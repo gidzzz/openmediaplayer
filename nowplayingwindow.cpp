@@ -26,6 +26,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent) :
     this->setButtonIcons();
     onMetadataChanged();
     ui->listView->hide();
+    ui->pushButton_2->hide();
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
@@ -91,10 +92,14 @@ void NowPlayingWindow::orientationChanged()
         qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
         //if(ui->artworkLabel->isHidden())
             //ui->artworkLabel->show();
+        ui->pushButton->show();
+        ui->pushButton_2->hide();
     } else {
         // Portrait mode
         qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
        // ui->artworkLabel->hide();
+        ui->pushButton->hide();
+        ui->pushButton_2->show();
     }
 }
 
