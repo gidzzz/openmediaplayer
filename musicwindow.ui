@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MusicWindow</class>
+ <widget class="QMainWindow" name="MusicWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>424</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>801</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="shuffleAllButton">
+       <property name="text">
+        <string>Shuffle all songs</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="songList">
+       <item>
+        <property name="text">
+         <string>Song 1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Song 2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Song 3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Song 4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Song 5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Song 6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Song 7</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Song 8</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <addaction name="actionAll_albums"/>
+    <addaction name="actionAll_songs"/>
+    <addaction name="actionArtists"/>
+    <addaction name="actionGenres"/>
+    <addaction name="actionPlaylists"/>
+   </widget>
+   <addaction name="menuOptions"/>
+  </widget>
+  <action name="actionAll_albums">
+   <property name="text">
+    <string>All albums</string>
+   </property>
+  </action>
+  <action name="actionArtists">
+   <property name="text">
+    <string>Artists</string>
+   </property>
+  </action>
+  <action name="actionGenres">
+   <property name="text">
+    <string>Genres</string>
+   </property>
+  </action>
+  <action name="actionPlaylists">
+   <property name="text">
+    <string>Playlists</string>
+   </property>
+  </action>
+  <action name="actionAll_songs">
+   <property name="text">
+    <string>All songs</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
