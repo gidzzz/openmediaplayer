@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5AutoOrientation);
 #endif
+    myMusicWindow = new MusicWindow(this);
 }
 
 MainWindow::~MainWindow()
@@ -35,7 +36,6 @@ void MainWindow::paintEvent(QPaintEvent*)
 
 void MainWindow::showSongWindow()
 {
-    MusicWindow *myMusicWindow = new MusicWindow(this);
     myMusicWindow->show();
 }
 
@@ -58,6 +58,7 @@ void MainWindow::setLabelText()
 void MainWindow::connectSignals()
 {
     connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showSongWindow()));
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
 #ifdef Q_WS_MAEMO_5
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 #endif
@@ -71,13 +72,20 @@ void MainWindow::orientationChanged()
         qDebug() << "MainWindow: Orientation changed: Landscape.";
         if(!ui->listWidget->isHidden()) {
             ui->listWidget->hide();
-            QMainWindow::setCentralWidget(ui->centralWidget);
+            //QMainWindow::setCentralWidget(ui->centralWidget);
         }
     } else {
         // Portrait mode
         qDebug() << "MainWindow: Orientation changed: Portrait.";
         if(ui->listWidget->isHidden())
             ui->listWidget->show();
-        QMainWindow::setCentralWidget(ui->listWidget);
+
+        //QMainWindow::setCentralWidget(ui->listWidget);
     }
+}
+
+void MainWindow::showAbout()
+{
+    QMessageBox::information(this, tr("About"),
+                             "A stock media player rewrite in Qt\nCopyright 2010-2011 <whoever's working on it>\n\nLicensed under GPLv3");
 }

@@ -2,6 +2,7 @@
 #define NOWPLAYINGWINDOW_H
 
 #include <QMainWindow>
+#include <QtGui>
 #ifdef Q_WS_MAEMO_5
 #include <libosso.h>
 #endif
@@ -28,6 +29,8 @@ private:
 private slots:
     void toggleVolumeSlider();
     void showFMTXDialog();
+    void onMetadataChanged();
+    void orientationChanged();
 };
 
 #endif // NOWPLAYINGWINDOW_H

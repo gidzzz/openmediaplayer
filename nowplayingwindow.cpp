@@ -9,6 +9,7 @@
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
 #define shuffleButtonPressed "/etc/hildon/theme/mediaplayer/SufflePressed.png"
 #define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
+#define albumImage "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_album.png"
 
 NowPlayingWindow::NowPlayingWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,10 +20,15 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent) :
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->volumeSlider->hide();
-    QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
+    ui->currentPositionLabel->setText("0:00");
+    ui->trackLengthLabel->setText("0:00");
+    ui->artworkLabel->setPixmap(QPixmap(albumImage));
     this->setButtonIcons();
+    onMetadataChanged();
+    QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
 NowPlayingWindow::~NowPlayingWindow()
@@ -64,4 +70,27 @@ void NowPlayingWindow::showFMTXDialog()
 #ifdef Q_WS_MAEMO_5
     osso_cp_plugin_execute(osso_context, "/usr/lib/hildon-control-panel/libcpfmtx.so", NULL, TRUE);
 #endif
+}
+
+void NowPlayingWindow::onMetadataChanged()
+{
+    ui->songNumberLabel->setText("226/9000");
+    ui->songTitleLabel->setText("Song name");
+    ui->albumNameLabel->setText("Album name");
+    ui->artistLabel->setText("Artist name");
+}
+
+void NowPlayingWindow::orientationChanged()
+{
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    if (screenGeometry.width() > screenGeometry.height()) {
+        // Landscape mode
+        qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
+        if(ui->artworkLabel->isHidden())
+            ui->artworkLabel->show();
+    } else {
+        // Portrait mode
+        qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
+        ui->artworkLabel->hide();
+    }
 }

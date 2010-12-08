@@ -21,7 +21,7 @@ public slots:
 
 private:
     Ui::MusicWindow *ui;
-
+    NowPlayingWindow *myNowPlayingWindow;
 };
 
 #endif // MUSICWINDOW_H

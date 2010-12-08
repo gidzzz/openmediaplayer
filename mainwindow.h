@@ -21,6 +21,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    MusicWindow *myMusicWindow;
     void paintEvent(QPaintEvent*);
     void setButtonIcons();
     void connectSignals();
@@ -29,6 +30,7 @@ private:
 private slots:
     void showSongWindow();
     void orientationChanged();
+    void showAbout();
 };
 
 #endif // MAINWINDOW_H

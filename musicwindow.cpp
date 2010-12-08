@@ -12,6 +12,7 @@ MusicWindow::MusicWindow(QWidget *parent) :
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
     connect(ui->songList, SIGNAL(clicked(QModelIndex)), this, SLOT(selectSong()));
+    myNowPlayingWindow = new NowPlayingWindow(this);
 }
 
 MusicWindow::~MusicWindow()
@@ -21,6 +22,5 @@ MusicWindow::~MusicWindow()
 
 void MusicWindow::selectSong()
 {
-    NowPlayingWindow *myNowPlayingWindow = new NowPlayingWindow(this);
     myNowPlayingWindow->show();
 }
