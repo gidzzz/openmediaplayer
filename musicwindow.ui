@@ -32,48 +32,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="songList">
-       <item>
-        <property name="text">
-         <string>Song 1</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Song 2</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Song 3</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Song 4</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Song 5</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Song 6</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Song 7</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Song 8</string>
-        </property>
-       </item>
-      </widget>
+      <widget class="QListWidget" name="songList"/>
      </item>
     </layout>
    </widget>

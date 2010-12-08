@@ -13,15 +13,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     musicwindow.cpp \
-    nowplayingwindow.cpp
+    nowplayingwindow.cpp \
+    videoswindow.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
-    nowplayingwindow.h
+    nowplayingwindow.h \
+    videoswindow.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
-    nowplayingwindow.ui
+    nowplayingwindow.ui \
+    videoswindow.ui
 
 CONFIG += mobility
 MOBILITY = 

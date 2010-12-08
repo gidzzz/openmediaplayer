@@ -13,6 +13,12 @@ MusicWindow::MusicWindow(QWidget *parent) :
     QMainWindow::setWindowTitle(tr("Songs"));
     connect(ui->songList, SIGNAL(clicked(QModelIndex)), this, SLOT(selectSong()));
     myNowPlayingWindow = new NowPlayingWindow(this);
+/*    QDir myDir("/home/user/MyDocs/.sounds/Music/Bullet for My Valentine/Fever");
+    QStringList filters;
+    filters << "*.mp3" << "*.acc" << "*.wav";
+    myDir.setNameFilters(filters);
+    QStringList list = myDir.entryList();*/
+    listSongs();
 }
 
 MusicWindow::~MusicWindow()
@@ -23,4 +29,17 @@ MusicWindow::~MusicWindow()
 void MusicWindow::selectSong()
 {
     myNowPlayingWindow->show();
+}
+
+void MusicWindow::listSongs()
+{
+     QDirIterator directory_walker("/home/user/MyDocs/.sounds", QDir::Files | QDir::NoSymLinks, QDirIterator::Subdirectories);
+
+    while(directory_walker.hasNext())
+    {
+          directory_walker.next();
+
+         if(directory_walker.fileInfo().completeSuffix() == "mp3")
+                   ui->songList->addItem(directory_walker.fileName());
+    }
 }

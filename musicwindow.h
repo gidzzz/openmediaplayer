@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <nowplayingwindow.h>
+#include <QDir>
+#include <QStringList>
+#include <QDirIterator>
 
 namespace Ui {
     class MusicWindow;
@@ -22,6 +25,7 @@ public slots:
 private:
     Ui::MusicWindow *ui;
     NowPlayingWindow *myNowPlayingWindow;
+    void listSongs();
 };
 
 #endif // MUSICWINDOW_H

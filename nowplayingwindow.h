@@ -25,12 +25,14 @@ private:
     osso_context_t *osso_context;
 #endif
     void setButtonIcons();
+    void listSongs();
 
 private slots:
     void toggleVolumeSlider();
     void showFMTXDialog();
     void onMetadataChanged();
     void orientationChanged();
+    void toggleList();
 };
 
 #endif // NOWPLAYINGWINDOW_H

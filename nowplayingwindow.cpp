@@ -22,13 +22,16 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent) :
     ui->volumeSlider->hide();
     ui->currentPositionLabel->setText("0:00");
     ui->trackLengthLabel->setText("0:00");
-    ui->artworkLabel->setPixmap(QPixmap(albumImage));
+    ui->pushButton->setIcon(QIcon(albumImage));
     this->setButtonIcons();
     onMetadataChanged();
+    ui->listView->hide();
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    listSongs();
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(toggleList()));
 }
 
 NowPlayingWindow::~NowPlayingWindow()
@@ -86,11 +89,36 @@ void NowPlayingWindow::orientationChanged()
     if (screenGeometry.width() > screenGeometry.height()) {
         // Landscape mode
         qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
-        if(ui->artworkLabel->isHidden())
-            ui->artworkLabel->show();
+        //if(ui->artworkLabel->isHidden())
+            //ui->artworkLabel->show();
     } else {
         // Portrait mode
         qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
-        ui->artworkLabel->hide();
+       // ui->artworkLabel->hide();
     }
 }
+
+void NowPlayingWindow::listSongs()
+{
+     QDirIterator directory_walker("/home/user/MyDocs/.sounds", QDir::Files | QDir::NoSymLinks, QDirIterator::Subdirectories);
+
+    while(directory_walker.hasNext())
+    {
+          directory_walker.next();
+
+         if(directory_walker.fileInfo().completeSuffix() == "mp3")
+                   ui->listView->addItem(directory_walker.fileName());
+    }
+}
+
+void NowPlayingWindow::toggleList()
+{
+    if(ui->listView->isHidden()) {
+        ui->listView->show();
+        ui->scrollArea->hide();
+    } else {
+        ui->listView->hide();
+        ui->scrollArea->show();
+    }
+}
+
