@@ -23,7 +23,7 @@
    <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QToolButton" name="songsButton">
+   <widget class="QPushButton" name="songsButton">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -51,8 +51,11 @@
       <height>164</height>
      </size>
     </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QToolButton" name="videosButton">
+   <widget class="QPushButton" name="videosButton">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -80,8 +83,11 @@
       <height>164</height>
      </size>
     </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QToolButton" name="radioButton">
+   <widget class="QPushButton" name="radioButton">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -109,8 +115,11 @@
       <height>164</height>
      </size>
     </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QToolButton" name="shuffleAllButton">
+   <widget class="QPushButton" name="shuffleAllButton">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -137,6 +146,9 @@
       <width>164</width>
       <height>164</height>
      </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="songsButtonLabel">
@@ -230,33 +242,61 @@ p, li { white-space: pre-wrap; }
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>230</y>
-      <width>256</width>
-      <height>192</height>
+      <x>0</x>
+      <y>320</y>
+      <width>121</width>
+      <height>81</height>
      </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
     <property name="editTriggers">
      <set>QAbstractItemView::NoEditTriggers</set>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>128</width>
+      <height>128</height>
+     </size>
+    </property>
     <item>
      <property name="text">
       <string>Songs</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png</iconset>
      </property>
     </item>
     <item>
      <property name="text">
       <string>Videos</string>
      </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png</iconset>
+     </property>
     </item>
     <item>
      <property name="text">
       <string>Internet Radio</string>
      </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png</iconset>
+     </property>
     </item>
     <item>
      <property name="text">
       <string>Shuffle all songs</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png</iconset>
      </property>
     </item>
    </widget>

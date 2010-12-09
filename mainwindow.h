@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QtGui>
 #include <musicwindow.h>
+#include <videoswindow.h>
 
 namespace Ui {
     class MainWindow;
@@ -22,15 +23,18 @@ public:
 private:
     Ui::MainWindow *ui;
     MusicWindow *myMusicWindow;
+    VideosWindow *myVideosWindow;
     void paintEvent(QPaintEvent*);
     void setButtonIcons();
     void connectSignals();
     void setLabelText();
 
 private slots:
-    void showSongWindow();
+    void showMusicWindow();
+    void showVideosWindow();
     void orientationChanged();
     void showAbout();
+    void processListClicks(QModelIndex);
 };
 
 #endif // MAINWINDOW_H

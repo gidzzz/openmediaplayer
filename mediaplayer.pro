@@ -39,6 +39,7 @@ symbian {
 maemo5* {
     CONFIG += link_pkgconfig
     PKGCONFIG += libosso
+    QT += maemo5
 }
 
 RESOURCES += \

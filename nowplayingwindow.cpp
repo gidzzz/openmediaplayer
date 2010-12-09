@@ -20,19 +20,21 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent) :
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->volumeSlider->hide();
+    //ui->volumeSlider_2->hide();
     ui->currentPositionLabel->setText("0:00");
     ui->trackLengthLabel->setText("0:00");
-    ui->pushButton->setIcon(QIcon(albumImage));
+    ui->artworkButton->setIcon(QIcon(albumImage));
+    ui->artworkButton_2->setIcon(ui->artworkButton->icon());
     this->setButtonIcons();
-    onMetadataChanged();
-    ui->listView->hide();
-    ui->pushButton_2->hide();
-    QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
-    connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
-    connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-    listSongs();
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(toggleList()));
+    //this->onMetadataChanged()
+    ui->songPlaylist->hide();
+    ui->songPlaylist_2->hide();
+    QMainWindow::setCentralWidget(ui->horizontalWidget);
+    ui->landscapeWidget->setLayout(ui->verticalLayout);
+    ui->portraitWidget->setLayout(ui->verticalLayout_3);
+    ui->portraitWidget->hide();
+    this->connectSignals();
+    this->listSongs();
 }
 
 NowPlayingWindow::~NowPlayingWindow()
@@ -67,6 +69,21 @@ void NowPlayingWindow::setButtonIcons()
     ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
     ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
+    ui->prevButton_2->setIcon(QIcon(prevButtonIcon));
+    ui->playButton_2->setIcon(QIcon(playButtonIcon));
+    ui->nextButton_2->setIcon(QIcon(nextButtonIcon));
+    ui->shuffleButton_2->setIcon(QIcon(shuffleButtonIcon));
+    ui->repeatButton_2->setIcon(QIcon(repeatButtonIcon));
+    //ui->volumeButton_2->setIcon(QIcon(volumeButtonIcon));
+}
+
+void NowPlayingWindow::connectSignals()
+{
+    connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
+    connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    connect(ui->artworkButton_2, SIGNAL(clicked()), this, SLOT(toggleList()));
+    connect(ui->artworkButton, SIGNAL(clicked()), this, SLOT(toggleList()));
 }
 
 void NowPlayingWindow::showFMTXDialog()
@@ -76,12 +93,22 @@ void NowPlayingWindow::showFMTXDialog()
 #endif
 }
 
-void NowPlayingWindow::onMetadataChanged()
+void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs, QString songName, QString albumName, QString artistName)
 {
-    ui->songNumberLabel->setText("226/9000");
-    ui->songTitleLabel->setText("Song name");
-    ui->albumNameLabel->setText("Album name");
-    ui->artistLabel->setText("Artist name");
+    ui->songNumberLabel->setText(QString::number(songNumber) + "/" + QString::number(totalNumberOfSongs));
+    ui->songTitleLabel->setText(songName);
+    ui->albumNameLabel->setText(albumName);
+    ui->artistLabel->setText(artistName);
+    ui->songNumberLabel_2->setText(ui->songNumberLabel->text());
+    ui->songTitleLabel_2->setText(ui->songTitleLabel->text());
+    ui->albumNameLabel_2->setText(ui->albumNameLabel->text());
+    ui->artistLabel_2->setText(ui->artistLabel->text());
+    if(!ui->songPlaylist->isHidden() || !ui->songPlaylist_2->isHidden()) {
+        ui->songPlaylist->hide();
+        ui->songPlaylist_2->hide();
+        ui->scrollArea->show();
+        ui->scrollArea_2->show();
+    }
 }
 
 void NowPlayingWindow::orientationChanged()
@@ -90,16 +117,17 @@ void NowPlayingWindow::orientationChanged()
     if (screenGeometry.width() > screenGeometry.height()) {
         // Landscape mode
         qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
-        //if(ui->artworkLabel->isHidden())
-            //ui->artworkLabel->show();
-        ui->pushButton->show();
-        ui->pushButton_2->hide();
+        ui->portraitWidget->hide();
+        ui->landscapeWidget->show();
     } else {
         // Portrait mode
         qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
-       // ui->artworkLabel->hide();
-        ui->pushButton->hide();
-        ui->pushButton_2->show();
+        ui->landscapeWidget->hide();
+        if(ui->scrollArea_2->isHidden())
+            ui->scrollArea_2->show();
+        if(!ui->songPlaylist_2->isHidden())
+            ui->songPlaylist_2->hide();
+        ui->portraitWidget->show();
     }
 }
 
@@ -112,18 +140,22 @@ void NowPlayingWindow::listSongs()
           directory_walker.next();
 
          if(directory_walker.fileInfo().completeSuffix() == "mp3")
-                   ui->listView->addItem(directory_walker.fileName());
+                   ui->songPlaylist->addItem(directory_walker.fileName());
+                   ui->songPlaylist_2->addItem(directory_walker.fileName());
     }
 }
 
 void NowPlayingWindow::toggleList()
 {
-    if(ui->listView->isHidden()) {
-        ui->listView->show();
+    if(ui->songPlaylist->isHidden() || ui->songPlaylist_2->isHidden()) {
+        ui->songPlaylist->show();
+        ui->songPlaylist_2->show();
         ui->scrollArea->hide();
+        ui->scrollArea_2->hide();
     } else {
-        ui->listView->hide();
+        ui->songPlaylist->hide();
+        ui->songPlaylist_2->hide();
         ui->scrollArea->show();
+        ui->scrollArea_2->show();
     }
 }
-

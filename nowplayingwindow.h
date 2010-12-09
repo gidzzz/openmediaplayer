@@ -19,6 +19,9 @@ public:
     explicit NowPlayingWindow(QWidget *parent = 0);
     ~NowPlayingWindow();
 
+public slots:
+    void onMetadataChanged(int, int, QString, QString, QString);
+
 private:
     Ui::NowPlayingWindow *ui;
 #ifdef Q_WS_MAEMO_5
@@ -26,11 +29,11 @@ private:
 #endif
     void setButtonIcons();
     void listSongs();
+    void connectSignals();
 
 private slots:
     void toggleVolumeSlider();
     void showFMTXDialog();
-    void onMetadataChanged();
     void orientationChanged();
     void toggleList();
 };

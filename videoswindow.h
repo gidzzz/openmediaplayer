@@ -2,6 +2,8 @@
 #define VIDEOSWINDOW_H
 
 #include <QMainWindow>
+#include <QActionGroup>
+#include <QAction>
 
 namespace Ui {
     class VideosWindow;
@@ -17,6 +19,11 @@ public:
 
 private:
     Ui::VideosWindow *ui;
+    QActionGroup *sortByActionGroup;
+    QAction *sortByDate;
+    QAction *sortByCategory;
+
+private slots:
 };
 
 #endif // VIDEOSWINDOW_H

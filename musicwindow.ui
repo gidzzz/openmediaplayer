@@ -25,14 +25,16 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="shuffleAllButton">
-       <property name="text">
-        <string>Shuffle all songs</string>
+      <widget class="QListWidget" name="songList">
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
+       <item>
+        <property name="text">
+         <string>New Item</string>
+        </property>
+       </item>
       </widget>
-     </item>
-     <item>
-      <widget class="QListWidget" name="songList"/>
      </item>
     </layout>
    </widget>

@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setAttribute(Qt::WA_Maemo5AutoOrientation);
 #endif
     myMusicWindow = new MusicWindow(this);
+    myVideosWindow = new VideosWindow(this);
 }
 
 MainWindow::~MainWindow()
@@ -34,9 +35,14 @@ void MainWindow::paintEvent(QPaintEvent*)
     painter.drawImage(this->rect(), QImage(backgroundImage));
 }
 
-void MainWindow::showSongWindow()
+void MainWindow::showMusicWindow()
 {
     myMusicWindow->show();
+}
+
+void MainWindow::showVideosWindow()
+{
+    myVideosWindow->show();
 }
 
 void MainWindow::setButtonIcons()
@@ -57,8 +63,10 @@ void MainWindow::setLabelText()
 
 void MainWindow::connectSignals()
 {
-    connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showSongWindow()));
+    connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
+    connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
+    connect(ui->listWidget, SIGNAL(activated(QModelIndex)), this, SLOT(processListClicks(QModelIndex)));
 #ifdef Q_WS_MAEMO_5
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 #endif
@@ -72,11 +80,27 @@ void MainWindow::orientationChanged()
         qDebug() << "MainWindow: Orientation changed: Landscape.";
         if(!ui->listWidget->isHidden()) {
             ui->listWidget->hide();
-            //QMainWindow::setCentralWidget(ui->centralWidget);
+        ui->songsButton->show();
+        ui->songsButtonLabel->show();
+        ui->videosButton->show();
+        ui->videosButtonLabel->show();
+        ui->radioButton->show();
+        ui->radioButtonLabel->show();
+        ui->shuffleAllButton->show();
+        ui->shuffleLabel->show();
         }
     } else {
         // Portrait mode
         qDebug() << "MainWindow: Orientation changed: Portrait.";
+        ui->songsButton->hide();
+        ui->songsButtonLabel->hide();
+        ui->videosButton->hide();
+        ui->videosButtonLabel->hide();
+        ui->radioButton->hide();
+        ui->radioButtonLabel->hide();
+        ui->shuffleAllButton->hide();
+        ui->shuffleLabel->hide();
+        ui->listWidget->setGeometry(QRect(0, 0, 480, 800));
         if(ui->listWidget->isHidden())
             ui->listWidget->show();
 
@@ -88,4 +112,9 @@ void MainWindow::showAbout()
 {
     QMessageBox::information(this, tr("About"),
                              "A stock media player rewrite in Qt\nCopyright 2010-2011 <whoever's working on it>\n\nLicensed under GPLv3");
+}
+
+void MainWindow::processListClicks(QModelIndex index)
+{
+    this->showMusicWindow();
 }

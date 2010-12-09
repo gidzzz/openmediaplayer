@@ -6,6 +6,9 @@
 #include <QDir>
 #include <QStringList>
 #include <QDirIterator>
+#ifdef Q_WS_MAEMO_5
+#include <QMaemo5ValueButton>
+#endif
 
 namespace Ui {
     class MusicWindow;
@@ -25,6 +28,11 @@ public slots:
 private:
     Ui::MusicWindow *ui;
     NowPlayingWindow *myNowPlayingWindow;
+#ifdef Q_WS_MAEMO_5
+    QMaemo5ValueButton *shuffleAllButton;
+#else
+    QPushButton *shuffleAllButton;
+#endif
     void listSongs();
 };
 
