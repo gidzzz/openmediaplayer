@@ -41,7 +41,13 @@ MusicWindow::~MusicWindow()
 
 void MusicWindow::selectSong()
 {
-    myNowPlayingWindow->onMetadataChanged(ui->songList->currentRow()+1, ui->songList->count(), QString("Song name") , QString("Album Name"), QString("Artist Name"));
+    myNowPlayingWindow->onMetadataChanged(ui->songList->currentRow()+1,
+                                          ui->songList->count(),
+                                          //QString("Song name"),
+                                          QString(ui->songList->currentItem()->text()),
+                                          tr("(unknown album)"),
+                                          tr("(unknown arist)")
+                                          );
     myNowPlayingWindow->show();
 }
 

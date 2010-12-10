@@ -34,7 +34,7 @@ private slots:
     void showVideosWindow();
     void orientationChanged();
     void showAbout();
-    void processListClicks(QModelIndex);
+    void processListClicks(QListWidgetItem*);
 };
 
 #endif // MAINWINDOW_H

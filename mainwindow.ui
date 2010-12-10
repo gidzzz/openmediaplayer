@@ -242,7 +242,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>310</x>
       <y>320</y>
       <width>121</width>
       <height>81</height>
@@ -267,6 +267,9 @@ p, li { white-space: pre-wrap; }
      <property name="text">
       <string>Songs</string>
      </property>
+     <property name="statusTip">
+      <string>songs_button</string>
+     </property>
      <property name="icon">
       <iconset>
        <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png</iconset>
@@ -275,6 +278,9 @@ p, li { white-space: pre-wrap; }
     <item>
      <property name="text">
       <string>Videos</string>
+     </property>
+     <property name="statusTip">
+      <string>videos_button</string>
      </property>
      <property name="icon">
       <iconset>
@@ -285,6 +291,9 @@ p, li { white-space: pre-wrap; }
      <property name="text">
       <string>Internet Radio</string>
      </property>
+     <property name="statusTip">
+      <string>radio_button</string>
+     </property>
      <property name="icon">
       <iconset>
        <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png</iconset>
@@ -293,6 +302,9 @@ p, li { white-space: pre-wrap; }
     <item>
      <property name="text">
       <string>Shuffle all songs</string>
+     </property>
+     <property name="statusTip">
+      <string>shuffle_button</string>
      </property>
      <property name="icon">
       <iconset>

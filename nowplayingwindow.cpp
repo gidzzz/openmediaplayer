@@ -20,13 +20,12 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent) :
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->volumeSlider->hide();
-    //ui->volumeSlider_2->hide();
     ui->currentPositionLabel->setText("0:00");
     ui->trackLengthLabel->setText("0:00");
     ui->artworkButton->setIcon(QIcon(albumImage));
     ui->artworkButton_2->setIcon(ui->artworkButton->icon());
     this->setButtonIcons();
-    //this->onMetadataChanged()
+    ui->buttonsWidget->setLayout(ui->horizontalLayout_9);
     ui->songPlaylist->hide();
     ui->songPlaylist_2->hide();
     QMainWindow::setCentralWidget(ui->horizontalWidget);
@@ -45,18 +44,20 @@ NowPlayingWindow::~NowPlayingWindow()
 void NowPlayingWindow::toggleVolumeSlider()
 {
     if(ui->volumeSlider->isHidden()) {
-        ui->prevButton->hide();
+        /*ui->prevButton->hide();
         ui->nextButton->hide();
         ui->playButton->hide();
         ui->shuffleButton->hide();
-        ui->repeatButton->hide();
+        ui->repeatButton->hide();*/
+        ui->buttonsWidget->hide();
         ui->volumeSlider->show();
     } else {
-        ui->prevButton->show();
+        /*ui->prevButton->show();
         ui->nextButton->show();
         ui->playButton->show();
         ui->shuffleButton->show();
-        ui->repeatButton->show();
+        ui->repeatButton->show();*/
+        ui->buttonsWidget->show();
         ui->volumeSlider->hide();
     }
 }
@@ -95,7 +96,7 @@ void NowPlayingWindow::showFMTXDialog()
 
 void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs, QString songName, QString albumName, QString artistName)
 {
-    ui->songNumberLabel->setText(QString::number(songNumber) + "/" + QString::number(totalNumberOfSongs));
+    ui->songNumberLabel->setText(QString::number(songNumber) + "/" + QString::number(totalNumberOfSongs) + tr(" songs"));
     ui->songTitleLabel->setText(songName);
     ui->albumNameLabel->setText(albumName);
     ui->artistLabel->setText(artistName);

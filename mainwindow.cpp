@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 #define musicIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png"
 #define videosIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png"
 #define radioIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png"
@@ -66,7 +67,7 @@ void MainWindow::connectSignals()
     connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
     connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
-    connect(ui->listWidget, SIGNAL(activated(QModelIndex)), this, SLOT(processListClicks(QModelIndex)));
+    connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
 #ifdef Q_WS_MAEMO_5
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 #endif
@@ -114,7 +115,11 @@ void MainWindow::showAbout()
                              "A stock media player rewrite in Qt\nCopyright 2010-2011 <whoever's working on it>\n\nLicensed under GPLv3");
 }
 
-void MainWindow::processListClicks(QModelIndex index)
+void MainWindow::processListClicks(QListWidgetItem* item)
 {
-    this->showMusicWindow();
+    QString itemName = item->statusTip();
+    if(itemName == "songs_button")
+        this->showMusicWindow();
+    else if(itemName == "videos_button")
+        this->showVideosWindow();
 }
