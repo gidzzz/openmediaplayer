@@ -34,6 +34,9 @@ void InternetRadioWindow::showFMTXDialog()
 
 void InternetRadioWindow::showAddBookmarkDialog()
 {
+    /* FIXME: Some line (or 3?) cause this to appear 3 times:
+       QLayout: Attempting to add QLayout "" to QDialog "", which already has a layout
+    */
     bookmarkDialog = new QDialog(this);
     bookmarkDialog->setWindowTitle(tr("Add radio bookmark"));
     horizontalLayout = new QHBoxLayout(bookmarkDialog);
@@ -55,17 +58,18 @@ void InternetRadioWindow::showAddBookmarkDialog()
     lineEditLayout->addWidget(nameBox);
     lineEditLayout->addWidget(addressBox);
 
-    verticalLayout_1 = new QVBoxLayout(bookmarkDialog);
+    saveButtonLayout = new QVBoxLayout(bookmarkDialog);
     verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     saveButton = new QPushButton(bookmarkDialog);
     saveButton->setText(tr("Save"));
+    saveButton->setDefault(true);
     connect(saveButton, SIGNAL(clicked()), this, SLOT(onSaveClicked()));
-    verticalLayout_1->addItem(verticalSpacer);
-    verticalLayout_1->addWidget(saveButton);
+    buttonBox = new QDialogButtonBox(Qt::Vertical);
+    buttonBox->addButton(saveButton, QDialogButtonBox::ActionRole);
 
     horizontalLayout->addLayout(labelLayout);
     horizontalLayout->addLayout(lineEditLayout);
-    horizontalLayout->addLayout(verticalLayout_1);
+    horizontalLayout->addWidget(buttonBox);
 
     bookmarkDialog->setLayout(horizontalLayout);
     bookmarkDialog->setAttribute(Qt::WA_DeleteOnClose);

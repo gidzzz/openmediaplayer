@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QSpacerItem>
 #include <QMessageBox>
+#include <QDialogButtonBox>
 #ifdef Q_WS_MAEMO_5
 #include <libosso.h>
 #include <QMaemo5InformationBox>
@@ -38,12 +39,13 @@ private:
     QVBoxLayout *labelLayout;
     QVBoxLayout *lineEditLayout;
     QVBoxLayout *verticalLayout;
-    QVBoxLayout *verticalLayout_1;
+    QVBoxLayout *saveButtonLayout;
     QLabel *addressLabel;
     QPushButton *saveButton;
     QLineEdit *addressBox;
     QLineEdit *nameBox;
     QSpacerItem *verticalSpacer;
+    QDialogButtonBox *buttonBox;
 
 private slots:
     void showFMTXDialog();
