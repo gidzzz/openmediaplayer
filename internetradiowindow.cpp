@@ -49,6 +49,7 @@ void InternetRadioWindow::showAddBookmarkDialog()
 
     nameBox = new QLineEdit(bookmarkDialog);
     addressBox = new QLineEdit(bookmarkDialog);
+    addressBox->setText("http://");
 
     lineEditLayout = new QVBoxLayout(bookmarkDialog);
     lineEditLayout->addWidget(nameBox);
@@ -58,6 +59,7 @@ void InternetRadioWindow::showAddBookmarkDialog()
     verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     saveButton = new QPushButton(bookmarkDialog);
     saveButton->setText(tr("Save"));
+    connect(saveButton, SIGNAL(clicked()), this, SLOT(onSaveClicked()));
     verticalLayout_1->addItem(verticalSpacer);
     verticalLayout_1->addWidget(saveButton);
 
@@ -68,4 +70,31 @@ void InternetRadioWindow::showAddBookmarkDialog()
     bookmarkDialog->setLayout(horizontalLayout);
     bookmarkDialog->setAttribute(Qt::WA_DeleteOnClose);
     bookmarkDialog->show();
+}
+
+void InternetRadioWindow::onSaveClicked()
+{
+    if(nameBox->text().isEmpty()) {
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(this, tr("Unable to add empty bookmark"));
+#else
+        QMessageBox::critical(this, tr("Error"), tr("Unable to add empty bookmark"));
+#endif
+    } else {
+        if(!saveButton->text().contains("http://")) {
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(this, tr("Invalid URL"));
+#else
+            QMessageBox::critical(this, tr("Error"), tr("Invalid URL"));
+#endif
+        } else {
+            if(!saveButton->text().contains("*.*")) {
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(this, tr("Invalid URL"));
+#else
+            QMessageBox::critical(this, tr("Error"), tr("Invalid URL"));
+#endif
+            }
+        }
+    }
 }

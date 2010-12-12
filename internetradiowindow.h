@@ -8,8 +8,10 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QSpacerItem>
+#include <QMessageBox>
 #ifdef Q_WS_MAEMO_5
 #include <libosso.h>
+#include <QMaemo5InformationBox>
 #endif
 
 namespace Ui {
@@ -46,6 +48,7 @@ private:
 private slots:
     void showFMTXDialog();
     void showAddBookmarkDialog();
+    void onSaveClicked();
 };
 
 #endif // INTERNETRADIOWINDOW_H
