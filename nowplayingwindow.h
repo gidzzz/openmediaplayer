@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QtGui>
+#include <QtDBus>
 #ifdef Q_WS_MAEMO_5
+#include <QLibrary>
 #include <libosso.h>
 #endif
 
@@ -36,6 +38,7 @@ private slots:
     void showFMTXDialog();
     void orientationChanged();
     void toggleList();
+    void onVolumeChanged();
 };
 
 #endif // NOWPLAYINGWINDOW_H

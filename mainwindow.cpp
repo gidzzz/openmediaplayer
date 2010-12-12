@@ -20,9 +20,13 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5AutoOrientation);
+#else
+    // Menu bar breaks layouts on desktop, hide it.
+    ui->menuBar->hide();
 #endif
     myMusicWindow = new MusicWindow(this);
     myVideosWindow = new VideosWindow(this);
+    myInternetRadioWindow = new InternetRadioWindow(this);
 }
 
 MainWindow::~MainWindow()
@@ -46,6 +50,11 @@ void MainWindow::showVideosWindow()
     myVideosWindow->show();
 }
 
+void MainWindow::showInternetRadioWindow()
+{
+    myInternetRadioWindow->show();
+}
+
 void MainWindow::setButtonIcons()
 {
     ui->songsButton->setIcon(QIcon(musicIcon));
@@ -66,11 +75,10 @@ void MainWindow::connectSignals()
 {
     connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
     connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
+    connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
-#ifdef Q_WS_MAEMO_5
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-#endif
 }
 
 void MainWindow::orientationChanged()
@@ -122,4 +130,6 @@ void MainWindow::processListClicks(QListWidgetItem* item)
         this->showMusicWindow();
     else if(itemName == "videos_button")
         this->showVideosWindow();
+    else if(itemName == "radio_button")
+        this->showInternetRadioWindow();
 }

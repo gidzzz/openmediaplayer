@@ -384,7 +384,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>461</width>
+                <width>511</width>
                 <height>80</height>
                </rect>
               </property>
@@ -500,7 +500,7 @@
                   <enum>Qt::Horizontal</enum>
                  </property>
                  <property name="sizeType">
-                  <enum>QSizePolicy::Maximum</enum>
+                  <enum>QSizePolicy::Fixed</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>

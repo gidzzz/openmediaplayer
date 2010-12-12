@@ -29,6 +29,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent) :
     ui->songPlaylist->hide();
     ui->songPlaylist_2->hide();
     QMainWindow::setCentralWidget(ui->horizontalWidget);
+    QMainWindow::setGeometry(0, 0, 800, 450);
     ui->landscapeWidget->setLayout(ui->verticalLayout);
     ui->portraitWidget->setLayout(ui->verticalLayout_3);
     ui->portraitWidget->hide();
@@ -62,6 +63,22 @@ void NowPlayingWindow::toggleVolumeSlider()
     }
 }
 
+void NowPlayingWindow::onVolumeChanged()
+{
+    /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
+                 /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.extension.get_extension_property string:volume*/
+#ifdef Q_WS_MAEMO_5
+    QString volumeLevel = QDBusInterface(
+                                         "com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
+                                         "/com/nokia/mafw/renderer/gstrenderer",
+                                         "com.nokia.mafw.extension",
+                                         QDBusConnection::sessionBus()).call("get_extension_property", "volume").arguments().takeLast().toString();
+    qDebug() << volumeLevel;
+    //ui->volumeSlider->setValue(volumeLevel);
+    qDebug() << "Volume changed";
+#endif
+}
+
 void NowPlayingWindow::setButtonIcons()
 {
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
@@ -85,12 +102,22 @@ void NowPlayingWindow::connectSignals()
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->artworkButton_2, SIGNAL(clicked()), this, SLOT(toggleList()));
     connect(ui->artworkButton, SIGNAL(clicked()), this, SLOT(toggleList()));
+#ifdef Q_WS_MAEMO_5
+    QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
+                                          "/com/nokia/mafw/renderer/gstrenderer",
+                                          "com.nokia.mafw.extension",
+                                          "property_changed",
+                                          this, SLOT(onVolumeChanged()));
+#endif
 }
 
 void NowPlayingWindow::showFMTXDialog()
 {
 #ifdef Q_WS_MAEMO_5
-    osso_cp_plugin_execute(osso_context, "/usr/lib/hildon-control-panel/libcpfmtx.so", NULL, TRUE);
+    osso_context = osso_initialize("qt-mediaplayer", "0.1", TRUE, NULL);
+    osso_cp_plugin_execute(osso_context, "libcpfmtx.so", this, TRUE);
+    //QLibrary fmtx("libcpfmtx.so");
+    //fmtx.resolve("execute");
 #endif
 }
 
@@ -134,7 +161,14 @@ void NowPlayingWindow::orientationChanged()
 
 void NowPlayingWindow::listSongs()
 {
-     QDirIterator directory_walker("/home/user/MyDocs/.sounds", QDir::Files | QDir::NoSymLinks, QDirIterator::Subdirectories);
+    QDirIterator directory_walker(
+#ifdef Q_WS_MAEMO_5
+                                  "/home/user/MyDocs/.sounds",
+#else
+                                  "/home",
+#endif
+                                  QDir::Files | QDir::NoSymLinks,
+                                  QDirIterator::Subdirectories);
 
     while(directory_walker.hasNext())
     {

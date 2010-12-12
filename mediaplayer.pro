@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui dbus
 
 TARGET = mediaplayer
 TEMPLATE = app
@@ -14,17 +14,20 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     musicwindow.cpp \
     nowplayingwindow.cpp \
-    videoswindow.cpp
+    videoswindow.cpp \
+    internetradiowindow.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
     nowplayingwindow.h \
-    videoswindow.h
+    videoswindow.h \
+    internetradiowindow.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
     nowplayingwindow.ui \
-    videoswindow.ui
+    videoswindow.ui \
+    internetradiowindow.ui
 
 CONFIG += mobility
 MOBILITY = 

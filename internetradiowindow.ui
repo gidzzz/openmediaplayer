@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InternetRadioWindow</class>
+ <widget class="QMainWindow" name="InternetRadioWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>424</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Internet radio stations</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>801</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QListWidget" name="listWidget">
+       <item>
+        <property name="text">
+         <string>Station 1</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuInternet_Radio">
+    <property name="title">
+     <string>Internet Radio</string>
+    </property>
+    <addaction name="actionAdd_radio_bookmark"/>
+    <addaction name="actionFM_transmitter"/>
+   </widget>
+   <addaction name="menuInternet_Radio"/>
+  </widget>
+  <action name="actionAdd_radio_bookmark">
+   <property name="text">
+    <string>Add radio bookmark</string>
+   </property>
+  </action>
+  <action name="actionFM_transmitter">
+   <property name="text">
+    <string>FM transmitter</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

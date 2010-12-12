@@ -7,6 +7,7 @@
 #include <QtGui>
 #include <musicwindow.h>
 #include <videoswindow.h>
+#include <internetradiowindow.h>
 
 namespace Ui {
     class MainWindow;
@@ -24,6 +25,7 @@ private:
     Ui::MainWindow *ui;
     MusicWindow *myMusicWindow;
     VideosWindow *myVideosWindow;
+    InternetRadioWindow *myInternetRadioWindow;
     void paintEvent(QPaintEvent*);
     void setButtonIcons();
     void connectSignals();
@@ -35,6 +37,7 @@ private slots:
     void orientationChanged();
     void showAbout();
     void processListClicks(QListWidgetItem*);
+    void showInternetRadioWindow();
 };
 
 #endif // MAINWINDOW_H

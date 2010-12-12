@@ -9,16 +9,20 @@ MusicWindow::MusicWindow(QWidget *parent) :
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     shuffleAllButton = new QMaemo5ValueButton(this);
-    shuffleAllButton->setText(tr("Shuffle songs"));
 #else
     shuffleAllButton = new QPushButton(this);
 #endif
+    shuffleAllButton->setText(tr("Shuffle songs"));
     ui->verticalLayout->removeWidget(ui->songList);
     ui->verticalLayout->addWidget(shuffleAllButton);
     ui->verticalLayout->addWidget(ui->songList);
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
+#ifdef Q_WS_MAEMO_5
     connect(ui->songList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectSong()));
+#else
+    connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectSong()));
+#endif
     myNowPlayingWindow = new NowPlayingWindow(this);
     listSongs();
 #ifdef Q_WS_MAEMO_5
@@ -53,7 +57,14 @@ void MusicWindow::selectSong()
 
 void MusicWindow::listSongs()
 {
-     QDirIterator directory_walker("/home/user/MyDocs/.sounds", QDir::Files | QDir::NoSymLinks, QDirIterator::Subdirectories);
+     QDirIterator directory_walker(
+#ifdef Q_WS_MAEMO_5
+                                   "/home/user/MyDocs/.sounds",
+#else
+                                   "/home",
+#endif
+                                   QDir::Files | QDir::NoSymLinks,
+                                   QDirIterator::Subdirectories);
 
     while(directory_walker.hasNext())
     {
