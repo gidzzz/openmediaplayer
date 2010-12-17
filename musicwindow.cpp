@@ -18,13 +18,10 @@ MusicWindow::MusicWindow(QWidget *parent) :
     ui->verticalLayout->addWidget(ui->songList);
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
-#ifdef Q_WS_MAEMO_5
-    connect(ui->songList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectSong()));
-#else
-    connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectSong()));
-#endif
     myNowPlayingWindow = new NowPlayingWindow(this);
-    listSongs();
+    this->listSongs();
+    ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->connectSignals();
 #ifdef Q_WS_MAEMO_5
     int numberOfSongs = ui->songList->count();
     if(numberOfSongs == 1) {
@@ -73,4 +70,37 @@ void MusicWindow::listSongs()
          if(directory_walker.fileInfo().completeSuffix() == "mp3")
                    ui->songList->addItem(directory_walker.fileName());
     }
+}
+
+void MusicWindow::connectSignals()
+{
+#ifdef Q_WS_MAEMO_5
+    connect(ui->songList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectSong()));
+#else
+    connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectSong()));
+#endif
+    connect(ui->songList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onContextMenuRequested(const QPoint &)));
+}
+
+void MusicWindow::onContextMenuRequested(const QPoint &point)
+{
+    contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Add to now playing"));
+    contextMenu->addAction(tr("Delete"));
+    contextMenu->addAction(tr("Set as ringing tone"));
+    contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    contextMenu->exec(point);
+}
+
+void MusicWindow::onShareClicked()
+{
+    // The code used here (share.(h/cpp/ui) was taken from filebox's source code
+    // C) 2010. Matias Perez
+    QStringList list;
+    QString clip = "/home/user/MyDocs/.sounds/" + ui->songList->statusTip();
+    list.append(clip);
+    Share *share = new Share(this, list);
+    share->setAttribute(Qt::WA_DeleteOnClose);
+    share->show();
 }

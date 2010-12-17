@@ -29,11 +29,6 @@
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
-       <item>
-        <property name="text">
-         <string>New Item</string>
-        </property>
-       </item>
       </widget>
      </item>
     </layout>

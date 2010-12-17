@@ -6,6 +6,8 @@
 #include <QDir>
 #include <QStringList>
 #include <QDirIterator>
+#include <QMenu>
+#include <share.h>
 #ifdef Q_WS_MAEMO_5
 #include <QMaemo5ValueButton>
 #endif
@@ -28,12 +30,18 @@ public slots:
 private:
     Ui::MusicWindow *ui;
     NowPlayingWindow *myNowPlayingWindow;
+    QMenu *contextMenu;
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleAllButton;
 #else
     QPushButton *shuffleAllButton;
 #endif
     void listSongs();
+    void connectSignals();
+
+private slots:
+    void onContextMenuRequested(const QPoint&);
+    void onShareClicked();
 };
 
 #endif // MUSICWINDOW_H
