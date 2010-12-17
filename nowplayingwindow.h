@@ -38,7 +38,9 @@ private slots:
     void showFMTXDialog();
     void orientationChanged();
     void toggleList();
-    void onVolumeChanged();
+#ifdef Q_WS_MAEMO_5
+    void onVolumeChanged(const QDBusMessage &msg);
+#endif
 };
 
 #endif // NOWPLAYINGWINDOW_H

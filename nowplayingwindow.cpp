@@ -45,39 +45,25 @@ NowPlayingWindow::~NowPlayingWindow()
 void NowPlayingWindow::toggleVolumeSlider()
 {
     if(ui->volumeSlider->isHidden()) {
-        /*ui->prevButton->hide();
-        ui->nextButton->hide();
-        ui->playButton->hide();
-        ui->shuffleButton->hide();
-        ui->repeatButton->hide();*/
         ui->buttonsWidget->hide();
         ui->volumeSlider->show();
     } else {
-        /*ui->prevButton->show();
-        ui->nextButton->show();
-        ui->playButton->show();
-        ui->shuffleButton->show();
-        ui->repeatButton->show();*/
         ui->buttonsWidget->show();
         ui->volumeSlider->hide();
     }
 }
 
-void NowPlayingWindow::onVolumeChanged()
+#ifdef Q_WS_MAEMO_5
+void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
 {
     /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
                  /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.extension.get_extension_property string:volume*/
-#ifdef Q_WS_MAEMO_5
-    QString volumeLevel = QDBusInterface(
-                                         "com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
-                                         "/com/nokia/mafw/renderer/gstrenderer",
-                                         "com.nokia.mafw.extension",
-                                         QDBusConnection::sessionBus()).call("get_extension_property", "volume").arguments().takeLast().toString();
-    qDebug() << volumeLevel;
-    //ui->volumeSlider->setValue(volumeLevel);
-    qDebug() << "Volume changed";
-#endif
+    if (msg.arguments()[0].toString() == "volume") {
+        int volumeLevel = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
+        ui->volumeSlider->setValue(volumeLevel);
+        }
 }
+#endif
 
 void NowPlayingWindow::setButtonIcons()
 {
@@ -107,7 +93,7 @@ void NowPlayingWindow::connectSignals()
                                           "/com/nokia/mafw/renderer/gstrenderer",
                                           "com.nokia.mafw.extension",
                                           "property_changed",
-                                          this, SLOT(onVolumeChanged()));
+                                          this, SLOT(onVolumeChanged(const QDBusMessage &)));
 #endif
 }
 
@@ -131,6 +117,8 @@ void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs,
     ui->songTitleLabel_2->setText(ui->songTitleLabel->text());
     ui->albumNameLabel_2->setText(ui->albumNameLabel->text());
     ui->artistLabel_2->setText(ui->artistLabel->text());
+    ui->songPlaylist->setCurrentRow(songNumber-1);
+    ui->songPlaylist_2->setCurrentRow(songNumber-1);
     if(!ui->songPlaylist->isHidden() || !ui->songPlaylist_2->isHidden()) {
         ui->songPlaylist->hide();
         ui->songPlaylist_2->hide();

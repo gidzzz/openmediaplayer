@@ -15,19 +15,22 @@ SOURCES += main.cpp\
     musicwindow.cpp \
     nowplayingwindow.cpp \
     videoswindow.cpp \
-    internetradiowindow.cpp
+    internetradiowindow.cpp \
+    share.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
     nowplayingwindow.h \
     videoswindow.h \
-    internetradiowindow.h
+    internetradiowindow.h \
+    share.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
     nowplayingwindow.ui \
     videoswindow.ui \
-    internetradiowindow.ui
+    internetradiowindow.ui \
+    share.ui
 
 CONFIG += mobility
 MOBILITY = 
