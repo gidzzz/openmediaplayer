@@ -12,7 +12,7 @@ class MafwRendererSignalHelper
   static void stop_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error);
   static void pause_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error);
   static void resume_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error);
-  static void get_status_cb(MafwRenderer* mafw_renderer, MafwPlaylist* playlist, uint index, MafwPlayState state, const char* object_id, gpointer user_data, const GError* error);
+  static void get_status_cb(MafwRenderer* mafw_renderer, MafwPlaylist* playlist, unsigned int index, MafwPlayState state, const char* object_id, gpointer user_data, const GError* error);
   static void next_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error);
   static void previous_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error);
   static void goto_index_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error);
