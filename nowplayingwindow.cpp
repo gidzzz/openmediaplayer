@@ -1,8 +1,10 @@
 #include "nowplayingwindow.h"
+#include "mafwrendereradapter.h"
 #include "ui_nowplayingwindow.h"
 
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
 #define playButtonIcon "/etc/hildon/theme/mediaplayer/Play.png"
+#define pauseButtonIcon "/etc/hildon/theme/mediaplayer/Pause.png"
 #define nextButtonIcon "/etc/hildon/theme/mediaplayer/Forward.png"
 #define repeatButtonIcon "/etc/hildon/theme/mediaplayer/Repeat.png"
 #define repeatButtonPressedIcon "/etc/hildon/theme/mediaplayer/RepeatPressed.png"
@@ -11,9 +13,10 @@
 #define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
 #define albumImage "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_album.png"
 
-NowPlayingWindow::NowPlayingWindow(QWidget *parent) :
+NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow(parent),
-    ui(new Ui::NowPlayingWindow)
+    ui(new Ui::NowPlayingWindow),
+    mafwrenderer(mra)
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -95,6 +98,38 @@ void NowPlayingWindow::setButtonIcons()
     //ui->volumeButton_2->setIcon(QIcon(volumeButtonIcon));
 }
 
+void NowPlayingWindow::metadataChanged(QString name, QVariant value)
+{
+  if(name == "title" /*MAFW_METADATA_KEY_TITLE*/)
+  {
+    ui->songTitleLabel->setText(value.toString());
+  }
+  if(name == "artist" /*MAFW_METADATA_KEY_ARTIST*/)
+  {
+    ui->artistLabel->setText(value.toString());
+  }
+  if(name == "album" /*MAFW_METADATA_KEY_ALBUM*/)
+  {
+    ui->albumNameLabel->setText(value.toString());
+  }
+}
+
+void NowPlayingWindow::stateChanged(int state)
+{
+  if(state == Paused)
+  {
+    ui->playButton->setIcon(QIcon(playButtonIcon));
+    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+  }
+  else
+  {
+    ui->playButton->setIcon(QIcon(pauseButtonIcon));
+    disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+  }
+}
+
 void NowPlayingWindow::connectSignals()
 {
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
@@ -102,6 +137,11 @@ void NowPlayingWindow::connectSignals()
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->artworkButton_2, SIGNAL(clicked()), this, SLOT(toggleList()));
     connect(ui->artworkButton, SIGNAL(clicked()), this, SLOT(toggleList()));
+    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+    connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
+    connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+    connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",

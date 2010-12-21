@@ -15,13 +15,17 @@ SOURCES += main.cpp\
     musicwindow.cpp \
     nowplayingwindow.cpp \
     videoswindow.cpp \
-    internetradiowindow.cpp
+    internetradiowindow.cpp \
+    mafwrenderersignalhelper.cpp \
+    mafwrendereradapter.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
     nowplayingwindow.h \
     videoswindow.h \
-    internetradiowindow.h
+    internetradiowindow.h \
+    mafwrenderersignalhelper.h \
+    mafwrendereradapter.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -41,7 +45,7 @@ symbian {
 
 maemo5* {
     CONFIG += link_pkgconfig
-    PKGCONFIG += libosso
+    PKGCONFIG += libosso mafw mafw-shared glib-2.0
     QT += maemo5
 }
 
