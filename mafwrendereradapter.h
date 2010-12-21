@@ -3,10 +3,10 @@
 
 #include <QObject>
 #include <QVariant>
+
 #include <libmafw/mafw.h>
 #include <libmafw-shared/mafw-shared.h>
 #include <glib.h>
-
 
 class MafwRendererAdapter : public QObject
 {
