@@ -13,12 +13,13 @@ namespace Ui {
     class NowPlayingWindow;
 }
 
+class MafwRendererAdapter;
 class NowPlayingWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit NowPlayingWindow(QWidget *parent = 0);
+  explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0);
     ~NowPlayingWindow();
 
 public slots:
@@ -28,6 +29,8 @@ private:
     Ui::NowPlayingWindow *ui;
 #ifdef Q_WS_MAEMO_5
     osso_context_t *osso_context;
+    MafwRendererAdapter* mafwrenderer;
+
 #endif
     void setButtonIcons();
     void listSongs();
@@ -41,6 +44,9 @@ private slots:
 #ifdef Q_WS_MAEMO_5
     void onVolumeChanged(const QDBusMessage &msg);
 #endif
+    void onVolumeChanged();
+    void stateChanged(int state);
+    void metadataChanged(QString name, QVariant value);
 };
 
 #endif // NOWPLAYINGWINDOW_H

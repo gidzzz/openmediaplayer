@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "mafwrendereradapter.h"
 #include "ui_mainwindow.h"
 
 
@@ -24,7 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
 #endif
-    myMusicWindow = new MusicWindow(this);
+    MafwRendererAdapter* mafwrenderer = new MafwRendererAdapter();
+    myMusicWindow = new MusicWindow(this, mafwrenderer);
     myVideosWindow = new VideosWindow(this);
     myInternetRadioWindow = new InternetRadioWindow(this);
 }
