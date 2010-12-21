@@ -20,13 +20,13 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->verticalLayout->addWidget(ui->songList);
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
-#ifdef Q_WS_MAEMO_5
+	myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer);
+	this->listSongs();
+/*#ifdef Q_WS_MAEMO_5
     connect(ui->songList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectSong()));
 #else
     connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectSong()));
-#endif
-    myNowPlayingWindow = new NowPlayingWindow(this);
-    this->listSongs();
+#endif*/
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connectSignals();
 #ifdef Q_WS_MAEMO_5
