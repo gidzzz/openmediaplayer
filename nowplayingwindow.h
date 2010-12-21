@@ -44,7 +44,6 @@ private slots:
 #ifdef Q_WS_MAEMO_5
     void onVolumeChanged(const QDBusMessage &msg);
 #endif
-    void onVolumeChanged();
     void stateChanged(int state);
     void metadataChanged(QString name, QVariant value);
 };
