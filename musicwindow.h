@@ -12,6 +12,9 @@
 #include <QMaemo5ValueButton>
 #endif
 
+#include "mafwrendereradapter.h"
+#include "ui_musicwindow.h"
+
 class MafwRendererAdapter;
 namespace Ui {
     class MusicWindow;
@@ -22,7 +25,7 @@ class MusicWindow : public QMainWindow
     Q_OBJECT
 
 public:
-  explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0);
+    explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0);
     ~MusicWindow();
 
 public slots:

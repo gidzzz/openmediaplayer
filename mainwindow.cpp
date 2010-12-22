@@ -1,13 +1,4 @@
 #include "mainwindow.h"
-#include "mafwrendereradapter.h"
-#include "ui_mainwindow.h"
-
-
-#define musicIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png"
-#define videosIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png"
-#define radioIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png"
-#define shuffleIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png"
-#define backgroundImage "/etc/hildon/theme/mediaplayer/background.png"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

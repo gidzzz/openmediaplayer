@@ -2,6 +2,13 @@
 #define SHARE_H
 
 #include <QDialog>
+#include <QtCore>
+//#include <QMessage>
+//#include <QMessageService>
+
+#include "ui_share.h"
+//#include "bluetoothtransferplugin.h"
+//#include "bluetoothtransfer.h"
 
 namespace Ui {
     class Share;

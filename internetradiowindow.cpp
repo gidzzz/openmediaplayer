@@ -2,8 +2,8 @@
 #include "ui_internetradiowindow.h"
 
 InternetRadioWindow::InternetRadioWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::InternetRadioWindow)
+        QMainWindow(parent),
+        ui(new Ui::InternetRadioWindow)
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -94,9 +94,9 @@ void InternetRadioWindow::onSaveClicked()
         } else {
             if(!saveButton->text().contains("*.*")) {
 #ifdef Q_WS_MAEMO_5
-            QMaemo5InformationBox::information(this, tr("Invalid URL"));
+                QMaemo5InformationBox::information(this, tr("Invalid URL"));
 #else
-            QMessageBox::critical(this, tr("Error"), tr("Invalid URL"));
+                QMessageBox::critical(this, tr("Error"), tr("Invalid URL"));
 #endif
             }
         }

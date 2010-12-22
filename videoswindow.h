@@ -5,6 +5,8 @@
 #include <QActionGroup>
 #include <QAction>
 
+#include "ui_videoswindow.h"
+
 namespace Ui {
     class VideosWindow;
 }

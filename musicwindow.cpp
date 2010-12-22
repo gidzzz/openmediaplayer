@@ -1,11 +1,9 @@
 #include "musicwindow.h"
-#include "mafwrendereradapter.h"
-#include "ui_musicwindow.h"
 
 MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
-    QMainWindow(parent),
-    ui(new Ui::MusicWindow),
-    mafwrenderer(mra)
+        QMainWindow(parent),
+        ui(new Ui::MusicWindow),
+        mafwrenderer(mra)
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -56,21 +54,21 @@ void MusicWindow::selectSong()
 
 void MusicWindow::listSongs()
 {
-     QDirIterator directory_walker(
+    QDirIterator directory_walker(
 #ifdef Q_WS_MAEMO_5
-                                   "/home/user/MyDocs/.sounds",
+            "/home/user/MyDocs/.sounds",
 #else
-                                   "/home",
+            "/home",
 #endif
-                                   QDir::Files | QDir::NoSymLinks,
-                                   QDirIterator::Subdirectories);
+            QDir::Files | QDir::NoSymLinks,
+            QDirIterator::Subdirectories);
 
     while(directory_walker.hasNext())
     {
-          directory_walker.next();
+        directory_walker.next();
 
-         if(directory_walker.fileInfo().completeSuffix() == "mp3")
-                   ui->songList->addItem(directory_walker.fileName());
+        if(directory_walker.fileInfo().completeSuffix() == "mp3")
+            ui->songList->addItem(directory_walker.fileName());
     }
 }
 
