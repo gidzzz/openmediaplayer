@@ -1,9 +1,8 @@
 #include "mafwrenderersignalhelper.h"
-#include "mafwrendereradapter.h"
-#include <QString>
 
-void 
-MafwRendererSignalHelper::play_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::play_playback_cb(MafwRenderer* mafw_renderer,
+												gpointer user_data,
+												const GError* error)
 {
   QString qerror;
   if(error)
@@ -13,8 +12,9 @@ MafwRendererSignalHelper::play_playback_cb(MafwRenderer* mafw_renderer, gpointer
   emit static_cast<MafwRendererAdapter*>(user_data)->signalPlay(qerror);
 }
 
-void 
-MafwRendererSignalHelper::play_uri_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::play_uri_playback_cb(MafwRenderer* mafw_renderer,
+													gpointer user_data,
+													const GError* error)
 {
   QString qerror;
   if(error)
@@ -24,8 +24,9 @@ MafwRendererSignalHelper::play_uri_playback_cb(MafwRenderer* mafw_renderer, gpoi
   emit static_cast<MafwRendererAdapter*>(user_data)->signalPlayURI(qerror);
 }
 
-void 
-MafwRendererSignalHelper::play_object_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::play_object_playback_cb(MafwRenderer* mafw_renderer,
+													   gpointer user_data,
+													   const GError* error)
 {
   QString qerror;
   if(error)
@@ -35,8 +36,9 @@ MafwRendererSignalHelper::play_object_playback_cb(MafwRenderer* mafw_renderer, g
   emit static_cast<MafwRendererAdapter*>(user_data)->signalPlayObject(qerror);
 }
 
-void 
-MafwRendererSignalHelper::stop_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::stop_playback_cb(MafwRenderer* mafw_renderer,
+												gpointer user_data,
+												const GError* error)
 {
   QString qerror;
   if(error)
@@ -46,8 +48,9 @@ MafwRendererSignalHelper::stop_playback_cb(MafwRenderer* mafw_renderer, gpointer
   emit static_cast<MafwRendererAdapter*>(user_data)->signalStop(qerror);
 }
 
-void 
-MafwRendererSignalHelper::pause_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::pause_playback_cb(MafwRenderer* mafw_renderer,
+												 gpointer user_data,
+												 const GError* error)
 {
   QString qerror;
   if(error)
@@ -57,8 +60,9 @@ MafwRendererSignalHelper::pause_playback_cb(MafwRenderer* mafw_renderer, gpointe
   emit static_cast<MafwRendererAdapter*>(user_data)->signalPause(qerror);
 }
 
-void 
-MafwRendererSignalHelper::resume_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::resume_playback_cb(MafwRenderer* mafw_renderer,
+												  gpointer user_data,
+												  const GError* error)
 {
   QString qerror;
   if(error)
@@ -68,8 +72,13 @@ MafwRendererSignalHelper::resume_playback_cb(MafwRenderer* mafw_renderer, gpoint
   emit static_cast<MafwRendererAdapter*>(user_data)->signalResume(qerror);
 }
 
-void
-MafwRendererSignalHelper::get_status_cb(MafwRenderer* mafw_renderer, MafwPlaylist* playlist, uint index, MafwPlayState state, const char* object_id, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::get_status_cb(MafwRenderer* mafw_renderer,
+											 MafwPlaylist* playlist,
+											 uint index,
+											 MafwPlayState state,
+											 const char* object_id,
+											 gpointer user_data,
+											 const GError* error)
 {
   QString qerror;
   if(error)
@@ -79,8 +88,9 @@ MafwRendererSignalHelper::get_status_cb(MafwRenderer* mafw_renderer, MafwPlaylis
   emit static_cast<MafwRendererAdapter*>(user_data)->signalGetStatus(playlist, index, state, object_id, qerror);
 }
 
-void 
-MafwRendererSignalHelper::next_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::next_playback_cb(MafwRenderer* mafw_renderer,
+												gpointer user_data,
+												const GError* error)
 {
   QString qerror;
   if(error)
@@ -90,8 +100,9 @@ MafwRendererSignalHelper::next_playback_cb(MafwRenderer* mafw_renderer, gpointer
   emit static_cast<MafwRendererAdapter*>(user_data)->signalNext(qerror);
 }
 
-void 
-MafwRendererSignalHelper::previous_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::previous_playback_cb(MafwRenderer* mafw_renderer,
+													gpointer user_data,
+													const GError* error)
 {
   QString qerror;
   if(error)
@@ -101,8 +112,9 @@ MafwRendererSignalHelper::previous_playback_cb(MafwRenderer* mafw_renderer, gpoi
   emit static_cast<MafwRendererAdapter*>(user_data)->signalPrevious(qerror);
 }
 
-void 
-MafwRendererSignalHelper::goto_index_playback_cb(MafwRenderer* mafw_renderer, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::goto_index_playback_cb(MafwRenderer* mafw_renderer,
+													  gpointer user_data,
+													  const GError* error)
 {
   QString qerror;
   if(error)
@@ -112,8 +124,10 @@ MafwRendererSignalHelper::goto_index_playback_cb(MafwRenderer* mafw_renderer, gp
   emit static_cast<MafwRendererAdapter*>(user_data)->signalGotoIndex(qerror);
 }
 
-void 
-MafwRendererSignalHelper::set_position_cb(MafwRenderer* mafw_renderer, int position, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::set_position_cb(MafwRenderer* mafw_renderer,
+											   int position,
+											   gpointer user_data,
+											   const GError* error)
 {
   QString qerror;
   if(error)
@@ -123,8 +137,10 @@ MafwRendererSignalHelper::set_position_cb(MafwRenderer* mafw_renderer, int posit
   emit static_cast<MafwRendererAdapter*>(user_data)->signalSetPosition(position, qerror);
 }
 
-void 
-MafwRendererSignalHelper::get_position_cb(MafwRenderer* mafw_renderer, int position, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::get_position_cb(MafwRenderer* mafw_renderer,
+											   int position,
+											   gpointer user_data,
+											   const GError* error)
 {
   QString qerror;
   if(error)
@@ -134,13 +150,16 @@ MafwRendererSignalHelper::get_position_cb(MafwRenderer* mafw_renderer, int posit
   emit static_cast<MafwRendererAdapter*>(user_data)->signalGetPosition(position, qerror);
 }
 
-void 
-MafwRendererSignalHelper::get_current_metadata_cb(MafwRenderer* mafw_renderer, const gchar* object_id, GHashTable* metadata, gpointer user_data, const GError* error)
+void MafwRendererSignalHelper::get_current_metadata_cb(MafwRenderer* mafw_renderer,
+													   const gchar* object_id,
+													   GHashTable* metadata,
+													   gpointer user_data,
+													   const GError* error)
 {
   QString qerror;
   if(error)
   {
     qerror = QString(error->message);
   }
-  //  emit static_cast<MafwRendererAdapter*>(user_data)->signalGetCurrentMetadata(qerror);
+	emit static_cast<MafwRendererAdapter*>(user_data)->signalGetCurrentMetadata(qerror);
 }

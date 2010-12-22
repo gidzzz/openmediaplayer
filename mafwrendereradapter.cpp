@@ -1,11 +1,4 @@
-#include <mafwrendereradapter.h>
-#include <mafwrenderersignalhelper.h>
-#include <QString>
-#include <QDebug>
-
-#define MEDIAPLAYER_RENDERER "Mafw-Gst-Renderer"
-#define MEDIAPLAYER_SOURCE "Mafw-Tracker-Source"
-
+#include "mafwrendereradapter.h"
 
 MafwRendererAdapter::MafwRendererAdapter()
 {
@@ -17,12 +10,7 @@ MafwRendererAdapter::MafwRendererAdapter()
 
 }
 
-MafwRendererAdapter::~MafwRendererAdapter()
-{
-}
-
-void
-MafwRendererAdapter::findRenderer()
+void MafwRendererAdapter::findRenderer()
 {
   if(mafw_registry)
   {
@@ -53,8 +41,7 @@ MafwRendererAdapter::findRenderer()
   }
 }
 
-void 
-MafwRendererAdapter::connectRegistrySignals()
+void MafwRendererAdapter::connectRegistrySignals()
 {
   g_signal_connect(mafw_registry, 
 		   "renderer_added", 
@@ -67,8 +54,7 @@ MafwRendererAdapter::connectRegistrySignals()
 		   static_cast<void*>(this));
 }
 
-void
-MafwRendererAdapter::connectRendererSignals()
+void MafwRendererAdapter::connectRendererSignals()
 {
   g_print("connect renderer signals\n");
   g_signal_connect(mafw_renderer,
@@ -93,16 +79,14 @@ MafwRendererAdapter::connectRendererSignals()
 		   static_cast<void*>(this));
 }
 
-void
-MafwRendererAdapter::disconnectRendererSignals()
+void MafwRendererAdapter::disconnectRendererSignals()
 {
   
 }
 
-void
-MafwRendererAdapter::onRendererAdded(MafwRegistry* mafw_registry,
-			      GObject* renderer,
-			      gpointer user_data)
+void MafwRendererAdapter::onRendererAdded(MafwRegistry* mafw_registry,
+										  GObject* renderer,
+										  gpointer user_data)
 {
   if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(renderer)), MEDIAPLAYER_RENDERER) == 0)
   {
@@ -113,10 +97,9 @@ MafwRendererAdapter::onRendererAdded(MafwRegistry* mafw_registry,
 }
 
 
-void
-MafwRendererAdapter::onRendererRemoved(MafwRegistry* mafw_registry,
-			       GObject* renderer,
-			       gpointer user_data)
+void MafwRendererAdapter::onRendererRemoved(MafwRegistry* mafw_registry,
+											GObject* renderer,
+											gpointer user_data)
 {
   if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(renderer)), MEDIAPLAYER_RENDERER) == 0)
   {
@@ -126,22 +109,27 @@ MafwRendererAdapter::onRendererRemoved(MafwRegistry* mafw_registry,
   }
 }
 
-void
-MafwRendererAdapter::onBufferingInfo(MafwRenderer* mafw_renderer, gfloat status, gpointer user_data)
+void MafwRendererAdapter::onBufferingInfo(MafwRenderer* mafw_renderer,
+										  gfloat status,
+										  gpointer user_data)
 {
   g_print("on buffering info\n");
   emit static_cast<MafwRendererAdapter*>(user_data)->bufferingInfo(status);
 }
 
-void
-MafwRendererAdapter::onMediaChanged(MafwRenderer* mafw_renderer, gint index, gchar* object_id, gpointer user_data)
+void MafwRendererAdapter::onMediaChanged(MafwRenderer* mafw_renderer,
+										 gint index,
+										 gchar* object_id,
+										 gpointer user_data)
 {
   g_print("on media changed\n");
   emit static_cast<MafwRendererAdapter*>(user_data)->mediaChanged(index, object_id);
 }
 
-void
-MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer, gchar* name, GValueArray* value, gpointer user_data)
+void MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer,
+											gchar* name,
+											GValueArray* value,
+											gpointer user_data)
 {
   g_print("on metadata changed %s\n", name);
   if(value->n_values == 1)
@@ -165,22 +153,23 @@ MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer, gchar* name,
   }
 }
 
-void
-MafwRendererAdapter::onPlaylistChanged(MafwRenderer* renderer, GObject* playlist, gpointer user_data)
+void MafwRendererAdapter::onPlaylistChanged(MafwRenderer* renderer,
+											GObject* playlist,
+											gpointer user_data)
 {
   g_print("on playlist changed\n");
   emit static_cast<MafwRendererAdapter*>(user_data)->playlistChanged(playlist);
 }
 
-void
-MafwRendererAdapter::onStateChanged(MafwRenderer* renderer, gint state, gpointer user_data)
+void MafwRendererAdapter::onStateChanged(MafwRenderer* renderer,
+										 gint state,
+										 gpointer user_data)
 {
   g_print("on state changed\n");
   emit static_cast<MafwRendererAdapter*>(user_data)->stateChanged(state);
 }
 
-void
-MafwRendererAdapter::play()
+void MafwRendererAdapter::play()
 {
   if(mafw_renderer)
   {
@@ -188,8 +177,7 @@ MafwRendererAdapter::play()
   }
 }
 
-void
-MafwRendererAdapter::playObject(const gchar* object_id)
+void MafwRendererAdapter::playObject(const gchar* object_id)
 {
   if(mafw_renderer)
   {
@@ -197,8 +185,7 @@ MafwRendererAdapter::playObject(const gchar* object_id)
   }
 }
 
-void
-MafwRendererAdapter::playURI(const gchar* uri)
+void MafwRendererAdapter::playURI(const gchar* uri)
 {
   if(mafw_renderer)
   {
@@ -206,8 +193,7 @@ MafwRendererAdapter::playURI(const gchar* uri)
   }
 }
 
-void
-MafwRendererAdapter::stop()
+void MafwRendererAdapter::stop()
 {
   if(mafw_renderer)
   {
@@ -216,8 +202,7 @@ MafwRendererAdapter::stop()
 }
 
 
-void
-MafwRendererAdapter::pause()
+void MafwRendererAdapter::pause()
 {
   if(mafw_renderer)
   {
@@ -225,8 +210,7 @@ MafwRendererAdapter::pause()
   }
 }
 
-void
-MafwRendererAdapter::resume()
+void MafwRendererAdapter::resume()
 {
   if(mafw_renderer)
   {
@@ -234,8 +218,7 @@ MafwRendererAdapter::resume()
   }
 }
 
-void
-MafwRendererAdapter::getStatus()
+void MafwRendererAdapter::getStatus()
 {
   if(mafw_renderer)
   {
@@ -243,8 +226,7 @@ MafwRendererAdapter::getStatus()
   }
 }
 
-void
-MafwRendererAdapter::next()
+void MafwRendererAdapter::next()
 {
   if(mafw_renderer)
   {
@@ -252,8 +234,7 @@ MafwRendererAdapter::next()
   }
 }
 
-void
-MafwRendererAdapter::previous()
+void MafwRendererAdapter::previous()
 {
   if(mafw_renderer)
   {
@@ -261,8 +242,7 @@ MafwRendererAdapter::previous()
   }
 }
 
-void
-MafwRendererAdapter::gotoIndex(uint index)
+void MafwRendererAdapter::gotoIndex(uint index)
 {
   if(mafw_renderer)
   {
@@ -270,9 +250,8 @@ MafwRendererAdapter::gotoIndex(uint index)
   }
 }
 
-void
-MafwRendererAdapter::setPosition(MafwRendererSeekMode seekmode,
-				 int seconds)
+void MafwRendererAdapter::setPosition(MafwRendererSeekMode seekmode,
+									  int seconds)
 {
   if(mafw_renderer)
   {
@@ -280,8 +259,7 @@ MafwRendererAdapter::setPosition(MafwRendererSeekMode seekmode,
   }
 }
 
-void
-MafwRendererAdapter::getPosition()
+void MafwRendererAdapter::getPosition()
 {
   if(mafw_renderer)
   {
@@ -289,8 +267,7 @@ MafwRendererAdapter::getPosition()
   }
 }
 
-void
-MafwRendererAdapter::getCurrentMetadata()
+void MafwRendererAdapter::getCurrentMetadata()
 {
   if(mafw_renderer)
   {
@@ -298,8 +275,7 @@ MafwRendererAdapter::getCurrentMetadata()
   }
 }
 
-bool
-MafwRendererAdapter::assignPlaylist(MafwPlaylist* playlist)
+bool MafwRendererAdapter::assignPlaylist(MafwPlaylist* playlist)
 {
   if(mafw_renderer)
   {

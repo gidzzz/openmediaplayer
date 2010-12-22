@@ -1,7 +1,12 @@
 #ifndef _MAFW_RENDERER_SIGNAL_HELPER_HPP_
 #define _MAFW_RENDERER_SIGNAL_HELPER_HPP_
+
+#include <QString>
+
 #include <libmafw/mafw.h>
 #include <libmafw-shared/mafw-shared.h>
+
+#include "mafwrendereradapter.h"
 
 class MafwRendererSignalHelper
 {

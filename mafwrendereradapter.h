@@ -3,10 +3,17 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QString>
+#include <QDebug>
 
 #include <libmafw/mafw.h>
 #include <libmafw-shared/mafw-shared.h>
 #include <glib.h>
+
+#include "mafwrenderersignalhelper.h"
+
+#define MEDIAPLAYER_RENDERER "Mafw-Gst-Renderer"
+#define MEDIAPLAYER_SOURCE "Mafw-Tracker-Source"
 
 class MafwRendererAdapter : public QObject
 {
@@ -15,7 +22,7 @@ class MafwRendererAdapter : public QObject
     friend class MafwRendererSignalHelper;
  public:
   MafwRendererAdapter();
-  ~MafwRendererAdapter();
+  ~MafwRendererAdapter() { }
 
   static void onRendererAdded(MafwRegistry* mafw_registry, GObject* renderer, gpointer user_data);
   static void onRendererRemoved(MafwRegistry* mafw_registry, GObject* renderer,gpointer user_data);
