@@ -20,14 +20,14 @@ void MafwRendererAdapter::findRenderer()
       GList* renderer_elem = renderer_list;
       while(renderer_elem)
       {
-	MafwRenderer* mafw_renderer = MAFW_RENDERER(renderer_elem->data);
-	g_warning("renderer: %s\n", mafw_extension_get_name(MAFW_EXTENSION(mafw_renderer)));
-	if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(mafw_renderer)),MEDIAPLAYER_RENDERER) == 0)
-	{
-	  g_object_ref(mafw_renderer);
-	  this->mafw_renderer = mafw_renderer;
-	  connectRendererSignals();
-	}
+    MafwRenderer* mafw_renderer = MAFW_RENDERER(renderer_elem->data);
+    g_warning("renderer: %s\n", mafw_extension_get_name(MAFW_EXTENSION(mafw_renderer)));
+    if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(mafw_renderer)),MEDIAPLAYER_RENDERER) == 0)
+    {
+      g_object_ref(mafw_renderer);
+      this->mafw_renderer = mafw_renderer;
+      connectRendererSignals();
+    }
       }
     }  
     else
@@ -44,39 +44,39 @@ void MafwRendererAdapter::findRenderer()
 void MafwRendererAdapter::connectRegistrySignals()
 {
   g_signal_connect(mafw_registry, 
-		   "renderer_added", 
-		   G_CALLBACK(&onRendererAdded), 
-		   static_cast<void*>(this));
+           "renderer_added",
+           G_CALLBACK(&onRendererAdded),
+           static_cast<void*>(this));
   
   g_signal_connect(mafw_registry, 
-		   "renderer_removed", 
-		   G_CALLBACK(&onRendererRemoved), 
-		   static_cast<void*>(this));
+           "renderer_removed",
+           G_CALLBACK(&onRendererRemoved),
+           static_cast<void*>(this));
 }
 
 void MafwRendererAdapter::connectRendererSignals()
 {
   g_print("connect renderer signals\n");
   g_signal_connect(mafw_renderer,
-		   "buffering-info",
-		   G_CALLBACK(&onBufferingInfo),
-		   static_cast<void*>(this));
+           "buffering-info",
+           G_CALLBACK(&onBufferingInfo),
+           static_cast<void*>(this));
   g_signal_connect(mafw_renderer,
-		   "media-changed",
-		   G_CALLBACK(&onMediaChanged),
-		   static_cast<void*>(this));
+           "media-changed",
+           G_CALLBACK(&onMediaChanged),
+           static_cast<void*>(this));
   g_signal_connect(mafw_renderer,
-		   "metadata-changed",
-		   G_CALLBACK(&onMetadataChanged),
-		   static_cast<void*>(this));
+           "metadata-changed",
+           G_CALLBACK(&onMetadataChanged),
+           static_cast<void*>(this));
   g_signal_connect(mafw_renderer,
-		   "playlist-changed",
-		   G_CALLBACK(&onPlaylistChanged),
-		   static_cast<void*>(this));
+           "playlist-changed",
+           G_CALLBACK(&onPlaylistChanged),
+           static_cast<void*>(this));
   g_signal_connect(mafw_renderer,
-		   "state-changed",
-		   G_CALLBACK(&onStateChanged),
-		   static_cast<void*>(this));
+           "state-changed",
+           G_CALLBACK(&onStateChanged),
+           static_cast<void*>(this));
 }
 
 void MafwRendererAdapter::disconnectRendererSignals()
@@ -85,8 +85,8 @@ void MafwRendererAdapter::disconnectRendererSignals()
 }
 
 void MafwRendererAdapter::onRendererAdded(MafwRegistry* mafw_registry,
-										  GObject* renderer,
-										  gpointer user_data)
+                                          GObject* renderer,
+                                          gpointer user_data)
 {
   if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(renderer)), MEDIAPLAYER_RENDERER) == 0)
   {
@@ -98,8 +98,8 @@ void MafwRendererAdapter::onRendererAdded(MafwRegistry* mafw_registry,
 
 
 void MafwRendererAdapter::onRendererRemoved(MafwRegistry* mafw_registry,
-											GObject* renderer,
-											gpointer user_data)
+                                            GObject* renderer,
+                                            gpointer user_data)
 {
   if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(renderer)), MEDIAPLAYER_RENDERER) == 0)
   {
@@ -110,26 +110,26 @@ void MafwRendererAdapter::onRendererRemoved(MafwRegistry* mafw_registry,
 }
 
 void MafwRendererAdapter::onBufferingInfo(MafwRenderer* mafw_renderer,
-										  gfloat status,
-										  gpointer user_data)
+                                          gfloat status,
+                                          gpointer user_data)
 {
   g_print("on buffering info\n");
   emit static_cast<MafwRendererAdapter*>(user_data)->bufferingInfo(status);
 }
 
 void MafwRendererAdapter::onMediaChanged(MafwRenderer* mafw_renderer,
-										 gint index,
-										 gchar* object_id,
-										 gpointer user_data)
+                                         gint index,
+                                         gchar* object_id,
+                                         gpointer user_data)
 {
   g_print("on media changed\n");
   emit static_cast<MafwRendererAdapter*>(user_data)->mediaChanged(index, object_id);
 }
 
 void MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer,
-											gchar* name,
-											GValueArray* value,
-											gpointer user_data)
+                                            gchar* name,
+                                            GValueArray* value,
+                                            gpointer user_data)
 {
   g_print("on metadata changed %s\n", name);
   if(value->n_values == 1)
@@ -139,9 +139,9 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer,
     {
     case G_TYPE_STRING:
       {
-	const gchar* str_value = g_value_get_string(v);
-	QVariant data = QVariant(str_value);
-	emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
+    const gchar* str_value = g_value_get_string(v);
+    QVariant data = QVariant(str_value);
+    emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
       }
       break;
     case G_TYPE_INT:
@@ -154,16 +154,16 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer,
 }
 
 void MafwRendererAdapter::onPlaylistChanged(MafwRenderer* renderer,
-											GObject* playlist,
-											gpointer user_data)
+                                            GObject* playlist,
+                                            gpointer user_data)
 {
   g_print("on playlist changed\n");
   emit static_cast<MafwRendererAdapter*>(user_data)->playlistChanged(playlist);
 }
 
 void MafwRendererAdapter::onStateChanged(MafwRenderer* renderer,
-										 gint state,
-										 gpointer user_data)
+                                         gint state,
+                                         gpointer user_data)
 {
   g_print("on state changed\n");
   emit static_cast<MafwRendererAdapter*>(user_data)->stateChanged(state);
@@ -251,7 +251,7 @@ void MafwRendererAdapter::gotoIndex(uint index)
 }
 
 void MafwRendererAdapter::setPosition(MafwRendererSeekMode seekmode,
-									  int seconds)
+                                      int seconds)
 {
   if(mafw_renderer)
   {
