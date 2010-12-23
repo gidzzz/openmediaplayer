@@ -1,9 +1,9 @@
 #include "musicwindow.h"
-#include "ui_musicwindow.h"
 
-MusicWindow::MusicWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MusicWindow)
+MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
+        QMainWindow(parent),
+        ui(new Ui::MusicWindow),
+        mafwrenderer(mra)
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -18,8 +18,8 @@ MusicWindow::MusicWindow(QWidget *parent) :
     ui->verticalLayout->addWidget(ui->songList);
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
-    myNowPlayingWindow = new NowPlayingWindow(this);
-    this->listSongs();
+	myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer);
+	this->listSongs();
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connectSignals();
 #ifdef Q_WS_MAEMO_5
@@ -54,21 +54,21 @@ void MusicWindow::selectSong()
 
 void MusicWindow::listSongs()
 {
-     QDirIterator directory_walker(
+    QDirIterator directory_walker(
 #ifdef Q_WS_MAEMO_5
-                                   "/home/user/MyDocs/.sounds",
+            "/home/user/MyDocs/.sounds",
 #else
-                                   "/home",
+            "/home",
 #endif
-                                   QDir::Files | QDir::NoSymLinks,
-                                   QDirIterator::Subdirectories);
+            QDir::Files | QDir::NoSymLinks,
+            QDirIterator::Subdirectories);
 
     while(directory_walker.hasNext())
     {
-          directory_walker.next();
+        directory_walker.next();
 
-         if(directory_walker.fileInfo().completeSuffix() == "mp3")
-                   ui->songList->addItem(directory_walker.fileName());
+        if(directory_walker.fileInfo().completeSuffix() == "mp3")
+            ui->songList->addItem(directory_walker.fileName());
     }
 }
 

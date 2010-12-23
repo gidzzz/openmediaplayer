@@ -1,5 +1,4 @@
 #include "videoswindow.h"
-#include "ui_videoswindow.h"
 
 VideosWindow::VideosWindow(QWidget *parent) :
     QMainWindow(parent),

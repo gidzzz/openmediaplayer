@@ -1,10 +1,4 @@
 #include "share.h"
-#include "ui_share.h"
-//#include "bluetoothtransferplugin.h"
-//#include "bluetoothtransfer.h"
-#include <QtCore>
-//#include <QMessage>
-//#include <QMessageService>
 
 Share::Share(QWidget *parent, QStringList selected) :
     QDialog(parent),
