@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     internetradiowindow.cpp \
     share.cpp \
     mafwrenderersignalhelper.cpp \
-    mafwrendereradapter.cpp
+    mafwrendereradapter.cpp \
+    fmtxdialog.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -27,14 +28,16 @@ HEADERS  += mainwindow.h \
     internetradiowindow.h \
     share.h \
     mafwrenderersignalhelper.h \
-    mafwrendereradapter.h
+    mafwrendereradapter.h \
+    fmtxdialog.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
     nowplayingwindow.ui \
     videoswindow.ui \
     internetradiowindow.ui \
-    share.ui
+    share.ui \
+    fmtxdialog.ui
 
 CONFIG += mobility
 MOBILITY = 
