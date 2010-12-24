@@ -17,9 +17,30 @@ VideosWindow::VideosWindow(QWidget *parent) :
     sortByCategory = new QAction(tr("Category"), sortByActionGroup);
     sortByCategory->setCheckable(true);
     this->menuBar()->addActions(sortByActionGroup->actions());
+    this->connectSignals();
 }
 
 VideosWindow::~VideosWindow()
 {
     delete ui;
+}
+
+void VideosWindow::connectSignals()
+{
+    connect(ui->listWidget, SIGNAL(activated(QModelIndex)), this, SLOT(onVideoSelected()));
+    connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
+}
+
+void VideosWindow::onVideoSelected()
+{
+    // Placeholder function
+    ui->listWidget->clearSelection();
+}
+
+void VideosWindow::onSortingChanged(QAction *action)
+{
+    if(action == sortByDate)
+        QMainWindow::setWindowTitle(tr("Videos - latest"));
+    else if(action == sortByCategory)
+        QMainWindow::setWindowTitle(tr("Videos - categories"));
 }

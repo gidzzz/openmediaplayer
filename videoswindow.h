@@ -24,8 +24,11 @@ private:
     QActionGroup *sortByActionGroup;
     QAction *sortByDate;
     QAction *sortByCategory;
+    void connectSignals();
 
 private slots:
+    void onVideoSelected();
+    void onSortingChanged(QAction*);
 };
 
 #endif // VIDEOSWINDOW_H
