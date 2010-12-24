@@ -49,6 +49,7 @@ private:
     void setButtonIcons();
     void listSongs();
     void connectSignals();
+    void updatePortraitWidgets();
 
 private slots:
     void toggleVolumeSlider();

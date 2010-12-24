@@ -12,14 +12,11 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->volumeSlider->hide();
     ui->currentPositionLabel->setText("0:00");
     ui->trackLengthLabel->setText("0:00");
-    ui->artworkButton->setIcon(QIcon(albumImage));
-    ui->artworkButton_2->setIcon(ui->artworkButton->icon());
     this->setButtonIcons();
     ui->buttonsWidget->setLayout(ui->horizontalLayout_9);
     ui->songPlaylist->hide();
     ui->songPlaylist_2->hide();
     QMainWindow::setCentralWidget(ui->horizontalWidget);
-    QMainWindow::setGeometry(0, 0, 800, 450);
     ui->landscapeWidget->setLayout(ui->verticalLayout);
     ui->portraitWidget->setLayout(ui->verticalLayout_3);
     ui->portraitWidget->hide();
@@ -57,6 +54,8 @@ void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
 
 void NowPlayingWindow::setButtonIcons()
 {
+    ui->artworkButton->setIcon(QIcon(albumImage));
+    ui->artworkButton_2->setIcon(ui->artworkButton->icon());
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
@@ -85,6 +84,7 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
   {
     ui->albumNameLabel->setText(value.toString());
   }
+  this->updatePortraitWidgets();
 }
 
 void NowPlayingWindow::stateChanged(int state)
@@ -92,14 +92,20 @@ void NowPlayingWindow::stateChanged(int state)
   if(state == Paused)
   {
     ui->playButton->setIcon(QIcon(playButtonIcon));
+    ui->playButton_2->setIcon(ui->playButton->icon());
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+    connect(ui->playButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+    connect(ui->playButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
   }
   else
   {
     ui->playButton->setIcon(QIcon(pauseButtonIcon));
+    ui->playButton_2->setIcon(ui->playButton->icon());
     disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+    disconnect(ui->playButton_2, SIGNAL(clicked()), 0, 0);
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+    connect(ui->playButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
   }
 }
 
@@ -113,6 +119,9 @@ void NowPlayingWindow::connectSignals()
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
     connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
+    connect(ui->playButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+    connect(ui->nextButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
+    connect(ui->prevButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
 #ifdef Q_WS_MAEMO_5
@@ -140,18 +149,22 @@ void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs,
     ui->songTitleLabel->setText(songName);
     ui->albumNameLabel->setText(albumName);
     ui->artistLabel->setText(artistName);
-    ui->songNumberLabel_2->setText(ui->songNumberLabel->text());
-    ui->songTitleLabel_2->setText(ui->songTitleLabel->text());
-    ui->albumNameLabel_2->setText(ui->albumNameLabel->text());
-    ui->artistLabel_2->setText(ui->artistLabel->text());
     ui->songPlaylist->setCurrentRow(songNumber-1);
-    ui->songPlaylist_2->setCurrentRow(songNumber-1);
     if(!ui->songPlaylist->isHidden() || !ui->songPlaylist_2->isHidden()) {
         ui->songPlaylist->hide();
         ui->songPlaylist_2->hide();
         ui->scrollArea->show();
         ui->scrollArea_2->show();
     }
+}
+
+void NowPlayingWindow::updatePortraitWidgets()
+{
+    ui->songNumberLabel_2->setText(ui->songNumberLabel->text());
+    ui->songTitleLabel_2->setText(ui->songTitleLabel->text());
+    ui->albumNameLabel_2->setText(ui->albumNameLabel->text());
+    ui->artistLabel_2->setText(ui->artistLabel->text());
+    ui->songPlaylist_2->setCurrentRow(ui->songPlaylist->currentRow());
 }
 
 void NowPlayingWindow::orientationChanged()
@@ -198,10 +211,12 @@ void NowPlayingWindow::listSongs()
 void NowPlayingWindow::toggleList()
 {
     if(ui->songPlaylist->isHidden() || ui->songPlaylist_2->isHidden()) {
-        ui->songPlaylist->show();
-        ui->songPlaylist_2->show();
+        /* Hide scrollArea first, then show playlist otherwise
+           the other labels will move a bit in portrait mode   */
         ui->scrollArea->hide();
         ui->scrollArea_2->hide();
+        ui->songPlaylist->show();
+        ui->songPlaylist_2->show();
     } else {
         ui->songPlaylist->hide();
         ui->songPlaylist_2->hide();
