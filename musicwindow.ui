@@ -20,10 +20,10 @@
       <x>0</x>
       <y>0</y>
       <width>801</width>
-      <height>391</height>
+      <height>121</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="songsLayout">
      <item>
       <widget class="QListWidget" name="songList">
        <property name="horizontalScrollBarPolicy">

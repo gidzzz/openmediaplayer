@@ -13,9 +13,9 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     shuffleAllButton = new QPushButton(this);
 #endif
     shuffleAllButton->setText(tr("Shuffle songs"));
-    ui->verticalLayout->removeWidget(ui->songList);
-    ui->verticalLayout->addWidget(shuffleAllButton);
-    ui->verticalLayout->addWidget(ui->songList);
+    ui->songsLayout->removeWidget(ui->songList);
+    ui->songsLayout->addWidget(shuffleAllButton);
+    ui->songsLayout->addWidget(ui->songList);
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
 	myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer);
