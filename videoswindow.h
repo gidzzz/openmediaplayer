@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QActionGroup>
 #include <QAction>
+#include <QSettings>
 
 #include "ui_videoswindow.h"
 
@@ -25,6 +26,7 @@ private:
     QAction *sortByDate;
     QAction *sortByCategory;
     void connectSignals();
+    void selectView();
 
 private slots:
     void onVideoSelected();
