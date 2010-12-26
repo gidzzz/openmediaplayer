@@ -55,26 +55,25 @@ void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
         qDebug() << QString::number(volumeLevel);
 #endif
         ui->volumeSlider->setValue(volumeLevel);
-        }
+    }
 }
 #endif
 
 void NowPlayingWindow::setButtonIcons()
 {
     ui->artworkButton->setIcon(QIcon(albumImage));
-    ui->artworkButton_2->setIcon(ui->artworkButton->icon());
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
     ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
     ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
-    ui->prevButton_2->setIcon(QIcon(prevButtonIcon));
-    ui->playButton_2->setIcon(QIcon(playButtonIcon));
-    ui->nextButton_2->setIcon(QIcon(nextButtonIcon));
-    ui->shuffleButton_2->setIcon(QIcon(shuffleButtonIcon));
-    ui->repeatButton_2->setIcon(QIcon(repeatButtonIcon));
-    //ui->volumeButton_2->setIcon(QIcon(volumeButtonIcon));
+    ui->prevButton_2->setIcon(ui->prevButton->icon());
+    ui->playButton_2->setIcon(ui->playButton->icon());
+    ui->nextButton_2->setIcon(ui->nextButton->icon());
+    ui->shuffleButton_2->setIcon(ui->shuffleButton->icon());
+    ui->repeatButton_2->setIcon(ui->repeatButton->icon());
+    ui->artworkButton_2->setIcon(ui->artworkButton->icon());
 }
 
 void NowPlayingWindow::metadataChanged(QString name, QVariant value)
