@@ -10,6 +10,9 @@ void ListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->save();
         QRect r = option.rect;
         QFont f = painter->font();
+        QPen defaultPen = painter->pen();
+        QColor gray;
+        gray = QColor(156, 154, 156);
 
         if( QApplication::desktop()->width() > QApplication::desktop()->height() )
         {
@@ -23,7 +26,9 @@ void ListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             f.setPointSize(13);
             painter->setFont(f);
             r.setBottom(r.bottom()-10);
+            painter->setPen(QPen(gray));
             painter->drawText(30, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+            painter->setPen(defaultPen);;
 
             r = option.rect;
             r.setRight(r.right()-12);
@@ -41,13 +46,16 @@ void ListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             f.setPointSize(13);
             painter->setFont(f);
             r.setBottom(r.bottom()-10);
+            painter->setPen(QPen(gray));
             painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+            painter->setPen(defaultPen);;
 
             r = option.rect;
             r.setRight(r.right()-12);
             f.setPointSize(18);
             painter->setFont(f);
             painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
+
         }
         painter->restore();
 }
@@ -143,6 +151,7 @@ void MusicWindow::connectSignals()
     connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectSong()));
 #endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onContextMenuRequested(const QPoint &)));
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
 void MusicWindow::onContextMenuRequested(const QPoint &point)
@@ -166,4 +175,9 @@ void MusicWindow::onShareClicked()
     Share *share = new Share(this, list);
     share->setAttribute(Qt::WA_DeleteOnClose);
     share->show();
+}
+
+void MusicWindow::orientationChanged()
+{
+    ui->songList->scroll(1,1);
 }

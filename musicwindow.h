@@ -60,6 +60,7 @@ private:
 private slots:
     void onContextMenuRequested(const QPoint&);
     void onShareClicked();
+    void orientationChanged();
 };
 
 #endif // MUSICWINDOW_H
