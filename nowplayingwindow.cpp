@@ -20,6 +20,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->landscapeWidget->setLayout(ui->verticalLayout);
     ui->portraitWidget->setLayout(ui->verticalLayout_3);
     ui->portraitWidget->hide();
+    volumeTimer = new QTimer(this);
+    volumeTimer->setInterval(3000);
     this->connectSignals();
     this->listSongs();
 }
@@ -37,6 +39,8 @@ void NowPlayingWindow::toggleVolumeSlider()
     } else {
         ui->buttonsWidget->show();
         ui->volumeSlider->hide();
+        if(volumeTimer->isActive())
+            volumeTimer->stop();
     }
 }
 
@@ -127,6 +131,10 @@ void NowPlayingWindow::connectSignals()
     connect(ui->prevButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
+    connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
+    connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
+    connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
+    connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -226,4 +234,10 @@ void NowPlayingWindow::toggleList()
         ui->scrollArea->show();
         ui->scrollArea_2->show();
     }
+}
+
+void NowPlayingWindow::volumeWatcher()
+{
+    if(!ui->volumeSlider->isHidden())
+        volumeTimer->start();
 }

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtGui>
 #include <QtDBus>
+#include <QTimer>
 #ifdef Q_WS_MAEMO_5
 #include <QLibrary>
 #include <libosso.h>
@@ -50,6 +51,7 @@ private:
     void listSongs();
     void connectSignals();
     void updatePortraitWidgets();
+    QTimer *volumeTimer;
 
 private slots:
     void toggleVolumeSlider();
@@ -61,6 +63,7 @@ private slots:
 #endif
     void stateChanged(int state);
     void metadataChanged(QString name, QVariant value);
+    void volumeWatcher();
 };
 
 #endif // NOWPLAYINGWINDOW_H
