@@ -1,16 +1,8 @@
 #ifndef FMTXDIALOG_H
 #define FMTXDIALOG_H
 
-#include <QDialog>
+#include <QtGui>
 #include "ui_fmtxdialog.h"
-#ifdef Q_WS_MAEMO_5
-#include <QMaemo5ListPickSelector>
-#include <QMaemo5InformationBox>
-#include <QMaemo5ValueButton>
-#include <QAbstractListModel>
-#include <QList>
-#include <QListView>
-#endif
 
 namespace Ui {
     class FMTXDialog;
@@ -19,20 +11,21 @@ namespace Ui {
 class FMTXDialog : public QDialog
 {
     Q_OBJECT
+    Ui::FMTXDialog *ui;
+    QDialog *freqDialog;
+    QPushButton *freqButton;
+    QListWidget *integers;
+    QListWidget *fractions;
 
 public:
     explicit FMTXDialog(QWidget *parent = 0);
     ~FMTXDialog();
 
-private:
-    Ui::FMTXDialog *ui;
-#ifdef Q_WS_MAEMO_5
-    QMaemo5ValueButton *fmtxList;
-    QMaemo5ListPickSelector *fmtxSelector;
-    QListView *fmtxItems;
-#endif
+protected:
+    void showEvent(QShowEvent *event);
 
 private slots:
+    void showFreqDialog();
     void onSaveClicked();
 };
 

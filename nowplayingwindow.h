@@ -10,6 +10,7 @@
 #endif
 
 #include "mafwrendereradapter.h"
+#include "fmtxdialog.h"
 #include "ui_nowplayingwindow.h"
 
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
@@ -41,11 +42,12 @@ public slots:
 
 private:
     Ui::NowPlayingWindow *ui;
+    FMTXDialog *fmtxDialog;
 #ifdef Q_WS_MAEMO_5
     osso_context_t *osso_context;
     MafwRendererAdapter* mafwrenderer;
-
 #endif
+
     void setButtonIcons();
     void listSongs();
     void connectSignals();

@@ -3,7 +3,8 @@
 NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow(parent),
     ui(new Ui::NowPlayingWindow),
-    mafwrenderer(mra)
+    mafwrenderer(mra),
+    fmtxDialog(new FMTXDialog(this))
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -139,10 +140,9 @@ void NowPlayingWindow::connectSignals()
 void NowPlayingWindow::showFMTXDialog()
 {
 #ifdef Q_WS_MAEMO_5
-    osso_context = osso_initialize("qt-mediaplayer", "0.1", TRUE, NULL);
-    osso_cp_plugin_execute(osso_context, "libcpfmtx.so", this, TRUE);
-    //QLibrary fmtx("libcpfmtx.so");
-    //fmtx.resolve("execute");
+    fmtxDialog->show();
+//    osso_context = osso_initialize("qt-mediaplayer", "0.1", TRUE, NULL);
+//    osso_cp_plugin_execute(osso_context, "libcpfmtx.so", this, TRUE);
 #endif
 }
 

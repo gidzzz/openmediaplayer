@@ -49,7 +49,7 @@ symbian {
     TARGET.EPOCHEAPSIZE = 0x020000 0x800000
 }
 
-maemo5* {
+maemo5 {
     CONFIG += link_pkgconfig
     PKGCONFIG += libosso mafw mafw-shared glib-2.0
     QT += maemo5
