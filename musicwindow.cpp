@@ -2,9 +2,7 @@
 
 void ListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-        //QString name = index.data(UserRoleName).toString();
-        //QString version = index.data(UserRoleVersion).toString();
-        //QString desc = index.data(UserRoleDescShort).toString();
+        // Thanks to hqh for fapman, this code is based on the list in it.
         QString songName = index.data(UserRoleSongName).toString();
         QString songLength = "--:--";
         QString songArtistAlbum = "(unknown artist) / (unknown album)";
