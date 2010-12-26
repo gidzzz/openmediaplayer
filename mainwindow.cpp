@@ -125,4 +125,5 @@ void MainWindow::processListClicks(QListWidgetItem* item)
         this->showVideosWindow();
     else if(itemName == "radio_button")
         this->showInternetRadioWindow();
+    ui->listWidget->clearSelection();
 }

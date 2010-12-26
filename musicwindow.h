@@ -16,6 +16,8 @@
 #include "mafwrendereradapter.h"
 #include "ui_musicwindow.h"
 
+#define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
+
 class MafwRendererAdapter;
 namespace Ui {
     class MusicWindow;

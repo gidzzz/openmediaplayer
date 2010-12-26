@@ -362,6 +362,12 @@
              <property name="horizontalScrollBarPolicy">
               <enum>Qt::ScrollBarAlwaysOff</enum>
              </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <property name="sortingEnabled">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
           </layout>
@@ -923,6 +929,12 @@
            </property>
            <property name="horizontalScrollBarPolicy">
             <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

@@ -39,6 +39,7 @@ public:
 
 public slots:
     void onMetadataChanged(int, int, QString, QString, QString);
+    void updatePortraitWidgets();
 
 private:
     Ui::NowPlayingWindow *ui;
@@ -50,7 +51,6 @@ private:
     void setButtonIcons();
     void listSongs();
     void connectSignals();
-    void updatePortraitWidgets();
     QTimer *volumeTimer;
 
 private slots:
