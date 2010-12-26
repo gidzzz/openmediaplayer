@@ -1,5 +1,4 @@
 #include "internetradiowindow.h"
-#include "ui_internetradiowindow.h"
 
 InternetRadioWindow::InternetRadioWindow(QWidget *parent) :
         QMainWindow(parent),

@@ -47,6 +47,9 @@ void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
                  /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.extension.get_extension_property string:volume*/
     if (msg.arguments()[0].toString() == "volume") {
         int volumeLevel = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
+#ifdef DEBUG
+        qDebug() << QString::number(volumeLevel);
+#endif
         ui->volumeSlider->setValue(volumeLevel);
         }
 }

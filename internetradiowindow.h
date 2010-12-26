@@ -14,6 +14,7 @@
 #include <libosso.h>
 #include <QMaemo5InformationBox>
 #endif
+#include "ui_internetradiowindow.h"
 
 namespace Ui {
     class InternetRadioWindow;

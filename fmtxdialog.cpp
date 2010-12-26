@@ -1,5 +1,4 @@
 #include "fmtxdialog.h"
-#include "ui_fmtxdialog.h"
 
 FMTXDialog::FMTXDialog(QWidget *parent) :
     QDialog(parent),

@@ -2,6 +2,7 @@
 #define FMTXDIALOG_H
 
 #include <QDialog>
+#include "ui_fmtxdialog.h"
 #ifdef Q_WS_MAEMO_5
 #include <QMaemo5ListPickSelector>
 #include <QMaemo5InformationBox>
