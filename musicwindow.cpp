@@ -1,5 +1,64 @@
 #include "musicwindow.h"
 
+void ListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+        //QString name = index.data(UserRoleName).toString();
+        //QString version = index.data(UserRoleVersion).toString();
+        //QString desc = index.data(UserRoleDescShort).toString();
+        QString songName = index.data(UserRoleSongName).toString();
+        QString songLength = "--:--";
+        QString songArtistAlbum = "(unknown artist) / (unknown album)";
+
+        painter->save();
+        QRect r = option.rect;
+        QFont f = painter->font();
+
+        if( QApplication::desktop()->width() > QApplication::desktop()->height() )
+        {
+            // Landscape
+            r = option.rect;
+            f.setPointSize(18);
+            painter->setFont(f);
+            painter->drawText(30, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+
+            r = option.rect;
+            f.setPointSize(13);
+            painter->setFont(f);
+            r.setBottom(r.bottom()-10);
+            painter->drawText(30, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+
+            r = option.rect;
+            r.setRight(r.right()-12);
+            f.setPointSize(18);
+            painter->setFont(f);
+            painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
+        } else {
+            // Portrait
+            r = option.rect;
+            f.setPointSize(18);
+            painter->setFont(f);
+            painter->drawText(r.left()+5, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+
+            r = option.rect;
+            f.setPointSize(13);
+            painter->setFont(f);
+            r.setBottom(r.bottom()-10);
+            painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+
+            r = option.rect;
+            r.setRight(r.right()-12);
+            f.setPointSize(18);
+            painter->setFont(f);
+            painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
+        }
+        painter->restore();
+}
+
+QSize ListItemDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
+{
+        return QSize(400, 70);
+}
+
 MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
         QMainWindow(parent),
         ui(new Ui::MusicWindow),
@@ -18,8 +77,10 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->songsLayout->addWidget(ui->songList);
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
-	myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer);
-	this->listSongs();
+    myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer);
+    ListItemDelegate *delegate = new ListItemDelegate(ui->songList);
+    ui->songList->setItemDelegate(delegate);
+    this->listSongs();
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connectSignals();
 #ifdef Q_WS_MAEMO_5
@@ -67,8 +128,12 @@ void MusicWindow::listSongs()
     {
         directory_walker.next();
 
-        if(directory_walker.fileInfo().completeSuffix() == "mp3")
-            ui->songList->addItem(directory_walker.fileName());
+        if(directory_walker.fileInfo().completeSuffix() == "mp3") {
+            QListWidgetItem *songItem = new QListWidgetItem(directory_walker.fileName());
+            songItem->setData(UserRoleSongName, directory_walker.fileName());
+            //ui->songList->addItem(directory_walker.fileName());
+            ui->songList->addItem(songItem);
+        }
     }
 }
 

@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QDirIterator>
 #include <QMenu>
+#include <QtGui>
 #include <share.h>
 #ifdef Q_WS_MAEMO_5
 #include <QMaemo5ValueButton>
@@ -19,6 +20,18 @@ class MafwRendererAdapter;
 namespace Ui {
     class MusicWindow;
 }
+
+enum UserRoles { UserRoleName=Qt::UserRole, UserRoleSongName };
+
+class ListItemDelegate : public QStyledItemDelegate
+{
+public:
+        explicit ListItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
+        virtual ~ListItemDelegate() {}
+
+        void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+        QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+};
 
 class MusicWindow : public QMainWindow
 {
