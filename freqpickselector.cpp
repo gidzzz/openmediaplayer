@@ -51,15 +51,15 @@ void FreqPickSelector::refreshFreqValues()
     QFile maxFile("/sys/class/i2c-adapter/i2c-2/2-0063/region_top_frequency");
     maxFile.open(QIODevice::ReadOnly);
     QTextStream maxStream(&maxFile);
-    int maxValue = maxStream.readLine().toInt() / 1000;
+    int maxValue = maxStream.readLine().toInt() / 1000 - 1;
     maxFile.close();
 #ifdef DEBUG
     qDebug() << "Minimum FMTX value: " << QString::number(minValue);
     qDebug() << "Maximum FMTX value: " << QString::number(maxValue);
 #endif
-    // TODO: get these values from fmtxd
     _minFreq = minValue;
     _maxFreq = maxValue;
+    // TODO: Get this from gconf: /system/fmtx/frequency
     double selectedFreq = 100;
 
     // Now updating the list widgets
