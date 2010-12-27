@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QLabel>
 #include <QLayout>
+#include <QDesktopWidget>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QSpacerItem>
@@ -36,16 +37,10 @@ private:
     void connectSignals();
     QDialog *bookmarkDialog;
     QLabel *nameLabel;
-    QHBoxLayout *horizontalLayout;
-    QVBoxLayout *labelLayout;
-    QVBoxLayout *lineEditLayout;
-    QVBoxLayout *verticalLayout;
-    QVBoxLayout *saveButtonLayout;
     QLabel *addressLabel;
     QPushButton *saveButton;
     QLineEdit *addressBox;
     QLineEdit *nameBox;
-    QSpacerItem *verticalSpacer;
     QDialogButtonBox *buttonBox;
 
 private slots:

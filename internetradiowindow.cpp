@@ -38,33 +38,45 @@ void InternetRadioWindow::showAddBookmarkDialog()
     */
     bookmarkDialog = new QDialog(this);
     bookmarkDialog->setWindowTitle(tr("Add radio bookmark"));
-    horizontalLayout = new QHBoxLayout(bookmarkDialog);
+    QHBoxLayout *horizontalLayout = new QHBoxLayout(bookmarkDialog);
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
 
     nameLabel = new QLabel(bookmarkDialog);
     nameLabel->setText(tr("Name"));
     addressLabel = new QLabel(bookmarkDialog);
     addressLabel->setText(tr("Web address"));
 
-    labelLayout = new QVBoxLayout(bookmarkDialog);
-    labelLayout->addWidget(nameLabel);
-    labelLayout->addWidget(addressLabel);
+    QVBoxLayout *labelLayout = new QVBoxLayout(bookmarkDialog);
 
     nameBox = new QLineEdit(bookmarkDialog);
     addressBox = new QLineEdit(bookmarkDialog);
     addressBox->setText("http://");
 
-    lineEditLayout = new QVBoxLayout(bookmarkDialog);
-    lineEditLayout->addWidget(nameBox);
-    lineEditLayout->addWidget(addressBox);
+    QVBoxLayout *lineEditLayout = new QVBoxLayout(bookmarkDialog);
 
-    saveButtonLayout = new QVBoxLayout(bookmarkDialog);
-    verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    if (screenGeometry.width() > screenGeometry.height()) {
+        labelLayout->addWidget(nameLabel);
+        labelLayout->addWidget(addressLabel);
+        lineEditLayout->addWidget(nameBox);
+        lineEditLayout->addWidget(addressBox);
+    } else {
+        horizontalLayout->setDirection(QBoxLayout::TopToBottom);
+        horizontalLayout->addWidget(nameLabel);
+        horizontalLayout->addWidget(nameBox);
+        horizontalLayout->addWidget(addressLabel);
+        horizontalLayout->addWidget(addressBox);
+    }
+
+    QVBoxLayout *saveButtonLayout = new QVBoxLayout(bookmarkDialog);
+    QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     saveButton = new QPushButton(bookmarkDialog);
     saveButton->setText(tr("Save"));
     saveButton->setDefault(true);
     connect(saveButton, SIGNAL(clicked()), this, SLOT(onSaveClicked()));
     buttonBox = new QDialogButtonBox(Qt::Vertical);
     buttonBox->addButton(saveButton, QDialogButtonBox::ActionRole);
+    saveButtonLayout->addItem(verticalSpacer);
+    saveButtonLayout->addWidget(buttonBox);
 
     horizontalLayout->addLayout(labelLayout);
     horizontalLayout->addLayout(lineEditLayout);
