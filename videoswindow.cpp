@@ -39,6 +39,8 @@ void VideosWindow::onVideoSelected()
 {
     // Placeholder function
     ui->listWidget->clearSelection();
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
+    window->showFullScreen();
 }
 
 void VideosWindow::onSortingChanged(QAction *action)

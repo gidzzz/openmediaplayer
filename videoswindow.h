@@ -7,6 +7,7 @@
 #include <QSettings>
 
 #include "ui_videoswindow.h"
+#include <videonowplayingwindow.h>
 
 namespace Ui {
     class VideosWindow;
