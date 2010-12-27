@@ -38,7 +38,7 @@ void FreqPickSelector::updateText()
 
 QString FreqPickSelector::currentValueText() const
 {
-    return QString::number(selectedFreq()) + " " + tr("MHz");
+    return integers->currentItem()->text() + "." + fractions->currentItem()->text() + " " + tr("MHz");
 }
 
 void FreqPickSelector::refreshFreqValues()
