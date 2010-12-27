@@ -38,8 +38,6 @@ void InternetRadioWindow::showAddBookmarkDialog()
     */
     bookmarkDialog = new QDialog(this);
     bookmarkDialog->setWindowTitle(tr("Add radio bookmark"));
-    QHBoxLayout *horizontalLayout = new QHBoxLayout(bookmarkDialog);
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
 
     nameLabel = new QLabel(bookmarkDialog);
     nameLabel->setText(tr("Name"));
@@ -47,12 +45,13 @@ void InternetRadioWindow::showAddBookmarkDialog()
     addressLabel->setText(tr("Web address"));
 
     QVBoxLayout *labelLayout = new QVBoxLayout(bookmarkDialog);
+    QVBoxLayout *lineEditLayout = new QVBoxLayout(bookmarkDialog);
+    QHBoxLayout *horizontalLayout = new QHBoxLayout(bookmarkDialog);
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
 
     nameBox = new QLineEdit(bookmarkDialog);
     addressBox = new QLineEdit(bookmarkDialog);
     addressBox->setText("http://");
-
-    QVBoxLayout *lineEditLayout = new QVBoxLayout(bookmarkDialog);
 
     if (screenGeometry.width() > screenGeometry.height()) {
         labelLayout->addWidget(nameLabel);
