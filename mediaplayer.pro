@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     share.cpp \
     mafwrenderersignalhelper.cpp \
     mafwrendereradapter.cpp \
-    fmtxdialog.cpp
+    fmtxdialog.cpp \
+    freqpickselector.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     share.h \
     mafwrenderersignalhelper.h \
     mafwrendereradapter.h \
-    fmtxdialog.h
+    fmtxdialog.h \
+    freqpickselector.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
