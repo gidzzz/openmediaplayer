@@ -3,8 +3,8 @@
 NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow(parent),
     ui(new Ui::NowPlayingWindow),
-    mafwrenderer(mra),
-    fmtxDialog(new FMTXDialog(this))
+    fmtxDialog(new FMTXDialog(this)),
+    mafwrenderer(mra)
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
