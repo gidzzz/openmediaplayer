@@ -48,6 +48,7 @@ void FreqPickSelector::refreshFreqValues()
     _maxFreq = 107;
     double selectedFreq = 100;
 
+    // Now updating the list widgets
     integers->clear();
     fractions->clear();
     for (int i = _minFreq; i <= _maxFreq; i++)
@@ -60,7 +61,7 @@ void FreqPickSelector::refreshFreqValues()
 
 QWidget *FreqPickSelector::widget(QWidget *parent)
 {
-    if (freqDialog == 0)
+    if (freqDialog != 0)
     {
         integers->setParent(0);
         fractions->setParent(0);
