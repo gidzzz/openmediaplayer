@@ -21,6 +21,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->landscapeWidget->setLayout(ui->verticalLayout);
     ui->portraitWidget->setLayout(ui->verticalLayout_3);
     ui->portraitWidget->hide();
+    volumeTimer = new QTimer(this);
+    volumeTimer->setInterval(3000);
     this->connectSignals();
     this->listSongs();
 }
@@ -38,6 +40,8 @@ void NowPlayingWindow::toggleVolumeSlider()
     } else {
         ui->buttonsWidget->show();
         ui->volumeSlider->hide();
+        if(volumeTimer->isActive())
+            volumeTimer->stop();
     }
 }
 
@@ -52,26 +56,25 @@ void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
         qDebug() << QString::number(volumeLevel);
 #endif
         ui->volumeSlider->setValue(volumeLevel);
-        }
+    }
 }
 #endif
 
 void NowPlayingWindow::setButtonIcons()
 {
     ui->artworkButton->setIcon(QIcon(albumImage));
-    ui->artworkButton_2->setIcon(ui->artworkButton->icon());
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
     ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
     ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
-    ui->prevButton_2->setIcon(QIcon(prevButtonIcon));
-    ui->playButton_2->setIcon(QIcon(playButtonIcon));
-    ui->nextButton_2->setIcon(QIcon(nextButtonIcon));
-    ui->shuffleButton_2->setIcon(QIcon(shuffleButtonIcon));
-    ui->repeatButton_2->setIcon(QIcon(repeatButtonIcon));
-    //ui->volumeButton_2->setIcon(QIcon(volumeButtonIcon));
+    ui->prevButton_2->setIcon(ui->prevButton->icon());
+    ui->playButton_2->setIcon(ui->playButton->icon());
+    ui->nextButton_2->setIcon(ui->nextButton->icon());
+    ui->shuffleButton_2->setIcon(ui->shuffleButton->icon());
+    ui->repeatButton_2->setIcon(ui->repeatButton->icon());
+    ui->artworkButton_2->setIcon(ui->artworkButton->icon());
 }
 
 void NowPlayingWindow::metadataChanged(QString name, QVariant value)
@@ -128,6 +131,10 @@ void NowPlayingWindow::connectSignals()
     connect(ui->prevButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
+    connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
+    connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
+    connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
+    connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -226,4 +233,10 @@ void NowPlayingWindow::toggleList()
         ui->scrollArea->show();
         ui->scrollArea_2->show();
     }
+}
+
+void NowPlayingWindow::volumeWatcher()
+{
+    if(!ui->volumeSlider->isHidden())
+        volumeTimer->start();
 }

@@ -13,7 +13,11 @@ VideosWindow::VideosWindow(QWidget *parent) :
     sortByActionGroup->setExclusive(true);
     sortByDate = new QAction(tr("Date"), sortByActionGroup);
     sortByDate->setCheckable(true);
-    sortByDate->setChecked(true);
+    this->selectView();
+    if(sortByDate->isChecked())
+        QMainWindow::setWindowTitle(tr("Videos - latest"));
+    else
+        QMainWindow::setWindowTitle(tr("Videos - categories"));
     sortByCategory = new QAction(tr("Category"), sortByActionGroup);
     sortByCategory->setCheckable(true);
     this->menuBar()->addActions(sortByActionGroup->actions());
@@ -39,8 +43,19 @@ void VideosWindow::onVideoSelected()
 
 void VideosWindow::onSortingChanged(QAction *action)
 {
-    if(action == sortByDate)
+    if(action == sortByDate) {
         QMainWindow::setWindowTitle(tr("Videos - latest"));
-    else if(action == sortByCategory)
+        QSettings().setValue("Videos/Sortby", "date");
+    } else if(action == sortByCategory) {
         QMainWindow::setWindowTitle(tr("Videos - categories"));
+        QSettings().setValue("Videos/Sortby", "caregory");
+    }
+}
+
+void VideosWindow::selectView()
+{
+    if(QSettings().value("Videos/Sortby").toString() == "category")
+        sortByCategory->setChecked(true);
+    else
+        sortByDate->setChecked(true);
 }

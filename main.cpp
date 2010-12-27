@@ -4,6 +4,9 @@
 
 int main(int argc, char *argv[])
 {
+    QApplication::setOrganizationName("MohammadAG");
+    QApplication::setApplicationName("mediaplayer");
+    QApplication::setApplicationVersion("0.1");
     QApplication a(argc, argv);
     MainWindow w;
 

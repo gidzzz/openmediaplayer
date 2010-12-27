@@ -98,7 +98,9 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
         QString label = tr("songs");
         shuffleAllButton->setValueText(QString::number(numberOfSongs) + " " + label);
     }
-    shuffleAllButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);;
+    shuffleAllButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
+    shuffleAllButton->setIconSize(QSize(64, 64));
+    shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
 #endif
 }
 
@@ -117,6 +119,7 @@ void MusicWindow::selectSong()
                                           tr("(unknown arist)")
                                           );
     myNowPlayingWindow->show();
+    myNowPlayingWindow->updatePortraitWidgets();
 }
 
 void MusicWindow::listSongs()
