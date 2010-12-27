@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QMaemo5AbstractPickSelector>
+#include <QFile>
 
 class FreqPickSelector : public QMaemo5AbstractPickSelector
 {

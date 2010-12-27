@@ -43,9 +43,23 @@ QString FreqPickSelector::currentValueText() const
 
 void FreqPickSelector::refreshFreqValues()
 {
+    QFile minFile("/sys/class/i2c-adapter/i2c-2/2-0063/region_bottom_frequency");
+    minFile.open(QIODevice::ReadOnly);
+    QTextStream minStream(&minFile);
+    int minValue = minStream.readLine().toInt() / 1000;
+    minFile.close();
+    QFile maxFile("/sys/class/i2c-adapter/i2c-2/2-0063/region_top_frequency");
+    maxFile.open(QIODevice::ReadOnly);
+    QTextStream maxStream(&maxFile);
+    int maxValue = maxStream.readLine().toInt() / 1000;
+    maxFile.close();
+#ifdef DEBUG
+    qDebug() << "Minimum FMTX value: " << QString::number(minValue);
+    qDebug() << "Maximum FMTX value: " << QString::number(maxValue);
+#endif
     // TODO: get these values from fmtxd
-    _minFreq = 76;
-    _maxFreq = 107;
+    _minFreq = minValue;
+    _maxFreq = maxValue;
     double selectedFreq = 100;
 
     // Now updating the list widgets
