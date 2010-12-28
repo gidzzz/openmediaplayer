@@ -56,6 +56,9 @@
        <property name="viewMode">
         <enum>QListView::IconMode</enum>
        </property>
+       <property name="selectionRectVisible">
+        <bool>false</bool>
+       </property>
        <item>
         <property name="text">
          <string>Video 1</string>

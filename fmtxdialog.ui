@@ -60,6 +60,9 @@
        <property name="standardButtons">
         <set>QDialogButtonBox::Save</set>
        </property>
+       <property name="centerButtons">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
     </layout>

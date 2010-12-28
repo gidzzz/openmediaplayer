@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     mafwrenderersignalhelper.cpp \
     mafwrendereradapter.cpp \
     fmtxdialog.cpp \
-    freqpickselector.cpp
+    freqpickselector.cpp \
+    videonowplayingwindow.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     mafwrenderersignalhelper.h \
     mafwrendereradapter.h \
     fmtxdialog.h \
-    freqpickselector.h
+    freqpickselector.h \
+    videonowplayingwindow.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -39,7 +41,8 @@ FORMS    += mainwindow.ui \
     videoswindow.ui \
     internetradiowindow.ui \
     share.ui \
-    fmtxdialog.ui
+    fmtxdialog.ui \
+    videonowplayingwindow.ui
 
 CONFIG += mobility
 MOBILITY = 
