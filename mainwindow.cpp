@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 
 /**************************************************************************
-    Maemo 5 Stock Media Player rewrite in Qt
+    Qt Media Player
     Copyright (C) 2010 Mohammad Abu-Garbeyyeh
 
     This program is free software: you can redistribute it and/or modify
