@@ -29,14 +29,18 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>27</x>
-      <y>84</y>
-      <width>181</width>
-      <height>181</height>
+      <x>35</x>
+      <y>90</y>
+      <width>164</width>
+      <height>164</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">QPushButton:pressed
+{
+background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
+border: none;
+}</string>
     </property>
     <property name="text">
      <string/>
@@ -61,14 +65,18 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>215</x>
-      <y>84</y>
-      <width>181</width>
-      <height>181</height>
+      <x>220</x>
+      <y>90</y>
+      <width>164</width>
+      <height>164</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">QPushButton:pressed
+{
+background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
+border: none;
+}</string>
     </property>
     <property name="text">
      <string/>
@@ -93,14 +101,18 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>403</x>
-      <y>84</y>
-      <width>181</width>
-      <height>181</height>
+      <x>410</x>
+      <y>90</y>
+      <width>164</width>
+      <height>164</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">QPushButton:pressed
+{
+background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
+border: none;
+}</string>
     </property>
     <property name="text">
      <string/>
@@ -125,14 +137,18 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>591</x>
-      <y>84</y>
-      <width>181</width>
-      <height>181</height>
+      <x>600</x>
+      <y>93</y>
+      <width>164</width>
+      <height>164</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">QPushButton:pressed
+{
+background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
+border: none;
+}</string>
     </property>
     <property name="text">
      <string/>
