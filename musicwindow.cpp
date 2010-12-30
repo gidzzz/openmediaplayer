@@ -102,6 +102,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     shuffleAllButton->setIconSize(QSize(64, 64));
     shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
 #endif
+    shuffleAllButton->hide();
 }
 
 MusicWindow::~MusicWindow()
