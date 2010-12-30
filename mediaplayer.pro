@@ -8,6 +8,7 @@ QT       += core gui dbus
 
 TARGET = mediaplayer
 TEMPLATE = app
+#DEFINES += DEBUG
 
 
 SOURCES += main.cpp\
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     mafwrendereradapter.h \
     fmtxdialog.h \
     freqpickselector.h \
-    videonowplayingwindow.h
+    videonowplayingwindow.h \
+    mirror.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -45,7 +47,7 @@ FORMS    += mainwindow.ui \
     videonowplayingwindow.ui
 
 CONFIG += mobility
-MOBILITY = 
+MOBILITY =
 
 symbian {
     TARGET.UID3 = 0xedf29700

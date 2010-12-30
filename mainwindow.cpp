@@ -34,6 +34,12 @@ MainWindow::MainWindow(QWidget *parent) :
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
 #endif
+#ifdef DEBUG
+    ui->songsButton->setFlat(false);
+    ui->videosButton->setFlat(false);
+    ui->radioButton->setFlat(false);
+    ui->shuffleAllButton->setFlat(false);
+#endif
     MafwRendererAdapter* mafwrenderer = new MafwRendererAdapter();
     myMusicWindow = new MusicWindow(this, mafwrenderer);
     myVideosWindow = new VideosWindow(this);
@@ -108,6 +114,9 @@ void MainWindow::orientationChanged()
         ui->radioButtonLabel->show();
         ui->shuffleAllButton->show();
         ui->shuffleLabel->show();
+        ui->songCountL->show();
+        ui->videoCountL->show();
+        ui->startionCountL->show();
         }
     } else {
         // Portrait mode
@@ -120,6 +129,9 @@ void MainWindow::orientationChanged()
         ui->radioButtonLabel->hide();
         ui->shuffleAllButton->hide();
         ui->shuffleLabel->hide();
+        ui->songCountL->hide();
+        ui->videoCountL->hide();
+        ui->startionCountL->hide();
         ui->listWidget->setGeometry(QRect(0, 0, 480, 800));
         if(ui->listWidget->isHidden())
             ui->listWidget->show();
@@ -131,7 +143,8 @@ void MainWindow::orientationChanged()
 void MainWindow::showAbout()
 {
     QMessageBox::information(this, tr("About"),
-                             "A stock media player rewrite in Qt\nCopyright 2010-2011 <whoever's working on it>\n\nLicensed under GPLv3");
+                             "Qt Mediaplayer for Maemo 5.\n\nCopyright 2010-2011:\nMohammad Abu-Garbeyyeh\n\
+Sebastian Lauwers\nTimur Kristof\nNicolai Hess\n\nLicensed under GPLv3");
 }
 
 void MainWindow::processListClicks(QListWidgetItem* item)
