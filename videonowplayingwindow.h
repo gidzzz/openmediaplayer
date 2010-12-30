@@ -5,6 +5,7 @@
 #include <QIcon>
 #include <QTimer>
 #include <QtDBus>
+#include "ui_videonowplayingwindow.h"
 
 #define wmCloseIcon "/etc/hildon/theme/images/wmBackIconPressed.png"
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"

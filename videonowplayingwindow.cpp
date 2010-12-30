@@ -1,5 +1,4 @@
 #include "videonowplayingwindow.h"
-#include "ui_videonowplayingwindow.h"
 
 VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent) :
     QMainWindow(parent),
