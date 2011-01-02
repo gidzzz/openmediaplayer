@@ -8,8 +8,9 @@
 #include <musicwindow.h>
 #include <videoswindow.h>
 #include <internetradiowindow.h>
-
+#ifdef Q_WS_MAEMO_5
 #include "mafwrendereradapter.h"
+#endif
 #include "ui_mainwindow.h"
 
 #define musicIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png"

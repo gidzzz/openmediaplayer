@@ -30,9 +30,12 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5AutoOrientation);
+    MafwRendererAdapter* mafwrenderer = new MafwRendererAdapter();
+    myMusicWindow = new MusicWindow(this, mafwrenderer);
 #else
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
+    myMusicWindow = new MusicWindow(this);
 #endif
 #ifdef DEBUG
     ui->songsButton->setFlat(false);
@@ -40,8 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->radioButton->setFlat(false);
     ui->shuffleAllButton->setFlat(false);
 #endif
-    MafwRendererAdapter* mafwrenderer = new MafwRendererAdapter();
-    myMusicWindow = new MusicWindow(this, mafwrenderer);
     myVideosWindow = new VideosWindow(this);
     myInternetRadioWindow = new InternetRadioWindow(this);
 }

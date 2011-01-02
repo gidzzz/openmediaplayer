@@ -120,7 +120,6 @@ void MusicWindow::selectSong()
                                           tr("(unknown arist)")
                                           );
     myNowPlayingWindow->show();
-    myNowPlayingWindow->updatePortraitWidgets();
 }
 
 void MusicWindow::listSongs()
@@ -143,6 +142,7 @@ void MusicWindow::listSongs()
             songItem->setData(UserRoleSongName, directory_walker.fileName());
             //ui->songList->addItem(directory_walker.fileName());
             ui->songList->addItem(songItem);
+            myNowPlayingWindow->listSongs(directory_walker.fileName());
         }
     }
 }

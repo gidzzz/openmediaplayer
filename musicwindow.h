@@ -11,9 +11,8 @@
 #include <share.h>
 #ifdef Q_WS_MAEMO_5
 #include <QMaemo5ValueButton>
-#endif
-
 #include "mafwrendereradapter.h"
+#endif
 #include "ui_musicwindow.h"
 
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
