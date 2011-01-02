@@ -3,10 +3,14 @@
 NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow(parent),
     ui(new Ui::NowPlayingWindow),
+#ifdef Q_WS_MAEMO_5
     fmtxDialog(new FMTXDialog(this)),
-    mafwrenderer(mra)
+    mafwrenderer(mra),
+#endif
+    albumArtScene(new QGraphicsScene(this))
 {
     ui->setupUi(this);
+    albumArtScene = new QGraphicsScene(ui->view);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
@@ -14,22 +18,33 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->currentPositionLabel->setText("0:00");
     ui->trackLengthLabel->setText("0:00");
     this->setButtonIcons();
-    ui->buttonsWidget->setLayout(ui->horizontalLayout_9);
+    ui->buttonsWidget->setLayout(ui->buttonsLayout);
     ui->songPlaylist->hide();
-    ui->songPlaylist_2->hide();
-    QMainWindow::setCentralWidget(ui->horizontalWidget);
-    ui->landscapeWidget->setLayout(ui->verticalLayout);
-    ui->portraitWidget->setLayout(ui->verticalLayout_3);
-    ui->portraitWidget->hide();
+    QMainWindow::setCentralWidget(ui->verticalWidget);
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
     this->connectSignals();
-    this->listSongs();
 }
 
 NowPlayingWindow::~NowPlayingWindow()
 {
     delete ui;
+}
+
+void NowPlayingWindow::setAlbumImage(QString image)
+{
+    ui->view->setScene(albumArtScene);
+    albumArtScene->setBackgroundBrush(QBrush(Qt::transparent));
+    m = new mirror();
+    albumArtScene->addItem(m);
+    QPixmap albumArt(image);
+    albumArt = albumArt.scaled(QSize(300, 300));
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(albumArt);
+    albumArtScene->addItem(item);
+    m->setItem(item);
+    QTransform t;
+    t = t.rotate(-25, Qt::YAxis);
+    ui->view->setTransform(t);
 }
 
 void NowPlayingWindow::toggleVolumeSlider()
@@ -62,19 +77,14 @@ void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
 
 void NowPlayingWindow::setButtonIcons()
 {
-    ui->artworkButton->setIcon(QIcon(albumImage));
+    //ui->artworkButton->setIcon(QIcon(albumImage));
+    this->setAlbumImage(albumImage);
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
     ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
     ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
-    ui->prevButton_2->setIcon(ui->prevButton->icon());
-    ui->playButton_2->setIcon(ui->playButton->icon());
-    ui->nextButton_2->setIcon(ui->nextButton->icon());
-    ui->shuffleButton_2->setIcon(ui->shuffleButton->icon());
-    ui->repeatButton_2->setIcon(ui->repeatButton->icon());
-    ui->artworkButton_2->setIcon(ui->artworkButton->icon());
 }
 
 void NowPlayingWindow::metadataChanged(QString name, QVariant value)
@@ -91,7 +101,10 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
   {
     ui->albumNameLabel->setText(value.toString());
   }
-  this->updatePortraitWidgets();
+  if(name == "renderer-art-uri")
+  {
+      this->setAlbumImage(value.toString());
+  }
 }
 
 void NowPlayingWindow::stateChanged(int state)
@@ -99,20 +112,14 @@ void NowPlayingWindow::stateChanged(int state)
   if(state == Paused)
   {
     ui->playButton->setIcon(QIcon(playButtonIcon));
-    ui->playButton_2->setIcon(ui->playButton->icon());
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-    connect(ui->playButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
-    connect(ui->playButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
   }
   else
   {
     ui->playButton->setIcon(QIcon(pauseButtonIcon));
-    ui->playButton_2->setIcon(ui->playButton->icon());
     disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-    disconnect(ui->playButton_2, SIGNAL(clicked()), 0, 0);
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-    connect(ui->playButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
   }
 }
 
@@ -121,21 +128,17 @@ void NowPlayingWindow::connectSignals()
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-    connect(ui->artworkButton_2, SIGNAL(clicked()), this, SLOT(toggleList()));
-    connect(ui->artworkButton, SIGNAL(clicked()), this, SLOT(toggleList()));
-    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
-    connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
-    connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
-    connect(ui->playButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
-    connect(ui->nextButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
-    connect(ui->prevButton_2, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
-    connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
+    connect(ui->view, SIGNAL(clicked()), this, SLOT(toggleList()));
 #ifdef Q_WS_MAEMO_5
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+    connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
+    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+    connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
+    connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
                                           "com.nokia.mafw.extension",
@@ -160,21 +163,10 @@ void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs,
     ui->albumNameLabel->setText(albumName);
     ui->artistLabel->setText(artistName);
     ui->songPlaylist->setCurrentRow(songNumber-1);
-    if(!ui->songPlaylist->isHidden() || !ui->songPlaylist_2->isHidden()) {
+    if(!ui->songPlaylist->isHidden()) {
         ui->songPlaylist->hide();
-        ui->songPlaylist_2->hide();
         ui->scrollArea->show();
-        ui->scrollArea_2->show();
     }
-}
-
-void NowPlayingWindow::updatePortraitWidgets()
-{
-    ui->songNumberLabel_2->setText(ui->songNumberLabel->text());
-    ui->songTitleLabel_2->setText(ui->songTitleLabel->text());
-    ui->albumNameLabel_2->setText(ui->albumNameLabel->text());
-    ui->artistLabel_2->setText(ui->artistLabel->text());
-    ui->songPlaylist_2->setCurrentRow(ui->songPlaylist->currentRow());
 }
 
 void NowPlayingWindow::orientationChanged()
@@ -183,55 +175,38 @@ void NowPlayingWindow::orientationChanged()
     if (screenGeometry.width() > screenGeometry.height()) {
         // Landscape mode
         qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
-        ui->portraitWidget->hide();
-        ui->landscapeWidget->show();
+        ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
+        ui->buttonsLayout->addItem(ui->horizontalSpacer_10);
+        ui->volumeButton->show();
+        ui->layoutWidget->setGeometry(QRect(0, 0, 372, 351));
     } else {
         // Portrait mode
         qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
-        ui->landscapeWidget->hide();
-        if(ui->scrollArea_2->isHidden())
-            ui->scrollArea_2->show();
-        if(!ui->songPlaylist_2->isHidden())
-            ui->songPlaylist_2->hide();
-        ui->portraitWidget->show();
+        ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
+        ui->buttonsLayout->removeItem(ui->horizontalSpacer_10);
+        ui->volumeButton->hide();
+        ui->layoutWidget->setGeometry(QRect(ui->layoutWidget->rect().left(),
+                                            ui->layoutWidget->rect().top(),
+                                            ui->layoutWidget->width(),
+                                            320));
     }
 }
 
-void NowPlayingWindow::listSongs()
+void NowPlayingWindow::listSongs(QString fileName)
 {
-    QDirIterator directory_walker(
-#ifdef Q_WS_MAEMO_5
-                                  "/home/user/MyDocs/.sounds",
-#else
-                                  "/home",
-#endif
-                                  QDir::Files | QDir::NoSymLinks,
-                                  QDirIterator::Subdirectories);
-
-    while(directory_walker.hasNext())
-    {
-          directory_walker.next();
-
-         if(directory_walker.fileInfo().completeSuffix() == "mp3")
-                   ui->songPlaylist->addItem(directory_walker.fileName());
-                   ui->songPlaylist_2->addItem(directory_walker.fileName());
-    }
+    ui->songPlaylist->addItem(fileName);
 }
 
 void NowPlayingWindow::toggleList()
 {
-    if(ui->songPlaylist->isHidden() || ui->songPlaylist_2->isHidden()) {
+    if(ui->songPlaylist->isHidden()) {
         /* Hide scrollArea first, then show playlist otherwise
            the other labels will move a bit in portrait mode   */
         ui->scrollArea->hide();
-        ui->scrollArea_2->hide();
         ui->songPlaylist->show();
-        ui->songPlaylist_2->show();
     } else {
         ui->songPlaylist->hide();
-        ui->songPlaylist_2->hide();
         ui->scrollArea->show();
-        ui->scrollArea_2->show();
     }
 }
 

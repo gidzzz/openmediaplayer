@@ -5,13 +5,15 @@
 #include <QtGui>
 #include <QtDBus>
 #include <QTimer>
+#include <mirror.h>
+#include <cqgraphicsview.h>
 #ifdef Q_WS_MAEMO_5
 #include <QLibrary>
 #include <libosso.h>
-#endif
-
 #include "mafwrendereradapter.h"
 #include "fmtxdialog.h"
+#endif
+
 #include "ui_nowplayingwindow.h"
 
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
@@ -37,23 +39,23 @@ class NowPlayingWindow : public QMainWindow
 public:
     explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0);
     ~NowPlayingWindow();
+    void listSongs(QString);
 
 public slots:
     void onMetadataChanged(int, int, QString, QString, QString);
-    void updatePortraitWidgets();
 
 private:
     Ui::NowPlayingWindow *ui;
-    FMTXDialog *fmtxDialog;
 #ifdef Q_WS_MAEMO_5
+    FMTXDialog *fmtxDialog;
     osso_context_t *osso_context;
     MafwRendererAdapter* mafwrenderer;
 #endif
-
     void setButtonIcons();
-    void listSongs();
     void connectSignals();
     QTimer *volumeTimer;
+    QGraphicsScene *albumArtScene;
+    mirror *m;
 
 private slots:
     void toggleVolumeSlider();
@@ -66,6 +68,7 @@ private slots:
     void stateChanged(int state);
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
+    void setAlbumImage(QString);
 };
 
 #endif // NOWPLAYINGWINDOW_H

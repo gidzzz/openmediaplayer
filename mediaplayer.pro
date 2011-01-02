@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     mafwrendereradapter.cpp \
     fmtxdialog.cpp \
     freqpickselector.cpp \
-    videonowplayingwindow.cpp
+    videonowplayingwindow.cpp \
+    cqgraphicsview.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     fmtxdialog.h \
     freqpickselector.h \
     videonowplayingwindow.h \
-    mirror.h
+    mirror.h \
+    cqgraphicsview.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
