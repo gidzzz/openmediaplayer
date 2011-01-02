@@ -3,6 +3,8 @@
 
 #include <QtGui>
 #include "ui_fmtxdialog.h"
+#include "freqpickselector.h"
+#include <QtMaemo5>
 
 namespace Ui {
     class FMTXDialog;

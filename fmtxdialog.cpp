@@ -1,6 +1,4 @@
 #include "fmtxdialog.h"
-#include "freqpickselector.h"
-#include <QtMaemo5>
 
 FMTXDialog::FMTXDialog(QWidget *parent) :
     QDialog(parent),
