@@ -1,5 +1,71 @@
 #include "nowplayingwindow.h"
 
+void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+        // Thanks to hqh for fapman, this code is based on the list in it.
+        QString songName = index.data().toString();
+        QString songLength = "--:--";
+        QString songArtistAlbum = "(unknown artist) / (unknown album)";
+
+        painter->save();
+        QRect r = option.rect;
+        QFont f = painter->font();
+        QPen defaultPen = painter->pen();
+        QColor gray;
+        gray = QColor(156, 154, 156);
+
+        if( QApplication::desktop()->width() > QApplication::desktop()->height() )
+        {
+            // Landscape
+            r = option.rect;
+            f.setPointSize(18);
+            painter->setFont(f);
+            painter->drawText(r.left(), r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+
+            r = option.rect;
+            f.setPointSize(13);
+            painter->setFont(f);
+            r.setBottom(r.bottom()-10);
+            painter->setPen(QPen(gray));
+            painter->drawText(r.left(), r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+            painter->setPen(defaultPen);;
+
+            r = option.rect;
+            r.setRight(r.right()-12);
+            f.setPointSize(18);
+            painter->setFont(f);
+            painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
+        } else {
+            // Portrait
+            r = option.rect;
+            f.setPointSize(18);
+            painter->setFont(f);
+            painter->drawText(r.left()+5, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+
+            r = option.rect;
+            f.setPointSize(13);
+            painter->setFont(f);
+            r.setBottom(r.bottom()-10);
+            painter->setPen(QPen(gray));
+            painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+            painter->setPen(defaultPen);;
+
+            r = option.rect;
+            r.setRight(r.right()-12);
+            f.setPointSize(18);
+            painter->setFont(f);
+            painter->drawText(r, Qt::AlignTop|Qt::AlignRight, songLength, &r);
+
+        }
+        painter->restore();
+}
+
+QSize PlayListDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
+{
+        return QSize(400, 70);
+}
+
+
 NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow(parent),
     ui(new Ui::NowPlayingWindow),
@@ -17,6 +83,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->volumeSlider->hide();
     ui->currentPositionLabel->setText("0:00");
     ui->trackLengthLabel->setText("0:00");
+    PlayListDelegate *delegate = new PlayListDelegate(ui->songPlaylist);
+    ui->songPlaylist->setItemDelegate(delegate);
     this->setButtonIcons();
     ui->buttonsWidget->setLayout(ui->buttonsLayout);
     ui->songPlaylist->hide();
@@ -33,12 +101,13 @@ NowPlayingWindow::~NowPlayingWindow()
 
 void NowPlayingWindow::setAlbumImage(QString image)
 {
+    albumArtScene->clear();
     ui->view->setScene(albumArtScene);
     albumArtScene->setBackgroundBrush(QBrush(Qt::transparent));
     m = new mirror();
     albumArtScene->addItem(m);
     QPixmap albumArt(image);
-    albumArt = albumArt.scaled(QSize(300, 300));
+    albumArt = albumArt.scaled(QSize(330, 300));
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(albumArt);
     albumArtScene->addItem(item);
     m->setItem(item);
@@ -89,22 +158,14 @@ void NowPlayingWindow::setButtonIcons()
 
 void NowPlayingWindow::metadataChanged(QString name, QVariant value)
 {
-  if(name == "title" /*MAFW_METADATA_KEY_TITLE*/)
-  {
-    ui->songTitleLabel->setText(value.toString());
-  }
-  if(name == "artist" /*MAFW_METADATA_KEY_ARTIST*/)
-  {
-    ui->artistLabel->setText(value.toString());
-  }
-  if(name == "album" /*MAFW_METADATA_KEY_ALBUM*/)
-  {
-    ui->albumNameLabel->setText(value.toString());
-  }
-  if(name == "renderer-art-uri")
-  {
-      this->setAlbumImage(value.toString());
-  }
+    if(name == "title" /*MAFW_METADATA_KEY_TITLE*/)
+        ui->songTitleLabel->setText(value.toString());
+    if(name == "artist" /*MAFW_METADATA_KEY_ARTIST*/)
+        ui->artistLabel->setText(value.toString());
+    if(name == "album" /*MAFW_METADATA_KEY_ALBUM*/)
+        ui->albumNameLabel->setText(value.toString());
+    if(name == "renderer-art-uri")
+        this->setAlbumImage(value.toString());
 }
 
 void NowPlayingWindow::stateChanged(int state)
@@ -187,14 +248,16 @@ void NowPlayingWindow::orientationChanged()
         ui->volumeButton->hide();
         ui->layoutWidget->setGeometry(QRect(ui->layoutWidget->rect().left(),
                                             ui->layoutWidget->rect().top(),
-                                            ui->layoutWidget->width(),
+                                            440,
                                             320));
     }
 }
 
 void NowPlayingWindow::listSongs(QString fileName)
 {
-    ui->songPlaylist->addItem(fileName);
+    QListWidgetItem *songItem = new QListWidgetItem(fileName);
+    songItem->setData(npUserRoleSongName, fileName);
+    ui->songPlaylist->addItem(songItem);
 }
 
 void NowPlayingWindow::toggleList()

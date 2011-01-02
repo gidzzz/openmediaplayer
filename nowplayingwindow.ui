@@ -58,8 +58,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>273</width>
-            <height>395</height>
+            <width>267</width>
+            <height>379</height>
            </rect>
           </property>
           <widget class="QWidget" name="layoutWidget">
@@ -173,7 +173,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QSlider" name="horizontalSlider">
+               <widget class="QSlider" name="songProgress">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -302,6 +302,9 @@
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
          </property>
          <property name="sortingEnabled">
           <bool>true</bool>

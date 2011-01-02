@@ -31,7 +31,21 @@ namespace Ui {
     class NowPlayingWindow;
 }
 
+enum npSongUserRoles { npUserRoleName=Qt::UserRole, npUserRoleSongName };
+
+class PlayListDelegate : public QStyledItemDelegate
+{
+public:
+        explicit PlayListDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
+        virtual ~PlayListDelegate() {}
+
+        void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+        QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+};
+
 class MafwRendererAdapter;
+
+
 class NowPlayingWindow : public QMainWindow
 {
     Q_OBJECT
