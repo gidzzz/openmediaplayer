@@ -66,9 +66,19 @@ void FreqPickSelector::refreshFreqValues()
     integers->clear();
     fractions->clear();
     for (int i = _minFreq; i <= _maxFreq; i++)
-        integers->addItem(QString::number(i));
+    {
+        QListWidgetItem *item = new QListWidgetItem(integers);
+        item->setText(QString::number(i));
+        item->setTextAlignment(Qt::AlignCenter);
+        integers->addItem(item);
+    }
     for (int i = 0; i <= 9; i++)
-        fractions->addItem(QString::number(i));
+    {
+        QListWidgetItem *item = new QListWidgetItem(fractions);
+        item->setText(QString::number(i));
+        item->setTextAlignment(Qt::AlignCenter);
+        fractions->addItem(item);
+    }
 
     setSelectedFreq(selectedFreq);
 }
