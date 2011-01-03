@@ -44,7 +44,7 @@ void FMTXDialog::onSaveClicked()
         // TODO: use DBus instead(!)
         system(QString("fmtx_client -p 1 -f %2 > /dev/null &").arg(frequencyValue).toUtf8().constData());
     else
-        system("fmtx_client -p 0 > /dev/null &");
+        system(QString("fmtx_client -p 0 -f %2 > /dev/null &").arg(frequencyValue).toUtf8().constData());
     this->close();
 }
 
