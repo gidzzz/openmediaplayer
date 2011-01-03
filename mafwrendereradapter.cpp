@@ -142,12 +142,18 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer,
             {
                 const gchar* str_value = g_value_get_string(v);
                 QVariant data = QVariant(str_value);
+#ifdef DEBUG
+                qDebug() << "string: " << data.toString();
+#endif
                 emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
             }
             break;
         case G_TYPE_INT:
             int int_value = g_value_get_int(v);
             QVariant data = QVariant(int_value);
+#ifdef DEBUG
+            qDebug() << "int: " << QString::number(data.toInt());
+#endif
             emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
             break;
         }
