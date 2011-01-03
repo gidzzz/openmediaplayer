@@ -53,12 +53,18 @@ void FreqPickSelector::refreshFreqValues()
     QTextStream maxStream(&maxFile);
     int maxValue = maxStream.readLine().toInt() / 1000 - 1;
     maxFile.close();
+    _minFreq = minValue;
+    _maxFreq = maxValue;
+    QFile regionStep("/sys/class/i2c-adapter/i2c-2/2-0063/region_channel_spacing");
+    regionStep.open(QIODevice::ReadOnly);
+    QTextStream regionStream(&regionStep);
+    int regionStepValue = regionStream.readLine().toInt() / 100;
+    regionStep.close();
 #ifdef DEBUG
     qDebug() << "Minimum FMTX value: " << QString::number(minValue);
     qDebug() << "Maximum FMTX value: " << QString::number(maxValue);
+    qDebug() << "FMTX Region spacing: " << QString::number(regionStepValue);
 #endif
-    _minFreq = minValue;
-    _maxFreq = maxValue;
     // TODO: Get this from gconf: /system/fmtx/frequency
     double selectedFreq = 100;
 
@@ -72,7 +78,8 @@ void FreqPickSelector::refreshFreqValues()
         item->setTextAlignment(Qt::AlignCenter);
         integers->addItem(item);
     }
-    for (int i = 0; i <= 9; i++)
+
+    for (int i = regionStepValue-1; i <= 9; i += regionStepValue)
     {
         QListWidgetItem *item = new QListWidgetItem(fractions);
         item->setText(QString::number(i));
@@ -96,7 +103,7 @@ QWidget *FreqPickSelector::widget(QWidget *parent)
     // So I'm just making a new dialog on every call now.
     freqDialog = new QDialog(parent);
     freqDialog->setWindowTitle("Select frequency");
-    freqDialog->setMinimumHeight(350);
+    freqDialog->setMinimumHeight(360);
     QHBoxLayout *hLayout = new QHBoxLayout(freqDialog);
     QDialogButtonBox *box = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Vertical, freqDialog);
     hLayout->addWidget(integers);

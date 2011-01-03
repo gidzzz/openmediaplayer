@@ -15,6 +15,7 @@ class FMTXDialog : public QDialog
     Q_OBJECT
     Ui::FMTXDialog *ui;
     QPushButton *freqButton;
+    FreqPickSelector *selector;
 
 public:
     explicit FMTXDialog(QWidget *parent = 0);
