@@ -77,18 +77,20 @@ QSize PlayListDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&
 
 NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow(parent),
-    ui(new Ui::NowPlayingWindow),
 #ifdef Q_WS_MAEMO_5
+    ui(new Ui::NowPlayingWindow),
     fmtxDialog(new FMTXDialog(this)),
-    mafwrenderer(mra),
+    mafwrenderer(mra)
+#else
+    ui(new Ui::NowPlayingWindow)
 #endif
-    albumArtScene(new QGraphicsScene(ui->view)),
-    delegate(new PlayListDelegate(ui->songPlaylist))
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
+    albumArtScene = new QGraphicsScene(ui->view);
+    delegate = new PlayListDelegate(ui->songPlaylist);
     ui->volumeSlider->hide();
     ui->currentPositionLabel->setText("0:00");
     ui->trackLengthLabel->setText("0:00");

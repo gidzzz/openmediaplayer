@@ -76,11 +76,12 @@ QSize ListItemDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&
 
 MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
         QMainWindow(parent),
-        ui(new Ui::MusicWindow),
 #ifdef Q_WS_MAEMO_5
-        mafwrenderer(mra),
+        ui(new Ui::MusicWindow),
+        mafwrenderer(mra)
+#else
+        ui(new Ui::MusicWindow)
 #endif
-        delegate(new ListItemDelegate(ui->songList))
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -96,6 +97,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
     myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer);
+    delegate = new ListItemDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
     this->listSongs();
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
