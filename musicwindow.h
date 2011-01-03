@@ -55,6 +55,7 @@ private:
 #else
     QPushButton *shuffleAllButton;
 #endif
+    ListItemDelegate *delegate;
     void listSongs();
     void connectSignals();
 

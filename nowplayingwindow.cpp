@@ -29,7 +29,7 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             r = option.rect;
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(r.left(), r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            painter->drawText(r.left(), r.top()+5, r.width()-60, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
@@ -49,7 +49,7 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             r = option.rect;
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(r.left()+5, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            painter->drawText(r.left()+5, r.top()+5, r.width()-60, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
@@ -82,10 +82,10 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     fmtxDialog(new FMTXDialog(this)),
     mafwrenderer(mra),
 #endif
-    albumArtScene(new QGraphicsScene(this))
+    albumArtScene(new QGraphicsScene(ui->view)),
+    delegate(new PlayListDelegate(ui->songPlaylist))
 {
     ui->setupUi(this);
-    albumArtScene = new QGraphicsScene(ui->view);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
@@ -110,7 +110,7 @@ NowPlayingWindow::~NowPlayingWindow()
 
 void NowPlayingWindow::setAlbumImage(QString image)
 {
-    albumArtScene->clear();
+    qDeleteAll(albumArtScene->items());
     ui->view->setScene(albumArtScene);
     albumArtScene->setBackgroundBrush(QBrush(Qt::transparent));
     m = new mirror();
@@ -155,7 +155,6 @@ void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
 
 void NowPlayingWindow::setButtonIcons()
 {
-    //ui->artworkButton->setIcon(QIcon(albumImage));
     this->setAlbumImage(albumImage);
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
@@ -223,7 +222,7 @@ void NowPlayingWindow::showFMTXDialog()
     fmtxDialog->show();
 //    osso_context = osso_initialize("qt-mediaplayer", "0.1", TRUE, NULL);
 //    osso_cp_plugin_execute(osso_context, "libcpfmtx.so", this, TRUE);
-#endif
+    #endif
 }
 
 void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs, QString songName, QString albumName, QString artistName)

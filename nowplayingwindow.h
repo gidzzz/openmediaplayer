@@ -69,6 +69,7 @@ private:
     void connectSignals();
     QTimer *volumeTimer;
     QGraphicsScene *albumArtScene;
+    PlayListDelegate *delegate;
     mirror *m;
 
 private slots:
