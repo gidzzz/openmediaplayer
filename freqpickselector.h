@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QMaemo5AbstractPickSelector>
 #include <QFile>
+#include <gq/GConfItem>
 
 class FreqPickSelector : public QMaemo5AbstractPickSelector
 {
@@ -13,6 +14,7 @@ class FreqPickSelector : public QMaemo5AbstractPickSelector
     QListWidget *fractions;
     int _minFreq;
     int _maxFreq;
+    GConfItem *frequency;
 
 public:
     explicit FreqPickSelector(QObject *parent = 0);
@@ -26,6 +28,7 @@ public:
 
 private slots:
     void updateText();
+    void onFrequencyChanged();
 };
 
 #endif // FREQPICKSELECTOR_H

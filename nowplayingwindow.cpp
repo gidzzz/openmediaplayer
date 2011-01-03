@@ -79,7 +79,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow(parent),
 #ifdef Q_WS_MAEMO_5
     ui(new Ui::NowPlayingWindow),
-    fmtxDialog(new FMTXDialog(this)),
     mafwrenderer(mra)
 #else
     ui(new Ui::NowPlayingWindow)
@@ -221,10 +220,9 @@ void NowPlayingWindow::connectSignals()
 void NowPlayingWindow::showFMTXDialog()
 {
 #ifdef Q_WS_MAEMO_5
+    FMTXDialog *fmtxDialog = new FMTXDialog(this);
     fmtxDialog->show();
-//    osso_context = osso_initialize("qt-mediaplayer", "0.1", TRUE, NULL);
-//    osso_cp_plugin_execute(osso_context, "libcpfmtx.so", this, TRUE);
-    #endif
+#endif
 }
 
 void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs, QString songName, QString albumName, QString artistName)

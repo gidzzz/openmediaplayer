@@ -26,8 +26,8 @@ void InternetRadioWindow::connectSignals()
 void InternetRadioWindow::showFMTXDialog()
 {
 #ifdef Q_WS_MAEMO_5
-    osso_context1 = osso_initialize("qt-mediaplayer", "0.1", TRUE, NULL);
-    osso_cp_plugin_execute(osso_context1, "libcpfmtx.so", this, TRUE);
+    FMTXDialog *fmtxDialog = new FMTXDialog(this);
+    fmtxDialog->show();
 #endif
 }
 

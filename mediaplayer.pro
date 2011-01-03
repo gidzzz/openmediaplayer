@@ -60,7 +60,7 @@ symbian {
 
 maemo5 {
     CONFIG += link_pkgconfig
-    PKGCONFIG += libosso mafw mafw-shared glib-2.0
+    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf
     QT += maemo5
 }
 

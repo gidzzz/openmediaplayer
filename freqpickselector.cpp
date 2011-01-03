@@ -6,6 +6,7 @@ FreqPickSelector::FreqPickSelector(QObject *parent) :
 {
     integers = new QListWidget();
     fractions = new QListWidget();
+    frequency = new GConfItem("/system/fmtx/frequency");
 
     refreshFreqValues();
 }
@@ -65,8 +66,7 @@ void FreqPickSelector::refreshFreqValues()
     qDebug() << "Maximum FMTX value: " << QString::number(maxValue);
     qDebug() << "FMTX Region spacing: " << QString::number(regionStepValue);
 #endif
-    // TODO: Get this from gconf: /system/fmtx/frequency
-    double selectedFreq = 100;
+    double selectedFreq = frequency->value().toDouble() / 1000;
 
     // Now updating the list widgets
     integers->clear();
@@ -88,6 +88,12 @@ void FreqPickSelector::refreshFreqValues()
     }
 
     setSelectedFreq(selectedFreq);
+}
+
+void FreqPickSelector::onFrequencyChanged()
+{
+    this->setSelectedFreq(frequency->value().toDouble());
+    this->updateText();
 }
 
 QWidget *FreqPickSelector::widget(QWidget *parent)
@@ -112,6 +118,7 @@ QWidget *FreqPickSelector::widget(QWidget *parent)
     freqDialog->setLayout(hLayout);
     connect(box, SIGNAL(accepted()), freqDialog, SLOT(accept()));
     connect(freqDialog, SIGNAL(accepted()), this, SLOT(updateText()));
+    connect(frequency, SIGNAL(valueChanged()), this, SLOT(onFrequencyChanged()));
 
     refreshFreqValues();
 

@@ -9,7 +9,6 @@
 #include <cqgraphicsview.h>
 #ifdef Q_WS_MAEMO_5
 #include <QLibrary>
-#include <libosso.h>
 #include "mafwrendereradapter.h"
 #include "fmtxdialog.h"
 #endif
@@ -61,8 +60,6 @@ public slots:
 private:
     Ui::NowPlayingWindow *ui;
 #ifdef Q_WS_MAEMO_5
-    FMTXDialog *fmtxDialog;
-    osso_context_t *osso_context;
     MafwRendererAdapter* mafwrenderer;
 #endif
     void setButtonIcons();

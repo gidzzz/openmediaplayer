@@ -12,10 +12,10 @@
 #include <QMessageBox>
 #include <QDialogButtonBox>
 #ifdef Q_WS_MAEMO_5
-#include <libosso.h>
 #include <QMaemo5InformationBox>
 #endif
 #include "ui_internetradiowindow.h"
+#include <fmtxdialog.h>
 
 namespace Ui {
     class InternetRadioWindow;
@@ -31,9 +31,6 @@ public:
 
 private:
     Ui::InternetRadioWindow *ui;
-#ifdef Q_WS_MAEMO_5
-    osso_context_t *osso_context1;
-#endif
     void connectSignals();
     QDialog *bookmarkDialog;
     QLabel *nameLabel;
