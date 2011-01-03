@@ -33,55 +33,61 @@ void InternetRadioWindow::showFMTXDialog()
 
 void InternetRadioWindow::showAddBookmarkDialog()
 {
-    /* FIXME: Some line (or 3?) cause this to appear 3 times:
-       QLayout: Attempting to add QLayout "" to QDialog "", which already has a layout
-    */
     bookmarkDialog = new QDialog(this);
     bookmarkDialog->setWindowTitle(tr("Add radio bookmark"));
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
 
+    // Labels
     nameLabel = new QLabel(bookmarkDialog);
     nameLabel->setText(tr("Name"));
     addressLabel = new QLabel(bookmarkDialog);
     addressLabel->setText(tr("Web address"));
 
-    QVBoxLayout *labelLayout = new QVBoxLayout(bookmarkDialog);
-    QVBoxLayout *lineEditLayout = new QVBoxLayout(bookmarkDialog);
-    QHBoxLayout *horizontalLayout = new QHBoxLayout(bookmarkDialog);
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-
+    // Input boxes
     nameBox = new QLineEdit(bookmarkDialog);
     addressBox = new QLineEdit(bookmarkDialog);
     addressBox->setText("http://");
 
-    if (screenGeometry.width() > screenGeometry.height()) {
-        labelLayout->addWidget(nameLabel);
-        labelLayout->addWidget(addressLabel);
-        lineEditLayout->addWidget(nameBox);
-        lineEditLayout->addWidget(addressBox);
-    } else {
-        horizontalLayout->setDirection(QBoxLayout::TopToBottom);
-        horizontalLayout->addWidget(nameLabel);
-        horizontalLayout->addWidget(nameBox);
-        horizontalLayout->addWidget(addressLabel);
-        horizontalLayout->addWidget(addressBox);
-    }
-
-    QVBoxLayout *saveButtonLayout = new QVBoxLayout(bookmarkDialog);
+    // Spacer above save button
     QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    // Save button
     saveButton = new QPushButton(bookmarkDialog);
     saveButton->setText(tr("Save"));
     saveButton->setDefault(true);
     connect(saveButton, SIGNAL(clicked()), this, SLOT(onSaveClicked()));
     buttonBox = new QDialogButtonBox(Qt::Vertical);
     buttonBox->addButton(saveButton, QDialogButtonBox::ActionRole);
-    saveButtonLayout->addItem(verticalSpacer);
+
+    // Layouts
+    QVBoxLayout *labelLayout = new QVBoxLayout();
+    labelLayout->addWidget(nameLabel);
+    labelLayout->addWidget(addressLabel);
+
+    QVBoxLayout *boxLayout = new QVBoxLayout();
+    boxLayout->addWidget(nameBox);
+    boxLayout->addWidget(addressBox);
+
+    QHBoxLayout *dialogLayout = new QHBoxLayout();
+    if (screenGeometry.width() < screenGeometry.height()) {
+        dialogLayout->setDirection(QBoxLayout::TopToBottom);
+    }
+
+    QVBoxLayout *saveButtonLayout = new QVBoxLayout();
+    if (screenGeometry.width() > screenGeometry.height()) {
+        saveButtonLayout->addItem(verticalSpacer);
+    }
     saveButtonLayout->addWidget(buttonBox);
 
-    horizontalLayout->addLayout(labelLayout);
-    horizontalLayout->addLayout(lineEditLayout);
-    horizontalLayout->addWidget(buttonBox);
+    // Pack all layouts together
+    QHBoxLayout *horizontalLayout = new QHBoxLayout();
+    horizontalLayout->addItem(labelLayout);
+    horizontalLayout->addItem(boxLayout);
 
-    bookmarkDialog->setLayout(horizontalLayout);
+    dialogLayout->addItem(horizontalLayout);
+    dialogLayout->addItem(saveButtonLayout);
+
+    bookmarkDialog->setLayout(dialogLayout);
     bookmarkDialog->setAttribute(Qt::WA_DeleteOnClose);
     bookmarkDialog->show();
 }
