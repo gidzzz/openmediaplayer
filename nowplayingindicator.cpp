@@ -9,6 +9,7 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
 #endif
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_OpaquePaintEvent);
     timer = new QTimer(this);
     timer->setInterval(100);
     this->stopAnimation();
@@ -32,7 +33,7 @@ void NowPlayingIndicator::setBackgroundImage(const QString &image)
 void NowPlayingIndicator::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.drawImage(this->rect(), QImage(this->indicatorImage));
+    painter.drawPixmap(0, 0, QPixmap(this->indicatorImage));
 }
 
 void NowPlayingIndicator::onStateChanged(int state)
