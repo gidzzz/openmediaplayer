@@ -38,7 +38,6 @@ private:
     MusicWindow *myMusicWindow;
     VideosWindow *myVideosWindow;
     InternetRadioWindow *myInternetRadioWindow;
-    NowPlayingIndicator *indicator;
     void paintEvent(QPaintEvent*);
     void setButtonIcons();
     void connectSignals();

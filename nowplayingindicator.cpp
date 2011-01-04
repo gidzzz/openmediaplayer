@@ -15,7 +15,7 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     mafwrenderer = new MafwRendererAdapter();
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
-    frame = 1;
+    frame = 0;
 }
 
 NowPlayingIndicator::~NowPlayingIndicator()
