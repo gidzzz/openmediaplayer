@@ -77,12 +77,19 @@ QSize SongListItemDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIn
 void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QString artistName = "Artist name";
-    QString test = "--:--";
     QString albumSongCount = "1 album, 1 song";
-    QImage albumCover("usr/share/icons/hicolor/64x64/hildon/mediaplayer_default_album.png");
 
     painter->save();
     QRect r = option.rect;
+    if(option.state & QStyle::State_Selected)
+    {
+        r = option.rect;
+#ifdef Q_WS_MAEMO_5
+        painter->drawImage(r, QImage("/etc/hildon/theme/images/TouchListBackgroundPressed.png"));
+#else
+        painter->fillRect(r, option.palette.highlight().color());
+#endif
+    }
     QFont f = painter->font();
     QPen defaultPen = painter->pen();
     QColor gray;
@@ -105,10 +112,8 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         painter->setPen(defaultPen);;
 
         r = option.rect;
-        r.setRight(r.right()-12);
-        f.setPointSize(18);
-        painter->setFont(f);
-        painter->drawImage(r, albumCover);
+        painter->drawPixmap(r.right()-70, r.top()+4, 64, 64, QPixmap(defaultAlbumArt));
+
     } else {
         // Portrait
         r = option.rect;
@@ -123,11 +128,13 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         painter->setPen(QPen(gray));
         painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
         painter->setPen(defaultPen);;
+        r = option.rect;
+        painter->drawPixmap(r.right()-(64+13), r.top()+4, 64, 64, QPixmap(defaultAlbumArt));
     }
     painter->restore();
 }
 
-QSize ArtistListItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize ArtistListItemDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
 {
     return QSize(400, 70);
 }

@@ -16,6 +16,7 @@
 #include "ui_musicwindow.h"
 
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
+#define defaultAlbumArt "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_default_album.png"
 
 class MafwRendererAdapter;
 namespace Ui {
