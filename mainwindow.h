@@ -10,8 +10,10 @@
 #include <internetradiowindow.h>
 #ifdef Q_WS_MAEMO_5
 #include "mafwrendereradapter.h"
+#include <QMaemo5InformationBox>
 #endif
 #include "ui_mainwindow.h"
+#include <nowplayingindicator.h>
 
 #define musicIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png"
 #define videosIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png"
@@ -36,6 +38,7 @@ private:
     MusicWindow *myMusicWindow;
     VideosWindow *myVideosWindow;
     InternetRadioWindow *myInternetRadioWindow;
+    NowPlayingIndicator *indicator;
     void paintEvent(QPaintEvent*);
     void setButtonIcons();
     void connectSignals();

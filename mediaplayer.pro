@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     fmtxdialog.cpp \
     freqpickselector.cpp \
     videonowplayingwindow.cpp \
-    cqgraphicsview.cpp
+    cqgraphicsview.cpp \
+    nowplayingindicator.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     freqpickselector.h \
     videonowplayingwindow.h \
     mirror.h \
-    cqgraphicsview.h
+    cqgraphicsview.h \
+    nowplayingindicator.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -46,7 +48,8 @@ FORMS    += mainwindow.ui \
     internetradiowindow.ui \
     share.ui \
     fmtxdialog.ui \
-    videonowplayingwindow.ui
+    videonowplayingwindow.ui \
+    nowplayingindicator.ui
 
 CONFIG += mobility
 MOBILITY =

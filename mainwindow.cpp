@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
     myVideosWindow = new VideosWindow(this);
     myInternetRadioWindow = new InternetRadioWindow(this);
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
 }
 
 MainWindow::~MainWindow()
@@ -96,6 +98,8 @@ void MainWindow::connectSignals()
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
+    // TODO: Connect this to a slot.
+    // connect(ui->indicator, SIGNAL(clicked()), this, SLOT();
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
@@ -136,9 +140,10 @@ void MainWindow::orientationChanged()
         ui->listWidget->setGeometry(QRect(0, 0, 480, 800));
         if(ui->listWidget->isHidden())
             ui->listWidget->show();
-
-        //QMainWindow::setCentralWidget(ui->listWidget);
     }
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
+                               ui->indicator->width(),ui->indicator->height());
+    ui->indicator->raise();
 }
 
 void MainWindow::showAbout()
