@@ -5,13 +5,15 @@
 #include <QPainter>
 #include <QDebug>
 #include <QtGui>
-#include <musicwindow.h>
-#include <videoswindow.h>
-#include <internetradiowindow.h>
-#ifdef Q_WS_MAEMO_5
-#include "mafwrendereradapter.h"
-#endif
+
+#include "musicwindow.h"
+#include "videoswindow.h"
+#include "internetradiowindow.h"
 #include "ui_mainwindow.h"
+
+#ifdef Q_WS_MAEMO_5
+	#include "mafwrendereradapter.h"
+#endif
 
 #define musicIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png"
 #define videosIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png"

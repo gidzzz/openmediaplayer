@@ -5,15 +5,21 @@
 #include <QtGui>
 #include <QtDBus>
 #include <QTimer>
-#include <mirror.h>
-#include <cqgraphicsview.h>
+
 #ifdef Q_WS_MAEMO_5
-#include <QLibrary>
-#include "mafwrendereradapter.h"
-#include "fmtxdialog.h"
+	#include <QLibrary>
 #endif
 
+#include "mirror.h"
+#include "cqgraphicsview.h"
 #include "ui_nowplayingwindow.h"
+
+#ifdef Q_WS_MAEMO_5
+	#include "mafwrendereradapter.h"
+	#include "fmtxdialog.h"
+#else
+	class MafwRendererAdapter;
+#endif
 
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
 #define playButtonIcon "/etc/hildon/theme/mediaplayer/Play.png"
@@ -41,9 +47,6 @@ public:
         void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
         QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
-
-class MafwRendererAdapter;
-
 
 class NowPlayingWindow : public QMainWindow
 {

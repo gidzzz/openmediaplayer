@@ -2,23 +2,29 @@
 #define MUSICWINDOW_H
 
 #include <QMainWindow>
-#include <nowplayingwindow.h>
 #include <QDir>
 #include <QStringList>
 #include <QDirIterator>
 #include <QMenu>
 #include <QtGui>
-#include <share.h>
+
 #ifdef Q_WS_MAEMO_5
-#include <QMaemo5ValueButton>
-#include "mafwrendereradapter.h"
+	#include <QMaemo5ValueButton>
 #endif
+
+#include "nowplayingwindow.h"
+#include "share.h"
 #include "ui_musicwindow.h"
+
+#ifdef Q_WS_MAEMO_5
+	#include "mafwrendereradapter.h"
+#else
+	class MafwRendererAdapter;
+#endif
 
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
 #define defaultAlbumArt "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_default_album.png"
 
-class MafwRendererAdapter;
 namespace Ui {
     class MusicWindow;
 }

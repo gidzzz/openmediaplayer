@@ -4,7 +4,7 @@
 #include <QtGui>
 #include <QMaemo5AbstractPickSelector>
 #include <QFile>
-#include <gq/GConfItem>
+#include <GConfItem>
 
 class FreqPickSelector : public QMaemo5AbstractPickSelector
 {
