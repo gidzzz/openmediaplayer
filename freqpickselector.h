@@ -4,7 +4,10 @@
 #include <QtGui>
 #include <QMaemo5AbstractPickSelector>
 #include <QFile>
-#include <GConfItem>
+#include <gq/GConfItem>
+/* /usr/include/gq is provided by libgq-gconf-dev and libgq-gconf0
+   These packages need to be installed on top of your sysrootfs.
+         Join #maemo-foss on FreeNode for more information. */
 
 class FreqPickSelector : public QMaemo5AbstractPickSelector
 {

@@ -3,7 +3,10 @@
 
 #include <QtGui>
 #include <QtMaemo5>
-#include <GConfItem>
+#include <gq/GConfItem>
+/* /usr/include/gq is provided by libgq-gconf-dev and libgq-gconf0
+   These packages need to be installed on top of your sysrootfs.
+         Join #maemo-foss on FreeNode for more information. */
 
 #include "ui_fmtxdialog.h"
 #include "freqpickselector.h"
