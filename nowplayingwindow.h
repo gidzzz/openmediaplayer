@@ -22,7 +22,7 @@
 #define repeatButtonIcon "/etc/hildon/theme/mediaplayer/Repeat.png"
 #define repeatButtonPressedIcon "/etc/hildon/theme/mediaplayer/RepeatPressed.png"
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
-#define shuffleButtonPressed "/etc/hildon/theme/mediaplayer/SufflePressed.png"
+#define shuffleButtonPressed "/etc/hildon/theme/mediaplayer/ShufflePressed.png"
 #define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
 #define albumImage "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_album.png"
 
