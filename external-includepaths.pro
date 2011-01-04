@@ -14,17 +14,17 @@
 #QTCREATORINSTALLPATH = /home/john/NokiaQtSDK
 
 count(QTCREATORINSTALLPATH, 0) {
-	error("You need to set the Qt Creator install path in external-includepaths.pro")
+    error("You need to set the Qt Creator install path in external-includepaths.pro")
 }
 
 !exists($$QTCREATORINSTALLPATH) {
-	error("Invalid Qt Creator install path.")
+    error("Invalid Qt Creator install path.")
 }
 
 INCLUDEPATH += \
-	$$QTCREATORINSTALLPATH/Maemo/4.6.2/sysroots/fremantle-arm-sysroot-20.2010.36-2-slim/usr/include/glib-2.0/ \
-	$$QTCREATORINSTALLPATH/Maemo/4.6.2/sysroots/fremantle-arm-sysroot-20.2010.36-2-slim/usr/include/mafw-1.0/ \
-	$$QTCREATORINSTALLPATH/Maemo/4.6.2/sysroots/fremantle-arm-sysroot-20.2010.36-2-slim/usr/include/gq
+    $$QTCREATORINSTALLPATH/Maemo/4.6.2/sysroots/fremantle-arm-sysroot-20.2010.36-2-slim/usr/include/glib-2.0/ \
+    $$QTCREATORINSTALLPATH/Maemo/4.6.2/sysroots/fremantle-arm-sysroot-20.2010.36-2-slim/usr/include/mafw-1.0/ \
+    $$QTCREATORINSTALLPATH/Maemo/4.6.2/sysroots/fremantle-arm-sysroot-20.2010.36-2-slim/usr/include/gq
 # /usr/include/gq is provided by libgq-gconf-dev and libgq-gconf0
 # These packages need to be installed on top of your sysrootfs.
 # Join #maemo-foss on FreeNode for more information.

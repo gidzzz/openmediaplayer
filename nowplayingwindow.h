@@ -7,7 +7,7 @@
 #include <QTimer>
 
 #ifdef Q_WS_MAEMO_5
-	#include <QLibrary>
+    #include <QLibrary>
 #endif
 
 #include "mirror.h"
@@ -15,10 +15,10 @@
 #include "ui_nowplayingwindow.h"
 
 #ifdef Q_WS_MAEMO_5
-	#include "mafwrendereradapter.h"
-	#include "fmtxdialog.h"
+    #include "mafwrendereradapter.h"
+    #include "fmtxdialog.h"
 #else
-	class MafwRendererAdapter;
+    class MafwRendererAdapter;
 #endif
 
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"

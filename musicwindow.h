@@ -9,7 +9,7 @@
 #include <QtGui>
 
 #ifdef Q_WS_MAEMO_5
-	#include <QMaemo5ValueButton>
+    #include <QMaemo5ValueButton>
 #endif
 
 #include "nowplayingwindow.h"
@@ -17,9 +17,9 @@
 #include "ui_musicwindow.h"
 
 #ifdef Q_WS_MAEMO_5
-	#include "mafwrendereradapter.h"
+    #include "mafwrendereradapter.h"
 #else
-	class MafwRendererAdapter;
+    class MafwRendererAdapter;
 #endif
 
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"

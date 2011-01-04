@@ -12,7 +12,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-	mainwindow.cpp \
+    mainwindow.cpp \
     musicwindow.cpp \
     nowplayingwindow.cpp \
     videoswindow.cpp \
@@ -62,7 +62,7 @@ maemo5 {
     CONFIG += link_pkgconfig
     PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf
     QT += maemo5
-	include(external-includepaths.pro)
+    include(external-includepaths.pro)
 }
 
 RESOURCES += \
