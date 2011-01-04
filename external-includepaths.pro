@@ -2,10 +2,13 @@
 # This is needed so that code completion works, and no warnings are shown when
 # looking at the code.
 #
+# Feel free to use the following command so that git stops tracking this file
+# git update-index --assume-unchanged external-includepaths.pro
+# To make git track it again:
+# git update-index --no-assume-unchanged external-includepaths.pro
+#
 # The following examples should help you figure things out.
 # Uncomment the lines as required.
-#
-# This file is ignored by git, so you can modify it without damaging anything.
 
 # Under OSX (where john is the username):
 #QTCREATORINSTALLPATH = /Users/john/NokiaQtSDK
