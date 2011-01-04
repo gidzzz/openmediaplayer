@@ -1,6 +1,6 @@
 #include "musicwindow.h"
 
-void ListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
         // Thanks to hqh for fapman, this code is based on the list in it.
         QString songName = index.data(UserRoleSongName).toString();
@@ -69,9 +69,67 @@ void ListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->restore();
 }
 
-QSize ListItemDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
+QSize SongListItemDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
 {
         return QSize(400, 70);
+}
+
+void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QString artistName = "Artist name";
+    QString test = "--:--";
+    QString albumSongCount = "1 album, 1 song";
+    QImage albumCover("usr/share/icons/hicolor/64x64/hildon/mediaplayer_default_album.png");
+
+    painter->save();
+    QRect r = option.rect;
+    QFont f = painter->font();
+    QPen defaultPen = painter->pen();
+    QColor gray;
+    gray = QColor(156, 154, 156);
+
+    if( QApplication::desktop()->width() > QApplication::desktop()->height() )
+    {
+        // Landscape
+        r = option.rect;
+        f.setPointSize(18);
+        painter->setFont(f);
+        painter->drawText(30, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
+
+        r = option.rect;
+        f.setPointSize(13);
+        painter->setFont(f);
+        r.setBottom(r.bottom()-10);
+        painter->setPen(QPen(gray));
+        painter->drawText(30, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
+        painter->setPen(defaultPen);;
+
+        r = option.rect;
+        r.setRight(r.right()-12);
+        f.setPointSize(18);
+        painter->setFont(f);
+        painter->drawImage(r, albumCover);
+    } else {
+        // Portrait
+        r = option.rect;
+        f.setPointSize(18);
+        painter->setFont(f);
+        painter->drawText(r.left()+5, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
+
+        r = option.rect;
+        f.setPointSize(13);
+        painter->setFont(f);
+        r.setBottom(r.bottom()-10);
+        painter->setPen(QPen(gray));
+        painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
+        painter->setPen(defaultPen);;
+    }
+    painter->restore();
+}
+
+QSize ArtistListItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    return QSize(400, 70);
 }
 
 MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
@@ -97,11 +155,14 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
     QMainWindow::setWindowTitle(tr("Songs"));
     myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer);
-    delegate = new ListItemDelegate(ui->songList);
+    SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
+    ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ui->songList->setItemDelegate(delegate);
+    ui->artistList->setItemDelegate(artistDelegate);
     this->listSongs();
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connectSignals();
+    this->loadViewState();
 #ifdef Q_WS_MAEMO_5
     int numberOfSongs = ui->songList->count();
     if(numberOfSongs == 1) {
@@ -198,4 +259,102 @@ void MusicWindow::onShareClicked()
 void MusicWindow::orientationChanged()
 {
     ui->songList->scroll(1,1);
+}
+
+void MusicWindow::populateMenuBar()
+{
+    ui->menubar->clear();
+    if(ui->albumList->isHidden())
+        ui->menubar->addAction(tr("All albums"), this, SLOT(showAlbumView()));
+    if(ui->artistList->isHidden())
+        ui->menubar->addAction(tr("Artists"), this, SLOT(showArtistView()));
+    if(ui->songList->isHidden())
+        ui->menubar->addAction(tr("All songs"), this, SLOT(showSongsView()));
+    if(ui->genresList->isHidden())
+        ui->menubar->addAction(tr("Genres"), this, SLOT(showGenresView()));
+    if(ui->playlistList->isHidden())
+        ui->menubar->addAction(tr("Playlists"), this, SLOT(showPlayListView()));
+}
+
+void MusicWindow::hideLayoutContents()
+{
+    if(!ui->songList->isHidden())
+        ui->songList->hide();
+    if(!ui->artistList->isHidden())
+        ui->artistList->hide();
+    if(!ui->genresList->isHidden())
+        ui->genresList->hide();
+    if(!ui->albumList->isHidden())
+        ui->albumList->hide();
+    if(!ui->playlistList->isHidden())
+        ui->playlistList->hide();
+}
+
+void MusicWindow::showAlbumView()
+{
+    this->hideLayoutContents();
+    ui->albumList->show();
+    this->populateMenuBar();
+    QMainWindow::setWindowTitle(tr("Albums"));
+    this->saveViewState("albums");
+}
+
+void MusicWindow::showArtistView()
+{
+    this->hideLayoutContents();
+    ui->artistList->show();
+    this->populateMenuBar();
+    QMainWindow::setWindowTitle(tr("Artists"));
+    this->saveViewState("artists");
+}
+
+void MusicWindow::showGenresView()
+{
+    this->hideLayoutContents();
+    ui->genresList->show();
+    this->populateMenuBar();
+    QMainWindow::setWindowTitle(tr("Genres"));
+    this->saveViewState("genres");
+}
+
+void MusicWindow::showSongsView()
+{
+    this->hideLayoutContents();
+    ui->songList->show();
+    this->populateMenuBar();
+    QMainWindow::setWindowTitle(tr("Songs"));
+    this->saveViewState("songs");
+}
+
+void MusicWindow::showPlayListView()
+{
+    this->hideLayoutContents();
+    ui->playlistList->show();
+    this->populateMenuBar();
+    QMainWindow::setWindowTitle(tr("Playlists"));
+    this->saveViewState("playlists");
+}
+
+void MusicWindow::saveViewState(QVariant view)
+{
+    QSettings().setValue("music/view", view);
+}
+
+void MusicWindow::loadViewState()
+{
+    if(QSettings().contains("music/view")) {
+        QString state = QSettings().value("music/view").toString();
+        if(state == "songs")
+            this->showSongsView();
+        else if(state == "albums")
+            this->showAlbumView();
+        else if(state == "artists")
+            this->showArtistView();
+        else if(state == "genres")
+            this->showGenresView();
+        else if(state == "playlists")
+            this->showPlayListView();
+    } else {
+        this->showSongsView();
+    }
 }

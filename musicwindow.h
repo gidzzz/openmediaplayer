@@ -24,14 +24,24 @@ namespace Ui {
 
 enum UserRoles { UserRoleName=Qt::UserRole, UserRoleSongName };
 
-class ListItemDelegate : public QStyledItemDelegate
+class SongListItemDelegate : public QStyledItemDelegate
 {
 public:
-        explicit ListItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
-        virtual ~ListItemDelegate() {}
+        explicit SongListItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
+        virtual ~SongListItemDelegate() {}
 
         void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
         QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+};
+
+class ArtistListItemDelegate : public QStyledItemDelegate
+{
+public:
+    explicit ArtistListItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
+    virtual ~ArtistListItemDelegate() {}
+
+    void paint (QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 class MusicWindow : public QMainWindow
@@ -55,14 +65,22 @@ private:
 #else
     QPushButton *shuffleAllButton;
 #endif
-    ListItemDelegate *delegate;
     void listSongs();
     void connectSignals();
+    void populateMenuBar();
+    void hideLayoutContents();
+    void saveViewState(QVariant);
+    void loadViewState();
 
 private slots:
     void onContextMenuRequested(const QPoint&);
     void onShareClicked();
     void orientationChanged();
+    void showAlbumView();
+    void showPlayListView();
+    void showArtistView();
+    void showSongsView();
+    void showGenresView();
 };
 
 #endif // MUSICWINDOW_H

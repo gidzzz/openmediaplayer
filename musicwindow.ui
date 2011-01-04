@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>424</height>
+    <height>444</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>801</width>
-      <height>121</height>
+      <height>416</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="songsLayout">
@@ -46,6 +46,81 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QListWidget" name="albumList">
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::NoDragDrop</enum>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>124</width>
+         <height>124</height>
+        </size>
+       </property>
+       <property name="movement">
+        <enum>QListView::Static</enum>
+       </property>
+       <property name="flow">
+        <enum>QListView::LeftToRight</enum>
+       </property>
+       <property name="isWrapping" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="gridSize">
+        <size>
+         <width>148</width>
+         <height>148</height>
+        </size>
+       </property>
+       <property name="viewMode">
+        <enum>QListView::IconMode</enum>
+       </property>
+       <item>
+        <property name="text">
+         <string>Placeholder</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="artistList">
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>Artist placeholder</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="genresList">
+       <item>
+        <property name="text">
+         <string>Genres placeholder</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="playlistList">
+       <item>
+        <property name="text">
+         <string>Playlist placeholder</string>
+        </property>
+       </item>
+      </widget>
+     </item>
     </layout>
    </widget>
   </widget>
@@ -62,11 +137,6 @@
     <property name="title">
      <string>Options</string>
     </property>
-    <addaction name="actionAll_albums"/>
-    <addaction name="actionAll_songs"/>
-    <addaction name="actionArtists"/>
-    <addaction name="actionGenres"/>
-    <addaction name="actionPlaylists"/>
    </widget>
    <addaction name="menuOptions"/>
   </widget>
