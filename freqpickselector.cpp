@@ -110,10 +110,18 @@ QWidget *FreqPickSelector::widget(QWidget *parent)
     freqDialog = new QDialog(parent);
     freqDialog->setWindowTitle("Select frequency");
     freqDialog->setMinimumHeight(360);
-    QHBoxLayout *hLayout = new QHBoxLayout(freqDialog);
+    QHBoxLayout *freqLayout = new QHBoxLayout();
     QDialogButtonBox *box = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Vertical, freqDialog);
-    hLayout->addWidget(integers);
-    hLayout->addWidget(fractions);
+    freqLayout->addWidget(integers);
+    freqLayout->addWidget(fractions);
+    QHBoxLayout *hLayout = new QHBoxLayout(freqDialog);
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    if (screenGeometry.width() < screenGeometry.height()) {
+        hLayout->setDirection(QBoxLayout::TopToBottom);
+        box->setOrientation(Qt::Horizontal);
+        freqDialog->setMinimumHeight(680);
+    }
+    hLayout->addLayout(freqLayout);
     hLayout->addWidget(box);
     freqDialog->setLayout(hLayout);
     connect(box, SIGNAL(accepted()), freqDialog, SLOT(accept()));

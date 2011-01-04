@@ -203,6 +203,8 @@ void NowPlayingWindow::connectSignals()
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
     connect(ui->view, SIGNAL(clicked()), this, SLOT(toggleList()));
+    connect(ui->repeatButton, SIGNAL(clicked()), this, SLOT(onRepeatButtonPressed()));
+    connect(ui->shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonPressed()));
 #ifdef Q_WS_MAEMO_5
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
@@ -285,4 +287,22 @@ void NowPlayingWindow::volumeWatcher()
 {
     if(!ui->volumeSlider->isHidden())
         volumeTimer->start();
+}
+
+void NowPlayingWindow::onShuffleButtonPressed()
+{
+    if(ui->shuffleButton->isChecked()) {
+        ui->shuffleButton->setIcon(QIcon(shuffleButtonPressed));
+    } else {
+        ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
+    }
+}
+
+void NowPlayingWindow::onRepeatButtonPressed()
+{
+    if(ui->repeatButton->isChecked()) {
+        ui->repeatButton->setIcon(QIcon(repeatButtonPressedIcon));
+    } else {
+        ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
+    }
 }

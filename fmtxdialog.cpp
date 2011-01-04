@@ -14,6 +14,12 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
 #else
     freqButton = new QPushButton("Frequency", this);
 #endif
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    if (screenGeometry.width() < screenGeometry.height()) {
+        ui->horizontalLayout->setDirection(QBoxLayout::TopToBottom);
+        ui->saveButton->setOrientation(Qt::Horizontal);
+        ui->saveLayout->removeItem(ui->verticalSpacer);
+    }
     fmtxState = new GConfItem("/system/fmtx/enabled");
     fmtxFrequency = new GConfItem("/system/fmtx/frequency");
     if(fmtxState->value().toBool())

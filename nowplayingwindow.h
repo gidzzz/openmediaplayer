@@ -81,6 +81,8 @@ private slots:
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
     void setAlbumImage(QString);
+    void onShuffleButtonPressed();
+    void onRepeatButtonPressed();
 };
 
 #endif // NOWPLAYINGWINDOW_H
