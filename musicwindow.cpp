@@ -1,144 +1,5 @@
 #include "musicwindow.h"
 
-void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-        // Thanks to hqh for fapman, this code is based on the list in it.
-        QString songName = index.data(UserRoleSongName).toString();
-        QString songLength = "--:--";
-        QString songArtistAlbum = "(unknown artist) / (unknown album)";
-
-        painter->save();
-        QRect r = option.rect;
-        if(option.state & QStyle::State_Selected)
-        {
-            r = option.rect;
-#ifdef Q_WS_MAEMO_5
-            painter->drawImage(r, QImage("/etc/hildon/theme/images/TouchListBackgroundPressed.png"));
-#else
-            painter->fillRect(r, option.palette.highlight().color());
-#endif
-        }
-        QFont f = painter->font();
-        QPen defaultPen = painter->pen();
-        QColor gray;
-        gray = QColor(156, 154, 156);
-
-        if( QApplication::desktop()->width() > QApplication::desktop()->height() )
-        {
-            // Landscape
-            r = option.rect;
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(30, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
-
-            r = option.rect;
-            f.setPointSize(13);
-            painter->setFont(f);
-            r.setBottom(r.bottom()-10);
-            painter->setPen(QPen(gray));
-            painter->drawText(30, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
-            painter->setPen(defaultPen);;
-
-            r = option.rect;
-            r.setRight(r.right()-12);
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
-        } else {
-            // Portrait
-            r = option.rect;
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r.left()+5, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
-
-            r = option.rect;
-            f.setPointSize(13);
-            painter->setFont(f);
-            r.setBottom(r.bottom()-10);
-            painter->setPen(QPen(gray));
-            painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
-            painter->setPen(defaultPen);;
-
-            r = option.rect;
-            r.setRight(r.right()-12);
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
-
-        }
-        painter->restore();
-}
-
-QSize SongListItemDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
-{
-        return QSize(400, 70);
-}
-
-void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QString artistName = "Artist name";
-    QString albumSongCount = "1 album, 1 song";
-
-    painter->save();
-    QRect r = option.rect;
-    if(option.state & QStyle::State_Selected)
-    {
-        r = option.rect;
-#ifdef Q_WS_MAEMO_5
-        painter->drawImage(r, QImage("/etc/hildon/theme/images/TouchListBackgroundPressed.png"));
-#else
-        painter->fillRect(r, option.palette.highlight().color());
-#endif
-    }
-    QFont f = painter->font();
-    QPen defaultPen = painter->pen();
-    QColor gray;
-    gray = QColor(156, 154, 156);
-
-    if( QApplication::desktop()->width() > QApplication::desktop()->height() )
-    {
-        // Landscape
-        r = option.rect;
-        f.setPointSize(18);
-        painter->setFont(f);
-        painter->drawText(30, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
-
-        r = option.rect;
-        f.setPointSize(13);
-        painter->setFont(f);
-        r.setBottom(r.bottom()-10);
-        painter->setPen(QPen(gray));
-        painter->drawText(30, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
-        painter->setPen(defaultPen);;
-
-        r = option.rect;
-        painter->drawPixmap(r.right()-70, r.top()+4, 64, 64, QPixmap(defaultAlbumArt));
-
-    } else {
-        // Portrait
-        r = option.rect;
-        f.setPointSize(18);
-        painter->setFont(f);
-        painter->drawText(r.left()+5, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
-
-        r = option.rect;
-        f.setPointSize(13);
-        painter->setFont(f);
-        r.setBottom(r.bottom()-10);
-        painter->setPen(QPen(gray));
-        painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
-        painter->setPen(defaultPen);;
-        r = option.rect;
-        painter->drawPixmap(r.right()-(64+13), r.top()+4, 64, 64, QPixmap(defaultAlbumArt));
-    }
-    painter->restore();
-}
-
-QSize ArtistListItemDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
-{
-    return QSize(400, 70);
-}
-
 MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
         QMainWindow(parent),
 #ifdef Q_WS_MAEMO_5
@@ -159,8 +20,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->songsLayout->removeWidget(ui->songList);
     ui->songsLayout->addWidget(shuffleAllButton);
     ui->songsLayout->addWidget(ui->songList);
-    QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
-    QMainWindow::setWindowTitle(tr("Songs"));
+    ui->centralwidget->setLayout(ui->songsLayout);
     myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer);
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
@@ -184,6 +44,9 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
 #endif
     shuffleAllButton->hide();
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->raise();
 }
 
 MusicWindow::~MusicWindow()
@@ -238,6 +101,7 @@ void MusicWindow::connectSignals()
 #endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onContextMenuRequested(const QPoint &)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    connect(ui->indicator, SIGNAL(clicked()), myNowPlayingWindow, SLOT(show()));
 }
 
 void MusicWindow::onContextMenuRequested(const QPoint &point)
@@ -266,6 +130,10 @@ void MusicWindow::onShareClicked()
 void MusicWindow::orientationChanged()
 {
     ui->songList->scroll(1,1);
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
+                               ui->indicator->width(),ui->indicator->height());
+    ui->indicator->raise();
 }
 
 void MusicWindow::populateMenuBar()

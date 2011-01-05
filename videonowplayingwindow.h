@@ -6,15 +6,8 @@
 #include <QTimer>
 #include <QtDBus>
 #include "ui_videonowplayingwindow.h"
-
-#define wmCloseIcon "/etc/hildon/theme/images/wmBackIconPressed.png"
-#define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
-#define playButtonIcon "/etc/hildon/theme/mediaplayer/Play.png"
-#define pauseButtonIcon "/etc/hildon/theme/mediaplayer/Pause.png"
-#define nextButtonIcon "/etc/hildon/theme/mediaplayer/Forward.png"
-#define shareButtonIcon "/usr/share/icons/hicolor/48x48/hildon/general_share.png"
-#define deleteButtonIcon "/usr/share/icons/hicolor/48x48/hildon/general_delete.png"
-#define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
+#include "ui_nowplayingindicator.h"
+#include "includes.h"
 
 namespace Ui {
     class VideoNowPlayingWindow;

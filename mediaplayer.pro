@@ -24,7 +24,10 @@ SOURCES += main.cpp\
     freqpickselector.cpp \
     videonowplayingwindow.cpp \
     cqgraphicsview.cpp \
-    nowplayingindicator.cpp
+    nowplayingindicator.cpp \
+    songlistitemdelegate.cpp \
+    artistlistitemdelegate.cpp \
+    playlistdelegate.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -39,7 +42,11 @@ HEADERS  += mainwindow.h \
     videonowplayingwindow.h \
     mirror.h \
     cqgraphicsview.h \
-    nowplayingindicator.h
+    nowplayingindicator.h \
+    songlistitemdelegate.h \
+    artistlistitemdelegate.h \
+    includes.h \
+    playlistdelegate.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \

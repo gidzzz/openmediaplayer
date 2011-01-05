@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>801</width>
-      <height>416</height>
+      <height>411</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="songsLayout">
@@ -123,6 +123,16 @@
      </item>
     </layout>
    </widget>
+   <widget class="NowPlayingIndicator" name="indicator" native="true">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>350</y>
+      <width>112</width>
+      <height>70</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -166,6 +176,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>NowPlayingIndicator</class>
+   <extends>QWidget</extends>
+   <header>nowplayingindicator.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
