@@ -5,6 +5,7 @@
 #include <QIcon>
 #include <QTimer>
 #include <QtDBus>
+
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
 

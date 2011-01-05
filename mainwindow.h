@@ -10,11 +10,14 @@
 #include <internetradiowindow.h>
 #ifdef Q_WS_MAEMO_5
 #include "mafwrendereradapter.h"
-#include <QMaemo5InformationBox>
 #endif
 #include "ui_mainwindow.h"
-#include "nowplayingindicator.h"
-#include "includes.h"
+
+#define musicIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png"
+#define videosIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png"
+#define radioIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png"
+#define shuffleIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png"
+#define backgroundImage "/etc/hildon/theme/mediaplayer/background.png"
 
 namespace Ui {
     class MainWindow;

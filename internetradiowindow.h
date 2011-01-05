@@ -13,10 +13,11 @@
 #include <QDialogButtonBox>
 #include "nowplayingindicator.h"
 #ifdef Q_WS_MAEMO_5
-#include <QMaemo5InformationBox>
+    #include <QMaemo5InformationBox>
 #endif
+
 #include "ui_internetradiowindow.h"
-#include <fmtxdialog.h>
+#include "fmtxdialog.h"
 
 namespace Ui {
     class InternetRadioWindow;

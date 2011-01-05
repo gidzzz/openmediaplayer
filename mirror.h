@@ -1,5 +1,6 @@
 #ifndef MIRROR_H
 #define MIRROR_H
+
 #include <QGraphicsRectItem>
 #include <QGraphicsItem>
 #include <QPainter>
