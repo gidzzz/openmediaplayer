@@ -5,19 +5,18 @@
 #include <QPainter>
 #include <QDebug>
 #include <QtGui>
-#include <musicwindow.h>
-#include <videoswindow.h>
-#include <internetradiowindow.h>
-#ifdef Q_WS_MAEMO_5
-#include "mafwrendereradapter.h"
-#endif
-#include "ui_mainwindow.h"
 
-#define musicIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png"
-#define videosIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png"
-#define radioIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png"
-#define shuffleIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png"
-#define backgroundImage "/etc/hildon/theme/mediaplayer/background.png"
+#include "musicwindow.h"
+#include "videoswindow.h"
+#include "internetradiowindow.h"
+#include "ui_mainwindow.h"
+#include "nowplayingindicator.h"
+#include "includes.h"
+
+#ifdef Q_WS_MAEMO_5
+    #include <QMaemo5InformationBox>
+    #include "mafwrendereradapter.h"
+#endif
 
 namespace Ui {
     class MainWindow;

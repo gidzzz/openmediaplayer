@@ -5,15 +5,23 @@
 #include <QtGui>
 #include <QtDBus>
 #include <QTimer>
-#include <mirror.h>
-#include <cqgraphicsview.h>
+
 #ifdef Q_WS_MAEMO_5
-#include <QLibrary>
-#include "mafwrendereradapter.h"
-#include "fmtxdialog.h"
+    #include <QLibrary>
 #endif
 
+#include "mirror.h"
+#include "cqgraphicsview.h"
 #include "ui_nowplayingwindow.h"
+#include "includes.h"
+#include "playlistdelegate.h"
+
+#ifdef Q_WS_MAEMO_5
+    #include "mafwrendereradapter.h"
+    #include "fmtxdialog.h"
+#else
+    class MafwRendererAdapter;
+#endif
 
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
 #define playButtonIcon "/etc/hildon/theme/mediaplayer/Play.png"
@@ -26,10 +34,15 @@
 #define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
 #define albumImage "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_album.png"
 
+>>>>>>> 9b57e78182287e49ebf50e02567db609e73c4ae9
 namespace Ui {
     class NowPlayingWindow;
 }
 
+<<<<<<< HEAD
+class MafwRendererAdapter;
+
+=======
 enum npSongUserRoles { npUserRoleName=Qt::UserRole, npUserRoleSongName };
 
 class PlayListDelegate : public QStyledItemDelegate
@@ -41,9 +54,7 @@ public:
         void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
         QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
-
-class MafwRendererAdapter;
-
+>>>>>>> 9b57e78182287e49ebf50e02567db609e73c4ae9
 
 class NowPlayingWindow : public QMainWindow
 {
@@ -66,7 +77,6 @@ private:
     void connectSignals();
     QTimer *volumeTimer;
     QGraphicsScene *albumArtScene;
-    PlayListDelegate *delegate;
     mirror *m;
 
 private slots:

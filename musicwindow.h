@@ -2,48 +2,33 @@
 #define MUSICWINDOW_H
 
 #include <QMainWindow>
-#include <nowplayingwindow.h>
 #include <QDir>
 #include <QStringList>
 #include <QDirIterator>
 #include <QMenu>
 #include <QtGui>
-#include <share.h>
 #ifdef Q_WS_MAEMO_5
-#include <QMaemo5ValueButton>
-#include "mafwrendereradapter.h"
+    #include <QMaemo5ValueButton>
+    #include "mafwrendereradapter.h"
 #endif
+
+#include "nowplayingwindow.h"
+#include "share.h"
 #include "ui_musicwindow.h"
+#include "songlistitemdelegate.h"
+#include "artistlistitemdelegate.h"
+#include "ui_musicwindow.h"
+#include "includes.h"
 
-#define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
-#define defaultAlbumArt "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_default_album.png"
+#ifdef Q_WS_MAEMO_5
+    #include "mafwrendereradapter.h"
+#else
+    class MafwRendererAdapter;
+#endif
 
-class MafwRendererAdapter;
 namespace Ui {
     class MusicWindow;
 }
-
-enum UserRoles { UserRoleName=Qt::UserRole, UserRoleSongName };
-
-class SongListItemDelegate : public QStyledItemDelegate
-{
-public:
-        explicit SongListItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
-        virtual ~SongListItemDelegate() {}
-
-        void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-        QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-};
-
-class ArtistListItemDelegate : public QStyledItemDelegate
-{
-public:
-    explicit ArtistListItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
-    virtual ~ArtistListItemDelegate() {}
-
-    void paint (QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-};
 
 class MusicWindow : public QMainWindow
 {
