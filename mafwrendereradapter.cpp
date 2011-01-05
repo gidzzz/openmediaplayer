@@ -57,7 +57,9 @@ void MafwRendererAdapter::connectRegistrySignals()
 
 void MafwRendererAdapter::connectRendererSignals()
 {
-    g_print("connect renderer signals\n");
+#ifdef DEBUG
+    qDebug() << "connect renderer signals";
+#endif
     g_signal_connect(mafw_renderer,
                      "buffering-info",
                      G_CALLBACK(&onBufferingInfo),
@@ -114,7 +116,9 @@ void MafwRendererAdapter::onBufferingInfo(MafwRenderer* mafw_renderer,
                                           gfloat status,
                                           gpointer user_data)
 {
-    g_print("on buffering info\n");
+#ifdef DEBUG
+    qDebug() << "On buffering info";
+#endif
     emit static_cast<MafwRendererAdapter*>(user_data)->bufferingInfo(status);
 }
 
@@ -123,7 +127,9 @@ void MafwRendererAdapter::onMediaChanged(MafwRenderer* mafw_renderer,
                                          gchar* object_id,
                                          gpointer user_data)
 {
-    g_print("on media changed\n");
+#ifdef DEBUG
+    qDebug() << "On media changed";
+#endif
     emit static_cast<MafwRendererAdapter*>(user_data)->mediaChanged(index, object_id);
 }
 
@@ -132,7 +138,9 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer,
                                             GValueArray* value,
                                             gpointer user_data)
 {
-    g_print("on metadata changed %s\n", name);
+#ifdef DEBUG
+    qDebug() << "On Metadata Changed" << name;
+#endif
     if(value->n_values == 1)
     {
         GValue* v = g_value_array_get_nth(value, 0);
@@ -172,7 +180,9 @@ void MafwRendererAdapter::onStateChanged(MafwRenderer* renderer,
                                          gint state,
                                          gpointer user_data)
 {
-    g_print("on state changed\n");
+#ifdef DEBUG
+    qDebug() << "On state changed";
+#endif
     emit static_cast<MafwRendererAdapter*>(user_data)->stateChanged(state);
 }
 
