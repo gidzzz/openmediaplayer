@@ -399,6 +399,17 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton:pressed
+{
+border: none;
+}
+
+QPushButton:checked
+{
+border: none;
+}</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -423,6 +434,17 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton:pressed
+{
+border: none;
+}
+
+QPushButton:checked
+{
+border: none;
+}</string>
              </property>
              <property name="text">
               <string/>

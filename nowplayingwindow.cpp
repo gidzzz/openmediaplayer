@@ -26,6 +26,9 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
     this->connectSignals();
+    ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
+    ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
+    ui->view->setFixedHeight(350);
 }
 
 NowPlayingWindow::~NowPlayingWindow()
@@ -174,6 +177,7 @@ void NowPlayingWindow::orientationChanged()
         ui->buttonsLayout->addItem(ui->horizontalSpacer_10);
         ui->volumeButton->show();
         ui->layoutWidget->setGeometry(QRect(0, 0, 372, 351));
+        ui->view->setFixedHeight(360);
     } else {
         // Portrait mode
         qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
@@ -184,6 +188,7 @@ void NowPlayingWindow::orientationChanged()
                                             ui->layoutWidget->rect().top(),
                                             440,
                                             320));
+        ui->view->setFixedHeight(360);
     }
 }
 
