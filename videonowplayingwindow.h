@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QtDBus>
 #include "ui_videonowplayingwindow.h"
-#include "ui_nowplayingindicator.h"
 #include "includes.h"
 
 namespace Ui {
