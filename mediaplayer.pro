@@ -25,9 +25,9 @@ SOURCES += main.cpp \
     videonowplayingwindow.cpp \
     cqgraphicsview.cpp \
     nowplayingindicator.cpp \
-    songlistitemdelegate.cpp \
-    artistlistitemdelegate.cpp \
-    playlistdelegate.cpp
+    delegates/songlistitemdelegate.cpp \
+    delegates/artistlistitemdelegate.cpp \
+    delegates/playlistdelegate.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -43,10 +43,10 @@ HEADERS  += mainwindow.h \
     mirror.h \
     cqgraphicsview.h \
     nowplayingindicator.h \
-    songlistitemdelegate.h \
-    artistlistitemdelegate.h \
+    delegates/songlistitemdelegate.h \
+    delegates/artistlistitemdelegate.h \
     includes.h \
-    playlistdelegate.h
+    delegates/playlistdelegate.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \

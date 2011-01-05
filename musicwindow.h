@@ -15,8 +15,8 @@
 #include "nowplayingwindow.h"
 #include "share.h"
 #include "ui_musicwindow.h"
-#include "songlistitemdelegate.h"
-#include "artistlistitemdelegate.h"
+#include "delegates/songlistitemdelegate.h"
+#include "delegates/artistlistitemdelegate.h"
 #include "ui_musicwindow.h"
 #include "includes.h"
 

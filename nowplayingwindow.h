@@ -10,7 +10,7 @@
 #include "cqgraphicsview.h"
 #include "ui_nowplayingwindow.h"
 #include "includes.h"
-#include "playlistdelegate.h"
+#include "delegates/playlistdelegate.h"
 
 #ifdef Q_WS_MAEMO_5
     #include "mafwrendereradapter.h"
