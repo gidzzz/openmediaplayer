@@ -4,14 +4,13 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPixmap>
-#include <QImage>
+#include <QList>
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QMouseEvent>
 #include <mafwrendereradapter.h>
 #include "ui_nowplayingindicator.h"
-
-#define idleFrame "/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator_pause.png"
+#include "includes.h"
 
 namespace Ui {
     class NowPlayingIndicator;
@@ -33,8 +32,8 @@ signals:
 private:
     Ui::NowPlayingIndicator *ui;
     void paintEvent(QPaintEvent*);
-    void setBackgroundImage(const QString &image);
     void mouseReleaseEvent(QMouseEvent *);
+    QList<QPixmap> images;
     QTimer *timer;
     QString indicatorImage;
 #ifdef Q_WS_MAEMO_5

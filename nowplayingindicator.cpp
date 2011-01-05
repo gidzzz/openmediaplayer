@@ -17,6 +17,9 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
     frame = 0;
+    images << QPixmap(idleFrame);
+    for (int i = 1; i < 12; i++)
+        images << QPixmap("/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(i) + ".png");
 }
 
 NowPlayingIndicator::~NowPlayingIndicator()
@@ -24,16 +27,10 @@ NowPlayingIndicator::~NowPlayingIndicator()
     delete ui;
 }
 
-void NowPlayingIndicator::setBackgroundImage(const QString &image)
-{
-    this->indicatorImage = image;
-    this->update();
-}
-
 void NowPlayingIndicator::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.drawPixmap(0, 0, QPixmap(this->indicatorImage));
+    painter.drawPixmap(0, 0, images[frame]);
 }
 
 void NowPlayingIndicator::onStateChanged(int state)
@@ -51,15 +48,15 @@ void NowPlayingIndicator::startAnimation()
         frame = 1;
     else
         frame++;
-    QString frameImage = "/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(frame) + ".png";
-    this->setBackgroundImage(frameImage);
+    this->update();
 }
 
 void NowPlayingIndicator::stopAnimation()
 {
     if(timer->isActive())
         timer->stop();
-    this->setBackgroundImage(idleFrame);
+    this->frame = 0;
+    this->repaint();
 }
 
 void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
