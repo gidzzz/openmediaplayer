@@ -11,6 +11,7 @@
 #include <QSpacerItem>
 #include <QMessageBox>
 #include <QDialogButtonBox>
+#include "nowplayingindicator.h"
 #ifdef Q_WS_MAEMO_5
 #include <QMaemo5InformationBox>
 #endif

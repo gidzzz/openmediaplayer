@@ -35,6 +35,16 @@
      </item>
     </layout>
    </widget>
+   <widget class="NowPlayingIndicator" name="indicator" native="true">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>330</y>
+      <width>112</width>
+      <height>70</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -65,6 +75,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>NowPlayingIndicator</class>
+   <extends>QWidget</extends>
+   <header>nowplayingindicator.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

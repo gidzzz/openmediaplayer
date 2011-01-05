@@ -32,6 +32,7 @@ private:
 private slots:
     void onVideoSelected();
     void onSortingChanged(QAction*);
+    void orientationChanged();
 };
 
 #endif // VIDEOSWINDOW_H

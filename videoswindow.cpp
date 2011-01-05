@@ -8,7 +8,7 @@ VideosWindow::VideosWindow(QWidget *parent) :
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
-    QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
+    ui->centralwidget->setLayout(ui->verticalLayout);
     sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
     sortByDate = new QAction(tr("Date"), sortByActionGroup);
@@ -22,6 +22,7 @@ VideosWindow::VideosWindow(QWidget *parent) :
     sortByCategory->setCheckable(true);
     this->menuBar()->addActions(sortByActionGroup->actions());
     this->connectSignals();
+    this->orientationChanged();
 }
 
 VideosWindow::~VideosWindow()
@@ -33,6 +34,7 @@ void VideosWindow::connectSignals()
 {
     connect(ui->listWidget, SIGNAL(activated(QModelIndex)), this, SLOT(onVideoSelected()));
     connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
 void VideosWindow::onVideoSelected()
@@ -60,4 +62,11 @@ void VideosWindow::selectView()
         sortByCategory->setChecked(true);
     else
         sortByDate->setChecked(true);
+}
+
+void VideosWindow::orientationChanged()
+{
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->raise();
 }

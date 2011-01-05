@@ -8,8 +8,11 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent) :
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
-    QMainWindow::setCentralWidget(ui->verticalLayoutWidget);
+    ui->centralwidget->setLayout(ui->verticalLayout);
     this->connectSignals();
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->raise();
 }
 
 InternetRadioWindow::~InternetRadioWindow()
