@@ -6,11 +6,13 @@
 #include <QPixmap>
 #include <QList>
 #include <QTimer>
+#include <QtDBus>
 #include <QDesktopWidget>
 #include <QMouseEvent>
-#include <mafwrendereradapter.h>
+#include "mafwrendereradapter.h"
 #include "ui_nowplayingindicator.h"
 #include "includes.h"
+#include "maemo5deviceevents.h"
 
 namespace Ui {
     class NowPlayingIndicator;
@@ -33,11 +35,14 @@ private:
     Ui::NowPlayingIndicator *ui;
     void paintEvent(QPaintEvent*);
     void mouseReleaseEvent(QMouseEvent *);
+    void connectSignals();
     QList<QPixmap> images;
     QTimer *timer;
+    int mafwState;
     QString indicatorImage;
 #ifdef Q_WS_MAEMO_5
     MafwRendererAdapter* mafwrenderer;
+    Maemo5DeviceEvents *deviceEvents;
 #endif
     int frame;
 
@@ -45,6 +50,7 @@ private slots:
     void onStateChanged(int);
     void startAnimation();
     void stopAnimation();
+    void onTkLockChanged(bool);
 };
 
 #endif // NOWPLAYINGINDICATOR_H

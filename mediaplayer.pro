@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     nowplayingindicator.cpp \
     delegates/songlistitemdelegate.cpp \
     delegates/artistlistitemdelegate.cpp \
-    delegates/playlistdelegate.cpp
+    delegates/playlistdelegate.cpp \
+    maemo5deviceevents.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     delegates/songlistitemdelegate.h \
     delegates/artistlistitemdelegate.h \
     includes.h \
-    delegates/playlistdelegate.h
+    delegates/playlistdelegate.h \
+    maemo5deviceevents.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
