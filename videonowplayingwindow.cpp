@@ -12,6 +12,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent) :
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
     this->setIcons();
+    this->orientationChanged();
     this->connectSignals();
     ui->volumeSlider->hide();
 }
@@ -39,6 +40,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -80,4 +82,27 @@ void VideoNowPlayingWindow::volumeWatcher()
 {
     if(!ui->volumeSlider->isHidden())
         volumeTimer->start();
+}
+
+void VideoNowPlayingWindow::orientationChanged()
+{
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->controlOverlay->setGeometry((screenGeometry.width() / 2)-(ui->controlOverlay->width()/2),
+                                    (screenGeometry.height() / 2)-(ui->controlOverlay->height()/2),
+                                    ui->controlOverlay->width(), ui->controlOverlay->height());
+    ui->toolbarOverlay->setGeometry(0, screenGeometry.height()-ui->toolbarOverlay->height(),
+                                    screenGeometry.width(), ui->toolbarOverlay->height());
+    ui->wmCloseButton->setGeometry(screenGeometry.width()-ui->wmCloseButton->width(), 0,
+                                   ui->wmCloseButton->width(), ui->wmCloseButton->height());
+    if(screenGeometry.width() > screenGeometry.height()) {
+        ui->deleteButton->show();
+        ui->shareButton->show();
+        ui->volumeButton->show();
+    } else {
+        ui->deleteButton->hide();
+        ui->shareButton->hide();
+        ui->volumeButton->hide();
+        if(!ui->volumeSlider->isHidden())
+            ui->volumeSlider->hide();
+    }
 }

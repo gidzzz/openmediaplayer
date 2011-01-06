@@ -5,6 +5,7 @@
 #include <QIcon>
 #include <QTimer>
 #include <QtDBus>
+#include <QDesktopWidget>
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
@@ -30,6 +31,7 @@ private:
 private slots:
     void toggleVolumeSlider();
     void volumeWatcher();
+    void orientationChanged();
 #ifdef Q_WS_MAEMO_5
     void onVolumeChanged(const QDBusMessage &msg);
 #endif
