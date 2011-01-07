@@ -18,17 +18,12 @@ SOURCES += main.cpp \
     videoswindow.cpp \
     internetradiowindow.cpp \
     share.cpp \
-    mafwrenderersignalhelper.cpp \
-    mafwrendereradapter.cpp \
-    fmtxdialog.cpp \
-    freqpickselector.cpp \
     videonowplayingwindow.cpp \
     cqgraphicsview.cpp \
     nowplayingindicator.cpp \
     delegates/songlistitemdelegate.cpp \
     delegates/artistlistitemdelegate.cpp \
-    delegates/playlistdelegate.cpp \
-    maemo5deviceevents.cpp
+    delegates/playlistdelegate.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -36,10 +31,6 @@ HEADERS  += mainwindow.h \
     videoswindow.h \
     internetradiowindow.h \
     share.h \
-    mafwrenderersignalhelper.h \
-    mafwrendereradapter.h \
-    fmtxdialog.h \
-    freqpickselector.h \
     videonowplayingwindow.h \
     mirror.h \
     cqgraphicsview.h \
@@ -47,8 +38,7 @@ HEADERS  += mainwindow.h \
     delegates/songlistitemdelegate.h \
     delegates/artistlistitemdelegate.h \
     includes.h \
-    delegates/playlistdelegate.h \
-    maemo5deviceevents.h
+    delegates/playlistdelegate.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -74,6 +64,16 @@ maemo5 {
     CONFIG += link_pkgconfig
     PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf
     QT += maemo5
+    SOURCES +=     mafwrenderersignalhelper.cpp \
+        mafwrendereradapter.cpp \
+        maemo5deviceevents.cpp \
+        fmtxdialog.cpp \
+        freqpickselector.cpp
+    HEADERS +=    mafwrenderersignalhelper.h \
+        mafwrendereradapter.h \
+        maemo5deviceevents.h \
+        fmtxdialog.h \
+        freqpickselector.h
     include(external-includepaths.pro)
 }
 

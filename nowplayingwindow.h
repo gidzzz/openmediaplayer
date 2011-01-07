@@ -52,8 +52,8 @@ private slots:
     void toggleList();
 #ifdef Q_WS_MAEMO_5
     void onVolumeChanged(const QDBusMessage &msg);
-#endif
     void stateChanged(int state);
+#endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
     void setAlbumImage(QString);

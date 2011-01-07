@@ -28,6 +28,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     this->connectSignals();
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
+    ui->volumeButton->setFixedSize(ui->volumeButton->sizeHint());
     ui->view->setFixedHeight(350);
 }
 
@@ -59,8 +60,8 @@ void NowPlayingWindow::toggleVolumeSlider()
         ui->buttonsWidget->hide();
         ui->volumeSlider->show();
     } else {
-        ui->buttonsWidget->show();
         ui->volumeSlider->hide();
+        ui->buttonsWidget->show();
         if(volumeTimer->isActive())
             volumeTimer->stop();
     }
@@ -104,6 +105,7 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
         this->setAlbumImage(value.toString());
 }
 
+#ifdef Q_WS_MAEMO_5
 void NowPlayingWindow::stateChanged(int state)
 {
   if(state == Paused)
@@ -119,6 +121,7 @@ void NowPlayingWindow::stateChanged(int state)
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
   }
 }
+#endif
 
 void NowPlayingWindow::connectSignals()
 {

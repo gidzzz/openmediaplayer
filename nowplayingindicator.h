@@ -9,10 +9,12 @@
 #include <QtDBus>
 #include <QDesktopWidget>
 #include <QMouseEvent>
-#include "mafwrendereradapter.h"
+#ifdef Q_WS_MAEMO_5
+    #include "mafwrendereradapter.h"
+    #include "maemo5deviceevents.h"
+#endif
 #include "ui_nowplayingindicator.h"
 #include "includes.h"
-#include "maemo5deviceevents.h"
 
 namespace Ui {
     class NowPlayingIndicator;
@@ -47,10 +49,12 @@ private:
     int frame;
 
 private slots:
+#ifdef Q_WS_MAEMO_5
     void onStateChanged(int);
+    void onTkLockChanged(bool);
+#endif
     void startAnimation();
     void stopAnimation();
-    void onTkLockChanged(bool);
 };
 
 #endif // NOWPLAYINGINDICATOR_H

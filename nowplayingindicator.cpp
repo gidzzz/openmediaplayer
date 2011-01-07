@@ -9,9 +9,11 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     timer = new QTimer(this);
     timer->setInterval(100);
     this->stopAnimation();
+#ifdef Q_WS_MAEMO_5
     mafwrenderer = new MafwRendererAdapter();
     this->mafwState = Paused;
     deviceEvents = new Maemo5DeviceEvents(this);
+#endif
     this->connectSignals();
     frame = 0;
     images << QPixmap(idleFrame);
@@ -32,11 +34,14 @@ void NowPlayingIndicator::paintEvent(QPaintEvent *)
 
 void NowPlayingIndicator::connectSignals()
 {
+#ifdef Q_WS_MAEMO_5
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
     connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onTkLockChanged(bool)));
+#endif
+    connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
 }
 
+#ifdef Q_WS_MAEMO_5
 void NowPlayingIndicator::onStateChanged(int state)
 {
     this->mafwState = state;
@@ -45,7 +50,8 @@ void NowPlayingIndicator::onStateChanged(int state)
     else
         timer->start();
 }
-
+#endif
+#ifdef Q_WS_MAEMO_5
 void NowPlayingIndicator::onTkLockChanged(bool state)
 {
     if(state) {
@@ -68,6 +74,7 @@ void NowPlayingIndicator::onTkLockChanged(bool state)
         }
     }
 }
+#endif
 
 void NowPlayingIndicator::startAnimation()
 {

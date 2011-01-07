@@ -17,7 +17,9 @@
 #endif
 
 #include "ui_internetradiowindow.h"
-#include "fmtxdialog.h"
+#ifdef Q_WS_MAEMO_5
+    #include "fmtxdialog.h"
+#endif
 
 namespace Ui {
     class InternetRadioWindow;
