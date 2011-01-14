@@ -48,7 +48,7 @@ public:
 
         QLinearGradient g(0,0,0,buffSize.height());
         g.setColorAt(1, Qt::transparent);
-        g.setColorAt(0.7, Qt::black);
+        g.setColorAt(0.8, widget->palette().background().color());
         p.fillRect(opt.rect, g);
         //p.setBrush(g);
 
