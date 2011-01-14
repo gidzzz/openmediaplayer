@@ -110,20 +110,18 @@ QWidget *FreqPickSelector::widget(QWidget *parent)
     freqDialog = new QDialog(parent);
     freqDialog->setWindowTitle("Select frequency");
     freqDialog->setMinimumHeight(360);
-    QHBoxLayout *freqLayout = new QHBoxLayout();
+    QGridLayout *mainLayout = new QGridLayout(freqDialog);
     QDialogButtonBox *box = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Vertical, freqDialog);
-    freqLayout->addWidget(integers);
-    freqLayout->addWidget(fractions);
-    QHBoxLayout *hLayout = new QHBoxLayout(freqDialog);
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    if (screenGeometry.width() < screenGeometry.height()) {
-        hLayout->setDirection(QBoxLayout::TopToBottom);
-        box->setOrientation(Qt::Horizontal);
+    mainLayout->addWidget(integers, 0, 0, 1, 1);
+    mainLayout->addWidget(fractions, 0, 1, 1, 1);
+    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
         freqDialog->setMinimumHeight(680);
+        mainLayout->addWidget(box, 2, 0, 1, mainLayout->columnCount(), Qt::AlignBottom);
+        box->setSizePolicy(QSizePolicy::MinimumExpanding, box->sizePolicy().verticalPolicy());
+    } else {
+        mainLayout->addWidget(box, 0, 2, 2, 1, Qt::AlignBottom);
     }
-    hLayout->addLayout(freqLayout);
-    hLayout->addWidget(box);
-    freqDialog->setLayout(hLayout);
+    freqDialog->setLayout(mainLayout);
     connect(box, SIGNAL(accepted()), freqDialog, SLOT(accept()));
     connect(freqDialog, SIGNAL(accepted()), this, SLOT(updateText()));
     connect(frequency, SIGNAL(valueChanged()), this, SLOT(onFrequencyChanged()));
