@@ -24,9 +24,7 @@ SOURCES += main.cpp \
     delegates/songlistitemdelegate.cpp \
     delegates/artistlistitemdelegate.cpp \
     delegates/playlistdelegate.cpp \
-    radionowplayingwindow.cpp \
-    maemo5dialogbutton.cpp \
-    qmaemo5rotator.cpp
+    radionowplayingwindow.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -42,9 +40,7 @@ HEADERS  += mainwindow.h \
     delegates/artistlistitemdelegate.h \
     includes.h \
     delegates/playlistdelegate.h \
-    radionowplayingwindow.h \
-    maemo5dialogbutton.h \
-    qmaemo5rotator.h
+    radionowplayingwindow.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \

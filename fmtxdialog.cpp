@@ -14,11 +14,13 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
 #else
     freqButton = new QPushButton("Frequency", this);
 #endif
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    if (screenGeometry.width() < screenGeometry.height()) {
-        ui->horizontalLayout->setDirection(QBoxLayout::TopToBottom);
-        ui->saveButton->setOrientation(Qt::Horizontal);
-        ui->saveLayout->removeItem(ui->verticalSpacer);
+    ui->buttonBox->setOrientation(Qt::Vertical);
+    ui->saveLayout->removeWidget(ui->buttonBox);
+    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
+        ui->saveLayout->addWidget(ui->buttonBox, 2, 0, 1, 2); // portrait
+        ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
+    } else {
+        ui->saveLayout->addWidget(ui->buttonBox, 0, 2, 2, 1, Qt::AlignBottom); // landscape
     }
     fmtxState = new GConfItem("/system/fmtx/enabled");
     fmtxFrequency = new GConfItem("/system/fmtx/frequency");
@@ -26,7 +28,7 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
         ui->fmtxCheckbox->setChecked(true);
     ui->fmtxLayout->addWidget(freqButton);
     connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
-    connect(ui->saveButton, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
+    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
 }
 
 FMTXDialog::~FMTXDialog()
