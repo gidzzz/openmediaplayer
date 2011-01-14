@@ -34,7 +34,7 @@ bool Maemo5DeviceEvents::isScreenLocked()
         if(this->screenState == "locked") {
 #ifdef DEBUG
             qDebug() << "Maemo5DeviceEvents: Screen is locked";
-#endif DEBUG
+#endif
             return true;
         } else if(this->screenState == "unlocked") {
 #ifdef DEBUG
