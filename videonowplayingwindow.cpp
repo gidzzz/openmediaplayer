@@ -1,4 +1,10 @@
 #include "videonowplayingwindow.h"
+#ifdef Q_WS_MAEMO_5
+#include <QtGui/QX11Info>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <X11/Xutil.h>
+#endif
 
 VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -7,6 +13,10 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent) :
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
+    //http://www.gossamer-threads.com/lists/maemo/developers/54239
+    quint32 disable = {0};
+    Atom winPortraitModeSupportAtom = XInternAtom(QX11Info::display(), "_HILDON_PORTRAIT_MODE_SUPPORT", false);
+    XChangeProperty(QX11Info::display(), winId(), winPortraitModeSupportAtom, XA_CARDINAL, 32, PropModeReplace, (uchar*) &disable, 1);
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
     volumeTimer = new QTimer(this);
