@@ -150,7 +150,7 @@ void MainWindow::showAbout()
 {
     QMessageBox::information(this, tr("About"),
                              "Qt Mediaplayer for Maemo 5.\n\nCopyright 2010-2011:\nMohammad Abu-Garbeyyeh\n\
-Sebastian Lauwers\nTimur Kristof\nNicolai Hess\n\nLicensed under GPLv3");
+Sebastian Lauwers\nTimur Kristof\nNicolai Hess\n\nLicensed under GPLv3\n\nBuild Date: " + QString(__DATE__ ) + " "  + QString(__TIME__ ));
 }
 
 void MainWindow::processListClicks(QListWidgetItem* item)

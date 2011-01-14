@@ -23,7 +23,10 @@ SOURCES += main.cpp \
     nowplayingindicator.cpp \
     delegates/songlistitemdelegate.cpp \
     delegates/artistlistitemdelegate.cpp \
-    delegates/playlistdelegate.cpp
+    delegates/playlistdelegate.cpp \
+    radionowplayingwindow.cpp \
+    maemo5dialogbutton.cpp \
+    qmaemo5rotator.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -38,7 +41,10 @@ HEADERS  += mainwindow.h \
     delegates/songlistitemdelegate.h \
     delegates/artistlistitemdelegate.h \
     includes.h \
-    delegates/playlistdelegate.h
+    delegates/playlistdelegate.h \
+    radionowplayingwindow.h \
+    maemo5dialogbutton.h \
+    qmaemo5rotator.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -48,10 +54,11 @@ FORMS    += mainwindow.ui \
     share.ui \
     fmtxdialog.ui \
     videonowplayingwindow.ui \
-    nowplayingindicator.ui
+    nowplayingindicator.ui \
+    radionowplayingwindow.ui
 
 CONFIG += mobility
-MOBILITY =
+MOBILITY = sensors
 
 symbian {
     TARGET.UID3 = 0xedf29700
@@ -68,13 +75,19 @@ maemo5 {
         mafwrendereradapter.cpp \
         maemo5deviceevents.cpp \
         fmtxdialog.cpp \
-        freqpickselector.cpp
+        freqpickselector.cpp \
+        qmaemo5rotator.cpp
     HEADERS +=    mafwrenderersignalhelper.h \
         mafwrendereradapter.h \
         maemo5deviceevents.h \
         fmtxdialog.h \
-        freqpickselector.h
+        freqpickselector.h \
+        qmaemo5rotator.h
     include(external-includepaths.pro)
+}
+
+unix {
+    #DEFINES += "BUILDDATE=$system(date -R)"
 }
 
 RESOURCES += \
