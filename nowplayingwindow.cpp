@@ -30,6 +30,19 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
     ui->volumeButton->setFixedSize(ui->volumeButton->sizeHint());
     ui->view->setFixedHeight(350);
+    // We might be starting NowPlayingWindow in portrait mode.
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    if (screenGeometry.width() < screenGeometry.height()) {
+        ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
+        if(!ui->volumeButton->isHidden())
+            ui->volumeButton->hide();
+        ui->layoutWidget->setGeometry(QRect(ui->layoutWidget->rect().left(),
+                                            ui->layoutWidget->rect().top(),
+                                            440,
+                                            320));
+        ui->view->setFixedHeight(360);
+        ui->buttonsLayout->setSpacing(30);
+    }
 }
 
 NowPlayingWindow::~NowPlayingWindow()
@@ -45,12 +58,12 @@ void NowPlayingWindow::setAlbumImage(QString image)
     m = new mirror();
     albumArtScene->addItem(m);
     QPixmap albumArt(image);
-    albumArt = albumArt.scaled(QSize(330, 300));
+    albumArt = albumArt.scaled(QSize(295, 295));
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(albumArt);
     albumArtScene->addItem(item);
     m->setItem(item);
     QTransform t;
-    t = t.rotate(-25, Qt::YAxis);
+    t = t.rotate(-10, Qt::YAxis);
     ui->view->setTransform(t);
 }
 
@@ -135,6 +148,10 @@ void NowPlayingWindow::connectSignals()
     connect(ui->view, SIGNAL(clicked()), this, SLOT(toggleList()));
     connect(ui->repeatButton, SIGNAL(clicked()), this, SLOT(onRepeatButtonPressed()));
     connect(ui->shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonPressed()));
+    connect(ui->nextButton, SIGNAL(pressed()), this, SLOT(onNextButtonPressed()));
+    connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
+    connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
+    connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
 #ifdef Q_WS_MAEMO_5
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
@@ -177,21 +194,25 @@ void NowPlayingWindow::orientationChanged()
         // Landscape mode
         qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
         ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
-        ui->buttonsLayout->addItem(ui->horizontalSpacer_10);
-        ui->volumeButton->show();
+        //ui->buttonsLayout->addItem(ui->horizontalSpacer_10);
+        if(ui->volumeButton->isHidden())
+            ui->volumeButton->show();
         ui->layoutWidget->setGeometry(QRect(0, 0, 372, 351));
         ui->view->setFixedHeight(360);
+        ui->buttonsLayout->setSpacing(60);
     } else {
         // Portrait mode
         qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
         ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
-        ui->buttonsLayout->removeItem(ui->horizontalSpacer_10);
-        ui->volumeButton->hide();
+        //ui->buttonsLayout->removeItem(ui->horizontalSpacer_10);
+        if(!ui->volumeButton->isHidden())
+            ui->volumeButton->hide();
         ui->layoutWidget->setGeometry(QRect(ui->layoutWidget->rect().left(),
                                             ui->layoutWidget->rect().top(),
                                             440,
                                             320));
         ui->view->setFixedHeight(360);
+        ui->buttonsLayout->setSpacing(30);
     }
 }
 
@@ -237,4 +258,20 @@ void NowPlayingWindow::onRepeatButtonPressed()
     } else {
         ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
     }
+}
+
+void NowPlayingWindow::onNextButtonPressed()
+{
+    if(ui->nextButton->isDown())
+        ui->nextButton->setIcon(QIcon(nextButtonPressedIcon));
+    else
+        ui->nextButton->setIcon(QIcon(nextButtonIcon));
+}
+
+void NowPlayingWindow::onPrevButtonPressed()
+{
+    if(ui->prevButton->isDown())
+        ui->prevButton->setIcon(QIcon(prevButtonPressedIcon));
+    else
+        ui->prevButton->setIcon(QIcon(prevButtonIcon));
 }

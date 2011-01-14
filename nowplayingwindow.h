@@ -48,7 +48,6 @@ private:
 private slots:
     void toggleVolumeSlider();
     void showFMTXDialog();
-    void orientationChanged();
     void toggleList();
 #ifdef Q_WS_MAEMO_5
     void onVolumeChanged(const QDBusMessage &msg);
@@ -59,6 +58,9 @@ private slots:
     void setAlbumImage(QString);
     void onShuffleButtonPressed();
     void onRepeatButtonPressed();
+    void orientationChanged();
+    void onNextButtonPressed();
+    void onPrevButtonPressed();
 };
 
 #endif // NOWPLAYINGWINDOW_H
