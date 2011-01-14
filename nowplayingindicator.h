@@ -15,6 +15,9 @@
 #endif
 #include "ui_nowplayingindicator.h"
 #include "includes.h"
+#include "nowplayingwindow.h"
+#include "radionowplayingwindow.h"
+#include "videonowplayingwindow.h"
 
 namespace Ui {
     class NowPlayingIndicator;

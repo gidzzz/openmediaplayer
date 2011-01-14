@@ -94,8 +94,15 @@ void NowPlayingIndicator::stopAnimation()
     this->repaint();
 }
 
-void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
+void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *)
 {
-    if(event->button() == Qt::LeftButton)
-        emit clicked();
+    //if(event->button() == Qt::LeftButton)
+     //   emit clicked();
+    // This button does some weird behavior, it always creates a new NowPlayingWindow...
+    // If video was running, show its window.
+    // If x was running, shows its window.
+    // TODO: Update code as mafw is integrated.
+    NowPlayingWindow *songs = new NowPlayingWindow(this, mafwrenderer);
+    songs->setAttribute(Qt::WA_DeleteOnClose);
+    songs->show();
 }
