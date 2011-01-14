@@ -86,9 +86,5 @@ maemo5 {
     include(external-includepaths.pro)
 }
 
-unix {
-    #DEFINES += "BUILDDATE=$system(date -R)"
-}
-
 RESOURCES += \
     images.qrc
