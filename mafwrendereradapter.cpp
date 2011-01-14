@@ -87,7 +87,7 @@ void MafwRendererAdapter::disconnectRendererSignals()
 
 }
 
-void MafwRendererAdapter::onRendererAdded(MafwRegistry* mafw_registry,
+void MafwRendererAdapter::onRendererAdded(MafwRegistry*,
                                           GObject* renderer,
                                           gpointer user_data)
 {
@@ -100,7 +100,7 @@ void MafwRendererAdapter::onRendererAdded(MafwRegistry* mafw_registry,
 }
 
 
-void MafwRendererAdapter::onRendererRemoved(MafwRegistry* mafw_registry,
+void MafwRendererAdapter::onRendererRemoved(MafwRegistry*,
                                             GObject* renderer,
                                             gpointer user_data)
 {
@@ -112,7 +112,7 @@ void MafwRendererAdapter::onRendererRemoved(MafwRegistry* mafw_registry,
     }
 }
 
-void MafwRendererAdapter::onBufferingInfo(MafwRenderer* mafw_renderer,
+void MafwRendererAdapter::onBufferingInfo(MafwRenderer*,
                                           gfloat status,
                                           gpointer user_data)
 {
@@ -122,7 +122,7 @@ void MafwRendererAdapter::onBufferingInfo(MafwRenderer* mafw_renderer,
     emit static_cast<MafwRendererAdapter*>(user_data)->bufferingInfo(status);
 }
 
-void MafwRendererAdapter::onMediaChanged(MafwRenderer* mafw_renderer,
+void MafwRendererAdapter::onMediaChanged(MafwRenderer*,
                                          gint index,
                                          gchar* object_id,
                                          gpointer user_data)
@@ -133,7 +133,7 @@ void MafwRendererAdapter::onMediaChanged(MafwRenderer* mafw_renderer,
     emit static_cast<MafwRendererAdapter*>(user_data)->mediaChanged(index, object_id);
 }
 
-void MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer,
+void MafwRendererAdapter::onMetadataChanged(MafwRenderer*,
                                             gchar* name,
                                             GValueArray* value,
                                             gpointer user_data)
@@ -168,15 +168,17 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer* mafw_renderer,
     }
 }
 
-void MafwRendererAdapter::onPlaylistChanged(MafwRenderer* renderer,
+void MafwRendererAdapter::onPlaylistChanged(MafwRenderer*,
                                             GObject* playlist,
                                             gpointer user_data)
 {
-    g_print("on playlist changed\n");
+#ifdef DEBUG
+    qDebug() << "On playlist changed";
+#endif
     emit static_cast<MafwRendererAdapter*>(user_data)->playlistChanged(playlist);
 }
 
-void MafwRendererAdapter::onStateChanged(MafwRenderer* renderer,
+void MafwRendererAdapter::onStateChanged(MafwRenderer*,
                                          gint state,
                                          gpointer user_data)
 {
