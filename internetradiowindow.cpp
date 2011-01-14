@@ -9,10 +9,9 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent) :
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
+    window = new RadioNowPlayingWindow(this);
     this->connectSignals();
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
-    ui->indicator->raise();
+    this->orientationChanged();
 }
 
 InternetRadioWindow::~InternetRadioWindow()
@@ -24,6 +23,8 @@ void InternetRadioWindow::connectSignals()
 {
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showAddBookmarkDialog()));
+    connect(ui->listWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(onStationSelected()));
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
 void InternetRadioWindow::showFMTXDialog()
@@ -32,6 +33,11 @@ void InternetRadioWindow::showFMTXDialog()
     FMTXDialog *fmtxDialog = new FMTXDialog(this);
     fmtxDialog->show();
 #endif
+}
+
+void InternetRadioWindow::onStationSelected()
+{
+    window->show();
 }
 
 void InternetRadioWindow::showAddBookmarkDialog()
@@ -120,4 +126,12 @@ void InternetRadioWindow::onSaveClicked()
             }
         }
     }
+}
+
+void InternetRadioWindow::orientationChanged()
+{
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
+                               ui->indicator->width(),ui->indicator->height());
+    ui->indicator->raise();
 }

@@ -17,6 +17,7 @@
 #endif
 
 #include "ui_internetradiowindow.h"
+#include "radionowplayingwindow.h"
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
 #endif
@@ -43,11 +44,14 @@ private:
     QLineEdit *addressBox;
     QLineEdit *nameBox;
     QDialogButtonBox *buttonBox;
+    RadioNowPlayingWindow *window;
 
 private slots:
     void showFMTXDialog();
     void showAddBookmarkDialog();
     void onSaveClicked();
+    void onStationSelected();
+    void orientationChanged();
 };
 
 #endif // INTERNETRADIOWINDOW_H
