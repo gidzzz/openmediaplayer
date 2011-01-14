@@ -108,8 +108,10 @@ void NowPlayingWindow::setButtonIcons()
 
 void NowPlayingWindow::metadataChanged(QString name, QVariant value)
 {
-    if(name == "title" /*MAFW_METADATA_KEY_TITLE*/)
+    if(name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
         ui->songTitleLabel->setText(value.toString());
+        system(QString("fmtx_client -s '" + value.toString() + "' -t '" + value.toString() + "'").toUtf8());
+    }
     if(name == "artist" /*MAFW_METADATA_KEY_ARTIST*/)
         ui->artistLabel->setText(value.toString());
     if(name == "album" /*MAFW_METADATA_KEY_ALBUM*/)
@@ -123,15 +125,21 @@ void NowPlayingWindow::stateChanged(int state)
 {
   if(state == Paused)
   {
-    ui->playButton->setIcon(QIcon(playButtonIcon));
-    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+      ui->playButton->setIcon(QIcon(playButtonIcon));
+      disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+      connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
   }
-  else
+  else if(state == Playing)
   {
-    ui->playButton->setIcon(QIcon(pauseButtonIcon));
-    disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+      ui->playButton->setIcon(QIcon(pauseButtonIcon));
+      disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+      connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+  }
+  else if(state == Stopped)
+  {
+      ui->playButton->setIcon(QIcon(playButtonIcon));
+      disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+      connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
   }
 }
 #endif
