@@ -11,6 +11,7 @@ FreqPickSelector::FreqPickSelector(QObject *parent) :
     refreshFreqValues();
 }
 
+
 FreqPickSelector::~FreqPickSelector()
 {
     integers->deleteLater();
@@ -49,6 +50,8 @@ void FreqPickSelector::refreshFreqValues()
     QTextStream minStream(&minFile);
     int minValue = minStream.readLine().toInt() / 1000;
     minFile.close();
+    if(minValue == 87)
+       minValue++;
     QFile maxFile("/sys/class/i2c-adapter/i2c-2/2-0063/region_top_frequency");
     maxFile.open(QIODevice::ReadOnly);
     QTextStream maxStream(&maxFile);
