@@ -39,6 +39,8 @@ signals:
 private:
     Ui::NowPlayingIndicator *ui;
     void paintEvent(QPaintEvent*);
+    void showEvent(QShowEvent *);
+    void hideEvent(QHideEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void connectSignals();
     QList<QPixmap> images;

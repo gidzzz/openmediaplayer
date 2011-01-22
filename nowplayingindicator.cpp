@@ -45,7 +45,7 @@ void NowPlayingIndicator::connectSignals()
 void NowPlayingIndicator::onStateChanged(int state)
 {
     this->mafwState = state;
-    if(state == Paused)
+    if(state == Paused || state == Stopped)
         this->stopAnimation();
     else
         timer->start();
@@ -63,7 +63,7 @@ void NowPlayingIndicator::onTkLockChanged(bool state)
 #ifdef DEBUG
         qDebug() << "NowPlayingIndicator: Screen unlocked, starting animation";
 #endif
-        if(!deviceEvents->isScreenLocked() && this->mafwState != Paused) {
+        if(!deviceEvents->isScreenLocked() && this->mafwState == Playing) {
             timer->start();
         } else {
 #ifdef DEBUG
@@ -102,7 +102,22 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *)
     // If video was running, show its window.
     // If x was running, shows its window.
     // TODO: Update code as mafw is integrated.
+#ifdef Q_WS_MAEMO_5
     NowPlayingWindow *songs = new NowPlayingWindow(this, mafwrenderer);
+#else
+    NowPlayingWindow *songs = new NowPlayingWindow(this, 0);
+#endif
     songs->setAttribute(Qt::WA_DeleteOnClose);
     songs->show();
+}
+
+void NowPlayingIndicator::hideEvent(QHideEvent *)
+{
+    this->stopAnimation();
+}
+
+void NowPlayingIndicator::showEvent(QShowEvent *)
+{
+    if(!deviceEvents->isScreenLocked() && this->mafwState == Playing)
+        timer->start();
 }
