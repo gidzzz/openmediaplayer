@@ -58,6 +58,7 @@ class MafwRendererAdapter : public QObject
   void metadataChanged(QString metadata, QVariant value);
   void playlistChanged(GObject* playlist);
   void stateChanged(int newState);
+  void mediaIsSeekable(bool);
 
   //Mafw callbacks as signals
   void signalPlay(QString error);
