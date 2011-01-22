@@ -29,7 +29,7 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             r = option.rect;
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(30, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            painter->drawText(30, r.top()+5, r.width()-100, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
@@ -49,7 +49,7 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             r = option.rect;
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(r.left()+5, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            painter->drawText(r.left()+5, r.top()+5, r.width()-60, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
