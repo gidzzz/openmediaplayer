@@ -108,7 +108,9 @@ void MainWindow::orientationChanged()
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     if (screenGeometry.width() > screenGeometry.height()){
         // Landscape mode
+#ifdef DEBUG
         qDebug() << "MainWindow: Orientation changed: Landscape.";
+#endif
         if(!ui->listWidget->isHidden()) {
             ui->listWidget->hide();
         ui->songsButton->show();
@@ -125,7 +127,9 @@ void MainWindow::orientationChanged()
         }
     } else {
         // Portrait mode
+#ifdef DEBUG
         qDebug() << "MainWindow: Orientation changed: Portrait.";
+#endif
         ui->songsButton->hide();
         ui->songsButtonLabel->hide();
         ui->videosButton->hide();
