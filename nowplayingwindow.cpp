@@ -13,10 +13,10 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
+    positionTimer = new QTimer(this);
+    positionTimer->setInterval(1000);
     albumArtScene = new QGraphicsScene(ui->view);
     ui->volumeSlider->hide();
-    ui->currentPositionLabel->setText("0:00");
-    ui->trackLengthLabel->setText("0:00");
     PlayListDelegate *delegate = new PlayListDelegate(ui->songPlaylist);
     ui->songPlaylist->setItemDelegate(delegate);
     this->setButtonIcons();
@@ -62,9 +62,9 @@ void NowPlayingWindow::setAlbumImage(QString image)
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(albumArt);
     albumArtScene->addItem(item);
     m->setItem(item);
-    QTransform t;
+    /*QTransform t;
     t = t.rotate(-10, Qt::YAxis);
-    ui->view->setTransform(t);
+    ui->view->setTransform(t);*/
 }
 
 void NowPlayingWindow::toggleVolumeSlider()
@@ -110,7 +110,7 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
 {
     if(name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
         ui->songTitleLabel->setText(value.toString());
-        system(QString("fmtx_client -s '" + value.toString() + "' -t '" + value.toString() + "'").toUtf8());
+        system(QString("fmtx_client -s '" + value.toString() + "' -t '" + value.toString() + "' > /dev/null &").toUtf8());
     }
     if(name == "artist" /*MAFW_METADATA_KEY_ARTIST*/)
         ui->artistLabel->setText(value.toString());
@@ -118,6 +118,8 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
         ui->albumNameLabel->setText(value.toString());
     if(name == "renderer-art-uri")
         this->setAlbumImage(value.toString());
+    if(name == "duration")
+        ui->trackLengthLabel->setText(value.toString());
 }
 
 #ifdef Q_WS_MAEMO_5
@@ -128,19 +130,27 @@ void NowPlayingWindow::stateChanged(int state)
       ui->playButton->setIcon(QIcon(playButtonIcon));
       disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
       connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+      if(positionTimer->isActive())
+          positionTimer->stop();
   }
   else if(state == Playing)
   {
       ui->playButton->setIcon(QIcon(pauseButtonIcon));
       disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
       connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+      if(!positionTimer->isActive())
+          positionTimer->start();
   }
   else if(state == Stopped)
   {
       ui->playButton->setIcon(QIcon(playButtonIcon));
       disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
       connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+      if(positionTimer->isActive())
+          positionTimer->stop();
   }
+  else if(state == Transitioning)
+      ui->songProgress->setEnabled(false);
 }
 #endif
 
@@ -163,9 +173,14 @@ void NowPlayingWindow::connectSignals()
 #ifdef Q_WS_MAEMO_5
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
+    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
+    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->songProgress, SLOT(setEnabled(bool)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
     connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
+    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
                                           "com.nokia.mafw.extension",
@@ -200,7 +215,9 @@ void NowPlayingWindow::orientationChanged()
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     if (screenGeometry.width() > screenGeometry.height()) {
         // Landscape mode
+#ifdef DEBUG
         qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
+#endif
         ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
         //ui->buttonsLayout->addItem(ui->horizontalSpacer_10);
         if(ui->volumeButton->isHidden())
@@ -210,7 +227,9 @@ void NowPlayingWindow::orientationChanged()
         ui->buttonsLayout->setSpacing(60);
     } else {
         // Portrait mode
+#ifdef DEBUG
         qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
+#endif
         ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
         //ui->buttonsLayout->removeItem(ui->horizontalSpacer_10);
         if(!ui->volumeButton->isHidden())
@@ -283,3 +302,17 @@ void NowPlayingWindow::onPrevButtonPressed()
     else
         ui->prevButton->setIcon(QIcon(prevButtonIcon));
 }
+
+#ifdef Q_WS_MAEMO_5
+void NowPlayingWindow::onPositionChanged(int position, QString)
+{
+    QTime t(0, 0);
+    t = t.addSecs(position);
+    ui->currentPositionLabel->setText(t.toString("mm:ss"));
+}
+
+void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
+{
+    this->stateChanged(state);
+}
+#endif

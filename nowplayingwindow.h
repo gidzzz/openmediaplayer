@@ -42,6 +42,7 @@ private:
     void setButtonIcons();
     void connectSignals();
     QTimer *volumeTimer;
+    QTimer *positionTimer;
     QGraphicsScene *albumArtScene;
     mirror *m;
 
@@ -52,6 +53,8 @@ private slots:
 #ifdef Q_WS_MAEMO_5
     void onVolumeChanged(const QDBusMessage &msg);
     void stateChanged(int state);
+    void onPositionChanged(int, QString);
+    void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
