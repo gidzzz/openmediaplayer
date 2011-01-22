@@ -38,6 +38,7 @@ protected:
 private slots:
     void onSaveClicked();
     void onStateChanged();
+    void orientationChanged();
 };
 
 #endif // FMTXDIALOG_H

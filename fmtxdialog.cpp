@@ -14,21 +14,15 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
 #else
     freqButton = new QPushButton("Frequency", this);
 #endif
-    ui->buttonBox->setOrientation(Qt::Vertical);
-    ui->saveLayout->removeWidget(ui->buttonBox);
-    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
-        ui->saveLayout->addWidget(ui->buttonBox, 2, 0, 1, 2); // portrait
-        ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
-    } else {
-        ui->saveLayout->addWidget(ui->buttonBox, 0, 2, 2, 1, Qt::AlignBottom); // landscape
-    }
+    ui->gridLayout->addWidget(freqButton, 1, 0, 1, 1);
+    this->orientationChanged();
     fmtxState = new GConfItem("/system/fmtx/enabled");
     fmtxFrequency = new GConfItem("/system/fmtx/frequency");
     if(fmtxState->value().toBool())
         ui->fmtxCheckbox->setChecked(true);
-    ui->fmtxLayout->addWidget(freqButton);
     connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
 FMTXDialog::~FMTXDialog()
@@ -62,4 +56,18 @@ void FMTXDialog::onStateChanged()
         ui->fmtxCheckbox->setChecked(true);
     else
         ui->fmtxCheckbox->setChecked(false);
+}
+
+void FMTXDialog::orientationChanged()
+{
+    ui->gridLayout->removeWidget(ui->buttonBox);
+    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
+        this->setFixedHeight(230);
+        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount()); // portrait
+        ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
+    } else {
+        ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
+        ui->gridLayout->addWidget(ui->buttonBox, 1, 1, 1, 1, Qt::AlignBottom); // landscape
+        this->setFixedHeight(150);
+    }
 }
