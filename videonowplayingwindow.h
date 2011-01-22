@@ -9,6 +9,7 @@
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
+#include "qmaemo5rotator.h"
 
 namespace Ui {
     class VideoNowPlayingWindow;
@@ -27,6 +28,10 @@ private:
     void setIcons();
     void connectSignals();
     QTimer *volumeTimer;
+    bool portrait;
+#ifdef Q_WS_MAEMO_5
+    QMaemo5Rotator *rotator;
+#endif
 
 private slots:
     void toggleVolumeSlider();
@@ -34,6 +39,8 @@ private slots:
     void orientationChanged();
 #ifdef Q_WS_MAEMO_5
     void onVolumeChanged(const QDBusMessage &msg);
+    void onPortraitMode();
+    void onLandscapeMode();
 #endif
 };
 
