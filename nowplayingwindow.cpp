@@ -151,8 +151,11 @@ void NowPlayingWindow::stateChanged(int state)
       if(positionTimer->isActive())
           positionTimer->stop();
   }
-  else if(state == Transitioning)
+  else if(state == Transitioning) {
       ui->songProgress->setEnabled(false);
+      ui->songProgress->setValue(0);
+      ui->songProgress->setRange(0, 99);
+  }
 }
 #endif
 
@@ -172,10 +175,13 @@ void NowPlayingWindow::connectSignals()
     connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
+    connect(ui->songProgress, SIGNAL(sliderPressed()), this, SLOT(onSliderPressed()));
+    connect(ui->songProgress, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
 #ifdef Q_WS_MAEMO_5
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
+    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(QString,QString,QString,int,QString)),
@@ -201,12 +207,16 @@ void NowPlayingWindow::showFMTXDialog()
 #endif
 }
 
-void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs, QString songName, QString albumName, QString artistName)
+void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs, QString song, QString album, QString artist, int duration)
 {
     ui->songNumberLabel->setText(QString::number(songNumber) + "/" + QString::number(totalNumberOfSongs) + tr(" songs"));
-    ui->songTitleLabel->setText(songName);
-    ui->albumNameLabel->setText(albumName);
-    ui->artistLabel->setText(artistName);
+    ui->songTitleLabel->setText(song);
+    ui->albumNameLabel->setText(album);
+    ui->artistLabel->setText(artist);
+    this->songDuration = duration;
+    QTime t(0, 0);
+    t = t.addSecs(duration);
+    ui->trackLengthLabel->setText(t.toString("mm:ss"));
     ui->songPlaylist->setCurrentRow(songNumber-1);
     if(!ui->songPlaylist->isHidden()) {
         ui->songPlaylist->hide();
@@ -222,6 +232,7 @@ void NowPlayingWindow::onMetadataRequested(QString name, QString album, QString 
     ui->artistLabel->setText(artist);
     QTime t(0,0);
     t = t.addSecs(duration);
+    ui->songProgress->setRange(0, duration);
     ui->trackLengthLabel->setText(t.toString("mm:ss"));
     if(!error.isEmpty())
         qDebug() << error;
@@ -321,6 +332,22 @@ void NowPlayingWindow::onPrevButtonPressed()
         ui->prevButton->setIcon(QIcon(prevButtonIcon));
 }
 
+void NowPlayingWindow::onSliderPressed()
+{
+#ifdef Q_WS_MAEMO_5
+    disconnect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
+    //connect(ui->songProgress, SIGNAL(valueChanged(int)), this, SLOT(setPosition(int)));
+#endif
+}
+
+void NowPlayingWindow::onSliderReleased()
+{
+#ifdef Q_WS_MAEMO_5
+    this->setPosition(ui->songProgress->value());
+    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
+#endif
+}
+
 #ifdef Q_WS_MAEMO_5
 void NowPlayingWindow::onPositionChanged(int position, QString)
 {
@@ -329,8 +356,28 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
     ui->currentPositionLabel->setText(t.toString("mm:ss"));
 }
 
+void NowPlayingWindow::updateProgressBar(int position, QString)
+{
+    if(ui->trackLengthLabel->text() != "00:00" || ui->trackLengthLabel->text() != "--:--") {
+        if(this->songDuration != 0) {
+#ifdef DEBUG
+            qDebug() << "Current position: " << position;
+            qDebug() << "Song Length: " << this->songDuration;
+#endif
+            ui->songProgress->setRange(0, this->songDuration);
+            ui->songProgress->setValue(position);
+        }
+    }
+}
+
 void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
 {
     this->stateChanged(state);
 }
+
+void NowPlayingWindow::setPosition(int newPosition)
+{
+    mafwrenderer->setPosition(SeekAbsolute, newPosition);
+}
+
 #endif

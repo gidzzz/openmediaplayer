@@ -32,7 +32,7 @@ public:
     void listSongs(QString);
 
 public slots:
-    void onMetadataChanged(int, int, QString, QString, QString);
+    void onMetadataChanged(int, int, QString, QString, QString, int);
 
 private:
     Ui::NowPlayingWindow *ui;
@@ -43,6 +43,7 @@ private:
     void connectSignals();
     QTimer *volumeTimer;
     QTimer *positionTimer;
+    int songDuration;
     QGraphicsScene *albumArtScene;
     mirror *m;
 
@@ -54,8 +55,10 @@ private slots:
     void onVolumeChanged(const QDBusMessage &msg);
     void stateChanged(int state);
     void onPositionChanged(int, QString);
+    void updateProgressBar(int, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onMetadataRequested(QString, QString, QString, int, QString);
+    void setPosition(int);
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
@@ -65,6 +68,8 @@ private slots:
     void orientationChanged();
     void onNextButtonPressed();
     void onPrevButtonPressed();
+    void onSliderPressed();
+    void onSliderReleased();
 };
 
 #endif // NOWPLAYINGWINDOW_H
