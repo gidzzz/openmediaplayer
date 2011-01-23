@@ -25,7 +25,9 @@ SOURCES += main.cpp \
     delegates/artistlistitemdelegate.cpp \
     delegates/playlistdelegate.cpp \
     radionowplayingwindow.cpp \
-    qrotatedlabel.cpp
+    qrotatedlabel.cpp \
+    mafwsourcesignalhelper.cpp \
+    mafwsourceadapter.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -42,7 +44,9 @@ HEADERS  += mainwindow.h \
     includes.h \
     delegates/playlistdelegate.h \
     radionowplayingwindow.h \
-    qrotatedlabel.h
+    qrotatedlabel.h \
+    mafwsourcesignalhelper.h \
+    mafwsourceadapter.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
