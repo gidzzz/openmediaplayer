@@ -73,7 +73,7 @@ class MafwRendererAdapter : public QObject
   void signalGotoIndex(QString error);
   void signalSetPosition(int position, QString error);
   void signalGetPosition(int position,QString error);
-  void signalGetCurrentMetadata(QString error);
+  void signalGetCurrentMetadata(QString name, QString album, QString artist, int duration, QString error);
 
  private:
   void findRenderer();

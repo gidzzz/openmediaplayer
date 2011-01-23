@@ -2,6 +2,7 @@
 
 MafwRendererAdapter::MafwRendererAdapter()
 {
+    this->mafw_renderer = NULL;
     g_warning("start\n");
     mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
     mafw_shared_init(mafw_registry, NULL);

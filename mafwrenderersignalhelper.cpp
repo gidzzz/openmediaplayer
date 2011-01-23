@@ -152,7 +152,7 @@ void MafwRendererSignalHelper::get_position_cb(MafwRenderer*,
 
 void MafwRendererSignalHelper::get_current_metadata_cb(MafwRenderer*,
                                                        const gchar*,
-                                                       GHashTable*,
+                                                       GHashTable* table,
                                                        gpointer user_data,
                                                        const GError* error)
 {
@@ -161,5 +161,10 @@ void MafwRendererSignalHelper::get_current_metadata_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
-    emit static_cast<MafwRendererAdapter*>(user_data)->signalGetCurrentMetadata(qerror);
+    QString artist = g_value_get_string(mafw_metadata_first(table, MAFW_METADATA_KEY_ARTIST));
+    QString songName = g_value_get_string(mafw_metadata_first(table, MAFW_METADATA_KEY_TITLE));
+    QString album = g_value_get_string(mafw_metadata_first(table, MAFW_METADATA_KEY_ALBUM));
+    // Seems to always return 0 for some reason...
+    int duration = g_value_get_int(mafw_metadata_first(table, MAFW_METADATA_KEY_DURATION));
+    emit static_cast<MafwRendererAdapter*>(user_data)->signalGetCurrentMetadata(songName, album, artist, duration, qerror);
 }
