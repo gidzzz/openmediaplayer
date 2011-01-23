@@ -11,14 +11,16 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     this->stopAnimation();
 #ifdef Q_WS_MAEMO_5
     mafwrenderer = new MafwRendererAdapter();
-    this->mafwState = Paused;
     deviceEvents = new Maemo5DeviceEvents(this);
 #endif
     this->connectSignals();
     frame = 0;
     images << QPixmap(idleFrame);
     for (int i = 1; i < 12; i++)
-        images << QPixmap("/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(i) + ".png");
+        images << QPixmap("/usr/share/icons/hicolthis->onStateChanged(state);or/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(i) + ".png");
+#ifdef Q_WS_MAEMO_5
+    mafwrenderer->getStatus();
+#endif
 }
 
 NowPlayingIndicator::~NowPlayingIndicator()
@@ -37,6 +39,8 @@ void NowPlayingIndicator::connectSignals()
 #ifdef Q_WS_MAEMO_5
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onTkLockChanged(bool)));
+    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 #endif
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
 }
@@ -47,7 +51,7 @@ void NowPlayingIndicator::onStateChanged(int state)
     this->mafwState = state;
     if(state == Paused || state == Stopped)
         this->stopAnimation();
-    else
+    else if(state == Playing)
         timer->start();
 }
 #endif
@@ -103,7 +107,7 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *)
     // If x was running, shows its window.
     // TODO: Update code as mafw is integrated.
 #ifdef Q_WS_MAEMO_5
-    NowPlayingWindow *songs = new NowPlayingWindow(this, mafwrenderer);
+    NowPlayingWindow *songs = new NowPlayingWindow(this, this->mafwrenderer);
 #else
     NowPlayingWindow *songs = new NowPlayingWindow(this, 0);
 #endif
@@ -121,3 +125,13 @@ void NowPlayingIndicator::showEvent(QShowEvent *)
     if(!deviceEvents->isScreenLocked() && this->mafwState == Playing)
         timer->start();
 }
+
+#ifdef Q_WS_MAEMO_5
+void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
+{
+    if(state == Paused || state == Stopped)
+        this->stopAnimation();
+    else if(state == Playing)
+        timer->start();
+}
+#endif

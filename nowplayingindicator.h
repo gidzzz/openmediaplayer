@@ -57,6 +57,7 @@ private slots:
 #ifdef Q_WS_MAEMO_5
     void onStateChanged(int);
     void onTkLockChanged(bool);
+    void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
 #endif
     void startAnimation();
     void stopAnimation();

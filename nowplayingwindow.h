@@ -55,6 +55,7 @@ private slots:
     void stateChanged(int state);
     void onPositionChanged(int, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
+    void onMetadataRequested(QString, QString, QString, int, QString);
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();

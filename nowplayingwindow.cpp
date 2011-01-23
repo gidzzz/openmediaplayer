@@ -43,6 +43,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra) :
         ui->view->setFixedHeight(360);
         ui->buttonsLayout->setSpacing(30);
     }
+    mafwrenderer->getCurrentMetadata();
+    mafwrenderer->getStatus();
 }
 
 NowPlayingWindow::~NowPlayingWindow()
@@ -176,6 +178,8 @@ void NowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(QString,QString,QString,int,QString)),
+            this, SLOT(onMetadataRequested(QString,QString,QString,int,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->songProgress, SLOT(setEnabled(bool)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
@@ -209,6 +213,20 @@ void NowPlayingWindow::onMetadataChanged(int songNumber, int totalNumberOfSongs,
         ui->scrollArea->show();
     }
 }
+
+#ifdef Q_WS_MAEMO_5
+void NowPlayingWindow::onMetadataRequested(QString name, QString album, QString artist, int duration, QString error)
+{
+    ui->songTitleLabel->setText(name);
+    ui->albumNameLabel->setText(album);
+    ui->artistLabel->setText(artist);
+    QTime t(0,0);
+    t = t.addSecs(duration);
+    ui->trackLengthLabel->setText(t.toString("mm:ss"));
+    if(!error.isEmpty())
+        qDebug() << error;
+}
+#endif
 
 void NowPlayingWindow::orientationChanged()
 {
