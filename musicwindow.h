@@ -9,7 +9,6 @@
 #include <QtGui>
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5ValueButton>
-    #include "mafwrendereradapter.h"
 #endif
 
 #include "nowplayingwindow.h"
@@ -22,6 +21,7 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "mafwrendereradapter.h"
+    #include "mafwsourceadapter.h"
 #else
     class MafwRendererAdapter;
 #endif
@@ -35,7 +35,7 @@ class MusicWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0);
+    explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0);
     ~MusicWindow();
 
 public slots:
@@ -45,13 +45,17 @@ private:
     Ui::MusicWindow *ui;
     NowPlayingWindow *myNowPlayingWindow;
     QMenu *contextMenu;
-    MafwRendererAdapter* mafwrenderer;
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleAllButton;
+    MafwRendererAdapter* mafwrenderer;
+    MafwSourceAdapter* mafwTrackerSource;
+    unsigned int browseAllSongsId;
+    unsigned int browseAllArtistsId;
 #else
     QPushButton *shuffleAllButton;
 #endif
     void listSongs();
+    void listArtists();
     void connectSignals();
     void populateMenuBar();
     void hideLayoutContents();
@@ -67,6 +71,9 @@ private slots:
     void showArtistView();
     void showSongsView();
     void showGenresView();
+    void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void trackerSourceReady();
 };
 
 #endif // MUSICWINDOW_H

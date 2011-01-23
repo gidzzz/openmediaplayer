@@ -25,13 +25,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->setButtonIcons();
     this->setLabelText();
-    this->connectSignals();
     ui->listWidget->hide();
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5AutoOrientation);
-    MafwRendererAdapter* mafwrenderer = new MafwRendererAdapter();
-    myMusicWindow = new MusicWindow(this, mafwrenderer);
+    TAGSOURCE_AUDIO_PATH = "localtagfs::music/songs";
+    TAGSOURCE_VIDEO_PATH = "localtagfs::videos";
+    RADIOSOURCE_PATH = "iradiosource::";
+    mafwrenderer = new MafwRendererAdapter();
+    mafwTrackerSource = new MafwSourceAdapter("Mafw-Tracker-Source");
+    mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
+    myMusicWindow = new MusicWindow(this, mafwrenderer, mafwTrackerSource);
+    ui->songCountL->clear();
+    ui->videoCountL->clear();
+    ui->startionCountL->clear();
 #else
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
@@ -47,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     myInternetRadioWindow = new InternetRadioWindow(this);
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    this->connectSignals();
 }
 
 MainWindow::~MainWindow()
@@ -101,6 +109,14 @@ void MainWindow::connectSignals()
     // TODO: Connect this to a slot.
     // connect(ui->indicator, SIGNAL(clicked()), this, SLOT();
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+#ifdef Q_WS_MAEMO_5
+    connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
+    connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
+    connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
+            this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
+    connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
+            this, SLOT(countRadioResult(QString, GHashTable*, QString)));
+#endif
 }
 
 void MainWindow::orientationChanged()
@@ -168,3 +184,81 @@ void MainWindow::processListClicks(QListWidgetItem* item)
         this->showInternetRadioWindow();
     ui->listWidget->clearSelection();
 }
+
+#ifdef Q_WS_MAEMO_5
+void MainWindow::trackerSourceReady()
+{
+    this->countSongs();
+    this->countVideos();
+}
+
+void MainWindow::radioSourceReady()
+{
+    countRadioStations();
+}
+
+void MainWindow::countSongs()
+{
+    mafwTrackerSource->getMetadata(TAGSOURCE_AUDIO_PATH,
+                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
+}
+
+void MainWindow::countVideos()
+{
+    mafwTrackerSource->getMetadata(TAGSOURCE_VIDEO_PATH,
+                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
+}
+
+void MainWindow::countRadioStations()
+{
+    mafwRadioSource->getMetadata(RADIOSOURCE_PATH,
+                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
+}
+
+
+void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, QString error)
+{
+    int count = -1;
+    GValue *v;
+    v = mafw_metadata_first(metadata,
+                            MAFW_METADATA_KEY_CHILDCOUNT_1);
+    if(v)
+        count = g_value_get_int(v);
+
+    QString countStr;
+    countStr.setNum(count);
+
+    if(objectId == TAGSOURCE_AUDIO_PATH) {
+        if(count == 1)
+            countStr.append(" " + tr("song"));
+        else
+            countStr.append(" " + tr("songs"));
+        ui->songCountL->setText(countStr);
+    } else if(objectId == TAGSOURCE_VIDEO_PATH) {
+        if(count == 1)
+            countStr.append(" " + tr("clip"));
+        else
+            countStr.append(" " + tr("clips"));
+        ui->videoCountL->setText(countStr);
+    }
+    if(!error.isEmpty())
+        qDebug() << error;
+}
+
+void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
+{
+    int count = -1;
+    GValue *v;
+    v = mafw_metadata_first(metadata,
+                            MAFW_METADATA_KEY_CHILDCOUNT_1);
+    if(v)
+        count = g_value_get_int(v);
+
+    if(count == 1)
+        ui->startionCountL->setText(QString::number(count) + " " + tr("station"));
+    else
+        ui->startionCountL->setText(QString::number(count) + " " + tr("stations"));
+    if(!error.isEmpty())
+        qDebug() << error;
+}
+#endif

@@ -16,6 +16,8 @@
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
     #include "mafwrendereradapter.h"
+    #include "mafwsourceadapter.h"
+    #include <libmafw/mafw-source.h>
 #endif
 
 namespace Ui {
@@ -39,6 +41,17 @@ private:
     void setButtonIcons();
     void connectSignals();
     void setLabelText();
+#ifdef Q_WS_MAEMO_5
+    MafwSourceAdapter *mafwTrackerSource;
+    MafwSourceAdapter *mafwRadioSource;
+    MafwRendererAdapter* mafwrenderer;
+    const char* TAGSOURCE_AUDIO_PATH;
+    const char* TAGSOURCE_VIDEO_PATH;
+    const char* RADIOSOURCE_PATH;
+    void countSongs();
+    void countVideos();
+    void countRadioStations();
+#endif
 
 private slots:
     void showMusicWindow();
@@ -47,6 +60,12 @@ private slots:
     void showAbout();
     void processListClicks(QListWidgetItem*);
     void showInternetRadioWindow();
+#ifdef Q_WS_MAEMO_5
+    void trackerSourceReady();
+    void radioSourceReady();
+    void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
+    void countRadioResult(QString objectId, GHashTable* metadata, QString error);
+#endif
 };
 
 #endif // MAINWINDOW_H

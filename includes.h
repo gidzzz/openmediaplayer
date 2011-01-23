@@ -28,7 +28,14 @@
 #define deleteButtonIcon "/usr/share/icons/hicolor/48x48/hildon/general_delete.png"
 
 // Enums
-enum UserRoles { UserRoleName=Qt::UserRole, UserRoleSongName };
+enum UserRoles { UserRoleName=Qt::UserRole,
+                 UserRoleSongName,
+                 UserRoleSongTitle,
+                 UserRoleSongAlbum,
+                 UserRoleSongArtist,
+                 UserRoleSongDuration,
+                 UserRoleSongCount,
+                 UserRoleAlbumCount};
 enum npSongUserRoles { npUserRoleName=Qt::UserRole, npUserRoleSongName };
 
 #endif // INCLUDES_H

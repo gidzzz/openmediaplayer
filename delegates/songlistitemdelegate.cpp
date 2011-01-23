@@ -3,9 +3,9 @@
 void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
         // Thanks to hqh for fapman, this code is based on the list in it.
-        QString songName = index.data(UserRoleSongName).toString();
-        QString songLength = "--:--";
-        QString songArtistAlbum = "(unknown artist) / (unknown album)";
+        QString songName = index.data(UserRoleSongTitle).toString();
+        QString songLength = index.data(UserRoleSongDuration).toString();
+        QString songArtistAlbum = index.data(UserRoleSongArtist).toString() + " / " + index.data(UserRoleSongAlbum).toString();
 
         painter->save();
         QRect r = option.rect;

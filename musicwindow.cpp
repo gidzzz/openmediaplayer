@@ -1,10 +1,11 @@
 #include "musicwindow.h"
 
-MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
+MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa) :
         QMainWindow(parent),
 #ifdef Q_WS_MAEMO_5
         ui(new Ui::MusicWindow),
-        mafwrenderer(mra)
+        mafwrenderer(mra),
+        mafwTrackerSource(msa)
 #else
         ui(new Ui::MusicWindow)
 #endif
@@ -26,9 +27,13 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra) :
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ui->songList->setItemDelegate(delegate);
     ui->artistList->setItemDelegate(artistDelegate);
-    this->listSongs();
+    //this->listSongs();
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connectSignals();
+    if(mafwTrackerSource->isReady())
+        this->trackerSourceReady();
+    else
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     this->loadViewState();
 #ifdef Q_WS_MAEMO_5
     int numberOfSongs = ui->songList->count();
@@ -232,4 +237,106 @@ void MusicWindow::loadViewState()
     } else {
         this->showSongsView();
     }
+}
+
+void MusicWindow::trackerSourceReady()
+{
+#ifdef DEBUG
+    qDebug() << "MusicWindow: Source ready";
+#endif
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+            this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+
+    this->browseAllSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
+                                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                              MAFW_METADATA_KEY_ALBUM,
+                                                                              MAFW_METADATA_KEY_ARTIST,
+                                                                              MAFW_METADATA_KEY_DURATION),
+                                                             0, MAFW_SOURCE_BROWSE_ALL);
+}
+
+void MusicWindow::browseAllSongs(uint browseId, int, uint, QString, GHashTable* metadata, QString)
+{
+    if(browseId != browseAllSongsId)
+      return;
+
+
+    QString title("--");
+    QString artist("--");
+    QString album("--");
+    //QString genre("--");
+    int duration = -1;
+    if(metadata != NULL) {
+        GValue *v;
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_TITLE);
+        title = v ? g_value_get_string (v) : tr("(unknown song)");
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ARTIST);
+        artist = v ? g_value_get_string (v) : tr("(unknown artist)");
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ALBUM);
+        album = v ? g_value_get_string (v) : tr("(unknown album)");
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_DURATION);
+        duration = v ? g_value_get_int (v) : -1;
+
+        QListWidgetItem *item = new QListWidgetItem();
+        item->setData(UserRoleSongTitle, title.toAscii());
+        item->setData(UserRoleSongArtist, artist);
+        item->setData(UserRoleSongAlbum, album);
+        if(duration != -1) {
+            QTime t(0,0);
+            t = t.addSecs(duration);
+            item->setData(UserRoleSongDuration, t.toString("mm:ss"));
+        } else {
+            item->setData(UserRoleSongDuration, "--:--");
+        }
+        // Although we don't need this to show the song title, we need it to
+        // sort alphabatically.
+        item->setText(title);
+        ui->songList->addItem(item);
+  }
+}
+
+void MusicWindow::browseAllArtists(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString error)
+{
+    if(browseId != browseAllArtistsId)
+        return;
+
+    QString title = QString::fromUtf8("-");
+    int duration = -1;
+    int songCount = -1;
+    int albumCount = -1;
+    QListWidgetItem *item = new QListWidgetItem();
+    if(metadata != NULL) {
+        GValue *v;
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_TITLE);
+        title = v ? QString::fromUtf8(g_value_get_string(v)) : "--";
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_CHILDCOUNT_1);
+        albumCount = v ? g_value_get_int (v) : -1;
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_CHILDCOUNT_2);
+        songCount = v ? g_value_get_int (v) : -1;
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI);
+        if(v != NULL) {
+            const gchar* file_uri = g_value_get_string(v);
+            gchar* filename = NULL;
+            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                item->setData(Qt::DecorationRole, QPixmap(filename));
+            }
+        }
+    }
+
+    item->setData(UserRoleSongTitle, title);
+    item->setData(UserRoleSongDuration, duration);
+    item->setData(UserRoleSongCount, songCount);
+    item->setData(UserRoleAlbumCount, albumCount);
+    ui->artistList->addItem(item);
+    if(!error.isEmpty())
+        qDebug() << error;
 }
