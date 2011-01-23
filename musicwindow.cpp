@@ -270,19 +270,19 @@ void MusicWindow::browseAllSongs(uint browseId, int, uint, QString, GHashTable* 
         GValue *v;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
-        title = v ? g_value_get_string (v) : tr("(unknown song)");
+        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_ARTIST);
-        artist = v ? g_value_get_string (v) : tr("(unknown artist)");
+        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_ALBUM);
-        album = v ? g_value_get_string (v) : tr("(unknown album)");
+        album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
 
         QListWidgetItem *item = new QListWidgetItem();
-        item->setData(UserRoleSongTitle, title.toAscii());
+        item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         if(duration != -1) {
@@ -332,7 +332,7 @@ void MusicWindow::browseAllArtists(uint browseId, int, uint, QString objectId, G
         }
     }
 
-    item->setData(UserRoleSongTitle, title);
+    item->setData(UserRoleSongTitle, title.toAscii());
     item->setData(UserRoleSongDuration, duration);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
