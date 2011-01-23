@@ -34,10 +34,14 @@ MafwSourceAdapter::findSource()
       while(source_elem)
       {
 	MafwSource* mafw_source = MAFW_SOURCE(source_elem->data);
+#ifdef DEBUG
 	g_print("source: %s\n", mafw_extension_get_name(MAFW_EXTENSION(mafw_source)));
+#endif
 	if(sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(mafw_source))) == 0)
 	{
+#ifdef DEBUG
 	  g_print("got source\n");
+#endif
 	  g_object_ref(mafw_source);
 	  this->mafw_source = mafw_source;
 	  this->sourceIsReady = true;
@@ -48,12 +52,16 @@ MafwSourceAdapter::findSource()
     }  
     else
     { 
+#ifdef DEBUG
       g_print("no source\n");
+#endif
     }
   }
   else
   {
+#ifdef DEBUG
     g_print("no rgistry\n");
+#endif
   }
 }
 
@@ -126,7 +134,9 @@ MafwSourceAdapter::disconnectSourceSignals()
 void
 MafwSourceAdapter::onContainerChanged(MafwSource* mafw_source, gchar* object_id, gpointer user_data)
 {
+#ifdef DEBUG
   g_print("on container changed %s\n", object_id);
+#endif
   QString objectId(object_id);
   emit static_cast<MafwSourceAdapter*>(user_data)->containerChanged(objectId);
 }
@@ -134,7 +144,9 @@ MafwSourceAdapter::onContainerChanged(MafwSource* mafw_source, gchar* object_id,
 void
 MafwSourceAdapter::onMetadataChanged(MafwSource* mafw_source, gchar* object_id, gpointer user_data)
 {
+#ifdef DEBUG
   g_print("on metadata changed %s\n", object_id);
+#endif
   QString objectId(object_id);
   emit static_cast<MafwSourceAdapter*>(user_data)->metadataChanged(objectId);
 }
@@ -142,7 +154,9 @@ MafwSourceAdapter::onMetadataChanged(MafwSource* mafw_source, gchar* object_id, 
 void
 MafwSourceAdapter::onUpdating(MafwSource* mafw_source, gint progress, gint processed_items, gint remaining_items, gint remaining_time, gpointer user_data)
 {
+#ifdef DEBUG
   g_print("on updating %d, %d\n", progress, remaining_items);
+#endif
   emit static_cast<MafwSourceAdapter*>(user_data)->updating(progress, processed_items, remaining_items, remaining_time);
 }
 
