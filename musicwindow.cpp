@@ -63,38 +63,13 @@ void MusicWindow::selectSong()
 {
     myNowPlayingWindow->onMetadataChanged(ui->songList->currentRow()+1,
                                           ui->songList->count(),
-                                          //QString("Song name"),
-                                          QString(ui->songList->currentItem()->text()),
-                                          tr("(unknown album)"),
-                                          tr("(unknown arist)")
+                                          ui->songList->currentItem()->data(UserRoleSongTitle).toString(),
+                                          ui->songList->currentItem()->data(UserRoleSongAlbum).toString(),
+                                          ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
+                                          ui->songList->currentItem()->data(UserRoleSongDurationS).toInt()
                                           );
     myNowPlayingWindow->show();
     ui->songList->clearSelection();
-}
-
-void MusicWindow::listSongs()
-{
-    QDirIterator directory_walker(
-#ifdef Q_WS_MAEMO_5
-            "/home/user/MyDocs/.sounds",
-#else
-            "/home",
-#endif
-            QDir::Files | QDir::NoSymLinks,
-            QDirIterator::Subdirectories);
-
-    while(directory_walker.hasNext())
-    {
-        directory_walker.next();
-
-        if(directory_walker.fileInfo().completeSuffix() == "mp3") {
-            QListWidgetItem *songItem = new QListWidgetItem(directory_walker.fileName());
-            songItem->setData(UserRoleSongName, directory_walker.fileName());
-            //ui->songList->addItem(directory_walker.fileName());
-            ui->songList->addItem(songItem);
-            myNowPlayingWindow->listSongs(directory_walker.fileName());
-        }
-    }
 }
 
 void MusicWindow::connectSignals()
@@ -281,7 +256,7 @@ void MusicWindow::browseAllSongs(uint browseId, int, uint, QString, GHashTable* 
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
 
-        QListWidgetItem *item = new QListWidgetItem();
+        QListWidgetItem *item = new QListWidgetItem(ui->songList);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
@@ -289,8 +264,10 @@ void MusicWindow::browseAllSongs(uint browseId, int, uint, QString, GHashTable* 
             QTime t(0,0);
             t = t.addSecs(duration);
             item->setData(UserRoleSongDuration, t.toString("mm:ss"));
+            item->setData(UserRoleSongDurationS, duration);
         } else {
             item->setData(UserRoleSongDuration, "--:--");
+            item->setData(UserRoleSongDurationS, 0);
         }
         // Although we don't need this to show the song title, we need it to
         // sort alphabatically.
@@ -336,6 +313,7 @@ void MusicWindow::browseAllArtists(uint browseId, int, uint, QString objectId, G
     item->setData(UserRoleSongDuration, duration);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
+    item->setData(UserRoleObjectID, objectId);
     ui->artistList->addItem(item);
     if(!error.isEmpty())
         qDebug() << error;

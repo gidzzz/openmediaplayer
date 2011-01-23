@@ -35,7 +35,10 @@ enum UserRoles { UserRoleName=Qt::UserRole,
                  UserRoleSongArtist,
                  UserRoleSongDuration,
                  UserRoleSongCount,
-                 UserRoleAlbumCount};
+                 UserRoleAlbumCount,
+                 UserRoleSongDurationS,
+                 UserRoleObjectID
+                };
 enum npSongUserRoles { npUserRoleName=Qt::UserRole, npUserRoleSongName };
 
 #endif // INCLUDES_H

@@ -54,7 +54,6 @@ private:
 #else
     QPushButton *shuffleAllButton;
 #endif
-    void listSongs();
     void listArtists();
     void connectSignals();
     void populateMenuBar();
