@@ -29,14 +29,14 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             r = option.rect;
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(30, r.top()+5, r.width()-100, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            painter->drawText(30, r.top()+5, r.width()-120, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
             painter->setFont(f);
             r.setBottom(r.bottom()-10);
             painter->setPen(QPen(gray));
-            painter->drawText(30, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+            painter->drawText(30, r.top(), r.width()-120, r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
             painter->setPen(defaultPen);;
 
             r = option.rect;
@@ -49,18 +49,18 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             r = option.rect;
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(r.left()+5, r.top()+5, r.width()-60, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            painter->drawText(r.left()+5, r.top()+5, r.width()-90, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
             painter->setFont(f);
             r.setBottom(r.bottom()-10);
             painter->setPen(QPen(gray));
-            painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+            painter->drawText(r.left()+5, r.top(), r.width()-90, r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
             painter->setPen(defaultPen);;
 
             r = option.rect;
-            r.setRight(r.right()-12);
+            r.setRight(r.right());
             f.setPointSize(18);
             painter->setFont(f);
             painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
