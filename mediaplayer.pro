@@ -9,6 +9,7 @@ QT       += core gui dbus
 TARGET = mediaplayer
 TEMPLATE = app
 #DEFINES += DEBUG
+DEFINES += MAFW
 
 
 SOURCES += main.cpp \
@@ -23,11 +24,10 @@ SOURCES += main.cpp \
     nowplayingindicator.cpp \
     delegates/songlistitemdelegate.cpp \
     delegates/artistlistitemdelegate.cpp \
+    delegates/internetradiodelegate.cpp \
     delegates/playlistdelegate.cpp \
     radionowplayingwindow.cpp \
-    qrotatedlabel.cpp \
-    mafwsourcesignalhelper.cpp \
-    mafwsourceadapter.cpp
+    qrotatedlabel.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -41,12 +41,11 @@ HEADERS  += mainwindow.h \
     nowplayingindicator.h \
     delegates/songlistitemdelegate.h \
     delegates/artistlistitemdelegate.h \
+    delegates/internetradiodelegate.h \
     includes.h \
     delegates/playlistdelegate.h \
     radionowplayingwindow.h \
-    qrotatedlabel.h \
-    mafwsourcesignalhelper.h \
-    mafwsourceadapter.h
+    qrotatedlabel.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -75,6 +74,8 @@ unix:!symbian {
         PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf
         QT += maemo5
         SOURCES +=     mafwrenderersignalhelper.cpp \
+            mafwsourcesignalhelper.cpp \
+            mafwsourceadapter.cpp \
             mafwrendereradapter.cpp \
             maemo5deviceevents.cpp \
             fmtxdialog.cpp \
@@ -82,6 +83,8 @@ unix:!symbian {
             qmaemo5rotator.cpp
         HEADERS +=    mafwrenderersignalhelper.h \
             mafwrendereradapter.h \
+            mafwsourcesignalhelper.h \
+            mafwsourceadapter.h \
             maemo5deviceevents.h \
             fmtxdialog.h \
             freqpickselector.h \
@@ -93,5 +96,3 @@ unix:!symbian {
     }
     INSTALLS += target
 }
-
-RESOURCES +=
