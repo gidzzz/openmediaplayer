@@ -10,6 +10,7 @@
 #define backgroundImage "/etc/hildon/theme/mediaplayer/background.png"
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
 #define defaultAlbumArt "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_default_album.png"
+#define defaultVideoImage "/usr/share/icons/hicolor/124x124/hildon/general_video.png"
 #define idleFrame "/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator_pause.png"
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
 #define prevButtonPressedIcon "/etc/hildon/theme/mediaplayer/BackPressed.png"
@@ -36,8 +37,10 @@ enum UserRoles { UserRoleName=Qt::UserRole,
                  UserRoleSongDuration,
                  UserRoleSongCount,
                  UserRoleAlbumCount,
+                 UserRoleAlbumArt,
                  UserRoleSongDurationS,
-                 UserRoleObjectID
+                 UserRoleObjectID,
+                 UserRoleSongURI,
                 };
 enum npSongUserRoles { npUserRoleName=Qt::UserRole, npUserRoleSongName };
 
