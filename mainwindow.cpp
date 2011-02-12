@@ -26,35 +26,48 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setButtonIcons();
     this->setLabelText();
     ui->listWidget->hide();
-#ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
-    setAttribute(Qt::WA_Maemo5AutoOrientation);
+
+#ifdef MAFW
     TAGSOURCE_AUDIO_PATH = "localtagfs::music/songs";
     TAGSOURCE_VIDEO_PATH = "localtagfs::videos";
     RADIOSOURCE_PATH = "iradiosource::";
     mafwrenderer = new MafwRendererAdapter();
     mafwTrackerSource = new MafwSourceAdapter("Mafw-Tracker-Source");
     mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
-    myMusicWindow = new MusicWindow(this, mafwrenderer, mafwTrackerSource);
+#endif
+
+#ifdef Q_WS_MAEMO_5
+    setAttribute(Qt::WA_Maemo5StackedWindow);
+    setAttribute(Qt::WA_Maemo5AutoOrientation);
+
     ui->songCountL->clear();
     ui->videoCountL->clear();
     ui->startionCountL->clear();
 #else
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
-    myMusicWindow = new MusicWindow(this);
 #endif
+
+#ifdef MAFW
+    myMusicWindow = new MusicWindow(this, mafwrenderer, mafwTrackerSource);
+    myVideosWindow = new VideosWindow(this, mafwTrackerSource);
+    myInternetRadioWindow = new InternetRadioWindow(this, mafwRadioSource);
+#else
+    myMusicWindow = new MusicWindow(this);
+    myVideosWindow = new VideosWindow(this);
+    myInternetRadioWindow = new InternetRadioWindow(this);
+#endif
+
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    this->connectSignals();
+
 #ifdef DEBUG
     ui->songsButton->setFlat(false);
     ui->videosButton->setFlat(false);
     ui->radioButton->setFlat(false);
     ui->shuffleAllButton->setFlat(false);
 #endif
-    myVideosWindow = new VideosWindow(this);
-    myInternetRadioWindow = new InternetRadioWindow(this);
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
-    this->connectSignals();
 }
 
 MainWindow::~MainWindow()
@@ -66,21 +79,6 @@ void MainWindow::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.drawImage(this->rect(), QImage(backgroundImage));
-}
-
-void MainWindow::showMusicWindow()
-{
-    myMusicWindow->show();
-}
-
-void MainWindow::showVideosWindow()
-{
-    myVideosWindow->show();
-}
-
-void MainWindow::showInternetRadioWindow()
-{
-    myInternetRadioWindow->show();
 }
 
 void MainWindow::setButtonIcons()
@@ -101,9 +99,9 @@ void MainWindow::setLabelText()
 
 void MainWindow::connectSignals()
 {
-    connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
-    connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
-    connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
+    connect(ui->songsButton, SIGNAL(clicked()), myMusicWindow, SLOT(show()));
+    connect(ui->videosButton, SIGNAL(clicked()), myVideosWindow, SLOT(show()));
+    connect(ui->radioButton, SIGNAL(clicked()), myInternetRadioWindow, SLOT(show()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
     // TODO: Connect this to a slot.
@@ -177,15 +175,15 @@ void MainWindow::processListClicks(QListWidgetItem* item)
 {
     QString itemName = item->statusTip();
     if(itemName == "songs_button")
-        this->showMusicWindow();
+        myMusicWindow->show();
     else if(itemName == "videos_button")
-        this->showVideosWindow();
+        myVideosWindow->show();
     else if(itemName == "radio_button")
-        this->showInternetRadioWindow();
+        myInternetRadioWindow->show();
     ui->listWidget->clearSelection();
 }
 
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
 void MainWindow::trackerSourceReady()
 {
     this->countSongs();
@@ -262,3 +260,15 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
         qDebug() << error;
 }
 #endif
+
+void MainWindow::focusInEvent(QFocusEvent *)
+{
+    qDebug() << "MainWindow: focused.";
+    ui->indicator->triggerAnimation();
+}
+
+void MainWindow::focusOutEvent(QFocusEvent *)
+{
+    qDebug() << "MainWindow: focus lost";
+    ui->indicator->stopAnimation();
+}

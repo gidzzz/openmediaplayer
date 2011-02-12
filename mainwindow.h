@@ -15,6 +15,8 @@
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
+#endif
+#ifdef MAFW
     #include "mafwrendereradapter.h"
     #include "mafwsourceadapter.h"
     #include <libmafw/mafw-source.h>
@@ -38,10 +40,13 @@ private:
     VideosWindow *myVideosWindow;
     InternetRadioWindow *myInternetRadioWindow;
     void paintEvent(QPaintEvent*);
+    void focusInEvent(QFocusEvent *);
+    void focusOutEvent(QFocusEvent *);
+
     void setButtonIcons();
     void connectSignals();
     void setLabelText();
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
     MafwRendererAdapter* mafwrenderer;
@@ -54,12 +59,9 @@ private:
 #endif
 
 private slots:
-    void showMusicWindow();
-    void showVideosWindow();
     void orientationChanged();
     void showAbout();
     void processListClicks(QListWidgetItem*);
-    void showInternetRadioWindow();
 #ifdef Q_WS_MAEMO_5
     void trackerSourceReady();
     void radioSourceReady();
