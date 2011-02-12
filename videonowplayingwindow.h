@@ -37,8 +37,10 @@ private slots:
     void toggleVolumeSlider();
     void volumeWatcher();
     void orientationChanged();
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     void onVolumeChanged(const QDBusMessage &msg);
+#endif
+#ifdef Q_WS_MAEMO_5
     void onPortraitMode();
     void onLandscapeMode();
 #endif

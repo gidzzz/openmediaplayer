@@ -86,7 +86,7 @@ void VideoNowPlayingWindow::toggleVolumeSlider()
     }
 }
 
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
 void VideoNowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
 {
     /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
