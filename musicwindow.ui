@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>801</width>
-      <height>411</height>
+      <height>416</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="songsLayout">
@@ -96,11 +96,6 @@
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
-       <item>
-        <property name="text">
-         <string>Artist placeholder</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item>

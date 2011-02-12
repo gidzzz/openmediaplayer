@@ -43,18 +43,16 @@ public slots:
 
 private:
     Ui::MusicWindow *ui;
+    void focusInEvent(QFocusEvent *);
+    void focusOutEvent(QFocusEvent *);
     NowPlayingWindow *myNowPlayingWindow;
     QMenu *contextMenu;
-#ifdef Q_WS_MAEMO_5
-    QMaemo5ValueButton *shuffleAllButton;
+#ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
     unsigned int browseAllSongsId;
     unsigned int browseAllArtistsId;
-#else
-    QPushButton *shuffleAllButton;
 #endif
-    void listArtists();
     void connectSignals();
     void populateMenuBar();
     void hideLayoutContents();
@@ -64,15 +62,19 @@ private:
 private slots:
     void onContextMenuRequested(const QPoint&);
     void onShareClicked();
+    void onDeleteClicked();
     void orientationChanged();
     void showAlbumView();
     void showPlayListView();
     void showArtistView();
     void showSongsView();
     void showGenresView();
+#ifdef MAFW
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void trackerSourceReady();
+    void listSongs();
+    void listArtists();
+#endif
 };
 
 #endif // MUSICWINDOW_H
