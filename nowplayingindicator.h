@@ -32,6 +32,10 @@ class NowPlayingIndicator : public QWidget
 public:
     explicit NowPlayingIndicator(QWidget *parent = 0);
     ~NowPlayingIndicator();
+    void triggerAnimation();
+
+public slots:
+    void stopAnimation();
 
 signals:
     void clicked();
@@ -39,9 +43,9 @@ signals:
 private:
     Ui::NowPlayingIndicator *ui;
     void paintEvent(QPaintEvent*);
+    void mouseReleaseEvent(QMouseEvent *);
     void showEvent(QShowEvent *);
     void hideEvent(QHideEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
     void connectSignals();
     QList<QPixmap> images;
     QTimer *timer;
@@ -60,7 +64,6 @@ private slots:
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
 #endif
     void startAnimation();
-    void stopAnimation();
 };
 
 #endif // NOWPLAYINGINDICATOR_H

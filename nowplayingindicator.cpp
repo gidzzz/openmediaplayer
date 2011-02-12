@@ -5,6 +5,10 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     ui(new Ui::NowPlayingIndicator)
 {
     ui->setupUi(this);
+    images << QPixmap(idleFrame);
+    for (int i = 1; i < 12; i++)
+        images << QPixmap("/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(i) + ".png");
+    frame = 0;
     setAttribute(Qt::WA_OpaquePaintEvent);
     timer = new QTimer(this);
     timer->setInterval(100);
@@ -14,10 +18,6 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     deviceEvents = new Maemo5DeviceEvents(this);
 #endif
     this->connectSignals();
-    frame = 0;
-    images << QPixmap(idleFrame);
-    for (int i = 1; i < 12; i++)
-        images << QPixmap("/usr/share/icons/hicolthis->onStateChanged(state);or/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(i) + ".png");
 #ifdef Q_WS_MAEMO_5
     mafwrenderer->getStatus();
 #endif
@@ -48,7 +48,10 @@ void NowPlayingIndicator::connectSignals()
 #ifdef Q_WS_MAEMO_5
 void NowPlayingIndicator::onStateChanged(int state)
 {
-    this->mafwState = state;
+#ifdef DEBUG
+    qDebug() << "NowPlayingIndicator::onStateChanged(int)";
+#endif
+    mafwState = state;
     if(state == Paused || state == Stopped)
         this->stopAnimation();
     else if(state == Playing)
@@ -92,6 +95,9 @@ void NowPlayingIndicator::startAnimation()
 
 void NowPlayingIndicator::stopAnimation()
 {
+#ifdef DEBUG
+    qDebug() << "NowPlayingIndicator::stopAnimation()";
+#endif
     if(timer->isActive())
         timer->stop();
     this->frame = 0;
@@ -115,23 +121,38 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *)
     songs->show();
 }
 
-void NowPlayingIndicator::hideEvent(QHideEvent *)
-{
-    this->stopAnimation();
-}
-
-void NowPlayingIndicator::showEvent(QShowEvent *)
-{
-    if(!deviceEvents->isScreenLocked() && this->mafwState == Playing)
-        timer->start();
-}
-
 #ifdef Q_WS_MAEMO_5
 void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
 {
-    if(state == Paused || state == Stopped)
-        this->stopAnimation();
-    else if(state == Playing)
-        timer->start();
+#ifdef DEBUG
+    qDebug() << "NowPlayingIndicator::onGetStatus";
+#endif
+    this->onStateChanged(state);
 }
 #endif
+
+void NowPlayingIndicator::showEvent(QShowEvent *)
+{
+#ifdef Q_WS_MAEMO_5
+    mafwrenderer->getStatus();
+    if(this->mafwState == Playing)
+        if(!timer->isActive())
+            timer->start();
+#endif
+}
+
+void NowPlayingIndicator::hideEvent(QHideEvent *)
+{
+#ifdef Q_WS_MAEMO_5
+    this->stopAnimation();
+#endif
+}
+
+void NowPlayingIndicator::triggerAnimation()
+{
+#ifdef Q_WS_MAEMO_5
+    if(this->mafwState == Playing)
+        if(!timer->isActive())
+            timer->start();
+#endif
+}
