@@ -26,6 +26,11 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QListWidget" name="listWidget">
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+        </font>
+       </property>
        <property name="autoScroll">
         <bool>false</bool>
        </property>
@@ -44,13 +49,16 @@
        <property name="movement">
         <enum>QListView::Static</enum>
        </property>
+       <property name="flow">
+        <enum>QListView::LeftToRight</enum>
+       </property>
        <property name="isWrapping" stdset="0">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="gridSize">
         <size>
-         <width>164</width>
-         <height>164</height>
+         <width>157</width>
+         <height>157</height>
         </size>
        </property>
        <property name="viewMode">
@@ -59,24 +67,6 @@
        <property name="selectionRectVisible">
         <bool>false</bool>
        </property>
-       <item>
-        <property name="text">
-         <string>Video 1</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Video 2</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png</iconset>
-        </property>
-       </item>
       </widget>
      </item>
     </layout>

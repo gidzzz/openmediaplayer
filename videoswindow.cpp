@@ -1,8 +1,11 @@
 #include "videoswindow.h"
 
-VideosWindow::VideosWindow(QWidget *parent) :
+VideosWindow::VideosWindow(QWidget *parent, MafwSourceAdapter* msa) :
     QMainWindow(parent),
     ui(new Ui::VideosWindow)
+#ifdef MAFW
+    ,mafwTrackerSource(msa)
+#endif
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -23,6 +26,12 @@ VideosWindow::VideosWindow(QWidget *parent) :
     this->menuBar()->addActions(sortByActionGroup->actions());
     this->connectSignals();
     this->orientationChanged();
+#ifdef MAFW
+    if(mafwTrackerSource->isReady())
+        this->listVideos();
+    else
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listVideos()));
+#endif
 }
 
 VideosWindow::~VideosWindow()
@@ -64,9 +73,80 @@ void VideosWindow::selectView()
         sortByDate->setChecked(true);
 }
 
+void VideosWindow::listVideos()
+{
+#ifdef DEBUG
+    qDebug("Source ready");
+#endif
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+            this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)));
+
+    this->browseAllVideosId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, NULL,
+                                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                                MAFW_METADATA_KEY_DURATION,
+                                                                                MAFW_METADATA_KEY_THUMBNAIL_URI,
+                                                                                MAFW_METADATA_KEY_URI,
+                                                                                ),
+                                                               0, MAFW_SOURCE_BROWSE_ALL);
+}
+
+void VideosWindow::browseAllVideos(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString)
+{
+    if(browseId != browseAllVideosId)
+      return;
+
+
+    QString title;
+    int duration = -1;
+    if(metadata != NULL) {
+        GValue *v;
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_TITLE);
+        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown clip)");
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_DURATION);
+        duration = v ? g_value_get_int (v) : -1;
+
+        QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
+        if(v != NULL) {
+            const gchar* file_uri = g_value_get_string(v);
+            gchar* filename = NULL;
+            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                item->setData(UserRoleSongURI, QString::fromUtf8(filename));
+            }
+        }
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_THUMBNAIL_URI);
+        if(v != NULL) {
+            const gchar* file_uri = g_value_get_string(v);
+            gchar* filename = NULL;
+            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                item->setData(Qt::DecorationRole, QString::fromUtf8(filename));
+            }
+        }
+
+        item->setText(title + "\n" + QString::number(duration));
+        if(item->data(Qt::DecorationRole).isNull())
+            item->setIcon(QIcon(defaultVideoImage));
+        else
+            item->setIcon(QIcon(item->data(Qt::DecorationRole).toString()));
+        ui->listWidget->addItem(item);
+  }
+}
+
 void VideosWindow::orientationChanged()
 {
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
+}
+
+void VideosWindow::focusInEvent(QFocusEvent *)
+{
+    ui->indicator->triggerAnimation();
+}
+
+void VideosWindow::focusOutEvent(QFocusEvent *)
+{
+    ui->indicator->stopAnimation();
 }
