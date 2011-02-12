@@ -1,17 +1,28 @@
 #include "internetradiowindow.h"
 
-InternetRadioWindow::InternetRadioWindow(QWidget *parent) :
+InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwSourceAdapter *msa) :
         QMainWindow(parent),
         ui(new Ui::InternetRadioWindow)
+#ifdef MAFW
+        ,mafwTrackerSource(msa)
+#endif
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
+    InternetRadioDelegate *delegate = new InternetRadioDelegate(ui->listWidget);
+    ui->listWidget->setItemDelegate(delegate);
     window = new RadioNowPlayingWindow(this);
     this->connectSignals();
     this->orientationChanged();
+#ifdef MAFW
+    if(mafwTrackerSource->isReady())
+        this->listStations();
+    else
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listStations()));
+#endif
 }
 
 InternetRadioWindow::~InternetRadioWindow()
@@ -128,10 +139,64 @@ void InternetRadioWindow::onSaveClicked()
     }
 }
 
+#ifdef MAFW
+void InternetRadioWindow::listStations()
+{
+#ifdef DEBUG
+    qDebug("Source ready");
+#endif
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+            this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
+
+    this->browseAllStationsId = mafwTrackerSource->sourceBrowse("iradiosource::", false, NULL, NULL,
+                                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                                MAFW_METADATA_KEY_URI,
+                                                                                ),
+                                                               0, MAFW_SOURCE_BROWSE_ALL);
+}
+
+void InternetRadioWindow::browseAllStations(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString)
+{
+    if(browseId != browseAllStationsId)
+      return;
+
+
+    QString title;
+    QString URI;
+    if(metadata != NULL) {
+        GValue *v;
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_TITLE);
+        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_URI);
+        URI = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown)");
+
+        QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+
+        item->setText(title);
+        item->setData(UserRoleSongTitle, title);
+        item->setData(UserRoleSongURI, URI);
+        ui->listWidget->addItem(item);
+  }
+}
+#endif
+
 void InternetRadioWindow::orientationChanged()
 {
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
                                ui->indicator->width(),ui->indicator->height());
     ui->indicator->raise();
+}
+
+void InternetRadioWindow::focusInEvent(QFocusEvent *)
+{
+    ui->indicator->triggerAnimation();
+}
+
+void InternetRadioWindow::focusOutEvent(QFocusEvent *)
+{
+    ui->indicator->stopAnimation();
 }

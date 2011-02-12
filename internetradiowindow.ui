@@ -26,11 +26,9 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QListWidget" name="listWidget">
-       <item>
-        <property name="text">
-         <string>Station 1</string>
-        </property>
-       </item>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>
