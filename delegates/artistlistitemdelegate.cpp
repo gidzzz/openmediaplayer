@@ -2,8 +2,26 @@
 
 void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QString artistName = "Artist name";
-    QString albumSongCount = "1 album, 1 song";
+    QString artistName = index.data(UserRoleSongName).toString();
+    //QString albumSongCount = "1 album, 1 song";
+    QString albumSongCount;
+    QPixmap albumArt;
+    albumSongCount.append(index.data(UserRoleAlbumCount).toString() + " ");
+    if(index.data(UserRoleAlbumCount).toInt() != 1)
+        albumSongCount.append(tr("albums"));
+    else
+        albumSongCount.append(tr("album"));
+    albumSongCount.append(", ");
+    albumSongCount.append(index.data(UserRoleSongCount).toString() + " ");
+    if(index.data(UserRoleSongCount).toInt() != 0)
+        albumSongCount.append(tr("songs"));
+    else
+        albumSongCount.append(tr("song"));
+    if(!index.data(UserRoleAlbumArt).isNull())
+        albumArt = QPixmap(index.data(UserRoleAlbumArt).toString());
+    else
+        albumArt = QPixmap(defaultAlbumArt);
+
 
     painter->save();
     QRect r = option.rect;
@@ -38,7 +56,7 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         painter->setPen(defaultPen);;
 
         r = option.rect;
-        painter->drawPixmap(r.right()-70, r.top()+4, 64, 64, QPixmap(defaultAlbumArt));
+        painter->drawPixmap(r.right()-70, r.top()+4, 64, 64, albumArt);
 
     } else {
         // Portrait
@@ -55,7 +73,7 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
         painter->setPen(defaultPen);;
         r = option.rect;
-        painter->drawPixmap(r.right()-(64+13), r.top()+4, 64, 64, QPixmap(defaultAlbumArt));
+        painter->drawPixmap(r.right()-(64+13), r.top()+4, 64, 64, albumArt);
     }
     painter->restore();
 }
