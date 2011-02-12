@@ -32,8 +32,14 @@
      </property>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="topMargin">
+          <number>5</number>
+         </property>
          <item>
           <widget class="CQGraphicsView" name="view">
            <property name="sizePolicy">
@@ -64,7 +70,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>260</width>
+            <width>264</width>
             <height>330</height>
            </rect>
           </property>

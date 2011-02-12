@@ -14,9 +14,11 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "mafwrendereradapter.h"
+    #include "mafwsourceadapter.h"
     #include "fmtxdialog.h"
 #else
     class MafwRendererAdapter;
+    class MafwSourceAdapter;
 #endif
 namespace Ui {
     class NowPlayingWindow;
@@ -27,17 +29,20 @@ class NowPlayingWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0);
+    explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0);
     ~NowPlayingWindow();
     void listSongs(QString);
 
 public slots:
-    void onMetadataChanged(int, int, QString, QString, QString, int);
+    void onSongSelected(int, int, QString, QString, QString, int);
+    void setAlbumImage(QString);
 
 private:
     Ui::NowPlayingWindow *ui;
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
+    MafwSourceAdapter* mafwTrackerSource;
+    void showEvent(QShowEvent *);
 #endif
     void setButtonIcons();
     void connectSignals();
@@ -51,7 +56,7 @@ private slots:
     void toggleVolumeSlider();
     void showFMTXDialog();
     void toggleList();
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     void onVolumeChanged(const QDBusMessage &msg);
     void stateChanged(int state);
     void onPositionChanged(int, QString);
@@ -62,7 +67,6 @@ private slots:
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
-    void setAlbumImage(QString);
     void onShuffleButtonPressed();
     void onRepeatButtonPressed();
     void orientationChanged();
