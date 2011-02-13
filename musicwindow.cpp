@@ -298,7 +298,7 @@ void MusicWindow::listAlbums()
                                                               0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void MusicWindow::browseAllSongs(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString)
+void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
     if(browseId != browseAllSongsId)
       return;
@@ -359,10 +359,16 @@ void MusicWindow::browseAllSongs(uint browseId, int, uint, QString objectId, GHa
         // sort alphabatically.
         item->setText(title);
         ui->songList->addItem(item);
+#ifdef Q_WS_MAEMO_5
+        if(remainingCount != 0)
+            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+        else
+            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
   }
 }
 
-void MusicWindow::browseAllArtists(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString error)
+void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
     if(browseId != browseAllArtistsId)
         return;
@@ -401,9 +407,15 @@ void MusicWindow::browseAllArtists(uint browseId, int, uint, QString objectId, G
     ui->artistList->addItem(item);
     if(!error.isEmpty())
         qDebug() << error;
+#ifdef Q_WS_MAEMO_5
+        if(remainingCount != 0)
+            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+        else
+            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
 }
 
-void MusicWindow::browseAllAlbums(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString error)
+void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error)
 {
     if(browseId != browseAllAlbumsId)
         return;
@@ -444,6 +456,12 @@ void MusicWindow::browseAllAlbums(uint browseId, int, uint, QString objectId, GH
     ui->artistList->addItem(item);
     if(!error.isEmpty())
         qDebug() << error;
+#ifdef Q_WS_MAEMO_5
+        if(remainingCount != 0)
+            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+        else
+            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
 }
 #endif
 
