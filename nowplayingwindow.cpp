@@ -130,6 +130,7 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
 #ifdef MAFW
 void NowPlayingWindow::stateChanged(int state)
 {
+    this->mafwState = state;
   if(state == Paused)
   {
       ui->playButton->setIcon(QIcon(playButtonIcon));
@@ -393,3 +394,27 @@ void NowPlayingWindow::showEvent(QShowEvent *)
 #endif
 
 #endif
+
+void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key() == Qt::Key_Backspace)
+        this->close();
+    else if(e->key() == Qt::Key_Space) {
+        if(this->mafwState == Playing)
+            mafwrenderer->pause();
+        else if(this->mafwState == Paused)
+            mafwrenderer->resume();
+        else if(this->mafwState == Stopped)
+            mafwrenderer->play();
+    }
+    else if(e->key() == Qt::Key_Right)
+        mafwrenderer->next();
+    else if(e->key() == Qt::Key_Left)
+        mafwrenderer->previous();
+    else if(e->key() == Qt::Key_Control) {
+        if(ui->menuNow_playing_menu->isHidden())
+            ui->menuNow_playing_menu->show();
+        else
+            ui->menuNow_playing_menu->hide();
+    }
+}

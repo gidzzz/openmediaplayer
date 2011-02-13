@@ -42,6 +42,7 @@ private:
 #ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
+    int mafwState;
     void showEvent(QShowEvent *);
 #endif
     void setButtonIcons();
@@ -51,6 +52,7 @@ private:
     int songDuration;
     QGraphicsScene *albumArtScene;
     mirror *m;
+    void keyPressEvent(QKeyEvent *);
 
 private slots:
     void toggleVolumeSlider();
