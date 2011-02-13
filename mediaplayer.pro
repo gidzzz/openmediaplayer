@@ -27,7 +27,9 @@ SOURCES += main.cpp \
     delegates/internetradiodelegate.cpp \
     delegates/playlistdelegate.cpp \
     radionowplayingwindow.cpp \
-    qrotatedlabel.cpp
+    qrotatedlabel.cpp \
+    singlealbumview.cpp \
+    delegates/singlealbumviewdelegate.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -45,7 +47,9 @@ HEADERS  += mainwindow.h \
     includes.h \
     delegates/playlistdelegate.h \
     radionowplayingwindow.h \
-    qrotatedlabel.h
+    qrotatedlabel.h \
+    singlealbumview.h \
+    delegates/singlealbumviewdelegate.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -56,7 +60,8 @@ FORMS    += mainwindow.ui \
     fmtxdialog.ui \
     videonowplayingwindow.ui \
     nowplayingindicator.ui \
-    radionowplayingwindow.ui
+    radionowplayingwindow.ui \
+    singlealbumview.ui
 
 CONFIG += mobility
 MOBILITY = sensors
