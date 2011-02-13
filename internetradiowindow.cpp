@@ -1,10 +1,11 @@
 #include "internetradiowindow.h"
 
-InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwSourceAdapter *msa) :
+InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa) :
         QMainWindow(parent),
         ui(new Ui::InternetRadioWindow)
 #ifdef MAFW
-        ,mafwTrackerSource(msa)
+        ,mafwTrackerSource(msa),
+        mafwrenderer(mra)
 #endif
 {
     ui->setupUi(this);
@@ -48,6 +49,7 @@ void InternetRadioWindow::showFMTXDialog()
 
 void InternetRadioWindow::onStationSelected()
 {
+    mafwrenderer->playObject(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     window->show();
 }
 
@@ -178,6 +180,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int, uint, QString ob
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongURI, URI);
+        item->setData(UserRoleObjectID, objectId);
         ui->listWidget->addItem(item);
   }
 }

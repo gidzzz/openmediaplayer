@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef MAFW
     myMusicWindow = new MusicWindow(this, mafwrenderer, mafwTrackerSource);
     myVideosWindow = new VideosWindow(this, mafwTrackerSource);
-    myInternetRadioWindow = new InternetRadioWindow(this, mafwRadioSource);
+    myInternetRadioWindow = new InternetRadioWindow(this, mafwrenderer, mafwRadioSource);
 #else
     myMusicWindow = new MusicWindow(this);
     myVideosWindow = new VideosWindow(this);
