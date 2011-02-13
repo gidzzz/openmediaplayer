@@ -16,6 +16,7 @@
 #include "ui_musicwindow.h"
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/artistlistitemdelegate.h"
+#include "singlealbumview.h"
 #include "ui_musicwindow.h"
 #include "includes.h"
 
@@ -52,6 +53,7 @@ private:
     MafwSourceAdapter* mafwTrackerSource;
     unsigned int browseAllSongsId;
     unsigned int browseAllArtistsId;
+    unsigned int browseAllAlbumsId;
 #endif
     void connectSignals();
     void populateMenuBar();
@@ -72,8 +74,11 @@ private slots:
 #ifdef MAFW
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void listSongs();
     void listArtists();
+    void listAlbums();
+    void onAlbumSelected(QListWidgetItem*);
 #endif
 };
 

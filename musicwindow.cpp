@@ -58,10 +58,11 @@ void MusicWindow::selectSong()
 void MusicWindow::connectSignals()
 {
 #ifdef Q_WS_MAEMO_5
-    connect(ui->songList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectSong()));
+    connect(ui->songList, SIGNAL(activated(QModelIndex)), this, SLOT(selectSong()));
 #else
     connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectSong()));
 #endif
+    connect(ui->albumList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
     connect(ui->songList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onContextMenuRequested(const QPoint &)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->indicator, SIGNAL(clicked()), myNowPlayingWindow, SLOT(show()));
@@ -157,6 +158,12 @@ void MusicWindow::showAlbumView()
     this->populateMenuBar();
     QMainWindow::setWindowTitle(tr("Albums"));
     this->saveViewState("albums");
+#ifdef MAFW
+    if(mafwTrackerSource->isReady())
+        this->listAlbums();
+    else
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listAlbums()));
+#endif
 }
 
 void MusicWindow::showArtistView()
@@ -232,6 +239,15 @@ void MusicWindow::loadViewState()
 }
 
 #ifdef MAFW
+void MusicWindow::onAlbumSelected(QListWidgetItem *item)
+{
+    SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource);
+    albumView->setAttribute(Qt::WA_DeleteOnClose);
+    albumView->browseAlbum(item->data(UserRoleSongAlbum).toString());
+    albumView->show();
+    ui->albumList->clearSelection();
+}
+
 void MusicWindow::listSongs()
 {
 #ifdef DEBUG
@@ -267,6 +283,19 @@ void MusicWindow::listArtists()
                                                                MAFW_METADATA_KEY_CHILDCOUNT_2,
                                                                MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI),
                                                                0, MAFW_SOURCE_BROWSE_ALL);
+}
+
+void MusicWindow::listAlbums()
+{
+    ui->albumList->clear();
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+            this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
+
+    this->browseAllAlbumsId = mafwTrackerSource->sourceBrowse("localtagfs::music/albums", false, NULL, NULL,
+                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
+                                                                               MAFW_METADATA_KEY_ARTIST,
+                                                                               MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
+                                                              0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void MusicWindow::browseAllSongs(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString)
@@ -369,6 +398,49 @@ void MusicWindow::browseAllArtists(uint browseId, int, uint, QString objectId, G
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
     item->setData(UserRoleObjectID, objectId);
+    ui->artistList->addItem(item);
+    if(!error.isEmpty())
+        qDebug() << error;
+}
+
+void MusicWindow::browseAllAlbums(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString error)
+{
+    if(browseId != browseAllAlbumsId)
+        return;
+
+    QString albumTitle;
+    QString artist;
+    QString albumArt;
+    QListWidgetItem *item = new QListWidgetItem(ui->albumList);
+    if(metadata != NULL) {
+        GValue *v;
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ALBUM);
+        albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown album)";
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ARTIST);
+        artist = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown artist)";
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI);
+        if(v != NULL) {
+            const gchar* file_uri = g_value_get_string(v);
+            gchar* filename = NULL;
+            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                item->setData(UserRoleAlbumArt, filename);
+            }
+        }
+    }
+
+    item->setData(UserRoleSongAlbum, albumTitle);
+    item->setData(UserRoleAlbumCount, artist);
+    item->setText(albumTitle);
+    if(item->data(UserRoleAlbumArt).isNull())
+        item->setIcon(QIcon(defaultAlbumArtMedium));
+    else {
+        QPixmap icon(item->data(UserRoleAlbumArt).toString());
+        item->setIcon(QIcon(icon.scaled(124, 124)));
+    }
     ui->artistList->addItem(item);
     if(!error.isEmpty())
         qDebug() << error;

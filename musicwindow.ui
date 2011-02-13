@@ -48,6 +48,11 @@
      </item>
      <item>
       <widget class="QListWidget" name="albumList">
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+        </font>
+       </property>
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
@@ -74,18 +79,13 @@
        </property>
        <property name="gridSize">
         <size>
-         <width>148</width>
-         <height>148</height>
+         <width>157</width>
+         <height>157</height>
         </size>
        </property>
        <property name="viewMode">
         <enum>QListView::IconMode</enum>
        </property>
-       <item>
-        <property name="text">
-         <string>Placeholder</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item>
