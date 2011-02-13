@@ -53,7 +53,7 @@ public:
         //p.setBrush(g);
 
         // Draw buffer on the screen
-        painter->setOpacity(0.4);
+        painter->setOpacity(0.5);
         painter->drawImage(option->rect.adjusted(0,0,1,1), buff.mirrored());//, opt.rect);
     }
 
