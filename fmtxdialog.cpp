@@ -71,3 +71,9 @@ void FMTXDialog::orientationChanged()
         this->setFixedHeight(150);
     }
 }
+
+void FMTXDialog::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key() == Qt::Key_Backspace)
+        this->close();
+}

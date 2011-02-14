@@ -35,6 +35,9 @@ public:
 protected:
     void showEvent(QShowEvent *event);
 
+private:
+    void keyPressEvent(QKeyEvent *);
+
 private slots:
     void onSaveClicked();
     void onStateChanged();

@@ -17,6 +17,7 @@
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/artistlistitemdelegate.h"
 #include "singlealbumview.h"
+#include "singleartistview.h"
 #include "ui_musicwindow.h"
 #include "includes.h"
 
@@ -46,6 +47,7 @@ private:
     Ui::MusicWindow *ui;
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
+    void keyPressEvent(QKeyEvent *);
     NowPlayingWindow *myNowPlayingWindow;
     QMenu *contextMenu;
 #ifdef MAFW
@@ -78,7 +80,8 @@ private slots:
     void listSongs();
     void listArtists();
     void listAlbums();
-    void onAlbumSelected(QListWidgetItem*);
+    void onAlbumSelected(QModelIndex);
+    void onArtistSelected(QModelIndex);
 #endif
 };
 

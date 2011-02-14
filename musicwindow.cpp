@@ -62,7 +62,10 @@ void MusicWindow::connectSignals()
 #else
     connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectSong()));
 #endif
-    connect(ui->albumList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
+#ifdef MAFW
+    connect(ui->albumList, SIGNAL(activated(QModelIndex)), this, SLOT(onAlbumSelected(QModelIndex)));
+    connect(ui->artistList, SIGNAL(activated(QModelIndex)), this, SLOT(onArtistSelected(QModelIndex)));
+#endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onContextMenuRequested(const QPoint &)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->indicator, SIGNAL(clicked()), myNowPlayingWindow, SLOT(show()));
@@ -239,13 +242,28 @@ void MusicWindow::loadViewState()
 }
 
 #ifdef MAFW
-void MusicWindow::onAlbumSelected(QListWidgetItem *item)
+void MusicWindow::onAlbumSelected(QModelIndex index)
 {
     SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource);
     albumView->setAttribute(Qt::WA_DeleteOnClose);
-    albumView->browseAlbum(item->data(UserRoleSongAlbum).toString());
+    albumView->browseAlbum(index.data(UserRoleSongAlbum).toString());
     albumView->show();
     ui->albumList->clearSelection();
+}
+
+void MusicWindow::onArtistSelected(QModelIndex index)
+{
+    int songCount = index.data(UserRoleAlbumCount).toInt();
+    if(songCount == 0 || songCount == 1) {
+        SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource);
+        albumView->browseSingleAlbum(index.data(UserRoleSongName).toString());
+        albumView->setAttribute(Qt::WA_DeleteOnClose);
+        albumView->show();
+    } else if(songCount > 1) {
+        SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource);
+        artistView->setAttribute(Qt::WA_DeleteOnClose);
+        artistView->show();
+    }
 }
 
 void MusicWindow::listSongs()
@@ -473,4 +491,10 @@ void MusicWindow::focusInEvent(QFocusEvent *)
 void MusicWindow::focusOutEvent(QFocusEvent *)
 {
     ui->indicator->stopAnimation();
+}
+
+void MusicWindow::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key() == Qt::Key_Backspace)
+        this->close();
 }
