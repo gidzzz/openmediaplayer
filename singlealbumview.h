@@ -33,10 +33,12 @@ public:
     explicit SingleAlbumView(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0);
     ~SingleAlbumView();
     void browseAlbum(QString);
+    void browseSingleAlbum(QString);
 
 private:
     Ui::SingleAlbumView *ui;
     QString albumName;
+    void keyPressEvent(QKeyEvent *);
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleAllButton;
 #else

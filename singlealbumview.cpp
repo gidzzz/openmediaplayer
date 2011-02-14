@@ -24,7 +24,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     ui->verticalLayout->removeWidget(ui->songList);
     ui->verticalLayout->addWidget(shuffleAllButton);
     ui->verticalLayout->addWidget(ui->songList);
-    connect(ui->songList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
@@ -42,6 +42,7 @@ void SingleAlbumView::listSongs()
     ui->songList->clear();
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+    qDebug(this->albumName.toUtf8());
 
     this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumName.toUtf8(), false, NULL, "+track",
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -85,10 +86,17 @@ void SingleAlbumView::browseAllSongs(uint browseId, int, uint, QString objectId,
         trackNumber = v ? g_value_get_int (v) : -1;
 
         QListWidgetItem *item = new QListWidgetItem(ui->songList);
+        qDebug(artist.toUtf8());
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
+
+        qDebug(title.toUtf8());
+        qDebug(artist.toUtf8());
+        qDebug(album.toUtf8());
+        qDebug(objectId.toUtf8());
+
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         if(v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
@@ -123,6 +131,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int, uint, QString objectId,
         itemTitle.append(title);
         item->setText(itemTitle);
         ui->songList->addItem(item);
+        this->setWindowTitle(item->data(UserRoleSongAlbum).toString());
     }
 #ifdef Q_WS_MAEMO_5
     QString songCount;
@@ -139,6 +148,16 @@ void SingleAlbumView::browseAllSongs(uint browseId, int, uint, QString objectId,
 void SingleAlbumView::browseAlbum(QString name)
 {
     this->albumName = "localtagfs::music/albums/" + name;
+    this->setWindowTitle(name);
+    if(mafwTrackerSource->isReady())
+        this->listSongs();
+    else
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
+}
+
+void SingleAlbumView::browseSingleAlbum(QString name)
+{
+    this->albumName = "localtagfs::music/artists/" + name + "/";
     this->setWindowTitle(name);
     if(mafwTrackerSource->isReady())
         this->listSongs();
@@ -163,7 +182,7 @@ void SingleAlbumView::onItemSelected(QListWidgetItem *item)
         npWindow->setAlbumImage(albumImage);
     npWindow->show();
 #ifdef Q_WS_MAEMO_5
-    mafwrenderer->playObject(item->data(UserRoleObjectID).toString().toAscii());
+    mafwrenderer->playObject(item->data(UserRoleObjectID).toString().toUtf8());
 #endif
     ui->songList->clearSelection();
 }
@@ -174,4 +193,10 @@ void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 void SingleAlbumView::orientationChanged()
 {
     ui->songList->scroll(1,1);
+}
+
+void SingleAlbumView::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key() == Qt::Key_Backspace)
+        this->close();
 }
