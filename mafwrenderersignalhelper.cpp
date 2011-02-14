@@ -156,14 +156,21 @@ void MafwRendererSignalHelper::get_current_metadata_cb(MafwRenderer*,
                                                        gpointer user_data,
                                                        const GError* error)
 {
+    GValue *v;
     QString qerror;
     if(error)
     {
         qerror = QString(error->message);
     }
-    QString artist = g_value_get_string(mafw_metadata_first(table, MAFW_METADATA_KEY_ARTIST));
-    QString songName = g_value_get_string(mafw_metadata_first(table, MAFW_METADATA_KEY_TITLE));
-    QString album = g_value_get_string(mafw_metadata_first(table, MAFW_METADATA_KEY_ALBUM));
+    v = mafw_metadata_first(table, MAFW_METADATA_KEY_ARTIST);
+    QString artist = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown artist)";
+
+    v = mafw_metadata_first(table, MAFW_METADATA_KEY_TITLE);
+    QString songName = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown song)";
+
+    v = mafw_metadata_first(table, MAFW_METADATA_KEY_ALBUM);
+    QString album = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown album)";
+
     // Seems to always return 0 for some reason...
     int duration = g_value_get_int(mafw_metadata_first(table, MAFW_METADATA_KEY_DURATION));
     emit static_cast<MafwRendererAdapter*>(user_data)->signalGetCurrentMetadata(songName, album, artist, duration, qerror);
