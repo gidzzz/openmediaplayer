@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     radionowplayingwindow.cpp \
     qrotatedlabel.cpp \
     singlealbumview.cpp \
-    delegates/singlealbumviewdelegate.cpp
+    delegates/singlealbumviewdelegate.cpp \
+    singleartistview.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -49,7 +50,8 @@ HEADERS  += mainwindow.h \
     radionowplayingwindow.h \
     qrotatedlabel.h \
     singlealbumview.h \
-    delegates/singlealbumviewdelegate.h
+    delegates/singlealbumviewdelegate.h \
+    singleartistview.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -61,7 +63,8 @@ FORMS    += mainwindow.ui \
     videonowplayingwindow.ui \
     nowplayingindicator.ui \
     radionowplayingwindow.ui \
-    singlealbumview.ui
+    singlealbumview.ui \
+    singleartistview.ui
 
 CONFIG += mobility
 MOBILITY = sensors
