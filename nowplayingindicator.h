@@ -33,6 +33,9 @@ public:
     explicit NowPlayingIndicator(QWidget *parent = 0);
     ~NowPlayingIndicator();
     void triggerAnimation();
+#ifdef MAFW
+    void setMafwSource(MafwSourceAdapter *source);
+#endif
 
 public slots:
     void stopAnimation();
@@ -53,6 +56,7 @@ private:
     QString indicatorImage;
 #ifdef Q_WS_MAEMO_5
     MafwRendererAdapter* mafwrenderer;
+    MafwSourceAdapter *mafwTrackerSource;
     Maemo5DeviceEvents *deviceEvents;
 #endif
     int frame;

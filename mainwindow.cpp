@@ -68,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->radioButton->setFlat(false);
     ui->shuffleAllButton->setFlat(false);
 #endif
+
+    ui->indicator->setMafwSource(this->mafwTrackerSource);
 }
 
 MainWindow::~MainWindow()

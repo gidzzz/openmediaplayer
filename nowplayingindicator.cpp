@@ -113,7 +113,7 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *)
     // If x was running, shows its window.
     // TODO: Update code as mafw is integrated.
 #ifdef Q_WS_MAEMO_5
-    NowPlayingWindow *songs = new NowPlayingWindow(this, this->mafwrenderer);
+    NowPlayingWindow *songs = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource);
 #else
     NowPlayingWindow *songs = new NowPlayingWindow(this, 0);
 #endif
@@ -156,3 +156,10 @@ void NowPlayingIndicator::triggerAnimation()
             timer->start();
 #endif
 }
+
+#ifdef MAFW
+void NowPlayingIndicator::setMafwSource(MafwSourceAdapter *source)
+{
+    this->mafwTrackerSource = source;
+}
+#endif
