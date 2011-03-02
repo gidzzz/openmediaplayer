@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 
 /**************************************************************************
-    Qt Media Player
-    Copyright (C) 2010 Mohammad Abu-Garbeyyeh
+    This file is part of Open MediaPlayer
+    Copyright (C) 2010-2011 Mohammad Abu-Garbeyyeh
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
