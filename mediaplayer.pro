@@ -30,7 +30,9 @@ SOURCES += main.cpp \
     qrotatedlabel.cpp \
     singlealbumview.cpp \
     delegates/singlealbumviewdelegate.cpp \
-    singleartistview.cpp
+    singleartistview.cpp \
+    mafwplaylistadapter.cpp \
+    mafwplaylistmanageradapter.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -51,7 +53,9 @@ HEADERS  += mainwindow.h \
     qrotatedlabel.h \
     singlealbumview.h \
     delegates/singlealbumviewdelegate.h \
-    singleartistview.h
+    singleartistview.h \
+    mafwplaylistadapter.h \
+    mafwplaylistmanageradapter.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
