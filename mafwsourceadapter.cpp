@@ -2,8 +2,8 @@
 #include <mafwsourcesignalhelper.h>
 
 MafwSourceAdapter::MafwSourceAdapter(QString source):
-  sourceName(source),
-  sourceIsReady(false)
+    sourceIsReady(false),
+    sourceName(source)
 {
   mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());  
   mafw_shared_init(mafw_registry, NULL);
@@ -80,7 +80,7 @@ MafwSourceAdapter::connectRegistrySignals()
 }
 
 void
-MafwSourceAdapter::onSourceAdded(MafwRegistry* mafw_registry,
+MafwSourceAdapter::onSourceAdded(MafwRegistry*,
 				 GObject* source,
 				 gpointer user_data)
 {
@@ -96,7 +96,7 @@ MafwSourceAdapter::onSourceAdded(MafwRegistry* mafw_registry,
 
 
 void
-MafwSourceAdapter::onSourceRemoved(MafwRegistry* mafw_registry,
+MafwSourceAdapter::onSourceRemoved(MafwRegistry*,
 				   GObject* source,
 				   gpointer user_data)
 {
@@ -132,7 +132,7 @@ MafwSourceAdapter::disconnectSourceSignals()
 }
 
 void
-MafwSourceAdapter::onContainerChanged(MafwSource* mafw_source, gchar* object_id, gpointer user_data)
+MafwSourceAdapter::onContainerChanged(MafwSource*, gchar* object_id, gpointer user_data)
 {
 #ifdef DEBUG
   g_print("on container changed %s\n", object_id);
@@ -142,7 +142,7 @@ MafwSourceAdapter::onContainerChanged(MafwSource* mafw_source, gchar* object_id,
 }
 
 void
-MafwSourceAdapter::onMetadataChanged(MafwSource* mafw_source, gchar* object_id, gpointer user_data)
+MafwSourceAdapter::onMetadataChanged(MafwSource*, gchar* object_id, gpointer user_data)
 {
 #ifdef DEBUG
   g_print("on metadata changed %s\n", object_id);
@@ -152,7 +152,7 @@ MafwSourceAdapter::onMetadataChanged(MafwSource* mafw_source, gchar* object_id, 
 }
 
 void
-MafwSourceAdapter::onUpdating(MafwSource* mafw_source, gint progress, gint processed_items, gint remaining_items, gint remaining_time, gpointer user_data)
+MafwSourceAdapter::onUpdating(MafwSource*, gint progress, gint processed_items, gint remaining_items, gint remaining_time, gpointer user_data)
 {
 #ifdef DEBUG
   g_print("on updating %d, %d\n", progress, remaining_items);

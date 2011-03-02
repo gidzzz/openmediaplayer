@@ -5,8 +5,8 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, Ma
     QMainWindow(parent),
     ui(new Ui::SingleArtistView)
 #ifdef MAFW
-    ,mafwTrackerSource(msa),
-    mafwrenderer(mra)
+    ,mafwrenderer(mra),
+    mafwTrackerSource(msa)
 #endif
 {
     ui->setupUi(this);

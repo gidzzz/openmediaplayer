@@ -4,8 +4,8 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* m
         QMainWindow(parent),
         ui(new Ui::InternetRadioWindow)
 #ifdef MAFW
-        ,mafwTrackerSource(msa),
-        mafwrenderer(mra)
+        ,mafwrenderer(mra),
+        mafwTrackerSource(msa)
 #endif
 {
     ui->setupUi(this);
