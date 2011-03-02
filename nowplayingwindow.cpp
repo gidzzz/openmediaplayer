@@ -531,15 +531,24 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         duration = v ? g_value_get_int (v) : -1;
         t = t.addSecs(duration);
 
-        QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
+        QListWidgetItem *item = new QListWidgetItem();
         item->setText(QString::number(index));
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongDuration, t.toString("mm:ss"));
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleObjectID, object_id);
-        qDebug() << index;
-        ui->songPlaylist->insertItem(index, item);
+        item->setData(UserRoleSongIndex, index);
+        qDebug() << "title" << title;
+
+        unsigned theIndex = 0;
+        int position;
+        for (position = 0; position < ui->songPlaylist->count() && theIndex < index; position++)
+        {
+            theIndex = ui->songPlaylist->item(position)->data(UserRoleSongIndex).toInt();
+        }
+
+        ui->songPlaylist->insertItem(position, item);
     }
 }
 

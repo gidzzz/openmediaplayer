@@ -36,11 +36,12 @@ enum UserRoles { UserRoleName=Qt::UserRole,
                  UserRoleSongArtist,
                  UserRoleSongDuration,
                  UserRoleSongCount,
+                 UserRoleSongIndex,
                  UserRoleAlbumCount,
                  UserRoleAlbumArt,
                  UserRoleSongDurationS,
                  UserRoleObjectID,
-                 UserRoleSongURI,
-                };
+                 UserRoleSongURI
+               };
 
 #endif // INCLUDES_H
