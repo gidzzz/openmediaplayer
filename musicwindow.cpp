@@ -18,12 +18,13 @@
 
 #include "musicwindow.h"
 
-MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa) :
+MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
         QMainWindow(parent),
 #ifdef Q_WS_MAEMO_5
         ui(new Ui::MusicWindow),
         mafwrenderer(mra),
-        mafwTrackerSource(msa)
+        mafwTrackerSource(msa),
+        playlist(pls)
 #else
         ui(new Ui::MusicWindow)
 #endif
@@ -31,7 +32,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource);
+    myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
 #else
     myNowPlayingWindow = new NowPlayingWindow(this);
 #endif
@@ -45,7 +46,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
-    ui->indicator->setMafwSource(this->mafwTrackerSource);
+    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     this->connectSignals();
 }
 
@@ -56,6 +57,16 @@ MusicWindow::~MusicWindow()
 
 void MusicWindow::selectSong()
 {
+    qDebug() << "Clearing playlist";
+    playlist->clear();
+    qDebug() << "Playlist cleared";
+    for (int i = 0; i < ui->songList->count(); i++) {
+        QListWidgetItem *item = ui->songList->item(i);
+        playlist->appendItem(item->data(UserRoleObjectID).toString());
+    }
+    qDebug() << "Playlist created";
+
+    mafwrenderer->gotoIndex(ui->songList->currentRow());
     myNowPlayingWindow->onSongSelected(ui->songList->currentRow()+1,
                                        ui->songList->count(),
                                        ui->songList->currentItem()->data(UserRoleSongTitle).toString(),

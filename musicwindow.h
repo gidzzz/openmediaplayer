@@ -38,7 +38,7 @@ class MusicWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0);
+    explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~MusicWindow();
 
 public slots:
@@ -54,6 +54,7 @@ private:
 #ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
+    MafwPlaylistAdapter* playlist;
     unsigned int browseAllSongsId;
     unsigned int browseAllArtistsId;
     unsigned int browseAllAlbumsId;

@@ -32,12 +32,7 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     timer->setInterval(100);
     this->stopAnimation();
 #ifdef Q_WS_MAEMO_5
-    mafwrenderer = new MafwRendererAdapter();
     deviceEvents = new Maemo5DeviceEvents(this);
-#endif
-    this->connectSignals();
-#ifdef Q_WS_MAEMO_5
-    mafwrenderer->getStatus();
 #endif
 }
 
@@ -131,7 +126,7 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *)
     // If x was running, shows its window.
     // TODO: Update code as mafw is integrated.
 #ifdef Q_WS_MAEMO_5
-    NowPlayingWindow *songs = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource);
+    NowPlayingWindow *songs = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
 #else
     NowPlayingWindow *songs = new NowPlayingWindow(this, 0);
 #endif
@@ -176,8 +171,14 @@ void NowPlayingIndicator::triggerAnimation()
 }
 
 #ifdef MAFW
-void NowPlayingIndicator::setMafwSource(MafwSourceAdapter *source)
+void NowPlayingIndicator::setSources(MafwRendererAdapter *renderer, MafwSourceAdapter *source, MafwPlaylistAdapter *pls)
 {
+    this->mafwrenderer = renderer;
     this->mafwTrackerSource = source;
+    this->playlist = pls;
+    this->connectSignals();
+#ifdef Q_WS_MAEMO_5
+    mafwrenderer->getStatus();
+#endif
 }
 #endif

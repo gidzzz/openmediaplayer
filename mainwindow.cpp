@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwrenderer = new MafwRendererAdapter();
     mafwTrackerSource = new MafwSourceAdapter("Mafw-Tracker-Source");
     mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
+    playlist = new MafwPlaylistAdapter(this, this->mafwrenderer);
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -49,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef MAFW
-    myMusicWindow = new MusicWindow(this, mafwrenderer, mafwTrackerSource);
+    myMusicWindow = new MusicWindow(this, mafwrenderer, mafwTrackerSource, this->playlist);
     myVideosWindow = new VideosWindow(this, mafwTrackerSource);
     myInternetRadioWindow = new InternetRadioWindow(this, mafwrenderer, mafwRadioSource);
 #else
@@ -69,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->shuffleAllButton->setFlat(false);
 #endif
 
-    ui->indicator->setMafwSource(this->mafwTrackerSource);
+    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
 }
 
 MainWindow::~MainWindow()

@@ -18,6 +18,7 @@
 #endif
 #ifdef MAFW
     #include "mafwrendereradapter.h"
+    #include "mafwplaylistadapter.h"
     #include "mafwsourceadapter.h"
     #include <libmafw/mafw-source.h>
 #endif
@@ -50,6 +51,7 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
     MafwRendererAdapter* mafwrenderer;
+    MafwPlaylistAdapter* playlist;
     const char* TAGSOURCE_AUDIO_PATH;
     const char* TAGSOURCE_VIDEO_PATH;
     const char* RADIOSOURCE_PATH;
