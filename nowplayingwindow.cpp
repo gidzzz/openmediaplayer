@@ -543,9 +543,11 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
 
         unsigned theIndex = 0;
         int position;
-        for (position = 0; position < ui->songPlaylist->count() && theIndex < index; position++)
+        for (position = 0; position < ui->songPlaylist->count(); position++)
         {
             theIndex = ui->songPlaylist->item(position)->data(UserRoleSongIndex).toInt();
+            if (theIndex > index)
+                break;
         }
 
         ui->songPlaylist->insertItem(position, item);
