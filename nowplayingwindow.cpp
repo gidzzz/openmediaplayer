@@ -18,12 +18,13 @@
 
 #include "nowplayingwindow.h"
 
-NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa) :
+NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter *pls) :
     QMainWindow(parent),
 #ifdef MAFW
     ui(new Ui::NowPlayingWindow),
     mafwrenderer(mra),
-    mafwTrackerSource(msa)
+    mafwTrackerSource(msa),
+    playlist(pls)
 #else
     ui(new Ui::NowPlayingWindow)
 #endif
@@ -32,7 +33,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
-    playlist = new MafwPlaylistAdapter(this, this->mafwrenderer);
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
     albumArtScene = new QGraphicsScene(ui->view);
@@ -65,9 +65,11 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     }
     ui->toolBarWidget->setFixedHeight(ui->toolBarWidget->sizeHint().height());
 #ifdef MAFW
+    lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
     mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
     mafwrenderer->getPosition();
+    QTimer::singleShot(200, this, SLOT(updatePlaylistState()));
 #endif
 }
 
@@ -91,6 +93,20 @@ void NowPlayingWindow::setAlbumImage(QString image)
     /*QTransform t;
     t = t.rotate(-10, Qt::YAxis);
     ui->view->setTransform(t);*/
+}
+
+void NowPlayingWindow::setSongNumber(int currentSong, int numberOfSongs)
+{
+    QString songNumber;
+    songNumber.append(QString::number(currentSong));
+    songNumber.append("/");
+    songNumber.append(QString::number(numberOfSongs));
+    songNumber.append(" ");
+    if (numberOfSongs == 1)
+        songNumber.append(tr("song"));
+    else
+        songNumber.append(tr("songs"));
+    ui->songNumberLabel->setText(songNumber);
 }
 
 void NowPlayingWindow::toggleVolumeSlider()
@@ -219,6 +235,7 @@ void NowPlayingWindow::connectSignals()
     connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
     connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+    connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
     connect(ui->songPlaylist, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onPlaylistItemActivated(QListWidgetItem*)));
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -551,13 +568,42 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         }
 
         ui->songPlaylist->insertItem(position, item);
+        this->setSongNumber(index, ui->songPlaylist->count());
+        ui->songPlaylist->setCurrentRow(lastPlayingSong->value().toInt());
     }
 }
 
 void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 {
-    qDebug() << ui->songPlaylist->currentRow();
-    qDebug() << item->text();
+#ifdef DEBUG
+    qDebug() << "Selected item number: " << ui->songPlaylist->currentRow();
+    qDebug() << "Item number in MAFW playlist: " << item->text();
+#endif
+    this->setSongNumber(ui->songPlaylist->currentRow()+1, ui->songPlaylist->count());
+    lastPlayingSong->set(ui->songPlaylist->currentRow());
     mafwrenderer->gotoIndex(item->text().toInt());
+    mafwrenderer->play();
 }
+
+void NowPlayingWindow::updatePlaylistState()
+{
+    //ui->shuffleButton->setChecked(playlist->isShuffled());
+    //ui->repeatButton->setChecked(playlist->isRepeat());
+}
+
+void NowPlayingWindow::clearPlaylist()
+{
+    QMessageBox confirmClear(QMessageBox::NoIcon,
+                             " ",
+                             tr("Clear all songs from now playing?"),
+                             QMessageBox::Yes | QMessageBox::No,
+                             this);
+    confirmClear.exec();
+    if(confirmClear.result() == QMessageBox::Yes) {
+        playlist->clear();
+        mafwrenderer->stop();
+        this->close();
+    }
+}
+
 #endif

@@ -13,10 +13,14 @@
 #include "delegates/playlistdelegate.h"
 
 #ifdef Q_WS_MAEMO_5
+    #include "fmtxdialog.h"
+#endif
+
+#ifdef MAFW
     #include "mafwrendereradapter.h"
     #include "mafwplaylistadapter.h"
     #include "mafwsourceadapter.h"
-    #include "fmtxdialog.h"
+    #include <gq/GConfItem>
 #else
     class MafwRendererAdapter;
     class MafwSourceAdapter;
@@ -30,7 +34,7 @@ class NowPlayingWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0);
+    explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~NowPlayingWindow();
     void listSongs(QString);
 
@@ -45,9 +49,11 @@ private:
     MafwSourceAdapter* mafwTrackerSource;
     MafwPlaylistAdapter *playlist;
     int mafwState;
+    GConfItem *lastPlayingSong;
     void showEvent(QShowEvent *);
 #endif
     void setButtonIcons();
+    void setSongNumber(int currentSong, int numberOfSongs);
     void connectSignals();
     QTimer *volumeTimer;
     QTimer *positionTimer;
@@ -71,6 +77,8 @@ private slots:
     void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
     void setPosition(int);
     void onPlaylistItemActivated(QListWidgetItem*);
+    void updatePlaylistState();
+    void clearPlaylist();
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
