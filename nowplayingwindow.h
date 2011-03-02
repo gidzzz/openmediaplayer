@@ -14,6 +14,7 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "mafwrendereradapter.h"
+    #include "mafwplaylistadapter.h"
     #include "mafwsourceadapter.h"
     #include "fmtxdialog.h"
 #else
@@ -42,6 +43,7 @@ private:
 #ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
+    MafwPlaylistAdapter *playlist;
     int mafwState;
     void showEvent(QShowEvent *);
 #endif
@@ -64,8 +66,11 @@ private slots:
     void onPositionChanged(int, QString);
     void updateProgressBar(int, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
-    void onMetadataRequested(QString, QString, QString, int, QString);
+    void onRendererMetadataRequested(QString, QString, QString, QString object_id, QString);
+    void onSourceMetadataRequested(QString, GHashTable*, QString);
+    void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
     void setPosition(int);
+    void onPlaylistItemActivated(QListWidgetItem*);
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();

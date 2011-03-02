@@ -14,6 +14,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
+    playlist = new MafwPlaylistAdapter(this, this->mafwrenderer);
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
     albumArtScene = new QGraphicsScene(ui->view);
@@ -125,6 +126,8 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
         ui->albumNameLabel->setText(value.toString());
     if(name == "renderer-art-uri")
         this->setAlbumImage(value.toString());
+
+    this->mafwrenderer->getCurrentMetadata();
 }
 
 #ifdef MAFW
@@ -188,13 +191,17 @@ void NowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(QString,QString,QString,int,QString)),
-            this, SLOT(onMetadataRequested(QString,QString,QString,int,QString)));
+    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(QString,QString,QString,QString,QString)),
+            this, SLOT(onRendererMetadataRequested(QString,QString,QString,QString,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->songProgress, SLOT(setEnabled(bool)));
+    connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
+    connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
     connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+    connect(ui->songPlaylist, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onPlaylistItemActivated(QListWidgetItem*)));
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
                                           "com.nokia.mafw.extension",
@@ -230,14 +237,74 @@ void NowPlayingWindow::onSongSelected(int songNumber, int totalNumberOfSongs, QS
 }
 
 #ifdef MAFW
-void NowPlayingWindow::onMetadataRequested(QString name, QString album, QString artist, int, QString error)
+void NowPlayingWindow::onRendererMetadataRequested(QString, QString, QString, QString object_id, QString error)
 {
-    ui->songTitleLabel->setText(name);
-    ui->albumNameLabel->setText(album);
-    ui->artistLabel->setText(artist);
-    if(!error.isEmpty())
+    this->mafwTrackerSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                              MAFW_METADATA_KEY_ALBUM,
+                                                                              MAFW_METADATA_KEY_ARTIST,
+                                                                              MAFW_METADATA_KEY_ALBUM_ART_URI,
+                                                                              MAFW_METADATA_KEY_DURATION,
+                                                                              MAFW_METADATA_KEY_IS_SEEKABLE));
+    if(!error.isNull() && !error.isEmpty())
         qDebug() << error;
 }
+
+void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
+{
+    QString title;
+    QString artist;
+    QString album;
+    QString albumArt;
+    bool isSeekable;
+    int duration = -1;
+    QTime t(0, 0);
+    if(metadata != NULL) {
+        GValue *v;
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_TITLE);
+        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ARTIST);
+        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ALBUM);
+        album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_DURATION);
+        duration = v ? g_value_get_int (v) : -1;
+        t = t.addSecs(duration);
+        this->songDuration = duration;
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_IS_SEEKABLE);
+        isSeekable = v ? g_value_get_boolean (v) : false;
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
+        if(v != NULL) {
+            const gchar* file_uri = g_value_get_string(v);
+            gchar* filename = NULL;
+            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                this->setAlbumImage(QString::fromUtf8(filename));
+            }
+        } else {
+            this->setAlbumImage(albumImage);
+        }
+
+        ui->songTitleLabel->setText(title);
+        ui->artistLabel->setText(artist);
+        ui->albumNameLabel->setText(album);
+        ui->trackLengthLabel->setText(t.toString("mm:ss"));
+        if (isSeekable)
+            ui->songProgress->setEnabled(true);
+    }
+
+    if(!error.isNull() && !error.isEmpty())
+        qDebug() << error;
+}
+
 #endif
 
 void NowPlayingWindow::orientationChanged()
@@ -411,10 +478,57 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
         mafwrenderer->next();
     else if(e->key() == Qt::Key_Left)
         mafwrenderer->previous();
-    else if(e->key() == Qt::Key_Control) {
+    else if(e->key() == Qt::Key_Shift) {
         if(ui->menuNow_playing_menu->isHidden())
             ui->menuNow_playing_menu->show();
         else
             ui->menuNow_playing_menu->hide();
     }
 }
+
+#ifdef MAFW
+void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index)
+{
+    QString title;
+    QString artist;
+    QString album;
+    int duration = -1;
+    QTime t(0, 0);
+    if(metadata != NULL) {
+        GValue *v;
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_TITLE);
+        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ARTIST);
+        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ALBUM);
+        album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_DURATION);
+        duration = v ? g_value_get_int (v) : -1;
+        t = t.addSecs(duration);
+
+        QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
+        item->setText(QString::number(index));
+        item->setData(UserRoleSongTitle, title);
+        item->setData(UserRoleSongDuration, t.toString("mm:ss"));
+        item->setData(UserRoleSongAlbum, album);
+        item->setData(UserRoleSongArtist, artist);
+        item->setData(UserRoleObjectID, object_id);
+        qDebug() << index;
+        ui->songPlaylist->insertItem(index, item);
+    }
+}
+
+void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
+{
+    qDebug() << ui->songPlaylist->currentRow();
+    qDebug() << item->text();
+    mafwrenderer->gotoIndex(item->text().toInt());
+}
+#endif
