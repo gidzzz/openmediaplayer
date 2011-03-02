@@ -151,7 +151,7 @@ void MafwRendererSignalHelper::get_position_cb(MafwRenderer*,
 }
 
 void MafwRendererSignalHelper::get_current_metadata_cb(MafwRenderer*,
-                                                       const gchar*,
+                                                       const gchar* object_id,
                                                        GHashTable* table,
                                                        gpointer user_data,
                                                        const GError* error)
@@ -171,7 +171,6 @@ void MafwRendererSignalHelper::get_current_metadata_cb(MafwRenderer*,
     v = mafw_metadata_first(table, MAFW_METADATA_KEY_ALBUM);
     QString album = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown album)";
 
-    // Seems to always return 0 for some reason...
-    int duration = g_value_get_int(mafw_metadata_first(table, MAFW_METADATA_KEY_DURATION));
-    emit static_cast<MafwRendererAdapter*>(user_data)->signalGetCurrentMetadata(songName, album, artist, duration, qerror);
+    emit static_cast<MafwRendererAdapter*>(user_data)->signalGetCurrentMetadata(songName, album, artist,
+                                                                                QString::fromUtf8(object_id), qerror);
 }
