@@ -27,6 +27,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
+    ui->indicator->setMafwSource(this->mafwTrackerSource);
     this->connectSignals();
 }
 

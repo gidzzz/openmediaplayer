@@ -24,6 +24,7 @@
 #ifdef Q_WS_MAEMO_5
     #include "mafwrendereradapter.h"
     #include "mafwsourceadapter.h"
+    #include "mafwplaylistadapter.h"
 #else
     class MafwRendererAdapter;
 #endif
