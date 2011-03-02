@@ -110,6 +110,7 @@ void VideosWindow::listVideos()
 
 void VideosWindow::browseAllVideos(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString)
 {
+    Q_UNUSED(objectId);
     if(browseId != browseAllVideosId)
       return;
 

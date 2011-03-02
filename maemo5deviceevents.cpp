@@ -82,4 +82,5 @@ bool Maemo5DeviceEvents::isScreenLocked()
             return false;
         }
     }
+    return false;
 }

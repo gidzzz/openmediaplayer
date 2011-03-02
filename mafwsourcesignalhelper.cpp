@@ -24,6 +24,7 @@
 void
 MafwSourceSignalHelper::browse_result_cb(MafwSource* mafw_source, guint browse_id, gint remaining_count, guint index, const gchar *object_id, GHashTable *metadata, gpointer user_data, const GError *error)
 {
+  Q_UNUSED(mafw_source);
   QString qerror;
   if(error)
   {
@@ -35,6 +36,7 @@ MafwSourceSignalHelper::browse_result_cb(MafwSource* mafw_source, guint browse_i
 void
 MafwSourceSignalHelper::metadata_result_cb(MafwSource* mafw_source, const char* object_id, GHashTable* metadata_keys, gpointer user_data, const GError* error)
 {
+  Q_UNUSED(mafw_source);
   QString qerror;
   if(error)
   {
@@ -44,11 +46,12 @@ MafwSourceSignalHelper::metadata_result_cb(MafwSource* mafw_source, const char* 
 }
 
 void
-MafwSourceSignalHelper::create_object_cb(MafwSource* mafw_source, 
-					 const char* object_id, 
-					 gpointer user_data, 
-					 const GError* error)
+MafwSourceSignalHelper::create_object_cb(MafwSource* mafw_source,
+                                         const char* object_id,
+                                         gpointer user_data,
+                                         const GError* error)
 {
+  Q_UNUSED(mafw_source);
   QString qerror;
   if(error)
   {
@@ -58,11 +61,12 @@ MafwSourceSignalHelper::create_object_cb(MafwSource* mafw_source,
 }
 
 void
-MafwSourceSignalHelper::destroy_object_cb(MafwSource* mafw_source, 
-					  const char* object_id, 
-					  gpointer user_data, 
-					  const GError* error)
+MafwSourceSignalHelper::destroy_object_cb(MafwSource* mafw_source,
+                                          const char* object_id,
+                                          gpointer user_data,
+                                          const GError* error)
 {
+  Q_UNUSED(mafw_source);
   QString qerror;
   if(error)
   {
@@ -73,11 +77,12 @@ MafwSourceSignalHelper::destroy_object_cb(MafwSource* mafw_source,
 
 void
 MafwSourceSignalHelper::set_metadata_cb(MafwSource* mafw_source,
-					const char* object_id,
-					const char** failed_keys,
-					gpointer user_data,
-					const GError* error)
+                                        const char* object_id,
+                                        const char** failed_keys,
+                                        gpointer user_data,
+                                        const GError* error)
 {
+  Q_UNUSED(mafw_source);
   QString qerror;
   if(error)
   {
@@ -90,10 +95,10 @@ MafwSourceSignalHelper::set_metadata_cb(MafwSource* mafw_source,
     failed_key_list.push_back(*failed_key);
     failed_key++;
   }
-  
-  emit static_cast<MafwSourceAdapter*>(user_data)->signalMetadataSetResult(object_id, 
-									   failed_key_list,
-									   qerror);
+
+  emit static_cast<MafwSourceAdapter*>(user_data)->signalMetadataSetResult(object_id,
+                                                                           failed_key_list,
+                                                                           qerror);
 }
 
 
