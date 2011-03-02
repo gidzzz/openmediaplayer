@@ -48,13 +48,8 @@ public:
 
         QLinearGradient g(0,0,0,buffSize.height());
         g.setColorAt(1, Qt::transparent);
-        QRect screenGeometry = QApplication::desktop()->screenGeometry();
-        if (screenGeometry.width() > screenGeometry.height())
-            g.setColorAt(0.8, widget->palette().background().color());
-        else
-            g.setColorAt(0.5, widget->palette().background().color());
+        g.setColorAt(0.8, widget->palette().background().color());
         p.fillRect(opt.rect, g);
-        //p.setBrush(g);
 
         // Draw buffer on the screen
         painter->setOpacity(0.5);
