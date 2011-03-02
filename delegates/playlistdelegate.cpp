@@ -47,7 +47,7 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             r = option.rect;
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(r.left(), r.top()+5, r.width()-60, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            painter->drawText(r.left(), r.top()+5, r.width()-90, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
@@ -59,15 +59,16 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
             r = option.rect;
             r.setRight(r.right()-12);
+            r.setTop(r.top()+5);
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
+            painter->drawText(r, Qt::AlignTop|Qt::AlignRight, songLength, &r);
         } else {
             // Portrait
             r = option.rect;
             f.setPointSize(18);
             painter->setFont(f);
-            painter->drawText(r.left()+5, r.top()+5, r.width()-60, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            painter->drawText(r.left()+5, r.top()+5, r.width()-90, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
@@ -80,6 +81,7 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             r = option.rect;
             r.setRight(r.right()-12);
             f.setPointSize(18);
+            r.setTop(r.top()+5);
             painter->setFont(f);
             painter->drawText(r, Qt::AlignTop|Qt::AlignRight, songLength, &r);
 
