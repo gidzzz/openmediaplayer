@@ -32,9 +32,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
-#else
-    myNowPlayingWindow = new NowPlayingWindow(this);
 #endif
     ui->centralwidget->setLayout(ui->songsLayout);
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
@@ -57,6 +54,12 @@ MusicWindow::~MusicWindow()
 
 void MusicWindow::selectSong()
 {
+#ifdef MAFW
+    myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+#else
+    myNowPlayingWindow = new NowPlayingWindow(this);
+#endif
+    myNowPlayingWindow->setAttribute(Qt::WA_DeleteOnClose);
     qDebug() << "Clearing playlist";
     playlist->clear();
     qDebug() << "Playlist cleared";
@@ -79,7 +82,7 @@ void MusicWindow::selectSong()
     else
         myNowPlayingWindow->setAlbumImage(albumImage);
     myNowPlayingWindow->show();
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     mafwrenderer->playObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toAscii());
 #endif
     ui->songList->clearSelection();
@@ -98,7 +101,6 @@ void MusicWindow::connectSignals()
 #endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onContextMenuRequested(const QPoint &)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-    connect(ui->indicator, SIGNAL(clicked()), myNowPlayingWindow, SLOT(show()));
 }
 
 void MusicWindow::onContextMenuRequested(const QPoint &point)
