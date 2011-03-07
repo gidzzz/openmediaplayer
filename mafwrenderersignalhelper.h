@@ -24,5 +24,6 @@ class MafwRendererSignalHelper
   static void set_position_cb(MafwRenderer* mafw_renderer, int position, gpointer user_data, const GError* error);
   static void get_position_cb(MafwRenderer* mafw_renderer, int position, gpointer user_data, const GError* error);
   static void get_current_metadata_cb(MafwRenderer* mafw_renderer, const gchar* object_id, GHashTable* metadata, gpointer user_data, const GError* error);
+  static void get_property_cb(MafwExtension *self, const gchar *name, GValue *value, gpointer udata, const GError *error);
 };
 #endif

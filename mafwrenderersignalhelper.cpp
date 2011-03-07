@@ -192,3 +192,23 @@ void MafwRendererSignalHelper::get_current_metadata_cb(MafwRenderer*,
     emit static_cast<MafwRendererAdapter*>(user_data)->signalGetCurrentMetadata(songName, album, artist,
                                                                                 QString::fromUtf8(object_id), qerror);
 }
+
+void MafwRendererSignalHelper::get_property_cb(MafwExtension *,
+                                               const gchar *name,
+                                               GValue *value,
+                                               gpointer user_data,
+                                               const GError *error)
+{
+    QString qerror;
+    if(error)
+    {
+        qerror = QString(error->message);
+    }
+#ifdef DEBUG
+    qDebug() << "MafwRendererSignalHelper::get_property_cb";
+#endif
+    if (strcmp (name, MAFW_PROPERTY_RENDERER_VOLUME) == 0) {
+        int volume = g_value_get_uint (value);
+        emit static_cast<MafwRendererAdapter*>(user_data)->signalGetVolume(volume);
+    }
+}
