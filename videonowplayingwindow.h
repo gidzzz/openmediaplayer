@@ -31,6 +31,7 @@ private:
     bool portrait;
 #ifdef Q_WS_MAEMO_5
     QMaemo5Rotator *rotator;
+    void setDNDAtom(bool dnd);
 #endif
 
 private slots:

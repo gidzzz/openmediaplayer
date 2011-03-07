@@ -47,6 +47,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent) :
     if(portrait) {
         QTimer::singleShot(1000, this, SLOT(onPortraitMode()));
     }
+    this->setDNDAtom(true);
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
     volumeTimer = new QTimer(this);
@@ -176,4 +177,16 @@ void VideoNowPlayingWindow::onLandscapeMode()
     if(!ui->portraittoolBar->isHidden())
         ui->portraittoolBar->hide();
 }
+
+void VideoNowPlayingWindow::setDNDAtom(bool dnd)
+{
+    quint32 enable;
+    if (dnd)
+        enable = 1;
+    else
+        enable = 0;
+    Atom winDNDAtom = XInternAtom(QX11Info::display(), "_HILDON_DO_NOT_DISTURB", false);
+    XChangeProperty(QX11Info::display(), winId(), winDNDAtom, XA_INTEGER, 32, PropModeReplace, (uchar*) &enable, 1);
+}
+
 #endif
