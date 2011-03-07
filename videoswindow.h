@@ -11,6 +11,7 @@
 
 #ifdef MAFW
     #include "mafwrendereradapter.h"
+    #include "mafwplaylistadapter.h"
     #include "mafwsourceadapter.h"
     #include <libmafw/mafw-source.h>
 #endif
@@ -24,7 +25,7 @@ class VideosWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit VideosWindow(QWidget *parent = 0, MafwSourceAdapter* msa = 0);
+    explicit VideosWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~VideosWindow();
 
 private:
@@ -37,7 +38,9 @@ private:
     void connectSignals();
     void selectView();
 #ifdef MAFW
+    MafwRendererAdapter *mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
+    MafwPlaylistAdapter *playlist;
     unsigned int browseAllVideosId;
 #endif
 

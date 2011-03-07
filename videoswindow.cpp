@@ -18,11 +18,13 @@
 
 #include "videoswindow.h"
 
-VideosWindow::VideosWindow(QWidget *parent, MafwSourceAdapter* msa) :
+VideosWindow::VideosWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
     QMainWindow(parent),
     ui(new Ui::VideosWindow)
 #ifdef MAFW
-    ,mafwTrackerSource(msa)
+    ,mafwrenderer(mra),
+    mafwTrackerSource(msa),
+    playlist(pls)
 #endif
 {
     ui->setupUi(this);
@@ -30,6 +32,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwSourceAdapter* msa) :
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
+    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
     sortByDate = new QAction(tr("Date"), sortByActionGroup);
