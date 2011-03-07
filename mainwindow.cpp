@@ -1,5 +1,3 @@
-#include "mainwindow.h"
-
 /**************************************************************************
     This file is part of Open MediaPlayer
     Copyright (C) 2010-2011 Mohammad Abu-Garbeyyeh
@@ -17,6 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
+
+#include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -50,9 +50,9 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef MAFW
-    myMusicWindow = new MusicWindow(this, mafwrenderer, mafwTrackerSource, this->playlist);
-    myVideosWindow = new VideosWindow(this, mafwTrackerSource);
-    myInternetRadioWindow = new InternetRadioWindow(this, mafwrenderer, mafwRadioSource);
+    myMusicWindow = new MusicWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    myVideosWindow = new VideosWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    myInternetRadioWindow = new InternetRadioWindow(this, this->mafwrenderer, this->mafwRadioSource, this->playlist);
 #else
     myMusicWindow = new MusicWindow(this);
     myVideosWindow = new VideosWindow(this);
@@ -110,7 +110,7 @@ void MainWindow::connectSignals()
     // TODO: Connect this to a slot.
     // connect(ui->indicator, SIGNAL(clicked()), this, SLOT();
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
@@ -232,12 +232,16 @@ void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, Q
     if(objectId == TAGSOURCE_AUDIO_PATH) {
         if(count == 1)
             countStr.append(" " + tr("song"));
+        else if(count == -1)
+            countStr = tr("(no songs)");
         else
             countStr.append(" " + tr("songs"));
         ui->songCountL->setText(countStr);
     } else if(objectId == TAGSOURCE_VIDEO_PATH) {
         if(count == 1)
             countStr.append(" " + tr("clip"));
+        else if(count == -1)
+            countStr = tr("(no videos)");
         else
             countStr.append(" " + tr("clips"));
         ui->videoCountL->setText(countStr);
@@ -257,6 +261,8 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
 
     if(count == 1)
         ui->startionCountL->setText(QString::number(count) + " " + tr("station"));
+    else if(count == -1)
+        ui->startionCountL->setText(tr("(no stations)"));
     else
         ui->startionCountL->setText(QString::number(count) + " " + tr("stations"));
     if(!error.isEmpty())
