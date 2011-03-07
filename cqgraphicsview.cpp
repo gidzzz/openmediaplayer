@@ -27,8 +27,30 @@ CQGraphicsView::~CQGraphicsView()
 {
 }
 
+void CQGraphicsView::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton) {
+        m_pressed = true;
+    } else {
+        m_pressed = false;
+    }
+    emit pressed();
+}
+
 void CQGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton)
+    if(event->button() == Qt::LeftButton && this->isPosOnItem(event->pos()))
         emit clicked();
+    m_pressed = false;
+    emit released();
+}
+
+bool CQGraphicsView::isPosOnItem(const QPoint &p)
+{
+    return rect().contains(p);
+}
+
+bool CQGraphicsView::isPressed()
+{
+    return m_pressed;
 }
