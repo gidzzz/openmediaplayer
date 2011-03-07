@@ -35,21 +35,33 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
 #endif
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
+
     albumArtScene = new QGraphicsScene(ui->view);
+
     ui->volumeSlider->hide();
+
+    this->playlistRequested = false;
+
     PlayListDelegate *delegate = new PlayListDelegate(ui->songPlaylist);
     ui->songPlaylist->setItemDelegate(delegate);
+
+    ui->songPlaylist->setContextMenuPolicy(Qt::CustomContextMenu);
+
     this->setButtonIcons();
     ui->buttonsWidget->setLayout(ui->buttonsLayout);
     ui->songPlaylist->hide();
     QMainWindow::setCentralWidget(ui->verticalWidget);
+
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
+
     this->connectSignals();
+
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
     ui->volumeButton->setFixedSize(ui->volumeButton->sizeHint());
     ui->view->setFixedHeight(350);
+
     // We might be starting NowPlayingWindow in portrait mode.
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     if (screenGeometry.width() < screenGeometry.height()) {
@@ -68,8 +80,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
     mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
+    mafwrenderer->getVolume();
     mafwrenderer->getPosition();
-    QTimer::singleShot(200, this, SLOT(updatePlaylistState()));
 #endif
 }
 
@@ -210,14 +222,15 @@ void NowPlayingWindow::connectSignals()
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
     connect(ui->view, SIGNAL(clicked()), this, SLOT(toggleList()));
-    connect(ui->repeatButton, SIGNAL(clicked()), this, SLOT(onRepeatButtonPressed()));
-    connect(ui->shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonPressed()));
+    connect(ui->repeatButton, SIGNAL(clicked(bool)), this, SLOT(onRepeatButtonToggled(bool)));
+    connect(ui->shuffleButton, SIGNAL(clicked(bool)), this, SLOT(onShuffleButtonToggled(bool)));
     connect(ui->nextButton, SIGNAL(pressed()), this, SLOT(onNextButtonPressed()));
     connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
     connect(ui->songProgress, SIGNAL(sliderPressed()), this, SLOT(onSliderPressed()));
     connect(ui->songProgress, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
+    connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
@@ -228,15 +241,21 @@ void NowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(QString,QString,QString,QString,QString)),
             this, SLOT(onRendererMetadataRequested(QString,QString,QString,QString,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->songProgress, SLOT(setEnabled(bool)));
+    connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
+    connect(playlist, SIGNAL(playlistChanged()), this, SLOT(onPlaylistChanged()));
+    connect(ui->repeatButton, SIGNAL(toggled(bool)), this, SLOT(onRepeatButtonToggled(bool)));
+    connect(ui->repeatButton, SIGNAL(toggled(bool)), this, SLOT(onShuffleButtonToggled(bool)));
+    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
     connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
     connect(ui->songPlaylist, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onPlaylistItemActivated(QListWidgetItem*)));
+
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
                                           "com.nokia.mafw.extension",
@@ -401,22 +420,24 @@ void NowPlayingWindow::volumeWatcher()
         volumeTimer->start();
 }
 
-void NowPlayingWindow::onShuffleButtonPressed()
+void NowPlayingWindow::onShuffleButtonToggled(bool checked)
 {
-    if(ui->shuffleButton->isChecked()) {
+    if(checked) {
         ui->shuffleButton->setIcon(QIcon(shuffleButtonPressed));
     } else {
         ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
     }
+    playlist->setShuffled(checked);
 }
 
-void NowPlayingWindow::onRepeatButtonPressed()
+void NowPlayingWindow::onRepeatButtonToggled(bool checked)
 {
-    if(ui->repeatButton->isChecked()) {
+    if(checked) {
         ui->repeatButton->setIcon(QIcon(repeatButtonPressedIcon));
     } else {
         ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
     }
+    playlist->setRepeat(checked);
 }
 
 void NowPlayingWindow::onNextButtonPressed()
@@ -439,7 +460,6 @@ void NowPlayingWindow::onSliderPressed()
 {
 #ifdef MAFW
     disconnect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
-    //connect(ui->songProgress, SIGNAL(valueChanged(int)), this, SLOT(setPosition(int)));
 #endif
 }
 
@@ -475,6 +495,11 @@ void NowPlayingWindow::updateProgressBar(int position, QString)
 
 void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
 {
+    if (!this->playlistRequested) {
+        QTimer::singleShot(250, playlist, SLOT(getItems()));
+        this->updatePlaylistState();
+        this->playlistRequested = true;
+    }
     this->stateChanged(state);
 }
 
@@ -556,7 +581,15 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleObjectID, object_id);
         item->setData(UserRoleSongIndex, index);
-        qDebug() << "title" << title;
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
+        if(v != NULL) {
+            const gchar* file_uri = g_value_get_string(v);
+            gchar* filename = NULL;
+            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                item->setData(UserRoleSongURI, QString::fromUtf8(filename));
+            }
+        }
 
         unsigned theIndex = 0;
         int position;
@@ -568,8 +601,10 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         }
 
         ui->songPlaylist->insertItem(position, item);
-        this->setSongNumber(index, ui->songPlaylist->count());
+        this->setSongNumber(index+1, ui->songPlaylist->count());
+        //ui->songPlaylist->setCurrentItem(ui->songPlaylist->findItems(lastPlayingSong->value().toString(), Qt::MatchExactly).first());
         ui->songPlaylist->setCurrentRow(lastPlayingSong->value().toInt());
+        ui->songPlaylist->scrollToItem(ui->songPlaylist->currentItem());
     }
 }
 
@@ -580,15 +615,19 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     qDebug() << "Item number in MAFW playlist: " << item->text();
 #endif
     this->setSongNumber(ui->songPlaylist->currentRow()+1, ui->songPlaylist->count());
-    lastPlayingSong->set(ui->songPlaylist->currentRow());
+    lastPlayingSong->set(ui->songPlaylist->currentItem()->text().toInt());
+    ui->songTitleLabel->setText(item->data(UserRoleSongTitle).toString());
+    ui->artistLabel->setText(item->data(UserRoleSongArtist).toString());
+    ui->albumNameLabel->setText(item->data(UserRoleSongAlbum).toString());
     mafwrenderer->gotoIndex(item->text().toInt());
-    mafwrenderer->play();
+    if (this->mafwState == Stopped)
+        mafwrenderer->play();
 }
 
 void NowPlayingWindow::updatePlaylistState()
 {
-    //ui->shuffleButton->setChecked(playlist->isShuffled());
-    //ui->repeatButton->setChecked(playlist->isRepeat());
+    ui->repeatButton->setChecked(playlist->isRepeat());
+    ui->shuffleButton->setChecked(playlist->isShuffled());
 }
 
 void NowPlayingWindow::clearPlaylist()
@@ -606,4 +645,41 @@ void NowPlayingWindow::clearPlaylist()
     }
 }
 
+void NowPlayingWindow::onPlaylistChanged()
+{
+    qDebug() << "NowPlayingWindow::onPlaylistChanged";
+    for (int i = 0; i < ui->songPlaylist->count(); i++) {
+        QListWidgetItem *item = ui->songPlaylist->item(i);
+        ui->songPlaylist->removeItemWidget(item);
+        delete item;
+    }
+    playlist->getItems();
+}
+
+void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
+{
+    contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Save playlist"));
+    contextMenu->addAction(tr("Set as ringing tone"));
+    contextMenu->addAction(tr("Delete from now playing"));
+    contextMenu->addAction(tr("Clear now playing"), this, SLOT(clearPlaylist()));
+    contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    contextMenu->exec(point);
+}
+
+void NowPlayingWindow::onShareClicked()
+{
+#ifdef Q_WS_MAEMO_5
+    // The code used here (share.(h/cpp/ui) was taken from filebox's source code
+    // C) 2010. Matias Perez
+    QStringList list;
+    QString clip = ui->songPlaylist->currentItem()->data(UserRoleSongURI).toString();
+    qDebug() << ui->songPlaylist->selectedItems().first()->data(UserRoleSongURI).toString();
+    list.append(clip);
+    Share *share = new Share(this, list);
+    share->setAttribute(Qt::WA_DeleteOnClose);
+    share->show();
+#endif
+}
 #endif

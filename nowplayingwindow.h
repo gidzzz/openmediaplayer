@@ -14,6 +14,7 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
+    #include "share.h"
 #endif
 
 #ifdef MAFW
@@ -57,10 +58,12 @@ private:
     void connectSignals();
     QTimer *volumeTimer;
     QTimer *positionTimer;
+    bool playlistRequested;
     int songDuration;
     QGraphicsScene *albumArtScene;
     mirror *m;
     void keyPressEvent(QKeyEvent *);
+    QMenu *contextMenu;
 
 private slots:
     void toggleVolumeSlider();
@@ -79,16 +82,19 @@ private slots:
     void onPlaylistItemActivated(QListWidgetItem*);
     void updatePlaylistState();
     void clearPlaylist();
+    void onPlaylistChanged();
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
-    void onShuffleButtonPressed();
-    void onRepeatButtonPressed();
+    void onRepeatButtonToggled(bool);
+    void onShuffleButtonToggled(bool);
     void orientationChanged();
     void onNextButtonPressed();
     void onPrevButtonPressed();
     void onSliderPressed();
     void onSliderReleased();
+    void onContextMenuRequested(const QPoint &point);
+    void onShareClicked();
 };
 
 #endif // NOWPLAYINGWINDOW_H
