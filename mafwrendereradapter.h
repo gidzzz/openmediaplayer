@@ -48,6 +48,8 @@ class MafwRendererAdapter : public QObject
            int seconds);
   void getPosition();
   void getCurrentMetadata();
+  void setVolume(int volume);
+  void getVolume();
   
   bool assignPlaylist(MafwPlaylist* playlist);
   
@@ -74,6 +76,7 @@ class MafwRendererAdapter : public QObject
   void signalSetPosition(int position, QString error);
   void signalGetPosition(int position,QString error);
   void signalGetCurrentMetadata(QString name, QString album, QString artist, QString object_id, QString error);
+  void signalGetVolume(int volume);
 
  private:
   void findRenderer();

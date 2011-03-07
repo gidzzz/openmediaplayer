@@ -323,3 +323,27 @@ bool MafwRendererAdapter::assignPlaylist(MafwPlaylist* playlist)
     }
     return false;
 }
+
+void MafwRendererAdapter::setVolume(int volume)
+{
+    if(mafw_renderer)
+    {
+        GValue value;
+        memset(&value, 0, sizeof(value));
+        g_value_init (&value, G_TYPE_UINT);
+        g_value_set_uint (&value, volume);
+        mafw_extension_set_property(MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_VOLUME, &value);
+    }
+}
+
+void MafwRendererAdapter::getVolume()
+{
+    if(mafw_renderer)
+    {
+#ifdef DEBUG
+        qDebug("MafwRendererAdapter::getVolume");
+#endif
+        mafw_extension_get_property (MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_VOLUME,
+                                     MafwRendererSignalHelper::get_property_cb, this);
+    }
+}
