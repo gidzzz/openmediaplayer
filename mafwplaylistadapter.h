@@ -28,6 +28,7 @@ public:
 
 signals:
     void onGetItems(QString object_id, GHashTable *metadata, guint index);
+    void playlistChanged();
 
 public slots:
     void getItems();
@@ -39,6 +40,7 @@ private:
 
 private slots:
     void onGetStatus(MafwPlaylist* playlist, uint, MafwPlayState, const char*, QString);
+    void onPlaylistChanged(GObject* playlist);
 };
 
 #endif // MAFWPLAYLISTADAPTER_H

@@ -19,16 +19,13 @@
 #include "mafwplaylistadapter.h"
 
 MafwPlaylistAdapter::MafwPlaylistAdapter(QObject *parent, MafwRendererAdapter *mra) :
-    QObject(parent)
-#ifdef MAFW
-    ,mafwrenderer(mra)
-#endif
+    QObject(parent),
+    mafwrenderer(mra)
 {
-#ifdef MAFW
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
+    connect(mafwrenderer, SIGNAL(playlistChanged(GObject*)), this, SLOT(onPlaylistChanged(GObject*)));
     QTimer::singleShot(100, mafwrenderer, SLOT(getStatus()));
-#endif
 }
 
 void MafwPlaylistAdapter::clear()
@@ -40,9 +37,10 @@ void MafwPlaylistAdapter::clear()
 bool MafwPlaylistAdapter::isRepeat()
 {
     if(mafw_playlist) {
-        return mafw_playlist_get_repeat (this->mafw_playlist);
-    } else {
-        return false;
+        if (mafw_playlist_get_repeat (this->mafw_playlist))
+            return true;
+        else
+            return false;
     }
 }
 
@@ -97,19 +95,24 @@ void MafwPlaylistAdapter::appendItem(QString objectId)
 
 void MafwPlaylistAdapter::getItems()
 {
+#ifdef DEBUG
     qDebug() << "MafwPlaylistAdapter::getItems";
-    if(mafw_playlist) {
+#endif
+    if (mafw_playlist) {
         mafw_playlist_get_items_md (this->mafw_playlist,
                                     0,
                                     -1,
                                     MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                      MAFW_METADATA_KEY_ALBUM,
                                                      MAFW_METADATA_KEY_ARTIST,
+                                                     MAFW_METADATA_KEY_URI,
                                                      MAFW_METADATA_KEY_DURATION),
                                     MafwPlaylistAdapter::get_items_cb,
                                     this, NULL);
     }
+#ifdef DEBUG
     qDebug() << "MafwPlaylistAdapter::getItems called successfully";
+#endif
 }
 
 void MafwPlaylistAdapter::get_items_cb(MafwPlaylist*,
@@ -123,8 +126,17 @@ void MafwPlaylistAdapter::get_items_cb(MafwPlaylist*,
 
 void MafwPlaylistAdapter::onGetStatus(MafwPlaylist* playlist, uint, MafwPlayState, const char*, QString)
 {
+#ifdef DEBUG
+    qDebug() << "MafwPlaylistAdapter::onGetStatus";
+#endif
     this->mafw_playlist = playlist;
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
-    this->getItems();
+}
+
+void MafwPlaylistAdapter::onPlaylistChanged(GObject* playlist)
+{
+    qDebug() << "MafwPlaylistAdapter::onPlaylistChanged";
+    this->mafw_playlist = MAFW_PLAYLIST(playlist);
+    emit playlistChanged();
 }
