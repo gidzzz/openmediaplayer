@@ -18,12 +18,13 @@
 
 #include "internetradiowindow.h"
 
-InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa) :
+InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
         QMainWindow(parent),
         ui(new Ui::InternetRadioWindow)
 #ifdef MAFW
         ,mafwrenderer(mra),
-        mafwTrackerSource(msa)
+        mafwTrackerSource(msa),
+        playlist(pls)
 #endif
 {
     ui->setupUi(this);
@@ -31,6 +32,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* m
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
+    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     InternetRadioDelegate *delegate = new InternetRadioDelegate(ui->listWidget);
     ui->listWidget->setItemDelegate(delegate);
     window = new RadioNowPlayingWindow(this);

@@ -14,6 +14,7 @@
 #include "nowplayingindicator.h"
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
+    #include "fmtxdialog.h"
 #endif
 
 #include "ui_internetradiowindow.h"
@@ -21,8 +22,10 @@
 #include "delegates/internetradiodelegate.h"
 #include "includes.h"
 
-#ifdef Q_WS_MAEMO_5
-    #include "fmtxdialog.h"
+#ifdef MAFW
+    #include "mafwrendereradapter.h"
+    #include "mafwsourceadapter.h"
+    #include "mafwplaylistadapter.h"
 #endif
 
 namespace Ui {
@@ -34,7 +37,7 @@ class InternetRadioWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit InternetRadioWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0);
+    explicit InternetRadioWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~InternetRadioWindow();
 
 private:
@@ -53,6 +56,7 @@ private:
 #ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
+    MafwPlaylistAdapter* playlist;
     unsigned int browseAllStationsId;
 #endif
 
