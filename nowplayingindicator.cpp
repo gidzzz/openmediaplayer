@@ -33,6 +33,7 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     this->stopAnimation();
 #ifdef Q_WS_MAEMO_5
     deviceEvents = new Maemo5DeviceEvents(this);
+    setAttribute(Qt::WA_Maemo5NonComposited);
 #endif
 }
 
@@ -67,7 +68,7 @@ void NowPlayingIndicator::onStateChanged(int state)
     mafwState = state;
     if(state == Paused || state == Stopped)
         this->stopAnimation();
-    else if(state == Playing)
+    else if(state == Playing && !timer->isActive())
         timer->start();
 }
 #endif
@@ -125,16 +126,16 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *)
     // If video was running, show its window.
     // If x was running, shows its window.
     // TODO: Update code as mafw is integrated.
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     NowPlayingWindow *songs = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
 #else
-    NowPlayingWindow *songs = new NowPlayingWindow(this, 0);
+    NowPlayingWindow *songs = new NowPlayingWindow(this);
 #endif
     songs->setAttribute(Qt::WA_DeleteOnClose);
     songs->show();
 }
 
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
 void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
 {
 #ifdef DEBUG
@@ -146,11 +147,10 @@ void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, 
 
 void NowPlayingIndicator::showEvent(QShowEvent *)
 {
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     mafwrenderer->getStatus();
-    if(this->mafwState == Playing)
-        if(!timer->isActive())
-            timer->start();
+    if (this->mafwState == Playing && !timer->isActive())
+        timer->start();
 #endif
 }
 
@@ -178,7 +178,7 @@ void NowPlayingIndicator::setSources(MafwRendererAdapter *renderer, MafwSourceAd
     this->playlist = pls;
     this->connectSignals();
 #ifdef Q_WS_MAEMO_5
-    mafwrenderer->getStatus();
+    QTimer::singleShot(1000, mafwrenderer, SLOT(getStatus()));
 #endif
 }
 #endif
