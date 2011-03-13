@@ -110,6 +110,8 @@ void MainWindow::connectSignals()
     // TODO: Connect this to a slot.
     // connect(ui->indicator, SIGNAL(clicked()), this, SLOT();
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
+    connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
@@ -184,6 +186,12 @@ void MainWindow::processListClicks(QListWidgetItem* item)
     else if(itemName == "radio_button")
         myInternetRadioWindow->show();
     ui->listWidget->clearSelection();
+}
+
+void MainWindow::openSettings()
+{
+    SettingsDialog *settings = new SettingsDialog(this);
+    settings->show();
 }
 
 #ifdef MAFW
@@ -276,8 +284,26 @@ void MainWindow::focusInEvent(QFocusEvent *)
     ui->indicator->triggerAnimation();
 }
 
+void MainWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::WindowActivate) {
+        qDebug() << "Window activated";
+        ui->indicator->triggerAnimation();
+    }
+    else if (event->type() == QEvent::WindowDeactivate) {
+        qDebug() << "Window deactivated";
+        ui->indicator->stopAnimation();
+    }
+}
+
 void MainWindow::focusOutEvent(QFocusEvent *)
 {
     qDebug() << "MainWindow: focus lost";
     ui->indicator->stopAnimation();
+}
+
+void MainWindow::closeEvent(QCloseEvent *)
+{
+    if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
+        mafwrenderer->stop();
 }

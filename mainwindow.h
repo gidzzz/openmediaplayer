@@ -12,6 +12,7 @@
 #include "ui_mainwindow.h"
 #include "nowplayingindicator.h"
 #include "includes.h"
+#include "settingsdialog.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
@@ -43,6 +44,8 @@ private:
     void paintEvent(QPaintEvent*);
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
+    void changeEvent(QEvent *);
+    void closeEvent(QCloseEvent *);
 
     void setButtonIcons();
     void connectSignals();
@@ -64,6 +67,7 @@ private slots:
     void orientationChanged();
     void showAbout();
     void processListClicks(QListWidgetItem*);
+    void openSettings();
 #ifdef Q_WS_MAEMO_5
     void trackerSourceReady();
     void radioSourceReady();
