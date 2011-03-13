@@ -13,6 +13,7 @@
 #ifdef MAFW
     #include "mafwsourceadapter.h"
     #include "mafwrendereradapter.h"
+    #include "mafwplaylistadapter.h"
 #endif
 
 #include "ui_singlealbumview.h"
@@ -30,7 +31,7 @@ class SingleAlbumView : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit SingleAlbumView(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0);
+    explicit SingleAlbumView(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~SingleAlbumView();
     void browseAlbum(QString);
     void browseSingleAlbum(QString);
@@ -47,6 +48,7 @@ private:
 #ifdef MAFW
     MafwSourceAdapter *mafwTrackerSource;
     MafwRendererAdapter* mafwrenderer;
+    MafwPlaylistAdapter* playlist;
     unsigned int browseAllSongsId;
 #endif
 

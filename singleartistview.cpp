@@ -19,12 +19,13 @@
 #include "singleartistview.h"
 #include "ui_singleartistview.h"
 
-SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa) :
+SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
     QMainWindow(parent),
     ui(new Ui::SingleArtistView)
 #ifdef MAFW
     ,mafwrenderer(mra),
-    mafwTrackerSource(msa)
+    mafwTrackerSource(msa),
+    playlist(pls)
 #endif
 {
     ui->setupUi(this);

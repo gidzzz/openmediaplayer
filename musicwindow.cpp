@@ -276,7 +276,7 @@ void MusicWindow::loadViewState()
 #ifdef MAFW
 void MusicWindow::onAlbumSelected(QModelIndex index)
 {
-    SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource);
+    SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     albumView->setAttribute(Qt::WA_DeleteOnClose);
     albumView->browseAlbum(index.data(UserRoleSongAlbum).toString());
     albumView->show();
@@ -287,12 +287,12 @@ void MusicWindow::onArtistSelected(QModelIndex index)
 {
     int songCount = index.data(UserRoleAlbumCount).toInt();
     if(songCount == 0 || songCount == 1) {
-        SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource);
+        SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         albumView->browseSingleAlbum(index.data(UserRoleSongName).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->show();
     } else if(songCount > 1) {
-        SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource);
+        SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         artistView->setAttribute(Qt::WA_DeleteOnClose);
         artistView->show();
     }

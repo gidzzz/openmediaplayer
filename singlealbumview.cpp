@@ -18,12 +18,13 @@
 
 #include "singlealbumview.h"
 
-SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa) :
+SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
     QMainWindow(parent),
     ui(new Ui::SingleAlbumView)
 #ifdef MAFW
     ,mafwTrackerSource(msa),
-    mafwrenderer(mra)
+    mafwrenderer(mra),
+    playlist(pls)
 #endif
 {
     ui->setupUi(this);
@@ -185,7 +186,7 @@ void SingleAlbumView::browseSingleAlbum(QString name)
 
 void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 {
-    NowPlayingWindow *npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource);
+    NowPlayingWindow *npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     npWindow->setAttribute(Qt::WA_DeleteOnClose);
     npWindow->onSongSelected(ui->songList->currentRow()+1,
                              ui->songList->count(),
