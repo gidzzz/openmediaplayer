@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     delegates/singlealbumviewdelegate.cpp \
     singleartistview.cpp \
     mafwplaylistadapter.cpp \
-    mafwplaylistmanageradapter.cpp
+    mafwplaylistmanageradapter.cpp \
+    settingsdialog.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -55,7 +56,8 @@ HEADERS  += mainwindow.h \
     delegates/singlealbumviewdelegate.h \
     singleartistview.h \
     mafwplaylistadapter.h \
-    mafwplaylistmanageradapter.h
+    mafwplaylistmanageradapter.h \
+    settingsdialog.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -68,7 +70,8 @@ FORMS    += mainwindow.ui \
     nowplayingindicator.ui \
     radionowplayingwindow.ui \
     singlealbumview.ui \
-    singleartistview.ui
+    singleartistview.ui \
+    settingsdialog.ui
 
 CONFIG += mobility
 MOBILITY = sensors
