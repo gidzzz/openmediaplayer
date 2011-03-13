@@ -55,6 +55,10 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
 
+#ifdef Q_WS_MAEMO_5
+    lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
+#endif
+
     this->connectSignals();
 
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
@@ -77,7 +81,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     }
     ui->toolBarWidget->setFixedHeight(ui->toolBarWidget->sizeHint().height());
 #ifdef MAFW
-    lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
     mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
     mafwrenderer->getVolume();
@@ -162,6 +165,8 @@ void NowPlayingWindow::setButtonIcons()
 
 void NowPlayingWindow::metadataChanged(QString name, QVariant value)
 {
+    this->mafwrenderer->getCurrentMetadata();
+
     if(name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
         ui->songTitleLabel->setText(value.toString());
         system(QString("fmtx_client -s '" + value.toString() + "' -t '" + value.toString() + "' > /dev/null &").toUtf8());
@@ -172,8 +177,6 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
         ui->albumNameLabel->setText(value.toString());
     if(name == "renderer-art-uri")
         this->setAlbumImage(value.toString());
-
-    this->mafwrenderer->getCurrentMetadata();
 }
 
 #ifdef MAFW
@@ -232,6 +235,7 @@ void NowPlayingWindow::connectSignals()
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
+    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int, char*)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
@@ -244,8 +248,6 @@ void NowPlayingWindow::connectSignals()
             this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
     connect(playlist, SIGNAL(playlistChanged()), this, SLOT(onPlaylistChanged()));
-    connect(ui->repeatButton, SIGNAL(toggled(bool)), this, SLOT(onRepeatButtonToggled(bool)));
-    connect(ui->repeatButton, SIGNAL(toggled(bool)), this, SLOT(onShuffleButtonToggled(bool)));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
@@ -253,6 +255,7 @@ void NowPlayingWindow::connectSignals()
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
     connect(ui->songPlaylist, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onPlaylistItemActivated(QListWidgetItem*)));
+    connect(lastPlayingSong, SIGNAL(valueChanged()), this, SLOT(onGconfValueChanged()));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -295,8 +298,10 @@ void NowPlayingWindow::onRendererMetadataRequested(QString, QString, QString, QS
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,
                                                                               MAFW_METADATA_KEY_ALBUM_ART_URI,
+                                                                              MAFW_METADATA_KEY_RENDERER_ART_URI,
                                                                               MAFW_METADATA_KEY_DURATION,
-                                                                              MAFW_METADATA_KEY_IS_SEEKABLE));
+                                                                              MAFW_METADATA_KEY_IS_SEEKABLE,
+                                                                              MAFW_METADATA_KEY_LYRICS));
     if(!error.isNull() && !error.isEmpty())
         qDebug() << error;
 }
@@ -307,6 +312,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
     QString artist;
     QString album;
     QString albumArt;
+    QString lyrics;
     bool isSeekable;
     int duration = -1;
     QTime t(0, 0);
@@ -342,8 +348,20 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
                 this->setAlbumImage(QString::fromUtf8(filename));
             }
         } else {
-            this->setAlbumImage(albumImage);
+            v = mafw_metadata_first(metadata,
+                                    MAFW_METADATA_KEY_RENDERER_ART_URI);
+            if(v != NULL) {
+                const gchar* file_uri = g_value_get_string(v);
+                gchar* filename = NULL;
+                if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
+                    this->setAlbumImage(QString::fromUtf8(filename));
+            } else
+                this->setAlbumImage(albumImage);
         }
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_LYRICS);
+        lyrics = v ? QString::fromUtf8(g_value_get_string(v)) : "NOLYRICS";
 
         ui->songTitleLabel->setText(title);
         ui->artistLabel->setText(artist);
@@ -516,6 +534,20 @@ void NowPlayingWindow::showEvent(QShowEvent *)
     if(positionTimer->isActive())
         ui->songProgress->setEnabled(true);
 }
+
+void NowPlayingWindow::onGconfValueChanged()
+{
+    this->setSongNumber(lastPlayingSong->value().toInt(), ui->songPlaylist->count());
+    ui->songPlaylist->setCurrentRow(lastPlayingSong->value().toInt());
+}
+
+void NowPlayingWindow::onMediaChanged(int index, char*)
+{
+    lastPlayingSong->set(index);
+    ui->songPlaylist->setCurrentRow(index);
+    ui->songPlaylist->scrollToItem(ui->songPlaylist->item(index));
+}
+
 #endif
 
 #endif
@@ -536,12 +568,12 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
         mafwrenderer->next();
     else if(e->key() == Qt::Key_Left)
         mafwrenderer->previous();
-    else if(e->key() == Qt::Key_Shift) {
+    /*else if(e->key() == Qt::Key_Shift) {
         if(ui->menuNow_playing_menu->isHidden())
             ui->menuNow_playing_menu->show();
         else
             ui->menuNow_playing_menu->hide();
-    }
+    }*/
 }
 
 #ifdef MAFW

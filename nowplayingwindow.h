@@ -83,6 +83,8 @@ private slots:
     void updatePlaylistState();
     void clearPlaylist();
     void onPlaylistChanged();
+    void onGconfValueChanged();
+    void onMediaChanged(int index, char*);
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
