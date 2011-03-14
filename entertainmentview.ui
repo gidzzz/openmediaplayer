@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EntertainmentView</class>
+ <widget class="QMainWindow" name="EntertainmentView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QDeclarativeView" name="declarativeView">
+      <property name="resizeMode">
+       <enum>QDeclarativeView::SizeRootObjectToView</enum>
+      </property>
+      <property name="source">
+       <url>
+        <string>file:///opt/usr/share/entertainment-view/qml/entertainment-view-test/entertainment-view-test.qml</string>
+       </url>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QDeclarativeView</class>
+   <extends>QGraphicsView</extends>
+   <header>QtDeclarative/QDeclarativeView</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
