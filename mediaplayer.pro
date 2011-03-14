@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui dbus
+QT       += core gui dbus declarative opengl
 
 TARGET = mediaplayer
 TEMPLATE = app
@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     singleartistview.cpp \
     mafwplaylistadapter.cpp \
     mafwplaylistmanageradapter.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    entertainmentview.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -57,7 +58,8 @@ HEADERS  += mainwindow.h \
     singleartistview.h \
     mafwplaylistadapter.h \
     mafwplaylistmanageradapter.h \
-    settingsdialog.h
+    settingsdialog.h \
+    entertainmentview.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -71,7 +73,8 @@ FORMS    += mainwindow.ui \
     radionowplayingwindow.ui \
     singlealbumview.ui \
     singleartistview.ui \
-    settingsdialog.ui
+    settingsdialog.ui \
+    entertainmentview.ui
 
 CONFIG += mobility
 MOBILITY = sensors
@@ -111,3 +114,8 @@ unix:!symbian {
     }
     INSTALLS += target
 }
+
+OTHER_FILES += \
+    entertainmentview.qml
+
+RESOURCES +=
