@@ -38,6 +38,7 @@ public:
 
 private:
     Ui::SingleAlbumView *ui;
+    NowPlayingWindow *npWindow;
     QString albumName;
     void keyPressEvent(QKeyEvent *);
 #ifdef Q_WS_MAEMO_5
@@ -59,6 +60,8 @@ private slots:
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onItemSelected(QListWidgetItem*);
 #endif
+    void createPlaylist(bool);
+    void onShuffleButtonClicked();
 };
 
 #endif // SINGLEALBUMVIEW_H

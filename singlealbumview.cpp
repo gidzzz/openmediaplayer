@@ -44,6 +44,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     ui->verticalLayout->addWidget(shuffleAllButton);
     ui->verticalLayout->addWidget(ui->songList);
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+    connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
@@ -61,7 +62,6 @@ void SingleAlbumView::listSongs()
     ui->songList->clear();
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
-    qDebug(this->albumName.toUtf8());
 
     this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumName.toUtf8(), false, NULL, "+track",
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -83,7 +83,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int, uint, QString objectId,
     QString title;
     QString artist;
     QString album;
-    //QString genre("--");
     int duration = -1;
     int trackNumber;
     if(metadata != NULL) {
@@ -105,16 +104,10 @@ void SingleAlbumView::browseAllSongs(uint browseId, int, uint, QString objectId,
         trackNumber = v ? g_value_get_int (v) : -1;
 
         QListWidgetItem *item = new QListWidgetItem(ui->songList);
-        qDebug(artist.toUtf8());
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
-
-        qDebug(title.toUtf8());
-        qDebug(artist.toUtf8());
-        qDebug(album.toUtf8());
-        qDebug(objectId.toUtf8());
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         if(v != NULL) {
@@ -186,7 +179,7 @@ void SingleAlbumView::browseSingleAlbum(QString name)
 
 void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 {
-    NowPlayingWindow *npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     npWindow->setAttribute(Qt::WA_DeleteOnClose);
     npWindow->onSongSelected(ui->songList->currentRow()+1,
                              ui->songList->count(),
@@ -199,10 +192,13 @@ void SingleAlbumView::onItemSelected(QListWidgetItem *item)
         npWindow->setAlbumImage(item->data(UserRoleAlbumArt).toString());
     else
         npWindow->setAlbumImage(albumImage);
-    npWindow->show();
-#ifdef Q_WS_MAEMO_5
-    mafwrenderer->playObject(item->data(UserRoleObjectID).toString().toUtf8());
-#endif
+
+    this->createPlaylist(false);
+
+    mafwrenderer->gotoIndex(ui->songList->currentRow());
+    mafwrenderer->play();
+    mafwrenderer->resume();
+
     ui->songList->clearSelection();
 }
 
@@ -218,4 +214,37 @@ void SingleAlbumView::keyPressEvent(QKeyEvent *e)
 {
     if(e->key() == Qt::Key_Backspace)
         this->close();
+}
+
+void SingleAlbumView::onShuffleButtonClicked()
+{
+    this->createPlaylist(true);
+}
+
+void SingleAlbumView::createPlaylist(bool shuffle)
+{
+#ifdef MAFW
+    if (ui->songList->count() > 0) {
+        qDebug() << "Clearing playlist";
+        playlist->clear();
+        qDebug() << "Playlist cleared";
+        for (int i = 0; i < ui->songList->count(); i++) {
+            QListWidgetItem *item = ui->songList->item(i);
+            playlist->appendItem(item->data(UserRoleObjectID).toString());
+        }
+
+        qDebug() << "Playlist created";
+
+        if (shuffle) {
+            playlist->setShuffled(true);
+
+            npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+            npWindow->setAttribute(Qt::WA_DeleteOnClose);
+            npWindow->onShuffleButtonToggled(true);
+        }
+        npWindow->show();
+        mafwrenderer->play();
+        mafwrenderer->resume();
+    }
+#endif
 }
