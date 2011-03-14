@@ -41,7 +41,8 @@ bool MafwPlaylistAdapter::isRepeat()
             return true;
         else
             return false;
-    }
+    } else
+        return false;
 }
 
 void MafwPlaylistAdapter::setRepeat(bool repeat)
