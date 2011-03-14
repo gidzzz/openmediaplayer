@@ -11,6 +11,7 @@
 #include "ui_nowplayingwindow.h"
 #include "includes.h"
 #include "delegates/playlistdelegate.h"
+#include "entertainmentview.h"
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
@@ -38,13 +39,20 @@ public:
     explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~NowPlayingWindow();
     void listSongs(QString);
+#ifdef MAFW
+    void updatePlaylistState();
+#endif
 
 public slots:
     void onSongSelected(int, int, QString, QString, QString, int);
     void setAlbumImage(QString);
+#ifdef MAFW
+    void onShuffleButtonToggled(bool);
+#endif
 
 private:
     Ui::NowPlayingWindow *ui;
+    EntertainmentView *entertainmentView;
 #ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
@@ -61,6 +69,7 @@ private:
     bool playlistRequested;
     int songDuration;
     QGraphicsScene *albumArtScene;
+    QString albumArtUri;
     mirror *m;
     void keyPressEvent(QKeyEvent *);
     QMenu *contextMenu;
@@ -80,7 +89,6 @@ private slots:
     void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
     void setPosition(int);
     void onPlaylistItemActivated(QListWidgetItem*);
-    void updatePlaylistState();
     void clearPlaylist();
     void onPlaylistChanged();
     void onGconfValueChanged();
@@ -89,7 +97,6 @@ private slots:
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
     void onRepeatButtonToggled(bool);
-    void onShuffleButtonToggled(bool);
     void orientationChanged();
     void onNextButtonPressed();
     void onPrevButtonPressed();
@@ -97,6 +104,9 @@ private slots:
     void onSliderReleased();
     void onContextMenuRequested(const QPoint &point);
     void onShareClicked();
+    void showEntertainmentview();
+    void updateEntertainmentViewMetadata();
+    void nullEntertainmentView();
 };
 
 #endif // NOWPLAYINGWINDOW_H

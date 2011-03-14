@@ -641,6 +641,7 @@ border: none;
     <addaction name="actionFM_Transmitter"/>
     <addaction name="actionClear_now_playing"/>
     <addaction name="actionSave_playlist"/>
+    <addaction name="actionEntertainment_view"/>
    </widget>
    <addaction name="menuNow_playing_menu"/>
   </widget>
@@ -657,6 +658,11 @@ border: none;
   <action name="actionSave_playlist">
    <property name="text">
     <string>Save playlist</string>
+   </property>
+  </action>
+  <action name="actionEntertainment_view">
+   <property name="text">
+    <string>Entertainment view</string>
    </property>
   </action>
  </widget>

@@ -37,6 +37,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     positionTimer->setInterval(1000);
 
     albumArtScene = new QGraphicsScene(ui->view);
+    entertainmentView = 0;
 
     ui->volumeSlider->hide();
 
@@ -96,6 +97,7 @@ NowPlayingWindow::~NowPlayingWindow()
 void NowPlayingWindow::setAlbumImage(QString image)
 {
     qDeleteAll(albumArtScene->items());
+    this->albumArtUri = image;
     ui->view->setScene(albumArtScene);
     albumArtScene->setBackgroundBrush(QBrush(Qt::transparent));
     m = new mirror();
@@ -232,6 +234,7 @@ void NowPlayingWindow::connectSignals()
     connect(ui->songProgress, SIGNAL(sliderPressed()), this, SLOT(onSliderPressed()));
     connect(ui->songProgress, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
     connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentview()));
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
@@ -371,6 +374,8 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             ui->songProgress->setEnabled(true);
     }
 
+    this->updateEntertainmentViewMetadata();
+
     if(!error.isNull() && !error.isEmpty())
         qDebug() << error;
 }
@@ -509,13 +514,14 @@ void NowPlayingWindow::updateProgressBar(int position, QString)
     }
 }
 
-void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
+void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *, QString)
 {
     if (!this->playlistRequested) {
         QTimer::singleShot(250, playlist, SLOT(getItems()));
         this->updatePlaylistState();
         this->playlistRequested = true;
     }
+    this->setSongNumber(index+1, ui->songPlaylist->count());
     this->stateChanged(state);
 }
 
@@ -537,7 +543,7 @@ void NowPlayingWindow::showEvent(QShowEvent *)
 
 void NowPlayingWindow::onGconfValueChanged()
 {
-    this->setSongNumber(lastPlayingSong->value().toInt(), ui->songPlaylist->count());
+    this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
     ui->songPlaylist->setCurrentRow(lastPlayingSong->value().toInt());
 }
 
@@ -631,7 +637,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         }
 
         ui->songPlaylist->insertItem(position, item);
-        this->setSongNumber(index+1, ui->songPlaylist->count());
+        this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
         //ui->songPlaylist->setCurrentItem(ui->songPlaylist->findItems(lastPlayingSong->value().toString(), Qt::MatchExactly).first());
         ui->songPlaylist->setCurrentRow(lastPlayingSong->value().toInt());
         ui->songPlaylist->scrollToItem(ui->songPlaylist->currentItem());
@@ -713,3 +719,24 @@ void NowPlayingWindow::onShareClicked()
 #endif
 }
 #endif
+
+void NowPlayingWindow::showEntertainmentview()
+{
+    entertainmentView = new EntertainmentView(this);
+    entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
+    connect(entertainmentView, SIGNAL(destroyed()), this, SLOT(nullEntertainmentView()));
+    entertainmentView->setAttribute(Qt::WA_Maemo5StackedWindow);
+    this->updateEntertainmentViewMetadata();
+    entertainmentView->showFullScreen();
+}
+
+void NowPlayingWindow::updateEntertainmentViewMetadata()
+{
+    if (entertainmentView)
+        entertainmentView->setMetadata(ui->songTitleLabel->text(), ui->albumNameLabel->text(), ui->artistLabel->text(), this->albumArtUri);
+}
+
+void NowPlayingWindow::nullEntertainmentView()
+{
+    entertainmentView = 0;
+}
