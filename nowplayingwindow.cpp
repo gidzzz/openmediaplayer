@@ -723,6 +723,9 @@ void NowPlayingWindow::onShareClicked()
 void NowPlayingWindow::showEntertainmentview()
 {
     entertainmentView = new EntertainmentView(this);
+#ifdef MAFW
+    disconnect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
+#endif
     entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
     connect(entertainmentView, SIGNAL(destroyed()), this, SLOT(nullEntertainmentView()));
     entertainmentView->setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -739,4 +742,8 @@ void NowPlayingWindow::updateEntertainmentViewMetadata()
 void NowPlayingWindow::nullEntertainmentView()
 {
     entertainmentView = 0;
+#ifdef MAFW
+    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
+    mafwrenderer->getPosition();
+#endif
 }
