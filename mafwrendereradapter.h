@@ -86,5 +86,6 @@ class MafwRendererAdapter : public QObject
   void disconnectRendererSignals();
   MafwRegistry* mafw_registry;
   MafwRenderer* mafw_renderer;
+  GValue GVolume;
 };
 #endif

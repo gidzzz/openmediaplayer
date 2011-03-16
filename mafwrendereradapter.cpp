@@ -21,6 +21,8 @@
 MafwRendererAdapter::MafwRendererAdapter()
 {
     this->mafw_renderer = NULL;
+    memset(&GVolume, 0, sizeof(GVolume));
+    g_value_init (&GVolume, G_TYPE_UINT);
     g_warning("start\n");
     mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
     mafw_shared_init(mafw_registry, NULL);
@@ -329,11 +331,8 @@ void MafwRendererAdapter::setVolume(int volume)
 {
     if(mafw_renderer)
     {
-        GValue value;
-        memset(&value, 0, sizeof(value));
-        g_value_init (&value, G_TYPE_UINT);
-        g_value_set_uint (&value, volume);
-        mafw_extension_set_property(MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_VOLUME, &value);
+        g_value_set_uint (&GVolume, volume);
+        mafw_extension_set_property(MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_VOLUME, &GVolume);
     }
 }
 
