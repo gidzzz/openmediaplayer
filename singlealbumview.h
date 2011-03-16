@@ -33,8 +33,12 @@ class SingleAlbumView : public QMainWindow
 public:
     explicit SingleAlbumView(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~SingleAlbumView();
+#ifdef MAFW
     void browseAlbum(QString);
     void browseSingleAlbum(QString);
+    void browseAlbumByObjectId(QString objectId);
+    bool isSingleAlbum;
+#endif
 
 private:
     Ui::SingleAlbumView *ui;

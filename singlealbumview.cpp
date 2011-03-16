@@ -29,6 +29,12 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
 {
     ui->setupUi(this);
     QString shuffleText(tr("Shuffle songs"));
+    ui->centralwidget->setLayout(ui->verticalLayout);
+
+#ifdef MAFW
+    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+#endif
+
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     shuffleAllButton = new QMaemo5ValueButton(shuffleText, this);
@@ -46,6 +52,11 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
     connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+#ifdef MAFW
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+            this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+#endif
+    this->orientationChanged();
 }
 
 SingleAlbumView::~SingleAlbumView()
@@ -59,9 +70,12 @@ void SingleAlbumView::listSongs()
 #ifdef DEBUG
     qDebug() << "MusicWindow: Source ready";
 #endif
+
     ui->songList->clear();
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+
+#ifdef Q_WS_MAEMO_5
+    setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
+#endif
 
     this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumName.toUtf8(), false, NULL, "+track",
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -74,11 +88,28 @@ void SingleAlbumView::listSongs()
                                                              0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void SingleAlbumView::browseAllSongs(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString)
+void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
     if(browseId != browseAllSongsId)
       return;
 
+    // Sometimes MAFW returns another object ID which ends with / and contains
+    // no songs, if this happens, browse songs again with that object ID.
+    if (objectId.endsWith("/")) {
+        this->albumName = this->albumName + "/";
+        this->listSongs();
+        return;
+    }
+
+    // If we're browsing an artist with a single album, then we only have to list
+    // songs from one album, this is returned as the object ID, browse that.
+    if (this->isSingleAlbum) {
+        this->albumName = objectId;
+        // Unset the boolean so this doesn't loop
+        this->isSingleAlbum = false;
+        this->listSongs();
+        return;
+    }
 
     QString title;
     QString artist;
@@ -143,9 +174,13 @@ void SingleAlbumView::browseAllSongs(uint browseId, int, uint, QString objectId,
         itemTitle.append(title);
         item->setText(itemTitle);
         ui->songList->addItem(item);
-        this->setWindowTitle(item->data(UserRoleSongAlbum).toString());
     }
+
 #ifdef Q_WS_MAEMO_5
+    if (remainingCount == 0)
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+    else
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
     QString songCount;
     songCount = QString::number(ui->songList->count());
     songCount.append(" ");
@@ -157,6 +192,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int, uint, QString objectId,
 #endif
 }
 
+#ifdef MAFW
 void SingleAlbumView::browseAlbum(QString name)
 {
     this->albumName = "localtagfs::music/albums/" + name;
@@ -169,13 +205,23 @@ void SingleAlbumView::browseAlbum(QString name)
 
 void SingleAlbumView::browseSingleAlbum(QString name)
 {
-    this->albumName = "localtagfs::music/artists/" + name + "/";
+    this->albumName = "localtagfs::music/artists/" + name;
     this->setWindowTitle(name);
     if(mafwTrackerSource->isReady())
         this->listSongs();
     else
         connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
 }
+
+void SingleAlbumView::browseAlbumByObjectId(QString objectId)
+{
+    this->albumName = objectId;
+    if(mafwTrackerSource->isReady())
+        this->listSongs();
+    else
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
+}
+#endif
 
 void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 {
@@ -208,6 +254,10 @@ void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 void SingleAlbumView::orientationChanged()
 {
     ui->songList->scroll(1,1);
+
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->raise();
 }
 
 void SingleAlbumView::keyPressEvent(QKeyEvent *e)
@@ -225,23 +275,29 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 {
 #ifdef MAFW
     if (ui->songList->count() > 0) {
+#ifdef DEBUG
         qDebug() << "Clearing playlist";
+#endif
         playlist->clear();
+#ifdef DEBUG
         qDebug() << "Playlist cleared";
+#endif
         for (int i = 0; i < ui->songList->count(); i++) {
             QListWidgetItem *item = ui->songList->item(i);
             playlist->appendItem(item->data(UserRoleObjectID).toString());
         }
 
+#ifdef DEBUG
         qDebug() << "Playlist created";
+#endif
 
         if (shuffle) {
             playlist->setShuffled(true);
-
             npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
             npWindow->setAttribute(Qt::WA_DeleteOnClose);
             npWindow->onShuffleButtonToggled(true);
         }
+
         npWindow->show();
         mafwrenderer->play();
         mafwrenderer->resume();
