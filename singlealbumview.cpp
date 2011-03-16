@@ -33,6 +33,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
 
 #ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    this->isSingleAlbum = false;
 #endif
 
 #ifdef Q_WS_MAEMO_5
