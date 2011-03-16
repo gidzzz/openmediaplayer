@@ -7,6 +7,7 @@
 #define videosIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png"
 #define radioIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png"
 #define shuffleIcon "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png"
+#define shuffleIcon124 "/usr/share/icons/hicolor/124x124/hildon/mediaplayer_default_shuffle.png"
 #define backgroundImage "/etc/hildon/theme/mediaplayer/background.png"
 #define defaultAlbumArt "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_default_album.png"
 #define defaultAlbumArtMedium "/usr/share/icons/hicolor/124x124/hildon/mediaplayer_default_album.png"
