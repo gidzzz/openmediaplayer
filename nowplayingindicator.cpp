@@ -178,5 +178,6 @@ void NowPlayingIndicator::setSources(MafwRendererAdapter *renderer, MafwSourceAd
     this->mafwTrackerSource = source;
     this->playlist = pls;
     this->connectSignals();
+    QTimer::singleShot(1000, mafwrenderer, SLOT(getStatus()));
 }
 #endif
