@@ -278,7 +278,8 @@ void MusicWindow::onAlbumSelected(QModelIndex index)
 {
     SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     albumView->setAttribute(Qt::WA_DeleteOnClose);
-    albumView->browseAlbum(index.data(UserRoleSongAlbum).toString());
+    albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
+    albumView->setWindowTitle(index.data(UserRoleSongAlbum).toString());
     albumView->show();
     ui->albumList->clearSelection();
 }
@@ -288,14 +289,21 @@ void MusicWindow::onArtistSelected(QModelIndex index)
     int songCount = index.data(UserRoleAlbumCount).toInt();
     if(songCount == 0 || songCount == 1) {
         SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        if (songCount == 1)
+            albumView->isSingleAlbum = true;
         albumView->browseSingleAlbum(index.data(UserRoleSongName).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
+        albumView->setWindowTitle(index.data(UserRoleSongName).toString());
         albumView->show();
     } else if(songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        artistView->browseAlbum(index.data(UserRoleObjectID).toString());
+        artistView->setWindowTitle(index.data(UserRoleSongName).toString());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
         artistView->show();
     }
+
+    ui->artistList->clearSelection();
 }
 
 void MusicWindow::listSongs()
@@ -450,6 +458,8 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
         }
     }
 
+    item->setText(title);
+
     item->setData(UserRoleSongName, title);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
@@ -465,7 +475,7 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
 #endif
 }
 
-void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error)
+void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
     if(browseId != browseAllAlbumsId)
         return;
@@ -496,6 +506,7 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
 
     item->setData(UserRoleSongAlbum, albumTitle);
     item->setData(UserRoleAlbumCount, artist);
+    item->setData(UserRoleObjectID, objectId);
     item->setText(albumTitle);
     if(item->data(UserRoleAlbumArt).isNull())
         item->setIcon(QIcon(defaultAlbumArtMedium));
