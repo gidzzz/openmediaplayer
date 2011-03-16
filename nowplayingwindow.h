@@ -26,6 +26,7 @@
 #else
     class MafwRendererAdapter;
     class MafwSourceAdapter;
+    class MafwPlaylistAdapter;
 #endif
 namespace Ui {
     class NowPlayingWindow;
@@ -46,9 +47,7 @@ public:
 public slots:
     void onSongSelected(int, int, QString, QString, QString, int);
     void setAlbumImage(QString);
-#ifdef MAFW
     void onShuffleButtonToggled(bool);
-#endif
 
 private:
     Ui::NowPlayingWindow *ui;
@@ -67,6 +66,7 @@ private:
     QTimer *volumeTimer;
     QTimer *positionTimer;
     bool playlistRequested;
+    bool isDefaultArt;
     int songDuration;
     QGraphicsScene *albumArtScene;
     QString albumArtUri;

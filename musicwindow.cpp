@@ -43,7 +43,9 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
+#ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+#endif
     this->connectSignals();
 }
 
@@ -60,6 +62,7 @@ void MusicWindow::selectSong()
     myNowPlayingWindow = new NowPlayingWindow(this);
 #endif
     myNowPlayingWindow->setAttribute(Qt::WA_DeleteOnClose);
+#ifdef MAFW
     qDebug() << "Clearing playlist";
     playlist->clear();
     qDebug() << "Playlist cleared";
@@ -81,6 +84,7 @@ void MusicWindow::selectSong()
         myNowPlayingWindow->setAlbumImage(ui->songList->currentItem()->data(UserRoleAlbumArt).toString());
     else
         myNowPlayingWindow->setAlbumImage(albumImage);
+#endif
     myNowPlayingWindow->show();
 #ifdef MAFW
     mafwrenderer->playObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toAscii());

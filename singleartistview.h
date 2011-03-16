@@ -38,7 +38,9 @@ private:
 #endif
 
 private slots:
+#ifdef MAFW
     void browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error);
+#endif
     void onAlbumSelected(QListWidgetItem*);
     void orientationChanged();
 };

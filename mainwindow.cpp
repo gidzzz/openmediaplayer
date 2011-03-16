@@ -70,7 +70,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->shuffleAllButton->setFlat(false);
 #endif
 
+#ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+#endif
 }
 
 MainWindow::~MainWindow()
@@ -304,6 +306,8 @@ void MainWindow::focusOutEvent(QFocusEvent *)
 
 void MainWindow::closeEvent(QCloseEvent *)
 {
+#ifdef MAFW
     if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
         mafwrenderer->stop();
+#endif
 }

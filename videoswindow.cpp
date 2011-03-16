@@ -32,7 +32,9 @@ VideosWindow::VideosWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSource
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
+#ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+#endif
     sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
     sortByDate = new QAction(tr("Date"), sortByActionGroup);
@@ -94,6 +96,7 @@ void VideosWindow::selectView()
         sortByDate->setChecked(true);
 }
 
+#ifdef MAFW
 void VideosWindow::listVideos()
 {
 #ifdef DEBUG
@@ -155,6 +158,7 @@ void VideosWindow::browseAllVideos(uint browseId, int, uint, QString objectId, G
         ui->listWidget->addItem(item);
   }
 }
+#endif
 
 void VideosWindow::orientationChanged()
 {

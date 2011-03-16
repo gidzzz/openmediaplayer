@@ -9,7 +9,10 @@
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
-#include "qmaemo5rotator.h"
+
+#ifdef Q_WS_MAEMO_5
+    #include "qmaemo5rotator.h"
+#endif
 
 namespace Ui {
     class VideoNowPlayingWindow;

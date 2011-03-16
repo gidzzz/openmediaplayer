@@ -50,10 +50,15 @@ SingleArtistView::~SingleArtistView()
 
 void SingleArtistView::browseAlbum(QString album)
 {
+#ifdef MAFW
     this->artistObjectId = album;
     this->listAlbums();
+#else
+    Q_UNUSED(album)
+#endif
 }
 
+#ifdef MAFW
 void SingleArtistView::listAlbums()
 {
     ui->albumList->clear();
@@ -118,10 +123,11 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
             this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
 }
+#endif
 
-#ifdef MAFW
 void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 {
+#ifdef MAFW
     if (item->data(Qt::UserRole).toString() == "shuffle")
         return;
     else {
@@ -131,8 +137,8 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
         albumView->setWindowTitle(item->text());
         albumView->show();
     }
-}
 #endif
+}
 
 void SingleArtistView::orientationChanged()
 {

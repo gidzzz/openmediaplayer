@@ -98,6 +98,10 @@ void NowPlayingWindow::setAlbumImage(QString image)
 {
     qDeleteAll(albumArtScene->items());
     this->albumArtUri = image;
+    if (image == albumImage)
+        this->isDefaultArt = true;
+    else
+        this->isDefaultArt = false;
     ui->view->setScene(albumArtScene);
     albumArtScene->setBackgroundBrush(QBrush(Qt::transparent));
     m = new mirror();
@@ -149,7 +153,8 @@ void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
 #ifdef DEBUG
         qDebug() << QString::number(volumeLevel);
 #endif
-        ui->volumeSlider->setValue(volumeLevel);
+        if (!ui->volumeSlider->isSliderDown())
+            ui->volumeSlider->setValue(volumeLevel);
     }
 }
 #endif
@@ -167,7 +172,9 @@ void NowPlayingWindow::setButtonIcons()
 
 void NowPlayingWindow::metadataChanged(QString name, QVariant value)
 {
+#ifdef MAFW
     this->mafwrenderer->getCurrentMetadata();
+#endif
 
     if(name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
         ui->songTitleLabel->setText(value.toString());
@@ -448,7 +455,10 @@ void NowPlayingWindow::onShuffleButtonToggled(bool checked)
     } else {
         ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
     }
+
+#ifdef MAFW
     playlist->setShuffled(checked);
+#endif
 }
 
 void NowPlayingWindow::onRepeatButtonToggled(bool checked)
@@ -458,7 +468,10 @@ void NowPlayingWindow::onRepeatButtonToggled(bool checked)
     } else {
         ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
     }
+
+#ifdef MAFW
     playlist->setRepeat(checked);
+#endif
 }
 
 void NowPlayingWindow::onNextButtonPressed()
@@ -552,6 +565,7 @@ void NowPlayingWindow::onMediaChanged(int index, char*)
     lastPlayingSong->set(index);
     ui->songPlaylist->setCurrentRow(index);
     ui->songPlaylist->scrollToItem(ui->songPlaylist->item(index));
+    this->isDefaultArt = true;
 }
 
 #endif
@@ -562,6 +576,7 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 {
     if(e->key() == Qt::Key_Backspace)
         this->close();
+#ifdef MAFW
     else if(e->key() == Qt::Key_Space) {
         if(this->mafwState == Playing)
             mafwrenderer->pause();
@@ -574,6 +589,7 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
         mafwrenderer->next();
     else if(e->key() == Qt::Key_Left)
         mafwrenderer->previous();
+#endif
     /*else if(e->key() == Qt::Key_Shift) {
         if(ui->menuNow_playing_menu->isHidden())
             ui->menuNow_playing_menu->show();
@@ -691,6 +707,7 @@ void NowPlayingWindow::onPlaylistChanged()
     }
     playlist->getItems();
 }
+#endif
 
 void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
 {
@@ -718,7 +735,6 @@ void NowPlayingWindow::onShareClicked()
     share->show();
 #endif
 }
-#endif
 
 void NowPlayingWindow::showEntertainmentview()
 {
@@ -728,7 +744,9 @@ void NowPlayingWindow::showEntertainmentview()
 #endif
     entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
     connect(entertainmentView, SIGNAL(destroyed()), this, SLOT(nullEntertainmentView()));
+#ifdef Q_WS_MAEMO_5
     entertainmentView->setAttribute(Qt::WA_Maemo5StackedWindow);
+#endif
     this->updateEntertainmentViewMetadata();
     entertainmentView->showFullScreen();
 }

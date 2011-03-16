@@ -13,7 +13,9 @@ EntertainmentView::EntertainmentView(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->declarativeView->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5NonComposited);
+#endif
     QGLWidget *glWidget = new QGLWidget;
     ui->declarativeView->setViewport(glWidget);
 

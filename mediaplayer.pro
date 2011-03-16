@@ -8,9 +8,6 @@ QT       += core gui dbus declarative opengl
 
 TARGET = mediaplayer
 TEMPLATE = app
-#DEFINES += DEBUG
-DEFINES += MAFW
-
 
 SOURCES += main.cpp \
     mainwindow.cpp \
@@ -31,8 +28,6 @@ SOURCES += main.cpp \
     singlealbumview.cpp \
     delegates/singlealbumviewdelegate.cpp \
     singleartistview.cpp \
-    mafwplaylistadapter.cpp \
-    mafwplaylistmanageradapter.cpp \
     settingsdialog.cpp \
     entertainmentview.cpp
 
@@ -56,8 +51,6 @@ HEADERS  += mainwindow.h \
     singlealbumview.h \
     delegates/singlealbumviewdelegate.h \
     singleartistview.h \
-    mafwplaylistadapter.h \
-    mafwplaylistmanageradapter.h \
     settingsdialog.h \
     entertainmentview.h
 
@@ -91,19 +84,12 @@ unix:!symbian {
         CONFIG += link_pkgconfig
         PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf
         QT += maemo5
-        SOURCES +=     mafwrenderersignalhelper.cpp \
-            mafwsourcesignalhelper.cpp \
-            mafwsourceadapter.cpp \
-            mafwrendereradapter.cpp \
-            maemo5deviceevents.cpp \
+        DEFINES += MAFW
+        SOURCES +=     maemo5deviceevents.cpp \
             fmtxdialog.cpp \
             freqpickselector.cpp \
             qmaemo5rotator.cpp
-        HEADERS +=    mafwrenderersignalhelper.h \
-            mafwrendereradapter.h \
-            mafwsourcesignalhelper.h \
-            mafwsourceadapter.h \
-            maemo5deviceevents.h \
+        HEADERS +=    maemo5deviceevents.h \
             fmtxdialog.h \
             freqpickselector.h \
             qmaemo5rotator.h
@@ -113,6 +99,27 @@ unix:!symbian {
         target.path = /usr/local/bin
     }
     INSTALLS += target
+}
+
+debug {
+    DEFINES += DEBUG
+}
+
+contains(DEFINES, MAFW) {
+
+    SOURCES +=      mafwrenderersignalhelper.cpp \
+            mafwsourcesignalhelper.cpp \
+            mafwsourceadapter.cpp \
+            mafwrendereradapter.cpp \
+            mafwplaylistadapter.cpp \
+            mafwplaylistmanageradapter.cpp \
+
+    HEADERS +=      mafwrenderersignalhelper.h \
+            mafwrendereradapter.h \
+            mafwsourcesignalhelper.h \
+            mafwsourceadapter.h \
+            mafwplaylistadapter.h \
+            mafwplaylistmanageradapter.h
 }
 
 OTHER_FILES += \

@@ -32,7 +32,9 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* m
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
+#ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+#endif
     InternetRadioDelegate *delegate = new InternetRadioDelegate(ui->listWidget);
     ui->listWidget->setItemDelegate(delegate);
     window = new RadioNowPlayingWindow(this);
@@ -69,7 +71,9 @@ void InternetRadioWindow::showFMTXDialog()
 
 void InternetRadioWindow::onStationSelected()
 {
+#ifdef MAFW
     mafwrenderer->playObject(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+#endif
     window->show();
 }
 
