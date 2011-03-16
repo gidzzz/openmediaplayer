@@ -55,6 +55,7 @@ void NowPlayingIndicator::connectSignals()
     connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onTkLockChanged(bool)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
 #endif
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
 }
@@ -177,8 +178,5 @@ void NowPlayingIndicator::setSources(MafwRendererAdapter *renderer, MafwSourceAd
     this->mafwTrackerSource = source;
     this->playlist = pls;
     this->connectSignals();
-#ifdef Q_WS_MAEMO_5
-    QTimer::singleShot(1000, mafwrenderer, SLOT(getStatus()));
-#endif
 }
 #endif
