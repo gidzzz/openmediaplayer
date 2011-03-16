@@ -6,6 +6,8 @@
 #include <QGraphicsObject>
 #include <QGLWidget>
 
+#include "ui_entertainmentview.h"
+
 namespace Ui {
     class EntertainmentView;
 }
@@ -32,6 +34,9 @@ private:
     QVariant artist;
     QVariant albumArt;
     QObject *rootObject;
+#ifdef Q_WS_MAEMO_5
+    void setDNDAtom(bool dnd);
+#endif
 };
 
 #endif // ENTERTAINMENTVIEW_H
