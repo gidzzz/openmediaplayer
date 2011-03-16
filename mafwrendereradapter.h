@@ -55,6 +55,7 @@ class MafwRendererAdapter : public QObject
   
  signals:
   //MafwRenderer signals
+  void rendererReady();
   void bufferingInfo(float status);
   void mediaChanged(int index, char* objectId);
   void metadataChanged(QString metadata, QVariant value);

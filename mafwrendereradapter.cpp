@@ -47,6 +47,7 @@ void MafwRendererAdapter::findRenderer()
                     g_object_ref(mafw_renderer);
                     this->mafw_renderer = mafw_renderer;
                     connectRendererSignals();
+                    emit rendererReady();
                 }
             }
         }
