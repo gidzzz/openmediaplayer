@@ -21,7 +21,6 @@
 void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QString artistName = index.data(UserRoleSongName).toString();
-    //QString albumSongCount = "1 album, 1 song";
     QString albumSongCount;
     QPixmap albumArt;
     albumSongCount.append(index.data(UserRoleAlbumCount).toString() + " ");
@@ -31,7 +30,7 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         albumSongCount.append(tr("album"));
     albumSongCount.append(", ");
     albumSongCount.append(index.data(UserRoleSongCount).toString() + " ");
-    if(index.data(UserRoleSongCount).toInt() != 0)
+    if(index.data(UserRoleSongCount).toInt() != 1)
         albumSongCount.append(tr("songs"));
     else
         albumSongCount.append(tr("song"));
