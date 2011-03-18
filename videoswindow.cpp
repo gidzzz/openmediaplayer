@@ -114,7 +114,7 @@ void VideosWindow::listVideos()
                                                                0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void VideosWindow::browseAllVideos(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString)
+void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
     Q_UNUSED(objectId);
     if(browseId != browseAllVideosId)
@@ -156,7 +156,13 @@ void VideosWindow::browseAllVideos(uint browseId, int, uint, QString objectId, G
         else
             item->setIcon(QIcon(item->data(Qt::DecorationRole).toString()));
         ui->listWidget->addItem(item);
-  }
+    }
+#ifdef Q_WS_MAEMO_5
+    if (remainingCount != 0)
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+    else
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
 }
 #endif
 
