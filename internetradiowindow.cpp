@@ -181,7 +181,7 @@ void InternetRadioWindow::listStations()
                                                                0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void InternetRadioWindow::browseAllStations(uint browseId, int, uint, QString objectId, GHashTable* metadata, QString)
+void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
     if(browseId != browseAllStationsId)
       return;
@@ -206,7 +206,13 @@ void InternetRadioWindow::browseAllStations(uint browseId, int, uint, QString ob
         item->setData(UserRoleSongURI, URI);
         item->setData(UserRoleObjectID, objectId);
         ui->listWidget->addItem(item);
-  }
+    }
+#ifdef Q_WS_MAEMO_5
+    if(remainingCount != 0)
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+    else
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
 }
 #endif
 
