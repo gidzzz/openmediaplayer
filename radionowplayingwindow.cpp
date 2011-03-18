@@ -80,13 +80,13 @@ void RadioNowPlayingWindow::orientationChanged()
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     if (screenGeometry.width() > screenGeometry.height()) {
         ui->mainLayout->setDirection(QBoxLayout::LeftToRight);
-        ui->buttonsLayout->addItem(ui->horizontalSpacer);
         ui->volumeWidget->show();
         ui->spacerWidget->show();
+        ui->spacerWidget2->show();
     } else {
         ui->volumeWidget->hide();
-        ui->buttonsLayout->removeItem(ui->horizontalSpacer);
         ui->mainLayout->setDirection(QBoxLayout::TopToBottom);
+        ui->spacerWidget2->hide();
         ui->spacerWidget->hide();
     }
 }
