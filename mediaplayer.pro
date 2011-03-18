@@ -81,8 +81,6 @@ symbian {
 
 unix:!symbian {
     maemo5 {
-        CONFIG += link_pkgconfig
-        PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf
         QT += maemo5
         DEFINES += MAFW
         SOURCES +=     maemo5deviceevents.cpp \
@@ -101,11 +99,10 @@ unix:!symbian {
     INSTALLS += target
 }
 
-debug {
-    DEFINES += DEBUG
-}
-
 contains(DEFINES, MAFW) {
+
+    CONFIG += link_pkgconfig
+    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gtk-2-0
 
     SOURCES +=      mafwrenderersignalhelper.cpp \
             mafwsourcesignalhelper.cpp \
