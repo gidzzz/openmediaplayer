@@ -26,7 +26,7 @@ MafwPlaylistAdapter::MafwPlaylistAdapter(QObject *parent, MafwRendererAdapter *m
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
     connect(mafwrenderer, SIGNAL(playlistChanged(GObject*)), this, SLOT(onPlaylistChanged(GObject*)));
-    QTimer::singleShot(100, mafwrenderer, SLOT(getStatus()));
+    connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
 }
 
 void MafwPlaylistAdapter::clear()
@@ -132,15 +132,22 @@ void MafwPlaylistAdapter::onGetStatus(MafwPlaylist* playlist, uint, MafwPlayStat
     qDebug() << "MafwPlaylistAdapter::onGetStatus";
 #endif
     this->mafw_playlist = playlist;
-    if (mafw_playlist == NULL)
-        this->assignAudioPlaylist();
+    if (this->isPlaylistNull()) {
+        if (mafwrenderer->isRendererReady())
+            this->assignAudioPlaylist();
+        else
+            connect(mafwrenderer, SIGNAL(rendererReady()), this, SLOT(assignAudioPlaylist()));
+    }
+
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
 }
 
 void MafwPlaylistAdapter::onPlaylistChanged(GObject* playlist)
 {
+#ifdef DEBUG
     qDebug() << "MafwPlaylistAdapter::onPlaylistChanged";
+#endif
     this->mafw_playlist = MAFW_PLAYLIST(playlist);
     emit playlistChanged();
 }

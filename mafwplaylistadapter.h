@@ -24,7 +24,6 @@ public:
     void insertItem(QString objectId, guint index);
     void appendUri(QString url);
     void appendItem(QString objectId);
-    void assignAudioPlaylist();
 
     static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
 
@@ -35,6 +34,7 @@ signals:
 
 public slots:
     void getItems();
+    void assignAudioPlaylist();
 
 private:
     MafwPlaylist *mafw_playlist;
