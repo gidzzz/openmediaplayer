@@ -37,7 +37,6 @@ void MafwRendererAdapter::findRenderer()
         GList* renderer_list = mafw_registry_get_renderers(mafw_registry);
         if(renderer_list)
         {
-
             GList* renderer_elem = renderer_list;
             while(renderer_elem)
             {
@@ -49,7 +48,6 @@ void MafwRendererAdapter::findRenderer()
                     g_object_ref(mafw_renderer);
                     this->mafw_renderer = mafw_renderer;
                     connectRendererSignals();
-                    emit rendererReady();
                 }
             }
         }
@@ -118,6 +116,7 @@ void MafwRendererAdapter::onRendererAdded(MafwRegistry*,
         g_object_ref(renderer);
         static_cast<MafwRendererAdapter*>(user_data)->mafw_renderer = MAFW_RENDERER(renderer);
         static_cast<MafwRendererAdapter*>(user_data)->connectRendererSignals();
+        emit static_cast<MafwRendererAdapter*>(user_data)->rendererReady();
     }
 }
 
@@ -325,6 +324,14 @@ bool MafwRendererAdapter::assignPlaylist(MafwPlaylist* playlist)
         return mafw_renderer_assign_playlist(mafw_renderer, playlist, NULL);
     }
     return false;
+}
+
+bool MafwRendererAdapter::isRendererReady()
+{
+    if(mafw_renderer)
+        return true;
+    else
+        return false;
 }
 
 void MafwRendererAdapter::setVolume(int volume)

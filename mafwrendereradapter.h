@@ -33,6 +33,8 @@ class MafwRendererAdapter : public QObject
   static void onPlaylistChanged(MafwRenderer* mafw_renderer, GObject* playlist, gpointer user_data);
   static void onStateChanged(MafwRenderer* mafw_renderer, gint state, gpointer user_data);
 
+  bool isRendererReady();
+
   public slots:
   void play();
   void playObject(const char* object_id);
