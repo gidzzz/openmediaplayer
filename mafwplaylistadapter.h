@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <libmafw/mafw-playlist.h>
 #include "mafwrendereradapter.h"
+#include "mafwplaylistmanageradapter.h"
 
 class MafwPlaylistAdapter : public QObject
 {
@@ -16,12 +17,14 @@ public:
     void clear();
     bool isRepeat();
     bool isShuffled();
+    bool isPlaylistNull();
     void setRepeat(bool repeat);
     void setShuffled(bool shuffled);
     void insertUri(QString uri, guint index);
     void insertItem(QString objectId, guint index);
     void appendUri(QString url);
     void appendItem(QString objectId);
+    void assignAudioPlaylist();
 
     static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
 
@@ -35,6 +38,7 @@ public slots:
 
 private:
     MafwPlaylist *mafw_playlist;
+    MafwPlaylistManagerAdapter *mafw_playlist_manager;
     MafwRendererAdapter *mafwrenderer;
     GError *error;
 

@@ -10,12 +10,24 @@ class MafwPlaylistManagerAdapter : public QObject
 public:
     explicit MafwPlaylistManagerAdapter(QObject *parent = 0);
 
+    void importPlaylist(QString playlistUri);
+    void duplicatePlaylist(QString newPlaylistName, MafwProxyPlaylist *playlist);
+    MafwProxyPlaylist* createPlaylist(QString playlistName);
+    MafwProxyPlaylist* getPlaylist(guint id);
+    GPtrArray* getPlaylists();
+    GArray* listPlaylists();
+    void freeListOfPlaylists(GArray *playlist_list);
+    static void import_cb(MafwPlaylistManager *, guint import_id, MafwProxyPlaylist *playlist, gpointer user_data, const GError *);
+
 signals:
+    void playlistImported(MafwProxyPlaylist *playlist, guint import_id);
 
 public slots:
 
 private:
     MafwPlaylistManager* playlist_manager;
+
+
 
 };
 

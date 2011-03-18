@@ -22,6 +22,7 @@ MafwPlaylistAdapter::MafwPlaylistAdapter(QObject *parent, MafwRendererAdapter *m
     QObject(parent),
     mafwrenderer(mra)
 {
+    mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
     connect(mafwrenderer, SIGNAL(playlistChanged(GObject*)), this, SLOT(onPlaylistChanged(GObject*)));
@@ -131,6 +132,8 @@ void MafwPlaylistAdapter::onGetStatus(MafwPlaylist* playlist, uint, MafwPlayStat
     qDebug() << "MafwPlaylistAdapter::onGetStatus";
 #endif
     this->mafw_playlist = playlist;
+    if (mafw_playlist == NULL)
+        this->assignAudioPlaylist();
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
 }
@@ -140,4 +143,18 @@ void MafwPlaylistAdapter::onPlaylistChanged(GObject* playlist)
     qDebug() << "MafwPlaylistAdapter::onPlaylistChanged";
     this->mafw_playlist = MAFW_PLAYLIST(playlist);
     emit playlistChanged();
+}
+
+void MafwPlaylistAdapter::assignAudioPlaylist()
+{
+    mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpAudioPlaylist"));
+    mafwrenderer->assignPlaylist(mafw_playlist);
+}
+
+bool MafwPlaylistAdapter::isPlaylistNull()
+{
+    if (mafw_playlist)
+        return false;
+    else
+        return true;
 }
