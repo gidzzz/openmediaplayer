@@ -16,7 +16,7 @@ EntertainmentView::EntertainmentView(QWidget *parent) :
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5NonComposited);
 #endif
-    QGLWidget *glWidget = new QGLWidget;
+    QGLWidget *glWidget = new QGLWidget(this);
     ui->declarativeView->setViewport(glWidget);
 
     rootObject = dynamic_cast<QObject*>(ui->declarativeView->rootObject());
@@ -29,6 +29,10 @@ EntertainmentView::EntertainmentView(QWidget *parent) :
     connect(this, SIGNAL(albumArtChanged(QVariant)), rootObject, SLOT(setAlbumArt(QVariant)));
 
 #ifdef Q_WS_MAEMO_5
+    quint32 disable = {0};
+    Atom winPortraitModeSupportAtom = XInternAtom(QX11Info::display(), "_HILDON_PORTRAIT_MODE_SUPPORT", false);
+    XChangeProperty(QX11Info::display(), winId(), winPortraitModeSupportAtom, XA_CARDINAL, 32, PropModeReplace, (uchar*) &disable, 1);
+
     this->setDNDAtom(true);
 #endif
 }
