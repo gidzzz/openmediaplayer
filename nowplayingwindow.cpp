@@ -218,6 +218,7 @@ void NowPlayingWindow::stateChanged(int state)
         ui->songProgress->setEnabled(false);
         ui->songProgress->setValue(0);
         ui->songProgress->setRange(0, 99);
+        ui->currentPositionLabel->setText("00:00");
     }
 }
 #endif
@@ -422,13 +423,6 @@ void NowPlayingWindow::orientationChanged()
     }
 }
 
-void NowPlayingWindow::listSongs(QString fileName)
-{
-    QListWidgetItem *songItem = new QListWidgetItem(fileName);
-    songItem->setData(UserRoleSongName, fileName);
-    ui->songPlaylist->addItem(songItem);
-}
-
 void NowPlayingWindow::toggleList()
 {
     if(ui->songPlaylist->isHidden()) {
@@ -550,6 +544,7 @@ void NowPlayingWindow::showEvent(QShowEvent *)
     mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
     mafwrenderer->getPosition();
+    this->updatePlaylistState();
     if(positionTimer->isActive())
         ui->songProgress->setEnabled(true);
 }
@@ -671,6 +666,7 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     ui->songTitleLabel->setText(item->data(UserRoleSongTitle).toString());
     ui->artistLabel->setText(item->data(UserRoleSongArtist).toString());
     ui->albumNameLabel->setText(item->data(UserRoleSongAlbum).toString());
+    ui->currentPositionLabel->setText("00:00");
     mafwrenderer->gotoIndex(item->text().toInt());
     if (this->mafwState == Stopped)
         mafwrenderer->play();
@@ -714,11 +710,24 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
     contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Save playlist"));
-    contextMenu->addAction(tr("Set as ringing tone"));
+    contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
     contextMenu->addAction(tr("Delete from now playing"));
     contextMenu->addAction(tr("Clear now playing"), this, SLOT(clearPlaylist()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     contextMenu->exec(point);
+}
+
+void NowPlayingWindow::setRingingTone()
+{
+#ifdef Q_WS_MAEMO_5
+    QString filename = ui->songPlaylist->currentItem()->data(UserRoleSongURI).toString();
+    QDBusInterface setRingtone("com.nokia.profiled",
+                               "/com/nokia/profiled",
+                               "com.nokia.profiled",
+                               QDBusConnection::sessionBus(), this);
+    setRingtone.call("set_value", "general", "ringing.alert.tone", filename);
+    QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
+#endif
 }
 
 void NowPlayingWindow::onShareClicked()
@@ -728,7 +737,9 @@ void NowPlayingWindow::onShareClicked()
     // C) 2010. Matias Perez
     QStringList list;
     QString clip = ui->songPlaylist->currentItem()->data(UserRoleSongURI).toString();
-    qDebug() << ui->songPlaylist->selectedItems().first()->data(UserRoleSongURI).toString();
+#ifdef DEBUG
+    qDebug() << "Sending file:" << clip;
+#endif
     list.append(clip);
     Share *share = new Share(this, list);
     share->setAttribute(Qt::WA_DeleteOnClose);

@@ -39,7 +39,6 @@ class NowPlayingWindow : public QMainWindow
 public:
     explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~NowPlayingWindow();
-    void listSongs(QString);
 #ifdef MAFW
     void updatePlaylistState();
 #endif
@@ -78,6 +77,7 @@ private slots:
     void toggleVolumeSlider();
     void showFMTXDialog();
     void toggleList();
+    void setRingingTone();
 #ifdef MAFW
     void onVolumeChanged(const QDBusMessage &msg);
     void stateChanged(int state);
