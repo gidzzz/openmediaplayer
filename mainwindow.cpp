@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwTrackerSource = new MafwSourceAdapter("Mafw-Tracker-Source");
     mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
     playlist = new MafwPlaylistAdapter(this, this->mafwrenderer);
+    this->shuffleNowPlayingWindowCreated = false;
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -51,24 +52,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #ifdef MAFW
     myMusicWindow = new MusicWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-    myVideosWindow = new VideosWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-    myInternetRadioWindow = new InternetRadioWindow(this, this->mafwrenderer, this->mafwRadioSource, this->playlist);
 #else
     myMusicWindow = new MusicWindow(this);
-    myVideosWindow = new VideosWindow(this);
-    myInternetRadioWindow = new InternetRadioWindow(this);
 #endif
 
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     this->connectSignals();
-
-#ifdef DEBUG
-    ui->songsButton->setFlat(false);
-    ui->videosButton->setFlat(false);
-    ui->radioButton->setFlat(false);
-    ui->shuffleAllButton->setFlat(false);
-#endif
 
 #ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
@@ -105,8 +95,8 @@ void MainWindow::setLabelText()
 void MainWindow::connectSignals()
 {
     connect(ui->songsButton, SIGNAL(clicked()), myMusicWindow, SLOT(show()));
-    connect(ui->videosButton, SIGNAL(clicked()), myVideosWindow, SLOT(show()));
-    connect(ui->radioButton, SIGNAL(clicked()), myInternetRadioWindow, SLOT(show()));
+    connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
+    connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
     // TODO: Connect this to a slot.
@@ -121,6 +111,7 @@ void MainWindow::connectSignals()
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
     connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countRadioResult(QString, GHashTable*, QString)));
+    connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
 #endif
 }
 
@@ -184,9 +175,11 @@ void MainWindow::processListClicks(QListWidgetItem* item)
     if(itemName == "songs_button")
         myMusicWindow->show();
     else if(itemName == "videos_button")
-        myVideosWindow->show();
+        this->showVideosWindow();
     else if(itemName == "radio_button")
-        myInternetRadioWindow->show();
+        this->showInternetRadioWindow();
+    else if(itemName == "shuffle_button")
+        this->onShuffleAllClicked();
     ui->listWidget->clearSelection();
 }
 
@@ -194,6 +187,28 @@ void MainWindow::openSettings()
 {
     SettingsDialog *settings = new SettingsDialog(this);
     settings->show();
+}
+
+void MainWindow::showVideosWindow()
+{
+#ifdef MAFW
+    myVideosWindow = new VideosWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+#else
+    myVideosWindow = new VideosWindow(this);
+#endif
+    myVideosWindow->setAttribute(Qt::WA_DeleteOnClose);
+    myVideosWindow->show();
+}
+
+void MainWindow::showInternetRadioWindow()
+{
+#ifdef MAFW
+    myInternetRadioWindow = new InternetRadioWindow(this, this->mafwrenderer, this->mafwRadioSource, this->playlist);
+#else
+    myInternetRadioWindow = new InternetRadioWindow(this);
+#endif
+    myInternetRadioWindow->setAttribute(Qt::WA_DeleteOnClose);
+    myInternetRadioWindow->show();
 }
 
 #ifdef MAFW
@@ -278,6 +293,42 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
     if(!error.isEmpty())
         qDebug() << error;
 }
+
+void MainWindow::onShuffleAllClicked()
+{
+    playlist->assignAudioPlaylist();
+    playlist->clear();
+
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+            this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+
+    this->browseAllSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
+                                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE),
+                                                             0, MAFW_SOURCE_BROWSE_ALL);
+}
+
+void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* , QString)
+{
+    if(browseId != browseAllSongsId)
+      return;
+
+    playlist->appendItem(objectId);
+
+    if (!this->shuffleNowPlayingWindowCreated) {
+        playlist->setShuffled(true);
+        NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+        window->onShuffleButtonToggled(true);
+        this->shuffleNowPlayingWindowCreated = true;
+        window->setAttribute(Qt::WA_DeleteOnClose);
+        window->show();
+        mafwrenderer->play();
+        mafwrenderer->resume();
+    }
+
+    if (remainingCount = 0)
+        playlist->getItems();
+}
+
 #endif
 
 void MainWindow::focusInEvent(QFocusEvent *)

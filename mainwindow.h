@@ -46,6 +46,7 @@ private:
     void focusOutEvent(QFocusEvent *);
     void changeEvent(QEvent *);
     void closeEvent(QCloseEvent *);
+    bool shuffleNowPlayingWindowCreated;
 
     void setButtonIcons();
     void connectSignals();
@@ -55,6 +56,7 @@ private:
     MafwSourceAdapter *mafwRadioSource;
     MafwRendererAdapter* mafwrenderer;
     MafwPlaylistAdapter* playlist;
+    uint browseAllSongsId;
     const char* TAGSOURCE_AUDIO_PATH;
     const char* TAGSOURCE_VIDEO_PATH;
     const char* RADIOSOURCE_PATH;
@@ -68,11 +70,15 @@ private slots:
     void showAbout();
     void processListClicks(QListWidgetItem*);
     void openSettings();
-#ifdef Q_WS_MAEMO_5
+    void showVideosWindow();
+    void showInternetRadioWindow();
+    void onShuffleAllClicked();
+#ifdef MAFW
     void trackerSourceReady();
     void radioSourceReady();
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
     void countRadioResult(QString objectId, GHashTable* metadata, QString error);
+    void browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
 #endif
 };
 
