@@ -31,6 +31,7 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, Ma
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
+    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
@@ -39,7 +40,12 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, Ma
             this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
 #endif
+    ui->searchWidget->hide();
+
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
     this->orientationChanged();
 }
 
@@ -145,4 +151,39 @@ void SingleArtistView::orientationChanged()
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
+}
+
+void SingleArtistView::onSearchTextChanged(QString text)
+{
+    if (!ui->indicator->isHidden())
+        ui->indicator->hide();
+
+    for (int i=0; i < ui->albumList->count(); i++) {
+        if (ui->albumList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
+            ui->albumList->item(i)->setHidden(true);
+        else
+            ui->albumList->item(i)->setHidden(false);
+    }
+
+    if (text.isEmpty()) {
+        ui->searchWidget->hide();
+        if (ui->indicator->isHidden())
+            ui->indicator->show();
+    }
+}
+
+void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
+        return;
+    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down && !ui->searchWidget->isHidden())
+        ui->albumList->setFocus();
+    else {
+        ui->albumList->clearSelection();
+        if (ui->searchWidget->isHidden())
+            ui->searchWidget->show();
+        if (!ui->searchEdit->hasFocus())
+            ui->searchEdit->setText(ui->searchEdit->text() + e->text());
+        ui->searchEdit->setFocus();
+    }
 }

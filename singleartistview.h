@@ -28,6 +28,7 @@ public:
 
 private:
     Ui::SingleArtistView *ui;
+    void keyReleaseEvent(QKeyEvent *);
 #ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
@@ -43,6 +44,7 @@ private slots:
 #endif
     void onAlbumSelected(QListWidgetItem*);
     void orientationChanged();
+    void onSearchTextChanged(QString);
 };
 
 #endif // SINGLEARTISTVIEW_H
