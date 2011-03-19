@@ -20,7 +20,7 @@
 
 MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
         QMainWindow(parent),
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
         ui(new Ui::MusicWindow),
         mafwrenderer(mra),
         mafwTrackerSource(msa),
@@ -32,8 +32,10 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
+    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
     ui->centralwidget->setLayout(ui->songsLayout);
+    ui->searchWidget->hide();
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ui->songList->setItemDelegate(delegate);
@@ -73,6 +75,9 @@ void MusicWindow::selectSong()
     qDebug() << "Playlist created";
 
     mafwrenderer->gotoIndex(ui->songList->currentRow());
+    mafwrenderer->play();
+    mafwrenderer->resume();
+
     myNowPlayingWindow->onSongSelected(ui->songList->currentRow()+1,
                                        ui->songList->count(),
                                        ui->songList->currentItem()->data(UserRoleSongTitle).toString(),
@@ -86,9 +91,6 @@ void MusicWindow::selectSong()
         myNowPlayingWindow->setAlbumImage(albumImage);
 #endif
     myNowPlayingWindow->show();
-#ifdef MAFW
-    mafwrenderer->playObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toAscii());
-#endif
     ui->songList->clearSelection();
 }
 
@@ -105,6 +107,9 @@ void MusicWindow::connectSignals()
 #endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onContextMenuRequested(const QPoint &)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
 }
 
 void MusicWindow::onContextMenuRequested(const QPoint &point)
@@ -113,9 +118,22 @@ void MusicWindow::onContextMenuRequested(const QPoint &point)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"));
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-    contextMenu->addAction(tr("Set as ringing tone"));
+    contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     contextMenu->exec(point);
+}
+
+void MusicWindow::setRingingTone()
+{
+#ifdef Q_WS_MAEMO_5
+    QString filename = ui->songList->currentItem()->data(UserRoleSongURI).toString();
+    QDBusInterface setRingtone("com.nokia.profiled",
+                               "/com/nokia/profiled",
+                               "com.nokia.profiled",
+                               QDBusConnection::sessionBus(), this);
+    setRingtone.call("set_value", "general", "ringing.alert.tone", filename);
+    QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
+#endif
 }
 
 void MusicWindow::onShareClicked()
@@ -144,11 +162,40 @@ void MusicWindow::onDeleteClicked()
                                   QMessageBox::Yes | QMessageBox::No,
                                   this);
         confirmDelete.exec();
-        if(confirmDelete.result() == QMessageBox::Yes)
-            //song.remove();
-            ui->songList->clear();
+        if(confirmDelete.result() == QMessageBox::Yes) {
+            song.remove();
+            ui->songList->removeItemWidget(ui->songList->currentItem());
+        }
         else if(confirmDelete.result() == QMessageBox::No)
             ui->songList->clearSelection();
+    }
+}
+
+void MusicWindow::onSearchTextChanged(QString text)
+{
+    if (!ui->indicator->isHidden())
+        ui->indicator->hide();
+
+    for (int i=0; i < this->currentList()->count(); i++) {
+        if (this->currentList() == ui->songList) {
+             if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
+                 ui->songList->item(i)->data(UserRoleSongArtist).toString().toLower().indexOf(text.toLower()) != -1 ||
+                 ui->songList->item(i)->data(UserRoleSongAlbum).toString().toLower().indexOf(text.toLower()) != -1)
+                 ui->songList->item(i)->setHidden(false);
+             else
+                 ui->songList->item(i)->setHidden(true);
+        } else {
+            if (this->currentList()->item(i)->text().toLower().indexOf(text.toLower()) == -1)
+                this->currentList()->item(i)->setHidden(true);
+            else
+                this->currentList()->item(i)->setHidden(false);
+        }
+    }
+
+    if (text.isEmpty()) {
+        ui->searchWidget->hide();
+        if (ui->indicator->isHidden())
+            ui->indicator->show();
     }
 }
 
@@ -198,10 +245,12 @@ void MusicWindow::showAlbumView()
     QMainWindow::setWindowTitle(tr("Albums"));
     this->saveViewState("albums");
 #ifdef MAFW
-    if(mafwTrackerSource->isReady())
-        this->listAlbums();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listAlbums()));
+    if (ui->albumList->count() == 0) {
+        if(mafwTrackerSource->isReady())
+            this->listAlbums();
+        else
+            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listAlbums()));
+    }
 #endif
 }
 
@@ -213,10 +262,12 @@ void MusicWindow::showArtistView()
     QMainWindow::setWindowTitle(tr("Artists"));
     this->saveViewState("artists");
 #ifdef MAFW
-    if(mafwTrackerSource->isReady())
-        this->listArtists();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listArtists()));
+    if (ui->artistList->count() == 0) {
+        if(mafwTrackerSource->isReady())
+            this->listArtists();
+        else
+            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listArtists()));
+    }
 #endif
 }
 
@@ -237,10 +288,12 @@ void MusicWindow::showSongsView()
     QMainWindow::setWindowTitle(tr("Songs"));
     this->saveViewState("songs");
 #ifdef MAFW
-    if(mafwTrackerSource->isReady())
-        this->listSongs();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
+    if (ui->songList->count() == 0) {
+        if(mafwTrackerSource->isReady())
+            this->listSongs();
+        else
+            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
+    }
 #endif
 }
 
@@ -251,6 +304,20 @@ void MusicWindow::showPlayListView()
     this->populateMenuBar();
     QMainWindow::setWindowTitle(tr("Playlists"));
     this->saveViewState("playlists");
+}
+
+QListWidget* MusicWindow::currentList()
+{
+    if (!ui->songList->isHidden())
+        return ui->songList;
+    if (!ui->artistList->isHidden())
+        return ui->artistList;
+    if (!ui->genresList->isHidden())
+        return ui->genresList;
+    if (!ui->albumList->isHidden())
+        return ui->albumList;
+    if (!ui->playlistList->isHidden())
+        return ui->playlistList;
 }
 
 void MusicWindow::saveViewState(QVariant view)
@@ -369,7 +436,6 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
     QString title;
     QString artist;
     QString album;
-    //QString genre("--");
     int duration = -1;
     if(metadata != NULL) {
         GValue *v;
@@ -540,8 +606,23 @@ void MusicWindow::focusOutEvent(QFocusEvent *)
     ui->indicator->stopAnimation();
 }
 
-void MusicWindow::keyPressEvent(QKeyEvent *e)
+void MusicWindow::keyPressEvent(QKeyEvent *)
 {
-    if(e->key() == Qt::Key_Backspace)
-        this->close();
+
+}
+
+void MusicWindow::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
+        return;
+    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down && !ui->searchWidget->isHidden())
+        this->currentList()->setFocus();
+    else {
+        this->currentList()->clearSelection();
+        if (ui->searchWidget->isHidden())
+            ui->searchWidget->show();
+        if (!ui->searchEdit->hasFocus())
+            ui->searchEdit->setText(ui->searchEdit->text() + e->text());
+        ui->searchEdit->setFocus();
+    }
 }

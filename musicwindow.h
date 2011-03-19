@@ -49,6 +49,7 @@ private:
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
     void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
     NowPlayingWindow *myNowPlayingWindow;
     QMenu *contextMenu;
 #ifdef MAFW
@@ -64,9 +65,11 @@ private:
     void hideLayoutContents();
     void saveViewState(QVariant);
     void loadViewState();
+    QListWidget* currentList();
 
 private slots:
     void onContextMenuRequested(const QPoint&);
+    void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();
     void orientationChanged();
@@ -75,6 +78,7 @@ private slots:
     void showArtistView();
     void showSongsView();
     void showGenresView();
+    void onSearchTextChanged(QString);
 #ifdef MAFW
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
