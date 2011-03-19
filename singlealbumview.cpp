@@ -41,6 +41,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     shuffleAllButton = new QMaemo5ValueButton(shuffleText, this);
     shuffleAllButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
     shuffleAllButton->setValueText("  songs");
+    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #else
     shuffleAllButton = new QPushButton(shuffleText, this);
 #endif
@@ -48,11 +49,17 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     ui->songList->setItemDelegate(delegate);
     shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
     ui->verticalLayout->removeWidget(ui->songList);
+    ui->verticalLayout->removeWidget(ui->searchWidget);
     ui->verticalLayout->addWidget(shuffleAllButton);
     ui->verticalLayout->addWidget(ui->songList);
+    ui->verticalLayout->addWidget(ui->searchWidget);
+    ui->searchWidget->hide();
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
     connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
@@ -136,6 +143,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         trackNumber = v ? g_value_get_int (v) : -1;
 
         QListWidgetItem *item = new QListWidgetItem(ui->songList);
+        item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
@@ -304,4 +312,39 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         mafwrenderer->resume();
     }
 #endif
+}
+
+void SingleAlbumView::onSearchTextChanged(QString text)
+{
+    if (!ui->indicator->isHidden())
+        ui->indicator->hide();
+
+    for (int i=0; i < ui->songList->count(); i++) {
+        if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
+            ui->songList->item(i)->setHidden(true);
+        else
+            ui->songList->item(i)->setHidden(false);
+    }
+
+    if (text.isEmpty()) {
+        ui->searchWidget->hide();
+        if (ui->indicator->isHidden())
+            ui->indicator->show();
+    }
+}
+
+void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
+        return;
+    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down && !ui->searchWidget->isHidden())
+        ui->songList->setFocus();
+    else {
+        ui->songList->clearSelection();
+        if (ui->searchWidget->isHidden())
+            ui->searchWidget->show();
+        if (!ui->searchEdit->hasFocus())
+            ui->searchEdit->setText(ui->searchEdit->text() + e->text());
+        ui->searchEdit->setFocus();
+    }
 }

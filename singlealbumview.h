@@ -45,6 +45,7 @@ private:
     NowPlayingWindow *npWindow;
     QString albumName;
     void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleAllButton;
 #else
@@ -66,6 +67,7 @@ private slots:
 #endif
     void createPlaylist(bool);
     void onShuffleButtonClicked();
+    void onSearchTextChanged(QString);
 };
 
 #endif // SINGLEALBUMVIEW_H
