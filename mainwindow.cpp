@@ -325,7 +325,7 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString
         mafwrenderer->resume();
     }
 
-    if (remainingCount = 0)
+    if (remainingCount == 0)
         playlist->getItems();
 }
 
