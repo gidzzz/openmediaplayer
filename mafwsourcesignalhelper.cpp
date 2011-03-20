@@ -46,6 +46,28 @@ MafwSourceSignalHelper::metadata_result_cb(MafwSource* mafw_source, const char* 
 }
 
 void
+MafwSourceSignalHelper::uri_result_cb(MafwSource* mafw_source, const char* object_id, GHashTable* metadata, gpointer user_data, const GError* error)
+{
+  Q_UNUSED(mafw_source)
+  QString uri;
+  QString objectId;
+  GValue *v;
+
+  v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
+  if(v != NULL) {
+      const gchar* file_uri = g_value_get_string(v);
+      gchar* filename = NULL;
+      if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+          uri = QString::fromUtf8(filename);
+      }
+  }
+
+  objectId = QString::fromUtf8(object_id);
+
+  emit static_cast<MafwSourceAdapter*>(user_data)->signalGotUri(object_id, uri);
+}
+
+void
 MafwSourceSignalHelper::create_object_cb(MafwSource* mafw_source,
                                          const char* object_id,
                                          gpointer user_data,

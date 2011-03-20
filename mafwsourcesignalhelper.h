@@ -23,6 +23,12 @@ class MafwSourceSignalHelper
 				 gpointer user_data, 
 				 const GError* error);
 
+  static void uri_result_cb(MafwSource* mafw_source,
+                            const char* object_id,
+                            GHashTable* metadata,
+                            gpointer user_data,
+                            const GError* error);
+
   static void create_object_cb(MafwSource* mafw_source, 
 			       const char* object_id, 
 			       gpointer user_data, 

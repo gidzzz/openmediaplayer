@@ -198,6 +198,15 @@ MafwSourceAdapter::getMetadata(const char* object_id, const char* const *metadat
   }
 }
 
+void
+MafwSourceAdapter::getUri(const char* object_id)
+{
+  if(mafw_source)
+  {
+    mafw_source_get_metadata(mafw_source, object_id, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI), MafwSourceSignalHelper::uri_result_cb, this);
+  }
+}
+
 bool
 MafwSourceAdapter::cancelBrowse(uint browseId,
 				QString& qerror)

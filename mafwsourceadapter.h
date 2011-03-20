@@ -58,6 +58,8 @@ class MafwSourceAdapter : public QObject
   void getMetadata(const char* object_id, 
 		   const char* const* metadata_keys);
 
+  void getUri(const char* object_id);
+
   void createObject(const char* parent,
 		    GHashTable* metadata);
 
@@ -89,6 +91,8 @@ class MafwSourceAdapter : public QObject
   void signalMetadataResult(QString objectId, 
 			    GHashTable* metadata_keys, 
 			    QString error);
+
+  void signalGotUri(QString ojbectId, QString Uri);
   
   void signalCreateObjectResult(QString objectId, QString error);
   void signalDestroyObjectResult(QString objectId, QString error);
