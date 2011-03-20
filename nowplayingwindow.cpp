@@ -176,10 +176,8 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
     this->mafwrenderer->getCurrentMetadata();
 #endif
 
-    if(name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
+    if(name == "title" /*MAFW_METADATA_KEY_TITLE*/)
         ui->songTitleLabel->setText(value.toString());
-        system(QString("fmtx_client -s '" + value.toString() + "' -t '" + value.toString() + "' > /dev/null &").toUtf8());
-    }
     if(name == "artist" /*MAFW_METADATA_KEY_ARTIST*/)
         ui->artistLabel->setText(value.toString());
     if(name == "album" /*MAFW_METADATA_KEY_ALBUM*/)
@@ -227,6 +225,7 @@ void NowPlayingWindow::connectSignals()
 {
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
+    connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(savePlaylist()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
@@ -521,13 +520,14 @@ void NowPlayingWindow::updateProgressBar(int position, QString)
     }
 }
 
-void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *, QString)
+void NowPlayingWindow::onGetStatus(MafwPlaylist* MafwPlaylist, uint index, MafwPlayState state, const char *, QString)
 {
     if (!this->playlistRequested) {
         QTimer::singleShot(250, playlist, SLOT(getItems()));
         this->updatePlaylistState();
         this->playlistRequested = true;
     }
+    this->mafwPlaylist = MafwPlaylist;
     this->setSongNumber(index+1, ui->songPlaylist->count());
     this->stateChanged(state);
 }
@@ -674,8 +674,8 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 
 void NowPlayingWindow::updatePlaylistState()
 {
-    ui->repeatButton->setChecked(playlist->isRepeat());
-    ui->shuffleButton->setChecked(playlist->isShuffled());
+    this->onRepeatButtonToggled(playlist->isRepeat());
+    this->onShuffleButtonToggled(playlist->isShuffled());
 }
 
 void NowPlayingWindow::clearPlaylist()
@@ -775,4 +775,29 @@ void NowPlayingWindow::nullEntertainmentView()
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
     mafwrenderer->getPosition();
 #endif
+}
+
+void NowPlayingWindow::savePlaylist()
+{
+    QDialog *saveDialog = new QDialog(this);
+    saveDialog->setWindowTitle("Save playlist");
+    saveDialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    QGridLayout *layout = new QGridLayout(saveDialog);
+
+    QLabel *nameLabel = new QLabel(saveDialog);
+    nameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    nameLabel->setAlignment(Qt::AlignCenter);
+    nameLabel->setText("Name");
+
+    QLineEdit *nameLineEdit = new QLineEdit(saveDialog);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save, Qt::Horizontal, this);
+    connect(buttonBox, SIGNAL(accepted()), saveDialog, SLOT(accept()));
+
+    layout->addWidget(nameLabel, 0, 0);
+    layout->addWidget(nameLineEdit, 0, 1);
+    layout->addWidget(buttonBox, 0, 2);
+
+    saveDialog->exec();
 }

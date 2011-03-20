@@ -21,6 +21,7 @@
 #ifdef MAFW
     #include "mafwrendereradapter.h"
     #include "mafwplaylistadapter.h"
+    #include "mafw-1.0/libmafw-shared/mafw-playlist-manager.h"
     #include "mafwsourceadapter.h"
     #include <gq/GConfItem>
 #else
@@ -55,6 +56,7 @@ private:
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
     MafwPlaylistAdapter *playlist;
+    MafwPlaylist *mafwPlaylist;
     int mafwState;
     GConfItem *lastPlayingSong;
     void showEvent(QShowEvent *);
@@ -107,6 +109,7 @@ private slots:
     void showEntertainmentview();
     void updateEntertainmentViewMetadata();
     void nullEntertainmentView();
+    void savePlaylist();
 };
 
 #endif // NOWPLAYINGWINDOW_H
