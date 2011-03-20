@@ -354,3 +354,15 @@ void MafwRendererAdapter::getVolume()
                                      MafwRendererSignalHelper::get_property_cb, this);
     }
 }
+
+void MafwRendererAdapter::setWindowXid(unsigned long Xid)
+{
+    if(mafw_renderer)
+    {
+        GValue xid;
+        memset(&xid, 0, sizeof(xid));
+        g_value_init (&xid, G_TYPE_ULONG);
+        g_value_set_ulong (&xid, Xid);
+        mafw_extension_set_property (MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_XID, &xid);
+    }
+}

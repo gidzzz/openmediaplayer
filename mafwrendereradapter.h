@@ -52,6 +52,7 @@ class MafwRendererAdapter : public QObject
   void getCurrentMetadata();
   void setVolume(int volume);
   void getVolume();
+  void setWindowXid(unsigned long Xid);
   
   bool assignPlaylist(MafwPlaylist* playlist);
   
