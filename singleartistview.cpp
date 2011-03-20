@@ -143,8 +143,10 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
         albumView->setWindowTitle(item->text());
         albumView->show();
     }
+    ui->albumList->clearSelection();
 #endif
 }
+
 
 void SingleArtistView::orientationChanged()
 {
