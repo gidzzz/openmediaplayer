@@ -41,9 +41,6 @@ public:
     explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~MusicWindow();
 
-public slots:
-    void selectSong();
-
 private:
     Ui::MusicWindow *ui;
     void focusInEvent(QFocusEvent *);
@@ -59,6 +56,7 @@ private:
     unsigned int browseAllSongsId;
     unsigned int browseAllArtistsId;
     unsigned int browseAllAlbumsId;
+    void fetchUri(QString objectId);
 #endif
     void connectSignals();
     void populateMenuBar();
@@ -69,6 +67,7 @@ private:
 
 private slots:
     void onContextMenuRequested(const QPoint&);
+    void onSongSelected(QListWidgetItem *);
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();
@@ -83,11 +82,14 @@ private slots:
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void onDeleteUriReceived(QString objectId, QString uri);
+    void onShareUriReceived(QString, QString Uri);
+    void onRingingToneUriReceived(QString objectId, QString uri);
     void listSongs();
     void listArtists();
     void listAlbums();
-    void onAlbumSelected(QModelIndex);
-    void onArtistSelected(QModelIndex);
+    void onAlbumSelected(QListWidgetItem*);
+    void onArtistSelected(QListWidgetItem*);
 #endif
 };
 

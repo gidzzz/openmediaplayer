@@ -56,7 +56,7 @@ MusicWindow::~MusicWindow()
     delete ui;
 }
 
-void MusicWindow::selectSong()
+void MusicWindow::onSongSelected(QListWidgetItem *)
 {
 #ifdef MAFW
     myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
@@ -78,17 +78,6 @@ void MusicWindow::selectSong()
     mafwrenderer->play();
     mafwrenderer->resume();
 
-    myNowPlayingWindow->onSongSelected(ui->songList->currentRow()+1,
-                                       ui->songList->count(),
-                                       ui->songList->currentItem()->data(UserRoleSongTitle).toString(),
-                                       ui->songList->currentItem()->data(UserRoleSongAlbum).toString(),
-                                       ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
-                                       ui->songList->currentItem()->data(UserRoleSongDurationS).toInt()
-                                       );
-    if(!ui->songList->currentItem()->data(UserRoleAlbumArt).isNull())
-        myNowPlayingWindow->setAlbumImage(ui->songList->currentItem()->data(UserRoleAlbumArt).toString());
-    else
-        myNowPlayingWindow->setAlbumImage(albumImage);
 #endif
     myNowPlayingWindow->show();
     ui->songList->clearSelection();
@@ -97,13 +86,13 @@ void MusicWindow::selectSong()
 void MusicWindow::connectSignals()
 {
 #ifdef Q_WS_MAEMO_5
-    connect(ui->songList, SIGNAL(activated(QModelIndex)), this, SLOT(selectSong()));
+    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onSongSelected(QListWidgetItem*)));
 #else
-    connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectSong()));
+    connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onSongSelected(QListWidgetItem*)));
 #endif
 #ifdef MAFW
-    connect(ui->albumList, SIGNAL(activated(QModelIndex)), this, SLOT(onAlbumSelected(QModelIndex)));
-    connect(ui->artistList, SIGNAL(activated(QModelIndex)), this, SLOT(onArtistSelected(QModelIndex)));
+    connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
+    connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onArtistSelected(QListWidgetItem*)));
 #endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onContextMenuRequested(const QPoint &)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
@@ -125,24 +114,46 @@ void MusicWindow::onContextMenuRequested(const QPoint &point)
 
 void MusicWindow::setRingingTone()
 {
-#ifdef Q_WS_MAEMO_5
-    QString filename = ui->songList->currentItem()->data(UserRoleSongURI).toString();
+#ifdef MAFW
+    mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
+#endif
+}
+
+void MusicWindow::onRingingToneUriReceived(QString objectId, QString uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
+
+    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
     QDBusInterface setRingtone("com.nokia.profiled",
                                "/com/nokia/profiled",
                                "com.nokia.profiled",
                                QDBusConnection::sessionBus(), this);
-    setRingtone.call("set_value", "general", "ringing.alert.tone", filename);
+    setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
     QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
-#endif
 }
 
 void MusicWindow::onShareClicked()
+{   
+    mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+}
+
+void MusicWindow::onShareUriReceived(QString objectId, QString Uri)
 {
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+
+    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
     // The code used here (share.(h/cpp/ui) was taken from filebox's source code
     // C) 2010. Matias Perez
     QStringList list;
-    QString clip = ui->songList->currentItem()->data(UserRoleSongURI).toString();
-    qDebug() << ui->songList->selectedItems().first()->data(UserRoleSongURI).toString();
+    QString clip;
+    clip = Uri;
+
     list.append(clip);
     Share *share = new Share(this, list);
     share->setAttribute(Qt::WA_DeleteOnClose);
@@ -151,7 +162,18 @@ void MusicWindow::onShareClicked()
 
 void MusicWindow::onDeleteClicked()
 {
-    QFile song(ui->songList->currentItem()->data(UserRoleSongURI).toString());
+    this->mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
+}
+
+void MusicWindow::onDeleteUriReceived(QString objectId, QString uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
+
+    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
+    QFile song(uri);
     if(song.exists()) {
         qDebug() << "Song exists";
         QMessageBox confirmDelete(QMessageBox::NoIcon,
@@ -310,14 +332,16 @@ QListWidget* MusicWindow::currentList()
 {
     if (!ui->songList->isHidden())
         return ui->songList;
-    if (!ui->artistList->isHidden())
+    else if (!ui->artistList->isHidden())
         return ui->artistList;
-    if (!ui->genresList->isHidden())
+    else if (!ui->genresList->isHidden())
         return ui->genresList;
-    if (!ui->albumList->isHidden())
+    else if (!ui->albumList->isHidden())
         return ui->albumList;
-    if (!ui->playlistList->isHidden())
+    else if (!ui->playlistList->isHidden())
         return ui->playlistList;
+    else
+        return 0;
 }
 
 void MusicWindow::saveViewState(QVariant view)
@@ -345,31 +369,31 @@ void MusicWindow::loadViewState()
 }
 
 #ifdef MAFW
-void MusicWindow::onAlbumSelected(QModelIndex index)
+void MusicWindow::onAlbumSelected(QListWidgetItem *item)
 {
     SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     albumView->setAttribute(Qt::WA_DeleteOnClose);
-    albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
-    albumView->setWindowTitle(index.data(UserRoleSongAlbum).toString());
+    albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
+    albumView->setWindowTitle(item->data(UserRoleSongAlbum).toString());
     albumView->show();
     ui->albumList->clearSelection();
 }
 
-void MusicWindow::onArtistSelected(QModelIndex index)
+void MusicWindow::onArtistSelected(QListWidgetItem *item)
 {
-    int songCount = index.data(UserRoleAlbumCount).toInt();
+    int songCount = item->data(UserRoleAlbumCount).toInt();
     if(songCount == 0 || songCount == 1) {
         SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         if (songCount == 1)
             albumView->isSingleAlbum = true;
-        albumView->browseSingleAlbum(index.data(UserRoleSongName).toString());
+        albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
-        albumView->setWindowTitle(index.data(UserRoleSongName).toString());
+        albumView->setWindowTitle(item->data(UserRoleSongName).toString());
         albumView->show();
     } else if(songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-        artistView->browseAlbum(index.data(UserRoleObjectID).toString());
-        artistView->setWindowTitle(index.data(UserRoleSongName).toString());
+        artistView->browseAlbum(item->data(UserRoleObjectID).toString());
+        artistView->setWindowTitle(item->data(UserRoleSongName).toString());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
         artistView->show();
     }
@@ -390,8 +414,6 @@ void MusicWindow::listSongs()
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,
-                                                                              MAFW_METADATA_KEY_URI,
-                                                                              MAFW_METADATA_KEY_ALBUM_ART_URI,
                                                                               MAFW_METADATA_KEY_DURATION),
                                                              0, MAFW_SOURCE_BROWSE_ALL);
 }
@@ -457,22 +479,6 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        if(v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleSongURI, QString::fromUtf8(filename));
-            }
-        }
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
-        if(v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleAlbumArt, QString::fromUtf8(filename));
-            }
-        }
 
         if(duration != -1) {
             QTime t(0,0);
@@ -545,6 +551,7 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
 #endif
 }
 
+
 void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
     if(browseId != browseAllAlbumsId)
@@ -615,7 +622,7 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
         return;
-    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down && !ui->searchWidget->isHidden())
+    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
         this->currentList()->setFocus();
     else {
         this->currentList()->clearSelection();
