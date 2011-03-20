@@ -202,26 +202,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
 }
 
 #ifdef MAFW
-void SingleAlbumView::browseAlbum(QString name)
-{
-    this->albumName = "localtagfs::music/albums/" + name;
-    this->setWindowTitle(name);
-    if(mafwTrackerSource->isReady())
-        this->listSongs();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
-}
-
-void SingleAlbumView::browseSingleAlbum(QString name)
-{
-    this->albumName = "localtagfs::music/artists/" + name;
-    this->setWindowTitle(name);
-    if(mafwTrackerSource->isReady())
-        this->listSongs();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
-}
-
 void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 {
     this->albumName = objectId;
