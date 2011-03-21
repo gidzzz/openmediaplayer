@@ -80,7 +80,7 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         r = option.rect;
         f.setPointSize(18);
         painter->setFont(f);
-        painter->drawText(r.left()+5, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
+        painter->drawText(r.left()+5, r.top()+5, r.width()-70, r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
 
         r = option.rect;
         f.setPointSize(13);
@@ -90,7 +90,7 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
         painter->setPen(defaultPen);;
         r = option.rect;
-        painter->drawPixmap(r.right()-(64+13), r.top()+4, 64, 64, albumArt);
+        painter->drawPixmap(r.right()-64, r.top()+4, 64, 64, albumArt);
     }
     painter->restore();
 }
