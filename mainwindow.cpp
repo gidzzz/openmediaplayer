@@ -60,6 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     this->connectSignals();
 
+    this->orientationChanged();
+
 #ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
 #endif
