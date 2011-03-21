@@ -355,14 +355,29 @@ void MafwRendererAdapter::getVolume()
     }
 }
 
-void MafwRendererAdapter::setWindowXid(unsigned long Xid)
+void MafwRendererAdapter::setWindowXid(uint Xid)
 {
     if(mafw_renderer)
     {
         GValue xid;
         memset(&xid, 0, sizeof(xid));
-        g_value_init (&xid, G_TYPE_ULONG);
-        g_value_set_ulong (&xid, Xid);
+        g_value_init (&xid, G_TYPE_UINT);
+        g_value_set_uint (&xid, Xid);
         mafw_extension_set_property (MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_XID, &xid);
+    }
+}
+
+void MafwRendererAdapter::setColorKey(int colorKey)
+{
+    if(mafw_renderer)
+    {
+        GValue gcolorkey;
+        memset(&gcolorkey, 0, sizeof(gcolorkey));
+        g_value_init (&gcolorkey, G_TYPE_INT);
+        g_value_set_int (&gcolorkey, colorKey);
+        // MAFW API docs state that this is a read-only property
+        // however, the stock Maemo 5 player is changing this to
+        // a static number.
+        mafw_extension_set_property (MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_COLORKEY, &gcolorkey);
     }
 }
