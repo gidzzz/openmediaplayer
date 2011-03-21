@@ -238,8 +238,7 @@ void NowPlayingWindow::connectSignals()
     connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
-    connect(ui->songProgress, SIGNAL(sliderPressed()), this, SLOT(onSliderPressed()));
-    connect(ui->songProgress, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
+    connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentview()));
 #ifdef MAFW
@@ -247,7 +246,6 @@ void NowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int, char*)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
-    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(QString,QString,QString,QString,QString)),
@@ -377,6 +375,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         ui->artistLabel->setText(artist);
         ui->albumNameLabel->setText(album);
         ui->trackLengthLabel->setText(t.toString("mm:ss"));
+        ui->songProgress->setRange(0, duration);
         if (isSeekable)
             ui->songProgress->setEnabled(true);
     }
@@ -483,18 +482,13 @@ void NowPlayingWindow::onPrevButtonPressed()
         ui->prevButton->setIcon(QIcon(prevButtonIcon));
 }
 
-void NowPlayingWindow::onSliderPressed()
+void NowPlayingWindow::onPositionSliderMoved(int position)
 {
 #ifdef MAFW
-    disconnect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
-#endif
-}
-
-void NowPlayingWindow::onSliderReleased()
-{
-#ifdef MAFW
-    this->setPosition(ui->songProgress->value());
-    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
+    mafwrenderer->setPosition(SeekAbsolute, position);
+    QTime t(0, 0);
+    t = t.addSecs(position);
+    ui->currentPositionLabel->setText(t.toString("mm:ss"));
 #endif
 }
 
@@ -503,20 +497,16 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
 {
     QTime t(0, 0);
     t = t.addSecs(position);
-    ui->currentPositionLabel->setText(t.toString("mm:ss"));
-}
+    if (!ui->songProgress->isSliderDown())
+        ui->currentPositionLabel->setText(t.toString("mm:ss"));
 
-void NowPlayingWindow::updateProgressBar(int position, QString)
-{
-    if(ui->trackLengthLabel->text() != "00:00" || ui->trackLengthLabel->text() != "--:--") {
-        if(this->songDuration != 0) {
+    if (this->songDuration != 0 && this->songDuration != -1 && entertainmentView == 0) {
 #ifdef DEBUG
-            qDebug() << "Current position: " << position;
-            qDebug() << "Song Length: " << this->songDuration;
+        qDebug() << "Current position: " << position;
+        qDebug() << "Song Length: " << this->songDuration;
 #endif
-            ui->songProgress->setRange(0, this->songDuration);
+        if (!ui->songProgress->isSliderDown() && ui->songProgress->isVisible())
             ui->songProgress->setValue(position);
-        }
     }
 }
 
@@ -750,9 +740,6 @@ void NowPlayingWindow::onShareClicked()
 void NowPlayingWindow::showEntertainmentview()
 {
     entertainmentView = new EntertainmentView(this);
-#ifdef MAFW
-    disconnect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
-#endif
     entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
     connect(entertainmentView, SIGNAL(destroyed()), this, SLOT(nullEntertainmentView()));
 #ifdef Q_WS_MAEMO_5
@@ -772,7 +759,6 @@ void NowPlayingWindow::nullEntertainmentView()
 {
     entertainmentView = 0;
 #ifdef MAFW
-    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(updateProgressBar(int,QString)));
     mafwrenderer->getPosition();
 #endif
 }

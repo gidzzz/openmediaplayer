@@ -84,7 +84,6 @@ private slots:
     void onVolumeChanged(const QDBusMessage &msg);
     void stateChanged(int state);
     void onPositionChanged(int, QString);
-    void updateProgressBar(int, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onRendererMetadataRequested(QString, QString, QString, QString object_id, QString);
     void onSourceMetadataRequested(QString, GHashTable*, QString);
@@ -102,8 +101,7 @@ private slots:
     void orientationChanged();
     void onNextButtonPressed();
     void onPrevButtonPressed();
-    void onSliderPressed();
-    void onSliderReleased();
+    void onPositionSliderMoved(int position);
     void onContextMenuRequested(const QPoint &point);
     void onShareClicked();
     void showEntertainmentview();
