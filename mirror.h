@@ -36,7 +36,7 @@ public:
         QPainter p(&buff);
 
         //Draw into the buffer
-        p.fillRect(opt.rect, QBrush(Qt::transparent));
+        p.fillRect(opt.rect, QBrush(widget->palette().background().color()));
 
         // Paint the item in the image starting from 0,0
         p.save();
