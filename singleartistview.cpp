@@ -150,6 +150,7 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 
 void SingleArtistView::orientationChanged()
 {
+    ui->albumList->setFlow(ui->albumList->flow());
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();

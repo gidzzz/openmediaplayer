@@ -223,7 +223,8 @@ void MusicWindow::onSearchTextChanged(QString text)
 
 void MusicWindow::orientationChanged()
 {
-    ui->songList->scroll(1,1);
+    this->currentList()->scroll(1,1);
+    ui->albumList->setFlow(ui->albumList->flow());
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
                                ui->indicator->width(),ui->indicator->height());

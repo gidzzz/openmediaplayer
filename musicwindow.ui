@@ -77,14 +77,20 @@
        <property name="isWrapping" stdset="0">
         <bool>true</bool>
        </property>
+       <property name="resizeMode">
+        <enum>QListView::Adjust</enum>
+       </property>
        <property name="gridSize">
         <size>
-         <width>157</width>
+         <width>155</width>
          <height>180</height>
         </size>
        </property>
        <property name="viewMode">
         <enum>QListView::IconMode</enum>
+       </property>
+       <property name="uniformItemSizes">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

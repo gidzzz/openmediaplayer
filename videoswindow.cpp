@@ -173,6 +173,8 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
 void VideosWindow::orientationChanged()
 {
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    if (screenGeometry.width() > screenGeometry.height())
+        ui->listWidget->setFlow(ui->listWidget->flow());
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
 }
