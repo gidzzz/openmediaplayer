@@ -39,6 +39,8 @@ void MafwRendererSignalHelper::play_uri_playback_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalPlayURI(qerror);
 }
 
@@ -51,6 +53,8 @@ void MafwRendererSignalHelper::play_object_playback_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalPlayObject(qerror);
 }
 
