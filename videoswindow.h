@@ -45,7 +45,7 @@ private:
 #endif
 
 private slots:
-    void onVideoSelected();
+    void onVideoSelected(QListWidgetItem*);
     void onSortingChanged(QAction*);
     void orientationChanged();
 #ifdef MAFW

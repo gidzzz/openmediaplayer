@@ -64,17 +64,22 @@ VideosWindow::~VideosWindow()
 
 void VideosWindow::connectSignals()
 {
-    connect(ui->listWidget, SIGNAL(activated(QModelIndex)), this, SLOT(onVideoSelected()));
+    connect(ui->listWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onVideoSelected(QListWidgetItem*)));
     connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
-void VideosWindow::onVideoSelected()
+void VideosWindow::onVideoSelected(QListWidgetItem *item)
 {
     // Placeholder function
     ui->listWidget->clearSelection();
+#ifdef MAFW
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+#else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
+#endif
     window->showFullScreen();
+    window->playObject(item->data(UserRoleObjectID).toString());
 }
 
 void VideosWindow::onSortingChanged(QAction *action)
@@ -116,10 +121,8 @@ void VideosWindow::listVideos()
 
 void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    Q_UNUSED(objectId);
     if(browseId != browseAllVideosId)
       return;
-
 
     QString title;
     int duration = -1;
@@ -151,6 +154,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
         }
 
         item->setText(title + "\n" + QString::number(duration));
+        item->setData(UserRoleObjectID, objectId);
         if(item->data(Qt::DecorationRole).isNull())
             item->setIcon(QIcon(defaultVideoImage));
         else
