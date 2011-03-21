@@ -56,6 +56,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
 
+    buttonWasDown = false;
+
 #ifdef Q_WS_MAEMO_5
     lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
 #endif
@@ -144,7 +146,7 @@ void NowPlayingWindow::toggleVolumeSlider()
 }
 
 #ifdef MAFW
-void NowPlayingWindow::onVolumeChanged(const QDBusMessage &msg)
+void NowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 {
     /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
                  /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.extension.get_extension_property string:volume*/
@@ -258,8 +260,8 @@ void NowPlayingWindow::connectSignals()
     connect(playlist, SIGNAL(playlistChanged()), this, SLOT(onPlaylistChanged()));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
-    connect(ui->nextButton, SIGNAL(clicked()), mafwrenderer, SLOT(next()));
-    connect(ui->prevButton, SIGNAL(clicked()), mafwrenderer, SLOT(previous()));
+    connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
+    connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
     connect(ui->songPlaylist, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onPlaylistItemActivated(QListWidgetItem*)));
@@ -269,7 +271,7 @@ void NowPlayingWindow::connectSignals()
                                           "/com/nokia/mafw/renderer/gstrenderer",
                                           "com.nokia.mafw.extension",
                                           "property_changed",
-                                          this, SLOT(onVolumeChanged(const QDBusMessage &)));
+                                          this, SLOT(onPropertyChanged(const QDBusMessage &)));
 #endif
 }
 
@@ -397,7 +399,6 @@ void NowPlayingWindow::orientationChanged()
         qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
 #endif
         ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
-        //ui->buttonsLayout->addItem(ui->horizontalSpacer_10);
         if(ui->volumeButton->isHidden())
             ui->volumeButton->show();
         ui->layoutWidget->setGeometry(QRect(0, 0, 372, 351));
@@ -409,7 +410,6 @@ void NowPlayingWindow::orientationChanged()
         qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
 #endif
         ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
-        //ui->buttonsLayout->removeItem(ui->horizontalSpacer_10);
         if(!ui->volumeButton->isHidden())
             ui->volumeButton->hide();
         ui->layoutWidget->setGeometry(QRect(ui->layoutWidget->rect().left(),
@@ -468,10 +468,11 @@ void NowPlayingWindow::onRepeatButtonToggled(bool checked)
 
 void NowPlayingWindow::onNextButtonPressed()
 {
-    if(ui->nextButton->isDown())
+    if(ui->nextButton->isDown()) {
         ui->nextButton->setIcon(QIcon(nextButtonPressedIcon));
-    else
+    } else {
         ui->nextButton->setIcon(QIcon(nextButtonIcon));
+    }
 }
 
 void NowPlayingWindow::onPrevButtonPressed()
@@ -493,8 +494,35 @@ void NowPlayingWindow::onPositionSliderMoved(int position)
 }
 
 #ifdef MAFW
+void NowPlayingWindow::onNextButtonClicked()
+{
+    if (ui->nextButton->isDown()) {
+        buttonWasDown = true;
+        mafwrenderer->setPosition(SeekRelative, 3);
+        mafwrenderer->getPosition();
+    } else {
+        if (!buttonWasDown)
+            mafwrenderer->next();
+        buttonWasDown = false;
+    }
+}
+
+void NowPlayingWindow::onPreviousButtonClicked()
+{
+    if (ui->prevButton->isDown()) {
+        buttonWasDown = true;
+        mafwrenderer->setPosition(SeekRelative, -3);
+        mafwrenderer->getPosition();
+    } else {
+        if (!buttonWasDown)
+            mafwrenderer->previous();
+        buttonWasDown = false;
+    }
+}
+
 void NowPlayingWindow::onPositionChanged(int position, QString)
 {
+    currentSongPosition = position;
     QTime t(0, 0);
     t = t.addSecs(position);
     if (!ui->songProgress->isSliderDown())
@@ -765,25 +793,31 @@ void NowPlayingWindow::nullEntertainmentView()
 
 void NowPlayingWindow::savePlaylist()
 {
-    QDialog *saveDialog = new QDialog(this);
-    saveDialog->setWindowTitle("Save playlist");
-    saveDialog->setAttribute(Qt::WA_DeleteOnClose);
+    savePlaylistDialog = new QDialog(this);
+    savePlaylistDialog->setWindowTitle("Save playlist");
+    savePlaylistDialog->setAttribute(Qt::WA_DeleteOnClose);
 
-    QGridLayout *layout = new QGridLayout(saveDialog);
+    QGridLayout *layout = new QGridLayout(savePlaylistDialog);
 
-    QLabel *nameLabel = new QLabel(saveDialog);
+    QLabel *nameLabel = new QLabel(savePlaylistDialog);
     nameLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     nameLabel->setAlignment(Qt::AlignCenter);
     nameLabel->setText("Name");
 
-    QLineEdit *nameLineEdit = new QLineEdit(saveDialog);
+    playlistNameLineEdit = new QLineEdit(savePlaylistDialog);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save, Qt::Horizontal, this);
-    connect(buttonBox, SIGNAL(accepted()), saveDialog, SLOT(accept()));
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(onSavePlaylistAccepted()));
 
     layout->addWidget(nameLabel, 0, 0);
-    layout->addWidget(nameLineEdit, 0, 1);
+    layout->addWidget(playlistNameLineEdit, 0, 1);
     layout->addWidget(buttonBox, 0, 2);
 
-    saveDialog->exec();
+    savePlaylistDialog->show();
+}
+
+void NowPlayingWindow::onSavePlaylistAccepted()
+{
+    playlist->duplicatePlaylist(playlistNameLineEdit->text());
+    savePlaylistDialog->close();
 }

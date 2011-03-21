@@ -66,14 +66,18 @@ private:
     void connectSignals();
     QTimer *volumeTimer;
     QTimer *positionTimer;
+    QLineEdit *playlistNameLineEdit;
     bool playlistRequested;
     bool isDefaultArt;
+    bool buttonWasDown;
     int songDuration;
+    int currentSongPosition;
     QGraphicsScene *albumArtScene;
     QString albumArtUri;
     mirror *m;
     void keyPressEvent(QKeyEvent *);
     QMenu *contextMenu;
+    QDialog *savePlaylistDialog;
 
 private slots:
     void toggleVolumeSlider();
@@ -81,7 +85,7 @@ private slots:
     void toggleList();
     void setRingingTone();
 #ifdef MAFW
-    void onVolumeChanged(const QDBusMessage &msg);
+    void onPropertyChanged(const QDBusMessage &msg);
     void stateChanged(int state);
     void onPositionChanged(int, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
@@ -94,6 +98,8 @@ private slots:
     void onPlaylistChanged();
     void onGconfValueChanged();
     void onMediaChanged(int index, char*);
+    void onNextButtonClicked();
+    void onPreviousButtonClicked();
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
@@ -108,6 +114,7 @@ private slots:
     void updateEntertainmentViewMetadata();
     void nullEntertainmentView();
     void savePlaylist();
+    void onSavePlaylistAccepted();
 };
 
 #endif // NOWPLAYINGWINDOW_H
