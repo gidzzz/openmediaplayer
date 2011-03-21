@@ -71,6 +71,17 @@ border: none;
         </property>
         <item>
          <widget class="QToolButton" name="shareButton">
+          <property name="styleSheet">
+           <string notr="true">QToolButton:pressed
+{
+background transparent;
+}
+
+QToolButton
+{
+border: none;
+}</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -84,6 +95,18 @@ border: none;
         </item>
         <item>
          <widget class="QToolButton" name="deleteButton">
+          <property name="styleSheet">
+           <string notr="true">QToolButton:pressed
+{
+background transparent;
+}
+
+QToolButton
+{
+border: none;
+}
+</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -151,6 +174,17 @@ border: none;
        </item>
        <item>
         <widget class="QToolButton" name="volumeButton">
+         <property name="styleSheet">
+          <string notr="true">QToolButton:pressed
+{
+background transparent;
+}
+
+QToolButton
+{
+border: none;
+}</string>
+         </property>
          <property name="text">
           <string/>
          </property>

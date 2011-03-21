@@ -34,7 +34,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRendererAdapte
 #endif
 {
     ui->setupUi(this);
-    setAttribute(Qt::WA_NativeWindow);
+    setAttribute(Qt::WA_OpaquePaintEvent);
     ui->widget->setAttribute(Qt::WA_NativeWindow);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -70,10 +70,13 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRendererAdapte
     this->connectSignals();
     ui->volumeSlider->hide();
 
+    this->showOverlay(false);
+
 #ifdef MAFW
     mafwrenderer->setColorKey(199939);
     mafwrenderer->getStatus();
     mafwrenderer->getPosition();
+    ui->toolbarOverlay->setStyleSheet(ui->controlOverlay->styleSheet());
 #endif
 }
 
@@ -210,6 +213,7 @@ void VideoNowPlayingWindow::orientationChanged()
                                     screenGeometry.width(), ui->toolbarOverlay->height());
     ui->wmCloseButton->setGeometry(screenGeometry.width()-ui->wmCloseButton->width(), 0,
                                    ui->wmCloseButton->width(), ui->wmCloseButton->height());
+    ui->widget->setGeometry(0, 0, screenGeometry.width(), screenGeometry.height());
 }
 
 #ifdef Q_WS_MAEMO_5
@@ -305,7 +309,12 @@ void VideoNowPlayingWindow::playVideo()
 
 void VideoNowPlayingWindow::paintEvent(QPaintEvent *)
 {
-
+    QPainter painter(this);
+    QBrush brush;
+    brush.setColor(QColor(3, 13, 3));
+    painter.setBrush(brush);
+    QPalette palette = this->palette();
+    palette.setColor(this->backgroundRole(), QColor(3, 13, 3));
 }
 
 void VideoNowPlayingWindow::mouseReleaseEvent(QMouseEvent *)
