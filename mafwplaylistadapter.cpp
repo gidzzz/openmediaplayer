@@ -158,6 +158,18 @@ void MafwPlaylistAdapter::assignAudioPlaylist()
     mafwrenderer->assignPlaylist(mafw_playlist);
 }
 
+void MafwPlaylistAdapter::assignVideoPlaylist()
+{
+    mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpVideoPlaylist"));
+    mafwrenderer->assignPlaylist(mafw_playlist);
+}
+
+void MafwPlaylistAdapter::duplicatePlaylist(QString newName)
+{
+    QString playlistName = QString::fromUtf8(mafw_playlist_get_name (mafw_playlist));
+    mafw_playlist_manager->duplicatePlaylist(newName, mafw_playlist_manager->createPlaylist(playlistName));
+}
+
 bool MafwPlaylistAdapter::isPlaylistNull()
 {
     if (mafw_playlist)

@@ -24,6 +24,9 @@ public:
     void insertItem(QString objectId, guint index);
     void appendUri(QString url);
     void appendItem(QString objectId);
+    void duplicatePlaylist(QString newName);
+    MafwPlaylist *mafw_playlist;
+    MafwPlaylistManagerAdapter *mafw_playlist_manager;
 
     static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
 
@@ -35,10 +38,9 @@ signals:
 public slots:
     void getItems();
     void assignAudioPlaylist();
+    void assignVideoPlaylist();
 
 private:
-    MafwPlaylist *mafw_playlist;
-    MafwPlaylistManagerAdapter *mafw_playlist_manager;
     MafwRendererAdapter *mafwrenderer;
     GError *error;
 
