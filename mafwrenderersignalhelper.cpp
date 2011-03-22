@@ -27,6 +27,8 @@ void MafwRendererSignalHelper::play_playback_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalPlay(qerror);
 }
 
@@ -67,6 +69,8 @@ void MafwRendererSignalHelper::stop_playback_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalStop(qerror);
 }
 
@@ -79,6 +83,8 @@ void MafwRendererSignalHelper::pause_playback_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalPause(qerror);
 }
 
@@ -91,6 +97,8 @@ void MafwRendererSignalHelper::resume_playback_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalResume(qerror);
 }
 
@@ -156,6 +164,8 @@ void MafwRendererSignalHelper::set_position_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalSetPosition(position, qerror);
 }
 
@@ -169,6 +179,8 @@ void MafwRendererSignalHelper::get_position_cb(MafwRenderer*,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalGetPosition(position, qerror);
 }
 
@@ -208,6 +220,8 @@ void MafwRendererSignalHelper::get_property_cb(MafwExtension *,
     {
         qerror = QString(error->message);
     }
+    if (!qerror.isNull() && !qerror.isEmpty())
+        qDebug() << qerror;
 #ifdef DEBUG
     qDebug() << "MafwRendererSignalHelper::get_property_cb";
 #endif
