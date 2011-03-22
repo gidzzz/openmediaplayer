@@ -618,7 +618,6 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
     QString artist;
     QString album;
     int duration = -1;
-    QTime t(0, 0);
     if(metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
@@ -636,12 +635,11 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
-        t = t.addSecs(duration);
 
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(QString::number(index));
         item->setData(UserRoleSongTitle, title);
-        item->setData(UserRoleSongDuration, t.toString("mm:ss"));
+        item->setData(UserRoleSongDuration, duration);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleObjectID, object_id);
@@ -685,6 +683,10 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     ui->artistLabel->setText(item->data(UserRoleSongArtist).toString());
     ui->albumNameLabel->setText(item->data(UserRoleSongAlbum).toString());
     ui->currentPositionLabel->setText("00:00");
+    QTime t(0, 0);
+    t = t.addSecs(item->data(UserRoleSongDuration).toInt());
+    this->songDuration = item->data(UserRoleSongDuration).toInt();
+    ui->trackLengthLabel->setText(t.toString("mm:ss"));
     mafwrenderer->gotoIndex(item->text().toInt());
     if (this->mafwState == Stopped)
         mafwrenderer->play();

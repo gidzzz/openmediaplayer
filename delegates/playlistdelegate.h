@@ -12,6 +12,7 @@
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QTime>
 #include <QStyleOptionViewItem>
 #include "includes.h"
 
