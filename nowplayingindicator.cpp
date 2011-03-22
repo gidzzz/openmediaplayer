@@ -123,17 +123,31 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && rect().contains(event->pos())) {
         emit clicked();
-    // This button does some weird behavior, it always creates a new NowPlayingWindow...
-    // If video was running, show its window.
-    // If x was running, shows its window.
-    // TODO: Update code as mafw is integrated.
 #ifdef MAFW
-        NowPlayingWindow *songs = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        QString playlistName = playlist->playlistName();
+        qDebug() << playlistName;
+        if (playlistName == "FmpVideoPlaylist") {
+            VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            window->showFullScreen();
+        }
+        else if (playlistName == "FmpRadioPlaylist") {
+            RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            window->show();
+        }
+        // The user can only create audio playlists with the UX
+        // Assume all other playlists are audio ones.
+        else {
+            NowPlayingWindow *window = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            window->show();
+        }
 #else
-        NowPlayingWindow *songs = new NowPlayingWindow(this);
+        NowPlayingWindow *window = new NowPlayingWindow(this);
+        window->setAttribute(Qt::WA_DeleteOnClose);
+        window->show();
 #endif
-        songs->setAttribute(Qt::WA_DeleteOnClose);
-        songs->show();
     }
 }
 
