@@ -73,6 +73,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
 {
     // Placeholder function
     ui->listWidget->clearSelection();
+    playlist->assignVideoPlaylist();
 #ifdef MAFW
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
 #else
