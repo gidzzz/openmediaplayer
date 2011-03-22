@@ -7,6 +7,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
+    if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
+        ui->onExitBox->setCurrentIndex(1);
 }
 
 SettingsDialog::~SettingsDialog()
