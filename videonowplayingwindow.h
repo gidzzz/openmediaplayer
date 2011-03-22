@@ -51,6 +51,7 @@ private:
     QString objectIdToPlay;
     bool portrait;
     bool isOverlayVisible;
+    bool gotInitialState;
 #ifdef Q_WS_MAEMO_5
     QMaemo5Rotator *rotator;
     void setDNDAtom(bool dnd);

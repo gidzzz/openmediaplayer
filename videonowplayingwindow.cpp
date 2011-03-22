@@ -65,6 +65,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRendererAdapte
     positionTimer->setInterval(1000);
 
     this->isOverlayVisible = true;
+    this->gotInitialState = false;
 
     this->setIcons();
     this->connectSignals();
@@ -194,6 +195,8 @@ void VideoNowPlayingWindow::stateChanged(int state)
         this->setDNDAtom(false);
         if(positionTimer->isActive())
             positionTimer->stop();
+        if (this->gotInitialState)
+            this->close();
     }
     else if(state == Transitioning) {
         ui->progressBar->setEnabled(false);
@@ -344,7 +347,7 @@ void VideoNowPlayingWindow::showOverlay(bool show)
 
     if (!show && this->positionTimer->isActive())
         this->positionTimer->stop();
-    else if (show && !this->positionTimer->isActive()) {
+    else if (show && !this->positionTimer->isActive() && this->mafwState != Stopped) {
         this->positionTimer->start();
         mafwrenderer->getPosition();
     }
@@ -364,6 +367,7 @@ void VideoNowPlayingWindow::onSliderMoved(int position)
 void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
 {
     this->stateChanged(state);
+    this->gotInitialState = true;
 }
 
 void VideoNowPlayingWindow::onPositionChanged(int position, QString)
