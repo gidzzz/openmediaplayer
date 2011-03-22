@@ -214,6 +214,9 @@ void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 
 void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 {
+#ifdef MAFw
+    playlist->assignAudioPlaylist();
+#endif
     npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     npWindow->setAttribute(Qt::WA_DeleteOnClose);
     npWindow->onSongSelected(ui->songList->currentRow()+1,
@@ -232,7 +235,6 @@ void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 
     mafwrenderer->gotoIndex(ui->songList->currentRow());
     mafwrenderer->play();
-    mafwrenderer->resume();
 
     ui->songList->clearSelection();
 }
@@ -288,8 +290,6 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         }
 
         npWindow->show();
-        mafwrenderer->play();
-        mafwrenderer->resume();
     }
 #endif
 }
