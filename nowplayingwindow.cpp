@@ -87,7 +87,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
     mafwrenderer->getVolume();
-    mafwrenderer->getPosition();
 #endif
 }
 
@@ -197,6 +196,7 @@ void NowPlayingWindow::stateChanged(int state)
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+        mafwrenderer->getPosition();
         if(positionTimer->isActive())
             positionTimer->stop();
     }
@@ -204,6 +204,7 @@ void NowPlayingWindow::stateChanged(int state)
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+        mafwrenderer->getPosition();
         if(!positionTimer->isActive())
             positionTimer->start();
     }
@@ -561,7 +562,6 @@ void NowPlayingWindow::showEvent(QShowEvent *)
 {
     mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
-    mafwrenderer->getPosition();
     this->updatePlaylistState();
     if(positionTimer->isActive())
         ui->songProgress->setEnabled(true);
