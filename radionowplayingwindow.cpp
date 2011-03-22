@@ -19,9 +19,14 @@
 #include "radionowplayingwindow.h"
 #include "ui_radionowplayingwindow.h"
 
-RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent) :
+RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
     QMainWindow(parent),
     ui(new Ui::RadioNowPlayingWindow)
+#ifdef MAFW
+    ,mafwrenderer(mra),
+    mafwTrackerSource(msa),
+    playlist(pls)
+#endif
 {
     ui->setupUi(this);
     ui->volumeSlider->hide();
