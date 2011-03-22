@@ -66,6 +66,7 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
     myNowPlayingWindow->setAttribute(Qt::WA_DeleteOnClose);
 #ifdef MAFW
     qDebug() << "Clearing playlist";
+    playlist->assignAudioPlaylist();
     playlist->clear();
     qDebug() << "Playlist cleared";
     for (int i = 0; i < ui->songList->count(); i++) {
@@ -76,7 +77,6 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
 
     mafwrenderer->gotoIndex(ui->songList->currentRow());
     mafwrenderer->play();
-    mafwrenderer->resume();
 
 #endif
     myNowPlayingWindow->show();
