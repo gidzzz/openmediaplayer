@@ -152,6 +152,11 @@ void MafwPlaylistAdapter::onPlaylistChanged(GObject* playlist)
     emit playlistChanged();
 }
 
+QString MafwPlaylistAdapter::playlistName()
+{
+    return QString::fromUtf8(mafw_playlist_get_name (mafw_playlist));
+}
+
 void MafwPlaylistAdapter::assignAudioPlaylist()
 {
     mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpAudioPlaylist"));
@@ -166,8 +171,7 @@ void MafwPlaylistAdapter::assignVideoPlaylist()
 
 void MafwPlaylistAdapter::duplicatePlaylist(QString newName)
 {
-    QString playlistName = QString::fromUtf8(mafw_playlist_get_name (mafw_playlist));
-    mafw_playlist_manager->duplicatePlaylist(newName, mafw_playlist_manager->createPlaylist(playlistName));
+    mafw_playlist_manager->duplicatePlaylist(newName, mafw_playlist_manager->createPlaylist(this->playlistName()));
 }
 
 bool MafwPlaylistAdapter::isPlaylistNull()
