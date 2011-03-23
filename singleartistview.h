@@ -11,6 +11,7 @@
 #endif
 
 #include "singlealbumview.h"
+#include "delegates/thumbnailitemdelegate.h"
 #include "includes.h"
 
 namespace Ui {
@@ -25,6 +26,7 @@ public:
     explicit SingleArtistView(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~SingleArtistView();
     void browseAlbum(QString artistId);
+    void setSongCount(int songCount);
 
 private:
     Ui::SingleArtistView *ui;

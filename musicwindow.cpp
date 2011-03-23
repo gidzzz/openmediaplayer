@@ -38,8 +38,10 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     ui->searchWidget->hide();
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
+    ThumbnailItemDelegate *albumDelegate = new ThumbnailItemDelegate(ui->albumList);
     ui->songList->setItemDelegate(delegate);
     ui->artistList->setItemDelegate(artistDelegate);
+    ui->albumList->setItemDelegate(albumDelegate);
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
     this->loadViewState();
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
@@ -206,6 +208,12 @@ void MusicWindow::onSearchTextChanged(QString text)
                  ui->songList->item(i)->setHidden(false);
              else
                  ui->songList->item(i)->setHidden(true);
+        } else if (this->currentList() == ui->albumList) {
+             if (ui->albumList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
+                 ui->albumList->item(i)->data(UserRoleValueText).toString().toLower().indexOf(text.toLower()) != -1)
+                 ui->albumList->item(i)->setHidden(false);
+             else
+                 ui->albumList->item(i)->setHidden(true);
         } else {
             if (this->currentList()->item(i)->text().toLower().indexOf(text.toLower()) == -1)
                 this->currentList()->item(i)->setHidden(true);
@@ -375,7 +383,7 @@ void MusicWindow::onAlbumSelected(QListWidgetItem *item)
     SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
     albumView->setAttribute(Qt::WA_DeleteOnClose);
     albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-    albumView->setWindowTitle(item->data(UserRoleSongAlbum).toString());
+    albumView->setWindowTitle(item->data(Qt::DisplayRole).toString());
     albumView->show();
     ui->albumList->clearSelection();
 }
@@ -395,6 +403,7 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleSongName).toString());
+        artistView->setSongCount(item->data(UserRoleSongCount).toInt());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
         artistView->show();
     }
@@ -561,7 +570,7 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
     QString albumTitle;
     QString artist;
     QString albumArt;
-    QListWidgetItem *item = new QListWidgetItem(ui->albumList);
+    QListWidgetItem *item = new QListWidgetItem();
     if(metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
@@ -577,22 +586,21 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
             if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleAlbumArt, filename);
+                item->setIcon(QIcon(QString::fromUtf8(filename)));
             }
+        } else {
+            item->setIcon(QIcon(defaultAlbumArtMedium));
         }
     }
 
-    item->setData(UserRoleSongAlbum, albumTitle);
-    item->setData(UserRoleAlbumCount, artist);
+    if (artist != "__VV__")
+        item->setData(UserRoleValueText, artist);
+    else
+        item->setData(UserRoleValueText, tr("Various artists"));
     item->setData(UserRoleObjectID, objectId);
     item->setText(albumTitle);
-    if(item->data(UserRoleAlbumArt).isNull())
-        item->setIcon(QIcon(defaultAlbumArtMedium));
-    else {
-        QPixmap icon(item->data(UserRoleAlbumArt).toString());
-        item->setIcon(QIcon(icon.scaled(124, 124)));
-    }
-    ui->artistList->addItem(item);
+
+    ui->albumList->addItem(item);
     if(!error.isEmpty())
         qDebug() << error;
 #ifdef Q_WS_MAEMO_5

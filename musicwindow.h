@@ -16,6 +16,7 @@
 #include "ui_musicwindow.h"
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/artistlistitemdelegate.h"
+#include "delegates/thumbnailitemdelegate.h"
 #include "singlealbumview.h"
 #include "singleartistview.h"
 #include "ui_musicwindow.h"

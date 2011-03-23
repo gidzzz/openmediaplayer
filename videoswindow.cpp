@@ -35,6 +35,10 @@ VideosWindow::VideosWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSource
 #ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
 #endif
+
+    ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->listWidget);
+    ui->listWidget->setItemDelegate(delegate);
+
     sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
     sortByDate = new QAction(tr("Date"), sortByActionGroup);
@@ -150,16 +154,21 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
             if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(Qt::DecorationRole, QString::fromUtf8(filename));
+                item->setIcon(QIcon(QString::fromUtf8(filename)));
             }
+        } else {
+            item->setIcon(QIcon(defaultVideoImage));
         }
 
-        item->setText(title + "\n" + QString::number(duration));
+        item->setText(title);
+        if (duration != -1) {
+            QTime t(0, 0);
+            t = t.addSecs(duration);
+            item->setData(UserRoleValueText, t.toString("h:mm:ss"));
+        } else {
+            item->setData(UserRoleValueText, "--:--");
+        }
         item->setData(UserRoleObjectID, objectId);
-        if(item->data(Qt::DecorationRole).isNull())
-            item->setIcon(QIcon(defaultVideoImage));
-        else
-            item->setIcon(QIcon(item->data(Qt::DecorationRole).toString()));
         ui->listWidget->addItem(item);
     }
 #ifdef Q_WS_MAEMO_5

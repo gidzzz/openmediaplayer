@@ -8,6 +8,7 @@
 
 #include "ui_videoswindow.h"
 #include "videonowplayingwindow.h"
+#include "delegates/thumbnailitemdelegate.h"
 
 #ifdef MAFW
     #include "mafwrendereradapter.h"

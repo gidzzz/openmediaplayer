@@ -29,6 +29,10 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, Ma
 #endif
 {
     ui->setupUi(this);
+
+    ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->albumList);
+    ui->albumList->setItemDelegate(delegate);
+
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
@@ -104,21 +108,19 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
             if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleAlbumArt, filename);
+                item->setIcon(QIcon(QString::fromUtf8(filename)));
             }
+        } else {
+            item->setIcon(QIcon(defaultAlbumArtMedium));
         }
     }
 
-    item->setData(UserRoleSongAlbum, albumTitle);
-    item->setData(UserRoleAlbumCount, artist);
+    if (artist != "__VV__")
+        item->setData(UserRoleValueText, artist);
+    else
+        item->setData(UserRoleValueText, tr("Various artists"));
     item->setData(UserRoleObjectID, objectId);
     item->setText(albumTitle);
-    if(item->data(UserRoleAlbumArt).isNull())
-        item->setIcon(QIcon(defaultAlbumArtMedium));
-    else {
-        QPixmap icon(item->data(UserRoleAlbumArt).toString());
-        item->setIcon(QIcon(icon.scaled(124, 124)));
-    }
     ui->albumList->addItem(item);
     if(!error.isEmpty())
         qDebug() << error;
@@ -188,5 +190,13 @@ void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
         if (!ui->searchEdit->hasFocus())
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
+    }
+}
+
+void SingleArtistView::setSongCount(int songCount)
+{
+    if (songCount != -1) {
+        ui->albumList->item(0)->setData(UserRoleValueText, QString::number(songCount) + " " + tr("songs"));
+        ui->albumList->scroll(1, 1);
     }
 }
