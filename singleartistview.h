@@ -36,17 +36,30 @@ private:
     MafwSourceAdapter* mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     uint browseAllAlbumsId;
+    uint addToNowPlayingId;
     QString artistObjectId;
     void listAlbums();
+    int numberOfSongs;
+    int numberOfSongsToAdd;
+    bool shuffleRequested;
+#endif
+#ifdef Q_WS_MAEMO_5
+    void notifyOnAddedToNowPlaying(int songCount);
 #endif
 
 private slots:
 #ifdef MAFW
     void browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error);
+    void onBrowseAllSongs(uint, int remainingCount, uint, QString objectId, GHashTable*, QString);
+    void onAddAlbumBrowseResult(uint, int remainingCount, uint, QString objectId, GHashTable*, QString);
 #endif
     void onAlbumSelected(QListWidgetItem*);
     void orientationChanged();
     void onSearchTextChanged(QString);
+    void addAllToNowPlaying();
+    void shuffleAllSongs();
+    void onContextMenuRequested(const QPoint &point);
+    void onAddAlbumToNowPlaying();
 };
 
 #endif // SINGLEARTISTVIEW_H

@@ -121,7 +121,25 @@
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <addaction name="actionAdd_songs_to_now_playing"/>
+    <addaction name="actionDelete"/>
+   </widget>
+   <addaction name="menuOptions"/>
   </widget>
+  <action name="actionAdd_songs_to_now_playing">
+   <property name="text">
+    <string>Add songs to now playing</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

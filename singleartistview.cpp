@@ -33,6 +33,10 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, Ma
     ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->albumList);
     ui->albumList->setItemDelegate(delegate);
 
+    ui->albumList->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    shuffleRequested = false;
+
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
@@ -50,6 +54,8 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, Ma
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
+    connect(ui->actionAdd_songs_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
+    connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     this->orientationChanged();
 }
 
@@ -79,7 +85,7 @@ void SingleArtistView::listAlbums()
 
     this->browseAllAlbumsId = mafwTrackerSource->sourceBrowse(this->artistObjectId.toUtf8(), false, NULL, NULL,
                                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
-                                                                               MAFW_METADATA_KEY_ARTIST,
+                                                                               MAFW_METADATA_KEY_CHILDCOUNT_1,
                                                                                MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
                                                               0, MAFW_SOURCE_BROWSE_ALL);
 }
@@ -90,7 +96,8 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         return;
 
     QString albumTitle;
-    QString artist;
+    QString songCount;
+    int childcount = -1;
     QString albumArt;
     QListWidgetItem *item = new QListWidgetItem();
     if(metadata != NULL) {
@@ -100,8 +107,18 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown album)";
 
         v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ARTIST);
-        artist = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown artist)";
+                                MAFW_METADATA_KEY_CHILDCOUNT_1);
+        childcount = v ? g_value_get_int(v) : -1;
+
+        if (childcount != -1) {
+            songCount.append(QString::number(childcount));
+            songCount.append(" ");
+
+            if (childcount == 1)
+                songCount.append(tr("song"));
+            else
+                songCount.append(tr("songs"));
+        }
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI);
         if(v != NULL) {
@@ -115,10 +132,8 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         }
     }
 
-    if (artist != "__VV__")
-        item->setData(UserRoleValueText, artist);
-    else
-        item->setData(UserRoleValueText, tr("Various artists"));
+    item->setData(UserRoleValueText, songCount);
+    item->setData(UserRoleSongCount, childcount);
     item->setData(UserRoleObjectID, objectId);
     item->setText(albumTitle);
     ui->albumList->addItem(item);
@@ -137,7 +152,7 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 {
 #ifdef MAFW
     if (item->data(Qt::UserRole).toString() == "shuffle")
-        return;
+        this->shuffleAllSongs();
     else {
         SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         albumView->setAttribute(Qt::WA_DeleteOnClose);
@@ -195,8 +210,155 @@ void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
 
 void SingleArtistView::setSongCount(int songCount)
 {
+    this->numberOfSongs = songCount;
     if (songCount != -1) {
         ui->albumList->item(0)->setData(UserRoleValueText, QString::number(songCount) + " " + tr("songs"));
         ui->albumList->scroll(1, 1);
     }
 }
+
+void SingleArtistView::addAllToNowPlaying()
+{
+    if (ui->albumList->count() > 1) {
+#ifdef MAFW
+
+#ifdef Q_WS_MAEMO_5
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+
+        if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+            playlist->assignAudioPlaylist();
+
+        this->browseAllAlbumsId = mafwTrackerSource->sourceBrowse(this->artistObjectId.toUtf8(), true, NULL, NULL, 0,
+                                                              0, MAFW_SOURCE_BROWSE_ALL);
+        connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+                this, SLOT(onBrowseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+#endif
+    }
+}
+
+#ifdef MAFW
+void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString)
+{
+    if (this->browseAllAlbumsId != browseId)
+        return;
+
+    if (!objectId.endsWith("/"))
+        playlist->appendItem(objectId);
+
+
+    if (remainingCount == 0) {
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+                   this, SLOT(onBrowseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+
+        if (!shuffleRequested) {
+#ifdef Q_WS_MAEMO_5
+            QString addedToNp;
+            // Multiple albums won't hold 1 song, but oh well...
+            if (this->numberOfSongs == 1)
+                addedToNp = tr("clip added to now playing");
+            else
+                addedToNp = tr("clips added to now playing");
+            QMaemo5InformationBox::information(this, QString::number(this->numberOfSongs) + " " + addedToNp);
+#endif
+        } else if (shuffleRequested && remainingCount == 0) {
+            mafwrenderer->play();
+            mafwrenderer->resume();
+
+            NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            window->onShuffleButtonToggled(true);
+            window->show();
+
+            shuffleRequested = false;
+        }
+    }
+
+#ifdef Q_WS_MAEMO_5
+    if (remainingCount != 0)
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+    else
+       this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
+}
+#endif
+
+void SingleArtistView::shuffleAllSongs()
+{
+#ifdef MAFW
+    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+        playlist->assignAudioPlaylist();
+
+    playlist->clear();
+    playlist->setShuffled(true);
+
+    shuffleRequested = true;
+    this->addAllToNowPlaying();
+#endif
+}
+
+void SingleArtistView::onContextMenuRequested(const QPoint &point)
+{
+    if (ui->albumList->currentRow() != 0) {
+        QMenu *contextMenu = new QMenu(this);
+        contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+        contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddAlbumToNowPlaying()));
+        contextMenu->addAction(tr("Delete"));
+        contextMenu->exec(point);
+    }
+}
+
+void SingleArtistView::onAddAlbumToNowPlaying()
+{
+#ifdef Q_WS_MAEMO_5
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+
+#ifdef MAFW
+    QString objectIdToBrowse = ui->albumList->currentItem()->data(UserRoleObjectID).toString();
+    numberOfSongsToAdd = ui->albumList->currentItem()->data(UserRoleSongCount).toInt();
+    this->addToNowPlayingId = mafwTrackerSource->sourceBrowse(objectIdToBrowse.toUtf8(), true, NULL, NULL, 0,
+                                                              0, MAFW_SOURCE_BROWSE_ALL);
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+            this, SLOT(onAddAlbumBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+#endif
+}
+
+void SingleArtistView::onAddAlbumBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString)
+{
+    if (this->addToNowPlayingId != browseId)
+        return;
+
+    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+        playlist->assignAudioPlaylist();
+
+    playlist->appendItem(objectId);
+
+#ifdef Q_WS_MAEMO_5
+    if (remainingCount != 0)
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+    else {
+       this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+       this->notifyOnAddedToNowPlaying(numberOfSongsToAdd);
+   }
+#endif
+
+    if (remainingCount == 0) {
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(onAddAlbumBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+        this->addToNowPlayingId = 0;
+        this->numberOfSongsToAdd = 0;
+    }
+}
+
+#ifdef Q_WS_MAEMO_5
+void SingleArtistView::notifyOnAddedToNowPlaying(int songCount)
+{
+        QString addedToNp;
+        if (songCount == 1)
+            addedToNp = tr("clip added to now playing");
+        else
+            addedToNp = tr("clips added to now playing");
+        QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
+}
+#endif
