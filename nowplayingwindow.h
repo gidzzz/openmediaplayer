@@ -116,6 +116,7 @@ private slots:
     void savePlaylist();
     void onSavePlaylistAccepted();
     void onDeleteFromNowPlaying();
+    void selectItemByText(int numberInPlaylist);
 };
 
 #endif // NOWPLAYINGWINDOW_H

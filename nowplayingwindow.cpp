@@ -546,7 +546,8 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist* MafwPlaylist, uint index, MafwP
         this->updatePlaylistState();
         this->playlistRequested = true;
     }
-    lastPlayingSong->set(index);
+    int indexAsInt = index;
+    lastPlayingSong->set(indexAsInt);
     this->mafwPlaylist = MafwPlaylist;
     this->setSongNumber(index+1, ui->songPlaylist->count());
     this->stateChanged(state);
@@ -571,13 +572,13 @@ void NowPlayingWindow::showEvent(QShowEvent *)
 void NowPlayingWindow::onGconfValueChanged()
 {
     this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
-    ui->songPlaylist->setCurrentRow(lastPlayingSong->value().toInt());
+    this->selectItemByText(lastPlayingSong->value().toInt());
 }
 
 void NowPlayingWindow::onMediaChanged(int index, char*)
 {
     lastPlayingSong->set(index);
-    ui->songPlaylist->setCurrentRow(index);
+    this->selectItemByText(index);
     ui->songPlaylist->scrollToItem(ui->songPlaylist->item(index));
     this->isDefaultArt = true;
 }
@@ -666,8 +667,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
 
         ui->songPlaylist->insertItem(position, item);
         this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
-        //ui->songPlaylist->setCurrentItem(ui->songPlaylist->findItems(lastPlayingSong->value().toString(), Qt::MatchExactly).first());
-        ui->songPlaylist->setCurrentRow(lastPlayingSong->value().toInt());
+        this->selectItemByText(lastPlayingSong->value().toInt());
         ui->songPlaylist->scrollToItem(ui->songPlaylist->currentItem());
     }
 }
@@ -834,4 +834,14 @@ void NowPlayingWindow::onDeleteFromNowPlaying()
     ui->songPlaylist->removeItemWidget(ui->songPlaylist->currentItem());
     delete ui->songPlaylist->currentItem();
     this->setSongNumber(lastPlayingSong->value().toInt(), ui->songPlaylist->count());
+}
+
+void NowPlayingWindow::selectItemByText(int numberInPlaylist)
+{
+    for (int i = 0; i < ui->songPlaylist->count(); i++) {
+        if (ui->songPlaylist->item(i)->text().toInt() == numberInPlaylist) {
+            ui->songPlaylist->clearSelection();
+            ui->songPlaylist->item(i)->setSelected(true);
+        }
+    }
 }
