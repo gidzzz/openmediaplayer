@@ -49,7 +49,6 @@ private:
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
     NowPlayingWindow *myNowPlayingWindow;
-    QMenu *contextMenu;
 #ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter* mafwTrackerSource;
@@ -58,6 +57,8 @@ private:
     unsigned int browseAllArtistsId;
     unsigned int browseAllAlbumsId;
     void fetchUri(QString objectId);
+    uint addToNowPlayingId;
+    int numberOfSongsToAdd;
 #endif
     void connectSignals();
     void populateMenuBar();
@@ -65,9 +66,12 @@ private:
     void saveViewState(QVariant);
     void loadViewState();
     QListWidget* currentList();
+#ifdef Q_WS_MAEMO_5
+    void notifyOnAddedToNowPlaying(int songCount);
+#endif
 
 private slots:
-    void onContextMenuRequested(const QPoint&);
+    void onContextMenuRequested(QPoint);
     void onSongSelected(QListWidgetItem *);
     void setRingingTone();
     void onShareClicked();
@@ -83,6 +87,7 @@ private slots:
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void onAddToNowPlayingCallback(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onDeleteUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString, QString Uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
@@ -92,6 +97,7 @@ private slots:
     void onAlbumSelected(QListWidgetItem*);
     void onArtistSelected(QListWidgetItem*);
 #endif
+    void onAddToNowPlaying();
 };
 
 #endif // MUSICWINDOW_H
