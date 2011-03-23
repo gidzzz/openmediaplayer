@@ -546,6 +546,7 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist* MafwPlaylist, uint index, MafwP
         this->updatePlaylistState();
         this->playlistRequested = true;
     }
+    lastPlayingSong->set(index);
     this->mafwPlaylist = MafwPlaylist;
     this->setSongNumber(index+1, ui->songPlaylist->count());
     this->stateChanged(state);
@@ -708,6 +709,7 @@ void NowPlayingWindow::clearPlaylist()
     confirmClear.exec();
     if(confirmClear.result() == QMessageBox::Yes) {
         playlist->clear();
+        lastPlayingSong->set(1);
         mafwrenderer->stop();
         this->close();
     }
@@ -729,9 +731,9 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
 {
     contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
-    contextMenu->addAction(tr("Save playlist"));
+    contextMenu->addAction(tr("Save playlist"), this, SLOT(savePlaylist()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
-    contextMenu->addAction(tr("Delete from now playing"));
+    contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
     contextMenu->addAction(tr("Clear now playing"), this, SLOT(clearPlaylist()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     contextMenu->exec(point);
@@ -822,4 +824,14 @@ void NowPlayingWindow::onSavePlaylistAccepted()
 {
     playlist->duplicatePlaylist(playlistNameLineEdit->text());
     savePlaylistDialog->close();
+}
+
+void NowPlayingWindow::onDeleteFromNowPlaying()
+{
+#ifdef MAFW
+    playlist->removeItem(ui->songPlaylist->currentItem()->text().toInt());
+#endif
+    ui->songPlaylist->removeItemWidget(ui->songPlaylist->currentItem());
+    delete ui->songPlaylist->currentItem();
+    this->setSongNumber(lastPlayingSong->value().toInt(), ui->songPlaylist->count());
 }

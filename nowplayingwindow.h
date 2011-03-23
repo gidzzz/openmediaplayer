@@ -115,6 +115,7 @@ private slots:
     void nullEntertainmentView();
     void savePlaylist();
     void onSavePlaylistAccepted();
+    void onDeleteFromNowPlaying();
 };
 
 #endif // NOWPLAYINGWINDOW_H
