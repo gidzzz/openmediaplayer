@@ -95,6 +95,12 @@ void MafwPlaylistAdapter::appendItem(QString objectId)
         mafw_playlist_append_item (this->mafw_playlist, objectId.toUtf8(), &error);
 }
 
+void MafwPlaylistAdapter::removeItem(int index)
+{
+    if(mafw_playlist)
+        mafw_playlist_remove_item (this->mafw_playlist, index, &error);
+}
+
 void MafwPlaylistAdapter::getItems()
 {
 #ifdef DEBUG

@@ -24,6 +24,7 @@ public:
     void insertItem(QString objectId, guint index);
     void appendUri(QString url);
     void appendItem(QString objectId);
+    void removeItem(int index);
     void duplicatePlaylist(QString newName);
     QString playlistName();
     MafwPlaylist *mafw_playlist;
