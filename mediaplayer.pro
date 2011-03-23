@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     delegates/singlealbumviewdelegate.cpp \
     singleartistview.cpp \
     settingsdialog.cpp \
-    entertainmentview.cpp
+    entertainmentview.cpp \
+    delegates/thumbnailitemdelegate.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -52,7 +53,8 @@ HEADERS  += mainwindow.h \
     delegates/singlealbumviewdelegate.h \
     singleartistview.h \
     settingsdialog.h \
-    entertainmentview.h
+    entertainmentview.h \
+    delegates/thumbnailitemdelegate.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
