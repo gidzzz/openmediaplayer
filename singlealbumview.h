@@ -46,6 +46,7 @@ private:
     void keyReleaseEvent(QKeyEvent *);
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleAllButton;
+    void notifyOnAddedToNowPlaying(int songCount);
 #else
     QPushButton *shuffleAllButton;
 #endif
@@ -62,11 +63,19 @@ private slots:
     void listSongs();
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onItemSelected(QListWidgetItem*);
+    void onRingingToneUriReceived(QString objectId, QString uri);
+    void onShareUriReceived(QString objectId, QString Uri);
+    void onDeleteUriReceived(QString objectId, QString uri);
 #endif
     void createPlaylist(bool);
     void onShuffleButtonClicked();
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();
+    void onContextMenuRequested(const QPoint &point);
+    void setRingingTone();
+    void onShareClicked();
+    void onDeleteClicked();
+    void onAddToNowPlaying();
 };
 
 #endif // SINGLEALBUMVIEW_H

@@ -47,6 +47,9 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
 #endif
     SingleAlbumViewDelegate *delegate = new SingleAlbumViewDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
+
+    ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
+
     shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
     ui->verticalLayout->removeWidget(ui->songList);
     ui->verticalLayout->removeWidget(ui->searchWidget);
@@ -55,6 +58,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     ui->verticalLayout->addWidget(ui->searchWidget);
     ui->searchWidget->hide();
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
@@ -77,7 +81,7 @@ SingleAlbumView::~SingleAlbumView()
 void SingleAlbumView::listSongs()
 {
 #ifdef DEBUG
-    qDebug() << "MusicWindow: Source ready";
+    qDebug() << "SingleAlbumView: Source ready";
 #endif
 
     ui->songList->clear();
@@ -215,7 +219,7 @@ void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 
 void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 {
-#ifdef MAFw
+#ifdef MAFW
     playlist->assignAudioPlaylist();
 #endif
     npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
@@ -342,14 +346,130 @@ void SingleAlbumView::addAllToNowPlaying()
         }
 
 #ifdef Q_WS_MAEMO_5
-        QString addedToNp;
-        if (ui->songList->count() == 1)
-            addedToNp = tr("clip added to now playing");
-        else
-            addedToNp = tr("clips added to now playing");
-        QMaemo5InformationBox::information(this, QString::number(ui->songList->count()) + " " + addedToNp);
+        this->notifyOnAddedToNowPlaying(ui->songList->count());
 #endif
 
 #endif
     }
 }
+
+void SingleAlbumView::onContextMenuRequested(const QPoint &point)
+{
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
+    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
+    contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    contextMenu->exec(point);
+}
+
+void SingleAlbumView::onAddToNowPlaying()
+{
+#ifdef MAFW
+    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+        playlist->assignAudioPlaylist();
+
+    playlist->appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());
+
+#ifdef Q_WS_MAEMO_5
+    this->notifyOnAddedToNowPlaying(ui->songList->selectedItems().count());
+#endif
+
+#endif
+}
+
+void SingleAlbumView::setRingingTone()
+{
+#ifdef MAFW
+    mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
+#endif
+}
+
+void SingleAlbumView::onRingingToneUriReceived(QString objectId, QString uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
+
+    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
+    QDBusInterface setRingtone("com.nokia.profiled",
+                               "/com/nokia/profiled",
+                               "com.nokia.profiled",
+                               QDBusConnection::sessionBus(), this);
+    setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
+    QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
+}
+
+void SingleAlbumView::onShareClicked()
+{
+    mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+}
+
+void SingleAlbumView::onShareUriReceived(QString objectId, QString Uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+
+    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
+    // The code used here (share.(h/cpp/ui) was taken from filebox's source code
+    // C) 2010. Matias Perez
+    QStringList list;
+    QString clip;
+    clip = Uri;
+
+    list.append(clip);
+    Share *share = new Share(this, list);
+    share->setAttribute(Qt::WA_DeleteOnClose);
+    share->show();
+}
+
+void SingleAlbumView::onDeleteClicked()
+{
+    this->mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
+}
+
+void SingleAlbumView::onDeleteUriReceived(QString objectId, QString uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
+
+    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
+    QFile song(uri);
+    if(song.exists()) {
+#ifdef DEBUG
+        qDebug() << "Song exists";
+#endif
+        QMessageBox confirmDelete(QMessageBox::NoIcon,
+                                  tr("Delete song?"),
+                                  tr("Are you sure you want to delete this song?")+ "\n\n"
+                                  + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
+                                  + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  this);
+        confirmDelete.exec();
+        if(confirmDelete.result() == QMessageBox::Yes) {
+            song.remove();
+            ui->songList->removeItemWidget(ui->songList->currentItem());
+        }
+        else if(confirmDelete.result() == QMessageBox::No)
+            ui->songList->clearSelection();
+    }
+}
+
+#ifdef Q_WS_MAEMO_5
+void SingleAlbumView::notifyOnAddedToNowPlaying(int songCount)
+{
+        QString addedToNp;
+        if (songCount == 1)
+            addedToNp = tr("clip added to now playing");
+        else
+            addedToNp = tr("clips added to now playing");
+        QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
+}
+#endif
