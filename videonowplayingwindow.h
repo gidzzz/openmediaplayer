@@ -6,9 +6,6 @@
 #include <QTimer>
 #include <QtDBus>
 #include <QDesktopWidget>
-#include <QGLWidget>
-#include <gst/gst.h>
-#include <gst/interfaces/xoverlay.h>
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
@@ -63,6 +60,7 @@ private:
     int colorkey;
     int mafwState;
     int length;
+    int pausedPosition;
 #endif
 
 private slots:

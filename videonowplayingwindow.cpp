@@ -76,13 +76,16 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRendererAdapte
 #ifdef MAFW
     mafwrenderer->setColorKey(199939);
     mafwrenderer->getStatus();
-    mafwrenderer->getPosition();
+    mafwrenderer->getVolume();
     ui->toolbarOverlay->setStyleSheet(ui->controlOverlay->styleSheet());
 #endif
 }
 
 VideoNowPlayingWindow::~VideoNowPlayingWindow()
 {
+    // Change this to pause instead of stop later on...
+    /* if (this->mafwState != Paused && this->mafwState != Stopped)
+        mafwrenderer->pause();*/
     mafwrenderer->stop();
     delete ui;
 }
@@ -176,6 +179,7 @@ void VideoNowPlayingWindow::stateChanged(int state)
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
         this->setDNDAtom(false);
+        mafwrenderer->getPosition();
         if(positionTimer->isActive())
             positionTimer->stop();
     }
@@ -184,6 +188,9 @@ void VideoNowPlayingWindow::stateChanged(int state)
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
         ui->progressBar->setEnabled(true);
+        if (pausedPosition != -1 && pausedPosition != 0)
+            mafwrenderer->setPosition(SeekAbsolute, pausedPosition);
+        mafwrenderer->getPosition();
         this->setDNDAtom(true);
         if(!positionTimer->isActive())
             positionTimer->start();
@@ -275,7 +282,8 @@ void VideoNowPlayingWindow::playObject(QString objectId)
 {
 #ifdef MAFW
     this->objectIdToPlay = objectId;
-    this->mafwTrackerSource->getMetadata(objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION));
+    this->mafwTrackerSource->getMetadata(objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
+                                                                             MAFW_METADATA_KEY_PAUSED_POSITION));
     QTimer::singleShot(200, this, SLOT(playVideo()));
 #endif
 }
@@ -292,6 +300,11 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         t = t.addSecs(duration);
 
         this->length = duration;
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_PAUSED_POSITION);
+        pausedPosition = v ? g_value_get_int (v) : -1;
+        qDebug() << pausedPosition;
 
         ui->videoLengthLabel->setText(t.toString("mm:ss"));
         ui->progressBar->setRange(0, duration);
