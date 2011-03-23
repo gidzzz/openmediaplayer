@@ -39,7 +39,7 @@ void Share::on_share_bt_released()
 
     if ( params != "" )
     {
-        QString sended = "dbus-send --system --print-reply --dest='com.nokia.icd_ui' /com/nokia/bt_ui com.nokia.bt_ui.show_send_file_dlg array:string:" + params;
+        QString sended = "dbus-send --system --print-reply --dest='com.nokia.icd_ui' /com/nokia/bt_ui com.nokia.bt_ui.show_send_file_dlg array:string:" + params + " > /dev/null";
         QByteArray ba = sended.toLatin1();
         const char *str1 = ba.data();
         system(str1);

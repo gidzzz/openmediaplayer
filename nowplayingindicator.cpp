@@ -125,7 +125,9 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         emit clicked();
 #ifdef MAFW
         QString playlistName = playlist->playlistName();
-        qDebug() << playlistName;
+#ifdef DEBUG
+        qDebug() << "Current playlist is: " + playlistName;
+#endif
         if (playlistName == "FmpVideoPlaylist") {
             VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
             window->setAttribute(Qt::WA_DeleteOnClose);
