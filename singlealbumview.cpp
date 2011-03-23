@@ -60,6 +60,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
+    connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
@@ -326,5 +327,29 @@ void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
         if (!ui->searchEdit->hasFocus())
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
+    }
+}
+
+void SingleAlbumView::addAllToNowPlaying()
+{
+    if (ui->songList->count() > 0) {
+#ifdef MAFW
+        if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+            playlist->assignAudioPlaylist();
+
+        for (int i = 0; i < ui->songList->count(); i++) {
+            playlist->appendItem(ui->songList->item(i)->data(UserRoleObjectID).toString());
+        }
+
+#ifdef Q_WS_MAEMO_5
+        QString addedToNp;
+        if (ui->songList->count() == 1)
+            addedToNp = tr("clip added to now playing");
+        else
+            addedToNp = tr("clips added to now playing");
+        QMaemo5InformationBox::information(this, QString::number(ui->songList->count()) + " " + addedToNp);
+#endif
+
+#endif
     }
 }

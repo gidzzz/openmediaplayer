@@ -66,6 +66,7 @@ private slots:
     void createPlaylist(bool);
     void onShuffleButtonClicked();
     void onSearchTextChanged(QString);
+    void addAllToNowPlaying();
 };
 
 #endif // SINGLEALBUMVIEW_H
