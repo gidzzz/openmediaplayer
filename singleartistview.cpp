@@ -35,7 +35,9 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, Ma
 
     ui->albumList->setContextMenuPolicy(Qt::CustomContextMenu);
 
+#ifdef MAFW
     shuffleRequested = false;
+#endif
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -196,7 +198,7 @@ void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
         return;
-    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down && !ui->searchWidget->isHidden())
+    else if ((e->key() == Qt::Key_Up || e->key() == Qt::Key_Down) && !ui->searchWidget->isHidden())
         ui->albumList->setFocus();
     else {
         ui->albumList->clearSelection();
@@ -210,7 +212,9 @@ void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
 
 void SingleArtistView::setSongCount(int songCount)
 {
+#ifdef MAFW
     this->numberOfSongs = songCount;
+#endif
     if (songCount != -1) {
         ui->albumList->item(0)->setData(UserRoleValueText, QString::number(songCount) + " " + tr("songs"));
         ui->albumList->scroll(1, 1);
@@ -324,6 +328,7 @@ void SingleArtistView::onAddAlbumToNowPlaying()
 #endif
 }
 
+#ifdef MAFW
 void SingleArtistView::onAddAlbumBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString)
 {
     if (this->addToNowPlayingId != browseId)
@@ -350,6 +355,7 @@ void SingleArtistView::onAddAlbumBrowseResult(uint browseId, int remainingCount,
         this->numberOfSongsToAdd = 0;
     }
 }
+#endif
 
 #ifdef Q_WS_MAEMO_5
 void SingleArtistView::notifyOnAddedToNowPlaying(int songCount)

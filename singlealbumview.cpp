@@ -322,7 +322,7 @@ void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
         return;
-    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down && !ui->searchWidget->isHidden())
+    else if ((e->key() == Qt::Key_Up || e->key() == Qt::Key_Down) && !ui->searchWidget->isHidden())
         ui->songList->setFocus();
     else {
         ui->songList->clearSelection();
@@ -387,6 +387,7 @@ void SingleAlbumView::setRingingTone()
 #endif
 }
 
+#ifdef MAFW
 void SingleAlbumView::onRingingToneUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
@@ -401,13 +402,17 @@ void SingleAlbumView::onRingingToneUriReceived(QString objectId, QString uri)
     setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
     QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
 }
+#endif
 
 void SingleAlbumView::onShareClicked()
 {
+#ifdef MAFW
     mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+#endif
 }
 
+#ifdef MAFW
 void SingleAlbumView::onShareUriReceived(QString objectId, QString Uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
@@ -426,13 +431,17 @@ void SingleAlbumView::onShareUriReceived(QString objectId, QString Uri)
     share->setAttribute(Qt::WA_DeleteOnClose);
     share->show();
 }
+#endif
 
 void SingleAlbumView::onDeleteClicked()
 {
+#ifdef MAFW
     this->mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
+#endif
 }
 
+#ifdef MAFW
 void SingleAlbumView::onDeleteUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
@@ -461,6 +470,7 @@ void SingleAlbumView::onDeleteUriReceived(QString objectId, QString uri)
             ui->songList->clearSelection();
     }
 }
+#endif
 
 #ifdef Q_WS_MAEMO_5
 void SingleAlbumView::notifyOnAddedToNowPlaying(int songCount)

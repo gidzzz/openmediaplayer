@@ -822,7 +822,9 @@ void NowPlayingWindow::savePlaylist()
 
 void NowPlayingWindow::onSavePlaylistAccepted()
 {
+#ifdef MAFW
     playlist->duplicatePlaylist(playlistNameLineEdit->text());
+#endif
     savePlaylistDialog->close();
 }
 
@@ -833,7 +835,9 @@ void NowPlayingWindow::onDeleteFromNowPlaying()
 #endif
     ui->songPlaylist->removeItemWidget(ui->songPlaylist->currentItem());
     delete ui->songPlaylist->currentItem();
+#ifdef MAFW
     this->setSongNumber(lastPlayingSong->value().toInt(), ui->songPlaylist->count());
+#endif
 }
 
 void NowPlayingWindow::selectItemByText(int numberInPlaylist)

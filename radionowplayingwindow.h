@@ -13,6 +13,10 @@
     #include "mafwrendereradapter.h"
     #include "mafwsourceadapter.h"
     #include "mafwplaylistadapter.h"
+#else
+    class MafwRendererAdapter;
+    class MafwSourceAdapter;
+    class MafwPlaylistAdapter;
 #endif
 #include "includes.h"
 

@@ -296,19 +296,6 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
         qDebug() << error;
 }
 
-void MainWindow::onShuffleAllClicked()
-{
-    playlist->assignAudioPlaylist();
-    playlist->clear();
-
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
-
-    this->browseAllSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
-                                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE),
-                                                             0, MAFW_SOURCE_BROWSE_ALL);
-}
-
 void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* , QString)
 {
     if(browseId != browseAllSongsId)
@@ -332,6 +319,21 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString
 }
 
 #endif
+
+void MainWindow::onShuffleAllClicked()
+{
+#ifdef MAFW
+    playlist->assignAudioPlaylist();
+    playlist->clear();
+
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+            this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+
+    this->browseAllSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
+                                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE),
+                                                             0, MAFW_SOURCE_BROWSE_ALL);
+#endif
+}
 
 void MainWindow::focusInEvent(QFocusEvent *)
 {

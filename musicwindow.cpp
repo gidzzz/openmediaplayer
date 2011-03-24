@@ -130,6 +130,7 @@ void MusicWindow::setRingingTone()
 #endif
 }
 
+#ifdef MAFW
 void MusicWindow::onRingingToneUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
@@ -144,13 +145,17 @@ void MusicWindow::onRingingToneUriReceived(QString objectId, QString uri)
     setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
     QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
 }
+#endif
 
 void MusicWindow::onShareClicked()
-{   
+{
+#ifdef MAFW
     mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+#endif
 }
 
+#ifdef MAFW
 void MusicWindow::onShareUriReceived(QString objectId, QString Uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
@@ -169,13 +174,17 @@ void MusicWindow::onShareUriReceived(QString objectId, QString Uri)
     share->setAttribute(Qt::WA_DeleteOnClose);
     share->show();
 }
+#endif
 
 void MusicWindow::onDeleteClicked()
 {
+#ifdef MAFW
     this->mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
+#endif
 }
 
+#ifdef MAFW
 void MusicWindow::onDeleteUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
@@ -202,6 +211,7 @@ void MusicWindow::onDeleteUriReceived(QString objectId, QString uri)
             ui->songList->clearSelection();
     }
 }
+#endif
 
 void MusicWindow::onSearchTextChanged(QString text)
 {
@@ -663,6 +673,7 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
 
 void MusicWindow::onAddToNowPlaying()
 {
+#ifdef MAFW
     if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
         playlist->assignAudioPlaylist();
 
@@ -675,17 +686,17 @@ void MusicWindow::onAddToNowPlaying()
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-#ifdef MAFW
         QString objectIdToBrowse = this->currentList()->currentItem()->data(UserRoleObjectID).toString();
         numberOfSongsToAdd = this->currentList()->currentItem()->data(UserRoleSongCount).toInt();
         this->addToNowPlayingId = mafwTrackerSource->sourceBrowse(objectIdToBrowse.toUtf8(), true, NULL, NULL, 0,
                                                                   0, MAFW_SOURCE_BROWSE_ALL);
         connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                 this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
-#endif
     }
+#endif
 }
 
+#ifdef MAFW
 void MusicWindow::onAddToNowPlayingCallback(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString)
 {
     if (this->addToNowPlayingId != browseId)
@@ -709,6 +720,7 @@ void MusicWindow::onAddToNowPlayingCallback(uint browseId, int remainingCount, u
         this->numberOfSongsToAdd = 0;
     }
 }
+#endif
 
 #ifdef Q_WS_MAEMO_5
 void MusicWindow::notifyOnAddedToNowPlaying(int songCount)
