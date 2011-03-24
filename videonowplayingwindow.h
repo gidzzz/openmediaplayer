@@ -12,13 +12,19 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "qmaemo5rotator.h"
+    #include "QMaemo5InformationBox"
 #endif
 
 #ifdef MAFW
     #include "mafwrendereradapter.h"
     #include "mafwsourceadapter.h"
     #include "mafwplaylistadapter.h"
+#else
+    class MafwRendererAdapter;
+    class MafwSourceAdapter;
+    class MafwPlaylistAdapter;
 #endif
+
 
 namespace Ui {
     class VideoNowPlayingWindow;
@@ -61,6 +67,7 @@ private:
     int mafwState;
     int length;
     int pausedPosition;
+    bool errorOccured;
 #endif
 
 private slots:
@@ -73,12 +80,13 @@ private slots:
     void onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString);
     void onPositionChanged(int position, QString);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
+    void playVideo();
+    void onErrorOccured(const QDBusMessage &msg);
 #endif
 #ifdef Q_WS_MAEMO_5
     void onPortraitMode();
     void onLandscapeMode();
 #endif
-    void playVideo();
     void onSliderMoved(int);
 };
 
