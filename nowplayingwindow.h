@@ -40,14 +40,14 @@ class NowPlayingWindow : public QMainWindow
 public:
     explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~NowPlayingWindow();
-#ifdef MAFW
-    void updatePlaylistState();
-#endif
 
 public slots:
     void onSongSelected(int, int, QString, QString, QString, int);
     void setAlbumImage(QString);
     void onShuffleButtonToggled(bool);
+#ifdef MAFW
+    void updatePlaylistState();
+#endif
 
 private:
     Ui::NowPlayingWindow *ui;

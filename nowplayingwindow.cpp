@@ -273,6 +273,8 @@ void NowPlayingWindow::connectSignals()
                                           "com.nokia.mafw.extension",
                                           "property_changed",
                                           this, SLOT(onPropertyChanged(const QDBusMessage &)));
+    QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "property_changed",
+                                          this, SLOT(updatePlaylistState()));
 #endif
 }
 
@@ -549,7 +551,7 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist* MafwPlaylist, uint index, MafwP
     int indexAsInt = index;
     lastPlayingSong->set(indexAsInt);
     this->mafwPlaylist = MafwPlaylist;
-    this->setSongNumber(index+1, ui->songPlaylist->count());
+    this->setSongNumber(index+1, playlist->getSize());
     this->stateChanged(state);
 }
 
@@ -694,9 +696,22 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 }
 
 void NowPlayingWindow::updatePlaylistState()
-{
-    this->onRepeatButtonToggled(playlist->isRepeat());
-    this->onShuffleButtonToggled(playlist->isShuffled());
+{    
+    if(playlist->isShuffled()) {
+        ui->shuffleButton->setIcon(QIcon(shuffleButtonPressed));
+        ui->shuffleButton->setChecked(true);
+    } else {
+        ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
+        ui->shuffleButton->setChecked(false);
+    }
+
+    if(playlist->isRepeat()) {
+        ui->repeatButton->setIcon(QIcon(repeatButtonPressedIcon));
+        ui->repeatButton->setChecked(true);
+    } else {
+        ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
+        ui->repeatButton->setChecked(false);
+    }
 }
 
 void NowPlayingWindow::clearPlaylist()
@@ -836,7 +851,7 @@ void NowPlayingWindow::onDeleteFromNowPlaying()
     ui->songPlaylist->removeItemWidget(ui->songPlaylist->currentItem());
     delete ui->songPlaylist->currentItem();
 #ifdef MAFW
-    this->setSongNumber(lastPlayingSong->value().toInt(), ui->songPlaylist->count());
+    this->setSongNumber(lastPlayingSong->value().toInt(), playlist->getSize());
 #endif
 }
 
@@ -846,6 +861,7 @@ void NowPlayingWindow::selectItemByText(int numberInPlaylist)
         if (ui->songPlaylist->item(i)->text().toInt() == numberInPlaylist) {
             ui->songPlaylist->clearSelection();
             ui->songPlaylist->item(i)->setSelected(true);
+            ui->songPlaylist->scrollToItem(ui->songPlaylist->item(i));
         }
     }
 }
