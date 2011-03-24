@@ -492,15 +492,25 @@ void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
         QMaemo5InformationBox *box = new QMaemo5InformationBox(this);
         box->setAttribute(Qt::WA_DeleteOnClose);
 
+        QWidget *widget = new QWidget(box);
+        QSpacerItem *spacer = new QSpacerItem(90, 20, QSizePolicy::Fixed, QSizePolicy::Maximum);
+
         QLabel *errorLabel = new QLabel(box);
 
+        QHBoxLayout *layout = new QHBoxLayout(widget);
+
+        layout->addItem(spacer);
+        layout->addWidget(errorLabel);
+        layout->setSpacing(0);
+
+        widget->setLayout(layout);
+
         // Bad padding in default widget, use tabbing to cover it up, sigh :/
-        errorMsg.prepend("\t");
-        errorMsg.replace("\n", "\n\t");
         errorLabel->setText("\n" + errorMsg + "\n");
         errorLabel->setAlignment(Qt::AlignLeft);
+        errorLabel->setWordWrap(true);
 
-        box->setWidget(errorLabel);
+        box->setWidget(widget);
         box->setTimeout(QMaemo5InformationBox::NoTimeout);
 
         connect(box, SIGNAL(clicked()), this, SLOT(close()));

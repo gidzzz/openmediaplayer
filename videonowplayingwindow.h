@@ -12,7 +12,8 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "qmaemo5rotator.h"
-    #include "QMaemo5InformationBox"
+    #include <QMaemo5InformationBox>
+    #include <QSpacerItem>
 #endif
 
 #ifdef MAFW
