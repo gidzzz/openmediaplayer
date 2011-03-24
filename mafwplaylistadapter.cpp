@@ -101,6 +101,13 @@ void MafwPlaylistAdapter::removeItem(int index)
         mafw_playlist_remove_item (this->mafw_playlist, index, &error);
 }
 
+int MafwPlaylistAdapter::getSize()
+{
+    guint size = mafw_playlist_get_size (this->mafw_playlist, &error);
+    int sizeAsInt = size;
+    return sizeAsInt;
+}
+
 void MafwPlaylistAdapter::getItems()
 {
 #ifdef DEBUG
