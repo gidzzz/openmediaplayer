@@ -19,7 +19,7 @@
 
 #include "ui_internetradiowindow.h"
 #include "radionowplayingwindow.h"
-#include "delegates/internetradiodelegate.h"
+#include "delegates/songlistitemdelegate.h"
 #include "includes.h"
 
 #ifdef MAFW

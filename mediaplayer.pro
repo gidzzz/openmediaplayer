@@ -21,7 +21,6 @@ SOURCES += main.cpp \
     nowplayingindicator.cpp \
     delegates/songlistitemdelegate.cpp \
     delegates/artistlistitemdelegate.cpp \
-    delegates/internetradiodelegate.cpp \
     delegates/playlistdelegate.cpp \
     radionowplayingwindow.cpp \
     qrotatedlabel.cpp \
@@ -45,7 +44,6 @@ HEADERS  += mainwindow.h \
     nowplayingindicator.h \
     delegates/songlistitemdelegate.h \
     delegates/artistlistitemdelegate.h \
-    delegates/internetradiodelegate.h \
     includes.h \
     delegates/playlistdelegate.h \
     radionowplayingwindow.h \

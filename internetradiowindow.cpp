@@ -35,7 +35,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* m
 #ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
 #endif
-    InternetRadioDelegate *delegate = new InternetRadioDelegate(ui->listWidget);
+    SongListItemDelegate *delegate = new SongListItemDelegate(ui->listWidget);
     ui->listWidget->setItemDelegate(delegate);
     window = new RadioNowPlayingWindow(this);
     this->connectSignals();
@@ -204,6 +204,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongURI, URI);
+        item->setData(UserRoleValueText, URI);
         item->setData(UserRoleObjectID, objectId);
         ui->listWidget->addItem(item);
     }
@@ -218,6 +219,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
 
 void InternetRadioWindow::orientationChanged()
 {
+    ui->listWidget->scroll(1, 1);
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
                                ui->indicator->width(),ui->indicator->height());
