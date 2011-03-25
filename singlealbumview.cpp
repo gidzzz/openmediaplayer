@@ -90,7 +90,7 @@ void SingleAlbumView::listSongs()
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
 #endif
 
-    this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumName.toUtf8(), false, NULL, "+track",
+    this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumName.toUtf8(), true, NULL, "+track",
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,
@@ -105,24 +105,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
 {
     if(browseId != browseAllSongsId)
       return;
-
-    // Sometimes MAFW returns another object ID which ends with / and contains
-    // no songs, if this happens, browse songs again with that object ID.
-    if (objectId.endsWith("/")) {
-        this->albumName = this->albumName + "/";
-        this->listSongs();
-        return;
-    }
-
-    // If we're browsing an artist with a single album, then we only have to list
-    // songs from one album, this is returned as the object ID, browse that.
-    if (this->isSingleAlbum) {
-        this->albumName = objectId;
-        // Unset the boolean so this doesn't loop
-        this->isSingleAlbum = false;
-        this->listSongs();
-        return;
-    }
 
     QString title;
     QString artist;
@@ -182,11 +164,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         }
         // Although we don't need this to show the song title, we need it to
         // sort alphabatically.
-        QString itemTitle;
-        itemTitle.append(QString::number(trackNumber));
-        itemTitle.append(" ");
-        itemTitle.append(title);
-        item->setText(itemTitle);
+        item->setText(title);
         ui->songList->addItem(item);
     }
 
@@ -222,23 +200,10 @@ void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 #ifdef MAFW
     playlist->assignAudioPlaylist();
 #endif
-    npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-    npWindow->setAttribute(Qt::WA_DeleteOnClose);
-    npWindow->onSongSelected(ui->songList->currentRow()+1,
-                             ui->songList->count(),
-                             item->data(UserRoleSongTitle).toString(),
-                             item->data(UserRoleSongAlbum).toString(),
-                             item->data(UserRoleSongArtist).toString(),
-                             item->data(UserRoleSongDurationS).toInt()
-                             );
-    if(!item->data(UserRoleAlbumArt).isNull())
-        npWindow->setAlbumImage(item->data(UserRoleAlbumArt).toString());
-    else
-        npWindow->setAlbumImage(albumImage);
 
     this->createPlaylist(false);
 
-    mafwrenderer->gotoIndex(ui->songList->currentRow());
+    mafwrenderer->gotoIndex(ui->songList->row(item));
     mafwrenderer->play();
 
     ui->songList->clearSelection();
@@ -275,6 +240,7 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         qDebug() << "Clearing playlist";
 #endif
         playlist->clear();
+        playlist->setShuffled(shuffle);
 #ifdef DEBUG
         qDebug() << "Playlist cleared";
 #endif
@@ -287,13 +253,8 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         qDebug() << "Playlist created";
 #endif
 
-        if (shuffle) {
-            playlist->setShuffled(true);
-            npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-            npWindow->setAttribute(Qt::WA_DeleteOnClose);
-            npWindow->onShuffleButtonToggled(true);
-        }
-
+        npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        npWindow->setAttribute(Qt::WA_DeleteOnClose);
         npWindow->show();
     }
 #endif
