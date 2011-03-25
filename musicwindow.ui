@@ -106,11 +106,9 @@
      </item>
      <item>
       <widget class="QListWidget" name="genresList">
-       <item>
-        <property name="text">
-         <string>Genres placeholder</string>
-        </property>
-       </item>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
