@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     singleartistview.cpp \
     settingsdialog.cpp \
     entertainmentview.cpp \
-    delegates/thumbnailitemdelegate.cpp
+    delegates/thumbnailitemdelegate.cpp \
+    singlegenreview.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -54,7 +55,8 @@ HEADERS  += mainwindow.h \
     singleartistview.h \
     settingsdialog.h \
     entertainmentview.h \
-    delegates/thumbnailitemdelegate.h
+    delegates/thumbnailitemdelegate.h \
+    singlegenreview.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -69,7 +71,8 @@ FORMS    += mainwindow.ui \
     singlealbumview.ui \
     singleartistview.ui \
     settingsdialog.ui \
-    entertainmentview.ui
+    entertainmentview.ui \
+    singlegenreview.ui
 
 CONFIG += mobility
 MOBILITY = sensors
@@ -84,6 +87,8 @@ symbian {
 unix:!symbian {
     maemo5 {
         QT += maemo5
+        CONFIG += link_pkgconfig
+        PKGCONFIG += dbus-1
         DEFINES += MAFW
         SOURCES +=     maemo5deviceevents.cpp \
             fmtxdialog.cpp \
