@@ -180,7 +180,7 @@ void SingleArtistView::onSearchTextChanged(QString text)
     if (!ui->indicator->isHidden())
         ui->indicator->hide();
 
-    for (int i=0; i < ui->albumList->count(); i++) {
+    for (int i=1; i < ui->albumList->count(); i++) {
         if (ui->albumList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
             ui->albumList->item(i)->setHidden(true);
         else
