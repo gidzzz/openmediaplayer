@@ -303,19 +303,19 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString
 
     playlist->appendItem(objectId);
 
-    if (!this->shuffleNowPlayingWindowCreated) {
-        playlist->setShuffled(true);
+    if (remainingCount == 0) {
+#ifdef Q_WS_MAEMO_5
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
+        uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
+        mafwrenderer->gotoIndex(randomIndex);
+        mafwrenderer->play();
         NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
-        window->onShuffleButtonToggled(true);
-        this->shuffleNowPlayingWindowCreated = true;
         window->setAttribute(Qt::WA_DeleteOnClose);
         window->show();
-        mafwrenderer->play();
-        mafwrenderer->resume();
+        ui->shuffleAllButton->setDisabled(false);
+        ui->shuffleAllButton->setDown(false);
     }
-
-    if (remainingCount == 0)
-        playlist->getItems();
 }
 
 #endif
@@ -323,15 +323,22 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString
 void MainWindow::onShuffleAllClicked()
 {
 #ifdef MAFW
+#ifdef Q_WS_MAEMO_5
+    setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+
     playlist->assignAudioPlaylist();
     playlist->clear();
+    playlist->setShuffled(true);
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
 
-    this->browseAllSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
-                                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE),
+    this->browseAllSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL, 0,
                                                              0, MAFW_SOURCE_BROWSE_ALL);
+
+    ui->shuffleAllButton->setDisabled(true);
+    ui->shuffleAllButton->setDown(true);
 #endif
 }
 
