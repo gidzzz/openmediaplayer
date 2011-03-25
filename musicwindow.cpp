@@ -39,13 +39,17 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ThumbnailItemDelegate *albumDelegate = new ThumbnailItemDelegate(ui->albumList);
+    SongListItemDelegate *genresDelegate = new SongListItemDelegate(ui->genresList);
+
     ui->songList->setItemDelegate(delegate);
     ui->artistList->setItemDelegate(artistDelegate);
     ui->albumList->setItemDelegate(albumDelegate);
+    ui->genresList->setItemDelegate(genresDelegate);
 
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->albumList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->artistList->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->genresList->setContextMenuPolicy(Qt::CustomContextMenu);
 
     this->loadViewState();
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
@@ -65,6 +69,7 @@ MusicWindow::~MusicWindow()
 void MusicWindow::onSongSelected(QListWidgetItem *)
 {
 #ifdef MAFW
+    playlist->assignAudioPlaylist();
     myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
 #else
     myNowPlayingWindow = new NowPlayingWindow(this);
@@ -72,7 +77,7 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
     myNowPlayingWindow->setAttribute(Qt::WA_DeleteOnClose);
 #ifdef MAFW
     qDebug() << "Clearing playlist";
-    playlist->assignAudioPlaylist();
+
     playlist->clear();
     qDebug() << "Playlist cleared";
     for (int i = 0; i < ui->songList->count(); i++) {
@@ -99,10 +104,12 @@ void MusicWindow::connectSignals()
 #ifdef MAFW
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
     connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onArtistSelected(QListWidgetItem*)));
+    connect(ui->genresList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onGenreSelected(QListWidgetItem*)));
 #endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(ui->genresList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
@@ -327,6 +334,14 @@ void MusicWindow::showGenresView()
     this->populateMenuBar();
     QMainWindow::setWindowTitle(tr("Genres"));
     this->saveViewState("genres");
+#ifdef MAFW
+    if (ui->genresList->count() == 0) {
+        if (mafwTrackerSource->isReady())
+            this->listGenres();
+        else
+            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listGenres()));
+    }
+#endif
 }
 
 void MusicWindow::showSongsView()
@@ -429,6 +444,18 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
     ui->artistList->clearSelection();
 }
 
+void MusicWindow::onGenreSelected(QListWidgetItem *item)
+{
+    SingleGenreView *genreWindow = new SingleGenreView(this, mafwrenderer, mafwTrackerSource, playlist);
+    genreWindow->setAttribute(Qt::WA_DeleteOnClose);
+    genreWindow->setWindowTitle(item->data(UserRoleSongTitle).toString());
+    genreWindow->show();
+    genreWindow->setSongCount(item->data(UserRoleSongCount).toInt());
+    genreWindow->browseGenre(item->data(UserRoleObjectID).toString());
+
+    ui->genresList->clearSelection();
+}
+
 void MusicWindow::listSongs()
 {
 #ifdef DEBUG
@@ -475,6 +502,19 @@ void MusicWindow::listAlbums()
                                                                                MAFW_METADATA_KEY_ARTIST,
                                                                                MAFW_METADATA_KEY_CHILDCOUNT_1,
                                                                                MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
+                                                              0, MAFW_SOURCE_BROWSE_ALL);
+}
+
+void MusicWindow::listGenres()
+{
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+            this, SLOT(browseAllGenres(uint, int, uint, QString, GHashTable*, QString)));
+
+    this->browseAllGenresId = mafwTrackerSource->sourceBrowse("localtagfs::music/genres", false, NULL, NULL,
+                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                               MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                                               MAFW_METADATA_KEY_CHILDCOUNT_2,
+                                                                               MAFW_METADATA_KEY_CHILDCOUNT_3),
                                                               0, MAFW_SOURCE_BROWSE_ALL);
 }
 
@@ -638,7 +678,91 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
             this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
 }
+
+void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString error)
+{
+    if (this->browseAllGenresId != browseId)
+        return;
+
+    QString title;
+    QString valueText;
+    int songCount = -1;
+    int albumCount = -1;
+    int artistCount = -1;
+    GValue *v;
+
+    v = mafw_metadata_first (metadata,
+                             MAFW_METADATA_KEY_TITLE);
+    title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown genre)");
+
+    v = mafw_metadata_first (metadata,
+                             MAFW_METADATA_KEY_CHILDCOUNT_1);
+    artistCount = v ? g_value_get_int (v) : -1;
+
+    v = mafw_metadata_first (metadata,
+                             MAFW_METADATA_KEY_CHILDCOUNT_2);
+    albumCount = v ? g_value_get_int (v) : -1;
+
+    v = mafw_metadata_first (metadata,
+                             MAFW_METADATA_KEY_CHILDCOUNT_3);
+    songCount = v ? g_value_get_int (v) : -1;
+
+    QListWidgetItem *item = new QListWidgetItem();
+    if (!title.isEmpty())
+        item->setData(UserRoleSongTitle, title);
+    else
+        item->setData(UserRoleSongTitle, tr("(unknown genre)"));
+    item->setText(item->data(UserRoleSongTitle).toString());
+    item->setData(UserRoleSongCount, songCount);
+    item->setData(UserRoleArtistCount, artistCount);
+    item->setData(UserRoleAlbumCount, albumCount);
+    item->setData(UserRoleObjectID, objectId);
+
+    valueText.append(QString::number(songCount));
+    valueText.append(" ");
+
+    if (songCount == 1)
+        valueText.append(tr("song"));
+    else
+        valueText.append(tr("songs"));
+
+    valueText.append(", ");
+
+    valueText.append(QString::number(albumCount));
+    valueText.append(" ");
+
+    if (albumCount == 1)
+        valueText.append(tr("album"));
+    else
+        valueText.append(tr("albums"));
+
+    valueText.append(", ");
+
+    valueText.append(QString::number(artistCount));
+    valueText.append(" ");
+
+    if (artistCount == 1)
+        valueText.append(tr("artist"));
+    else
+        valueText.append(tr("artists"));
+
+    item->setData(UserRoleValueText, valueText);
+
+    ui->genresList->addItem(item);
+
+    if(!error.isEmpty())
+        qDebug() << error;
+
+#ifdef Q_WS_MAEMO_5
+        if (remainingCount != 0)
+            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+        else
+            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+}
+#endif
+
+
 
 void MusicWindow::focusInEvent(QFocusEvent *)
 {
@@ -681,7 +805,7 @@ void MusicWindow::onAddToNowPlaying()
         playlist->appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());
         this->notifyOnAddedToNowPlaying(1);
     }
-    else if (this->currentList() == ui->artistList || this->currentList() == ui->albumList) {
+    else if (this->currentList() == ui->artistList || this->currentList() == ui->albumList || this->currentList() == ui->genresList) {
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif

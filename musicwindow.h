@@ -19,10 +19,11 @@
 #include "delegates/thumbnailitemdelegate.h"
 #include "singlealbumview.h"
 #include "singleartistview.h"
+#include "singlegenreview.h"
 #include "ui_musicwindow.h"
 #include "includes.h"
 
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
     #include "mafwrendereradapter.h"
     #include "mafwsourceadapter.h"
     #include "mafwplaylistadapter.h"
@@ -56,6 +57,8 @@ private:
     unsigned int browseAllSongsId;
     unsigned int browseAllArtistsId;
     unsigned int browseAllAlbumsId;
+    unsigned int browseAllGenresId;
+    unsigned int browseAllPlaylistsId;
     void fetchUri(QString objectId);
     uint addToNowPlayingId;
     int numberOfSongsToAdd;
@@ -87,6 +90,7 @@ private slots:
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void browseAllGenres(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onAddToNowPlayingCallback(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onDeleteUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString, QString Uri);
@@ -94,8 +98,10 @@ private slots:
     void listSongs();
     void listArtists();
     void listAlbums();
+    void listGenres();
     void onAlbumSelected(QListWidgetItem*);
     void onArtistSelected(QListWidgetItem*);
+    void onGenreSelected(QListWidgetItem*);
 #endif
     void onAddToNowPlaying();
 };
