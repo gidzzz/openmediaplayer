@@ -39,6 +39,7 @@ public:
     QWidget *widget(QWidget *parent);
     double selectedFreq() const;
     void setSelectedFreq(double d);
+    void setValue(QString property, QVariant value);
     void refreshFreqValues();
 
 private slots:

@@ -43,8 +43,12 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
     QString state = selector->getValue("state").toString();
     if (state == "enabled")
         ui->fmtxCheckbox->setChecked(true);
-    else if (state == "n/a")
+    else if (state == "n/a") {
         ui->fmtxCheckbox->setEnabled(false);
+#ifdef Q_WS_MAEMO_5
+        ui->fmtxCheckbox->setText(dgettext("osso-fm-transmitter", "fmtx_ni_disabled"));
+#endif
+    }
     connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
     connect(ui->fmtxCheckbox, SIGNAL(clicked()), this, SLOT(onCheckboxClicked()));
@@ -64,15 +68,16 @@ void FMTXDialog::showEvent(QShowEvent *event)
 void FMTXDialog::onSaveClicked()
 {
     int frequencyValue = selector->selectedFreq() * 1000;
+    uint ufreq = selector->selectedFreq() * 1000;
     fmtxFrequency->set(frequencyValue);
 #ifdef DEBUG
     qDebug() << "Selected Frequency:" << QString::number(frequencyValue);
 #endif
+    selector->setValue("frequency", ufreq);
     if(ui->fmtxCheckbox->isChecked())
-        // TODO: use DBus instead(!)
-        system(QString("fmtx_client -p 1 -f %2 > /dev/null &").arg(frequencyValue).toUtf8().constData());
+        selector->setValue("state", "enabled");
     else
-        system(QString("fmtx_client -p 0 -f %2 > /dev/null &").arg(frequencyValue).toUtf8().constData());
+        selector->setValue("state", "disabled");
     this->close();
 }
 

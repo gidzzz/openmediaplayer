@@ -127,6 +127,30 @@ QVariant FreqPickSelector::getValue(QString property)
     return response.value().variant();
 }
 
+void FreqPickSelector::setValue(QString property, QVariant value)
+{
+    QDBusMessage message = QDBusMessage::createMethodCall (FMTX_SERVICE, FMTX_OBJ_PATH, DBUS_INTERFACE_PROPERTIES, DBUS_PROPERTIES_SET);
+    QList<QVariant> list;
+    list << DBUS_INTERFACE_PROPERTIES << property << QVariant::fromValue(QDBusVariant(value));
+    message.setArguments(list);
+
+    QDBusReply<QDBusVariant> response = QDBusConnection::systemBus().call(message);
+
+    QString error;
+
+    if (property == "rds_text")
+        error.append("Unable to set RDS info text: ");
+    else if (property == "frequency")
+        error.append("Unable to set frequency:");
+    else if (property == "rds_ps")
+        error.append("Unable to set RDS station name:");
+    else if (property == "state")
+        error.append("Unable to set FmTx state:");
+
+    if (!response.isValid () && response.error().type() != QDBusError::InvalidSignature)
+           qWarning () << error << response.error().message();
+}
+
 QWidget *FreqPickSelector::widget(QWidget *parent)
 {
     if (freqDialog != 0)
