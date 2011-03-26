@@ -48,7 +48,14 @@ void FreqPickSelector::setSelectedFreq(double d)
     int selectedInteger = d;
     int selectedFraction = ((d - selectedInteger) * 10);
     integers->setCurrentRow(selectedInteger - _minFreq);
-    fractions->setCurrentRow(selectedFraction);
+    for (int i = 0; i < fractions->count(); i++) {
+        if (fractions->item(i)->text().toInt() == selectedFraction) {
+            fractions->clearSelection();
+            fractions->setCurrentRow(i);
+            fractions->scrollToItem(fractions->item(i));
+            break;
+        }
+    }
 }
 
 void FreqPickSelector::updateText()
@@ -63,31 +70,18 @@ QString FreqPickSelector::currentValueText() const
 
 void FreqPickSelector::refreshFreqValues()
 {
-    QFile minFile("/sys/class/i2c-adapter/i2c-2/2-0063/region_bottom_frequency");
-    minFile.open(QIODevice::ReadOnly);
-    QTextStream minStream(&minFile);
-    int minValue = minStream.readLine().toInt() / 1000;
-    minFile.close();
-    if(minValue == 87)
-       minValue++;
-    QFile maxFile("/sys/class/i2c-adapter/i2c-2/2-0063/region_top_frequency");
-    maxFile.open(QIODevice::ReadOnly);
-    QTextStream maxStream(&maxFile);
-    int maxValue = maxStream.readLine().toInt() / 1000 - 1;
-    maxFile.close();
+    int minValue = this->getValue("freq_min").toInt() / 1000;
+    int maxValue = this->getValue("freq_max").toInt() / 1000;
     _minFreq = minValue;
     _maxFreq = maxValue;
-    QFile regionStep("/sys/class/i2c-adapter/i2c-2/2-0063/region_channel_spacing");
-    regionStep.open(QIODevice::ReadOnly);
-    QTextStream regionStream(&regionStep);
-    int regionStepValue = regionStream.readLine().toInt() / 100;
-    regionStep.close();
+    int regionStepValue = this->getValue("freq_step").toInt() / 100;
+    double selectedFreq = this->getValue("frequency").toDouble() / 1000;
 #ifdef DEBUG
-    qDebug() << "Minimum FMTX value: " << QString::number(minValue);
-    qDebug() << "Maximum FMTX value: " << QString::number(maxValue);
-    qDebug() << "FMTX Region spacing: " << QString::number(regionStepValue);
+    qDebug() << "Minimum FMTX value:" << QString::number(minValue);
+    qDebug() << "Maximum FMTX value:" << QString::number(maxValue);
+    qDebug() << "FMTX Region spacing:" << QString::number(regionStepValue);
+    qDebug() << "FMTX Frequency:" << QString::number(selectedFreq);
 #endif
-    double selectedFreq = frequency->value().toDouble() / 1000;
 
     // Now updating the list widgets
     integers->clear();
@@ -117,6 +111,22 @@ void FreqPickSelector::onFrequencyChanged()
     this->updateText();
 }
 
+QVariant FreqPickSelector::getValue(QString property)
+{
+    QDBusMessage message = QDBusMessage::createMethodCall (FMTX_SERVICE, FMTX_OBJ_PATH, DBUS_INTERFACE_PROPERTIES, DBUS_PROPERTIES_GET);
+    QList<QVariant> list;
+    list << DBUS_INTERFACE_PROPERTIES << property;
+    message.setArguments(list);
+
+    QDBusReply<QDBusVariant> response = QDBusConnection::systemBus().call(message);
+    if (!response.isValid () && response.error().type() != QDBusError::InvalidSignature)
+    {
+           qWarning () << "Unable to get property" << property << ":" << response.error().message();
+    }
+
+    return response.value().variant();
+}
+
 QWidget *FreqPickSelector::widget(QWidget *parent)
 {
     if (freqDialog != 0)
@@ -129,8 +139,8 @@ QWidget *FreqPickSelector::widget(QWidget *parent)
     // For some odd reason, making one QDialog and then re-setting the parent of that doesn't work.
     // So I'm just making a new dialog on every call now.
     freqDialog = new QDialog(parent);
-    freqDialog->setWindowTitle("Select frequency");
-    freqDialog->setMinimumHeight(360);
+    freqDialog->setWindowTitle(dgettext("osso-fm-transmitter", "fmtx_ti_select_frequency"));
+    freqDialog->setMinimumHeight(370);
     QGridLayout *mainLayout = new QGridLayout(freqDialog);
     QDialogButtonBox *box = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Vertical, freqDialog);
     mainLayout->addWidget(integers, 0, 0, 1, 1);

@@ -9,6 +9,10 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     this->setAttribute(Qt::WA_DeleteOnClose);
     if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
         ui->onExitBox->setCurrentIndex(1);
+    if (QSettings().contains("FMTX/overrideChecks")) {
+        if (!QSettings().value("FMTX/overrideChecks").toBool())
+            ui->fmtxCheckBox->setChecked(true);
+    }
 }
 
 SettingsDialog::~SettingsDialog()
@@ -18,10 +22,10 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::accept()
 {
-    int index = ui->onExitBox->currentIndex();
-    if (index == 0)
+    if (ui->onExitBox->currentIndex() == 0)
         QSettings().setValue("main/onApplicationExit", "do-nothing");
-    else if (index == 1)
+    else if (ui->onExitBox->currentIndex() == 1)
         QSettings().setValue("main/onApplicationExit", "stop-playback");
+    QSettings().setValue("FMTX/overrideChecks", ui->fmtxCheckBox->isChecked());
     this->close();
 }

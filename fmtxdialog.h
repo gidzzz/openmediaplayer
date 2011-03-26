@@ -37,11 +37,13 @@ protected:
 
 private:
     void keyPressEvent(QKeyEvent *);
+    void showErrorNote(QString error);
 
 private slots:
     void onSaveClicked();
     void onStateChanged();
     void orientationChanged();
+    void onCheckboxClicked();
 };
 
 #endif // FMTXDIALOG_H

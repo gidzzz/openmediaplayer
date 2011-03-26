@@ -26,20 +26,28 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
 #ifdef Q_WS_MAEMO_5
-    freqButton = new QMaemo5ValueButton("Frequency", this);
+    freqButton = new QMaemo5ValueButton(" " + QString(dgettext("osso-fm-transmitter", "fmtx_fi_frequency")), this);
     freqButton->setValueLayout(QMaemo5ValueButton::ValueBesideText);
     freqButton->setPickSelector(selector);
+    ui->fmtxCheckbox->setText(dgettext("osso-fm-transmitter", "fmtx_fi_fmtx_on_off"));
+    this->setWindowTitle(dgettext("osso-fm-transmitter", "fmtx_ti_fm_transmitter"));
 #else
     freqButton = new QPushButton("Frequency", this);
 #endif
+    if (!QSettings().contains("FMTX/overrideChecks"))
+        QSettings().setValue("FMTX/overrideChecks", false);
     ui->gridLayout->addWidget(freqButton, 1, 0, 1, 1);
     this->orientationChanged();
     fmtxState = new GConfItem("/system/fmtx/enabled");
     fmtxFrequency = new GConfItem("/system/fmtx/frequency");
-    if(fmtxState->value().toBool())
+    QString state = selector->getValue("state").toString();
+    if (state == "enabled")
         ui->fmtxCheckbox->setChecked(true);
+    else if (state == "n/a")
+        ui->fmtxCheckbox->setEnabled(false);
     connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
+    connect(ui->fmtxCheckbox, SIGNAL(clicked()), this, SLOT(onCheckboxClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
@@ -86,12 +94,63 @@ void FMTXDialog::orientationChanged()
     } else {
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
         ui->gridLayout->addWidget(ui->buttonBox, 1, 1, 1, 1, Qt::AlignBottom); // landscape
-        this->setFixedHeight(150);
+        this->setFixedHeight(160);
     }
+}
+
+void FMTXDialog::onCheckboxClicked()
+{
+#ifdef Q_WS_MAEMO_5
+    if (!QSettings().value("FMTX/overrideChecks").toBool()) {
+        QString startable = selector->getValue("startable").toString();
+        if (startable != "true")
+            ui->fmtxCheckbox->setChecked(false);
+
+        if (startable == "true")
+            return;
+        else if (startable == "Headphones are connected") {
+            this->showErrorNote(dgettext("osso-fm-transmitter", "fmtx_ni_cable_error"));
+        }
+        else if (startable == "Usb device is connected") {
+            this->showErrorNote(dgettext("osso-fm-transmitter", "fmtx_ni_usb_error"));
+        }
+    }
+#endif
 }
 
 void FMTXDialog::keyPressEvent(QKeyEvent *e)
 {
     if(e->key() == Qt::Key_Backspace)
         this->close();
+}
+
+void FMTXDialog::showErrorNote(QString error)
+{
+    QMaemo5InformationBox *box = new QMaemo5InformationBox(this);
+    box->setAttribute(Qt::WA_DeleteOnClose);
+
+    QWidget *widget = new QWidget(box);
+    QSpacerItem *spacer = new QSpacerItem(90, 20, QSizePolicy::Fixed, QSizePolicy::Maximum);
+
+    QLabel *errorLabel = new QLabel(box);
+
+    QHBoxLayout *layout = new QHBoxLayout(widget);
+
+    layout->addItem(spacer);
+    layout->addWidget(errorLabel);
+    layout->setSpacing(0);
+
+    widget->setLayout(layout);
+
+    // Bad padding in default widget, use tabbing to cover it up, sigh :/
+    errorLabel->setText("\n" + error + "\n\n");
+    errorLabel->setAlignment(Qt::AlignLeft);
+    errorLabel->setWordWrap(true);
+
+    box->setWidget(widget);
+    box->setTimeout(QMaemo5InformationBox::NoTimeout);
+
+    connect(box, SIGNAL(clicked()), this, SLOT(close()));
+
+    box->exec();
 }
