@@ -42,6 +42,7 @@ public slots:
     void getItems();
     void assignAudioPlaylist();
     void assignVideoPlaylist();
+    void assignRadioPlaylist();
 
 private:
     MafwRendererAdapter *mafwrenderer;

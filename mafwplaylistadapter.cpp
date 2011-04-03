@@ -182,6 +182,12 @@ void MafwPlaylistAdapter::assignVideoPlaylist()
     mafwrenderer->assignPlaylist(mafw_playlist);
 }
 
+void MafwPlaylistAdapter::assignRadioPlaylist()
+{
+    mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpRadioPlaylist"));
+    mafwrenderer->assignPlaylist(mafw_playlist);
+}
+
 void MafwPlaylistAdapter::duplicatePlaylist(QString newName)
 {
     mafw_playlist_manager->duplicatePlaylist(newName, mafw_playlist_manager->createPlaylist(this->playlistName()));
