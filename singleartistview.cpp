@@ -160,7 +160,9 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setWindowTitle(item->text());
+        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         albumView->show();
+        ui->indicator->hide();
     }
     ui->albumList->clearSelection();
 #endif
@@ -271,9 +273,10 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint,
 
             NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
             window->setAttribute(Qt::WA_DeleteOnClose);
+            connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
             window->onShuffleButtonToggled(true);
             window->show();
-
+            ui->indicator->hide();
             shuffleRequested = false;
         }
     }

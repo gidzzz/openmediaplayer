@@ -75,6 +75,7 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
     myNowPlayingWindow = new NowPlayingWindow(this);
 #endif
     myNowPlayingWindow->setAttribute(Qt::WA_DeleteOnClose);
+    connect(myNowPlayingWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
 #ifdef MAFW
     qDebug() << "Clearing playlist";
 
@@ -91,6 +92,7 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
 
 #endif
     myNowPlayingWindow->show();
+    ui->indicator->hide();
     ui->songList->clearSelection();
 }
 
@@ -417,7 +419,9 @@ void MusicWindow::onAlbumSelected(QListWidgetItem *item)
     albumView->setAttribute(Qt::WA_DeleteOnClose);
     albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
     albumView->setWindowTitle(item->data(Qt::DisplayRole).toString());
+    connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
     albumView->show();
+    ui->indicator->hide();
     ui->albumList->clearSelection();
 }
 
@@ -431,14 +435,18 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->setWindowTitle(item->data(UserRoleSongName).toString());
+        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         albumView->show();
+        ui->indicator->hide();
     } else if(songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleSongName).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
+        connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         artistView->show();
+        ui->indicator->hide();
     }
 
     ui->artistList->clearSelection();
@@ -449,7 +457,9 @@ void MusicWindow::onGenreSelected(QListWidgetItem *item)
     SingleGenreView *genreWindow = new SingleGenreView(this, mafwrenderer, mafwTrackerSource, playlist);
     genreWindow->setAttribute(Qt::WA_DeleteOnClose);
     genreWindow->setWindowTitle(item->data(UserRoleSongTitle).toString());
+    connect(genreWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
     genreWindow->show();
+    ui->indicator->hide();
     genreWindow->setSongCount(item->data(UserRoleSongCount).toInt());
     genreWindow->browseGenre(item->data(UserRoleObjectID).toString());
 
@@ -857,3 +867,13 @@ void MusicWindow::notifyOnAddedToNowPlaying(int songCount)
         QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
 }
 #endif
+
+void MusicWindow::showEvent(QShowEvent *)
+{
+    emit shown();
+}
+
+void MusicWindow::hideEvent(QHideEvent *)
+{
+    emit hidden();
+}

@@ -255,7 +255,9 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 
         npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         npWindow->setAttribute(Qt::WA_DeleteOnClose);
+        connect(npWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         npWindow->show();
+        ui->indicator->hide();
     }
 #endif
 }

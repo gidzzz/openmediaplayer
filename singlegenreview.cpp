@@ -79,14 +79,18 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->setWindowTitle(item->data(UserRoleSongName).toString());
+        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         albumView->show();
+        ui->indicator->hide();
     } else if(songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleSongName).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
+        connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         artistView->show();
+        ui->indicator->hide();
     }
 
     ui->artistList->clearSelection();
@@ -289,8 +293,9 @@ void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount
 
             NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
             window->setAttribute(Qt::WA_DeleteOnClose);
+            connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
             window->show();
-
+            ui->indicator->hide();
             this->isShuffling = false;
         }
     }

@@ -43,6 +43,14 @@ public:
     explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
     ~MusicWindow();
 
+protected:
+    void hideEvent(QHideEvent *);
+    void showEvent(QShowEvent *);
+
+signals:
+    void hidden();
+    void shown();
+
 private:
     Ui::MusicWindow *ui;
     void focusInEvent(QFocusEvent *);
