@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setButtonIcons();
     this->setLabelText();
     ui->listWidget->hide();
+    dbusNowPlaying = 0;
 
 #ifdef MAFW
     TAGSOURCE_AUDIO_PATH = "localtagfs::music/songs";
@@ -39,12 +40,26 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef Q_WS_MAEMO_5
+    if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE)) {
+        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
+    }
+
+    if (!QDBusConnection::sessionBus().registerObject(DBUS_PATH, this, QDBusConnection::ExportScriptableSlots)) {
+        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
+    }
+
+    if (!QDBusConnection::sessionBus().registerObject("/com/nokia/mediaplayer", this, QDBusConnection::ExportScriptableSlots)) {
+        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
+    }
+
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5AutoOrientation);
 
     ui->songCountL->clear();
     ui->videoCountL->clear();
     ui->startionCountL->clear();
+
+    updatingIndex = 0;
 #else
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
@@ -106,8 +121,11 @@ void MainWindow::connectSignals()
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    connect(myMusicWindow, SIGNAL(shown()), ui->indicator, SLOT(hide()));
+    connect(myMusicWindow, SIGNAL(hidden()), ui->indicator, SLOT(show()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
+    connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
     connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
@@ -115,6 +133,55 @@ void MainWindow::connectSignals()
             this, SLOT(countRadioResult(QString, GHashTable*, QString)));
     connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
 #endif
+}
+
+void MainWindow::open_mp_now_playing()
+{
+    if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && !playlist->isPlaylistNull()) {
+        this->createNowPlayingWindow();
+    } else {
+        QTimer::singleShot(400, this, SLOT(createNowPlayingWindow()));
+    }
+}
+
+void MainWindow::mime_open(const QString &uriString)
+{
+    this->activateWindow();
+    this->uriToPlay = uriString;
+    if (uriToPlay.startsWith("/"))
+        uriToPlay.prepend("file:/");
+    QString objectId = mafwTrackerSource->createObjectId(uriToPlay);
+    qDebug() << objectId;
+    const gchar* text_uri = uriToPlay.toUtf8();
+    qDebug() << text_uri;
+    GnomeVFSURI* uri = gnome_vfs_uri_new (text_uri);
+    if (uri != NULL) {
+        qDebug() << gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
+        gnome_vfs_get_mime_type_from_uri (uri);
+    }
+}
+
+void MainWindow::createNowPlayingWindow()
+{
+    if (dbusNowPlaying == 0) {
+#ifdef MAFW
+        dbusNowPlaying = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+#else
+        dbusNowPlaying = new NowPlayingWindow(this);
+#endif
+        dbusNowPlaying->setAttribute(Qt::WA_DeleteOnClose);
+        connect(dbusNowPlaying, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+        connect(dbusNowPlaying, SIGNAL(destroyed()), this, SLOT(onDbusNpWindowDestroyed()));
+    } else {
+        dbusNowPlaying->activateWindow();
+    }
+    dbusNowPlaying->show();
+    ui->indicator->hide();
+}
+
+void MainWindow::onDbusNpWindowDestroyed()
+{
+    dbusNowPlaying = 0;
 }
 
 void MainWindow::orientationChanged()
@@ -199,7 +266,9 @@ void MainWindow::showVideosWindow()
     myVideosWindow = new VideosWindow(this);
 #endif
     myVideosWindow->setAttribute(Qt::WA_DeleteOnClose);
+    connect(myVideosWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
     myVideosWindow->show();
+    ui->indicator->hide();
 }
 
 void MainWindow::showInternetRadioWindow()
@@ -210,7 +279,9 @@ void MainWindow::showInternetRadioWindow()
     myInternetRadioWindow = new InternetRadioWindow(this);
 #endif
     myInternetRadioWindow->setAttribute(Qt::WA_DeleteOnClose);
+    connect(myInternetRadioWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
     myInternetRadioWindow->show();
+    ui->indicator->hide();
 }
 
 #ifdef MAFW
@@ -312,9 +383,10 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString
         mafwrenderer->play();
         NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
         window->setAttribute(Qt::WA_DeleteOnClose);
+        connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         window->show();
+        ui->indicator->hide();
         ui->shuffleAllButton->setDisabled(false);
-        ui->shuffleAllButton->setDown(false);
     }
 }
 
@@ -338,7 +410,6 @@ void MainWindow::onShuffleAllClicked()
                                                              0, MAFW_SOURCE_BROWSE_ALL);
 
     ui->shuffleAllButton->setDisabled(true);
-    ui->shuffleAllButton->setDown(true);
 #endif
 }
 
@@ -373,3 +444,39 @@ void MainWindow::closeEvent(QCloseEvent *)
         mafwrenderer->stop();
 #endif
 }
+
+#ifdef MAFW
+void MainWindow::onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time)
+{
+    QTime t(0, 0);
+    t = t.addSecs(remaining_time);
+    QString text = QString("\nRetrieving information on the new media files.\nEstimated time remaining: %1\n").arg(t.toString("mm:ss"));
+    if (processed_items != -1)
+        text.append(tr("Processed items:") + " " + QString::number(processed_items).replace("\"",""));
+    if (processed_items != -1 && remaining_items != -1)
+        text.append("\n");
+    if (remaining_items != -1)
+        text.append(tr("Remaining items:") + " " + QString::number(remaining_items).replace("\"",""));
+#ifdef Q_WS_MAEMO_5
+    if (updatingIndex == 0) {
+        updatingIndex = new QMaemo5InformationBox(this);
+        QWidget *widget = new QWidget(updatingIndex);
+        updatingIndex->setTimeout(QMaemo5InformationBox::NoTimeout);
+        updatingIndex->setMinimumHeight(140);
+        updatingLabel = new QLabel(updatingIndex);
+        updatingLabel->setText(text);
+        updatingProgressBar = new QProgressBar(updatingIndex);
+        updatingProgressBar->setValue(progress);
+        updatingIndex->setWidget(widget);
+
+        QVBoxLayout *layout = new QVBoxLayout(widget);
+        layout->addWidget(updatingLabel);
+        layout->addWidget(updatingProgressBar);
+        updatingIndex->exec();
+    } else {
+        updatingLabel->setText(text);
+        updatingProgressBar->setValue(progress);
+    }
+#endif
+}
+#endif

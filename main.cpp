@@ -21,6 +21,8 @@
 #include <QtGui/QApplication>
 
 #include "mainwindow.h"
+#include <QTime>
+#include <QTextStream>
 
 int main(int argc, char *argv[])
 {
@@ -28,21 +30,28 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("mediaplayer");
     QApplication::setApplicationVersion("0.1");
     QApplication a(argc, argv);
+    QTime t(0,0);
+    t.start();
     // TODO: Add a full list of contributors here when we're ready to release.
-    qDebug() << "Open MediaPlayer, version:" << QApplication::applicationVersion()
-             << "Running with PID:" << QApplication::applicationPid() << endl
-             << "Copyright (C) 2010 Mohammad Abu-Garbeyyeh" << endl
-             << "Licensed under GPLv3" << endl
-             << "This program comes with ABSOLUTELY NO WARRANTY" << endl
-             << "This is free software, and you are welcome to redistribute it" << endl
-             << "under certain conditions; visit http://www.gnu.org/licenses/gpl.txt for details.";
+    QTextStream out(stdout);
+    out << "Open MediaPlayer, version:" << QApplication::applicationVersion()
+        << "Running with PID:" << QApplication::applicationPid() << endl
+        << "Copyright (C) 2010-2011 Mohammad Abu-Garbeyyeh" << endl
+        << "Licensed under GPLv3" << endl
+        << "This program comes with ABSOLUTELY NO WARRANTY" << endl
+        << "This is free software, and you are welcome to redistribute it" << endl
+        << "under certain conditions; visit http://www.gnu.org/licenses/gpl.txt for details." << endl;
     MainWindow w;
+
+    if (!QDBusConnection::sessionBus().isConnected()) {
+        qWarning("Cannot connect to the D-Bus session bus.");
+    }
 
 #if defined(Q_WS_S60)
     w.showMaximized();
 #else
     w.show();
 #endif
-
+    out << QString("MediaPlayer startup took %1 ms").arg(t.elapsed()) << endl;
     return a.exec();
 }
