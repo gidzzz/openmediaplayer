@@ -60,6 +60,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
 
 #ifdef Q_WS_MAEMO_5
     lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
+
+    deviceEvents = new Maemo5DeviceEvents(this);
 #endif
 
     this->connectSignals();
@@ -244,6 +246,9 @@ void NowPlayingWindow::connectSignals()
     connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentview()));
+#ifdef Q_WS_MAEMO_5
+    connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
+#endif
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
@@ -276,6 +281,20 @@ void NowPlayingWindow::connectSignals()
                                           this, SLOT(updatePlaylistState()));
 #endif
 }
+
+#ifdef Q_WS_MAEMO_5
+void NowPlayingWindow::onScreenLocked(bool locked)
+{
+    if (locked) {
+        if (positionTimer->isActive())
+            positionTimer->stop();
+    } else {
+        if (!positionTimer->isActive() && this->mafwState == Playing)
+            positionTimer->start();
+        mafwrenderer->getPosition();
+    }
+}
+#endif
 
 void NowPlayingWindow::showFMTXDialog()
 {
@@ -430,9 +449,18 @@ void NowPlayingWindow::toggleList()
            the other labels will move a bit in portrait mode   */
         ui->scrollArea->hide();
         ui->songPlaylist->show();
+#ifdef MAFW
+        positionTimer->stop();
+#endif
     } else {
         ui->songPlaylist->hide();
         ui->scrollArea->show();
+#ifdef MAFW
+        if (!positionTimer->isActive() && this->mafwState == Playing) {
+            positionTimer->start();
+            mafwrenderer->getPosition();
+        }
+#endif
     }
 }
 

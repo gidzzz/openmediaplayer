@@ -16,6 +16,7 @@
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
     #include "share.h"
+    #include "maemo5deviceevents.h"
 #endif
 
 #ifdef MAFW
@@ -78,6 +79,9 @@ private:
     void keyPressEvent(QKeyEvent *);
     QMenu *contextMenu;
     QDialog *savePlaylistDialog;
+#ifdef Q_WS_MAEMO_5
+    Maemo5DeviceEvents *deviceEvents;
+#endif
 
 private slots:
     void toggleVolumeSlider();
@@ -117,6 +121,9 @@ private slots:
     void onSavePlaylistAccepted();
     void onDeleteFromNowPlaying();
     void selectItemByText(int numberInPlaylist);
+#ifdef Q_WS_MAEMO_5
+    void onScreenLocked(bool locked);
+#endif
 };
 
 #endif // NOWPLAYINGWINDOW_H
