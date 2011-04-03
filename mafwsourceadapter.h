@@ -67,6 +67,8 @@ class MafwSourceAdapter : public QObject
   
   void setMetadata(const char* object_id,
 		   GHashTable* metadata);
+
+  QString createObjectId(QString uri);
 		    
  signals:
   //MafwSource signals

@@ -254,3 +254,9 @@ MafwSourceAdapter::setMetadata(const char* object_id,
     mafw_source_set_metadata(mafw_source, object_id, metadata, MafwSourceSignalHelper::set_metadata_cb, this);
   }
 }
+
+QString
+MafwSourceAdapter::createObjectId(QString uri)
+{
+      return QString::fromUtf8(mafw_source_create_objectid (uri.toUtf8()));
+}
