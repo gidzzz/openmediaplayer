@@ -10,7 +10,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
         ui->onExitBox->setCurrentIndex(1);
     if (QSettings().contains("FMTX/overrideChecks")) {
-        if (!QSettings().value("FMTX/overrideChecks").toBool())
+        if (QSettings().value("FMTX/overrideChecks").toBool())
             ui->fmtxCheckBox->setChecked(true);
     }
 }
