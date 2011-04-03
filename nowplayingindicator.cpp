@@ -100,12 +100,14 @@ void NowPlayingIndicator::onTkLockChanged(bool state)
 
 void NowPlayingIndicator::startAnimation()
 {
-    // Update the icon only if the window is active
-        if(frame == 11)
+    // Update the widget frame by frame
+    if (this->isVisible()) {
+        if (frame == 11)
             frame = 1;
         else
             frame++;
         this->update();
+    }
 }
 
 void NowPlayingIndicator::stopAnimation()
@@ -125,26 +127,25 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         emit clicked();
 #ifdef MAFW
         QString playlistName = playlist->playlistName();
+        QMainWindow *window;
 #ifdef DEBUG
         qDebug() << "Current playlist is: " + playlistName;
 #endif
-        if (playlistName == "FmpVideoPlaylist") {
-            VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-            window->setAttribute(Qt::WA_DeleteOnClose);
-            window->showFullScreen();
-        }
-        else if (playlistName == "FmpRadioPlaylist") {
-            RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-            window->setAttribute(Qt::WA_DeleteOnClose);
-            window->show();
-        }
+        if (playlistName == "FmpVideoPlaylist")
+            window = new VideoNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        else if (playlistName == "FmpRadioPlaylist")
+            window = new RadioNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
-        else {
-            NowPlayingWindow *window = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-            window->setAttribute(Qt::WA_DeleteOnClose);
+        else
+            window = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        window->setAttribute(Qt::WA_DeleteOnClose);
+        if (playlistName == "FmpVideoPlaylist")
+            window->showFullScreen();
+        else
             window->show();
-        }
+        connect(window, SIGNAL(destroyed()), this, SLOT(show()));
+        this->hide();
 #else
         NowPlayingWindow *window = new NowPlayingWindow(this);
         window->setAttribute(Qt::WA_DeleteOnClose);
