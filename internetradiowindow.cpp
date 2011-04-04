@@ -23,7 +23,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* m
         ui(new Ui::InternetRadioWindow)
 #ifdef MAFW
         ,mafwrenderer(mra),
-        mafwTrackerSource(msa),
+        mafwRadioSource(msa),
         playlist(pls)
 #endif
 {
@@ -33,18 +33,17 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* m
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    ui->indicator->setSources(this->mafwrenderer, this->mafwRadioSource, this->playlist);
 #endif
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->listWidget);
     ui->listWidget->setItemDelegate(delegate);
-    window = new RadioNowPlayingWindow(this);
     this->connectSignals();
     this->orientationChanged();
 #ifdef MAFW
-    if(mafwTrackerSource->isReady())
+    if(mafwRadioSource->isReady())
         this->listStations();
     else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listStations()));
+        connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(listStations()));
 #endif
 }
 
@@ -72,8 +71,24 @@ void InternetRadioWindow::showFMTXDialog()
 void InternetRadioWindow::onStationSelected()
 {
 #ifdef MAFW
-    mafwrenderer->playObject(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    playlist->assignRadioPlaylist();
+    qDebug() << "Clearing playlist";
+
+    playlist->clear();
+    qDebug() << "Playlist cleared";
+    for (int i = 0; i < ui->listWidget->count(); i++) {
+        QListWidgetItem *item = ui->listWidget->item(i);
+        playlist->appendItem(item->data(UserRoleObjectID).toString());
+    }
+    qDebug() << "Playlist created";
+
+    mafwrenderer->gotoIndex(ui->listWidget->currentRow());
+    mafwrenderer->play();
+    window = new RadioNowPlayingWindow(this, mafwrenderer, mafwRadioSource, playlist);
+#else
+    window = new RadioNowPlayingWindow(this);
 #endif
+    window->setAttribute(Qt::WA_DeleteOnClose);
     window->show();
 }
 
@@ -171,13 +186,13 @@ void InternetRadioWindow::listStations()
 #ifdef DEBUG
     qDebug("Source ready");
 #endif
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+    connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
 
-    this->browseAllStationsId = mafwTrackerSource->sourceBrowse("iradiosource::", false, NULL, NULL,
+    this->browseAllStationsId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
                                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                                 MAFW_METADATA_KEY_URI,
-                                                                                ),
+                                                                                MAFW_METADATA_KEY_MIME),
                                                                0, MAFW_SOURCE_BROWSE_ALL);
 }
 
@@ -189,8 +204,17 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
 
     QString title;
     QString URI;
+    QString mime;
     if(metadata != NULL) {
         GValue *v;
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_MIME);
+        mime = QString::fromUtf8(g_value_get_string (v));
+
+        if (mime.contains("video"))
+            return;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");

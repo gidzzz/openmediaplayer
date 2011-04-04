@@ -37,10 +37,16 @@ private:
     void connectSignals();
     void setIcons();
     QTimer *volumeTimer;
+    QTimer *positionTimer;
+    bool buttonWasDown;
 #ifdef MAFW
     MafwRendererAdapter *mafwrenderer;
-    MafwSourceAdapter *mafwTrackerSource;
+    MafwSourceAdapter *mafwRadioSource;
     MafwPlaylistAdapter *playlist;
+    int mafwState;
+    int streamDuration;
+    QString artistName;
+    QString albumName;
 #endif
 
 private slots:
@@ -51,6 +57,20 @@ private slots:
 #endif
     void onNextButtonPressed();
     void onPrevButtonPressed();
+    void onStopButtonPressed();
+    void streamIsSeekable(bool seekable);
+    void updateArtistAlbum();
+#ifdef MAFW
+    void stateChanged(int state);
+    void onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString);
+    void onGetPosition(int position, QString);
+    void onBufferingInfo(float);
+    void onNextButtonClicked();
+    void onPreviousButtonClicked();
+    void onRendererMetadataRequested(GHashTable*, QString object_id, QString error);
+    void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
+    void onRendererMetadataChanged(QString name, QVariant value);
+#endif
 };
 
 #endif // RADIONOWPLAYINGWINDOW_H

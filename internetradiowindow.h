@@ -55,7 +55,7 @@ private:
     RadioNowPlayingWindow *window;
 #ifdef MAFW
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter* mafwTrackerSource;
+    MafwSourceAdapter* mafwRadioSource;
     MafwPlaylistAdapter* playlist;
     unsigned int browseAllStationsId;
 #endif

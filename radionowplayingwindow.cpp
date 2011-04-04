@@ -24,7 +24,7 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRendererAdapte
     ui(new Ui::RadioNowPlayingWindow)
 #ifdef MAFW
     ,mafwrenderer(mra),
-    mafwTrackerSource(msa),
+    mafwRadioSource(msa),
     playlist(pls)
 #endif
 {
@@ -36,8 +36,23 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRendererAdapte
     this->setIcons();
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
+
+    positionTimer = new QTimer(this);
+    positionTimer->setInterval(1000);
+
+    ui->bufferBar->setRange(0, 2);
+    ui->bufferBar->setValue(1);
+
+    ui->bufferBar->hide();
+
     this->connectSignals();
     this->orientationChanged();
+#ifdef MAFW
+    mafwrenderer->getStatus();
+    mafwrenderer->getPosition();
+    mafwrenderer->getVolume();
+    mafwrenderer->getCurrentMetadata();
+#endif
 }
 
 RadioNowPlayingWindow::~RadioNowPlayingWindow()
@@ -57,6 +72,22 @@ void RadioNowPlayingWindow::connectSignals()
     connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
+#ifdef MAFW
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
+    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
+    connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
+    connect(mafwrenderer, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onRendererMetadataChanged(QString,QVariant)));
+    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
+            this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
+    connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
+    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+    connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
+    connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
+#endif
 }
 
 void RadioNowPlayingWindow::setIcons()
@@ -80,6 +111,216 @@ void RadioNowPlayingWindow::toggleVolumeSlider()
     }
 }
 
+#ifdef MAFW
+void RadioNowPlayingWindow::stateChanged(int state)
+{
+    this->mafwState = state;
+
+    if(state == Paused) {
+        ui->playButton->setIcon(QIcon(playButtonIcon));
+        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+        disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+        disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+        mafwrenderer->getPosition();
+        if(positionTimer->isActive())
+            positionTimer->stop();
+    }
+    else if(state == Playing) {
+        ui->playButton->setIcon(QIcon(pauseButtonIcon));
+        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+        disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+        disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+        mafwrenderer->getPosition();
+        if(!positionTimer->isActive())
+            positionTimer->start();
+    }
+    else if(state == Stopped) {
+        ui->playButton->setIcon(QIcon(playButtonIcon));
+        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+        disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+        disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+        if(positionTimer->isActive())
+            positionTimer->stop();
+    }
+    else if(state == Transitioning) {
+        ui->songProgress->setEnabled(false);
+        ui->songProgress->setValue(0);
+        ui->songProgress->setRange(0, 99);
+        ui->currentPositionLabel->setText("00:00");
+    }
+}
+
+void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant value)
+{
+#ifdef MAFW
+    this->mafwrenderer->getCurrentMetadata();
+#endif
+
+    if(name == "is-seekable" /*MAFW_METADATA_KEY_IS_SEEKABLE*/) {
+        ui->songProgress->setEnabled(value.toBool());
+        this->streamIsSeekable(value.toBool());
+    }
+    if (name == "duration" /*MAFW_METADATA_KEY_DURATION*/) {
+        QTime t(0, 0);
+        t = t.addSecs(value.toInt());
+        ui->streamLengthLabel->setText(t.toString("mm:ss"));
+    }
+    if(name == "renderer-art-uri")
+        ui->albumArt->setPixmap(QPixmap(value.toString()));
+    if (name == "artist")
+        this->artistName = value.toString();
+    if (name == "album")
+        this->albumName = value.toString();
+    if (name == "artist" || name == "album")
+        this->updateArtistAlbum();
+}
+
+void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
+{
+    this->stateChanged(state);
+}
+
+void RadioNowPlayingWindow::updateArtistAlbum()
+{
+    ui->artistAlbumLabel->setText(this->artistName + " / " + this->albumName);
+}
+
+void RadioNowPlayingWindow::onGetPosition(int position, QString)
+{
+    QTime t(0, 0);
+    t = t.addSecs(position);
+    ui->currentPositionLabel->setText(t.toString("mm:ss"));
+    if (ui->streamLengthLabel->text() != "-:--")
+        ui->songProgress->setValue(position);
+    else {
+        if (ui->songProgress->value() != 0)
+            ui->songProgress->setValue(0);
+    }
+}
+
+void RadioNowPlayingWindow::onBufferingInfo(float buffer)
+{
+    if (buffer != 0.0) {
+        int percentage = (int)(buffer*100);
+        ui->bufferBar->setRange(0, 100);
+        ui->bufferBar->setValue(percentage);
+        if (buffer == 1.0) {
+            ui->bufferBar->hide();
+            ui->seekWidget->show();
+            if (!positionTimer->isActive())
+                positionTimer->start();
+        }
+    } else {
+        ui->bufferBar->setRange(0, 0);
+        ui->bufferBar->setValue(-1);
+        if (positionTimer->isActive())
+            positionTimer->stop();
+    }
+
+    if (buffer != 1.0 && !ui->bufferBar->isVisible()) {
+        ui->seekWidget->hide();
+        ui->bufferBar->show();
+    }
+}
+
+void RadioNowPlayingWindow::onNextButtonClicked()
+{
+    if (ui->nextButton->isDown()) {
+        buttonWasDown = true;
+        mafwrenderer->setPosition(SeekRelative, 3);
+        mafwrenderer->getPosition();
+    } else {
+        if (!buttonWasDown)
+            mafwrenderer->next();
+        buttonWasDown = false;
+    }
+}
+
+void RadioNowPlayingWindow::onPreviousButtonClicked()
+{
+    if (ui->prevButton->isDown()) {
+        buttonWasDown = true;
+        mafwrenderer->setPosition(SeekRelative, -3);
+        mafwrenderer->getPosition();
+    } else {
+        if (!buttonWasDown)
+            mafwrenderer->previous();
+        buttonWasDown = false;
+    }
+}
+
+void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString object_id, QString error)
+{
+    /*this->mafwRadioSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                              MAFW_METADATA_KEY_ALBUM,
+                                                                              MAFW_METADATA_KEY_ARTIST,
+                                                                              MAFW_METADATA_KEY_ALBUM_ART_URI,
+                                                                              MAFW_METADATA_KEY_DURATION,
+                                                                              MAFW_METADATA_KEY_IS_SEEKABLE));*/
+    this->onSourceMetadataRequested(object_id, metadata, "");
+    if(!error.isNull() && !error.isEmpty())
+        qDebug() << error;
+}
+
+void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
+{
+    QString artistAlbum;
+    QString organization;
+    QString albumArt;
+    bool isSeekable;
+    int duration = -1;
+    QTime t(0, 0);
+    if(metadata != NULL) {
+        GValue *v;
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_TITLE);
+        artistAlbum = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown artist) / (unknown album)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_ORGANIZATION);
+        organization = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_DURATION);
+        duration = v ? g_value_get_int (v) : -1;
+        if (duration != -1)
+            t = t.addSecs(duration);
+        this->streamDuration = duration;
+
+        v = mafw_metadata_first(metadata,
+                                MAFW_METADATA_KEY_IS_SEEKABLE);
+        isSeekable = v ? g_value_get_boolean (v) : false;
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
+        if(v != NULL) {
+            const gchar* file_uri = g_value_get_string(v);
+            gchar* filename = NULL;
+            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                ui->albumArt->setPixmap(QPixmap(QString::fromUtf8(filename)));
+            }
+        } else {
+            ui->albumArt->setPixmap(QPixmap(radioImage));
+        }
+
+        ui->stationLabel->setText(organization);
+        ui->artistAlbumLabel->setText(artistAlbum);
+        if (duration != -1) {
+            ui->streamLengthLabel->setText(t.toString("mm:ss"));
+            ui->songProgress->setRange(0, duration);
+        } else {
+            ui->streamLengthLabel->setText("-:--");
+        }
+        this->streamIsSeekable(isSeekable);
+    }
+
+    if(!error.isNull() && !error.isEmpty())
+        qDebug() << error;
+}
+#endif
+
 void RadioNowPlayingWindow::orientationChanged()
 {
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
@@ -88,11 +329,13 @@ void RadioNowPlayingWindow::orientationChanged()
         ui->volumeWidget->show();
         ui->spacerWidget->show();
         ui->spacerWidget2->show();
+        ui->metadataWidget->setFixedWidth(440);
     } else {
         ui->volumeWidget->hide();
         ui->mainLayout->setDirection(QBoxLayout::TopToBottom);
         ui->spacerWidget2->hide();
         ui->spacerWidget->hide();
+        ui->metadataWidget->setFixedWidth(470);
     }
 }
 
@@ -106,7 +349,7 @@ void RadioNowPlayingWindow::showFMTXDialog()
 
 void RadioNowPlayingWindow::onNextButtonPressed()
 {
-    if(ui->nextButton->isDown())
+    if (ui->nextButton->isDown())
         ui->nextButton->setIcon(QIcon(nextButtonPressedIcon));
     else
         ui->nextButton->setIcon(QIcon(nextButtonIcon));
@@ -114,8 +357,39 @@ void RadioNowPlayingWindow::onNextButtonPressed()
 
 void RadioNowPlayingWindow::onPrevButtonPressed()
 {
-    if(ui->prevButton->isDown())
+    if (ui->prevButton->isDown())
         ui->prevButton->setIcon(QIcon(prevButtonPressedIcon));
     else
         ui->prevButton->setIcon(QIcon(prevButtonIcon));
+}
+
+void RadioNowPlayingWindow::onStopButtonPressed()
+{
+    if (ui->playButton->isDown())
+        ui->playButton->setIcon(QIcon(stopButtonPressedIcon));
+    else
+        ui->playButton->setIcon(QIcon(stopButtonIcon));
+}
+
+void RadioNowPlayingWindow::streamIsSeekable(bool seekable)
+{
+#ifdef MAFW
+    if (seekable) {
+        if (this->mafwState == Playing) {
+            this->stateChanged(Playing);
+        }
+    } else {
+        if (this->mafwState == Playing) {
+            ui->playButton->setIcon(QIcon(stopButtonIcon));
+            disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(stop()));
+            connect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+            connect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+            mafwrenderer->getPosition();
+            if(!positionTimer->isActive())
+                positionTimer->start();
+        }
+    }
+    ui->songProgress->setEnabled(seekable);
+#endif
 }
