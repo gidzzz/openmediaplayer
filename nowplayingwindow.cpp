@@ -256,8 +256,8 @@ void NowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(QString,QString,QString,QString,QString)),
-            this, SLOT(onRendererMetadataRequested(QString,QString,QString,QString,QString)));
+    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
+            this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->songProgress, SLOT(setEnabled(bool)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
@@ -323,7 +323,7 @@ void NowPlayingWindow::onSongSelected(int songNumber, int totalNumberOfSongs, QS
 }
 
 #ifdef MAFW
-void NowPlayingWindow::onRendererMetadataRequested(QString, QString, QString, QString object_id, QString error)
+void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_id, QString error)
 {
     this->mafwTrackerSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                               MAFW_METADATA_KEY_ALBUM,

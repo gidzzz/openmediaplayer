@@ -38,24 +38,12 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRendererAdapte
     ui->widget->setAttribute(Qt::WA_NativeWindow);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    /*QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    if(screenGeometry.width() > screenGeometry.height()) {
-        portrait = false;
-        this->orientationChanged();
-        this->onLandscapeMode();
-    } else {
-        portrait = true;
-    }*/
-    this->orientationChanged();
-    this->onLandscapeMode();
-    rotator = new QMaemo5Rotator(QMaemo5Rotator::AutomaticBehavior);
-    //http://www.gossamer-threads.com/lists/maemo/developers/54239
     quint32 disable = {0};
     Atom winPortraitModeSupportAtom = XInternAtom(QX11Info::display(), "_HILDON_PORTRAIT_MODE_SUPPORT", false);
     XChangeProperty(QX11Info::display(), winId(), winPortraitModeSupportAtom, XA_CARDINAL, 32, PropModeReplace, (uchar*) &disable, 1);
-    /*if(portrait) {
-        QTimer::singleShot(1000, this, SLOT(onPortraitMode()));
-    }*/
+    this->orientationChanged();
+    this->onLandscapeMode();
+    //http://www.gossamer-threads.com/lists/maemo/developers/54239
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
     volumeTimer = new QTimer(this);
@@ -113,11 +101,6 @@ void VideoNowPlayingWindow::connectSignals()
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
-    //connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-#ifdef Q_WS_MAEMO_5
-    //connect(rotator, SIGNAL(portrait()), this, SLOT(onPortraitMode()));
-    //connect(rotator, SIGNAL(landscape()), this, SLOT(onLandscapeMode()));
-#endif
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
@@ -522,3 +505,4 @@ void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
     }
 }
 #endif
+

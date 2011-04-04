@@ -49,6 +49,7 @@ void
 MafwSourceSignalHelper::uri_result_cb(MafwSource* mafw_source, const char* object_id, GHashTable* metadata, gpointer user_data, const GError* error)
 {
   Q_UNUSED(mafw_source)
+  Q_UNUSED(error)
   QString uri;
   QString objectId;
   GValue *v;

@@ -6,12 +6,12 @@
 #include <QTimer>
 #include <QtDBus>
 #include <QDesktopWidget>
+#include <QKeyEvent>
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
 
 #ifdef Q_WS_MAEMO_5
-    #include "qmaemo5rotator.h"
     #include <QMaemo5InformationBox>
     #include <QSpacerItem>
 #endif
@@ -57,7 +57,6 @@ private:
     bool isOverlayVisible;
     bool gotInitialState;
 #ifdef Q_WS_MAEMO_5
-    QMaemo5Rotator *rotator;
     void setDNDAtom(bool dnd);
 #endif
 #ifdef MAFW

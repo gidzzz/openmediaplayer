@@ -386,7 +386,7 @@
               <number>1000</number>
              </property>
              <property name="autoRepeatInterval">
-              <number>300</number>
+              <number>200</number>
              </property>
             </widget>
            </item>
@@ -451,7 +451,7 @@
               <number>1000</number>
              </property>
              <property name="autoRepeatInterval">
-              <number>300</number>
+              <number>200</number>
              </property>
             </widget>
            </item>
