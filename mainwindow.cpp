@@ -140,7 +140,7 @@ void MainWindow::open_mp_now_playing()
     if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && !playlist->isPlaylistNull()) {
         this->createNowPlayingWindow();
     } else {
-        QTimer::singleShot(400, this, SLOT(createNowPlayingWindow()));
+        QTimer::singleShot(700, this, SLOT(createNowPlayingWindow()));
     }
 }
 
@@ -448,35 +448,37 @@ void MainWindow::closeEvent(QCloseEvent *)
 #ifdef MAFW
 void MainWindow::onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time)
 {
-    QTime t(0, 0);
-    t = t.addSecs(remaining_time);
-    QString text = QString("\nRetrieving information on the new media files.\nEstimated time remaining: %1\n").arg(t.toString("mm:ss"));
-    if (processed_items != -1)
-        text.append(tr("Processed items:") + " " + QString::number(processed_items).replace("\"",""));
-    if (processed_items != -1 && remaining_items != -1)
-        text.append("\n");
-    if (remaining_items != -1)
-        text.append(tr("Remaining items:") + " " + QString::number(remaining_items).replace("\"",""));
+    if (remaining_time != -1 && remaining_time != 0) {
+        QTime t(0, 0);
+        t = t.addSecs(remaining_time);
+        QString text = QString("\nRetrieving information on the new media files.\nEstimated time remaining: %1\n").arg(t.toString("mm:ss"));
+        if (processed_items != -1)
+            text.append(tr("Processed items:") + " " + QString::number(processed_items).replace("\"",""));
+        if (processed_items != -1 && remaining_items != -1)
+            text.append("\n");
+        if (remaining_items != -1)
+            text.append(tr("Remaining items:") + " " + QString::number(remaining_items).replace("\"",""));
 #ifdef Q_WS_MAEMO_5
-    if (updatingIndex == 0) {
-        updatingIndex = new QMaemo5InformationBox(this);
-        QWidget *widget = new QWidget(updatingIndex);
-        updatingIndex->setTimeout(QMaemo5InformationBox::NoTimeout);
-        updatingIndex->setMinimumHeight(140);
-        updatingLabel = new QLabel(updatingIndex);
-        updatingLabel->setText(text);
-        updatingProgressBar = new QProgressBar(updatingIndex);
-        updatingProgressBar->setValue(progress);
-        updatingIndex->setWidget(widget);
+        if (updatingIndex == 0) {
+            updatingIndex = new QMaemo5InformationBox(this);
+            QWidget *widget = new QWidget(updatingIndex);
+            updatingIndex->setTimeout(QMaemo5InformationBox::NoTimeout);
+            updatingIndex->setMinimumHeight(140);
+            updatingLabel = new QLabel(updatingIndex);
+            updatingLabel->setText(text);
+            updatingProgressBar = new QProgressBar(updatingIndex);
+            updatingProgressBar->setValue(progress);
+            updatingIndex->setWidget(widget);
 
-        QVBoxLayout *layout = new QVBoxLayout(widget);
-        layout->addWidget(updatingLabel);
-        layout->addWidget(updatingProgressBar);
-        updatingIndex->exec();
-    } else {
-        updatingLabel->setText(text);
-        updatingProgressBar->setValue(progress);
-    }
+            QVBoxLayout *layout = new QVBoxLayout(widget);
+            layout->addWidget(updatingLabel);
+            layout->addWidget(updatingProgressBar);
+            updatingIndex->exec();
+        } else {
+            updatingLabel->setText(text);
+            updatingProgressBar->setValue(progress);
+        }
 #endif
+    }
 }
 #endif
