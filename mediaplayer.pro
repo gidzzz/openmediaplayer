@@ -90,12 +90,10 @@ unix:!symbian {
         DEFINES += MAFW
         SOURCES +=     maemo5deviceevents.cpp \
             fmtxdialog.cpp \
-            freqpickselector.cpp \
-            qmaemo5rotator.cpp
+            freqpickselector.cpp
         HEADERS +=    maemo5deviceevents.h \
             fmtxdialog.h \
-            freqpickselector.h \
-            qmaemo5rotator.h
+            freqpickselector.h
         include(external-includepaths.pro)
         target.path = /opt/usr/bin
     } else {
@@ -107,7 +105,7 @@ unix:!symbian {
 contains(DEFINES, MAFW) {
 
     CONFIG += link_pkgconfig
-    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gtk-2-0
+    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gtk-2-0 gnome-vfs-2.0
 
     SOURCES +=      mafwrenderersignalhelper.cpp \
             mafwsourcesignalhelper.cpp \
