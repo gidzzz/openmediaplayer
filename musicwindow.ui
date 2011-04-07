@@ -113,11 +113,9 @@
      </item>
      <item>
       <widget class="QListWidget" name="playlistList">
-       <item>
-        <property name="text">
-         <string>Playlist placeholder</string>
-        </property>
-       </item>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
