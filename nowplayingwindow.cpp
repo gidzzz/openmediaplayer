@@ -528,7 +528,10 @@ void NowPlayingWindow::onNextButtonClicked()
 {
     if (ui->nextButton->isDown()) {
         buttonWasDown = true;
-        mafwrenderer->setPosition(SeekRelative, 3);
+        if (currentSongPosition >= this->songDuration)
+            mafwrenderer->setPosition(SeekAbsolute, 0);
+        else
+            mafwrenderer->setPosition(SeekRelative, 3);
         mafwrenderer->getPosition();
     } else {
         if (!buttonWasDown)
