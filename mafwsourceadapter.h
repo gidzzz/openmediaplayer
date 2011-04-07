@@ -46,7 +46,7 @@ class MafwSourceAdapter : public QObject
   
   uint sourceBrowse(const char* object_id, 
 		    bool  recursive, 
-		    MafwFilter* filter, 
+                    const char* filter,
 		    const char* sort_criteria, 
 		    const char* const *metadata_keys, 
 		    uint skip_count, 

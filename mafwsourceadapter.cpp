@@ -179,9 +179,14 @@ MafwSourceAdapter::onUpdating(MafwSource*, gint progress, gint processed_items, 
 }
 
 uint
-MafwSourceAdapter::sourceBrowse(const char* object_id, bool recursive, MafwFilter* filter, const char* sort_criteria, const char* const *metadata_keys, uint skip_count, uint item_count)
+MafwSourceAdapter::sourceBrowse(const char* object_id, bool recursive, const char* filterString, const char* sort_criteria, const char* const *metadata_keys, uint skip_count, uint item_count)
 {
   uint rc = -1;
+  MafwFilter *filter;
+  if (filterString)
+      filter = mafw_filter_parse (filterString);
+  else
+      filter = NULL;
   if(mafw_source)
   {
     rc = mafw_source_browse(mafw_source, object_id, recursive, filter, sort_criteria, metadata_keys, skip_count, item_count, MafwSourceSignalHelper::browse_result_cb, this);
