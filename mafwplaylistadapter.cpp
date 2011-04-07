@@ -108,6 +108,12 @@ int MafwPlaylistAdapter::getSize()
     return sizeAsInt;
 }
 
+int MafwPlaylistAdapter::getSizeOf(MafwPlaylist *playlist)
+{
+    int size = mafw_playlist_get_size (playlist, &error);
+    return size;
+}
+
 void MafwPlaylistAdapter::getItems()
 {
 #ifdef DEBUG
@@ -128,6 +134,19 @@ void MafwPlaylistAdapter::getItems()
 #ifdef DEBUG
     qDebug() << "MafwPlaylistAdapter::getItems called successfully";
 #endif
+}
+
+void MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist)
+{
+    mafw_playlist_get_items_md (playlist,
+                                0,
+                                -1,
+                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                 MAFW_METADATA_KEY_ALBUM,
+                                                 MAFW_METADATA_KEY_ARTIST,
+                                                 MAFW_METADATA_KEY_DURATION),
+                                MafwPlaylistAdapter::get_items_cb,
+                                this, NULL);
 }
 
 void MafwPlaylistAdapter::get_items_cb(MafwPlaylist*,

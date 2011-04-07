@@ -27,6 +27,8 @@ public:
     void removeItem(int index);
     void duplicatePlaylist(QString newName);
     int getSize();
+    int getSizeOf(MafwPlaylist *playlist);
+    void getItemsOf(MafwPlaylist *playlist);
     QString playlistName();
     MafwPlaylist *mafw_playlist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
