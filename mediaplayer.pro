@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     settingsdialog.cpp \
     entertainmentview.cpp \
     delegates/thumbnailitemdelegate.cpp \
-    singlegenreview.cpp
+    singlegenreview.cpp \
+    singleplaylistview.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -54,7 +55,8 @@ HEADERS  += mainwindow.h \
     settingsdialog.h \
     entertainmentview.h \
     delegates/thumbnailitemdelegate.h \
-    singlegenreview.h
+    singlegenreview.h \
+    singleplaylistview.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -70,10 +72,8 @@ FORMS    += mainwindow.ui \
     singleartistview.ui \
     settingsdialog.ui \
     entertainmentview.ui \
-    singlegenreview.ui
-
-CONFIG += mobility
-MOBILITY = sensors
+    singlegenreview.ui \
+    singleplaylistview.ui
 
 symbian {
     TARGET.UID3 = 0xedf29700
@@ -124,5 +124,3 @@ contains(DEFINES, MAFW) {
 
 OTHER_FILES += \
     entertainmentview.qml
-
-RESOURCES +=
