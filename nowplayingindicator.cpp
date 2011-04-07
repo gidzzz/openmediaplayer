@@ -28,6 +28,7 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
         images << QPixmap("/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(i) + ".png");
     frame = 0;
     setAttribute(Qt::WA_OpaquePaintEvent);
+    mafwRadioSource = 0;
     timer = new QTimer(this);
     timer->setInterval(100);
     this->stopAnimation();
@@ -133,8 +134,11 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
 #endif
         if (playlistName == "FmpVideoPlaylist")
             window = new VideoNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
-        else if (playlistName == "FmpRadioPlaylist")
-            window = new RadioNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        else if (playlistName == "FmpRadioPlaylist")  {
+            if (mafwRadioSource == 0)
+                mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
+            window = new RadioNowPlayingWindow(this, this->mafwrenderer, this->mafwRadioSource, this->playlist);
+        }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
         else

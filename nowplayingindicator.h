@@ -60,6 +60,7 @@ private:
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
+    MafwSourceAdapter* mafwRadioSource;
 #endif
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;
