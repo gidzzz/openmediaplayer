@@ -37,6 +37,10 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
     playlist = new MafwPlaylistAdapter(this, this->mafwrenderer);
     this->shuffleNowPlayingWindowCreated = false;
+    if (mafwrenderer->isRendererReady())
+        mafwrenderer->getStatus();
+    else
+        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -132,6 +136,13 @@ void MainWindow::connectSignals()
     connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countRadioResult(QString, GHashTable*, QString)));
     connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
+    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+#endif
+#ifdef Q_WS_MAEMO_5
+    QDBusConnection::systemBus().connect("", "", "org.freedesktop.Hal.Device", "Condition",
+                                         this, SLOT(onBluetoothButtonPressed(QDBusMessage)));
 #endif
 }
 
@@ -233,9 +244,8 @@ void MainWindow::orientationChanged()
 
 void MainWindow::showAbout()
 {
-    QMessageBox::information(this, tr("About"),
-                             "Qt Mediaplayer for Maemo 5.\n\nCopyright 2010-2011:\nMohammad Abu-Garbeyyeh\n\
-Sebastian Lauwers\nTimur Kristof\nNicolai Hess\n\nLicensed under GPLv3\n\nBuild Date: " + QString(__DATE__ ) + " "  + QString(__TIME__ ));
+    AboutWindow *window = new AboutWindow(this);
+    window->show();
 }
 
 void MainWindow::processListClicks(QListWidgetItem* item)
@@ -479,6 +489,40 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
             updatingProgressBar->setValue(progress);
         }
 #endif
+    }
+}
+
+void MainWindow::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)
+{
+    this->mafwState = state;
+}
+
+void MainWindow::pausePlay()
+{
+    if (this->mafwState == Playing)
+        mafwrenderer->pause();
+    else if (this->mafwState == Paused)
+        mafwrenderer->resume();
+    else if (this->mafwState == Stopped)
+        mafwrenderer->play();
+}
+
+void MainWindow::onStateChanged(int state)
+{
+    this->mafwState = state;
+}
+
+#endif
+#ifdef Q_WS_MAEMO_5
+void MainWindow::onBluetoothButtonPressed(QDBusMessage msg)
+{
+    if (msg.arguments()[0] == "ButtonPressed") {
+        if (msg.arguments()[1] == "play-cd" || msg.arguments()[1] == "pause-cd") {
+            this->pausePlay();
+        } else if (msg.arguments()[1] == "next-song")
+            mafwrenderer->next();
+        else if (msg.arguments()[1] == "previous-song")
+            mafwrenderer->previous();
     }
 }
 #endif

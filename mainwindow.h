@@ -14,6 +14,7 @@
 #include "nowplayingindicator.h"
 #include "includes.h"
 #include "settingsdialog.h"
+#include "aboutwindow.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
@@ -80,6 +81,7 @@ private:
     void countSongs();
     void countVideos();
     void countRadioStations();
+    int mafwState;
 #endif
 
 private slots:
@@ -99,6 +101,12 @@ private slots:
     void countRadioResult(QString objectId, GHashTable* metadata, QString error);
     void browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);
+    void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
+    void pausePlay();
+    void onStateChanged(int state);
+#endif
+#ifdef Q_WS_MAEMO_5
+    void onBluetoothButtonPressed(QDBusMessage msg);
 #endif
 };
 
