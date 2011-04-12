@@ -22,9 +22,9 @@
 #ifdef MAFW
     #include "mafwrendereradapter.h"
     #include "mafwplaylistadapter.h"
-    #include "mafw-1.0/libmafw-shared/mafw-playlist-manager.h"
     #include "mafwsourceadapter.h"
     #include <gq/GConfItem>
+    #include "mafwplaylistmanageradapter.h"
 #else
     class MafwRendererAdapter;
     class MafwSourceAdapter;
@@ -58,6 +58,7 @@ private:
     MafwSourceAdapter* mafwTrackerSource;
     MafwPlaylistAdapter *playlist;
     MafwPlaylist *mafwPlaylist;
+    MafwPlaylistManagerAdapter *mafw_playlist_manager;
     int mafwState;
     GConfItem *lastPlayingSong;
     void showEvent(QShowEvent *);

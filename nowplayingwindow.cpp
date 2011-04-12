@@ -86,6 +86,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     }
     ui->toolBarWidget->setFixedHeight(ui->toolBarWidget->sizeHint().height());
 #ifdef MAFW
+    mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
     mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
     mafwrenderer->getVolume();
@@ -816,20 +817,26 @@ void NowPlayingWindow::onShareClicked()
 
 void NowPlayingWindow::showEntertainmentview()
 {
-    entertainmentView = new EntertainmentView(this);
+    entertainmentView = new EntertainmentView(this, mafwrenderer, mafwTrackerSource, playlist);
     entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
+    for (int i = 0; i < ui->songPlaylist->count(); i++) {
+        entertainmentView->addItemToPlaylist(ui->songPlaylist->item(i));
+    }
     connect(entertainmentView, SIGNAL(destroyed()), this, SLOT(nullEntertainmentView()));
-#ifdef Q_WS_MAEMO_5
-    entertainmentView->setAttribute(Qt::WA_Maemo5StackedWindow);
-#endif
     this->updateEntertainmentViewMetadata();
     entertainmentView->showFullScreen();
 }
 
 void NowPlayingWindow::updateEntertainmentViewMetadata()
 {
-    if (entertainmentView)
-        entertainmentView->setMetadata(ui->songTitleLabel->text(), ui->albumNameLabel->text(), ui->artistLabel->text(), this->albumArtUri);
+    if (entertainmentView) {
+        entertainmentView->setMetadata(ui->songTitleLabel->text(),
+                                       ui->albumNameLabel->text(),
+                                       ui->artistLabel->text(),
+                                       this->albumArtUri,
+                                       this->songDuration);
+        entertainmentView->setCurrentRow(ui->songPlaylist->row(ui->songPlaylist->currentItem()));
+    }
 }
 
 void NowPlayingWindow::nullEntertainmentView()
@@ -868,9 +875,41 @@ void NowPlayingWindow::savePlaylist()
 void NowPlayingWindow::onSavePlaylistAccepted()
 {
 #ifdef MAFW
-    playlist->duplicatePlaylist(playlistNameLineEdit->text());
-#endif
+    bool playlistExists = false;
+    GArray* playlists = mafw_playlist_manager->listPlaylists();
+    QString playlistName;
+
+    for (uint i = 0; i < playlists->len; i++) {
+        MafwPlaylistManagerItem* item = &g_array_index(playlists, MafwPlaylistManagerItem, i);
+
+        playlistName = QString::fromUtf8(item->name);
+        if (playlistName == playlistNameLineEdit->text())
+            playlistExists = true;
+    }
+
+    if (playlistExists) {
+        QMessageBox overwrite(QMessageBox::NoIcon,
+                              " ",
+                              tr("Playlist with the same name exists, overwrite?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              savePlaylistDialog);
+        overwrite.exec();
+        if (overwrite.result() == QMessageBox::Yes) {
+            mafw_playlist_manager->deletePlaylist(playlistNameLineEdit->text());
+            playlist->duplicatePlaylist(playlistNameLineEdit->text());
+            savePlaylistDialog->close();
+        }
+        else if (overwrite.result() == QMessageBox::No) {
+            overwrite.close();
+            QMaemo5InformationBox::information(this, tr("Playlist not saved"));
+        }
+    }       else {
+        playlist->duplicatePlaylist(playlistNameLineEdit->text());
+        savePlaylistDialog->close();
+    }
+#else
     savePlaylistDialog->close();
+#endif
 }
 
 void NowPlayingWindow::onDeleteFromNowPlaying()
@@ -891,6 +930,7 @@ void NowPlayingWindow::selectItemByText(int numberInPlaylist)
         if (ui->songPlaylist->item(i)->text().toInt() == numberInPlaylist) {
             ui->songPlaylist->clearSelection();
             ui->songPlaylist->item(i)->setSelected(true);
+            ui->songPlaylist->setCurrentItem(ui->songPlaylist->item(i));
             ui->songPlaylist->scrollToItem(ui->songPlaylist->item(i));
         }
     }
