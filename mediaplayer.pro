@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     delegates/thumbnailitemdelegate.cpp \
     singlegenreview.cpp \
     singleplaylistview.cpp \
-    aboutwindow.cpp
+    aboutwindow.cpp \
+    mafwadapterfactory.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -58,7 +59,8 @@ HEADERS  += mainwindow.h \
     delegates/thumbnailitemdelegate.h \
     singlegenreview.h \
     singleplaylistview.h \
-    aboutwindow.h
+    aboutwindow.h \
+    mafwadapterfactory.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
