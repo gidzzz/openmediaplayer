@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     entertainmentview.cpp \
     delegates/thumbnailitemdelegate.cpp \
     singlegenreview.cpp \
-    singleplaylistview.cpp
+    singleplaylistview.cpp \
+    aboutwindow.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -56,7 +57,8 @@ HEADERS  += mainwindow.h \
     entertainmentview.h \
     delegates/thumbnailitemdelegate.h \
     singlegenreview.h \
-    singleplaylistview.h
+    singleplaylistview.h \
+    aboutwindow.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -73,7 +75,8 @@ FORMS    += mainwindow.ui \
     settingsdialog.ui \
     entertainmentview.ui \
     singlegenreview.ui \
-    singleplaylistview.ui
+    singleplaylistview.ui \
+    aboutwindow.ui
 
 symbian {
     TARGET.UID3 = 0xedf29700
@@ -105,7 +108,7 @@ unix:!symbian {
 contains(DEFINES, MAFW) {
 
     CONFIG += link_pkgconfig
-    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gtk-2-0 gnome-vfs-2.0
+    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0
 
     SOURCES +=      mafwrenderersignalhelper.cpp \
             mafwsourcesignalhelper.cpp \
@@ -123,4 +126,5 @@ contains(DEFINES, MAFW) {
 }
 
 OTHER_FILES += \
-    entertainmentview.qml
+    entertainmentview.qml \
+    Slider.qml
