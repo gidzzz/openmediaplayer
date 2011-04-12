@@ -62,6 +62,7 @@ private:
     int mafwState;
     GConfItem *lastPlayingSong;
     void showEvent(QShowEvent *);
+    void updatePlaylist();
 #endif
     void setButtonIcons();
     void setSongNumber(int currentSong, int numberOfSongs);

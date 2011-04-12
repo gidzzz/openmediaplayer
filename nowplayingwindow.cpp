@@ -575,7 +575,7 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
 void NowPlayingWindow::onGetStatus(MafwPlaylist* MafwPlaylist, uint index, MafwPlayState state, const char *, QString)
 {
     if (!this->playlistRequested) {
-        QTimer::singleShot(250, playlist, SLOT(getItems()));
+        this->updatePlaylist();
         this->updatePlaylistState();
         this->playlistRequested = true;
     }
@@ -671,7 +671,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
 
-        QListWidgetItem *item = new QListWidgetItem();
+        QListWidgetItem *item = ui->songPlaylist->item(index);
         item->setText(QString::number(index));
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongDuration, duration);
@@ -689,16 +689,16 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
             }
         }
 
-        unsigned theIndex = 0;
+        /*unsigned theIndex = 0;
         int position;
         for (position = 0; position < ui->songPlaylist->count(); position++)
         {
             theIndex = ui->songPlaylist->item(position)->data(UserRoleSongIndex).toInt();
             if (theIndex > index)
                 break;
-        }
+        }*/
 
-        ui->songPlaylist->insertItem(position, item);
+        //ui->songPlaylist->insertItem(position, item);
         this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
         this->selectItemByText(lastPlayingSong->value().toInt());
         ui->songPlaylist->scrollToItem(ui->songPlaylist->currentItem());
@@ -769,7 +769,7 @@ void NowPlayingWindow::onPlaylistChanged()
         ui->songPlaylist->removeItemWidget(item);
         delete item;
     }
-    playlist->getItems();
+    this->updatePlaylist();
 }
 #endif
 
@@ -933,5 +933,28 @@ void NowPlayingWindow::selectItemByText(int numberInPlaylist)
             ui->songPlaylist->setCurrentItem(ui->songPlaylist->item(i));
             ui->songPlaylist->scrollToItem(ui->songPlaylist->item(i));
         }
+    }
+}
+
+void NowPlayingWindow::updatePlaylist()
+{
+    int songCount = playlist->getSize();
+
+    // Make a new item for all items
+    for (int i = 0; i < songCount; i++)
+    {
+        QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
+        ui->songPlaylist->addItem(item);
+        item->setData(UserRoleValueText, " ");
+        item->setData(UserRoleSongDuration, -10);
+    }
+
+    // Iterate over every 30 items and fetch those
+    for (int x = 0; x < songCount; x = x+30) {
+        if (x > songCount) {
+            playlist->getItems(x, -1);
+            break;
+        }
+        playlist->getItems(x, x+30);
     }
 }
