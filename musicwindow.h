@@ -131,6 +131,7 @@ private slots:
     void onPlaylistSelected(QListWidgetItem*);
 #endif
     void onAddToNowPlaying();
+    void onDeletePlaylistClicked();
 };
 
 #endif // MUSICWINDOW_H

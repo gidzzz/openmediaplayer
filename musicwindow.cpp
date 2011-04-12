@@ -118,6 +118,7 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
         else if (row == 4)
             window->browseAutomaticPlaylist("(play-count=)", "", MAFW_SOURCE_BROWSE_ALL);
         window->show();
+        connect(window, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
     } else if (row > 5) {
         SinglePlaylistView *window = new SinglePlaylistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
         window->setWindowTitle(item->text());
@@ -126,6 +127,7 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
         else
             window->browseObjectId(item->data(UserRoleObjectID).toString());
         window->show();
+        connect(window, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
     }
     ui->playlistList->clearSelection();
 }
@@ -162,9 +164,12 @@ void MusicWindow::onContextMenuRequested(QPoint point)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
     if (this->currentList() == ui->playlistList) {
-        if (ui->playlistList->currentRow() > 4 && !ui->playlistList->currentItem()->data(Qt::UserRole).toBool())
-            contextMenu->addAction(tr("Delete playlist"));
-        else {
+        if (ui->playlistList->currentRow() > 4 && !ui->playlistList->currentItem()->data(Qt::UserRole).toBool()) {
+            if (ui->playlistList->currentItem()->data(UserRoleObjectID).isNull())
+                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeletePlaylistClicked()));
+            else
+                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeleteClicked()));
+        } else {
             contextMenu->exec(point);
             return;
         }
@@ -176,6 +181,26 @@ void MusicWindow::onContextMenuRequested(QPoint point)
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     }
     contextMenu->exec(point);
+}
+
+void MusicWindow::onDeletePlaylistClicked()
+{
+#ifdef MAFW
+    if (ui->playlistList->currentItem()->data(UserRoleObjectID).isNull()) {
+        QMessageBox confirmDelete(QMessageBox::NoIcon,
+                                  " ",
+                                  tr("Delete selected item from device?"),
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  this);
+        confirmDelete.exec();
+        if (confirmDelete.result() == QMessageBox::Yes) {
+            mafw_playlist_manager->deletePlaylist(ui->playlistList->currentItem()->text());
+            delete ui->playlistList->currentItem();
+        }
+        else if (confirmDelete.result() == QMessageBox::No)
+            ui->playlistList->clearSelection();
+    }
+#endif
 }
 
 void MusicWindow::setRingingTone()
@@ -245,26 +270,42 @@ void MusicWindow::onDeleteUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
 
-    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+    if (objectId != this->currentList()->currentItem()->data(UserRoleObjectID).toString())
         return;
 
     QFile song(uri);
     if(song.exists()) {
-        qDebug() << "Song exists";
-        QMessageBox confirmDelete(QMessageBox::NoIcon,
-                                  tr("Delete song?"),
-                                  tr("Are you sure you want to delete this song?")+ "\n\n"
-                                  + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
-                                  + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  this);
-        confirmDelete.exec();
-        if(confirmDelete.result() == QMessageBox::Yes) {
-            song.remove();
-            ui->songList->removeItemWidget(ui->songList->currentItem());
+        if (this->currentList() == ui->songList) {
+            QMessageBox confirmDelete(QMessageBox::NoIcon,
+                                      tr("Delete song?"),
+                                      tr("Are you sure you want to delete this song?")+ "\n\n"
+                                      + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
+                                      + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
+                                      QMessageBox::Yes | QMessageBox::No,
+                                      this);
+            confirmDelete.exec();
+            if(confirmDelete.result() == QMessageBox::Yes) {
+                song.remove();
+                ui->songList->removeItemWidget(ui->songList->currentItem());
+                delete ui->songList->currentItem();
+            }
+            else if(confirmDelete.result() == QMessageBox::No)
+                ui->songList->clearSelection();
+        } else if (this->currentList() == ui->playlistList) {
+            QMessageBox confirmDelete(QMessageBox::NoIcon,
+                                      " ",
+                                      tr("Delete selected item from device?"),
+                                      QMessageBox::Yes | QMessageBox::No,
+                                      this);
+            confirmDelete.exec();
+            if(confirmDelete.result() == QMessageBox::Yes) {
+                song.remove();
+                ui->playlistList->removeItemWidget(ui->playlistList->currentItem());
+                delete ui->playlistList->currentItem();
+            }
+            else if(confirmDelete.result() == QMessageBox::No)
+                ui->playlistList->clearSelection();
         }
-        else if(confirmDelete.result() == QMessageBox::No)
-            ui->songList->clearSelection();
     }
 }
 #endif
@@ -587,11 +628,12 @@ void MusicWindow::listPlaylists()
         ui->playlistList->removeItemWidget(ui->playlistList->item(x));
         delete ui->playlistList->item(x);
         ui->playlistList->clear();
-        recentlyAddedCount = 0;
-        recentlyPlayedCount = 0;
-        mostPlayedCount = 0;
-        neverPlayedCount = 0;
     }
+
+    recentlyAddedCount = 0;
+    recentlyPlayedCount = 0;
+    mostPlayedCount = 0;
+    neverPlayedCount = 0;
 
     this->listAutoPlaylists();
 
