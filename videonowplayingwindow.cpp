@@ -24,13 +24,14 @@
 #include <X11/Xutil.h>
 #endif
 
-VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
     ui(new Ui::VideoNowPlayingWindow)
 #ifdef MAFW
-    ,mafwrenderer(mra),
-    mafwTrackerSource(msa),
-    playlist(pls)
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);

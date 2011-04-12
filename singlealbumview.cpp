@@ -18,13 +18,14 @@
 
 #include "singlealbumview.h"
 
-SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
     ui(new Ui::SingleAlbumView)
 #ifdef MAFW
-    ,mafwTrackerSource(msa),
-    mafwrenderer(mra),
-    playlist(pls)
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);
@@ -32,7 +33,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     ui->centralwidget->setLayout(ui->verticalLayout);
 
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    ui->indicator->setFactory(mafwFactory);
     this->isSingleAlbum = false;
 #endif
 
@@ -253,7 +254,7 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         qDebug() << "Playlist created";
 #endif
 
-        npWindow = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        npWindow = new NowPlayingWindow(this, mafwFactory);
         npWindow->setAttribute(Qt::WA_DeleteOnClose);
         connect(npWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         npWindow->show();

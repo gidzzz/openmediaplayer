@@ -39,7 +39,7 @@ class NowPlayingWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit NowPlayingWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
+    explicit NowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~NowPlayingWindow();
 
 public slots:
@@ -54,9 +54,10 @@ private:
     Ui::NowPlayingWindow *ui;
     EntertainmentView *entertainmentView;
 #ifdef MAFW
+    MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter* mafwTrackerSource;
-    MafwPlaylistAdapter *playlist;
+    MafwSourceAdapter *mafwTrackerSource;
+    MafwPlaylistAdapter* playlist;
     MafwPlaylist *mafwPlaylist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
     int mafwState;

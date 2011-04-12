@@ -23,6 +23,7 @@
     #define DBUS_INTERFACE "com.nokia.mediaplayer"
 #endif
 #ifdef MAFW
+    #include "mafwadapterfactory.h"
     #include "mafwrendereradapter.h"
     #include "mafwplaylistadapter.h"
     #include "mafwsourceadapter.h"
@@ -70,9 +71,10 @@ private:
     QLabel *updatingLabel;
 #endif
 #ifdef MAFW
+    MafwAdapterFactory *mafwFactory;
+    MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
-    MafwRendererAdapter* mafwrenderer;
     MafwPlaylistAdapter* playlist;
     uint browseAllSongsId;
     const char* TAGSOURCE_AUDIO_PATH;

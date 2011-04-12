@@ -28,7 +28,6 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
         images << QPixmap("/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(i) + ".png");
     frame = 0;
     setAttribute(Qt::WA_OpaquePaintEvent);
-    mafwRadioSource = 0;
     timer = new QTimer(this);
     timer->setInterval(100);
     this->stopAnimation();
@@ -133,16 +132,14 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         qDebug() << "Current playlist is: " + playlistName;
 #endif
         if (playlistName == "FmpVideoPlaylist")
-            window = new VideoNowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+            window = new VideoNowPlayingWindow(this, mafwFactory);
         else if (playlistName == "FmpRadioPlaylist")  {
-            if (mafwRadioSource == 0)
-                mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
-            window = new RadioNowPlayingWindow(this, this->mafwrenderer, this->mafwRadioSource, this->playlist);
+            window = new RadioNowPlayingWindow(this, mafwFactory);
         }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
         else
-            window = new NowPlayingWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+            window = new NowPlayingWindow(this, mafwFactory);
         window->setAttribute(Qt::WA_DeleteOnClose);
         if (playlistName == "FmpVideoPlaylist")
             window->showFullScreen();
@@ -194,11 +191,12 @@ void NowPlayingIndicator::triggerAnimation()
 }
 
 #ifdef MAFW
-void NowPlayingIndicator::setSources(MafwRendererAdapter *renderer, MafwSourceAdapter *source, MafwPlaylistAdapter *pls)
+void NowPlayingIndicator::setFactory(MafwAdapterFactory *factory)
 {
-    this->mafwrenderer = renderer;
-    this->mafwTrackerSource = source;
-    this->playlist = pls;
+    this->mafwFactory = factory;
+    this->mafwrenderer = factory->getRenderer();
+    this->playlist = factory->getPlaylistAdapter();
     this->connectSignals();
+    mafwrenderer->getStatus();
 }
 #endif

@@ -18,13 +18,14 @@
 
 #include "nowplayingwindow.h"
 
-NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter *pls) :
+NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
 #ifdef MAFW
     ui(new Ui::NowPlayingWindow),
-    mafwrenderer(mra),
-    mafwTrackerSource(msa),
-    playlist(pls)
+    mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter())
 #else
     ui(new Ui::NowPlayingWindow)
 #endif
@@ -64,6 +65,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     deviceEvents = new Maemo5DeviceEvents(this);
 #endif
 
+    this->stateChanged(mafwFactory->mafwState());
+
     this->connectSignals();
 
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
@@ -87,9 +90,15 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, Ma
     ui->toolBarWidget->setFixedHeight(ui->toolBarWidget->sizeHint().height());
 #ifdef MAFW
     mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
-    mafwrenderer->getCurrentMetadata();
-    mafwrenderer->getStatus();
-    mafwrenderer->getVolume();
+    if (mafwrenderer->isRendererReady()) {
+        mafwrenderer->getCurrentMetadata();
+        mafwrenderer->getStatus();
+        mafwrenderer->getVolume();
+    } else {
+        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getCurrentMetadata()));
+        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
+        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getVolume()));
+    }
 #endif
 }
 
@@ -817,7 +826,7 @@ void NowPlayingWindow::onShareClicked()
 
 void NowPlayingWindow::showEntertainmentview()
 {
-    entertainmentView = new EntertainmentView(this, mafwrenderer, mafwTrackerSource, playlist);
+    entertainmentView = new EntertainmentView(this, mafwFactory);
     entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
     for (int i = 0; i < ui->songPlaylist->count(); i++) {
         entertainmentView->addItemToPlaylist(ui->songPlaylist->item(i));

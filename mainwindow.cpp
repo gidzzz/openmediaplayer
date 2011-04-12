@@ -36,10 +36,11 @@ MainWindow::MainWindow(QWidget *parent) :
     TAGSOURCE_AUDIO_PATH = "localtagfs::music/songs";
     TAGSOURCE_VIDEO_PATH = "localtagfs::videos";
     RADIOSOURCE_PATH = "iradiosource::";
-    mafwrenderer = new MafwRendererAdapter();
-    mafwTrackerSource = new MafwSourceAdapter("Mafw-Tracker-Source");
-    mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
-    playlist = new MafwPlaylistAdapter(this, this->mafwrenderer);
+    mafwFactory = new MafwAdapterFactory(this);
+    mafwrenderer = mafwFactory->getRenderer();
+    mafwTrackerSource = mafwFactory->getTrackerSource();
+    mafwRadioSource = mafwFactory->getRadioSource();
+    playlist = mafwFactory->getPlaylistAdapter();
     this->shuffleNowPlayingWindowCreated = false;
     if (mafwrenderer->isRendererReady())
         mafwrenderer->getStatus();
@@ -74,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef MAFW
-    myMusicWindow = new MusicWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    myMusicWindow = new MusicWindow(this, mafwFactory);
 #else
     myMusicWindow = new MusicWindow(this);
 #endif
@@ -86,7 +87,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->orientationChanged();
 
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    ui->indicator->setFactory(mafwFactory);
 #endif
 #ifdef Q_WS_MAEMO_5
     QTimer::singleShot(700, this, SLOT(takeScreenshot()));
@@ -183,7 +184,7 @@ void MainWindow::createNowPlayingWindow()
 {
     if (dbusNowPlaying == 0) {
 #ifdef MAFW
-        dbusNowPlaying = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+        dbusNowPlaying = new NowPlayingWindow(this, mafwFactory);
 #else
         dbusNowPlaying = new NowPlayingWindow(this);
 #endif
@@ -278,7 +279,7 @@ void MainWindow::openSettings()
 void MainWindow::showVideosWindow()
 {
 #ifdef MAFW
-    myVideosWindow = new VideosWindow(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    myVideosWindow = new VideosWindow(this, mafwFactory);
 #else
     myVideosWindow = new VideosWindow(this);
 #endif
@@ -291,7 +292,7 @@ void MainWindow::showVideosWindow()
 void MainWindow::showInternetRadioWindow()
 {
 #ifdef MAFW
-    myInternetRadioWindow = new InternetRadioWindow(this, this->mafwrenderer, this->mafwRadioSource, this->playlist);
+    myInternetRadioWindow = new InternetRadioWindow(this, mafwFactory);
 #else
     myInternetRadioWindow = new InternetRadioWindow(this);
 #endif
@@ -398,7 +399,7 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString
         uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
         mafwrenderer->gotoIndex(randomIndex);
         mafwrenderer->play();
-        NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+        NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
         window->setAttribute(Qt::WA_DeleteOnClose);
         connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
         window->show();

@@ -12,9 +12,7 @@
 #include "includes.h"
 
 #ifdef MAFW
-    #include "mafwrendereradapter.h"
-    #include "mafwsourceadapter.h"
-    #include "mafwplaylistadapter.h"
+    #include "mafwadapterfactory.h"
 #endif
 
 namespace Ui {
@@ -26,7 +24,7 @@ class EntertainmentView : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EntertainmentView(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
+    explicit EntertainmentView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~EntertainmentView();
     void setMetadata(QString songName, QString albumName, QString artistName, QString albumArtUri, int duration);
     void addItemToPlaylist(QListWidgetItem *item);
@@ -59,8 +57,9 @@ private:
     void setDNDAtom(bool dnd);
 #endif
 #ifdef MAFW
+    MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter* mafwTrackerSource;
+    MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     int mafwState;
 #endif

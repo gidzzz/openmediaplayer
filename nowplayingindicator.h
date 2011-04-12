@@ -10,9 +10,7 @@
 #include <QDesktopWidget>
 #include <QMouseEvent>
 #ifdef Q_WS_MAEMO_5
-    #include "mafwrendereradapter.h"
-    #include "mafwsourceadapter.h"
-    #include "mafwplaylistadapter.h"
+    #include "mafwadapterfactory.h"
     #include "maemo5deviceevents.h"
 #endif
 #include "ui_nowplayingindicator.h"
@@ -36,7 +34,7 @@ public:
     ~NowPlayingIndicator();
     void triggerAnimation();
 #ifdef MAFW
-    void setSources(MafwRendererAdapter *renderer, MafwSourceAdapter *source, MafwPlaylistAdapter *pls);
+    void setFactory(MafwAdapterFactory *mafwFactory = 0);
 #endif
 
 public slots:
@@ -57,10 +55,9 @@ private:
     int mafwState;
     QString indicatorImage;
 #ifdef MAFW
-    MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter *mafwTrackerSource;
-    MafwPlaylistAdapter* playlist;
-    MafwSourceAdapter* mafwRadioSource;
+    MafwAdapterFactory *mafwFactory;
+    MafwRendererAdapter *mafwrenderer;
+    MafwPlaylistAdapter *playlist;
 #endif
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;

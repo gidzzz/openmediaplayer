@@ -18,13 +18,14 @@
 
 #include "musicwindow.h"
 
-MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
         QMainWindow(parent),
 #ifdef MAFW
         ui(new Ui::MusicWindow),
-        mafwrenderer(mra),
-        mafwTrackerSource(msa),
-        playlist(pls)
+        mafwFactory(factory),
+        mafwrenderer(factory->getRenderer()),
+        mafwTrackerSource(factory->getTrackerSource()),
+        playlist(factory->getPlaylistAdapter())
 #else
         ui(new Ui::MusicWindow)
 #endif
@@ -60,7 +61,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAd
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    ui->indicator->setFactory(mafwFactory);
 #endif
     this->connectSignals();
 }
@@ -74,7 +75,7 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
 {
 #ifdef MAFW
     playlist->assignAudioPlaylist();
-    myNowPlayingWindow = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+    myNowPlayingWindow = new NowPlayingWindow(this, mafwFactory);
 #else
     myNowPlayingWindow = new NowPlayingWindow(this);
 #endif
@@ -107,7 +108,7 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
 
     int row = ui->playlistList->row(item);
     if (row >= 1 && row <= 4) {
-        SinglePlaylistView *window = new SinglePlaylistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        SinglePlaylistView *window = new SinglePlaylistView(this, mafwFactory);
         window->setWindowTitle(item->text());
         if (row == 1)
             window->browseAutomaticPlaylist("", "-added", 30);
@@ -120,7 +121,7 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
         window->show();
         connect(window, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
     } else if (row > 5) {
-        SinglePlaylistView *window = new SinglePlaylistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        SinglePlaylistView *window = new SinglePlaylistView(this, mafwFactory);
         window->setWindowTitle(item->text());
         if (item->data(UserRoleObjectID).isNull())
             window->browsePlaylist(MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist(item->text())));
@@ -509,7 +510,7 @@ void MusicWindow::loadViewState()
 #ifdef MAFW
 void MusicWindow::onAlbumSelected(QListWidgetItem *item)
 {
-    SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
     albumView->setAttribute(Qt::WA_DeleteOnClose);
     albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
     albumView->setWindowTitle(item->data(Qt::DisplayRole).toString());
@@ -523,7 +524,7 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
 {
     int songCount = item->data(UserRoleAlbumCount).toInt();
     if(songCount == 0 || songCount == 1) {
-        SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         if (songCount == 1)
             albumView->isSingleAlbum = true;
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
@@ -533,7 +534,7 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         albumView->show();
         ui->indicator->hide();
     } else if(songCount > 1) {
-        SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleSongName).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
@@ -548,7 +549,7 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
 
 void MusicWindow::onGenreSelected(QListWidgetItem *item)
 {
-    SingleGenreView *genreWindow = new SingleGenreView(this, mafwrenderer, mafwTrackerSource, playlist);
+    SingleGenreView *genreWindow = new SingleGenreView(this, mafwFactory);
     genreWindow->setAttribute(Qt::WA_DeleteOnClose);
     genreWindow->setWindowTitle(item->data(UserRoleSongTitle).toString());
     connect(genreWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));

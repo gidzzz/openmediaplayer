@@ -18,13 +18,14 @@
 
 #include "internetradiowindow.h"
 
-InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *factory) :
         QMainWindow(parent),
         ui(new Ui::InternetRadioWindow)
 #ifdef MAFW
-        ,mafwrenderer(mra),
-        mafwRadioSource(msa),
-        playlist(pls)
+        ,mafwFactory(factory),
+        mafwrenderer(factory->getRenderer()),
+        mafwRadioSource(factory->getRadioSource()),
+        playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);
@@ -33,7 +34,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRendererAdapter* m
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwRadioSource, this->playlist);
+    ui->indicator->setFactory(mafwFactory);
 #endif
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->listWidget);
     ui->listWidget->setItemDelegate(delegate);
@@ -84,7 +85,7 @@ void InternetRadioWindow::onStationSelected()
 
     mafwrenderer->gotoIndex(ui->listWidget->currentRow());
     mafwrenderer->play();
-    window = new RadioNowPlayingWindow(this, mafwrenderer, mafwRadioSource, playlist);
+    window = new RadioNowPlayingWindow(this, mafwFactory);
 #else
     window = new RadioNowPlayingWindow(this);
 #endif

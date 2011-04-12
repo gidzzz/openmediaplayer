@@ -5,9 +5,7 @@
 #include <QListWidgetItem>
 
 #ifdef MAFW
-    #include "mafwrendereradapter.h"
-    #include "mafwsourceadapter.h"
-    #include "mafwplaylistadapter.h"
+    #include "mafwadapterfactory.h"
 #endif
 
 #include "singlealbumview.h"
@@ -23,7 +21,7 @@ class SingleArtistView : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit SingleArtistView(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
+    explicit SingleArtistView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SingleArtistView();
     void browseAlbum(QString artistId);
     void setSongCount(int songCount);
@@ -32,8 +30,9 @@ private:
     Ui::SingleArtistView *ui;
     void keyReleaseEvent(QKeyEvent *);
 #ifdef MAFW
+    MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter* mafwTrackerSource;
+    MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     uint browseAllAlbumsId;
     uint addToNowPlayingId;

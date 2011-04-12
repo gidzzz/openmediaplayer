@@ -42,7 +42,7 @@ class MusicWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MusicWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
+    explicit MusicWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~MusicWindow();
 
 protected:
@@ -61,8 +61,9 @@ private:
     void keyReleaseEvent(QKeyEvent *);
     NowPlayingWindow *myNowPlayingWindow;
 #ifdef MAFW
+    MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter* mafwTrackerSource;
+    MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     MafwPlaylistManagerAdapter* mafw_playlist_manager;
     unsigned int browseAllSongsId;

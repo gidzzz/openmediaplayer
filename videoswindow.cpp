@@ -18,13 +18,14 @@
 
 #include "videoswindow.h"
 
-VideosWindow::VideosWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
     ui(new Ui::VideosWindow)
 #ifdef MAFW
-    ,mafwrenderer(mra),
-    mafwTrackerSource(msa),
-    playlist(pls)
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);
@@ -33,7 +34,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSource
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    ui->indicator->setFactory(mafwFactory);
 #endif
 
     ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->listWidget);
@@ -79,7 +80,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     ui->listWidget->clearSelection();
     //playlist->assignVideoPlaylist();
 #ifdef MAFW
-    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif

@@ -7,13 +7,14 @@
 #include <X11/Xutil.h>
 #endif
 
-EntertainmentView::EntertainmentView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+EntertainmentView::EntertainmentView(QWidget *parent, MafwAdapterFactory *factory ) :
     QMainWindow(parent),
     ui(new Ui::EntertainmentView)
 #ifdef MAFW
-    ,mafwrenderer(mra),
-    mafwTrackerSource(msa),
-    playlist(pls)
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);

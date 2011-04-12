@@ -19,13 +19,14 @@
 #include "radionowplayingwindow.h"
 #include "ui_radionowplayingwindow.h"
 
-RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
     ui(new Ui::RadioNowPlayingWindow)
 #ifdef MAFW
-    ,mafwrenderer(mra),
-    mafwRadioSource(msa),
-    playlist(pls)
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwRadioSource(factory->getRadioSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);

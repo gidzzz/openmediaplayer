@@ -37,7 +37,7 @@ class InternetRadioWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit InternetRadioWindow(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
+    explicit InternetRadioWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~InternetRadioWindow();
 
 private:
@@ -54,8 +54,9 @@ private:
     QDialogButtonBox *buttonBox;
     RadioNowPlayingWindow *window;
 #ifdef MAFW
+    MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter* mafwRadioSource;
+    MafwSourceAdapter *mafwRadioSource;
     MafwPlaylistAdapter* playlist;
     unsigned int browseAllStationsId;
 #endif

@@ -18,13 +18,14 @@
 
 #include "singleplaylistview.h"
 
-SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
     ui(new Ui::SinglePlaylistView)
 #ifdef MAFW
-    ,mafwrenderer(mra),
-    mafwTrackerSource(msa),
-    playlist(pls)
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);
@@ -34,7 +35,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwRendererAdapter* mra
     ui->centralwidget->setLayout(ui->verticalLayout);
 
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    ui->indicator->setFactory(factory);
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -226,7 +227,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 {
     QString playlistName = playlist->playlistName();
-    if (playlistName != "FmpAudioPlaylist" && playlistName != "FmpVideoPlaylist" && playlistName != "FmpRadioPlaylist")
+    if (playlistName != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->clear();
@@ -241,7 +242,7 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
     mafwrenderer->resume();
 #endif
 
-    NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+    NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
     window->show();
     window->updatePlaylistState();
 }
@@ -331,7 +332,7 @@ void SinglePlaylistView::onShuffleButtonClicked()
         playlist->appendItem(ui->songList->item(i)->data(UserRoleObjectID).toString());
     }
 
-    NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+    NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
     window->show();
     window->updatePlaylistState();
     mafwrenderer->play();

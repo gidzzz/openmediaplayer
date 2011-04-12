@@ -4,9 +4,7 @@
 #include <QMainWindow>
 
 #ifdef MAFW
-    #include "mafwrendereradapter.h"
-    #include "mafwsourceadapter.h"
-    #include "mafwplaylistadapter.h"
+    #include "mafwadapterfactory.h"
 #endif
 
 #include "delegates/artistlistitemdelegate.h"
@@ -32,7 +30,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *);
 
 public:
-    explicit SingleGenreView(QWidget *parent = 0, MafwRendererAdapter* mra = 0, MafwSourceAdapter* msa = 0, MafwPlaylistAdapter* pls = 0);
+    explicit SingleGenreView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SingleGenreView();
     void browseGenre(QString objectId);
     void setSongCount(int);
@@ -40,9 +38,10 @@ public:
 private:
     Ui::SingleGenreView *ui;
 #ifdef MAFW
-    MafwRendererAdapter *mafwrenderer;
+    MafwAdapterFactory *mafwFactory;
+    MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
-    MafwPlaylistAdapter *playlist;
+    MafwPlaylistAdapter* playlist;
     uint browseGenreId;
     uint addToNowPlayingId;
     QString objectIdToBrowse;

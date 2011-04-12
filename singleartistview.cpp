@@ -19,13 +19,14 @@
 #include "singleartistview.h"
 #include "ui_singleartistview.h"
 
-SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
     ui(new Ui::SingleArtistView)
 #ifdef MAFW
-    ,mafwrenderer(mra),
-    mafwTrackerSource(msa),
-    playlist(pls)
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);
@@ -45,7 +46,7 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRendererAdapter* mra, Ma
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    ui->indicator->setFactory(mafwFactory);
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
@@ -156,7 +157,7 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
     if (item->data(Qt::UserRole).toString() == "shuffle")
         this->shuffleAllSongs();
     else {
-        SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setWindowTitle(item->text());
@@ -271,7 +272,7 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint,
             mafwrenderer->play();
             mafwrenderer->resume();
 
-            NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+            NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
             window->setAttribute(Qt::WA_DeleteOnClose);
             connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
             window->onShuffleButtonToggled(true);

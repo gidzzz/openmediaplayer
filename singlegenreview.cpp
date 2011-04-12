@@ -18,13 +18,14 @@
 
 #include "singlegenreview.h"
 
-SingleGenreView::SingleGenreView(QWidget *parent, MafwRendererAdapter* mra, MafwSourceAdapter* msa, MafwPlaylistAdapter* pls) :
+SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
     ui(new Ui::SingleGenreView)
 #ifdef MAFW
-    ,mafwrenderer(mra),
-    mafwTrackerSource(msa),
-    playlist(pls)
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);
@@ -32,7 +33,7 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwRendererAdapter* mra, Mafw
     ui->centralwidget->setLayout(ui->verticalLayout);
 
 #ifdef MAFW
-    ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+    ui->indicator->setFactory(factory);
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -91,7 +92,7 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
 {
     int songCount = item->data(UserRoleAlbumCount).toInt();
     if(songCount == 0 || songCount == 1) {
-        SingleAlbumView *albumView = new SingleAlbumView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         if (songCount == 1)
             albumView->isSingleAlbum = true;
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
@@ -101,7 +102,7 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
         albumView->show();
         ui->indicator->hide();
     } else if(songCount > 1) {
-        SingleArtistView *artistView = new SingleArtistView(this, this->mafwrenderer, this->mafwTrackerSource, this->playlist);
+        SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleSongName).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
@@ -309,7 +310,7 @@ void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount
             mafwrenderer->play();
             mafwrenderer->resume();
 
-            NowPlayingWindow *window = new NowPlayingWindow(this, mafwrenderer, mafwTrackerSource, playlist);
+            NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
             window->setAttribute(Qt::WA_DeleteOnClose);
             connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
             window->show();
