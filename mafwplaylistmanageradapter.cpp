@@ -72,3 +72,8 @@ void MafwPlaylistManagerAdapter::freeListOfPlaylists(GArray *playlist_list)
 {
     mafw_playlist_manager_free_list_of_playlists (playlist_list);
 }
+
+void MafwPlaylistManagerAdapter::deletePlaylist(QString playlistName)
+{
+    mafw_playlist_manager_destroy_playlist (playlist_manager, this->createPlaylist(playlistName), NULL);
+}

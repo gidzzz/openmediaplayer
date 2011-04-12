@@ -17,6 +17,7 @@ public:
     GPtrArray* getPlaylists();
     GArray* listPlaylists();
     void freeListOfPlaylists(GArray *playlist_list);
+    void deletePlaylist(QString playlistName);
     static void import_cb(MafwPlaylistManager *, guint import_id, MafwProxyPlaylist *playlist, gpointer user_data, const GError *);
 
 signals:
