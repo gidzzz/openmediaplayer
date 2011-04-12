@@ -98,7 +98,7 @@
      <string>Options</string>
     </property>
     <addaction name="actionAdd_to_now_playing"/>
-    <addaction name="actionDelete"/>
+    <addaction name="actionDelete_playlist"/>
    </widget>
    <addaction name="menuOptions"/>
   </widget>
@@ -109,7 +109,12 @@
   </action>
   <action name="actionDelete">
    <property name="text">
-    <string>Delete</string>
+    <string>Delete playlist</string>
+   </property>
+  </action>
+  <action name="actionDelete_playlist">
+   <property name="text">
+    <string>Delete playlist</string>
    </property>
   </action>
  </widget>
