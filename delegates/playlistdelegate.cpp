@@ -22,10 +22,19 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 {
         // Thanks to hqh for fapman, this code is based on the list in it.
         QString songName = index.data(UserRoleSongTitle).toString();
-        QString songArtistAlbum = index.data(UserRoleSongArtist).toString() + " / " + index.data(UserRoleSongAlbum).toString();
-        QTime t(0, 0);
-        t = t.addSecs(index.data(UserRoleSongDuration).toInt());
-        QString songLength = t.toString("mm:ss");
+        QString songArtistAlbum;
+        if (!index.data(UserRoleSongArtist).toString().isEmpty())
+            songArtistAlbum = index.data(UserRoleSongArtist).toString() + " / " + index.data(UserRoleSongAlbum).toString();
+        else
+            songArtistAlbum = " ";
+        QString songLength;
+        if (index.data(UserRoleSongDuration).toInt() != -10) {
+            QTime t(0, 0);
+            t = t.addSecs(index.data(UserRoleSongDuration).toInt());
+            songLength = t.toString("mm:ss");
+        } else {
+            songLength = " ";
+        }
 
         painter->save();
         QRect r = option.rect;
