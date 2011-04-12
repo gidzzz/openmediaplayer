@@ -17,6 +17,10 @@
 **************************************************************************/
 
 #include "mainwindow.h"
+#ifdef Q_WS_MAEMO_5
+#include <QtGui/QX11Info>
+#include <X11/Xlib.h>
+#endif
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -84,6 +88,9 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef MAFW
     ui->indicator->setSources(this->mafwrenderer, this->mafwTrackerSource, this->playlist);
 #endif
+#ifdef Q_WS_MAEMO_5
+    QTimer::singleShot(700, this, SLOT(takeScreenshot()));
+#endif
 }
 
 MainWindow::~MainWindow()
@@ -129,7 +136,7 @@ void MainWindow::connectSignals()
     connect(myMusicWindow, SIGNAL(hidden()), ui->indicator, SLOT(show()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
-    connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
+    //connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
     connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
@@ -524,5 +531,32 @@ void MainWindow::onBluetoothButtonPressed(QDBusMessage msg)
         else if (msg.arguments()[1] == "previous-song")
             mafwrenderer->previous();
     }
+}
+
+void MainWindow::takeScreenshot()
+{
+    // True takes a screenshot, false destroys it
+    // See http://maemo.org/api_refs/5.0/5.0-final/hildon/hildon-Additions-to-GTK+.html#hildon-gtk-window-take-screenshot
+    bool take = true;
+    XEvent xev = { 0 };
+
+    xev.xclient.type = ClientMessage;
+    xev.xclient.serial = 0;
+    xev.xclient.send_event = True;
+    xev.xclient.display = QX11Info::display();
+    xev.xclient.window = XDefaultRootWindow (xev.xclient.display);
+    xev.xclient.message_type = XInternAtom (xev.xclient.display, "_HILDON_LOADING_SCREENSHOT", False);
+    xev.xclient.format = 32;
+    xev.xclient.data.l[0] = take ? 0 : 1;
+    xev.xclient.data.l[1] = this->winId();
+
+    XSendEvent (xev.xclient.display,
+                xev.xclient.window,
+                False,
+                SubstructureRedirectMask | SubstructureNotifyMask,
+                &xev);
+
+    XFlush (xev.xclient.display);
+    XSync (xev.xclient.display, False);
 }
 #endif

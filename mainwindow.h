@@ -107,6 +107,7 @@ private slots:
 #endif
 #ifdef Q_WS_MAEMO_5
     void onBluetoothButtonPressed(QDBusMessage msg);
+    void takeScreenshot();
 #endif
 };
 
