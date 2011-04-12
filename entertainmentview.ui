@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Entertainment View</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -28,7 +28,7 @@
       </property>
       <property name="source">
        <url>
-        <string>file:///opt/usr/share/entertainment-view/qml/entertainment-view-test/entertainment-view-test.qml</string>
+        <string>file:///opt/mediaplayer/qml/entertainmentview.qml</string>
        </url>
       </property>
      </widget>

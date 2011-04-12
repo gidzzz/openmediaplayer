@@ -1,16 +1,24 @@
 import Qt 4.7
 
 Rectangle {
-    id: rectangle1
+    id: mainRectangle
     width: 800
     height: 480
-    color: "#000000"
+    color: "#333333"
     signal quitButtonClicked;
+    signal nextButtonClicked;
+    signal prevButtonClicked;
+    signal playButtonClicked;
+    signal sliderValueChanged(int value);
+    signal playlistItemSelected(int index);
 
     Image {
         id: quitButton
         x: 688
-        y: 0
+        anchors.top: parent.top
+        anchors.topMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
         source: "file:///etc/hildon/theme/images/wmBackIconPressed.png"
         scale: quitMouse.pressed ? 0.8 : 1.0
         smooth: quitMouse.pressed
@@ -20,12 +28,7 @@ Rectangle {
             y: 0
             width: 112
             height: 56
-            anchors.rightMargin: 0
-            anchors.bottomMargin: 0
-            anchors.leftMargin: 0
-            anchors.topMargin: 0
             anchors.fill: parent
-            anchors.margins: -10
             onClicked: {
                 quitButtonClicked()
                 Qt.quit
@@ -38,10 +41,15 @@ Rectangle {
         width: 376
         height: 312
 
-
         Rectangle {
             id: metadataRectangle
-            color: "#000000"
+            x: 0
+            y: 0
+            color: "#333333"
+            anchors.rightMargin: 0
+            anchors.bottomMargin: 0
+            anchors.leftMargin: 0
+            anchors.topMargin: 0
             anchors.fill: parent
             Text {
                 id: songTitle
@@ -54,7 +62,7 @@ Rectangle {
             Text {
                 id: albumName
                 x: 32
-                y: 230
+                y: 240
                 color: "#9c9a9c"
                 text: "Album name"
             }
@@ -62,86 +70,140 @@ Rectangle {
             Text {
                 id: artsitName
                 x: 32
-                y: 202
+                y: 213
                 color: "#ffffff"
                 text: "Artist name"
             }
 
-            Item {
-                id: slider; width: 317; height: 50
+            Text {
+                id: songPositionText
+                x: 271
+                y: 180
+                color: "#ffffff"
+                text: "00:00/00:00"
+                font.pointSize: 13
+                anchors.right: slider.right
+            }
 
-                // value is read/write.
-                property real value: 1
-                onValueChanged: updatePos();
-                property real maximum: 1
-                property real minimum: 1
-                property int xMax: width - handle.width - 4
+            Slider {
+                id: slider; width: 318; height: 50
+
                 x: 32
                 y: 125
-                onXMaxChanged: updatePos();
-                onMinimumChanged: updatePos();
+                minimum: 0
+                maximum: 100
+                value: 0
 
-                function updatePos() {
-                    if (maximum > minimum) {
-                        var pos = 2 + (value - minimum) * slider.xMax / (maximum - minimum);
-                        pos = Math.min(pos, width - handle.width - 2);
-                        pos = Math.max(pos, 2);
-                        handle.x = pos;
-                    } else {
-                        handle.x = 2;
-                    }
+                onValueChanged: {
+                    if (slider.down)
+                        sliderValueChanged(value)
                 }
+            }
+        }
 
-                Rectangle {
-                    anchors.fill: parent
-                    border.color: "white"; border.width: 0; radius: 8
-                    gradient: Gradient {
-                        GradientStop {
-                            position: 0
-                            color: "#66343434"
-                        }
+        // The model:
+        ListModel {
+            id: playlistModel
+        }
 
-                        GradientStop {
-                            position: 1
-                            color: "#66000000"
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: handle; smooth: true
-                    y: 2; width: 51; height: slider.height-4; radius: 6
-                    gradient: Gradient {
-                        GradientStop {
-                            position: 0
-                            color: "#d3d3d3"
-                        }
-
-                        GradientStop {
-                            position: 1
-                            color: "#808080"
-                        }
-                    }
-
-                    MouseArea {
-                        id: mouse
-                        drag.maximumY: 100
-                        drag.maximumX: 100
-                        anchors.fill: parent; drag.target: parent
-                        drag.axis: Drag.XAxis; drag.minimumX: 2;                        onPositionChanged: { value = (maximum - minimum) * (handle.x-2) / slider.xMax + minimum; }
+        Component {
+            id: highlight
+            Rectangle {
+                width: listView.currentItem.width+5; height: listView.currentItem.height
+                color: "#1c1c1c"; radius: 0
+                y: listView.currentItem.y
+                Behavior on y {
+                    SpringAnimation {
+                        spring: 3
+                        damping: 0.2
                     }
                 }
             }
+        }
+
+        Component {
+            id: listDelegate
+
+            Item {
+                id: delegateItem
+                width: listView.width; height: 55
+                clip: true
+
+                Row {
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 10
+
+                    Column {
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        Text {
+                            text: name
+                            font.pixelSize: 18
+                            color: "white"
+                        }
+                        Row {
+                            spacing: 5
+                            Text { text: albumArtist; font.pixelSize: 13; color: "#9c9a9c" }
+                        }
+                    }
+                }
+
+                Row {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    spacing: 10
+
+                    Text {
+                        id: durationText
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: duration
+                        font.pixelSize: 15
+                        color: "white"
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: delegateItem
+                    onClicked: {
+                        listView.currentIndex = index
+                        playlistItemSelected(index)
+                    }
+                }
+
+                // Animate adding and removing of items:
+
+                ListView.onAdd: SequentialAnimation {
+                    PropertyAction { target: delegateItem; property: "height"; value: 0 }
+                    NumberAnimation { target: delegateItem; property: "height"; to: 55; duration: 250; easing.type: Easing.InOutQuad }
+                }
+
+                ListView.onRemove: SequentialAnimation {
+                    PropertyAction { target: delegateItem; property: "ListView.delayRemove"; value: true }
+                    NumberAnimation { target: delegateItem; property: "height"; to: 0; duration: 250; easing.type: Easing.InOutQuad }
+
+                    // Make sure delayRemove is set back to false so that the item can be destroyed
+                    PropertyAction { target: delegateItem; property: "ListView.delayRemove"; value: false }
+                }
+            }
+        }
+
+
+        ListView {
+            id: listView
+            anchors.fill: flipable
+            model: playlistModel
+            delegate: listDelegate
+            highlight: highlight
+            highlightFollowsCurrentItem: false
+            focus: true
+            maximumFlickVelocity: 1000
         }
 
         property bool flipped: false
         x: 37
 
         front: metadataRectangle
-        back: Image {
-            source: albumArtImage.source; height: 360; width: 360;
-        }
-
+        back: listView
 
         transform: Rotation {
             id: rotation
@@ -161,8 +223,8 @@ Rectangle {
             NumberAnimation { target: rotation; property: "angle"; duration: 500 }
         }
 
-        PropertyAnimation on x { to: 392; duration: 1000; easing.type: Easing.OutBack }
-        y: -700
+        PropertyAnimation on x { to: 400; duration: 1000; easing.type: Easing.OutBack }
+        y: 0
         PropertyAnimation on y { to: 84; duration: 1000; easing.type: Easing.OutBack }
     }
 
@@ -224,7 +286,7 @@ Rectangle {
 
                     GradientStop {
                         position: 0.01
-                        color: "#000000"
+                        color: "#333333"
                     }
                 }
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -252,26 +314,154 @@ Rectangle {
         id: animateMetadata
         target: flipable
         property: "x"
-        to: 30
+        to: 10
         duration: 1000
         easing.type: Easing.InOutBack
     }
 
     Timer {
         id: animationTimer
-        interval: 1000; running: true; repeat: true
+        interval: 5000; running: true; repeat: true
         onTriggered: {
-            animateAlbumArt.running = true
-            animateMetadata.running = true
+            if (!listView.moving && !slider.down) {
+                animateAlbumArt.running = true
+                animateMetadata.running = true
 
-            if (albumRectangle.x == 400) {
-                animateAlbumArt.to = 20
-                animateMetadata.to = 400
+                if (albumRectangle.x == 400) {
+                    animateAlbumArt.to = 20
+                    animateMetadata.to = 400
+                }
+                else if(albumRectangle.x == 20) {
+                    animateAlbumArt.to = 400
+                    animateMetadata.to = 10
+                }
             }
-            else if(albumRectangle.x == 20) {
-                animateAlbumArt.to = 400
-                animateMetadata.to = 10
+        }
+    }
+
+    Rectangle {
+        id: controls
+        x: 267
+        y: 470
+        width: 267
+        height: 64
+        color: "#00000000"
+        radius: 0
+        anchors.horizontalCenterOffset: 1
+        anchors.horizontalCenter: parent.horizontalCenter
+        opacity: 1
+
+        PropertyAnimation on y { to: 416; duration: 1000; easing.type: Easing.OutBack }
+
+        PropertyAnimation {
+            id: hideControls
+            target: controls
+            property: "y"
+            to: mainRectangle.height+70
+            duration: 500
+            easing.type: Easing.InOutBack
+        }
+
+        PropertyAnimation {
+            id: showControls
+            target: controls
+            property: "y"
+            to: mainRectangle.height-64
+            duration: 500
+            easing.type: Easing.InOutBack
+        }
+
+        Image {
+            id: prevButton
+            width: 64
+            height: 64
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            opacity: 1
+            source: "file:///etc/hildon/theme/mediaplayer/Back.png"
+
+            MouseArea {
+                id: prevButtonArea
+                opacity: 1
+                anchors.fill: parent
+                onClicked: prevButtonClicked()
             }
+        }
+
+        Image {
+            id: playButton
+            x: 93
+            y: 0
+            width: 64
+            height: 64
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "file:///etc/hildon/theme/mediaplayer/Play.png"
+
+            MouseArea {
+                id: playButtonArea
+                anchors.fill: parent
+                onClicked: playButtonClicked()
+            }
+        }
+
+        Image {
+            id: nextButton
+            x: 186
+            y: 0
+            width: 64
+            height: 64
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            source: "file:///etc/hildon/theme/mediaplayer/Forward.png"
+
+            MouseArea {
+                id: nextButtonArea
+                x: 0
+                y: 0
+                anchors.rightMargin: 0
+                anchors.bottomMargin: 0
+                anchors.leftMargin: 0
+                anchors.topMargin: 0
+                anchors.fill: parent
+                onClicked: nextButtonClicked()
+            }
+        }
+    }
+
+    MouseArea {
+        id: controlsToggleArea
+        x: 0
+        y: 397
+        width: 267
+        height: 83
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
+        anchors.top: parent.top
+        anchors.topMargin: 397
+
+        onClicked: {
+            if (controls.y == mainRectangle.height+70)
+                showControls.running = true
+            else
+                hideControls.running = true
+        }
+    }
+
+    MouseArea {
+        id: controlsToggleArea1
+        x: 534
+        y: 397
+        width: 267
+        height: 83
+        anchors.top: parent.top
+        anchors.topMargin: 397
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
+        onClicked: {
+            if (controls.y == mainRectangle.height+70)
+                showControls.running = true
+            else
+                hideControls.running = true
         }
     }
 
@@ -290,5 +480,35 @@ Rectangle {
 
     function setAlbumArt(text) {
         albumArtImage.source = text
+    }
+
+    function setPosition(text) {
+        songPositionText.text = text
+    }
+
+    function setSliderValue(number) {
+        slider.value = number
+    }
+
+    function setSliderMaximum(number) {
+        slider.maximum = number
+    }
+
+    function setPlayButtonIcon(text) {
+        playButton.source = text
+    }
+
+    function addPlaylistItem(song, valueText, duration, index) {
+        playlistModel.append ({
+                              "name": song,
+                              "duration": duration,
+                              "albumArtist": valueText,
+                              "index": index
+                          })
+    }
+
+    function onRowChanged(row) {
+        console.log (listView.count)
+        console.log (row)
     }
 }
