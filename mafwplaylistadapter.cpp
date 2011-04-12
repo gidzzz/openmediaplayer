@@ -114,15 +114,20 @@ int MafwPlaylistAdapter::getSizeOf(MafwPlaylist *playlist)
     return size;
 }
 
-void MafwPlaylistAdapter::getItems()
+void MafwPlaylistAdapter::getAllItems()
+{
+    this->getItems(0, -1);
+}
+
+void MafwPlaylistAdapter::getItems(int from, int to)
 {
 #ifdef DEBUG
     qDebug() << "MafwPlaylistAdapter::getItems";
 #endif
     if (mafw_playlist) {
         mafw_playlist_get_items_md (this->mafw_playlist,
-                                    0,
-                                    -1,
+                                    from,
+                                    to,
                                     MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                      MAFW_METADATA_KEY_ALBUM,
                                                      MAFW_METADATA_KEY_ARTIST,

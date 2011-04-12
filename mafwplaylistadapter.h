@@ -29,6 +29,8 @@ public:
     int getSize();
     int getSizeOf(MafwPlaylist *playlist);
     void getItemsOf(MafwPlaylist *playlist);
+    void getItems(int from, int to);
+    void getAllItems();
     QString playlistName();
     MafwPlaylist *mafw_playlist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
@@ -41,7 +43,6 @@ signals:
     void playlistChanged();
 
 public slots:
-    void getItems();
     void assignAudioPlaylist();
     void assignVideoPlaylist();
     void assignRadioPlaylist();
