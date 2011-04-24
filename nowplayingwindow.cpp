@@ -34,6 +34,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
+    setAttribute(Qt::WA_DeleteOnClose);
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
@@ -289,6 +290,8 @@ void NowPlayingWindow::connectSignals()
                                           this, SLOT(onPropertyChanged(const QDBusMessage &)));
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "property_changed",
                                           this, SLOT(updatePlaylistState()));
+    QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "playlist_updated", this, SLOT(updatePlaylist()));
+    QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "contents_changed", this, SLOT(updatePlaylist()));
 #endif
 }
 
@@ -557,8 +560,12 @@ void NowPlayingWindow::onPreviousButtonClicked()
         mafwrenderer->setPosition(SeekRelative, -3);
         mafwrenderer->getPosition();
     } else {
-        if (!buttonWasDown)
-            mafwrenderer->previous();
+        if (!buttonWasDown) {
+            if (this->currentSongPosition > 3)
+                this->setPosition(0);
+            else
+                mafwrenderer->previous();
+        }
         buttonWasDown = false;
     }
 }
@@ -607,7 +614,7 @@ void NowPlayingWindow::showEvent(QShowEvent *)
     mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
     this->updatePlaylistState();
-    if(positionTimer->isActive())
+    if (positionTimer->isActive())
         ui->songProgress->setEnabled(true);
 }
 
@@ -635,16 +642,16 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
         this->close();
 #ifdef MAFW
     else if(e->key() == Qt::Key_Space) {
-        if(this->mafwState == Playing)
+        if (this->mafwState == Playing)
             mafwrenderer->pause();
-        else if(this->mafwState == Paused)
+        else if (this->mafwState == Paused)
             mafwrenderer->resume();
-        else if(this->mafwState == Stopped)
+        else if (this->mafwState == Stopped)
             mafwrenderer->play();
     }
-    else if(e->key() == Qt::Key_Right)
+    else if (e->key() == Qt::Key_Right)
         mafwrenderer->next();
-    else if(e->key() == Qt::Key_Left)
+    else if (e->key() == Qt::Key_Left)
         mafwrenderer->previous();
 #endif
     /*else if(e->key() == Qt::Key_Shift) {
@@ -910,7 +917,9 @@ void NowPlayingWindow::onSavePlaylistAccepted()
         }
         else if (overwrite.result() == QMessageBox::No) {
             overwrite.close();
+#ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(this, tr("Playlist not saved"));
+#endif
         }
     }       else {
         playlist->duplicatePlaylist(playlistNameLineEdit->text());
@@ -950,12 +959,18 @@ void NowPlayingWindow::updatePlaylist()
     int songCount = playlist->getSize();
 
     // Make a new item for all items
-    for (int i = 0; i < songCount; i++)
-    {
-        QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
-        ui->songPlaylist->addItem(item);
-        item->setData(UserRoleValueText, " ");
-        item->setData(UserRoleSongDuration, -10);
+    if (songCount != ui->songPlaylist->count()) {
+        if (ui->songPlaylist->count() != 0) {
+            for (int y = 0; y < ui->songPlaylist->count(); y++)
+                delete ui->songPlaylist->item(y);
+        }
+
+        for (int i = 0; i < songCount; i++) {
+            QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
+            ui->songPlaylist->addItem(item);
+            item->setData(UserRoleValueText, " ");
+            item->setData(UserRoleSongDuration, -10);
+        }
     }
 
     // Iterate over every 30 items and fetch those

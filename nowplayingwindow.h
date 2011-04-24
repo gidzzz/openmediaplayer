@@ -20,11 +20,9 @@
 #endif
 
 #ifdef MAFW
-    #include "mafwrendereradapter.h"
-    #include "mafwplaylistadapter.h"
-    #include "mafwsourceadapter.h"
+    #include <mafw/mafwadapterfactory.h>
     #include <gq/GConfItem>
-    #include "mafwplaylistmanageradapter.h"
+    #include "mafw/mafwplaylistmanageradapter.h"
 #else
     class MafwRendererAdapter;
     class MafwSourceAdapter;
@@ -63,7 +61,6 @@ private:
     int mafwState;
     GConfItem *lastPlayingSong;
     void showEvent(QShowEvent *);
-    void updatePlaylist();
 #endif
     void setButtonIcons();
     void setSongNumber(int currentSong, int numberOfSongs);
@@ -107,6 +104,7 @@ private slots:
     void onMediaChanged(int index, char*);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
+    void updatePlaylist();
 #endif
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
