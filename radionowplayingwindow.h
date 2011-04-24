@@ -4,13 +4,14 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QDesktopWidget>
+#include <QTime>
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
 #endif
 
 #ifdef MAFW
-    #include "mafwadapterfactory.h"
+    #include "mafw/mafwadapterfactory.h"
 #else
     class MafwRendererAdapter;
     class MafwSourceAdapter;

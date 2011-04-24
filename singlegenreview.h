@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 #ifdef MAFW
-    #include "mafwadapterfactory.h"
+    #include "mafw/mafwadapterfactory.h"
 #endif
 
 #include "delegates/artistlistitemdelegate.h"

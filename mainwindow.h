@@ -23,12 +23,8 @@
     #define DBUS_INTERFACE "com.nokia.mediaplayer"
 #endif
 #ifdef MAFW
-    #include "mafwadapterfactory.h"
-    #include "mafwrendereradapter.h"
-    #include "mafwplaylistadapter.h"
-    #include "mafwsourceadapter.h"
-    #include <libmafw/mafw-source.h>
-    #include <libgnomevfs/gnome-vfs-mime.h>
+    #include "mafw/mafwadapterfactory.h"
+    //#include <libgnomevfs/gnome-vfs-mime.h>
 #endif
 
 namespace Ui {

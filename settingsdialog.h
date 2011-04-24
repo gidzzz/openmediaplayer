@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QSettings>
+#include <QDesktopWidget>
 
 namespace Ui {
     class SettingsDialog;
@@ -21,6 +22,7 @@ private:
 
 private slots:
     void accept();
+    void orientationChanged();
 };
 
 #endif // SETTINGSDIALOG_H

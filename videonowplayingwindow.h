@@ -7,6 +7,7 @@
 #include <QtDBus>
 #include <QDesktopWidget>
 #include <QKeyEvent>
+#include <QMessageBox>
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
@@ -17,7 +18,7 @@
 #endif
 
 #ifdef MAFW
-    #include "mafwadapterfactory.h"
+    #include "mafw/mafwadapterfactory.h"
 #else
     class MafwRendererAdapter;
     class MafwSourceAdapter;

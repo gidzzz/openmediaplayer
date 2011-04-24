@@ -25,12 +25,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
         ui->onExitBox->setCurrentIndex(1);
     if (QSettings().contains("FMTX/overrideChecks")) {
         if (QSettings().value("FMTX/overrideChecks").toBool())
             ui->fmtxCheckBox->setChecked(true);
     }
+    this->orientationChanged();
 }
 
 SettingsDialog::~SettingsDialog()
@@ -46,4 +48,18 @@ void SettingsDialog::accept()
         QSettings().setValue("main/onApplicationExit", "stop-playback");
     QSettings().setValue("FMTX/overrideChecks", ui->fmtxCheckBox->isChecked());
     this->close();
+}
+
+void SettingsDialog::orientationChanged()
+{
+    ui->gridLayout->removeWidget(ui->buttonBox);
+    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
+        this->setFixedHeight(320);
+        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount()); // portrait
+        ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
+    } else {
+        ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
+        ui->gridLayout->addWidget(ui->buttonBox, 2, 1, 1, 1, Qt::AlignBottom); // landscape
+        this->setFixedHeight(240);
+    }
 }

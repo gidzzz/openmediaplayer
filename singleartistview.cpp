@@ -269,6 +269,9 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint,
             QMaemo5InformationBox::information(this, QString::number(this->numberOfSongs) + " " + addedToNp);
 #endif
         } else if (shuffleRequested && remainingCount == 0) {
+            uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
+            mafwrenderer->gotoIndex(randomIndex);
+
             mafwrenderer->play();
             mafwrenderer->resume();
 

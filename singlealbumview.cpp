@@ -249,6 +249,10 @@ void SingleAlbumView::createPlaylist(bool shuffle)
             QListWidgetItem *item = ui->songList->item(i);
             playlist->appendItem(item->data(UserRoleObjectID).toString());
         }
+        if (shuffle) {
+            uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
+            mafwrenderer->gotoIndex(randomIndex);
+        }
 
 #ifdef DEBUG
         qDebug() << "Playlist created";
@@ -359,12 +363,14 @@ void SingleAlbumView::onRingingToneUriReceived(QString objectId, QString uri)
     if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
         return;
 
+#ifdef Q_WS_MAEMO_5
     QDBusInterface setRingtone("com.nokia.profiled",
                                "/com/nokia/profiled",
                                "com.nokia.profiled",
                                QDBusConnection::sessionBus(), this);
     setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
     QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
+#endif
 }
 #endif
 
@@ -391,9 +397,11 @@ void SingleAlbumView::onShareUriReceived(QString objectId, QString Uri)
     clip = Uri;
 
     list.append(clip);
+#ifdef Q_WS_MAEMO_5
     Share *share = new Share(this, list);
     share->setAttribute(Qt::WA_DeleteOnClose);
     share->show();
+#endif
 }
 #endif
 

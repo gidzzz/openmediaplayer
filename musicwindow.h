@@ -25,10 +25,8 @@
 #include "includes.h"
 
 #ifdef MAFW
-    #include "mafwrendereradapter.h"
-    #include "mafwsourceadapter.h"
-    #include "mafwplaylistadapter.h"
-    #include "mafwplaylistmanageradapter.h"
+    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwplaylistmanageradapter.h"
 #else
     class MafwRendererAdapter;
 #endif
@@ -59,7 +57,7 @@ private:
     void focusOutEvent(QFocusEvent *);
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
-    NowPlayingWindow *myNowPlayingWindow;
+    NowPlayingWindow *nowPlayingWindow;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -133,6 +131,7 @@ private slots:
 #endif
     void onAddToNowPlaying();
     void onDeletePlaylistClicked();
+    void onWindowDestroyed();
 };
 
 #endif // MUSICWINDOW_H

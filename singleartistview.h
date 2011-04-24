@@ -5,7 +5,7 @@
 #include <QListWidgetItem>
 
 #ifdef MAFW
-    #include "mafwadapterfactory.h"
+    #include "mafw/mafwadapterfactory.h"
 #endif
 
 #include "singlealbumview.h"

@@ -175,7 +175,9 @@ void VideoNowPlayingWindow::stateChanged(int state)
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+#ifdef Q_WS_MAEMO_5
         this->setDNDAtom(false);
+#endif
         mafwrenderer->getPosition();
         if(positionTimer->isActive())
             positionTimer->stop();
@@ -188,7 +190,9 @@ void VideoNowPlayingWindow::stateChanged(int state)
         if (pausedPosition != -1 && pausedPosition != 0)
             mafwrenderer->setPosition(SeekAbsolute, pausedPosition);
         mafwrenderer->getPosition();
+#ifdef Q_WS_MAEMO_5
         this->setDNDAtom(true);
+#endif
         if(!positionTimer->isActive())
             positionTimer->start();
     }
@@ -196,7 +200,9 @@ void VideoNowPlayingWindow::stateChanged(int state)
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+#ifdef Q_WS_MAEMO_5
         this->setDNDAtom(false);
+#endif
         if(positionTimer->isActive())
             positionTimer->stop();
         if (this->gotInitialState && !this->errorOccured)
@@ -444,15 +450,15 @@ void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
             errorMsg.append(tr("Playlist may be corrupt or empty"));
         }
         else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CODEC_NOT_FOUND) {
-            errorMsg.append(tr("Codec not found:\n"));
+            errorMsg.append(tr("Codec not found:") + "\n");
             errorMsg.append(msg.arguments()[2].toString());
         }
         else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_VIDEO_CODEC_NOT_FOUND) {
-            errorMsg.append(tr("Video codec not found:\n"));
+            errorMsg.append(tr("Video codec not found:") + "\n");
             errorMsg.append(msg.arguments()[2].toString());
         }
         else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_AUDIO_CODEC_NOT_FOUND) {
-            errorMsg.append(tr("Audio codec not found:\n"));
+            errorMsg.append(tr("Audio codec not found:") + "\n");
             errorMsg.append(msg.arguments()[2].toString());
         }
         else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_NO_PLAYLIST)

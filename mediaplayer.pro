@@ -9,6 +9,9 @@ QT       += core gui dbus declarative opengl
 TARGET = mediaplayer
 TEMPLATE = app
 
+DEFINES += MAFW
+INCLUDEPATH += /usr/lib/madde/linux-x86_64/sysroots/meego-core-armv7l-madde-sysroot-1.1-fs/usr/include/libmafw/
+
 SOURCES += main.cpp \
     mainwindow.cpp \
     musicwindow.cpp \
@@ -32,8 +35,7 @@ SOURCES += main.cpp \
     delegates/thumbnailitemdelegate.cpp \
     singlegenreview.cpp \
     singleplaylistview.cpp \
-    aboutwindow.cpp \
-    mafwadapterfactory.cpp
+    aboutwindow.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -59,8 +61,7 @@ HEADERS  += mainwindow.h \
     delegates/thumbnailitemdelegate.h \
     singlegenreview.h \
     singleplaylistview.h \
-    aboutwindow.h \
-    mafwadapterfactory.h
+    aboutwindow.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -100,10 +101,8 @@ unix:!symbian {
             fmtxdialog.h \
             freqpickselector.h
         include(external-includepaths.pro)
-        target.path = /opt/usr/bin
-    } else {
-        target.path = /usr/local/bin
     }
+    target.path = /usr/local/bin
     INSTALLS += target
 }
 
@@ -112,21 +111,29 @@ contains(DEFINES, MAFW) {
     CONFIG += link_pkgconfig
     PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0
 
-    SOURCES +=      mafwrenderersignalhelper.cpp \
-            mafwsourcesignalhelper.cpp \
-            mafwsourceadapter.cpp \
-            mafwrendereradapter.cpp \
-            mafwplaylistadapter.cpp \
-            mafwplaylistmanageradapter.cpp \
+    SOURCES +=      mafw/mafwrenderersignalhelper.cpp \
+            mafw/mafwsourcesignalhelper.cpp \
+            mafw/mafwsourceadapter.cpp \
+            mafw/mafwrendereradapter.cpp \
+            mafw/mafwplaylistadapter.cpp \
+            mafw/mafwplaylistmanageradapter.cpp \
+            mafw/mafwadapterfactory.cpp
 
-    HEADERS +=      mafwrenderersignalhelper.h \
-            mafwrendereradapter.h \
-            mafwsourcesignalhelper.h \
-            mafwsourceadapter.h \
-            mafwplaylistadapter.h \
-            mafwplaylistmanageradapter.h
+    HEADERS +=      mafw/mafwrenderersignalhelper.h \
+            mafw/mafwrendereradapter.h \
+            mafw/mafwsourcesignalhelper.h \
+            mafw/mafwsourceadapter.h \
+            mafw/mafwplaylistadapter.h \
+            mafw/mafwplaylistmanageradapter.h \
+            mafw/mafwadapterfactory.h
 }
 
 OTHER_FILES += \
     entertainmentview.qml \
-    Slider.qml
+    Slider.qml \
+    qtc_packaging/meego.spec
+
+qmlfiles.files += entertainmentview.qml
+qmlfiles.files += Slider.qml
+qmlfiles.path = /opt/mediaplayer/qml/
+INSTALLS += qmlfiles

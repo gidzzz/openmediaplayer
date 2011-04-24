@@ -142,7 +142,9 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
 
         ui->songList->insertItem(position, item);
     }
+#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
 }
 
 void SinglePlaylistView::browseObjectId(QString objectId)
@@ -335,6 +337,9 @@ void SinglePlaylistView::onShuffleButtonClicked()
     NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
     window->show();
     window->updatePlaylistState();
+    uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
+    mafwrenderer->gotoIndex(randomIndex);
+
     mafwrenderer->play();
     mafwrenderer->resume();
 #endif
@@ -383,12 +388,14 @@ void SinglePlaylistView::onRingingToneUriReceived(QString objectId, QString uri)
     if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
         return;
 
+#ifdef Q_WS_MAEMO_5
     QDBusInterface setRingtone("com.nokia.profiled",
                                "/com/nokia/profiled",
                                "com.nokia.profiled",
                                QDBusConnection::sessionBus(), this);
     setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
     QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
+#endif
 }
 #endif
 
@@ -415,9 +422,11 @@ void SinglePlaylistView::onShareUriReceived(QString objectId, QString Uri)
     clip = Uri;
 
     list.append(clip);
+#ifdef Q_WS_MAEMO_5
     Share *share = new Share(this, list);
     share->setAttribute(Qt::WA_DeleteOnClose);
     share->show();
+#endif
 }
 #endif
 

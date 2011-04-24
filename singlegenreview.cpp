@@ -307,6 +307,9 @@ void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount
                    this, SLOT(onNowPlayingBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 
         if (this->isShuffling) {
+            uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
+            mafwrenderer->gotoIndex(randomIndex);
+
             mafwrenderer->play();
             mafwrenderer->resume();
 

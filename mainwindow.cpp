@@ -172,12 +172,14 @@ void MainWindow::mime_open(const QString &uriString)
     QString objectId = mafwTrackerSource->createObjectId(uriToPlay);
     qDebug() << objectId;
     const gchar* text_uri = uriToPlay.toUtf8();
+#if 0
     qDebug() << text_uri;
     GnomeVFSURI* uri = gnome_vfs_uri_new (text_uri);
     if (uri != NULL) {
         qDebug() << gnome_vfs_uri_to_string (uri, GNOME_VFS_URI_HIDE_NONE);
         gnome_vfs_get_mime_type_from_uri (uri);
     }
+#endif
 }
 
 void MainWindow::createNowPlayingWindow()

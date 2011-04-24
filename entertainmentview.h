@@ -12,7 +12,7 @@
 #include "includes.h"
 
 #ifdef MAFW
-    #include "mafwadapterfactory.h"
+    #include "mafw/mafwadapterfactory.h"
 #endif
 
 namespace Ui {

@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     // TODO: Add a full list of contributors here when we're ready to release.
     QTextStream out(stdout);
     out << "Open MediaPlayer, version: " << QApplication::applicationVersion() << " "
-        << "Running with PID:" << QApplication::applicationPid() << endl
+        << "Running with PID: " << QApplication::applicationPid() << endl
         << "Copyright (C) 2010-2011 Mohammad Abu-Garbeyyeh" << endl
         << "Licensed under GPLv3" << endl
         << "This program comes with ABSOLUTELY NO WARRANTY" << endl

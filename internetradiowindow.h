@@ -23,9 +23,7 @@
 #include "includes.h"
 
 #ifdef MAFW
-    #include "mafwrendereradapter.h"
-    #include "mafwsourceadapter.h"
-    #include "mafwplaylistadapter.h"
+    #include "mafw/mafwadapterfactory.h"
 #endif
 
 namespace Ui {

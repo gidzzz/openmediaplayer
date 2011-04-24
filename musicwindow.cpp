@@ -43,6 +43,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ThumbnailItemDelegate *albumDelegate = new ThumbnailItemDelegate(ui->albumList);
+    nowPlayingWindow = 0;
 
     ui->songList->setItemDelegate(delegate);
     ui->artistList->setItemDelegate(artistDelegate);
@@ -75,30 +76,38 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
 {
 #ifdef MAFW
     playlist->assignAudioPlaylist();
-    myNowPlayingWindow = new NowPlayingWindow(this, mafwFactory);
+    if (nowPlayingWindow == 0) {
+        nowPlayingWindow = new NowPlayingWindow(this, mafwFactory);
 #else
-    myNowPlayingWindow = new NowPlayingWindow(this);
+        nowPlayingWindow = new NowPlayingWindow(this);
 #endif
-    myNowPlayingWindow->setAttribute(Qt::WA_DeleteOnClose);
-    connect(myNowPlayingWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+        nowPlayingWindow->setAttribute(Qt::WA_DeleteOnClose);
+        connect(nowPlayingWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+        connect(nowPlayingWindow, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
+    }
 #ifdef MAFW
-    qDebug() << "Clearing playlist";
 
     playlist->clear();
-    qDebug() << "Playlist cleared";
+    int selectedIndex = ui->songList->currentRow();
     for (int i = 0; i < ui->songList->count(); i++) {
         QListWidgetItem *item = ui->songList->item(i);
         playlist->appendItem(item->data(UserRoleObjectID).toString());
+        if (ui->songList->row(item) == selectedIndex) {
+            mafwrenderer->gotoIndex(selectedIndex);
+            mafwrenderer->play();
+            mafwrenderer->resume();
+        }
     }
-    qDebug() << "Playlist created";
-
-    mafwrenderer->gotoIndex(ui->songList->currentRow());
-    mafwrenderer->play();
 
 #endif
-    myNowPlayingWindow->show();
+    nowPlayingWindow->show();
     ui->indicator->hide();
     ui->songList->clearSelection();
+}
+
+void MusicWindow::onWindowDestroyed()
+{
+    nowPlayingWindow = 0;
 }
 
 void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
@@ -219,13 +228,14 @@ void MusicWindow::onRingingToneUriReceived(QString objectId, QString uri)
 
     if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
         return;
-
+#ifdef Q_WS_MAEMO_5
     QDBusInterface setRingtone("com.nokia.profiled",
                                "/com/nokia/profiled",
                                "com.nokia.profiled",
                                QDBusConnection::sessionBus(), this);
     setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
     QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
+#endif
 }
 #endif
 
@@ -1073,7 +1083,9 @@ void MusicWindow::onAddToNowPlaying()
 
     if (this->currentList() == ui->songList) {
         playlist->appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());
+#ifdef Q_WS_MAEMO_5
         this->notifyOnAddedToNowPlaying(1);
+#endif
     }
     else if (this->currentList() == ui->artistList || this->currentList() == ui->albumList || this->currentList() == ui->genresList) {
 #ifdef Q_WS_MAEMO_5

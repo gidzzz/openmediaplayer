@@ -11,7 +11,7 @@
 #include "delegates/thumbnailitemdelegate.h"
 
 #ifdef MAFW
-    #include "mafwadapterfactory.h"
+    #include "mafw/mafwadapterfactory.h"
     #include <libmafw/mafw-source.h>
 #endif
 

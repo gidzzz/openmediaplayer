@@ -21,6 +21,9 @@
 NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NowPlayingIndicator)
+#ifdef MAFW
+  ,window(0)
+#endif
 {
     ui->setupUi(this);
     images << QPixmap(idleFrame);
@@ -60,7 +63,7 @@ void NowPlayingIndicator::connectSignals()
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
 }
 
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
 void NowPlayingIndicator::onStateChanged(int state)
 {
 #ifdef DEBUG
@@ -127,25 +130,27 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         emit clicked();
 #ifdef MAFW
         QString playlistName = playlist->playlistName();
-        QMainWindow *window;
 #ifdef DEBUG
         qDebug() << "Current playlist is: " + playlistName;
 #endif
-        if (playlistName == "FmpVideoPlaylist")
+        if (playlistName == "FmpVideoPlaylist" && window == 0)
             window = new VideoNowPlayingWindow(this, mafwFactory);
-        else if (playlistName == "FmpRadioPlaylist")  {
+        else if (playlistName == "FmpRadioPlaylist" && window == 0)  {
             window = new RadioNowPlayingWindow(this, mafwFactory);
         }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
         else
-            window = new NowPlayingWindow(this, mafwFactory);
-        window->setAttribute(Qt::WA_DeleteOnClose);
+            if (window == 0)
+                window = new NowPlayingWindow(this, mafwFactory);
+        if (window == 0)
+            window->setAttribute(Qt::WA_DeleteOnClose);
         if (playlistName == "FmpVideoPlaylist")
             window->showFullScreen();
         else
             window->show();
         connect(window, SIGNAL(destroyed()), this, SLOT(show()));
+        connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
         this->hide();
 #else
         NowPlayingWindow *window = new NowPlayingWindow(this);
@@ -153,6 +158,11 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         window->show();
 #endif
     }
+}
+
+void NowPlayingIndicator::onWindowDestroyed()
+{
+    window = 0;
 }
 
 #ifdef MAFW
