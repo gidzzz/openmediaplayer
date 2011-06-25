@@ -24,7 +24,7 @@
 #endif
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
-    //#include <libgnomevfs/gnome-vfs-mime.h>
+    #include <libgnomevfs/gnome-vfs-mime-utils.h>
 #endif
 
 namespace Ui {
