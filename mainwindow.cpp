@@ -173,12 +173,45 @@ void MainWindow::mime_open(const QString &uriString)
     qDebug() << objectId;
     const gchar* text_uri = uriToPlay.toUtf8();
     const char* mimetype = gnome_vfs_get_mime_type_for_name(text_uri);
-    QString qmimetype = QString(mimetype);
-    if(qmimetype.startsWith("audio/")) {
-        //TODO start audio playback
-    } else if(qmimetype.startsWith("video/")) {
-        //TODO start video playback
+    QString qmimetype = mimetype;
+    if (qmimetype.startsWith("audio")) {
+#ifdef MAFW
+        playlist->assignAudioPlaylist();
+        playlist->clear();
+        playlist->appendItem(objectId);
+#endif
+        NowPlayingWindow *nowPlayingWindow;
+#ifdef MAFW
+        nowPlayingWindow = new NowPlayingWindow(this, mafwFactory);
+#else
+        nowPlayingWindow = new NowPlayingWindow(this);
+#endif
+        nowPlayingWindow->setAttribute(Qt::WA_DeleteOnClose);
+        connect(nowPlayingWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+        connect(nowPlayingWindow, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
+        nowPlayingWindow->show();
+    } else if(qmimetype.startsWith("video")) {
+#ifdef MAFW
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+#else
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
+#endif
+        connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+        window->showFullScreen();
+#ifdef MAFW
+        window->playObject(objectId);
+#endif
     }
+#ifdef MAFW
+    if (mafwrenderer->isRendererReady()) {
+        mafwrenderer->play();
+        mafwrenderer->resume();
+    } else {
+        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
+        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(resume()));
+    }
+#endif
+    ui->indicator->hide();
 }
 
 void MainWindow::createNowPlayingWindow()
