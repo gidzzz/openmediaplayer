@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QTime>
+#include <QNetworkSession>
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"

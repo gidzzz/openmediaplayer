@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui dbus declarative opengl
+QT       += core gui dbus declarative opengl network
 
 TARGET = mediaplayer
 TEMPLATE = app
@@ -26,7 +26,6 @@ SOURCES += main.cpp \
     delegates/artistlistitemdelegate.cpp \
     delegates/playlistdelegate.cpp \
     radionowplayingwindow.cpp \
-    qrotatedlabel.cpp \
     singlealbumview.cpp \
     delegates/singlealbumviewdelegate.cpp \
     singleartistview.cpp \
@@ -52,7 +51,6 @@ HEADERS  += mainwindow.h \
     includes.h \
     delegates/playlistdelegate.h \
     radionowplayingwindow.h \
-    qrotatedlabel.h \
     singlealbumview.h \
     delegates/singlealbumviewdelegate.h \
     singleartistview.h \

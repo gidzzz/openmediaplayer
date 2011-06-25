@@ -19,13 +19,13 @@
 #include "internetradiowindow.h"
 
 InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *factory) :
-        QMainWindow(parent),
-        ui(new Ui::InternetRadioWindow)
+    QMainWindow(parent),
+    ui(new Ui::InternetRadioWindow)
 #ifdef MAFW
-        ,mafwFactory(factory),
-        mafwrenderer(factory->getRenderer()),
-        mafwRadioSource(factory->getRadioSource()),
-        playlist(factory->getPlaylistAdapter())
+    ,mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwRadioSource(factory->getRadioSource()),
+    playlist(factory->getPlaylistAdapter())
 #endif
 {
     ui->setupUi(this);
@@ -84,7 +84,15 @@ void InternetRadioWindow::onStationSelected()
     qDebug() << "Playlist created";
 
     mafwrenderer->gotoIndex(ui->listWidget->currentRow());
-    mafwrenderer->play();
+
+    QNetworkSession session(QNetworkConfiguration(), this);
+    if (!session.isOpen()) {
+        session.open();
+        connect(&session, SIGNAL(opened()), mafwrenderer, SLOT(play()));
+    } else {
+        mafwrenderer->play();
+    }
+
     window = new RadioNowPlayingWindow(this, mafwFactory);
 #else
     window = new RadioNowPlayingWindow(this);

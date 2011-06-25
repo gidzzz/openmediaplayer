@@ -8,6 +8,7 @@
 #include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QPainter>
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
@@ -67,7 +68,9 @@ private:
     int mafwState;
     int length;
     int pausedPosition;
+    int currentPosition;
     bool errorOccured;
+    static QColor colorKey() {return QColor(3, 13, 3);}
 #endif
 
 private slots:

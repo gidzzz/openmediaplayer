@@ -25,7 +25,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylistAdapter()),
+    mafw_playlist_manager(new MafwPlaylistManagerAdapter(this))
 #else
     ui(new Ui::NowPlayingWindow)
 #endif
@@ -90,7 +91,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     }
     ui->toolBarWidget->setFixedHeight(ui->toolBarWidget->sizeHint().height());
 #ifdef MAFW
-    mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
     if (mafwrenderer->isRendererReady()) {
         mafwrenderer->getCurrentMetadata();
         mafwrenderer->getStatus();

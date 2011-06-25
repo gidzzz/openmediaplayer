@@ -34,6 +34,14 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     playlist(factory->getPlaylistAdapter())
 #endif
 {
+    /* Make Qt do the work of keeping the overlay the magic color  */
+    QWidget::setBackgroundRole(QPalette::Window);
+    QWidget::setAutoFillBackground(true);
+    QPalette overlayPalette = QWidget::palette();
+    overlayPalette.setColor
+        (QPalette::Window,
+         colorKey());
+    QWidget::setPalette(overlayPalette);
     ui->setupUi(this);
     setAttribute(Qt::WA_OpaquePaintEvent);
     ui->widget->setAttribute(Qt::WA_NativeWindow);
@@ -179,6 +187,8 @@ void VideoNowPlayingWindow::stateChanged(int state)
         this->setDNDAtom(false);
 #endif
         mafwrenderer->getPosition();
+        this->pausedPosition = this->currentPosition;
+        mafwrenderer->getPosition();
         if(positionTimer->isActive())
             positionTimer->stop();
     }
@@ -247,9 +257,6 @@ void VideoNowPlayingWindow::onPortraitMode()
     ui->controlOverlay->setGeometry(360, 70, 101, 318);
     if(!ui->toolbarOverlay->isHidden())
         ui->toolbarOverlay->hide();
-    if(ui->portraittoolBar->isHidden())
-        ui->portraittoolBar->show();
-    ui->portraittoolBar->update();
 }
 
 void VideoNowPlayingWindow::onLandscapeMode()
@@ -265,8 +272,6 @@ void VideoNowPlayingWindow::onLandscapeMode()
     ui->controlOverlay->setGeometry(230, 170, 318, 114);
     if(ui->toolbarOverlay->isHidden())
         ui->toolbarOverlay->show();
-    if(!ui->portraittoolBar->isHidden())
-        ui->portraittoolBar->hide();
 }
 
 void VideoNowPlayingWindow::setDNDAtom(bool dnd)
@@ -397,6 +402,9 @@ void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state
 
 void VideoNowPlayingWindow::onPositionChanged(int position, QString)
 {
+    this->currentPosition = position;
+    if (this->mafwState == Paused)
+         this->pausedPosition = this->currentPosition;
     QTime t(0, 0);
     t = t.addSecs(position);
     if (!ui->progressBar->isSliderDown() && ui->progressBar->isVisible()) {
