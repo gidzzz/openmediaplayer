@@ -17,7 +17,7 @@ class MafwSourceAdapter : public QObject
  public:
   MafwSourceAdapter(QString sourceName);
   ~MafwSourceAdapter();
-  
+
   bool isReady() const;
   static void onSourceAdded(MafwRegistry* mafw_registry, 
 			    GObject* source, 

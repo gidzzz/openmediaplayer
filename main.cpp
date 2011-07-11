@@ -23,6 +23,7 @@
 #include "mainwindow.h"
 #include <QTime>
 #include <QTextStream>
+#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
@@ -30,17 +31,56 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("mediaplayer");
     QApplication::setApplicationVersion("0.1");
     QApplication a(argc, argv);
+
+    QString langPath = "/opt/openmediaplayer/";
+    // This shit returns the device language, not the current language
+    //QString lang = QLocale::languageToString(QLocale::system().language());
+
+    // Open locale file to chech current language
+    QString line, lang;
+    QFile data( "/etc/osso-af-init/locale" );
+    if (data.open(QFile::ReadOnly | QFile::Truncate))
+    {
+        QTextStream out(&data);
+        while ( !out.atEnd() )
+        {
+            line = out.readLine();
+            if ( line.indexOf("export LANG") == 0 )
+            {
+                lang = line;
+                lang.replace("export LANG=","");
+            }
+        }
+    }
+    data.close();
+
+    // Convert en_GB to English, es_ES to Spanish...
+    QLocale::setDefault(lang);
+    lang = QLocale::languageToString(QLocale(lang).language());
+
+    // Install language file
+    QTranslator translator;
+    if (!lang.isEmpty() && !langPath.isEmpty())
+    {
+        if (QFile::exists(langPath + lang + ".qm"))
+        {
+            translator.load(langPath + lang);
+            a.installTranslator(&translator);
+        }
+    }
+
+
     QTime t(0,0);
     t.start();
     // TODO: Add a full list of contributors here when we're ready to release.
-    QTextStream out(stdout);
+    /*QTextStream out(stdout);
     out << "Open MediaPlayer, version: " << QApplication::applicationVersion() << " "
         << "Running with PID: " << QApplication::applicationPid() << endl
         << "Copyright (C) 2010-2011 Mohammad Abu-Garbeyyeh" << endl
         << "Licensed under GPLv3" << endl
         << "This program comes with ABSOLUTELY NO WARRANTY" << endl
         << "This is free software, and you are welcome to redistribute it" << endl
-        << "under certain conditions; visit http://www.gnu.org/licenses/gpl.txt for details." << endl;
+        << "under certain conditions; visit http://www.gnu.org/licenses/gpl.txt for details." << endl;*/
     MainWindow w;
 
     if (!QDBusConnection::sessionBus().isConnected()) {
@@ -52,6 +92,6 @@ int main(int argc, char *argv[])
 #else
     w.show();
 #endif
-    out << QString("MediaPlayer startup took %1 ms").arg(t.elapsed()) << endl;
+    //out << QString("MediaPlayer startup took %1 ms").arg(t.elapsed()) << endl;
     return a.exec();
 }

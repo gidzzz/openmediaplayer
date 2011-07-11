@@ -6,6 +6,11 @@
 #include <QtDBus>
 #include <QTimer>
 
+#include <QNetworkAccessManager>
+#include <QUrl>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+
 #include "mirror.h"
 #include "cqgraphicsview.h"
 #include "ui_nowplayingwindow.h"
@@ -39,8 +44,12 @@ class NowPlayingWindow : public QMainWindow
 public:
     explicit NowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~NowPlayingWindow();
+    QString albuminfolder;
+    QNetworkAccessManager* data;
+    QString TEartist, TEalbum, TEtitle, TEid;
 
 public slots:
+    void reloadLyricsFromFile();
     void onSongSelected(int, int, QString, QString, QString, int);
     void setAlbumImage(QString);
     void onShuffleButtonToggled(bool);
@@ -84,6 +93,13 @@ private:
 #endif
 
 private slots:
+    QString cleanItem(QString data = "");
+    void on_lyricsText_customContextMenuRequested(QPoint pos);
+    void downloaded(QNetworkReply *reply);
+    void on_view_customContextMenuRequested(QPoint pos);
+    void changeArt();
+    void editLyrics();
+    void reloadLyrics();
     void toggleVolumeSlider();
     void showFMTXDialog();
     void toggleList();
@@ -106,6 +122,7 @@ private slots:
     void onPreviousButtonClicked();
     void updatePlaylist();
 #endif
+    void editTags();
     void metadataChanged(QString name, QVariant value);
     void volumeWatcher();
     void onRepeatButtonToggled(bool);

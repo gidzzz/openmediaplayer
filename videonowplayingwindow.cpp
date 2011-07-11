@@ -228,7 +228,8 @@ void VideoNowPlayingWindow::stateChanged(int state)
 
 void VideoNowPlayingWindow::orientationChanged()
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    //QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    QRect screenGeometry = QRect(0,0,800,480);
     ui->controlOverlay->setGeometry((screenGeometry.width() / 2)-(ui->controlOverlay->width()/2),
                                     (screenGeometry.height() / 2)-(ui->controlOverlay->height()/2),
                                     ui->controlOverlay->width(), ui->controlOverlay->height());
@@ -265,7 +266,8 @@ void VideoNowPlayingWindow::onLandscapeMode()
     ui->deleteButton->show();
     ui->shareButton->show();
     ui->volumeButton->show();
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    //QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    QRect screenGeometry = QRect(0,0,800,480);
     ui->wmCloseButton->setIconSize(QSize(112, 56));
     ui->wmCloseButton->setGeometry(screenGeometry.width()-112, 0, 112, 56);
     ui->controlLayout->setDirection(QBoxLayout::LeftToRight);

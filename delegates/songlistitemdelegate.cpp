@@ -45,29 +45,29 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QColor gray;
         gray = QColor(156, 154, 156);
 
-        if( QApplication::desktop()->width() > QApplication::desktop()->height() )
-        {
-            // Landscape
+
             r = option.rect;
             f.setPointSize(18);
+            QFontMetrics fm(f);
             painter->setFont(f);
-            if (valueText.isEmpty()) {
-                if (index.data(Qt::UserRole).toBool()) {
-                    painter->setPen(QPen(option.palette.highlight().color()));
-                    painter->drawText(r.left(), r.top(), r.width(), r.height(), Qt::AlignCenter, songName, &r);
-                } else {
-                    painter->drawText(30, r.top(), r.width()-120, r.height(), Qt::AlignVCenter|Qt::AlignLeft, songName, &r);
-                }
-            } else
-                painter->drawText(30, r.top()+5, r.width()-120, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+            int pf = fm.width(songLength);
+            songName = fm.elidedText(songName, Qt::ElideRight, r.width()-pf-40);
+
+            if (valueText.isEmpty())
+                painter->drawText(15, r.top(), r.width()-pf, r.height(), Qt::AlignVCenter|Qt::AlignLeft, songName, &r);
+            else
+                painter->drawText(15, r.top()+5, r.width()-pf, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
             r = option.rect;
             f.setPointSize(13);
             painter->setFont(f);
             r.setBottom(r.bottom()-10);
             painter->setPen(QPen(gray));
+
+            QFontMetrics fm2(f);
+            valueText = fm2.elidedText(valueText, Qt::ElideRight, r.width()-pf-40);
             if (!index.data(Qt::UserRole).toBool() && !valueText.isNull() && !valueText.isEmpty())
-                painter->drawText(30, r.top(), r.width()-120, r.height(), Qt::AlignBottom|Qt::AlignLeft, valueText, &r);
+                painter->drawText(15, r.top(), r.width()-pf, r.height(), Qt::AlignBottom|Qt::AlignLeft, valueText, &r);
             painter->setPen(defaultPen);
 
             if (!songLength.isEmpty()) {
@@ -77,39 +77,7 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
                 painter->setFont(f);
                 painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
             }
-        } else {
-            // Portrait
-            r = option.rect;
-            f.setPointSize(18);
-            painter->setFont(f);
-            if (valueText.isEmpty()) {
-                if (index.data(Qt::UserRole).toBool()) {
-                    painter->setPen(QPen(option.palette.highlight().color()));
-                    painter->drawText(r.left(), r.top(), r.width(), r.height(), Qt::AlignCenter, songName, &r);
-                } else {
-                    painter->drawText(r.left()+5, r.top(), r.width()-90, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
-                }
-            } else
-                painter->drawText(r.left()+5, r.top()+5, r.width()-90, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
-            r = option.rect;
-            f.setPointSize(13);
-            painter->setFont(f);
-            r.setBottom(r.bottom()-10);
-            painter->setPen(QPen(gray));
-            if (!index.data(Qt::UserRole).toBool() && !valueText.isNull() && !valueText.isEmpty())
-                painter->drawText(r.left()+5, r.top(), r.width()-90, r.height(), Qt::AlignBottom|Qt::AlignLeft, valueText, &r);
-            painter->setPen(defaultPen);;
-
-            if (!songLength.isEmpty()) {
-                r = option.rect;
-                r.setRight(r.right());
-                f.setPointSize(18);
-                painter->setFont(f);
-                painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
-            }
-
-        }
         painter->restore();
 }
 

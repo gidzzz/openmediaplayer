@@ -20,20 +20,24 @@
 
 void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    // Translator doesn't load here. I don't know why...
+
     QString artistName = index.data(UserRoleSongName).toString();
     QString albumSongCount;
     QPixmap albumArt;
     albumSongCount.append(index.data(UserRoleAlbumCount).toString() + " ");
-    if(index.data(UserRoleAlbumCount).toInt() != 1)
+    /*if(index.data(UserRoleAlbumCount).toInt() != 1)
         albumSongCount.append(tr("albums"));
     else
-        albumSongCount.append(tr("album"));
+        albumSongCount.append(tr("album"));*/
+    albumSongCount.append(index.data(Qt::UserRole+51).toString());
     albumSongCount.append(", ");
     albumSongCount.append(index.data(UserRoleSongCount).toString() + " ");
-    if(index.data(UserRoleSongCount).toInt() != 1)
+    /*if(index.data(UserRoleSongCount).toInt() != 1)
         albumSongCount.append(tr("songs"));
     else
-        albumSongCount.append(tr("song"));
+        albumSongCount.append(tr("song"));*/
+    albumSongCount.append(index.data(Qt::UserRole+50).toString());
     if(!index.data(UserRoleAlbumArt).isNull())
         albumArt = QPixmap(index.data(UserRoleAlbumArt).toString());
     else
@@ -56,42 +60,22 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     QColor gray;
     gray = QColor(156, 154, 156);
 
-    if( QApplication::desktop()->width() > QApplication::desktop()->height() )
-    {
-        // Landscape
-        r = option.rect;
-        f.setPointSize(18);
-        painter->setFont(f);
-        painter->drawText(30, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
+    r = option.rect;
+    f.setPointSize(18);
+    painter->setFont(f);
+    painter->drawText(15, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
 
-        r = option.rect;
-        f.setPointSize(13);
-        painter->setFont(f);
-        r.setBottom(r.bottom()-10);
-        painter->setPen(QPen(gray));
-        painter->drawText(30, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
-        painter->setPen(defaultPen);;
+    r = option.rect;
+    f.setPointSize(13);
+    painter->setFont(f);
+    r.setBottom(r.bottom()-10);
+    painter->setPen(QPen(gray));
+    painter->drawText(15, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
+    painter->setPen(defaultPen);;
 
-        r = option.rect;
-        painter->drawPixmap(r.right()-70, r.top()+4, 64, 64, albumArt);
+    r = option.rect;
+    painter->drawPixmap(r.right()-70, r.top()+3, 64, 64, albumArt);
 
-    } else {
-        // Portrait
-        r = option.rect;
-        f.setPointSize(18);
-        painter->setFont(f);
-        painter->drawText(r.left()+5, r.top()+5, r.width()-70, r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
-
-        r = option.rect;
-        f.setPointSize(13);
-        painter->setFont(f);
-        r.setBottom(r.bottom()-10);
-        painter->setPen(QPen(gray));
-        painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
-        painter->setPen(defaultPen);;
-        r = option.rect;
-        painter->drawPixmap(r.right()-64, r.top()+4, 64, 64, albumArt);
-    }
     painter->restore();
 }
 

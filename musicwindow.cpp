@@ -671,6 +671,9 @@ void MusicWindow::listPlaylists()
             listItem->setData(UserRoleSongCount, playlistCount);
             QString valueText = QString::number(playlistCount) + " ";
 
+            if ( playlistCount > 1 ) listItem->setData(Qt::UserRole+50, tr("songs"));
+            else listItem->setData(Qt::UserRole+50, tr("song"));
+
             if (playlistCount == 1)
                 valueText.append(tr("song"));
             else
@@ -891,6 +894,12 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
     item->setData(UserRoleSongName, title);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
+
+    if ( songCount > 1 ) item->setData(Qt::UserRole+50, tr("songs"));
+    else item->setData(Qt::UserRole+50, tr("song"));
+    if ( albumCount > 1 ) item->setData(Qt::UserRole+51, tr("albums"));
+    else item->setData(Qt::UserRole+51, tr("album"));
+
     item->setData(UserRoleObjectID, objectId);
     ui->artistList->addItem(item);
     if(!error.isEmpty())
@@ -948,6 +957,9 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
     item->setData(UserRoleSongCount, songCount);
     item->setText(albumTitle);
 
+    if ( songCount > 1 ) item->setData(Qt::UserRole+50, tr("songs"));
+    else item->setData(Qt::UserRole+50, tr("song"));
+
     ui->albumList->addItem(item);
     if(!error.isEmpty())
         qDebug() << error;
@@ -997,6 +1009,11 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     item->setData(UserRoleArtistCount, artistCount);
     item->setData(UserRoleAlbumCount, albumCount);
     item->setData(UserRoleObjectID, objectId);
+
+    if ( songCount > 1 ) item->setData(Qt::UserRole+50, tr("songs"));
+    else item->setData(Qt::UserRole+50, tr("song"));
+    if ( albumCount > 1 ) item->setData(Qt::UserRole+51, tr("albums"));
+    else item->setData(Qt::UserRole+51, tr("album"));
 
     valueText.append(QString::number(songCount));
     valueText.append(" ");

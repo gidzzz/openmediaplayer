@@ -37,37 +37,23 @@ void SingleAlbumViewDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         }
         QFont f = painter->font();
 
-        if( QApplication::desktop()->width() > QApplication::desktop()->height() )
-        {
-            // Landscape
-            r = option.rect;
-            r.setLeft(r.left()+30);
-            r.setRight(r.right()-60);
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r, Qt::AlignVCenter|Qt::AlignLeft, songName, &r);
+        r = option.rect;
+        f.setPointSize(18);
+        QFontMetrics fm(f);
+        painter->setFont(f);
+        int pf = fm.width(songLength);
+        songName = fm.elidedText(songName, Qt::ElideRight, r.width()-pf-40);
 
-            r = option.rect;
-            r.setRight(r.right()-12);
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
-        } else {
-            // Portrait
-            r = option.rect;
-            f.setPointSize(18);
-            r.setRight(r.right()-70);
-            painter->setFont(f);
-            painter->drawText(r, Qt::AlignVCenter|Qt::AlignLeft, songName, &r);
+        painter->drawText(15, r.top(), r.width()-pf, r.height(), Qt::AlignVCenter|Qt::AlignLeft, songName, &r);
 
-            r = option.rect;
-            r.setRight(r.right());
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
+        r = option.rect;
+        r.setRight(r.right()-12);
+        f.setPointSize(18);
+        painter->setFont(f);
+        painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
 
-        }
         painter->restore();
+
 }
 
 QSize SingleAlbumViewDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const

@@ -8,6 +8,7 @@ QT       += core gui dbus declarative opengl network
 
 TARGET = mediaplayer
 TEMPLATE = app
+TRANSLATIONS = mediaplayer.ts
 
 DEFINES += MAFW
 INCLUDEPATH += /usr/lib/madde/linux-x86_64/sysroots/meego-core-armv7l-madde-sysroot-1.1-fs/usr/include/libmafw/
@@ -34,7 +35,12 @@ SOURCES += main.cpp \
     delegates/thumbnailitemdelegate.cpp \
     singlegenreview.cpp \
     singleplaylistview.cpp \
-    aboutwindow.cpp
+    aboutwindow.cpp \
+    home.cpp \
+    freqdlg.cpp \
+    delegates/maintdelegate.cpp \
+    editlyrics.cpp \
+    tagwindow.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -59,7 +65,13 @@ HEADERS  += mainwindow.h \
     delegates/thumbnailitemdelegate.h \
     singlegenreview.h \
     singleplaylistview.h \
-    aboutwindow.h
+    aboutwindow.h \
+    home.h \
+    texteditautoresizer.h \
+    freqdlg.h \
+    delegates/maintdelegate.h \
+    editlyrics.h \
+    tagwindow.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
@@ -77,7 +89,11 @@ FORMS    += mainwindow.ui \
     entertainmentview.ui \
     singlegenreview.ui \
     singleplaylistview.ui \
-    aboutwindow.ui
+    aboutwindow.ui \
+    home.ui \
+    freqdlg.ui \
+    editlyrics.ui \
+    tagwindow.ui
 
 symbian {
     TARGET.UID3 = 0xedf29700
@@ -93,11 +109,9 @@ unix:!symbian {
         PKGCONFIG += dbus-1
         DEFINES += MAFW
         SOURCES +=     maemo5deviceevents.cpp \
-            fmtxdialog.cpp \
-            freqpickselector.cpp
+            fmtxdialog.cpp
         HEADERS +=    maemo5deviceevents.h \
-            fmtxdialog.h \
-            freqpickselector.h
+            fmtxdialog.h
         include(external-includepaths.pro)
     }
     target.path = /usr/local/bin
@@ -125,6 +139,9 @@ contains(DEFINES, MAFW) {
             mafw/mafwplaylistmanageradapter.h \
             mafw/mafwadapterfactory.h
 }
+
+LIBS += -lhildonthumbnail
+PKGCONFIG += glib-2.0 gtk+-2.0
 
 OTHER_FILES += \
     entertainmentview.qml \

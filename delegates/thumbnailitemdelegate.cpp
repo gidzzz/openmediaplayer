@@ -43,15 +43,20 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     gray = QColor(156, 154, 156);
 
     r = option.rect;
-    painter->drawPixmap(r.x() + ((r.width()/2)-(128/2)), r.y(), 128, 128, thumbnail);
+    painter->drawPixmap(r.x() + ((r.width()/2)-(128/2)), r.y()+3, 128, 128, thumbnail);
 
     r = option.rect;
     r.setLeft(r.left()+10);
     r.setRight(r.right()-10);
-    painter->drawText(r.x(), r.y()+133, r.width(), r.height(), Qt::AlignHCenter, title, &r);
+
+    QFontMetrics fm(f);
+    title = fm.elidedText(title, Qt::ElideRight, 138);
+
+    painter->drawText(r.x(), r.y()+134, r.width(), r.height(), Qt::AlignHCenter, title, &r);
 
     r = option.rect;
     painter->setPen(QPen(gray));
+    duration = fm.elidedText(duration, Qt::ElideRight, 138);
     painter->drawText(r.x(), r.y()+ (142 + painter->font().pointSize()), r.width(), r.height(), Qt::AlignHCenter, duration, &r);
     painter->setPen(defaultPen);
 

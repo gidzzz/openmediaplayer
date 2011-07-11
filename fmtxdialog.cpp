@@ -21,14 +21,15 @@
 FMTXDialog::FMTXDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FMTXDialog),
-    selector(new FreqPickSelector(this))
+    selector(new FreqDlg(this))
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
+
 #ifdef Q_WS_MAEMO_5
     freqButton = new QMaemo5ValueButton(" " + QString(dgettext("osso-fm-transmitter", "fmtx_fi_frequency")), this);
     freqButton->setValueLayout(QMaemo5ValueButton::ValueBesideText);
-    freqButton->setPickSelector(selector);
+    //freqButton->setPickSelector(selector);
     ui->fmtxCheckbox->setText(dgettext("osso-fm-transmitter", "fmtx_fi_fmtx_on_off"));
     this->setWindowTitle(dgettext("osso-fm-transmitter", "fmtx_ti_fm_transmitter"));
 #else
@@ -49,15 +50,28 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
         ui->fmtxCheckbox->setText(dgettext("osso-fm-transmitter", "fmtx_ni_disabled"));
 #endif
     }
+    ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
+    connect(freqButton, SIGNAL(clicked()), this, SLOT(showDialog()));
     connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
     connect(ui->fmtxCheckbox, SIGNAL(clicked()), this, SLOT(onCheckboxClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    freqButton->setValueText(selector->currentValueText());
 }
 
 FMTXDialog::~FMTXDialog()
 {
     delete ui;
+}
+
+void FMTXDialog::showDialog()
+{
+    selector->exec();
+    if ( selector->res != "" )
+    {
+        //qDebug() << selector->res;
+        freqButton->setValueText(selector->res);
+    }
 }
 
 void FMTXDialog::showEvent(QShowEvent *event)

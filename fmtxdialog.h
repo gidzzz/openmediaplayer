@@ -9,7 +9,7 @@
          Join #maemo-foss on FreeNode for more information. */
 
 #include "ui_fmtxdialog.h"
-#include "freqpickselector.h"
+#include "freqdlg.h"
 
 namespace Ui {
     class FMTXDialog;
@@ -24,7 +24,7 @@ class FMTXDialog : public QDialog
 #else
     QPushButton *freqButton;
 #endif
-    FreqPickSelector *selector;
+    FreqDlg *selector;
     GConfItem *fmtxState;
     GConfItem *fmtxFrequency;
 
@@ -40,6 +40,7 @@ private:
     void showErrorNote(QString error);
 
 private slots:
+    void showDialog();
     void onSaveClicked();
     void onStateChanged();
     void orientationChanged();

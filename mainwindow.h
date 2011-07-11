@@ -56,6 +56,7 @@ private:
     void closeEvent(QCloseEvent *);
     bool shuffleNowPlayingWindowCreated;
 
+    void loadThemeIcons();
     void setButtonIcons();
     void connectSignals();
     void setLabelText();

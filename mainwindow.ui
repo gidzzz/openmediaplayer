@@ -296,50 +296,34 @@ p, li { white-space: pre-wrap; }
     </property>
     <item>
      <property name="text">
-      <string>Music</string>
+      <string> </string>
      </property>
      <property name="statusTip">
       <string>songs_button</string>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png</iconset>
-     </property>
     </item>
     <item>
      <property name="text">
-      <string>Videos</string>
+      <string> </string>
      </property>
      <property name="statusTip">
       <string>videos_button</string>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png</iconset>
-     </property>
     </item>
     <item>
      <property name="text">
-      <string>Internet Radio</string>
+      <string> </string>
      </property>
      <property name="statusTip">
       <string>radio_button</string>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png</iconset>
-     </property>
     </item>
     <item>
      <property name="text">
-      <string>Shuffle all songs</string>
+      <string> </string>
      </property>
      <property name="statusTip">
       <string>shuffle_button</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png</normaloff>../../../../../../../usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png</iconset>
      </property>
     </item>
    </widget>
@@ -441,7 +425,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">

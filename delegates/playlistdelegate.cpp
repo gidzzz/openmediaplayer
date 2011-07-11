@@ -52,51 +52,33 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         QColor gray;
         gray = QColor(156, 154, 156);
 
-        if( QApplication::desktop()->width() > QApplication::desktop()->height() )
-        {
-            // Landscape
-            r = option.rect;
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r.left(), r.top()+5, r.width()-90, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+        r = option.rect;
+        f.setPointSize(18);
+        painter->setFont(f);
+        QFontMetrics fm(f);
+        painter->setFont(f);
+        int pf = fm.width(songLength);
+        songName = fm.elidedText(songName, Qt::ElideRight, r.width()-pf-40);
+        painter->drawText(r.left()+12, r.top()+5, r.width()-pf-40, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 
-            r = option.rect;
-            f.setPointSize(13);
-            painter->setFont(f);
-            r.setBottom(r.bottom()-10);
-            painter->setPen(QPen(gray));
-            painter->drawText(r.left(), r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
-            painter->setPen(defaultPen);;
+        r = option.rect;
+        f.setPointSize(13);
+        painter->setFont(f);
+        r.setBottom(r.bottom()-10);
+        painter->setPen(QPen(gray));
 
-            r = option.rect;
-            r.setRight(r.right()-12);
-            r.setTop(r.top()+5);
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r, Qt::AlignTop|Qt::AlignRight, songLength, &r);
-        } else {
-            // Portrait
-            r = option.rect;
-            f.setPointSize(18);
-            painter->setFont(f);
-            painter->drawText(r.left()+5, r.top()+5, r.width()-90, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
+        QFontMetrics fm2(f);
+        songArtistAlbum = fm2.elidedText(songArtistAlbum, Qt::ElideRight, r.width()-40);
+        painter->drawText(r.left()+12, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
+        painter->setPen(defaultPen);;
 
-            r = option.rect;
-            f.setPointSize(13);
-            painter->setFont(f);
-            r.setBottom(r.bottom()-10);
-            painter->setPen(QPen(gray));
-            painter->drawText(r.left()+5, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, songArtistAlbum, &r);
-            painter->setPen(defaultPen);
+        r = option.rect;
+        r.setRight(r.right()-12);
+        r.setTop(r.top()+5);
+        f.setPointSize(18);
+        painter->setFont(f);
+        painter->drawText(r, Qt::AlignTop|Qt::AlignRight, songLength, &r);
 
-            r = option.rect;
-            r.setRight(r.right()-12);
-            f.setPointSize(18);
-            r.setTop(r.top()+5);
-            painter->setFont(f);
-            painter->drawText(r, Qt::AlignTop|Qt::AlignRight, songLength, &r);
-
-        }
         painter->restore();
 }
 

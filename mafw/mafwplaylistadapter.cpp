@@ -149,6 +149,7 @@ void MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist)
                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                  MAFW_METADATA_KEY_ALBUM,
                                                  MAFW_METADATA_KEY_ARTIST,
+                                                 MAFW_METADATA_KEY_URI,
                                                  MAFW_METADATA_KEY_DURATION),
                                 MafwPlaylistAdapter::get_items_cb,
                                 this, NULL);

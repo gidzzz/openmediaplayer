@@ -32,6 +32,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
         if (QSettings().value("FMTX/overrideChecks").toBool())
             ui->fmtxCheckBox->setChecked(true);
     }
+    //ui->buttonBox->button(QAbstractButton::)
     this->orientationChanged();
 }
 
