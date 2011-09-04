@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EntertainmentView</class>
- <widget class="QMainWindow" name="EntertainmentView">
+ <class>CarView</class>
+ <widget class="QMainWindow" name="CarView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Entertainment View</string>
+   <string>Car View</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -28,7 +28,7 @@
       </property>
       <property name="source">
        <url>
-        <string>file:///opt/mediaplayer/qml/entertainmentview/entertainmentview.qml</string>
+        <string>file:///opt/mediaplayer/qml/carview/carview.qml</string>
        </url>
       </property>
      </widget>

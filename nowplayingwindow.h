@@ -17,6 +17,7 @@
 #include "includes.h"
 #include "delegates/playlistdelegate.h"
 #include "entertainmentview.h"
+#include "carview.h"
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
@@ -60,6 +61,7 @@ public slots:
 private:
     Ui::NowPlayingWindow *ui;
     EntertainmentView *entertainmentView;
+    CarView *carView;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -132,9 +134,12 @@ private slots:
     void onPositionSliderMoved(int position);
     void onContextMenuRequested(const QPoint &point);
     void onShareClicked();
-    void showEntertainmentview();
+    void showEntertainmentView();
     void updateEntertainmentViewMetadata();
     void nullEntertainmentView();
+    void showCarView();
+    void updateCarViewMetadata();
+    void nullCarView();
     void savePlaylist();
     void onSavePlaylistAccepted();
     void onDeleteFromNowPlaying();

@@ -32,6 +32,7 @@ SOURCES += main.cpp \
     singleartistview.cpp \
     settingsdialog.cpp \
     entertainmentview.cpp \
+    carview.cpp \
     delegates/thumbnailitemdelegate.cpp \
     singlegenreview.cpp \
     singleplaylistview.cpp \
@@ -62,6 +63,7 @@ HEADERS  += mainwindow.h \
     singleartistview.h \
     settingsdialog.h \
     entertainmentview.h \
+    carview.h \
     delegates/thumbnailitemdelegate.h \
     singlegenreview.h \
     singleplaylistview.h \
@@ -87,6 +89,7 @@ FORMS    += mainwindow.ui \
     singleartistview.ui \
     settingsdialog.ui \
     entertainmentview.ui \
+    carview.ui \
     singlegenreview.ui \
     singleplaylistview.ui \
     aboutwindow.ui \
@@ -144,11 +147,27 @@ LIBS += -lhildonthumbnail
 PKGCONFIG += glib-2.0 gtk+-2.0
 
 OTHER_FILES += \
-    entertainmentview.qml \
-    Slider.qml \
+    qml_entertainmentview/entertainmentview.qml \
+    qml_entertainmentview/Slider.qml \
+    qml_carview/carview.qml \
+    qml_carview/Button.qml \
+    qml_carview/MetadataText.qml \
+    qml_carview/Playlist.qml \
+    qml_carview/Slider.qml \
+    qml_carview/SongView.qml \
     qtc_packaging/meego.spec
 
-qmlfiles.files += entertainmentview.qml
-qmlfiles.files += Slider.qml
-qmlfiles.path = /opt/mediaplayer/qml/
-INSTALLS += qmlfiles
+qml_entertainmentview.files += qml_entertainmentview/entertainmentview.qml
+qml_entertainmentview.files += qml_entertainmentview/Slider.qml
+qml_entertainmentview.path = /opt/mediaplayer/qml/entertainmentview/
+
+qml_carview.files += qml_carview/carview.qml
+qml_carview.files += qml_carview/Button.qml
+qml_carview.files += qml_carview/MetadataText.qml
+qml_carview.files += qml_carview/Playlist.qml
+qml_carview.files += qml_carview/Slider.qml
+qml_carview.files += qml_carview/SongView.qml
+qml_carview.path = /opt/mediaplayer/qml/carview/
+
+INSTALLS += qml_entertainmentview
+INSTALLS += qml_carview

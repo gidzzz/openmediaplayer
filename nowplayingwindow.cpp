@@ -51,6 +51,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     newsong = 1;
     albumArtScene = new QGraphicsScene(ui->view);
     entertainmentView = 0;
+    carView = 0;
 
     ui->volSliderWidget->hide();
     ui->lyrics->hide();
@@ -380,7 +381,8 @@ void NowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
     connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentview()));
+    connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentView()));
+    connect(ui->actionCar_view, SIGNAL(triggered()), this, SLOT(showCarView()));
 #ifdef Q_WS_MAEMO_5
     connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 #endif
@@ -622,6 +624,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         }
 
         this->updateEntertainmentViewMetadata();
+        this->updateCarViewMetadata();
 
         if(!error.isNull() && !error.isEmpty())
         qDebug() << error;
@@ -814,7 +817,7 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
     if (!ui->songProgress->isSliderDown())
         ui->currentPositionLabel->setText(t.toString("mm:ss"));
 
-    if (this->songDuration != 0 && this->songDuration != -1 && entertainmentView == 0) {
+    if (this->songDuration != 0 && this->songDuration != -1 && entertainmentView == 0 && carView == 0) {
 #ifdef DEBUG
         qDebug() << "Current position: " << position;
         qDebug() << "Song Length: " << this->songDuration;
@@ -1107,7 +1110,7 @@ void NowPlayingWindow::onShareClicked()
 #endif
 }
 
-void NowPlayingWindow::showEntertainmentview()
+void NowPlayingWindow::showEntertainmentView()
 {
     entertainmentView = new EntertainmentView(this, mafwFactory);
     entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
@@ -1117,6 +1120,18 @@ void NowPlayingWindow::showEntertainmentview()
     connect(entertainmentView, SIGNAL(destroyed()), this, SLOT(nullEntertainmentView()));
     this->updateEntertainmentViewMetadata();
     entertainmentView->showFullScreen();
+}
+
+void NowPlayingWindow::showCarView()
+{
+    carView = new CarView(this, mafwFactory);
+    carView->setAttribute(Qt::WA_DeleteOnClose);
+    for (int i = 0; i < ui->songPlaylist->count(); i++) {
+        carView->addItemToPlaylist(ui->songPlaylist->item(i));
+    }
+    connect(carView, SIGNAL(destroyed()), this, SLOT(nullCarView()));
+    this->updateCarViewMetadata();
+    carView->showFullScreen();
 }
 
 void NowPlayingWindow::updateEntertainmentViewMetadata()
@@ -1131,9 +1146,29 @@ void NowPlayingWindow::updateEntertainmentViewMetadata()
     }
 }
 
+void NowPlayingWindow::updateCarViewMetadata()
+{
+    if (carView) {
+        carView->setMetadata(ui->songTitleLabel->text(),
+                                       ui->albumNameLabel->text(),
+                                       ui->artistLabel->text(),
+                                       this->albumArtUri,
+                                       this->songDuration);
+        carView->setCurrentRow(ui->songPlaylist->row(ui->songPlaylist->currentItem()));
+    }
+}
+
 void NowPlayingWindow::nullEntertainmentView()
 {
     entertainmentView = 0;
+#ifdef MAFW
+    mafwrenderer->getPosition();
+#endif
+}
+
+void NowPlayingWindow::nullCarView()
+{
+    carView = 0;
 #ifdef MAFW
     mafwrenderer->getPosition();
 #endif

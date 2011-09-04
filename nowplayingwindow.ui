@@ -875,6 +875,7 @@ border: none;
     <addaction name="actionClear_now_playing"/>
     <addaction name="actionSave_playlist"/>
     <addaction name="actionEntertainment_view"/>
+    <addaction name="actionCar_view"/>
    </widget>
    <addaction name="menuNow_playing_menu"/>
   </widget>
@@ -896,6 +897,11 @@ border: none;
   <action name="actionEntertainment_view">
    <property name="text">
     <string>Entertainment view</string>
+   </property>
+  </action>
+  <action name="actionCar_view">
+   <property name="text">
+    <string>Car view</string>
    </property>
   </action>
  </widget>
