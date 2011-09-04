@@ -141,8 +141,10 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
         else
-            if (window == 0)
+            if (window == 0) {
                 window = new NowPlayingWindow(this, mafwFactory);
+                emit nowPlayingWindowCreated();
+            }
         if (window == 0)
             window->setAttribute(Qt::WA_DeleteOnClose);
         if (playlistName == "FmpVideoPlaylist")
@@ -163,6 +165,7 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
 void NowPlayingIndicator::onWindowDestroyed()
 {
     window = 0;
+    emit nowPlayingWindowDestroyed();
 }
 
 #ifdef MAFW

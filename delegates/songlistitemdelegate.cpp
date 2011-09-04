@@ -45,7 +45,6 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QColor gray;
         gray = QColor(156, 154, 156);
 
-
             r = option.rect;
             f.setPointSize(18);
             QFontMetrics fm(f);
@@ -53,8 +52,13 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             int pf = fm.width(songLength);
             songName = fm.elidedText(songName, Qt::ElideRight, r.width()-pf-40);
 
+// gidzzz TODO: optimal pen save/restore
             if (valueText.isEmpty())
-                painter->drawText(15, r.top(), r.width()-pf, r.height(), Qt::AlignVCenter|Qt::AlignLeft, songName, &r);
+            {
+                QColor green(0, 255, 0);
+                painter->setPen(QPen(green));
+                painter->drawText(15, r.top(), r.width()-pf, r.height(), Qt::AlignVCenter|Qt::AlignCenter, songName, &r);
+            }
             else
                 painter->drawText(15, r.top()+5, r.width()-pf, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);
 

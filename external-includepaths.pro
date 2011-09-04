@@ -15,6 +15,7 @@
 
 # Under Linux (where john is the username):
 #QTCREATORINSTALLPATH = /home/john/NokiaQtSDK
+QTCREATORINSTALLPATH = /usr/local
 
 count(QTCREATORINSTALLPATH, 0) {
     error("You need to set the Qt Creator install path in external-includepaths.pro")

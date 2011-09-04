@@ -176,7 +176,7 @@ void NowPlayingWindow::downloaded(QNetworkReply *reply)
 
     if (reply->error() != QNetworkReply::NoError) {
         //qDebug() << "error: " << reply->error();
-        ui->lyricsText->setText(tr("No lyrics founded"));
+        ui->lyricsText->setText(tr("Lyrics not found."));
         ui->lyricsText->setWhatsThis("");
     } else {
         QString str = QString::fromUtf8(reply->readAll());
@@ -594,7 +594,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
                 } else
                 {
-                    QString line1 = tr("There is not an active Internet connection");
+                    QString line1 = tr("There is no active Internet connection.");
                     QString line2 = tr("Please connect to use this function.");
                     ui->lyricsText->setText(line1+"\n"+line2);
                 }

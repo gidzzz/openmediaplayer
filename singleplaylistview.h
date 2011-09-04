@@ -32,6 +32,10 @@ public:
     void browseAutomaticPlaylist(QString filter, QString sorting, int maxCount);
 #endif
 
+public slots:
+    void lockView();
+    void unlockView();
+
 protected:
     void keyReleaseEvent(QKeyEvent *e);
 
@@ -52,6 +56,7 @@ private:
     uint browsePlaylistId;
 #endif
     void setSongCount(int count);
+    bool lock;
 
 private slots:
     void orientationChanged();

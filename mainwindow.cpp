@@ -131,7 +131,7 @@ void MainWindow::loadThemeIcons()
     if ( QFileInfo("/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_radio.png").exists() )
         radioIcon = "/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_radio.png";
     else
-        radioIcon = "/usr/share/icons/hicolo/164x164/hildon/mediaplayer_main_button_radio.png";
+        radioIcon = "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png";
 
     if ( QFileInfo("/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_shuffle.png").exists() )
         shuffleIcon = "/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_shuffle.png";
