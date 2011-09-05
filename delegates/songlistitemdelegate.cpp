@@ -52,7 +52,6 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             int pf = fm.width(songLength);
             songName = fm.elidedText(songName, Qt::ElideRight, r.width()-pf-40);
 
-// gidzzz TODO: optimal pen save/restore
             if (valueText.isEmpty())
             {
                 QColor green(0, 255, 0);

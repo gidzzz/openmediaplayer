@@ -132,9 +132,9 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
     } else if (row > 5) {
         SinglePlaylistView *window = new SinglePlaylistView(this, mafwFactory);
         window->setWindowTitle(item->text());
-        if (item->data(UserRoleObjectID).isNull())
+        if (item->data(UserRoleObjectID).isNull()) // saved playlist case
             window->browsePlaylist(MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist(item->text())));
-        else
+        else // imported playlist case
             window->browseObjectId(item->data(UserRoleObjectID).toString());
         window->show();
         connect(window, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
@@ -170,6 +170,12 @@ void MusicWindow::connectSignals()
 
 void MusicWindow::onContextMenuRequested(QPoint point)
 {
+    QString valueText = currentList()->indexAt(point).data(UserRoleValueText).toString();
+    if (this->currentList() == ui->playlistList && valueText.isEmpty()) {
+        qDebug() << "suppressing context menu";
+        return;
+    }
+
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
@@ -743,7 +749,7 @@ void MusicWindow::listImportedPlaylists()
                                                                 0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void MusicWindow::browseAutomaticPlaylists(uint browseId, int, uint, QString objectId, GHashTable *metadata, QString)
+void MusicWindow::browseAutomaticPlaylists(uint browseId, int, uint, QString objectId, GHashTable *metadata, QString) // not really, imported playlists too
 {
     GValue *v;
     if (browseId == this->browseRecentlyAddedId) {
@@ -1116,7 +1122,100 @@ void MusicWindow::onAddToNowPlaying()
         connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                 this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
     }
+    else if (this->currentList() == ui->playlistList) {
+#ifdef Q_WS_MAEMO_5
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
+        QListWidgetItem *item = this->currentList()->currentItem();
+
+        qDebug() << "item id: " << item->data(UserRoleObjectID).toString();
+
+        int row = this->currentList()->row(item);
+        if (row < 5) { // automatic playlist case
+            QString filter;
+            QString sorting;
+            int limit = 30; // TODO: user-configurable?
+            switch (row) {
+                case 1: filter = ""; sorting = "-added"; break;
+                case 2: filter = "(play-count>0)"; sorting = "-last-played"; break;
+                case 3: filter = "(play-count>0)"; sorting = "-play-count,+title"; break;
+                case 4: filter = "(play-count=)"; sorting = "";
+            }
+            qDebug() << "connecting MusicWindow to signalSourceBrowseResult";
+            connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+
+            this->addToNowPlayingId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
+                                                                     MAFW_SOURCE_NO_KEYS, 0, limit);
+        }
+        else if (item->data(UserRoleObjectID).isNull()) { // saved playlist case
+            MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist(item->text()));
+            songAddBufferSize = numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
+
+            if (numberOfSongsToAdd > 0) {
+                songAddBuffer = new QString[songAddBufferSize];
+                qDebug() << "connecting MusicWindow to onGetItems";
+                connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
+                    this, SLOT(onGetItems(QString,GHashTable*,guint)));
+                playlist->getItemsOf(mafwplaylist);
+            }
+        }
+        else { // imported playlist case
+            QString objectId = item->data(UserRoleObjectID).toString();
+
+            qDebug() << "connecting MusicWindow to signalSourceBrowseResult";
+            connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+
+            this->addToNowPlayingId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
+                                                                      MAFW_SOURCE_NO_KEYS, 0, MAFW_SOURCE_BROWSE_ALL);
+        }
+    }
+#endif
+}
+
+void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index)
+{
+    qDebug() << "MusicWindow::onGetItems(QString, GHashTable*, guint) | index: " << index;
+    songAddBuffer[index] = objectId;
+    numberOfSongsToAdd--;
+
+    if (numberOfSongsToAdd == 0) {
+        this->notifyOnAddedToNowPlaying(songAddBufferSize);
+
+        qDebug() << "disconnecting MusicWindow from onGetItems";
+        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
+            this, SLOT(onGetItems(QString,GHashTable*,guint)));
+
+        for (int i = 0; i < songAddBufferSize; i++)
+            playlist->appendItem(songAddBuffer[i]);
+
+        delete[] songAddBuffer;
+        songAddBufferSize = 0;
+#ifdef Q_WS_MAEMO_5
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
+    }
+}
+
+void MusicWindow::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString)
+{
+    if (browseId != this->addToNowPlayingId)
+        return;
+
+    qDebug() << "MusicWindow::onGetItems(QString, GHashTable*, guint) | index: " << index;
+    playlist->appendItem(objectId); // when items seem to be delivered in correct order, appending is sufficient
+
+    if (remainingCount == 0) {
+        this->notifyOnAddedToNowPlaying(index+1); // when items are delivered in correct order, index determines operation size
+        qDebug() << "disconnecting MusicWindow from signalSourceBrowseResult";
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+        this->addToNowPlayingId = 0;
+#ifdef Q_WS_MAEMO_5
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
+    }
 }
 
 #ifdef MAFW

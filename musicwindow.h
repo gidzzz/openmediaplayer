@@ -83,6 +83,8 @@ private:
     void fetchUri(QString objectId);
     uint addToNowPlayingId;
     int numberOfSongsToAdd;
+    QString* songAddBuffer;
+    int songAddBufferSize;
 #endif
     void connectSignals();
     void populateMenuBar();
@@ -128,6 +130,8 @@ private slots:
     void onArtistSelected(QListWidgetItem*);
     void onGenreSelected(QListWidgetItem*);
     void onPlaylistSelected(QListWidgetItem*);
+    void onGetItems(QString objectId, GHashTable*, guint index);
+    void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString);
 #endif
     void onAddToNowPlaying();
     void onDeletePlaylistClicked();

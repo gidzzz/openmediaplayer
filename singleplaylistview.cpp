@@ -57,7 +57,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
 
-    //ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
 
     ui->searchWidget->hide();
 
