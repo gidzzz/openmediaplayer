@@ -28,9 +28,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     playlist(factory->getPlaylistAdapter())
 #endif
 {
-    qDebug() << "Unlocking SinglePlaylistView on creation";
-    lock = false;
-
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -40,9 +37,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 #ifdef MAFW
     ui->indicator->setFactory(factory);
 #endif
-
-    connect(ui->indicator, SIGNAL(nowPlayingWindowCreated()), this, SLOT(lockView()));
-    connect(ui->indicator, SIGNAL(nowPlayingWindowDestroyed()), this, SLOT(unlockView()));
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -87,16 +81,17 @@ SinglePlaylistView::~SinglePlaylistView()
 
 void SinglePlaylistView::browsePlaylist(MafwPlaylist *mafwplaylist)
 {
+    qDebug() << "connecting SinglePlaylistView to onGetItems";
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
             this, SLOT(onGetItems(QString,GHashTable*,guint)));
-    this->setSongCount(playlist->getSizeOf(mafwplaylist));
+    this->numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
+    this->setSongCount(numberOfSongsToAdd);
     playlist->getItemsOf(mafwplaylist);
 }
 
 void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guint index)
 {
-    if (lock) return;
-
+    numberOfSongsToAdd--;
     qDebug() << "SinglePlaylistView::onGetItems(QString, GHashTable*, guint)";
     QString title;
     QString artist;
@@ -150,9 +145,15 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         }
         ui->songList->insertItem(position, item);
     }
+
+    if (numberOfSongsToAdd == 0) {
+        qDebug() << "disconnecting SinglePlaylistView from onGetItems";
+        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
+            this, SLOT(onGetItems(QString,GHashTable*,guint)));
 #ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+    }
 }
 
 void SinglePlaylistView::browseObjectId(QString objectId)
@@ -253,9 +254,6 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 
     NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
 
-    lockView();
-    connect(window, SIGNAL(destroyed()), this, SLOT(unlockView()));
-
     window->show();
     window->updatePlaylistState();
 }
@@ -346,9 +344,6 @@ void SinglePlaylistView::onShuffleButtonClicked()
     }
 
     NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
-
-    lockView();
-    connect(window, SIGNAL(destroyed()), this, SLOT(unlockView()));
 
     window->show();
     window->updatePlaylistState();
@@ -496,16 +491,4 @@ void SinglePlaylistView::setSongCount(int count)
         songCount.append(tr("song"));
     shuffleAllButton->setValueText(songCount);
 #endif
-}
-
-void SinglePlaylistView::lockView()
-{
-    qDebug() << "Locking SinglePlaylistView";
-    lock = true;
-}
-
-void SinglePlaylistView::unlockView()
-{
-    qDebug() << "Unlocking SinglePlaylistView";
-    lock = false;
 }

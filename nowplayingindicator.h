@@ -42,8 +42,6 @@ public slots:
 
 signals:
     void clicked();
-    void nowPlayingWindowCreated();
-    void nowPlayingWindowDestroyed();
 
 private:
     Ui::NowPlayingIndicator *ui;

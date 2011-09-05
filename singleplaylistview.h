@@ -32,10 +32,6 @@ public:
     void browseAutomaticPlaylist(QString filter, QString sorting, int maxCount);
 #endif
 
-public slots:
-    void lockView();
-    void unlockView();
-
 protected:
     void keyReleaseEvent(QKeyEvent *e);
 
@@ -54,9 +50,9 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     uint browsePlaylistId;
+    int numberOfSongsToAdd;
 #endif
     void setSongCount(int count);
-    bool lock;
 
 private slots:
     void orientationChanged();
