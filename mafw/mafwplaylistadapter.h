@@ -15,6 +15,7 @@ class MafwPlaylistAdapter : public QObject
 public:
     explicit MafwPlaylistAdapter(QObject *parent = 0, MafwRendererAdapter* mra = 0);
     void clear();
+    void clear(MafwPlaylist *playlist);
     bool isRepeat();
     bool isShuffled();
     bool isPlaylistNull();
@@ -24,6 +25,7 @@ public:
     void insertItem(QString objectId, guint index);
     void appendUri(QString url);
     void appendItem(QString objectId);
+    void appendItem(MafwPlaylist *playlist, QString objectId);
     void removeItem(int index);
     void duplicatePlaylist(QString newName);
     int getSize();

@@ -72,6 +72,9 @@ private slots:
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();
+    void enterEditMode();
+    void leaveEditMode();
+    void saveCurrentPlaylist();
 };
 
 #endif // SINGLEPLAYLISTVIEW_H

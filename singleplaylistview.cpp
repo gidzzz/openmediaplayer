@@ -71,6 +71,10 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
 
+    connect(ui->actionEdit_playlist, SIGNAL(triggered()), this, SLOT(enterEditMode()));
+    connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(leaveEditMode()));
+    ui->menuOptions->removeAction(ui->actionSave_playlist);
+
     this->orientationChanged();
 }
 
@@ -170,7 +174,8 @@ void SinglePlaylistView::browseObjectId(QString objectId)
 
 void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting, int maxCount)
 {
-    ui->menubar->removeAction(ui->actionDelete_playlist);
+    ui->menuOptions->removeAction(ui->actionDelete_playlist);
+    ui->menuOptions->removeAction(ui->actionEdit_playlist);
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
     this->browsePlaylistId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
@@ -338,6 +343,7 @@ void SinglePlaylistView::onShuffleButtonClicked()
         playlist->assignAudioPlaylist();
 
     playlist->clear();
+    playlist->setShuffled(true);
 
     for (int i = 0; i < ui->songList->count(); i++) {
         playlist->appendItem(ui->songList->item(i)->data(UserRoleObjectID).toString());
@@ -351,7 +357,6 @@ void SinglePlaylistView::onShuffleButtonClicked()
     mafwrenderer->gotoIndex(randomIndex);
 
     mafwrenderer->play();
-    mafwrenderer->resume();
 #endif
 
 }
@@ -490,5 +495,40 @@ void SinglePlaylistView::setSongCount(int count)
     else
         songCount.append(tr("song"));
     shuffleAllButton->setValueText(songCount);
+#endif
+}
+
+void SinglePlaylistView::enterEditMode()
+{
+    qDebug() << "entering playlist edit mode";
+    ui->menuOptions->removeAction(ui->actionEdit_playlist);
+    ui->menuOptions->insertAction(ui->actionDelete_playlist, ui->actionSave_playlist);
+
+    ui->songList->setDragEnabled(true);
+    ui->songList->setDragDropMode(QAbstractItemView::InternalMove);
+}
+
+void SinglePlaylistView::leaveEditMode()
+{
+    qDebug() << "leaving playlist edit mode";
+    ui->menuOptions->removeAction(ui->actionSave_playlist);
+    ui->menuOptions->insertAction(ui->actionDelete_playlist, ui->actionEdit_playlist);
+
+    ui->songList->setDragEnabled(false);
+
+    this->saveCurrentPlaylist();
+}
+
+void SinglePlaylistView::saveCurrentPlaylist()
+{
+#ifdef MAFW
+    QString playlistName = this->windowTitle();
+    int songCount = ui->songList->count();
+
+    MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(playlist->mafw_playlist_manager->createPlaylist(playlistName));
+    playlist->clear(targetPlaylist);
+
+    for (int i = 0; i < songCount; i++)
+        playlist->appendItem(targetPlaylist, ui->songList->item(i)->data(UserRoleObjectID).toString());
 #endif
 }

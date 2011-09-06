@@ -35,6 +35,12 @@ void MafwPlaylistAdapter::clear()
         mafw_playlist_clear (this->mafw_playlist, &error);
 }
 
+void MafwPlaylistAdapter::clear(MafwPlaylist *playlist)
+{
+    if(playlist)
+        mafw_playlist_clear (playlist, &error);
+}
+
 bool MafwPlaylistAdapter::isRepeat()
 {
     if(mafw_playlist) {
@@ -93,6 +99,12 @@ void MafwPlaylistAdapter::appendItem(QString objectId)
 {
     if(mafw_playlist)
         mafw_playlist_append_item (this->mafw_playlist, objectId.toUtf8(), &error);
+}
+
+void MafwPlaylistAdapter::appendItem(MafwPlaylist *playlist, QString objectId)
+{
+    if(playlist)
+        mafw_playlist_append_item (playlist, objectId.toUtf8(), &error);
 }
 
 void MafwPlaylistAdapter::removeItem(int index)
