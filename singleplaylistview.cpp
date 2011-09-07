@@ -63,7 +63,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     ui->verticalLayout->addWidget(ui->searchWidget);
 
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
-    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onBrowserContextMenuRequested(QPoint)));
     connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
@@ -361,7 +361,7 @@ void SinglePlaylistView::onShuffleButtonClicked()
 
 }
 
-void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
+void SinglePlaylistView::onBrowserContextMenuRequested(const QPoint &point)
 {
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -369,6 +369,14 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    contextMenu->exec(point);
+}
+
+void SinglePlaylistView::onEditorContextMenuRequested(const QPoint &point)
+{
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
     contextMenu->exec(point);
 }
 
@@ -501,18 +509,28 @@ void SinglePlaylistView::setSongCount(int count)
 void SinglePlaylistView::enterEditMode()
 {
     qDebug() << "entering playlist edit mode";
+
     ui->menuOptions->removeAction(ui->actionEdit_playlist);
     ui->menuOptions->insertAction(ui->actionDelete_playlist, ui->actionSave_playlist);
 
+    disconnect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onBrowserContextMenuRequested(QPoint)));
+    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onEditorContextMenuRequested(QPoint)));
+
+    ui->songList->viewport()->setAcceptDrops(true);
     ui->songList->setDragEnabled(true);
     ui->songList->setDragDropMode(QAbstractItemView::InternalMove);
+    ui->songList->setAutoScrollMargin(120);
 }
 
 void SinglePlaylistView::leaveEditMode()
 {
     qDebug() << "leaving playlist edit mode";
+
     ui->menuOptions->removeAction(ui->actionSave_playlist);
     ui->menuOptions->insertAction(ui->actionDelete_playlist, ui->actionEdit_playlist);
+
+    disconnect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onEditorContextMenuRequested(QPoint)));
+    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onBrowserContextMenuRequested(QPoint)));
 
     ui->songList->setDragEnabled(false);
 
@@ -531,4 +549,10 @@ void SinglePlaylistView::saveCurrentPlaylist()
     for (int i = 0; i < songCount; i++)
         playlist->appendItem(targetPlaylist, ui->songList->item(i)->data(UserRoleObjectID).toString());
 #endif
+}
+
+void SinglePlaylistView::onDeleteFromPlaylist()
+{
+    delete ui->songList->takeItem(ui->songList->currentRow());
+    this->setSongCount(ui->songList->count());
 }

@@ -67,11 +67,13 @@ private slots:
     void addAllToNowPlaying();
     void onSearchTextChanged(QString text);
     void onShuffleButtonClicked();
-    void onContextMenuRequested(const QPoint &point);
+    void onBrowserContextMenuRequested(const QPoint &point);
+    void onEditorContextMenuRequested(const QPoint &point);
     void onAddToNowPlaying();
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();
+    void onDeleteFromPlaylist();
     void enterEditMode();
     void leaveEditMode();
     void saveCurrentPlaylist();
