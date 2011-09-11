@@ -83,7 +83,7 @@ private:
     void fetchUri(QString objectId);
     uint addToNowPlayingId;
     int numberOfSongsToAdd;
-    QString* songAddBuffer;
+    gchar** songAddBuffer;
     int songAddBufferSize;
 #endif
     void connectSignals();

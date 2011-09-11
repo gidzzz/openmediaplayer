@@ -161,9 +161,9 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setWindowTitle(item->text());
-        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+//        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
         albumView->show();
-        ui->indicator->hide();
+        //ui->indicator->hide();
     }
     ui->albumList->clearSelection();
 #endif
@@ -192,8 +192,7 @@ void SingleArtistView::onSearchTextChanged(QString text)
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
-        if (ui->indicator->isHidden())
-            ui->indicator->show();
+        ui->indicator->autoSetVisibility();
     }
 }
 
@@ -275,12 +274,11 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint,
             mafwrenderer->play();
             mafwrenderer->resume();
 
-            NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
-            window->setAttribute(Qt::WA_DeleteOnClose);
-            connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+            NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+//            connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
             window->onShuffleButtonToggled(true);
             window->show();
-            ui->indicator->hide();
+            //ui->indicator->hide();
             shuffleRequested = false;
         }
     }

@@ -198,6 +198,8 @@ void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 
 void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 {
+    disconnect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+
 #ifdef MAFW
     playlist->assignAudioPlaylist();
 #endif
@@ -258,11 +260,11 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         qDebug() << "Playlist created";
 #endif
 
-        npWindow = new NowPlayingWindow(this, mafwFactory);
-        npWindow->setAttribute(Qt::WA_DeleteOnClose);
-        connect(npWindow, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+        npWindow = NowPlayingWindow::acquire(this, mafwFactory);
+        connect(npWindow, SIGNAL(destroyed()), this, SLOT(onNowPlayingWindowDestroyed()));
+//        connect(npWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
         npWindow->show();
-        ui->indicator->hide();
+        //ui->indicator->hide();
     }
 #endif
 }
@@ -281,8 +283,7 @@ void SingleAlbumView::onSearchTextChanged(QString text)
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
-        if (ui->indicator->isHidden())
-            ui->indicator->show();
+        ui->indicator->autoSetVisibility();
     }
 }
 
@@ -455,3 +456,8 @@ void SingleAlbumView::notifyOnAddedToNowPlaying(int songCount)
         QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
 }
 #endif
+
+void SingleAlbumView::onNowPlayingWindowDestroyed()
+{
+    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+}

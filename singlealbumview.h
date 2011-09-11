@@ -75,6 +75,7 @@ private slots:
     void onShareClicked();
     void onDeleteClicked();
     void onAddToNowPlaying();
+    void onNowPlayingWindowDestroyed();
 };
 
 #endif // SINGLEALBUMVIEW_H

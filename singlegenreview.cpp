@@ -98,18 +98,18 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->setWindowTitle(item->data(UserRoleSongName).toString());
-        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+//        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
         albumView->show();
-        ui->indicator->hide();
+        //ui->indicator->hide();
     } else if(songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleSongName).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
-        connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+//        connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
         artistView->show();
-        ui->indicator->hide();
+        //ui->indicator->hide();
     }
 
     ui->artistList->clearSelection();
@@ -245,8 +245,7 @@ void SingleGenreView::onSearchTextChanged(QString text)
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
-        if (ui->indicator->isHidden())
-            ui->indicator->show();
+        ui->indicator->autoSetVisibility();
     }
 }
 
@@ -313,11 +312,10 @@ void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount
             mafwrenderer->play();
             mafwrenderer->resume();
 
-            NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
-            window->setAttribute(Qt::WA_DeleteOnClose);
-            connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(show()));
+            NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+//            connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
             window->show();
-            ui->indicator->hide();
+            //ui->indicator->hide();
             this->isShuffling = false;
         }
     }

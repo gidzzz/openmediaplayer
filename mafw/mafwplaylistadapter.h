@@ -26,23 +26,26 @@ public:
     void appendUri(QString url);
     void appendItem(QString objectId);
     void appendItem(MafwPlaylist *playlist, QString objectId);
+    void appendItems(const gchar** oid);
     void removeItem(int index);
     void duplicatePlaylist(QString newName);
     int getSize();
     int getSizeOf(MafwPlaylist *playlist);
-    void getItemsOf(MafwPlaylist *playlist);
-    void getItems(int from, int to);
-    void getAllItems();
+    gpointer getItemsOf(MafwPlaylist *playlist);
+    gpointer getItems(int from, int to);
+    gpointer getAllItems();
     QString playlistName();
     MafwPlaylist *mafw_playlist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
 
     static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
+    static void onContentsChanged(MafwPlaylist*, guint, guint, guint, gpointer user_data);
 
 
 signals:
     void onGetItems(QString object_id, GHashTable *metadata, guint index);
     void playlistChanged();
+    void contentsChanged();
 
 public slots:
     void assignAudioPlaylist();
@@ -50,6 +53,7 @@ public slots:
     void assignRadioPlaylist();
 
 private:
+    void connectPlaylistSignals();
     MafwRendererAdapter *mafwrenderer;
     GError *error;
 

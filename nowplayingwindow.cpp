@@ -24,8 +24,23 @@
 #include "hildon-thumbnail/hildon-albumart-factory.h"
 #include <QNetworkConfigurationManager>
 
+NowPlayingWindow* NowPlayingWindow::instance = NULL;
 int newsong;
 QString currentPlaylistUrl;
+
+NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory *mafwFactory)
+{
+    if (instance) {
+        instance->setParent(parent, Qt::Window);
+        qDebug() << "handing out running NPW instance";
+    }
+    else {
+        qDebug() << "handing out new NPW instance";
+        instance = new NowPlayingWindow(parent, mafwFactory);
+    }
+
+    return instance;
+}
 
 NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
@@ -48,6 +63,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
+    browseId = NULL;
     newsong = 1;
     albumArtScene = new QGraphicsScene(ui->view);
     entertainmentView = 0;
@@ -399,7 +415,7 @@ void NowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
-    connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
+    //connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
@@ -905,6 +921,14 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 #ifdef MAFW
 void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index)
 {
+    qDebug() << "NowPlayingWindow::onGetPlaylistItems | index: " << index;
+
+    if (--numberOfSongsToAdd == 0) {
+        qDebug() << "disconnecting SinglePlaylistView from onGetItems";
+        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
+        browseId = NULL;
+    }
+
     QString title;
     QString artist;
     QString album;
@@ -928,7 +952,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
 
-        QListWidgetItem *item = ui->songPlaylist->item(index);
+        QListWidgetItem *item =  ui->songPlaylist->item(index);
         item->setText(QString::number(index));
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongDuration, duration);
@@ -1269,7 +1293,14 @@ void NowPlayingWindow::selectItemByText(int numberInPlaylist)
 
 void NowPlayingWindow::updatePlaylist()
 {
-    int songCount = playlist->getSize();
+    qDebug() << "NowPlayingWindow::updatePlaylist";
+
+    if (browseId) {
+        qDebug() << "canelling previous get_items query";
+        mafw_playlist_cancel_get_items_md(browseId);
+    }
+
+/*    int songCount = playlist->getSize();
 
     // Make a new item for all items
     if (songCount != ui->songPlaylist->count()) {
@@ -1284,15 +1315,31 @@ void NowPlayingWindow::updatePlaylist()
             item->setData(UserRoleValueText, " ");
             item->setData(UserRoleSongDuration, -10);
         }
-    }
 
-    // Iterate over every 30 items and fetch those
+    }*/
+
+    ui->songPlaylist->clear();
+
+/*    // Iterate over every 30 items and fetch those
     for (int x = 0; x < songCount; x = x+30) {
-        if (x > songCount) {
+        if (x > songCount) { hmmm, is it ever executed?
             playlist->getItems(x, -1);
             break;
         }
         playlist->getItems(x, x+30);
+    }*/
+
+    if (numberOfSongsToAdd = playlist->getSize()) {
+        for (int i = 0; i < numberOfSongsToAdd; i++) {
+            QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
+            ui->songPlaylist->addItem(item);
+            item->setData(UserRoleValueText, " ");
+            item->setData(UserRoleSongDuration, -10);
+        }
+        qDebug() << "connecting SinglePlaylistView to onGetItems";
+        connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
+
+        browseId = playlist->getAllItems();
     }
 }
 
@@ -1404,4 +1451,14 @@ void NowPlayingWindow::editTags()
         g_hash_table_destroy(hash);
 
     }
+}
+
+void NowPlayingWindow::closeEvent(QCloseEvent *e)
+{
+    qDebug() << "disconnecting SinglePlaylistView from onGetItems";
+    disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
+    this->hide();
+    this->setParent(0);
+    emit hidden();
+    e->ignore();
 }

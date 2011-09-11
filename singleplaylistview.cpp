@@ -241,6 +241,8 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
 void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 {
+    disconnect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+
     QString playlistName = playlist->playlistName();
     if (playlistName != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
@@ -257,7 +259,8 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
     mafwrenderer->resume();
 #endif
 
-    NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowDestroyed()));
 
     window->show();
     window->updatePlaylistState();
@@ -277,9 +280,20 @@ void SinglePlaylistView::addAllToNowPlaying()
     QString playlistName = playlist->playlistName();
     if (playlistName != "FmpAudioPlaylist" && playlistName != "FmpVideoPlaylist" && playlistName != "FmpRadioPlaylist")
         playlist->assignAudioPlaylist();
-    for (int i = 0; i < ui->songList->count(); i++) {
-        playlist->appendItem(ui->songList->item(i)->data(UserRoleObjectID).toString());
-    }
+
+    int songCount = ui->songList->count();
+    gchar** songAddBuffer = new gchar*[songCount+1];
+
+    for (int i = 0; i < songCount; i++)
+        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[songCount] = NULL;
+
+    playlist->appendItems((const gchar**)songAddBuffer);
+
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
+
 #ifdef Q_WS_MAEMO_5
     this->notifyOnAddedToNowPlaying(ui->songList->count());
 #endif
@@ -330,8 +344,7 @@ void SinglePlaylistView::onSearchTextChanged(QString text)
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
-        if (ui->indicator->isHidden())
-            ui->indicator->show();
+        ui->indicator->autoSetVisibility();
     }
 }
 
@@ -349,7 +362,7 @@ void SinglePlaylistView::onShuffleButtonClicked()
         playlist->appendItem(ui->songList->item(i)->data(UserRoleObjectID).toString());
     }
 
-    NowPlayingWindow *window = new NowPlayingWindow(this, mafwFactory);
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
 
     window->show();
     window->updatePlaylistState();
@@ -555,4 +568,11 @@ void SinglePlaylistView::onDeleteFromPlaylist()
 {
     delete ui->songList->takeItem(ui->songList->currentRow());
     this->setSongCount(ui->songList->count());
+}
+
+void SinglePlaylistView::onNowPlayingWindowDestroyed()
+{
+    ui->songList->clearSelection();
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowDestroyed()));
+    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
 }

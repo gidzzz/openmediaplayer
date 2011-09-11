@@ -77,6 +77,7 @@ private slots:
     void enterEditMode();
     void leaveEditMode();
     void saveCurrentPlaylist();
+    void onNowPlayingWindowDestroyed();
 };
 
 #endif // SINGLEPLAYLISTVIEW_H

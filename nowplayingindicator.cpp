@@ -25,6 +25,7 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
   ,window(0)
 #endif
 {
+    ready = false; // avoid segfaults on requesting info from the playlist too early
     ui->setupUi(this);
     images << QPixmap(idleFrame);
     for (int i = 1; i < 12; i++)
@@ -58,7 +59,10 @@ void NowPlayingIndicator::connectSignals()
     connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onTkLockChanged(bool)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+            this, SLOT(onPlaylistReady()));
     connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
+    connect(playlist, SIGNAL(contentsChanged()), this, SLOT(autoSetVisibility()));
 #endif
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
 }
@@ -76,6 +80,7 @@ void NowPlayingIndicator::onStateChanged(int state)
         timer->start();
 }
 #endif
+
 #ifdef Q_WS_MAEMO_5
 void NowPlayingIndicator::onTkLockChanged(bool state)
 {
@@ -133,28 +138,29 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
 #ifdef DEBUG
         qDebug() << "Current playlist is: " + playlistName;
 #endif
-        if (playlistName == "FmpVideoPlaylist" && window == 0)
+        if (playlistName == "FmpVideoPlaylist" && window == 0) {
             window = new VideoNowPlayingWindow(this, mafwFactory);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            connect(window, SIGNAL(destroyed), this, SLOT(onWindowDestroyed()));
+            }
         else if (playlistName == "FmpRadioPlaylist" && window == 0)  {
             window = new RadioNowPlayingWindow(this, mafwFactory);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
         }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
         else
-            if (window == 0)
-                window = new NowPlayingWindow(this, mafwFactory);
-        if (window == 0)
-            window->setAttribute(Qt::WA_DeleteOnClose);
+            window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
         if (playlistName == "FmpVideoPlaylist")
             window->showFullScreen();
-        else
+        else //{
             window->show();
-        connect(window, SIGNAL(destroyed()), this, SLOT(show()));
-        connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
-        this->hide();
+        //connect(window, SIGNAL(hidden()), this, SLOT(autoSetVisibility()));
+        //this->hide();
+        //}
 #else
-        NowPlayingWindow *window = new NowPlayingWindow(this);
-        window->setAttribute(Qt::WA_DeleteOnClose);
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this);
         window->show();
 #endif
     }
@@ -163,6 +169,7 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
 void NowPlayingIndicator::onWindowDestroyed()
 {
     window = 0;
+    //this->autoSetVisibility();
 }
 
 #ifdef MAFW
@@ -172,6 +179,16 @@ void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, 
     qDebug() << "NowPlayingIndicator::onGetStatus";
 #endif
     this->onStateChanged(state);
+}
+#endif
+
+#ifdef MAFW
+void NowPlayingIndicator::onPlaylistReady()
+{
+    disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+        this, SLOT(onPlaylistReady()));
+    ready = true;
+    this->autoSetVisibility();
 }
 #endif
 
@@ -210,3 +227,12 @@ void NowPlayingIndicator::setFactory(MafwAdapterFactory *factory)
     mafwrenderer->getStatus();
 }
 #endif
+
+void NowPlayingIndicator::autoSetVisibility()
+{
+    qDebug() << "NowPlayingIndicator::autoSetVisibility";
+    if (ready && playlist->getSize())
+        this->show();
+    else
+        this->hide();
+}

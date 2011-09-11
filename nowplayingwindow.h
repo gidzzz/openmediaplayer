@@ -43,22 +43,28 @@ class NowPlayingWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit NowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    static NowPlayingWindow* acquire(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~NowPlayingWindow();
     QString albuminfolder;
     QNetworkAccessManager* data;
     QString TEartist, TEalbum, TEtitle, TEid;
+
+signals:
+    void hidden();
 
 public slots:
     void reloadLyricsFromFile();
     void onSongSelected(int, int, QString, QString, QString, int);
     void setAlbumImage(QString);
     void onShuffleButtonToggled(bool);
+    void closeEvent(QCloseEvent *e);
 #ifdef MAFW
     void updatePlaylistState();
 #endif
 
 private:
+    static NowPlayingWindow *instance;
+    explicit NowPlayingWindow(QWidget *parent, MafwAdapterFactory *mafwFactory);
     Ui::NowPlayingWindow *ui;
     EntertainmentView *entertainmentView;
     CarView *carView;
@@ -72,6 +78,7 @@ private:
     int mafwState;
     GConfItem *lastPlayingSong;
     void showEvent(QShowEvent *);
+    gpointer browseId;
 #endif
     void setButtonIcons();
     void setSongNumber(int currentSong, int numberOfSongs);
@@ -84,6 +91,7 @@ private:
     bool buttonWasDown;
     int songDuration;
     int currentSongPosition;
+    int numberOfSongsToAdd;
     QGraphicsScene *albumArtScene;
     QString albumArtUri;
     mirror *m;

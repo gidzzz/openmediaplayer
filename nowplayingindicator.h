@@ -39,6 +39,7 @@ public:
 
 public slots:
     void stopAnimation();
+    void autoSetVisibility();
 
 signals:
     void clicked();
@@ -59,6 +60,7 @@ private:
     MafwRendererAdapter *mafwrenderer;
     MafwPlaylistAdapter *playlist;
     QMainWindow *window;
+    bool ready;
 #endif
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;
@@ -72,6 +74,7 @@ private slots:
 #ifdef MAFW
     void onStateChanged(int);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
+    void onPlaylistReady();
 #endif
     void startAnimation();
     void onWindowDestroyed();

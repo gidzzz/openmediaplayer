@@ -107,6 +107,12 @@ void MafwPlaylistAdapter::appendItem(MafwPlaylist *playlist, QString objectId)
         mafw_playlist_append_item (playlist, objectId.toUtf8(), &error);
 }
 
+void MafwPlaylistAdapter::appendItems(const gchar** oid)
+{
+    if(mafw_playlist)
+        mafw_playlist_append_items (this->mafw_playlist, oid, &error);
+}
+
 void MafwPlaylistAdapter::removeItem(int index)
 {
     if(mafw_playlist)
@@ -126,18 +132,19 @@ int MafwPlaylistAdapter::getSizeOf(MafwPlaylist *playlist)
     return size;
 }
 
-void MafwPlaylistAdapter::getAllItems()
+gpointer MafwPlaylistAdapter::getAllItems()
 {
-    this->getItems(0, -1);
+    return this->getItems(0, -1);
 }
 
-void MafwPlaylistAdapter::getItems(int from, int to)
+gpointer MafwPlaylistAdapter::getItems(int from, int to)
 {
 #ifdef DEBUG
     qDebug() << "MafwPlaylistAdapter::getItems";
 #endif
+
     if (mafw_playlist) {
-        mafw_playlist_get_items_md (this->mafw_playlist,
+        return mafw_playlist_get_items_md (this->mafw_playlist,
                                     from,
                                     to,
                                     MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -147,15 +154,15 @@ void MafwPlaylistAdapter::getItems(int from, int to)
                                                      MAFW_METADATA_KEY_DURATION),
                                     MafwPlaylistAdapter::get_items_cb,
                                     this, NULL);
-    }
+    } else return NULL;
 #ifdef DEBUG
     qDebug() << "MafwPlaylistAdapter::getItems called successfully";
 #endif
 }
 
-void MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist)
+gpointer MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist)
 {
-    mafw_playlist_get_items_md (playlist,
+    return mafw_playlist_get_items_md (playlist,
                                 0,
                                 -1,
                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -191,6 +198,8 @@ void MafwPlaylistAdapter::onGetStatus(MafwPlaylist* playlist, uint, MafwPlayStat
 
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
+
+    connectPlaylistSignals();
 }
 
 void MafwPlaylistAdapter::onPlaylistChanged(GObject* playlist)
@@ -236,4 +245,18 @@ bool MafwPlaylistAdapter::isPlaylistNull()
         return false;
     else
         return true;
+}
+
+void MafwPlaylistAdapter::connectPlaylistSignals()
+{
+    g_signal_connect(mafw_playlist,
+                     "contents-changed",
+                     G_CALLBACK(&onContentsChanged),
+                     static_cast<void*>(this));
+    // "item-moved" could alo be added here
+}
+
+void MafwPlaylistAdapter::onContentsChanged(MafwPlaylist*, guint, guint, guint, gpointer user_data) //move up?
+{
+    emit static_cast<MafwPlaylistAdapter*>(user_data)->contentsChanged();
 }

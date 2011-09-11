@@ -81,6 +81,7 @@ private:
     void countVideos();
     void countRadioStations();
     int mafwState;
+    int rendererStatusNotifications;
 #endif
 
 private slots:
