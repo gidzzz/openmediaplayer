@@ -924,7 +924,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
     qDebug() << "NowPlayingWindow::onGetPlaylistItems | index: " << index;
 
     if (--numberOfSongsToAdd == 0) {
-        qDebug() << "disconnecting SinglePlaylistView from onGetItems";
+        qDebug() << "disconnecting NowPlayingWindow from onGetItems";
         disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
         browseId = NULL;
     }
@@ -1455,8 +1455,6 @@ void NowPlayingWindow::editTags()
 
 void NowPlayingWindow::closeEvent(QCloseEvent *e)
 {
-    qDebug() << "disconnecting SinglePlaylistView from onGetItems";
-    disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
     this->hide();
     this->setParent(0);
     emit hidden();

@@ -46,7 +46,8 @@ private:
     uint addToNowPlayingId;
     QString objectIdToBrowse;
     QString currentObjectId;
-    int numberOfSongsToAdd;
+    gchar** songAddBuffer;
+    int songAddBufferSize;
     int songsInGenre;
     bool isShuffling;
 #endif

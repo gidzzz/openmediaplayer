@@ -39,7 +39,8 @@ private:
     QString artistObjectId;
     void listAlbums();
     int numberOfSongs;
-    int numberOfSongsToAdd;
+    gchar** songAddBuffer;
+    int songAddBufferSize;
     bool shuffleRequested;
 #endif
 #ifdef Q_WS_MAEMO_5

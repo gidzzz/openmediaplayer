@@ -25,24 +25,25 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     QString artistName = index.data(UserRoleSongName).toString();
     QString albumSongCount;
     QPixmap albumArt;
+
     albumSongCount.append(index.data(UserRoleAlbumCount).toString() + " ");
-    /*if(index.data(UserRoleAlbumCount).toInt() != 1)
+    if(index.data(UserRoleAlbumCount).toInt() == 1)
+        albumSongCount.append(tr("album"));
+    else
         albumSongCount.append(tr("albums"));
-    else
-        albumSongCount.append(tr("album"));*/
-    albumSongCount.append(index.data(Qt::UserRole+51).toString());
+
     albumSongCount.append(", ");
+
     albumSongCount.append(index.data(UserRoleSongCount).toString() + " ");
-    /*if(index.data(UserRoleSongCount).toInt() != 1)
-        albumSongCount.append(tr("songs"));
+    if(index.data(UserRoleSongCount).toInt() == 1)
+        albumSongCount.append(tr("song"));
     else
-        albumSongCount.append(tr("song"));*/
-    albumSongCount.append(index.data(Qt::UserRole+50).toString());
+        albumSongCount.append(tr("songs"));
+
     if(!index.data(UserRoleAlbumArt).isNull())
         albumArt = QPixmap(index.data(UserRoleAlbumArt).toString());
     else
         albumArt = QPixmap(defaultAlbumArt);
-
 
     painter->save();
     QRect r = option.rect;

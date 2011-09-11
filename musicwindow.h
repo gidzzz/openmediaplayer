@@ -114,7 +114,7 @@ private slots:
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllGenres(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void onAddToNowPlayingCallback(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
+    void onAddToNowPlayingCallback(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString);
     void browseAutomaticPlaylists(uint browseId, int, uint, QString, GHashTable* metadata, QString);
     void onDeleteUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString, QString Uri);
@@ -131,7 +131,6 @@ private slots:
     void onGenreSelected(QListWidgetItem*);
     void onPlaylistSelected(QListWidgetItem*);
     void onGetItems(QString objectId, GHashTable*, guint index);
-    void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString);
 #endif
     void onAddToNowPlaying();
     void onDeletePlaylistClicked();

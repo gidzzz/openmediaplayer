@@ -262,7 +262,7 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 
         npWindow = NowPlayingWindow::acquire(this, mafwFactory);
         connect(npWindow, SIGNAL(destroyed()), this, SLOT(onNowPlayingWindowDestroyed()));
-//        connect(npWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+        //connect(npWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
         npWindow->show();
         //ui->indicator->hide();
     }
@@ -310,12 +310,21 @@ void SingleAlbumView::addAllToNowPlaying()
         if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
             playlist->assignAudioPlaylist();
 
-        for (int i = 0; i < ui->songList->count(); i++) {
-            playlist->appendItem(ui->songList->item(i)->data(UserRoleObjectID).toString());
-        }
+        int songCount = ui->songList->count();
+        gchar** songAddBuffer = new gchar*[songCount+1];
+
+        for (int i = 0; i < songCount; i++)
+            songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        songAddBuffer[songCount] = NULL;
+
+        playlist->appendItems((const gchar**)songAddBuffer);
+
+        for (int i = 0; i < songCount; i++)
+            delete[] songAddBuffer[i];
+        delete[] songAddBuffer;
 
 #ifdef Q_WS_MAEMO_5
-        this->notifyOnAddedToNowPlaying(ui->songList->count());
+        this->notifyOnAddedToNowPlaying(songCount);
 #endif
 
 #endif
