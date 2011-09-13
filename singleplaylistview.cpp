@@ -249,9 +249,18 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 
     playlist->clear();
 
-    for (int i = 0; i < ui->songList->count(); i++) {
-        playlist->appendItem(ui->songList->item(i)->data(UserRoleObjectID).toString());
-    }
+    int songCount = ui->songList->count();
+    gchar** songAddBuffer = new gchar*[songCount+1];
+
+    for (int i = 0; i < songCount; i++)
+        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[songCount] = NULL;
+
+    playlist->appendItems((const gchar**)songAddBuffer);
+
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
 
 #ifdef MAFW
     mafwrenderer->gotoIndex(ui->songList->currentRow());

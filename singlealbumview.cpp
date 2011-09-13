@@ -247,10 +247,20 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 #ifdef DEBUG
         qDebug() << "Playlist cleared";
 #endif
-        for (int i = 0; i < ui->songList->count(); i++) {
-            QListWidgetItem *item = ui->songList->item(i);
-            playlist->appendItem(item->data(UserRoleObjectID).toString());
-        }
+
+        int songCount = ui->songList->count();
+        gchar** songAddBuffer = new gchar*[songCount+1];
+
+        for (int i = 0; i < songCount; i++)
+            songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        songAddBuffer[songCount] = NULL;
+
+        playlist->appendItems((const gchar**)songAddBuffer);
+
+        for (int i = 0; i < songCount; i++)
+            delete[] songAddBuffer[i];
+        delete[] songAddBuffer;
+
         if (shuffle) {
             uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
             mafwrenderer->gotoIndex(randomIndex);
@@ -261,7 +271,7 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 #endif
 
         npWindow = NowPlayingWindow::acquire(this, mafwFactory);
-        connect(npWindow, SIGNAL(destroyed()), this, SLOT(onNowPlayingWindowDestroyed()));
+        connect(npWindow, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowDestroyed()));
         //connect(npWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
         npWindow->show();
         //ui->indicator->hide();
