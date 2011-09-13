@@ -63,6 +63,7 @@ void NowPlayingIndicator::connectSignals()
             this, SLOT(onPlaylistReady()));
     connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
     connect(playlist, SIGNAL(contentsChanged()), this, SLOT(autoSetVisibility()));
+    connect(playlist, SIGNAL(playlistChanged()), this, SLOT(autoSetVisibility()));
 #endif
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
 }
@@ -150,8 +151,10 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
-        else
+        else {
             window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
+            connect(window, SIGNAL(hidden()), this, SLOT(onWindowDestroyed()));
+        }
         if (playlistName == "FmpVideoPlaylist")
             window->showFullScreen();
         else //{
@@ -186,7 +189,7 @@ void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, 
 void NowPlayingIndicator::onPlaylistReady()
 {
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-        this, SLOT(onPlaylistReady()));
+               this, SLOT(onPlaylistReady()));
     ready = true;
     this->autoSetVisibility();
 }

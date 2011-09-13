@@ -1295,6 +1295,11 @@ void NowPlayingWindow::updatePlaylist()
 {
     qDebug() << "NowPlayingWindow::updatePlaylist";
 
+    if (playlist->playlistName() != "FmpAudioPlaylist") {
+        qDebug() << "playlist type rejected, update aborted";
+        return;
+    }
+
     if (browseId) {
         qDebug() << "canelling previous get_items query";
         mafw_playlist_cancel_get_items_md(browseId);

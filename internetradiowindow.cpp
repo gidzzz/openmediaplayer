@@ -73,10 +73,11 @@ void InternetRadioWindow::onStationSelected()
 {
 #ifdef MAFW
     playlist->assignRadioPlaylist();
-    qDebug() << "Clearing playlist";
 
+    qDebug() << "Clearing playlist";
     playlist->clear();
     qDebug() << "Playlist cleared";
+
     for (int i = 0; i < ui->listWidget->count(); i++) {
         QListWidgetItem *item = ui->listWidget->item(i);
         playlist->appendItem(item->data(UserRoleObjectID).toString());

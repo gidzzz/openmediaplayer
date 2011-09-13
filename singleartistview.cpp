@@ -369,7 +369,7 @@ void SingleArtistView::onAddAlbumBrowseResult(uint browseId, int remainingCount,
 
         qDebug() << "disconnecting SingleArtistView from signalSourceBrowseResult";
         connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onAddAlbumBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+                this, SLOT(onAddAlbumBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 
         for (int i = 0; i < songAddBufferSize; i++)
             delete[] songAddBuffer[i];

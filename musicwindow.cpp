@@ -1140,7 +1140,7 @@ void MusicWindow::onAddToNowPlaying()
             }
             qDebug() << "connecting MusicWindow to signalSourceBrowseResult";
             connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
+                    this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
 
             this->addToNowPlayingId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
                                                                      MAFW_SOURCE_NO_KEYS, 0, limit);
@@ -1155,7 +1155,7 @@ void MusicWindow::onAddToNowPlaying()
 
                 qDebug() << "connecting MusicWindow to onGetItems";
                 connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-                    this, SLOT(onGetItems(QString,GHashTable*,guint)));
+                        this, SLOT(onGetItems(QString,GHashTable*,guint)));
 
                 playlist->getItemsOf(mafwplaylist);
             }
@@ -1166,7 +1166,7 @@ void MusicWindow::onAddToNowPlaying()
 
             qDebug() << "connecting MusicWindow to signalSourceBrowseResult";
             connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
+                    this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
 
             // for some reason, if metadata fetching is disabled here, IDs for filesystem instead of localtagfs are returned
             this->addToNowPlayingId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
@@ -1189,7 +1189,7 @@ void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index)
     if (numberOfSongsToAdd == 0) {
         qDebug() << "disconnecting MusicWindow from onGetItems";
         disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-            this, SLOT(onGetItems(QString,GHashTable*,guint)));
+                   this, SLOT(onGetItems(QString,GHashTable*,guint)));
 
         playlist->appendItems((const gchar**)songAddBuffer);
 
@@ -1224,7 +1224,7 @@ void MusicWindow::onAddToNowPlayingCallback(uint browseId, int remainingCount, u
 
         qDebug() << "disconnecting MusicWindow from signalSourceBrowseResult";
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
 
         for (int i = 0; i < songAddBufferSize; i++)
             delete[] songAddBuffer[i];
