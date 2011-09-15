@@ -507,17 +507,32 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
         qDebug() << error;
 }
 
-void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* , QString)
+void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* , QString)
 {
     if(browseId != browseAllSongsId)
       return;
 
-    playlist->appendItem(objectId);
+    if (songAddBufferSize == 0) {
+        songAddBufferSize = remainingCount+1;
+        songAddBuffer = new gchar*[songAddBufferSize+1];
+        songAddBuffer[songAddBufferSize] = NULL;
+    }
+
+    qDebug() << "MusicWindow::onAddToNowPlayingCallback | index: " << index;
+    songAddBuffer[index] = qstrdup(objectId.toUtf8());
 
     if (remainingCount == 0) {
-#ifdef Q_WS_MAEMO_5
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
+        playlist->appendItems((const gchar**)songAddBuffer);
+
+        qDebug() << "disconnecting MainWindow from signalSourceBrowseResult";
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+                   this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+
+        for (int i = 0; i < songAddBufferSize; i++)
+            delete[] songAddBuffer[i];
+        delete[] songAddBuffer;
+        this->browseAllSongsId = 0;
+
         uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
         mafwrenderer->gotoIndex(randomIndex);
         mafwrenderer->play();
@@ -526,6 +541,10 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString
         window->show();
         //ui->indicator->hide();
         ui->shuffleAllButton->setDisabled(false);
+#ifdef Q_WS_MAEMO_5
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
+        songAddBufferSize = 0;
     }
 }
 
@@ -542,6 +561,9 @@ void MainWindow::onShuffleAllClicked()
     playlist->clear();
     playlist->setShuffled(true);
 
+    songAddBufferSize = 0;
+
+    qDebug() << "connecting MainWindow to signalSourceBrowseResult";
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
 

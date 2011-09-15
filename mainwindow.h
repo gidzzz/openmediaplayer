@@ -82,6 +82,8 @@ private:
     void countRadioStations();
     int mafwState;
     int rendererStatusNotifications;
+    int songAddBufferSize;
+    gchar** songAddBuffer;
 #endif
 
 private slots:

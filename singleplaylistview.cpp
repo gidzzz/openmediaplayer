@@ -354,9 +354,18 @@ void SinglePlaylistView::onShuffleButtonClicked()
     playlist->clear();
     playlist->setShuffled(true);
 
-    for (int i = 0; i < ui->songList->count(); i++) {
-        playlist->appendItem(ui->songList->item(i)->data(UserRoleObjectID).toString());
-    }
+    int songCount = ui->songList->count();
+    gchar** songAddBuffer = new gchar*[songCount+1];
+
+    for (int i = 0; i < songCount; i++)
+        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[songCount] = NULL;
+
+    playlist->appendItems((const gchar**)songAddBuffer);
+
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
 
