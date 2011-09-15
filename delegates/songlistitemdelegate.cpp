@@ -22,7 +22,20 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 {
         // Thanks to hqh for fapman, this code is based on the list in it.
         QString songName = index.data(Qt::DisplayRole).toString();
-        QString songLength = index.data(UserRoleSongDuration).toString();
+
+        int duration = index.data(UserRoleSongDuration).toInt();
+        QString songLength;
+        switch (duration) {
+            case Duration::Blank:
+                songLength = "";
+                break;
+            case Duration::Unknown:
+                songLength = "--:--";
+                break;
+            default:
+                songLength = time_mmss(duration);
+        }
+
         QString valueText;
         if (index.data(UserRoleValueText).isNull() && !index.data(UserRoleSongArtist).toString().isEmpty())
             valueText = index.data(UserRoleSongArtist).toString() + " / " + index.data(UserRoleSongAlbum).toString();

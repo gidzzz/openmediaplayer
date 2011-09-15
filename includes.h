@@ -56,10 +56,22 @@ enum UserRoles { UserRoleName=Qt::UserRole,
                  UserRoleAlbumCount,
                  UserRoleArtistCount,
                  UserRoleAlbumArt,
-                 UserRoleSongDurationS,
                  UserRoleObjectID,
                  UserRoleSongURI,
                  UserRoleValueText
                };
+
+namespace Duration {
+    enum e {
+        Unknown = -1,
+        Blank = -2
+    };
+};
+
+// handy function to generate "mm:ss" time string
+inline QString time_mmss(int seconds)
+{
+    return QString("%1:%2").arg(seconds/60, 2, 10, QChar('0')).arg(seconds%60, 2, 10, QChar('0'));
+}
 
 #endif // INCLUDES_H

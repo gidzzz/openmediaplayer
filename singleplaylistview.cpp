@@ -117,14 +117,12 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
 
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
+        duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
-        QTime t(0,0);
-        t = t.addSecs(duration);
-        item->setData(UserRoleSongDuration, t.toString("mm:ss"));
+        item->setData(UserRoleSongDuration, duration);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleObjectID, objectId);
@@ -208,7 +206,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
+        duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem(ui->songList);
         item->setText(title);
@@ -216,16 +214,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
-
-        if (duration != -1) {
-            QTime t(0,0);
-            t = t.addSecs(duration);
-            item->setData(UserRoleSongDuration, t.toString("mm:ss"));
-            item->setData(UserRoleSongDurationS, duration);
-        } else {
-            item->setData(UserRoleSongDuration, "--:--");
-            item->setData(UserRoleSongDurationS, 0);
-        }
+        item->setData(UserRoleSongDuration, duration);
 
         ui->songList->addItem(item);
     }

@@ -240,6 +240,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         item->setData(UserRoleSongURI, URI);
         item->setData(UserRoleValueText, URI);
         item->setData(UserRoleObjectID, objectId);
+        item->setData(UserRoleSongDuration, Duration::Blank);
         ui->listWidget->addItem(item);
     }
 #ifdef Q_WS_MAEMO_5

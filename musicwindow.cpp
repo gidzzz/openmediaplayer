@@ -660,6 +660,7 @@ void MusicWindow::listPlaylists()
         QListWidgetItem *listItem = new QListWidgetItem();
         listItem->setText(tr("Saved"));
         listItem->setData(Qt::UserRole, true);
+        listItem->setData(UserRoleSongDuration, Duration::Blank);
         ui->playlistList->addItem(listItem);
     }
 
@@ -674,6 +675,7 @@ void MusicWindow::listPlaylists()
             QListWidgetItem *listItem = new QListWidgetItem();
             listItem->setText(playlistName);
             listItem->setData(UserRoleSongCount, playlistCount);
+            listItem->setData(UserRoleSongDuration, Duration::Blank);
             QString valueText = QString::number(playlistCount) + " ";
 
             if ( playlistCount > 1 ) listItem->setData(Qt::UserRole+50, tr("songs"));
@@ -692,6 +694,7 @@ void MusicWindow::listPlaylists()
     QListWidgetItem *item = new QListWidgetItem();
     item->setData(Qt::UserRole, true);
     item->setText(tr("Imported playlists"));
+    item->setData(UserRoleSongDuration, Duration::Blank);
     ui->playlistList->addItem(item);
 
     this->listImportedPlaylists();
@@ -702,6 +705,7 @@ void MusicWindow::listAutoPlaylists()
     QListWidgetItem *listItem = new QListWidgetItem();
     listItem->setText(tr("Automatic playlists"));
     listItem->setData(Qt::UserRole, true);
+    listItem->setData(UserRoleSongDuration, Duration::Blank);
     ui->playlistList->insertItem(0, listItem);
 
     QStringList playlists;
@@ -709,6 +713,7 @@ void MusicWindow::listAutoPlaylists()
     foreach (QString string, playlists) {
         QListWidgetItem *listItem = new QListWidgetItem();
         listItem->setText(string);
+        listItem->setData(UserRoleSongDuration, Duration::Blank);
         ui->playlistList->addItem(listItem);
     }
 
@@ -801,6 +806,7 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int, uint, QString obj
         else
             valueText.append(tr("songs"));
         listItem->setData(UserRoleValueText, valueText);
+        listItem->setData(UserRoleSongDuration, Duration::Blank);
         ui->playlistList->addItem(listItem);
     }
     ui->playlistList->scroll(0,0);
@@ -829,23 +835,15 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
+        duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem(ui->songList);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
+        item->setData(UserRoleSongDuration, duration);
 
-        if(duration != -1) {
-            QTime t(0,0);
-            t = t.addSecs(duration);
-            item->setData(UserRoleSongDuration, t.toString("mm:ss"));
-            item->setData(UserRoleSongDurationS, duration);
-        } else {
-            item->setData(UserRoleSongDuration, "--:--");
-            item->setData(UserRoleSongDurationS, 0);
-        }
         // Although we don't need this to show the song title, we need it to
         // sort alphabatically.
         item->setText(title);
@@ -1009,6 +1007,7 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     item->setData(UserRoleArtistCount, artistCount);
     item->setData(UserRoleAlbumCount, albumCount);
     item->setData(UserRoleObjectID, objectId);
+    item->setData(UserRoleSongDuration, Duration::Blank);
 
     if ( songCount > 1 ) item->setData(Qt::UserRole+50, tr("songs"));
     else item->setData(Qt::UserRole+50, tr("song"));
@@ -1196,12 +1195,12 @@ void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index)
         for (int i = 0; i < songAddBufferSize; i++)
             delete[] songAddBuffer[i];
         delete[] songAddBuffer;
-        songAddBufferSize = 0;
 
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
         this->notifyOnAddedToNowPlaying(songAddBufferSize);
 #endif
+        songAddBufferSize = 0;
     }
 }
 

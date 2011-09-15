@@ -475,9 +475,7 @@ void NowPlayingWindow::onSongSelected(int songNumber, int totalNumberOfSongs, QS
     artist = fm.elidedText(artist, Qt::ElideRight, 420);
     ui->artistLabel->setText(artist);
     this->songDuration = duration;
-    QTime t(0, 0);
-    t = t.addSecs(duration);
-    ui->trackLengthLabel->setText(t.toString("mm:ss"));
+    ui->trackLengthLabel->setText(time_mmss(duration));
     ui->songPlaylist->setCurrentRow(songNumber-1);
     if(!ui->songPlaylist->isHidden()) {
         ui->songPlaylist->hide();
@@ -509,8 +507,8 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
     QString albumArt;
     QString lyrics;
     bool isSeekable;
-    int duration = -1;
-    QTime t(0, 0);
+    int duration;
+
     if(metadata != NULL) {
         GValue *v;
 
@@ -533,7 +531,6 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
-        t = t.addSecs(duration);
         this->songDuration = duration;
 
         QFont f = ui->songTitleLabel->font();
@@ -630,7 +627,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             album = fm.elidedText(album, Qt::ElideRight, 420);
             ui->albumNameLabel->setText(album);
 
-            ui->trackLengthLabel->setText(t.toString("mm:ss"));
+            ui->trackLengthLabel->setText(time_mmss(duration));
             ui->songProgress->setRange(0, duration);
             if (isSeekable)
                 ui->songProgress->setEnabled(true);
@@ -785,9 +782,7 @@ void NowPlayingWindow::onPositionSliderMoved(int position)
 {
 #ifdef MAFW
     mafwrenderer->setPosition(SeekAbsolute, position);
-    QTime t(0, 0);
-    t = t.addSecs(position);
-    ui->currentPositionLabel->setText(t.toString("mm:ss"));
+    ui->currentPositionLabel->setText(time_mmss(position));
 #endif
 }
 
@@ -828,10 +823,8 @@ void NowPlayingWindow::onPreviousButtonClicked()
 void NowPlayingWindow::onPositionChanged(int position, QString)
 {
     currentSongPosition = position;
-    QTime t(0, 0);
-    t = t.addSecs(position);
     if (!ui->songProgress->isSliderDown())
-        ui->currentPositionLabel->setText(t.toString("mm:ss"));
+        ui->currentPositionLabel->setText(time_mmss(position));
 
     if (this->songDuration != 0 && this->songDuration != -1 && entertainmentView == 0 && carView == 0) {
 #ifdef DEBUG
@@ -932,7 +925,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
     QString title;
     QString artist;
     QString album;
-    int duration = -1;
+    int duration;
     if(metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
@@ -950,7 +943,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
 
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
+        duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item =  ui->songPlaylist->item(index);
         item->setText(QString::number(index));
@@ -1035,10 +1028,8 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     temp = fm.elidedText(item->data(UserRoleSongAlbum).toString(), Qt::ElideRight, 420);
     ui->albumNameLabel->setText(temp);
     ui->currentPositionLabel->setText("00:00");
-    QTime t(0, 0);
-    t = t.addSecs(item->data(UserRoleSongDuration).toInt());
     this->songDuration = item->data(UserRoleSongDuration).toInt();
-    ui->trackLengthLabel->setText(t.toString("mm:ss"));
+    ui->trackLengthLabel->setText(time_mmss(songDuration));
     mafwrenderer->gotoIndex(item->text().toInt());
     if (this->mafwState == Stopped)
         mafwrenderer->play();
@@ -1339,7 +1330,7 @@ void NowPlayingWindow::updatePlaylist()
             QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
             ui->songPlaylist->addItem(item);
             item->setData(UserRoleValueText, " ");
-            item->setData(UserRoleSongDuration, -10);
+            item->setData(UserRoleSongDuration, Duration::Blank);
         }
         qDebug() << "connecting SinglePlaylistView to onGetItems";
         connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);

@@ -125,7 +125,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
+        duration = v ? g_value_get_int (v) : Duration::Unknown;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TRACK);
         trackNumber = v ? g_value_get_int (v) : -1;
@@ -136,6 +136,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
+        item->setData(UserRoleSongDuration, duration);
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         if(v != NULL) {
@@ -154,15 +155,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
             }
         }
 
-        if(duration != -1) {
-            QTime t(0,0);
-            t = t.addSecs(duration);
-            item->setData(UserRoleSongDuration, t.toString("mm:ss"));
-            item->setData(UserRoleSongDurationS, duration);
-        } else {
-            item->setData(UserRoleSongDuration, "--:--");
-            item->setData(UserRoleSongDurationS, 0);
-        }
         // Although we don't need this to show the song title, we need it to
         // sort alphabatically.
         item->setText(title);

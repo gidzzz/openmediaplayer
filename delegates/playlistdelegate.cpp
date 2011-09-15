@@ -27,13 +27,18 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             songArtistAlbum = index.data(UserRoleSongArtist).toString() + " / " + index.data(UserRoleSongAlbum).toString();
         else
             songArtistAlbum = " ";
+
+        int duration = index.data(UserRoleSongDuration).toInt();
         QString songLength;
-        if (index.data(UserRoleSongDuration).toInt() != -10) {
-            QTime t(0, 0);
-            t = t.addSecs(index.data(UserRoleSongDuration).toInt());
-            songLength = t.toString("mm:ss");
-        } else {
-            songLength = " ";
+        switch (duration) {
+            case Duration::Blank:
+                songLength = "";
+                break;
+            case Duration::Unknown:
+                songLength = "--:--";
+                break;
+            default:
+                songLength = time_mmss(duration);
         }
 
         painter->save();

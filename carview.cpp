@@ -109,13 +109,7 @@ void CarView::setDNDAtom(bool dnd)
 #ifdef MAFW
 void CarView::onPositionChanged(int position, QString)
 {
-    QTime t(0,0);
-    t = t.addSecs(position);
-    QString text = t.toString("mm:ss") + "/";
-    t.setHMS(0, 0, 0, 0);
-    t = QTime(0,0).addSecs(this->songDuration);
-    text.append(t.toString("mm:ss"));
-    duration = text;
+    duration = time_mmss(position) + "/" + time_mmss(songDuration);
     emit durationTextChanged(duration);
     emit positionChanged(position);
 }
@@ -182,9 +176,10 @@ void CarView::onSliderValueChanged(int position)
 
 void CarView::addItemToPlaylist(QListWidgetItem *item)
 {
+    int duration = item->data(UserRoleSongDuration).toInt();
     emit addToPlaylist(item->data(UserRoleSongTitle).toString(),
                        QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
-                       QTime(0,0).addSecs(item->data(UserRoleSongDuration).toInt()).toString("mm:ss"),
+                       time_mmss(duration),
                        item->text().toInt());
 }
 
