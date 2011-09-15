@@ -318,6 +318,7 @@ void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
         ui->songList->setFocus();
     else {
         ui->songList->clearSelection();
+        ui->indicator->inhibit();
         if (ui->searchWidget->isHidden())
             ui->searchWidget->show();
         if (!ui->searchEdit->hasFocus())
@@ -328,9 +329,6 @@ void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
 
 void SinglePlaylistView::onSearchTextChanged(QString text)
 {
-    if (!ui->indicator->isHidden())
-        ui->indicator->hide();
-
     for (int i=0; i < ui->songList->count(); i++) {
         if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
             ui->songList->item(i)->data(UserRoleSongArtist).toString().toLower().indexOf(text.toLower()) != -1 ||
@@ -342,7 +340,7 @@ void SinglePlaylistView::onSearchTextChanged(QString text)
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
-        ui->indicator->autoSetVisibility();
+        ui->indicator->restore();
     }
 }
 

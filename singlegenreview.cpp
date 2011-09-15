@@ -223,6 +223,7 @@ void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
         ui->artistList->setFocus();
     else {
         ui->artistList->clearSelection();
+        ui->indicator->inhibit();
         if (ui->searchWidget->isHidden())
             ui->searchWidget->show();
         if (!ui->searchEdit->hasFocus())
@@ -233,9 +234,6 @@ void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
 
 void SingleGenreView::onSearchTextChanged(QString text)
 {
-    if (!ui->indicator->isHidden())
-        ui->indicator->hide();
-
     for (int i=0; i < ui->artistList->count(); i++) {
         if (ui->artistList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
             ui->artistList->item(i)->setHidden(true);
@@ -245,7 +243,7 @@ void SingleGenreView::onSearchTextChanged(QString text)
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
-        ui->indicator->autoSetVisibility();
+        ui->indicator->restore();
     }
 }
 

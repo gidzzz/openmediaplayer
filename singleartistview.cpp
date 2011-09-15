@@ -180,9 +180,6 @@ void SingleArtistView::orientationChanged()
 
 void SingleArtistView::onSearchTextChanged(QString text)
 {
-    if (!ui->indicator->isHidden())
-        ui->indicator->hide();
-
     for (int i=1; i < ui->albumList->count(); i++) {
         if (ui->albumList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
             ui->albumList->item(i)->setHidden(true);
@@ -192,7 +189,7 @@ void SingleArtistView::onSearchTextChanged(QString text)
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
-        ui->indicator->autoSetVisibility();
+        ui->indicator->restore();
     }
 }
 
@@ -204,6 +201,7 @@ void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
         ui->albumList->setFocus();
     else {
         ui->albumList->clearSelection();
+        ui->indicator->inhibit();
         if (ui->searchWidget->isHidden())
             ui->searchWidget->show();
         if (!ui->searchEdit->hasFocus())

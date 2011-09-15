@@ -329,9 +329,6 @@ void MusicWindow::onDeleteUriReceived(QString objectId, QString uri)
 
 void MusicWindow::onSearchTextChanged(QString text)
 {
-    if (!ui->indicator->isHidden())
-        ui->indicator->hide();
-
     for (int i=0; i < this->currentList()->count(); i++) {
         if (this->currentList() == ui->songList) {
              if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
@@ -356,7 +353,7 @@ void MusicWindow::onSearchTextChanged(QString text)
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
-        ui->indicator->autoSetVisibility();
+        ui->indicator->restore();
     }
 }
 
@@ -1083,6 +1080,7 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
         this->currentList()->setFocus();
     else {
         this->currentList()->clearSelection();
+        ui->indicator->inhibit();
         if (ui->searchWidget->isHidden())
             ui->searchWidget->show();
         if (!ui->searchEdit->hasFocus())
