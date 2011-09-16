@@ -254,7 +254,7 @@ void MusicWindow::onShareClicked()
 }
 
 #ifdef MAFW
-void MusicWindow::onShareUriReceived(QString objectId, QString Uri)
+void MusicWindow::onShareUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
@@ -265,7 +265,7 @@ void MusicWindow::onShareUriReceived(QString objectId, QString Uri)
     // C) 2010. Matias Perez
     QStringList list;
     QString clip;
-    clip = Uri;
+    clip = uri;
 
     list.append(clip);
     Share *share = new Share(this, list);

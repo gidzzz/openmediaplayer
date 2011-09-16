@@ -393,7 +393,7 @@ void SingleAlbumView::onShareClicked()
 }
 
 #ifdef MAFW
-void SingleAlbumView::onShareUriReceived(QString objectId, QString Uri)
+void SingleAlbumView::onShareUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
@@ -404,7 +404,7 @@ void SingleAlbumView::onShareUriReceived(QString objectId, QString Uri)
     // C) 2010. Matias Perez
     QStringList list;
     QString clip;
-    clip = Uri;
+    clip = uri;
 
     list.append(clip);
 #ifdef Q_WS_MAEMO_5

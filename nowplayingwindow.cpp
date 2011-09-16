@@ -920,7 +920,8 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         qDebug() << "disconnecting NowPlayingWindow from onGetItems";
         disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
         browseId = NULL;
-    }
+    } else if (numberOfSongsToAdd%100 == 0)
+        browseId = playlist->getItems(numberOfSongsToAdd-100, numberOfSongsToAdd-1);
 
     QString title;
     QString artist;
@@ -954,43 +955,6 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         item->setData(UserRoleObjectID, object_id);
         item->setData(UserRoleSongIndex, index);
 
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        //qDebug() << g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI));
-        if(v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleSongURI, QString::fromUtf8(filename));
-            }
-        }
-        // SHIT! MAFW doesn't get the items URI!!! let's use current playlist
-        // Please MAG: Fix it!!!
-        else
-        {
-            //qDebug() << playlist->playlistName();
-            QFile data(currentPlaylistUrl);
-            if (data.open(QFile::ReadOnly | QFile::Truncate))
-            {
-                QTextStream out(&data);
-                while ( !out.atEnd() )
-                {
-                    QString line = out.readLine();
-                    QString num; num.setNum(index);
-                    num.append(",localtagfs");
-                    if ( line.contains(num) )
-                    {
-                        line.replace("%2F","/").replace("%20"," ");
-                        line.remove(QRegExp("(.*)music\\/songs\\/"));
-                        line.remove("music/songs/");
-                        QByteArray text = QByteArray::fromPercentEncoding(line.toUtf8());
-                        if ( QFileInfo(text).exists() )
-                            item->setData(UserRoleSongURI, text);
-                    }
-                }
-            }
-            data.close();
-        }
-
         /*unsigned theIndex = 0;
         int position;
         for (position = 0; position < ui->songPlaylist->count(); position++)
@@ -1001,9 +965,9 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         }*/
 
         //ui->songPlaylist->insertItem(position, item);
-        this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
-        this->selectItemByText(lastPlayingSong->value().toInt());
-        ui->songPlaylist->scrollToItem(ui->songPlaylist->currentItem());
+        this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count()-numberOfSongsToAdd);
+        if (index == lastPlayingSong->value().toInt())
+            this->selectItemByText(lastPlayingSong->value().toInt());
     }
 }
 
@@ -1097,33 +1061,63 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
 
 void NowPlayingWindow::setRingingTone()
 {
+#ifdef MAFW
+    mafwTrackerSource->getUri(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
+#endif
+}
+
+#ifdef MAFW
+void NowPlayingWindow::onRingingToneUriReceived(QString objectId, QString uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
+
+    if (objectId != ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
 #ifdef Q_WS_MAEMO_5
-    QString filename = ui->songPlaylist->currentItem()->data(UserRoleSongURI).toString();
     QDBusInterface setRingtone("com.nokia.profiled",
                                "/com/nokia/profiled",
                                "com.nokia.profiled",
                                QDBusConnection::sessionBus(), this);
-    setRingtone.call("set_value", "general", "ringing.alert.tone", filename);
+    setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
     QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
 #endif
 }
+#endif
 
 void NowPlayingWindow::onShareClicked()
 {
-#ifdef Q_WS_MAEMO_5
+#ifdef MAFW
+    mafwTrackerSource->getUri(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+#endif
+}
+
+#ifdef MAFW
+void NowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+
+    if (objectId != ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
     // The code used here (share.(h/cpp/ui) was taken from filebox's source code
     // C) 2010. Matias Perez
     QStringList list;
-    QString clip = ui->songPlaylist->currentItem()->data(UserRoleSongURI).toString();
+    QString clip;
+    clip = uri;
 #ifdef DEBUG
     qDebug() << "Sending file:" << clip;
 #endif
     list.append(clip);
+#ifdef Q_WS_MAEMO_5
     Share *share = new Share(this, list);
     share->setAttribute(Qt::WA_DeleteOnClose);
     share->show();
 #endif
 }
+#endif
 
 void NowPlayingWindow::showEntertainmentView()
 {
@@ -1292,38 +1286,11 @@ void NowPlayingWindow::updatePlaylist()
     }
 
     if (browseId) {
-        qDebug() << "canelling previous get_items query";
+        qDebug() << "cancelling previous get_items query";
         mafw_playlist_cancel_get_items_md(browseId);
     }
 
-/*    int songCount = playlist->getSize();
-
-    // Make a new item for all items
-    if (songCount != ui->songPlaylist->count()) {
-        if (ui->songPlaylist->count() != 0) {
-            for (int y = 0; y < ui->songPlaylist->count(); y++)
-                delete ui->songPlaylist->item(y);
-        }
-
-        for (int i = 0; i < songCount; i++) {
-            QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
-            ui->songPlaylist->addItem(item);
-            item->setData(UserRoleValueText, " ");
-            item->setData(UserRoleSongDuration, -10);
-        }
-
-    }*/
-
     ui->songPlaylist->clear();
-
-/*    // Iterate over every 30 items and fetch those
-    for (int x = 0; x < songCount; x = x+30) {
-        if (x > songCount) { hmmm, is it ever executed?
-            playlist->getItems(x, -1);
-            break;
-        }
-        playlist->getItems(x, x+30);
-    }*/
 
     if (numberOfSongsToAdd = playlist->getSize()) {
         for (int i = 0; i < numberOfSongsToAdd; i++) {
@@ -1333,9 +1300,13 @@ void NowPlayingWindow::updatePlaylist()
             item->setData(UserRoleSongDuration, Duration::Blank);
         }
         qDebug() << "connecting SinglePlaylistView to onGetItems";
-        connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
+        connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
+                this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
 
-        browseId = playlist->getAllItems();
+        // For some reason MAFW doesn't send metadata when handling too many
+        // requests. The workaround here is to query a safe number of items and
+        // wait with another batch until all of them are served.
+        browseId = playlist->getItems(numberOfSongsToAdd-1-(numberOfSongsToAdd-1)%100, -1);
     }
 }
 

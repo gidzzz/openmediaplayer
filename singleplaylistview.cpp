@@ -449,7 +449,7 @@ void SinglePlaylistView::onShareClicked()
 }
 
 #ifdef MAFW
-void SinglePlaylistView::onShareUriReceived(QString objectId, QString Uri)
+void SinglePlaylistView::onShareUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
@@ -460,8 +460,10 @@ void SinglePlaylistView::onShareUriReceived(QString objectId, QString Uri)
     // C) 2010. Matias Perez
     QStringList list;
     QString clip;
-    clip = Uri;
-
+    clip = uri;
+#ifdef DEBUG
+    qDebug() << "Sending file:" << clip;
+#endif
     list.append(clip);
 #ifdef Q_WS_MAEMO_5
     Share *share = new Share(this, list);

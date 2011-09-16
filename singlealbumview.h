@@ -63,7 +63,7 @@ private slots:
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onItemSelected(QListWidgetItem*);
     void onRingingToneUriReceived(QString objectId, QString uri);
-    void onShareUriReceived(QString objectId, QString Uri);
+    void onShareUriReceived(QString objectId, QString uri);
     void onDeleteUriReceived(QString objectId, QString uri);
 #endif
     void createPlaylist(bool);

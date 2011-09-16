@@ -60,7 +60,7 @@ private slots:
     void onGetItems(QString objectId, GHashTable* metadata, guint index);
     void onBrowseResult(uint browseId, int, uint, QString objectId, GHashTable *metadata, QString);
     void onDeleteUriReceived(QString objectId, QString uri);
-    void onShareUriReceived(QString objectId, QString Uri);
+    void onShareUriReceived(QString objectId, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
     void onItemSelected(QListWidgetItem *);

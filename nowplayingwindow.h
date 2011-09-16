@@ -131,6 +131,8 @@ private slots:
     void onNextButtonClicked();
     void onPreviousButtonClicked();
     void updatePlaylist();
+    void onRingingToneUriReceived(QString objectId, QString uri);
+    void onShareUriReceived(QString objectId, QString uri);
 #endif
     void editTags();
     void metadataChanged(QString name, QVariant value);
