@@ -38,6 +38,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
 #endif
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->listWidget);
     ui->listWidget->setItemDelegate(delegate);
+    ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connectSignals();
     this->orientationChanged();
 #ifdef MAFW
@@ -58,6 +59,7 @@ void InternetRadioWindow::connectSignals()
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showAddBookmarkDialog()));
     connect(ui->listWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(onStationSelected()));
+    connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
 
@@ -100,6 +102,23 @@ void InternetRadioWindow::onStationSelected()
 #endif
     window->setAttribute(Qt::WA_DeleteOnClose);
     window->show();
+}
+
+void InternetRadioWindow::onContextMenuRequested(const QPoint &point)
+{
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    contextMenu->exec(point);
+}
+
+void InternetRadioWindow::onDeleteClicked()
+{
+#ifdef MAFW
+    QString objectId = ui->listWidget->currentItem()->data(UserRoleObjectID).toString();
+    mafwRadioSource->destroyObject(objectId.toUtf8().data());
+    delete ui->listWidget->takeItem(ui->listWidget->currentRow());
+#endif
 }
 
 void InternetRadioWindow::showAddBookmarkDialog()
@@ -165,27 +184,37 @@ void InternetRadioWindow::showAddBookmarkDialog()
 
 void InternetRadioWindow::onSaveClicked()
 {
-    if(nameBox->text().isEmpty()) {
+    if (nameBox->text().isEmpty()) {
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("Unable to add empty bookmark"));
 #else
         QMessageBox::critical(this, tr("Error"), tr("Unable to add empty bookmark"));
 #endif
     } else {
-        if(!saveButton->text().contains("http://")) {
+        if (addressBox->text().contains("http://") && addressBox->text().length() > 7) {
+            bookmarkDialog->close();
+
+            GHashTable* metadata = mafw_metadata_new();
+            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_TITLE, nameBox->text().toUtf8().data());
+            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_URI, addressBox->text().toUtf8().data());
+            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_MIME, "audio/unknown");
+            mafwRadioSource->createObject("iradiosource::", metadata);
+            mafw_metadata_release(metadata);
+
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(this, tr("Media bookmark saved"));
+#endif
+
+#ifdef MAFW
+            ui->listWidget->clear();
+            this->listStations();
+#endif
+        } else {
 #ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(this, tr("Invalid URL"));
 #else
             QMessageBox::critical(this, tr("Error"), tr("Invalid URL"));
 #endif
-        } else {
-            if(!saveButton->text().contains("*.*")) {
-#ifdef Q_WS_MAEMO_5
-                QMaemo5InformationBox::information(this, tr("Invalid URL"));
-#else
-                QMessageBox::critical(this, tr("Error"), tr("Invalid URL"));
-#endif
-            }
         }
     }
 }
@@ -196,6 +225,12 @@ void InternetRadioWindow::listStations()
 #ifdef DEBUG
     qDebug("Source ready");
 #endif
+
+#ifdef Q_WS_MAEMO_5
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+
+    qDebug() << "connecting InternetRadioWindow to signalSourceBrowseResult";
     connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
 
@@ -208,14 +243,13 @@ void InternetRadioWindow::listStations()
 
 void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if(browseId != browseAllStationsId)
+    if (browseId != browseAllStationsId)
       return;
-
 
     QString title;
     QString URI;
     QString mime;
-    if(metadata != NULL) {
+    if (metadata != NULL) {
         GValue *v;
 
         v = mafw_metadata_first(metadata,
@@ -243,12 +277,16 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         item->setData(UserRoleSongDuration, Duration::Blank);
         ui->listWidget->addItem(item);
     }
+
+    if (remainingCount == 0) {
 #ifdef Q_WS_MAEMO_5
-    if(remainingCount != 0)
-        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-    else
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+        qDebug() << "disconnecting InternetRadioWindow from signalSourceBrowseResult";
+        disconnect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+                   this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
+    }
+
 }
 #endif
 

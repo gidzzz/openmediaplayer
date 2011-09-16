@@ -417,6 +417,7 @@ void MainWindow::showInternetRadioWindow()
 #endif
     myInternetRadioWindow->setAttribute(Qt::WA_DeleteOnClose);
     //connect(myInternetRadioWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+    connect(myInternetRadioWindow, SIGNAL(destroyed()), this, SLOT(countRadioStations()));
     myInternetRadioWindow->show();
     //ui->indicator->hide();
 }

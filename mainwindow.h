@@ -79,7 +79,6 @@ private:
     const char* RADIOSOURCE_PATH;
     void countSongs();
     void countVideos();
-    void countRadioStations();
     int mafwState;
     int rendererStatusNotifications;
     int songAddBufferSize;
@@ -101,6 +100,7 @@ private slots:
     void radioSourceReady();
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
     void countRadioResult(QString objectId, GHashTable* metadata, QString error);
+    void countRadioStations();
     void browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);

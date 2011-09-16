@@ -65,6 +65,8 @@ private slots:
     void showAddBookmarkDialog();
     void onSaveClicked();
     void onStationSelected();
+    void onContextMenuRequested(const QPoint &point);
+    void onDeleteClicked();
     void orientationChanged();
 #ifdef MAFW
     void listStations();
