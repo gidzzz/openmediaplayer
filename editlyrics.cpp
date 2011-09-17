@@ -7,7 +7,7 @@
 #include <QTextStream>
 #include <QDebug>
 
-EditLyrics::EditLyrics(QWidget *parent, QString d1, QString d2, QString d3) :
+EditLyrics::EditLyrics(QWidget *parent, QString lyricsFile, QString artist, QString title) :
     QMainWindow(parent),
     ui(new Ui::EditLyrics)
 {
@@ -20,9 +20,8 @@ EditLyrics::EditLyrics(QWidget *parent, QString d1, QString d2, QString d3) :
 
     new TextEditAutoResizer(ui->content);
 
-    modified = 0;
-    ui->label->setText(d2 + " - " + d3);
-    file = "/home/user/.lyrics/"+d1.replace("/","-");
+    ui->label->setText(artist + " - " + title);
+    file = "/home/user/.lyrics/" + lyricsFile;
     //qDebug() << file;
 
     if ( QFileInfo(file).exists() )
@@ -49,17 +48,13 @@ EditLyrics::~EditLyrics()
 
 void EditLyrics::on_pushButton_pressed()
 {
-    if ( QFileInfo(file).exists() )
-        QFile::remove(file);
     QFile f(file);
     f.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite);
     QTextStream out(&f);
     out << ui->content->toPlainText();
     f.close();
-    modified = 1;
 
-    NowPlayingWindow * npw = qobject_cast<NowPlayingWindow*>(this->parentWidget());
-    npw->reloadLyricsFromFile();
+    qobject_cast<NowPlayingWindow*>(this->parentWidget())->reloadLyricsFromFile();
 
     this->close();
 }

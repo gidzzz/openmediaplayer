@@ -169,7 +169,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     }
 
     data = new QNetworkAccessManager(this);
-    connect(data, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloaded(QNetworkReply*)));
+    connect(data, SIGNAL(finished(QNetworkReply*)), this, SLOT(onLyricsDownloaded(QNetworkReply*)));
 
     this->orientationChanged();
 
@@ -181,14 +181,14 @@ NowPlayingWindow::~NowPlayingWindow()
     delete ui;
 }
 
-void NowPlayingWindow::downloaded(QNetworkReply *reply)
+void NowPlayingWindow::onLyricsDownloaded(QNetworkReply *reply)
 {
-    QString f1 = reply->url().toString();
-    //f1.remove("http://www.leoslyrics.com/").replace("/","-");
-    f1.remove("http://lyrics.mirkforce.net/");
+    QString lyricsFile = reply->url().toString();
+    //lyricsFile.remove("http://www.leoslyrics.com/").replace("/","-");
+    lyricsFile.remove("http://lyrics.mirkforce.net/").replace("/", "-");
 
-    //if ( ! f1.contains( ui->songTitleLabel->text().toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") ) )
-    if ( ! f1.contains( cleanItem(ui->songTitleLabel->whatsThis()) ) )
+    //if ( ! lyricsFile.contains( ui->songTitleLabel->text().toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") ) )
+    if ( ! lyricsFile.contains( cleanItem(ui->songTitleLabel->whatsThis()) ) )
         return;
 
     if (reply->error() != QNetworkReply::NoError) {
@@ -196,23 +196,19 @@ void NowPlayingWindow::downloaded(QNetworkReply *reply)
         ui->lyricsText->setText(tr("Lyrics not found."));
         ui->lyricsText->setWhatsThis("");
     } else {
-        QString str = QString::fromUtf8(reply->readAll());
+        QString lyrics = QString::fromUtf8(reply->readAll());
         //str.remove(QRegExp("(.*)oncontextmenu=\"return false;\">"));
         //str.remove(QRegExp("</p>(.*)"));
         //str.remove(QRegExp("<(.*)>"));
-        //qDebug() << str.toLatin1();
-        ui->lyricsText->setText(str);
-        ui->lyricsText->setWhatsThis(f1);
-        QString f = "/home/user/.lyrics/";
-        f1.replace("/","-");
-        f.append(f1);
-        if ( QFileInfo(f).exists() )
-            QFile::remove(f);
-        QFile file(f);
-        file.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite);
+        ui->lyricsText->setText(lyrics);
+        ui->lyricsText->setWhatsThis(lyricsFile);
+        QString lyricsPath = "/home/user/.lyrics/";
+        lyricsPath.append(lyricsFile);
+        QFile file(lyricsPath);
+        file.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite );
         QTextStream out(&file);
         //out.setCodec("UTF-8");
-        out << str;
+        out << lyrics;
         file.close();
     }
 }
@@ -509,7 +505,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
     bool isSeekable;
     int duration;
 
-    if(metadata != NULL) {
+    if (metadata != NULL) {
         GValue *v;
 
         v = mafw_metadata_first(metadata,
@@ -544,7 +540,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             isSeekable = v ? g_value_get_boolean (v) : false;
 
             v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
-            if(v != NULL) {
+            if (v != NULL) {
                 const gchar* file_uri = g_value_get_string(v);
                 gchar* filename = NULL;
                 if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
@@ -553,7 +549,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             } else {
                 v = mafw_metadata_first(metadata,
                                         MAFW_METADATA_KEY_RENDERER_ART_URI);
-                if(v != NULL) {
+                if (v != NULL) {
                     const gchar* file_uri = g_value_get_string(v);
                     gchar* filename = NULL;
                     if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
@@ -569,26 +565,27 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             ui->lyricsText->setText(tr("Loading lyrics..."));
             ui->lyricsText->setWhatsThis("");
             QApplication::processEvents();
+
+            QString lyricsPath = "/home/user/.lyrics/";
+            QString lyricsFile = cleanItem(artist) + "-" + cleanItem(title) + ".txt";
             QDir d;
-            d.mkdir("/home/user/.lyrics");
-            QString fi = "/home/user/.lyrics/";
-            QString fj = cleanItem(artist) + "/" + cleanItem(title) + ".txt";
-            fi.append(fj.replace("/","-"));
-            if ( QFileInfo(fi).exists() )
+            d.mkdir(lyricsPath);
+            lyricsPath.append(lyricsFile);
+            if ( QFileInfo(lyricsPath).exists() )
             {
                 QString lines;
-                QFile data(fi);
-                if (data.open(QFile::ReadOnly | QFile::Truncate))
+                QFile data(lyricsPath);
+                if ( data.open(QFile::ReadOnly) )
                 {
                     QTextStream out(&data);
                     while ( !out.atEnd() )
                         lines += out.readLine()+"\n";
                 }
                 data.close();
-                QApplication::processEvents();
                 ui->lyricsText->setText(lines);
-                ui->lyricsText->setWhatsThis(fj);
-                //qDebug() << "loading from file..." << fi;
+                ui->lyricsText->setWhatsThis(lyricsFile);
+                QApplication::processEvents();
+                //qDebug() << "loading from file..." << lyricsPath;
             }
             else
             {
@@ -598,8 +595,9 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
                 {
                     ui->lyricsText->setText(tr("Fetching lyrics..."));
                     ui->lyricsText->setWhatsThis("");
-                    data->get(QNetworkRequest(QUrl("http://lyrics.mirkforce.net/" +
-                                                   cleanItem(artist) + "/" + cleanItem(title) + ".txt")));
+                    QApplication::processEvents();
+
+                    data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + lyricsFile.replace("-", "/") ) ) );
 
                     /*QString salida = "http://www.leoslyrics.com/";
                     salida += artist.toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") + "/";
@@ -1356,9 +1354,9 @@ void NowPlayingWindow::editLyrics()
 void NowPlayingWindow::reloadLyricsFromFile()
 {
     QString lines = "";
-    QString file = "/home/user/.lyrics/"+ui->lyricsText->whatsThis().replace("/","-");
+    QString file = "/home/user/.lyrics/" + ui->lyricsText->whatsThis();
     QFile data(file);
-    if (data.open(QFile::ReadOnly | QFile::Truncate))
+    if (data.open(QFile::ReadOnly))
     {
         QTextStream out(&data);
         while ( !out.atEnd() )
@@ -1374,7 +1372,7 @@ void NowPlayingWindow::reloadLyrics()
     //qDebug() << ui->lyricsText->whatsThis();
     if ( ui->lyricsText->whatsThis() != "" )
     {
-        data->get(QNetworkRequest(QUrl("http://lyrics.mirkforce.net/" + ui->lyricsText->whatsThis())));
+        data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + ui->lyricsText->whatsThis().replace("-", "/") ) ) );
         ui->lyricsText->setText(tr("Fetching lyrics..."));
         ui->lyricsText->setWhatsThis("");
     }
@@ -1389,7 +1387,7 @@ QString NowPlayingWindow::cleanItem(QString data)
         int j = data.indexOf(")");
         if ( j > 0 ) data.remove(i, j);
     }
-    data = data.remove(QRegExp("\\W")).remove(" ");
+    data = data.remove(QRegExp("[\\W_]"));
     //qDebug() << data;
     return data;
 }

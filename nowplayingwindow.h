@@ -105,7 +105,7 @@ private:
 private slots:
     QString cleanItem(QString data = "");
     void on_lyricsText_customContextMenuRequested(QPoint pos);
-    void downloaded(QNetworkReply *reply);
+    void onLyricsDownloaded(QNetworkReply *reply);
     void on_view_customContextMenuRequested(QPoint pos);
     void changeArt();
     void editLyrics();

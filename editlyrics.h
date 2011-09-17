@@ -12,12 +12,11 @@ class EditLyrics : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditLyrics(QWidget *parent = 0, QString d1 = "",
-                        QString d2 = "", QString d3 = "");
+    explicit EditLyrics(QWidget *parent = 0, QString lyricsFile = "",
+                        QString artist = "", QString title = "");
     ~EditLyrics();
     QString file;
     QString lyrics;
-    int modified;
 
 private:
     Ui::EditLyrics *ui;
