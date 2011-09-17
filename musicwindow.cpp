@@ -43,7 +43,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ThumbnailItemDelegate *albumDelegate = new ThumbnailItemDelegate(ui->albumList);
-    nowPlayingWindow = 0;
 
     ui->songList->setItemDelegate(delegate);
     ui->artistList->setItemDelegate(artistDelegate);
@@ -77,37 +76,39 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
 {
 #ifdef MAFW
     playlist->assignAudioPlaylist();
-    if (nowPlayingWindow == 0) {
-        nowPlayingWindow = NowPlayingWindow::acquire(this, mafwFactory);
-#else
-        nowPlayingWindow = NowPlayingWindow::acquire(this);
-#endif
-        //connect(nowPlayingWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
-        connect(nowPlayingWindow, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
-    }
-#ifdef MAFW
-
     playlist->clear();
-    int selectedIndex = ui->songList->currentRow();
-    for (int i = 0; i < ui->songList->count(); i++) {
-        QListWidgetItem *item = ui->songList->item(i);
-        playlist->appendItem(item->data(UserRoleObjectID).toString());
-        if (ui->songList->row(item) == selectedIndex) {
-            mafwrenderer->gotoIndex(selectedIndex);
-            mafwrenderer->play();
-            mafwrenderer->resume();
-        }
-    }
 
+    int selectedIndex = ui->songList->currentRow();
+    int songCount = ui->songList->count();
+    gchar** songAddBuffer = new gchar*[songCount+1];
+
+    for (int i = 0; i < songCount; i++)
+        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[songCount] = NULL;
+
+    playlist->appendItems((const gchar**)songAddBuffer);
+
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
+
+    // Seems to work only for smaller libraries.
+    // For bigger, something probably doesn't have enough time to ready up.
+    mafwrenderer->gotoIndex(selectedIndex);
+    mafwrenderer->play();
 #endif
-    nowPlayingWindow->show();
+
+#ifdef MAFW
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+        mafwrenderer->gotoIndex(selectedIndex);
+    mafwrenderer->play();
+#else
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this);
+#endif
+
+    window->show();
     //ui->indicator->hide();
     ui->songList->clearSelection();
-}
-
-void MusicWindow::onWindowDestroyed()
-{
-    nowPlayingWindow = 0;
 }
 
 void MusicWindow::onPlaylistSelected(QListWidgetItem *item)

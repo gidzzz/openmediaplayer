@@ -57,7 +57,6 @@ private:
     void focusOutEvent(QFocusEvent *);
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
-    NowPlayingWindow *nowPlayingWindow;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -134,7 +133,6 @@ private slots:
 #endif
     void onAddToNowPlaying();
     void onDeletePlaylistClicked();
-    void onWindowDestroyed();
 };
 
 #endif // MUSICWINDOW_H
