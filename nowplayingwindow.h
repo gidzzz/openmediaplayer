@@ -63,6 +63,7 @@ public slots:
 #endif
 
 private:
+    QTime t; int n;
     static NowPlayingWindow *instance;
     explicit NowPlayingWindow(QWidget *parent, MafwAdapterFactory *mafwFactory);
     Ui::NowPlayingWindow *ui;

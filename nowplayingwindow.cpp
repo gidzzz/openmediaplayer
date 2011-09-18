@@ -24,6 +24,8 @@
 #include "hildon-thumbnail/hildon-albumart-factory.h"
 #include <QNetworkConfigurationManager>
 
+const int BATCH_SIZE = 100;
+
 NowPlayingWindow* NowPlayingWindow::instance = NULL;
 int newsong;
 QString currentPlaylistUrl;
@@ -529,6 +531,14 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         duration = v ? g_value_get_int (v) : -1;
         this->songDuration = duration;
 
+        QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
+        if (item) {
+            item->setData(UserRoleSongTitle, title);
+            item->setData(UserRoleSongDuration, duration);
+            item->setData(UserRoleSongAlbum, album);
+            item->setData(UserRoleSongArtist, artist);
+        }
+
         QFont f = ui->songTitleLabel->font();
         QFontMetrics fm(f);
 
@@ -913,19 +923,21 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index)
 {
     qDebug() << "NowPlayingWindow::onGetPlaylistItems | index: " << index;
-
     if (--numberOfSongsToAdd == 0) {
+        int e = t.elapsed();
+        qDebug() << QString("%1 ms, %2/s").arg(e).arg((double)n/e*1000);
+
         qDebug() << "disconnecting NowPlayingWindow from onGetItems";
         disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
         browseId = NULL;
-    } else if (numberOfSongsToAdd%100 == 0)
-        browseId = playlist->getItems(numberOfSongsToAdd-100, numberOfSongsToAdd-1);
+    } else if (numberOfSongsToAdd % BATCH_SIZE == 0)
+        browseId = playlist->getItems(numberOfSongsToAdd-BATCH_SIZE, numberOfSongsToAdd-1);
 
     QString title;
     QString artist;
     QString album;
     int duration;
-    if(metadata != NULL) {
+    if (metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
@@ -945,7 +957,6 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item =  ui->songPlaylist->item(index);
-        item->setText(QString::number(index));
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongDuration, duration);
         item->setData(UserRoleSongAlbum, album);
@@ -964,9 +975,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
 
         //ui->songPlaylist->insertItem(position, item);
         this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count()-numberOfSongsToAdd);
-        if (index == lastPlayingSong->value().toInt())
-            this->selectItemByText(lastPlayingSong->value().toInt());
-    }
+    } else qDebug() << "warning: null metadata";
 }
 
 void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
@@ -1269,7 +1278,7 @@ void NowPlayingWindow::selectItemByText(int numberInPlaylist)
             ui->songPlaylist->clearSelection();
             ui->songPlaylist->item(i)->setSelected(true);
             ui->songPlaylist->setCurrentItem(ui->songPlaylist->item(i));
-            ui->songPlaylist->scrollToItem(ui->songPlaylist->item(i));
+            ui->songPlaylist->scrollToItem(ui->songPlaylist->item(i), QAbstractItemView::PositionAtCenter);
         }
     }
 }
@@ -1293,18 +1302,39 @@ void NowPlayingWindow::updatePlaylist()
     if (numberOfSongsToAdd = playlist->getSize()) {
         for (int i = 0; i < numberOfSongsToAdd; i++) {
             QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
-            ui->songPlaylist->addItem(item);
+            item->setText(QString::number(i));
             item->setData(UserRoleValueText, " ");
             item->setData(UserRoleSongDuration, Duration::Blank);
+            ui->songPlaylist->addItem(item);
         }
+
+        this->selectItemByText(lastPlayingSong->value().toInt());
+
         qDebug() << "connecting SinglePlaylistView to onGetItems";
         connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
                 this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
 
+        // measure playlist fill rate
+        n = numberOfSongsToAdd;
+        t.setHMS(0,0,0,0);
+        t.start();
+
         // For some reason MAFW doesn't send metadata when handling too many
         // requests. The workaround here is to query a safe number of items and
         // wait with another batch until all of them are served.
-        browseId = playlist->getItems(numberOfSongsToAdd-1-(numberOfSongsToAdd-1)%100, -1);
+
+        // Smaller batches make playlist filling more fluid, but it takes more
+        // time to complete. Large batches might be not safe.
+
+        browseId = playlist->getItems(numberOfSongsToAdd-1 - (numberOfSongsToAdd-1)%BATCH_SIZE, -1);
+        qDebug() << numberOfSongsToAdd-1 - (numberOfSongsToAdd-1)%BATCH_SIZE;
+
+        // fast and easy, but not safe and results come late
+        /*browseId = playlist->getAllItems();*/
+
+        // fast and results start to come early, but not safe
+        /*for (int i = 0; i < numberOfSongsToAdd; i+=10)
+            playlist->getItems(i, i+10);*/
     }
 }
 

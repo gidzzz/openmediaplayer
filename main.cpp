@@ -69,6 +69,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Initialize random numbers
+    qsrand(QTime::currentTime().msec() + 1000*QTime::currentTime().second());
 
     QTime t(0,0);
     t.start();
