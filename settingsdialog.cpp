@@ -28,10 +28,12 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
         ui->onExitBox->setCurrentIndex(1);
-    if (QSettings().contains("FMTX/overrideChecks")) {
+    if (QSettings().contains("lyrics/enable"))
+        if (QSettings().value("lyrics/enable").toBool())
+            ui->lyricsCheckBox->setChecked(true);
+    if (QSettings().contains("FMTX/overrideChecks"))
         if (QSettings().value("FMTX/overrideChecks").toBool())
             ui->fmtxCheckBox->setChecked(true);
-    }
     //ui->buttonBox->button(QAbstractButton::)
     this->orientationChanged();
 }
@@ -47,7 +49,12 @@ void SettingsDialog::accept()
         QSettings().setValue("main/onApplicationExit", "do-nothing");
     else if (ui->onExitBox->currentIndex() == 1)
         QSettings().setValue("main/onApplicationExit", "stop-playback");
+
+    QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
+    NowPlayingWindow::destroy();
+
     QSettings().setValue("FMTX/overrideChecks", ui->fmtxCheckBox->isChecked());
+
     this->close();
 }
 

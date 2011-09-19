@@ -38,7 +38,6 @@ public:
 
 private:
     Ui::SingleAlbumView *ui;
-    NowPlayingWindow *npWindow;
     QString albumName;
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);

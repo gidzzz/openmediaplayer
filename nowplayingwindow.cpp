@@ -44,6 +44,14 @@ NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory 
     return instance;
 }
 
+void NowPlayingWindow::destroy()
+{
+    if (instance) {
+        delete instance;
+        instance = NULL;
+    }
+}
+
 NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
 #ifdef MAFW
@@ -70,6 +78,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     albumArtScene = new QGraphicsScene(ui->view);
     entertainmentView = 0;
     carView = 0;
+    enableLyrics = QSettings().value("lyrics/enable").toBool();
 
     ui->volSliderWidget->hide();
     ui->lyrics->hide();
@@ -503,7 +512,6 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
     QString artist;
     QString album;
     QString albumArt;
-    QString lyrics;
     bool isSeekable;
     int duration;
 
@@ -568,58 +576,60 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
                     this->setAlbumImage(albumImage);
             }
 
-            v = mafw_metadata_first(metadata,
-                                    MAFW_METADATA_KEY_LYRICS);
-            lyrics = v ? QString::fromUtf8(g_value_get_string(v)) : "NOLYRICS";
+            if (enableLyrics) {
+                v = mafw_metadata_first(metadata,
+                                        MAFW_METADATA_KEY_LYRICS);
+                QString lyrics = v ? QString::fromUtf8(g_value_get_string(v)) : "NOLYRICS";
 
-            ui->lyricsText->setText(tr("Loading lyrics..."));
-            ui->lyricsText->setWhatsThis("");
-            QApplication::processEvents();
-
-            QString lyricsPath = "/home/user/.lyrics/";
-            QString lyricsFile = cleanItem(artist) + "-" + cleanItem(title) + ".txt";
-            QDir d;
-            d.mkdir(lyricsPath);
-            lyricsPath.append(lyricsFile);
-            if ( QFileInfo(lyricsPath).exists() )
-            {
-                QString lines;
-                QFile data(lyricsPath);
-                if ( data.open(QFile::ReadOnly) )
-                {
-                    QTextStream out(&data);
-                    while ( !out.atEnd() )
-                        lines += out.readLine()+"\n";
-                }
-                data.close();
-                ui->lyricsText->setText(lines);
-                ui->lyricsText->setWhatsThis(lyricsFile);
+                ui->lyricsText->setText(tr("Loading lyrics..."));
+                ui->lyricsText->setWhatsThis("");
                 QApplication::processEvents();
-                //qDebug() << "loading from file..." << lyricsPath;
-            }
-            else
-            {
-                QNetworkConfigurationManager mgr;
-                QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
-                if ( activeConfigs.count() > 0 )
+
+                QString lyricsPath = "/home/user/.lyrics/";
+                QString lyricsFile = cleanItem(artist) + "-" + cleanItem(title) + ".txt";
+                QDir d;
+                d.mkdir(lyricsPath);
+                lyricsPath.append(lyricsFile);
+                if ( QFileInfo(lyricsPath).exists() )
                 {
-                    ui->lyricsText->setText(tr("Fetching lyrics..."));
-                    ui->lyricsText->setWhatsThis("");
+                    QString lines;
+                    QFile data(lyricsPath);
+                    if ( data.open(QFile::ReadOnly) )
+                    {
+                        QTextStream out(&data);
+                        while ( !out.atEnd() )
+                            lines += out.readLine()+"\n";
+                    }
+                    data.close();
+                    ui->lyricsText->setText(lines);
+                    ui->lyricsText->setWhatsThis(lyricsFile);
                     QApplication::processEvents();
-
-                    data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + lyricsFile.replace("-", "/") ) ) );
-
-                    /*QString salida = "http://www.leoslyrics.com/";
-                    salida += artist.toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") + "/";
-                    salida += title.toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") + "-lyrics/" ;
-                    data->get(QNetworkRequest(QUrl(salida)));*/
-                    //qDebug() << salida;
-
-                } else
+                    //qDebug() << "loading from file..." << lyricsPath;
+                }
+                else
                 {
-                    QString line1 = tr("There is no active Internet connection.");
-                    QString line2 = tr("Please connect to use this function.");
-                    ui->lyricsText->setText(line1+"\n"+line2);
+                    QNetworkConfigurationManager mgr;
+                    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
+                    if ( activeConfigs.count() > 0 )
+                    {
+                        ui->lyricsText->setText(tr("Fetching lyrics..."));
+                        ui->lyricsText->setWhatsThis("");
+                        QApplication::processEvents();
+
+                        data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + lyricsFile.replace("-", "/") ) ) );
+
+                        /*QString salida = "http://www.leoslyrics.com/";
+                        salida += artist.toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") + "/";
+                        salida += title.toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") + "-lyrics/" ;
+                        data->get(QNetworkRequest(QUrl(salida)));*/
+                        //qDebug() << salida;
+
+                    } else
+                    {
+                        QString line1 = tr("There is no active Internet connection.");
+                        QString line2 = tr("Please connect to use this function.");
+                        ui->lyricsText->setText(line1+"\n"+line2);
+                    }
                 }
             }
 
@@ -715,7 +725,7 @@ void NowPlayingWindow::toggleList()
 #ifdef MAFW
         positionTimer->stop();
 #endif
-    } else if(ui->lyrics->isHidden() && ui->widget->isHidden()) {
+    } else if(enableLyrics && ui->lyrics->isHidden() && ui->widget->isHidden()) {
         ui->widget->hide();
         ui->songPlaylist->hide();
         ui->lyrics->show();

@@ -262,10 +262,10 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         qDebug() << "Playlist created";
 #endif
 
-        npWindow = NowPlayingWindow::acquire(this, mafwFactory);
-        connect(npWindow, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowDestroyed()));
-        //connect(npWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
-        npWindow->show();
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowDestroyed()));
+        //connect(window, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
+        window->show();
         //ui->indicator->hide();
     }
 #endif

@@ -60,7 +60,6 @@ private:
     void setButtonIcons();
     void connectSignals();
     void setLabelText();
-    QMainWindow *dbusNowPlaying;
     QString uriToPlay;
 #ifdef Q_WS_MAEMO_5
     QMaemo5InformationBox *updatingIndex;
@@ -94,7 +93,6 @@ private slots:
     void showInternetRadioWindow();
     void onShuffleAllClicked();
     void createNowPlayingWindow();
-    void onDbusNpWindowDestroyed();
 #ifdef MAFW
     void trackerSourceReady();
     void radioSourceReady();

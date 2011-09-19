@@ -5,6 +5,8 @@
 #include <QSettings>
 #include <QDesktopWidget>
 
+#include "nowplayingwindow.h"
+
 namespace Ui {
     class SettingsDialog;
 }

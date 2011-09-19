@@ -38,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setButtonIcons();
     this->setLabelText();
     ui->listWidget->hide();
-    dbusNowPlaying = 0;
 
     MainDelegate *delegate = new MainDelegate(ui->listWidget);
     ui->listWidget->setItemDelegate(delegate);
@@ -267,15 +266,14 @@ void MainWindow::mime_open(const QString &uriString)
         playlist->clear();
         playlist->appendItem(objectId);
 #endif
-        NowPlayingWindow *nowPlayingWindow;
+
 #ifdef MAFW
-        nowPlayingWindow = NowPlayingWindow::acquire(this, mafwFactory);
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
 #else
-        nowPlayingWindow = NowPlayingWindow::acquire(this);
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this);
 #endif
-        //connect(nowPlayingWindow, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
-        //connect(nowPlayingWindow, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
-        nowPlayingWindow->show();
+        //connect(window, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
+        window->show();
     } else if(qmimetype.startsWith("video")) {
 #ifdef MAFW
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
@@ -302,24 +300,16 @@ void MainWindow::mime_open(const QString &uriString)
 
 void MainWindow::createNowPlayingWindow()
 {
-    if (dbusNowPlaying == 0) {
 #ifdef MAFW
-        dbusNowPlaying = NowPlayingWindow::acquire(this, mafwFactory);
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
 #else
-        dbusNowPlaying = NowPlayingWindow::acquire(this);
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this);
 #endif
-        //connect(dbusNowPlaying, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
-        //connect(dbusNowPlaying, SIGNAL(destroyed()), this, SLOT(onDbusNpWindowDestroyed()));
-    } else {
-        dbusNowPlaying->activateWindow();
-    }
-    dbusNowPlaying->show();
-    //ui->indicator->hide();
-}
+    //connect(window, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
 
-void MainWindow::onDbusNpWindowDestroyed()
-{
-    dbusNowPlaying = 0;
+    window->show();
+    //window->activateWindow();
+    //ui->indicator->hide();
 }
 
 void MainWindow::orientationChanged()

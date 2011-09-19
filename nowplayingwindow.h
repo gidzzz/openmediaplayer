@@ -44,6 +44,7 @@ class NowPlayingWindow : public QMainWindow
 
 public:
     static NowPlayingWindow* acquire(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    static void destroy();
     ~NowPlayingWindow();
     QString albuminfolder;
     QNetworkAccessManager* data;
@@ -90,6 +91,7 @@ private:
     bool playlistRequested;
     bool isDefaultArt;
     bool buttonWasDown;
+    bool enableLyrics;
     int songDuration;
     int currentSongPosition;
     int numberOfSongsToAdd;
