@@ -39,7 +39,7 @@ public:
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
 
     static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
-    static void onContentsChanged(MafwPlaylist*, guint, guint, guint, gpointer user_data);
+    static void onContentsChanged(MafwPlaylist*, guint from, guint nremove, guint nreplace, gpointer user_data);
 
 
 signals:

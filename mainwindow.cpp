@@ -513,11 +513,11 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint index, Q
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
 
     if (remainingCount == 0) {
-        playlist->appendItems((const gchar**)songAddBuffer);
-
         qDebug() << "disconnecting MainWindow from signalSourceBrowseResult";
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+
+        playlist->appendItems((const gchar**)songAddBuffer);
 
         for (int i = 0; i < songAddBufferSize; i++)
             delete[] songAddBuffer[i];
@@ -525,8 +525,10 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint index, Q
         this->browseAllSongsId = 0;
 
         uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
+        playlist->getSize(); // explained in musicwindow.cpp
         mafwrenderer->gotoIndex(randomIndex);
         mafwrenderer->play();
+
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
         //connect(window, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
         window->show();

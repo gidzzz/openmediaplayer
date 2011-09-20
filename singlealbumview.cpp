@@ -198,6 +198,7 @@ void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 
     this->createPlaylist(false);
 
+    playlist->getSize(); // explained in musicwindow.cpp
     mafwrenderer->gotoIndex(ui->songList->row(item));
     mafwrenderer->play();
 
@@ -255,7 +256,9 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 
         if (shuffle) {
             uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
+            playlist->getSize(); // explained in musicwindow.cpp
             mafwrenderer->gotoIndex(randomIndex);
+            mafwrenderer->play();
         }
 
 #ifdef DEBUG
