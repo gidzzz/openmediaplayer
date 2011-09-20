@@ -27,7 +27,7 @@
 const int BATCH_SIZE = 100;
 
 NowPlayingWindow* NowPlayingWindow::instance = NULL;
-int newsong;
+bool newSong;
 QString currentPlaylistUrl;
 
 NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory *mafwFactory)
@@ -74,7 +74,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     positionTimer->setInterval(1000);
 
     browseId = NULL;
-    newsong = 1;
+    newSong = true;
     albumArtScene = new QGraphicsScene(ui->view);
     entertainmentView = 0;
     carView = 0;
@@ -440,7 +440,7 @@ void NowPlayingWindow::connectSignals()
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "property_changed",
                                           this, SLOT(updatePlaylistState()));
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "playlist_updated", this, SLOT(updatePlaylist()));
-    QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "contents_changed", this, SLOT(updatePlaylist()));
+    connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(updatePlaylist(guint, guint, guint)));
 #endif
 }
 
@@ -550,7 +550,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         QFont f = ui->songTitleLabel->font();
         QFontMetrics fm(f);
 
-        if ( (newsong==1) || (title!=ui->songTitleLabel->whatsThis()) )
+        if ( newSong || (title!=ui->songTitleLabel->whatsThis()) )
         {
 
             v = mafw_metadata_first(metadata,
@@ -650,7 +650,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             if (isSeekable)
                 ui->songProgress->setEnabled(true);
 
-            newsong=0;
+            newSong = false;
 
         }
 
@@ -887,15 +887,13 @@ void NowPlayingWindow::showEvent(QShowEvent *)
 void NowPlayingWindow::onGconfValueChanged()
 {
     this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
-    this->selectItemByText(lastPlayingSong->value().toInt());
+    this->selectItemByRow(lastPlayingSong->value().toInt());
 }
 
 void NowPlayingWindow::onMediaChanged(int index, char*)
 {
-    newsong = 1;
+    newSong = true;
     lastPlayingSong->set(index);
-    this->selectItemByText(index);
-    ui->songPlaylist->scrollToItem(ui->songPlaylist->item(index));
     this->isDefaultArt = true;
 }
 
@@ -992,10 +990,10 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 {
 #ifdef DEBUG
     qDebug() << "Selected item number: " << ui->songPlaylist->currentRow();
-    qDebug() << "Item number in MAFW playlist: " << item->text();
+    //qDebug() << "Item number in MAFW playlist: " << item->text();
 #endif
     this->setSongNumber(ui->songPlaylist->currentRow()+1, ui->songPlaylist->count());
-    lastPlayingSong->set(ui->songPlaylist->currentItem()->text().toInt());
+    lastPlayingSong->set(ui->songPlaylist->currentRow());
 
     QFont f = ui->songTitleLabel->font();
     QFontMetrics fm(f);
@@ -1011,7 +1009,7 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     ui->currentPositionLabel->setText("00:00");
     this->songDuration = item->data(UserRoleSongDuration).toInt();
     ui->trackLengthLabel->setText(time_mmss(songDuration));
-    mafwrenderer->gotoIndex(item->text().toInt());
+    mafwrenderer->gotoIndex(ui->songPlaylist->row(item));
     if (this->mafwState == Stopped)
         mafwrenderer->play();
 }
@@ -1272,16 +1270,11 @@ void NowPlayingWindow::onSavePlaylistAccepted()
 void NowPlayingWindow::onDeleteFromNowPlaying()
 {
 #ifdef MAFW
-    playlist->removeItem(ui->songPlaylist->currentItem()->text().toInt());
-#endif
-    ui->songPlaylist->removeItemWidget(ui->songPlaylist->currentItem());
-    delete ui->songPlaylist->currentItem();
-#ifdef MAFW
-    this->setSongNumber(lastPlayingSong->value().toInt(), playlist->getSize());
+    playlist->removeItem(ui->songPlaylist->currentRow());
 #endif
 }
 
-void NowPlayingWindow::selectItemByText(int numberInPlaylist)
+/*void NowPlayingWindow::selectItemByText(int numberInPlaylist)
 {
     for (int i = 0; i < ui->songPlaylist->count(); i++) {
         if (ui->songPlaylist->item(i)->text().toInt() == numberInPlaylist) {
@@ -1291,61 +1284,94 @@ void NowPlayingWindow::selectItemByText(int numberInPlaylist)
             ui->songPlaylist->scrollToItem(ui->songPlaylist->item(i), QAbstractItemView::PositionAtCenter);
         }
     }
+}*/
+
+void NowPlayingWindow::selectItemByRow(int row)
+{
+    if (ui->songPlaylist->item(row)){
+        ui->songPlaylist->clearSelection();
+        ui->songPlaylist->item(row)->setSelected(true);
+        ui->songPlaylist->setCurrentRow(row);
+        ui->songPlaylist->scrollToItem(ui->songPlaylist->item(row), QAbstractItemView::PositionAtCenter);
+    }
 }
 
-void NowPlayingWindow::updatePlaylist()
+void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 {
-    qDebug() << "NowPlayingWindow::updatePlaylist";
+    qDebug() << "NowPlayingWindow::updatePlaylist |" << from << nremove << nreplace;
 
     if (playlist->playlistName() != "FmpAudioPlaylist") {
         qDebug() << "playlist type rejected, update aborted";
         return;
     }
 
-    if (browseId) {
-        qDebug() << "cancelling previous get_items query";
-        mafw_playlist_cancel_get_items_md(browseId);
-    }
+    // measure playlist fill rate
+    n = numberOfSongsToAdd;
+    t.setHMS(0,0,0,0);
+    t.start();
 
-    ui->songPlaylist->clear();
+    if (nreplace < BATCH_SIZE && from + nremove + nreplace != 0 && numberOfSongsToAdd == 0) {
+        if (nremove > 0)
+            for (int i = 0; i < nremove; i++)
+                delete ui->songPlaylist->takeItem(from);
+        else {
+            for (int i = 0; i < nreplace; i++) {
+                QListWidgetItem *item = new QListWidgetItem();
+                //item->setText(QString::number(i));
+                item->setData(UserRoleValueText, " ");
+                item->setData(UserRoleSongDuration, Duration::Blank);
+                ui->songPlaylist->insertItem(from, item);
+            }
 
-    if (numberOfSongsToAdd = playlist->getSize()) {
-        for (int i = 0; i < numberOfSongsToAdd; i++) {
-            QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
-            item->setText(QString::number(i));
-            item->setData(UserRoleValueText, " ");
-            item->setData(UserRoleSongDuration, Duration::Blank);
-            ui->songPlaylist->addItem(item);
+            qDebug() << "connecting SinglePlaylistView to onGetItems";
+            connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
+                    this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
+
+            numberOfSongsToAdd = nreplace;
+            playlist->getItems(from, from+nreplace);
         }
 
-        this->selectItemByText(lastPlayingSong->value().toInt());
+    } else {
 
-        qDebug() << "connecting SinglePlaylistView to onGetItems";
-        connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-                this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
+        if (browseId) {
+            qDebug() << "cancelling previous get_items query";
+            mafw_playlist_cancel_get_items_md(browseId);
+        }
 
-        // measure playlist fill rate
-        n = numberOfSongsToAdd;
-        t.setHMS(0,0,0,0);
-        t.start();
+        ui->songPlaylist->clear();
 
-        // For some reason MAFW doesn't send metadata when handling too many
-        // requests. The workaround here is to query a safe number of items and
-        // wait with another batch until all of them are served.
+        if (numberOfSongsToAdd = playlist->getSize()) {
+            for (int i = 0; i < numberOfSongsToAdd; i++) {
+                QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
+                //item->setText(QString::number(i));
+                item->setData(UserRoleValueText, " ");
+                item->setData(UserRoleSongDuration, Duration::Blank);
+                ui->songPlaylist->addItem(item);
+            }
 
-        // Smaller batches make playlist filling more fluid, but it takes more
-        // time to complete. Large batches might be not safe.
+            qDebug() << "connecting SinglePlaylistView to onGetItems";
+            connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
+                    this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
 
-        browseId = playlist->getItems(numberOfSongsToAdd-1 - (numberOfSongsToAdd-1)%BATCH_SIZE, -1);
-        qDebug() << numberOfSongsToAdd-1 - (numberOfSongsToAdd-1)%BATCH_SIZE;
+            // For some reason MAFW doesn't send metadata when handling too many
+            // requests. The workaround here is to query a safe number of items and
+            // wait with another batch until all of them are served.
 
-        // fast and easy, but not safe and results come late
-        /*browseId = playlist->getAllItems();*/
+            // Smaller batches make playlist filling more fluid, but it takes more
+            // time to complete. Large batches might be not safe.
 
-        // fast and results start to come early, but not safe
-        /*for (int i = 0; i < numberOfSongsToAdd; i+=10)
-            playlist->getItems(i, i+10);*/
+            browseId = playlist->getItems(numberOfSongsToAdd-1 - (numberOfSongsToAdd-1)%BATCH_SIZE, -1);
+
+            // fast and easy, but not safe and results come late
+            /*browseId = playlist->getAllItems();*/
+
+            // fast and results start to come early, but not safe
+            /*for (int i = 0; i < numberOfSongsToAdd; i+=10)
+                playlist->getItems(i, i+10);*/
+        }
     }
+
+    mafwrenderer->getStatus();
 }
 
 void NowPlayingWindow::on_view_customContextMenuRequested(QPoint pos)

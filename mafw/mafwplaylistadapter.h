@@ -45,7 +45,7 @@ public:
 signals:
     void onGetItems(QString object_id, GHashTable *metadata, guint index);
     void playlistChanged();
-    void contentsChanged();
+    void contentsChanged(guint from, guint nremove, guint nreplace);
 
 public slots:
     void assignAudioPlaylist();

@@ -63,7 +63,7 @@ void NowPlayingIndicator::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onPlaylistReady()));
     connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
-    connect(playlist, SIGNAL(contentsChanged()), this, SLOT(autoSetVisibility()));
+    connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(autoSetVisibility()));
     connect(playlist, SIGNAL(playlistChanged()), this, SLOT(autoSetVisibility()));
 #endif
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));

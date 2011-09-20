@@ -256,7 +256,7 @@ void MafwPlaylistAdapter::connectPlaylistSignals()
     // "item-moved" could alo be added here
 }
 
-void MafwPlaylistAdapter::onContentsChanged(MafwPlaylist*, guint, guint, guint, gpointer user_data) //move up?
+void MafwPlaylistAdapter::onContentsChanged(MafwPlaylist*, guint from, guint nremove, guint nreplace, gpointer user_data)
 {
-    emit static_cast<MafwPlaylistAdapter*>(user_data)->contentsChanged();
+    emit static_cast<MafwPlaylistAdapter*>(user_data)->contentsChanged(from, nremove, nreplace);
 }

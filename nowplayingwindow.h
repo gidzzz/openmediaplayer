@@ -133,7 +133,7 @@ private slots:
     void onMediaChanged(int index, char*);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
-    void updatePlaylist();
+    void updatePlaylist(guint from = 0, guint nremove = 0, guint nreplace = 0);
     void onRingingToneUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString objectId, QString uri);
 #endif
@@ -156,7 +156,8 @@ private slots:
     void savePlaylist();
     void onSavePlaylistAccepted();
     void onDeleteFromNowPlaying();
-    void selectItemByText(int numberInPlaylist);
+    //void selectItemByText(int numberInPlaylist);
+    void selectItemByRow(int row);
 #ifdef Q_WS_MAEMO_5
     void onScreenLocked(bool locked);
 #endif
