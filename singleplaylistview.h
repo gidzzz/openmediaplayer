@@ -57,7 +57,7 @@ private:
 private slots:
     void orientationChanged();
 #ifdef MAFW
-    void onGetItems(QString objectId, GHashTable* metadata, guint index);
+    void onGetItems(QString objectId, GHashTable* metadata, guint index, gpointer op);
     void onBrowseResult(uint browseId, int, uint, QString objectId, GHashTable *metadata, QString);
     void onDeleteUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString objectId, QString uri);

@@ -39,11 +39,12 @@ public:
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
 
     static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
+    static void get_items_free_cbarg(gpointer user_data);
     static void onContentsChanged(MafwPlaylist*, guint from, guint nremove, guint nreplace, gpointer user_data);
 
 
 signals:
-    void onGetItems(QString object_id, GHashTable *metadata, guint index);
+    void onGetItems(QString object_id, GHashTable *metadata, guint index, gpointer op);
     void playlistChanged();
     void contentsChanged(guint from, guint nremove, guint nreplace);
 
@@ -60,6 +61,12 @@ private:
 private slots:
     void onGetStatus(MafwPlaylist* playlist, uint, MafwPlayState, const char*, QString);
     void onPlaylistChanged(GObject* playlist);
+};
+
+struct get_items_cb_payload
+{
+    MafwPlaylistAdapter* adapter;
+    gpointer op;
 };
 
 #endif // MAFWPLAYLISTADAPTER_H

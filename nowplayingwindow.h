@@ -124,7 +124,7 @@ private slots:
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onRendererMetadataRequested(GHashTable*, QString object_id, QString);
     void onSourceMetadataRequested(QString, GHashTable*, QString);
-    void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
+    void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index, gpointer op);
     void setPosition(int);
     void onPlaylistItemActivated(QListWidgetItem*);
     void clearPlaylist();

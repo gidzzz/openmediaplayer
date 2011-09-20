@@ -86,17 +86,20 @@ SinglePlaylistView::~SinglePlaylistView()
 void SinglePlaylistView::browsePlaylist(MafwPlaylist *mafwplaylist)
 {
     qDebug() << "connecting SinglePlaylistView to onGetItems";
-    connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-            this, SLOT(onGetItems(QString,GHashTable*,guint)));
+    connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
+            this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
     this->numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
     this->setSongCount(numberOfSongsToAdd);
-    playlist->getItemsOf(mafwplaylist);
+    browsePlaylistId = (uint)playlist->getItemsOf(mafwplaylist);
 }
 
-void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guint index)
+void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guint index, gpointer op)
 {
+    if ((uint)op != browsePlaylistId)
+        return;
+
+    qDebug() << "SinglePlaylistView::onGetItems |" << index;
     numberOfSongsToAdd--;
-    qDebug() << "SinglePlaylistView::onGetItems(QString, GHashTable*, guint)";
     QString title;
     QString artist;
     QString album;
@@ -150,8 +153,8 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
 
     if (numberOfSongsToAdd == 0) {
         qDebug() << "disconnecting SinglePlaylistView from onGetItems";
-        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-                   this, SLOT(onGetItems(QString,GHashTable*,guint)));
+        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
+                   this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif

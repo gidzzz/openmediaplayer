@@ -144,16 +144,19 @@ gpointer MafwPlaylistAdapter::getItems(int from, int to)
 #endif
 
     if (mafw_playlist) {
-        return mafw_playlist_get_items_md (this->mafw_playlist,
-                                    from,
-                                    to,
-                                    MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                     MAFW_METADATA_KEY_ALBUM,
-                                                     MAFW_METADATA_KEY_ARTIST,
-                                                     MAFW_METADATA_KEY_URI,
-                                                     MAFW_METADATA_KEY_DURATION),
-                                    MafwPlaylistAdapter::get_items_cb,
-                                    this, NULL);
+        get_items_cb_payload* pl = new get_items_cb_payload;
+        pl->adapter = this;
+        pl->op = mafw_playlist_get_items_md (this->mafw_playlist,
+                                             from,
+                                             to,
+                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                              MAFW_METADATA_KEY_ALBUM,
+                                                              MAFW_METADATA_KEY_ARTIST,
+                                                              MAFW_METADATA_KEY_URI,
+                                                              MAFW_METADATA_KEY_DURATION),
+                                             MafwPlaylistAdapter::get_items_cb,
+                                             pl, NULL);
+        return pl->op;
     } else return NULL;
 #ifdef DEBUG
     qDebug() << "MafwPlaylistAdapter::getItems called successfully";
@@ -162,16 +165,19 @@ gpointer MafwPlaylistAdapter::getItems(int from, int to)
 
 gpointer MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist)
 {
-    return mafw_playlist_get_items_md (playlist,
-                                0,
-                                -1,
-                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                 MAFW_METADATA_KEY_ALBUM,
-                                                 MAFW_METADATA_KEY_ARTIST,
-                                                 MAFW_METADATA_KEY_URI,
-                                                 MAFW_METADATA_KEY_DURATION),
-                                MafwPlaylistAdapter::get_items_cb,
-                                this, NULL);
+    get_items_cb_payload* pl = new get_items_cb_payload;
+    pl->adapter = this;
+    pl->op = mafw_playlist_get_items_md (playlist,
+                                         0,
+                                         -1,
+                                         MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                          MAFW_METADATA_KEY_ALBUM,
+                                                          MAFW_METADATA_KEY_ARTIST,
+                                                          MAFW_METADATA_KEY_URI,
+                                                          MAFW_METADATA_KEY_DURATION),
+                                         MafwPlaylistAdapter::get_items_cb,
+                                         pl, NULL);
+    return pl->op;
 }
 
 void MafwPlaylistAdapter::get_items_cb(MafwPlaylist*,
@@ -180,7 +186,15 @@ void MafwPlaylistAdapter::get_items_cb(MafwPlaylist*,
                                        GHashTable *metadata,
                                        gpointer user_data)
 {
-    emit static_cast<MafwPlaylistAdapter*>(user_data)->onGetItems(QString::fromUtf8(object_id), metadata, index);
+    MafwPlaylistAdapter* adapter = static_cast<get_items_cb_payload*>(user_data)->adapter;
+                     gpointer op = static_cast<get_items_cb_payload*>(user_data)->op;
+
+    emit adapter->onGetItems(QString::fromUtf8(object_id), metadata, index, op);
+}
+
+void MafwPlaylistAdapter::get_items_free_cbarg(gpointer user_data)
+{
+    delete static_cast<get_items_cb_payload*>(user_data);
 }
 
 void MafwPlaylistAdapter::onGetStatus(MafwPlaylist* playlist, uint, MafwPlayState, const char*, QString)

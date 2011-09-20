@@ -422,7 +422,7 @@ void NowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
-    //connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
+    //connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint,gpointer)));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
@@ -928,7 +928,7 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 }
 
 #ifdef MAFW
-void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index)
+void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index, gpointer op)
 {
     qDebug() << "NowPlayingWindow::onGetPlaylistItems | index: " << index;
     if (--numberOfSongsToAdd == 0) {
@@ -936,7 +936,8 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         qDebug() << QString("%1 ms, %2/s").arg(e).arg((double)n/e*1000);
 
         qDebug() << "disconnecting NowPlayingWindow from onGetItems";
-        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)), this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)));
+        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
+                   this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint,gpointer)));
         browseId = NULL;
     } else if (numberOfSongsToAdd % BATCH_SIZE == 0)
         browseId = playlist->getItems(numberOfSongsToAdd-BATCH_SIZE, numberOfSongsToAdd-1);
@@ -1324,8 +1325,8 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
             }
 
             qDebug() << "connecting SinglePlaylistView to onGetItems";
-            connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-                    this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
+            connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
+                    this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint,gpointer)), Qt::UniqueConnection);
 
             numberOfSongsToAdd = nreplace;
             playlist->getItems(from, from+nreplace);
@@ -1350,8 +1351,8 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
             }
 
             qDebug() << "connecting SinglePlaylistView to onGetItems";
-            connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-                    this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint)), Qt::UniqueConnection);
+            connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
+                    this, SLOT(onGetPlaylistItems(QString,GHashTable*,guint,gpointer)), Qt::UniqueConnection);
 
             // For some reason MAFW doesn't send metadata when handling too many
             // requests. The workaround here is to query a safe number of items and

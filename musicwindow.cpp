@@ -1152,10 +1152,10 @@ void MusicWindow::onAddToNowPlaying()
                 songAddBuffer[songAddBufferSize] = NULL;
 
                 qDebug() << "connecting MusicWindow to onGetItems";
-                connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-                        this, SLOT(onGetItems(QString,GHashTable*,guint)));
+                connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
+                        this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
 
-                playlist->getItemsOf(mafwplaylist);
+                this->addToNowPlayingId = (uint)playlist->getItemsOf(mafwplaylist);
             }
         }
         else { // imported playlist case
@@ -1178,16 +1178,19 @@ void MusicWindow::onAddToNowPlaying()
 #endif
 }
 
-void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index)
+void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index, gpointer op)
 {
-    qDebug() << "MusicWindow::onGetItems(QString, GHashTable*, guint) | index: " << index;
+    if ((uint)op != addToNowPlayingId)
+        return;
+
+    qDebug() << "MusicWindow::onGetItems | index: " << index;
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
     numberOfSongsToAdd--;
 
     if (numberOfSongsToAdd == 0) {
         qDebug() << "disconnecting MusicWindow from onGetItems";
-        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint)),
-                   this, SLOT(onGetItems(QString,GHashTable*,guint)));
+        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
+                   this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
 
         playlist->appendItems((const gchar**)songAddBuffer);
 
