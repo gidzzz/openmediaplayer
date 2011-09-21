@@ -6,6 +6,7 @@
 #include <QtDBus>
 #include <QTimer>
 
+#include <QNetworkConfigurationManager>
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <QNetworkRequest>
@@ -18,6 +19,11 @@
 #include "delegates/playlistdelegate.h"
 #include "entertainmentview.h"
 #include "carview.h"
+#include "texteditautoresizer.h"
+#include "home.h"
+#include "editlyrics.h"
+#include "tagwindow.h"
+#include "mediaart.h"
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"

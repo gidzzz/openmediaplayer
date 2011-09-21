@@ -41,7 +41,8 @@ SOURCES += main.cpp \
     freqdlg.cpp \
     delegates/maintdelegate.cpp \
     editlyrics.cpp \
-    tagwindow.cpp
+    tagwindow.cpp \
+    mediaart.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -73,7 +74,8 @@ HEADERS  += mainwindow.h \
     freqdlg.h \
     delegates/maintdelegate.h \
     editlyrics.h \
-    tagwindow.h
+    tagwindow.h \
+    mediaart.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \

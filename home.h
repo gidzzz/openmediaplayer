@@ -2,8 +2,15 @@
 #define HOME_H
 
 #include <QDialog>
+#include <QDir>
+#include <QFileInfo>
 #include <QListWidgetItem>
 #include <QMaemo5ValueButton>
+
+#include "includes.h"
+#include "ui_home.h"
+#include "qmaemo5rotator.h"
+#include "mediaart.h"
 
 namespace Ui {
     class Home;
@@ -17,12 +24,12 @@ public:
     explicit Home(QWidget *parent = 0, QString target = "", QString path = "", QString album = "");
     ~Home();
     QMaemo5ValueButton* button;
-    QString target1;
-    QString albumtitle;
-    QString newalbumart;
+    QString target;
+    QString album;
+    QString newAlbumArt;
 
 public slots:
-    void CargarBrowser(QString directorio);
+    void openBrowser(QString directory);
 
 private:
     Ui::Home *ui;

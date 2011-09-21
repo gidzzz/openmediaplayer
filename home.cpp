@@ -1,13 +1,6 @@
-#include "includes.h"
 #include "home.h"
-#include "ui_home.h"
-#include "qsettings.h"
-#include "qmaemo5rotator.h"
-#include <qdir.h>
-#include <qfileinfo.h>
-#include "hildon-thumbnail/hildon-albumart-factory.h"
 
-QString hPath;
+QString currentPath;
 
 Home::Home(QWidget *parent, QString target, QString path, QString album) :
     QDialog(parent),
@@ -15,19 +8,21 @@ Home::Home(QWidget *parent, QString target, QString path, QString album) :
 {
     ui->setupUi(this);
 
-    albumtitle = album;
-    target1 = target;
+    this->album = album;
+    this->target = target;
     QFileInfo dr(path);
     this->setWindowTitle(target);
 
-    ui->pushButton->setIcon(QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/filemanager_folder_up.png"));
-    ui->button->setIcon(QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/general_folder.png"));
+    // currtheme is "default" when it should be "hicolor"?
+    qDebug() << "/usr/share/icons/"+currtheme+"/48x48/hildon/filemanager_folder_up.png";
+    ui->pushButton->setIcon( QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/filemanager_folder_up.png") );
+    ui->button->setIcon( QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/general_folder.png") );
     ui->button->setText( dr.fileName() );
     if ( path == "/") ui->button->setText( "/" );
     ui->button->setValueText( path );
     if ( path == "/") ui->button->setValueText( "" );
 
-    CargarBrowser( path );
+    openBrowser( path );
 
     setAttribute(Qt::WA_Maemo5AutoOrientation, true);
 
@@ -38,18 +33,18 @@ Home::~Home()
     delete ui;
 }
 
-void Home::CargarBrowser(QString directorio)
+void Home::openBrowser(QString directory)
 {
 
-    hPath = directorio;
-    QDir dir ( directorio, "*" );
+    currentPath = directory;
+    QDir dir ( directory, "*" );
     dir.setFilter ( QDir::Dirs | QDir::Hidden );
     if ( !dir.isReadable() )
           return;
-    ui->button->setText( QFileInfo(directorio).fileName() );
-    if ( directorio == "/") ui->button->setText( "/" );
-    ui->button->setValueText( directorio );
-    if ( directorio == "/") ui->button->setValueText( "" );
+    ui->button->setText( QFileInfo(directory).fileName() );
+    if ( directory == "/") ui->button->setText( "/" );
+    ui->button->setValueText( directory );
+    if ( directory == "/") ui->button->setValueText( "" );
 
     ui->listWidget->clear();
 
@@ -71,17 +66,17 @@ void Home::CargarBrowser(QString directorio)
 
         if ( fileInfo.isDir() )
         {
-            QListWidgetItem *item1 = new QListWidgetItem( ui->listWidget );
-            item1->setText(fileInfo.fileName());
-            item1->setIcon(QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/general_folder.png"));
-            ui->listWidget->insertItem( i, item1 );
+            QListWidgetItem *item = new QListWidgetItem( ui->listWidget );
+            item->setText(fileInfo.fileName());
+            item->setIcon(QIcon( "/usr/share/icons/"+currtheme+"/48x48/hildon/general_folder.png") );
+            ui->listWidget->insertItem( i, item );
         }
         else if ( fileInfo.completeSuffix() == "jpg" )
         {
-            QListWidgetItem *item1 = new QListWidgetItem( ui->listWidget );
-            item1->setText(fileInfo.fileName());
-            item1->setIcon(QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/general_image.png"));
-            ui->listWidget->insertItem( i, item1 );
+            QListWidgetItem *item = new QListWidgetItem( ui->listWidget );
+            item->setText(fileInfo.fileName());
+            item->setIcon( QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/general_image.png") );
+            ui->listWidget->insertItem( i, item );
         }
 
     }
@@ -94,31 +89,27 @@ void Home::CargarBrowser(QString directorio)
 
 void Home::on_listWidget_itemClicked(QListWidgetItem* item)
 {
-    QString temp = hPath;
-    if ( temp != "/" ) temp.append("/");
-    temp.append( item->text() );
-    if ( temp == "//" ) temp="/";
+    QString newPath = currentPath;
+    if ( newPath != "/" ) newPath.append("/");
+    newPath.append( item->text() );
+    if ( newPath == "//" ) newPath = "/";
 
-    if ( QFileInfo(temp).isFile() )
+    if ( QFileInfo(newPath).isFile() )
     {
-        //qDebug() << QString::fromUtf8(hildon_albumart_get_path(NULL,albumtitle.toUtf8(),"album"));
-        QString newfile = QString::fromUtf8(hildon_albumart_get_path(NULL,albumtitle.toUtf8(),"album"));
-        if ( QFileInfo(newfile).exists() )
-            QFile::remove(newfile);
-        QFile::copy(temp,newfile);
-        newalbumart = newfile;
+        newAlbumArt = MediaArt::setAlbumImage(album, newPath);
         this->accept();
     }
 
-    CargarBrowser( temp );
+    openBrowser( newPath );
 }
 
 void Home::on_pushButton_clicked()
 {
-    if ( hPath == "/" ) return;
-    QString nPath = hPath;
-    int i = nPath.lastIndexOf( "/" );
-    nPath.remove ( i, nPath.length() - i );
-    if ( nPath == "" ) nPath = "/";
-    CargarBrowser( nPath );
+    if ( currentPath == "/" ) return;
+
+    QString newPath = currentPath;
+    int i = newPath.lastIndexOf( "/" );
+    newPath.remove ( i, newPath.length() - i );
+    if ( newPath == "" ) newPath = "/";
+    openBrowser( newPath );
 }

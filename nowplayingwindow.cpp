@@ -16,13 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-#include "texteditautoresizer.h"
 #include "nowplayingwindow.h"
-#include "home.h"
-#include "editlyrics.h"
-#include "tagwindow.h"
-#include "hildon-thumbnail/hildon-albumart-factory.h"
-#include <QNetworkConfigurationManager>
 
 const int BATCH_SIZE = 100;
 
@@ -232,17 +226,14 @@ void NowPlayingWindow::setAlbumImage(QString image)
     this->albumArtUri = image;
     if (image == albumImage)
     {
-        //If there's no albumart search for folder.jpg file and apply it
+        // If there's no albumart, search for "folder.jpg" file and apply it
         albuminfolder.remove("file://").replace("%20"," ");
         int x = albuminfolder.lastIndexOf("/");
-        albuminfolder.remove(x,albuminfolder.length()-x);
+        albuminfolder.remove(x, albuminfolder.length()-x);
         albuminfolder.append("/folder.jpg");
         if ( QFileInfo(albuminfolder).exists() )
         {
-            QString newfile = QString::fromUtf8(hildon_albumart_get_path(NULL,ui->albumNameLabel->whatsThis().toUtf8(),"album"));
-            if ( QFileInfo(newfile).exists() )
-                QFile::remove(newfile);
-            QFile::copy(albuminfolder,newfile);
+            MediaArt::setAlbumImage(ui->albumNameLabel->text(), image);
             image = albuminfolder;
             this->isDefaultArt = false;
         }
@@ -1387,7 +1378,7 @@ void NowPlayingWindow::changeArt()
     Home* hw = new Home(this, tr("Change album art"), "/home/user/MyDocs", ui->albumNameLabel->whatsThis());
     hw->exec();
     if ( hw->result() == QDialog::Accepted )
-        setAlbumImage(hw->newalbumart);
+        setAlbumImage(hw->newAlbumArt);
     delete hw;
 }
 
