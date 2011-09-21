@@ -25,6 +25,7 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     QString duration = index.data(UserRoleValueText).toString();
 
     painter->save();
+    painter->setRenderHint(QPainter::SmoothPixmapTransform);
     QRect r = option.rect;
     if(option.state & QStyle::State_Selected)
     {

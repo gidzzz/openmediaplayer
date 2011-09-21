@@ -253,7 +253,7 @@ void NowPlayingWindow::setAlbumImage(QString image)
     m = new mirror();
     albumArtScene->addItem(m);
     QPixmap albumArt(image);
-    albumArt = albumArt.scaled(QSize(295, 295));
+    albumArt = albumArt.scaled(QSize(295, 295), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(albumArt);
     albumArtScene->addItem(item);
     m->setItem(item);
