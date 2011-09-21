@@ -226,15 +226,21 @@ void NowPlayingWindow::setAlbumImage(QString image)
     this->albumArtUri = image;
     if (image == albumImage)
     {
-        // If there's no albumart, search for "folder.jpg" file and apply it
-        albuminfolder.remove("file://").replace("%20"," ");
-        int x = albuminfolder.lastIndexOf("/");
-        albuminfolder.remove(x, albuminfolder.length()-x);
-        albuminfolder.append("/folder.jpg");
-        if ( QFileInfo(albuminfolder).exists() )
+        // If there's no album art, search for it song's directory
+        albumInFolder.remove("file://").replace("%20"," ");
+        int x = albumInFolder.lastIndexOf("/");
+        albumInFolder.remove(x, albumInFolder.length()-x);
+
+        if ( QFileInfo(albumInFolder + "/cover.jpg").exists() )
+            albumInFolder.append("/cover.jpg");
+        else if ( QFileInfo(albumInFolder + "/front.jpg").exists() )
+            albumInFolder.append("/front.jpg");
+        else
+            albumInFolder.append("/folder.jpg");
+
+        if ( QFileInfo(albumInFolder).exists() )
         {
-            MediaArt::setAlbumImage(ui->albumNameLabel->text(), image);
-            image = albuminfolder;
+            image = MediaArt::setAlbumImage(ui->albumNameLabel->text(), albumInFolder);
             this->isDefaultArt = false;
         }
         else
@@ -334,7 +340,7 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
         ui->albumNameLabel->setText(temp);
     }
     if(name == "uri")
-        albuminfolder = value.toString();
+        albumInFolder = value.toString();
     if(name == "renderer-art-uri")
         this->setAlbumImage(value.toString());
 }
@@ -515,7 +521,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_URI);
-        albuminfolder = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+        albumInFolder = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_ARTIST);
@@ -1369,17 +1375,30 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 void NowPlayingWindow::on_view_customContextMenuRequested(QPoint pos)
 {
     QMenu *contextMenu = new QMenu(this);
-    contextMenu->addAction(tr("Change album art"), this, SLOT(changeArt()));
+    contextMenu->addAction(tr("Select album art"), this, SLOT(selectAlbumArt()));
+    contextMenu->addAction(tr("Reset album art"), this, SLOT(resetAlbumArt()));
     contextMenu->exec(mapToGlobal(pos));
 }
 
-void NowPlayingWindow::changeArt()
+void NowPlayingWindow::selectAlbumArt()
 {
-    Home* hw = new Home(this, tr("Change album art"), "/home/user/MyDocs", ui->albumNameLabel->whatsThis());
+    Home* hw = new Home(this, tr("Select album art"), "/home/user/MyDocs", ui->albumNameLabel->whatsThis());
     hw->exec();
     if ( hw->result() == QDialog::Accepted )
         setAlbumImage(hw->newAlbumArt);
     delete hw;
+}
+
+void NowPlayingWindow::resetAlbumArt()
+{
+    QMessageBox confirm(QMessageBox::NoIcon,
+                             " ",
+                             tr("Reset album art?"),
+                             QMessageBox::Yes | QMessageBox::No,
+                             this);
+    confirm.exec();
+    if(confirm.result() == QMessageBox::Yes)
+        setAlbumImage(MediaArt::setAlbumImage(ui->albumNameLabel->text(), ""));
 }
 
 void NowPlayingWindow::on_lyricsText_customContextMenuRequested(QPoint pos)

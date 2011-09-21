@@ -2,6 +2,14 @@
 #define EDITLYRICS_H
 
 #include <QMainWindow>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
+#include <QDebug>
+
+#include "ui_editlyrics.h"
+#include "nowplayingwindow.h"
+#include "texteditautoresizer.h"
 
 namespace Ui {
     class EditLyrics;

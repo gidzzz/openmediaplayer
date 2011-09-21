@@ -91,7 +91,7 @@ void SingleAlbumView::listSongs()
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
 #endif
 
-    this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumName.toUtf8(), true, NULL, "+track",
+    this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumName.toUtf8(), true, NULL, "+track,+title",
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,

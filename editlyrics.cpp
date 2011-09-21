@@ -1,11 +1,4 @@
 #include "editlyrics.h"
-#include "ui_editlyrics.h"
-#include "nowplayingwindow.h"
-#include "texteditautoresizer.h"
-#include <QFile>
-#include <QFileInfo>
-#include <QTextStream>
-#include <QDebug>
 
 EditLyrics::EditLyrics(QWidget *parent, QString lyricsFile, QString artist, QString title) :
     QMainWindow(parent),

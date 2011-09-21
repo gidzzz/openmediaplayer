@@ -3,6 +3,7 @@
 QString MediaArt::setAlbumImage(QString album, QString image)
 {
     gchar* file;
+    gchar* uri;
 
     // Get album art path
     file = hildon_albumart_get_path(NULL, album.toUtf8(), "album");
@@ -18,8 +19,8 @@ QString MediaArt::setAlbumImage(QString album, QString image)
         QFile::copy(image, newArtFile);
 
     // Get thumbnail path
-    QString newArtUri = "file://" + newArtFile;
-    file = hildon_thumbnail_get_uri(newArtUri.toUtf8(), 124, 124, true);
+    uri = g_filename_to_uri(newArtFile.toUtf8(), NULL, NULL);
+    file = hildon_thumbnail_get_uri(uri, 124, 124, true);
     QString newThumbFile = QString::fromUtf8(file);
     delete file;
 
@@ -30,13 +31,14 @@ QString MediaArt::setAlbumImage(QString album, QString image)
     // Generate new thumbanil
     if (!image.isEmpty()) {
         HildonThumbnailFactory* factory = hildon_thumbnail_factory_get_instance();
-        HildonThumbnailRequest* request = hildon_thumbnail_factory_request_uri(factory, newArtUri.toUtf8(), 124, 124, true, "image/jpeg", NULL, NULL, NULL);
+        HildonThumbnailRequest* request = hildon_thumbnail_factory_request_uri(factory, uri, 124, 124, true, "image/jpeg", NULL, NULL, NULL);
 
-        hildon_thumbnail_factory_join(factory);
+        hildon_thumbnail_request_join(request);
         g_object_unref(request);
         g_object_unref(factory);
-
-        return newArtFile;
     }
-    else return albumImage;
+
+    g_free(uri);
+
+    return image.isEmpty() ? albumImage : newArtFile;
 }

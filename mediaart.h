@@ -10,6 +10,7 @@ namespace MediaArt
 {
     // Returns: path to the new image
     QString setAlbumImage(QString album, QString image);
+    void callback(HildonThumbnailFactory *self, const gchar *thumbnail, GError *error, gpointer user_data);
 }
 
 #endif // MEDIAART_H
