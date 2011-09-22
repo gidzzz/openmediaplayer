@@ -1137,7 +1137,7 @@ void NowPlayingWindow::showEntertainmentView()
     entertainmentView = new EntertainmentView(this, mafwFactory);
     entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
     for (int i = 0; i < ui->songPlaylist->count(); i++) {
-        entertainmentView->addItemToPlaylist(ui->songPlaylist->item(i));
+        entertainmentView->addItemToPlaylist(ui->songPlaylist->item(i), i);
     }
     connect(entertainmentView, SIGNAL(destroyed()), this, SLOT(nullEntertainmentView()));
     this->updateEntertainmentViewMetadata();
@@ -1149,7 +1149,7 @@ void NowPlayingWindow::showCarView()
     carView = new CarView(this, mafwFactory);
     carView->setAttribute(Qt::WA_DeleteOnClose);
     for (int i = 0; i < ui->songPlaylist->count(); i++) {
-        carView->addItemToPlaylist(ui->songPlaylist->item(i));
+        carView->addItemToPlaylist(ui->songPlaylist->item(i), i);
     }
     connect(carView, SIGNAL(destroyed()), this, SLOT(nullCarView()));
     this->updateCarViewMetadata();

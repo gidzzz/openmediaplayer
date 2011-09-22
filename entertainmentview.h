@@ -27,7 +27,7 @@ public:
     explicit EntertainmentView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~EntertainmentView();
     void setMetadata(QString songName, QString albumName, QString artistName, QString albumArtUri, int duration);
-    void addItemToPlaylist(QListWidgetItem *item);
+    void addItemToPlaylist(QListWidgetItem *item, int index);
     void setCurrentRow(int);
 
 signals:

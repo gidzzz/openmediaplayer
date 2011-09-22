@@ -174,13 +174,13 @@ void CarView::onSliderValueChanged(int position)
     mafwrenderer->setPosition(SeekAbsolute, position);
 }
 
-void CarView::addItemToPlaylist(QListWidgetItem *item)
+void CarView::addItemToPlaylist(QListWidgetItem *item, int index)
 {
     int duration = item->data(UserRoleSongDuration).toInt();
     emit addToPlaylist(item->data(UserRoleSongTitle).toString(),
                        QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
                        time_mmss(duration),
-                       item->text().toInt());
+                       index);
 }
 
 void CarView::onPlaylistItemChanged(int index)
