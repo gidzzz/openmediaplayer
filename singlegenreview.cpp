@@ -98,18 +98,20 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->setWindowTitle(item->data(UserRoleSongName).toString());
-        //connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
         albumView->show();
-        //ui->indicator->hide();
+        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        ui->indicator->inhibit();
     } else if(songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleSongName).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
-        //connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
         artistView->show();
-        //ui->indicator->hide();
+        connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        ui->indicator->inhibit();
     }
 
     ui->artistList->clearSelection();
@@ -315,9 +317,12 @@ void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount
             mafwrenderer->play();
 
             NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-            //connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
             window->show();
-            //ui->indicator->hide();
+
+            connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+            ui->indicator->inhibit();
+
             this->isShuffling = false;
         }
 #ifdef Q_WS_MAEMO_5

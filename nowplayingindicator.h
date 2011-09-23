@@ -33,8 +33,6 @@ public:
     explicit NowPlayingIndicator(QWidget *parent = 0);
     ~NowPlayingIndicator();
     void triggerAnimation();
-    void inhibit();
-    void restore();
 #ifdef MAFW
     void setFactory(MafwAdapterFactory *mafwFactory = 0);
 #endif
@@ -42,6 +40,8 @@ public:
 public slots:
     void stopAnimation();
     void autoSetVisibility();
+    void inhibit();
+    void restore();
 
 signals:
     void clicked();
@@ -81,6 +81,7 @@ private slots:
 #endif
     void startAnimation();
     void onWindowDestroyed();
+    void onNowPlayingWindowHidden();
 };
 
 #endif // NOWPLAYINGINDICATOR_H

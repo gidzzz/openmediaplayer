@@ -84,9 +84,11 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
 #else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif
-    //connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
     window->showFullScreen();
-    //ui->indicator->hide();
+
+    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    ui->indicator->inhibit();
+
     window->playObject(item->data(UserRoleObjectID).toString());
 }
 

@@ -107,7 +107,10 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
 #endif
 
     window->show();
-    //ui->indicator->hide();
+
+    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->inhibit();
+
     ui->songList->clearSelection();
 }
 
@@ -527,9 +530,12 @@ void MusicWindow::onAlbumSelected(QListWidgetItem *item)
     albumView->setAttribute(Qt::WA_DeleteOnClose);
     albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
     albumView->setWindowTitle(item->data(Qt::DisplayRole).toString());
-    //connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
     albumView->show();
-    //ui->indicator->hide();
+
+    connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    ui->indicator->inhibit();
+
     ui->albumList->clearSelection();
 }
 
@@ -543,18 +549,20 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->setWindowTitle(item->data(UserRoleSongName).toString());
-        //connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
         albumView->show();
-        //ui->indicator->hide();
-    } else if(songCount > 1) {
+        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        ui->indicator->inhibit();
+    } else if (songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleSongName).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
-        //connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
         artistView->show();
-        //ui->indicator->hide();
+        connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        ui->indicator->inhibit();
     }
 
     ui->artistList->clearSelection();
@@ -565,9 +573,12 @@ void MusicWindow::onGenreSelected(QListWidgetItem *item)
     SingleGenreView *genreWindow = new SingleGenreView(this, mafwFactory);
     genreWindow->setAttribute(Qt::WA_DeleteOnClose);
     genreWindow->setWindowTitle(item->data(UserRoleSongTitle).toString());
-    //connect(genreWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
     genreWindow->show();
-    //ui->indicator->hide();
+
+    connect(genreWindow, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    ui->indicator->inhibit();
+
     genreWindow->setSongCount(item->data(UserRoleSongCount).toInt());
     genreWindow->browseGenre(item->data(UserRoleObjectID).toString());
 
@@ -1258,4 +1269,10 @@ void MusicWindow::showEvent(QShowEvent *)
 void MusicWindow::hideEvent(QHideEvent *)
 {
     emit hidden();
+}
+
+void MusicWindow::onNowPlayingWindowHidden()
+{
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->restore();
 }

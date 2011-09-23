@@ -161,9 +161,11 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setWindowTitle(item->text());
-        //connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
         albumView->show();
-        //ui->indicator->hide();
+
+        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        ui->indicator->inhibit();
     }
     ui->albumList->clearSelection();
 #endif
@@ -283,10 +285,13 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint 
             mafwrenderer->play();
 
             NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-            //connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
+
             window->onShuffleButtonToggled(true);
             window->show();
-            //ui->indicator->hide();
+
+            connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+            ui->indicator->inhibit();
+
             shuffleRequested = false;
         }
 #ifdef Q_WS_MAEMO_5

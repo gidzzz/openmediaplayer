@@ -154,26 +154,31 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         // Assume all other playlists are audio ones.
         else {
             window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
-            connect(window, SIGNAL(hidden()), this, SLOT(onWindowDestroyed()));
+            connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         }
         if (playlistName == "FmpVideoPlaylist")
             window->showFullScreen();
-        else //{
+        else
             window->show();
-        //connect(window, SIGNAL(hidden()), this, SLOT(autoSetVisibility()));
-        //this->hide();
-        //}
 #else
         NowPlayingWindow *window = NowPlayingWindow::acquire(this);
         window->show();
 #endif
+        this->inhibit();
     }
 }
 
 void NowPlayingIndicator::onWindowDestroyed()
 {
+    this->restore();
     window = 0;
-    //this->autoSetVisibility();
+}
+
+void NowPlayingIndicator::onNowPlayingWindowHidden() // could be joined with the method above
+{
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    this->restore();
+    window = 0;
 }
 
 #ifdef MAFW

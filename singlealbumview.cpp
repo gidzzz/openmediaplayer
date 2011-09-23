@@ -266,10 +266,11 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 #endif
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowDestroyed()));
-        //connect(window, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
+
         window->show();
-        //ui->indicator->hide();
+
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+        ui->indicator->inhibit();
     }
 #endif
 }
@@ -469,7 +470,8 @@ void SingleAlbumView::notifyOnAddedToNowPlaying(int songCount)
 }
 #endif
 
-void SingleAlbumView::onNowPlayingWindowDestroyed()
+void SingleAlbumView::onNowPlayingWindowHidden()
 {
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
 }

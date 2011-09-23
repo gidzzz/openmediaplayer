@@ -133,6 +133,7 @@ private slots:
 #endif
     void onAddToNowPlaying();
     void onDeletePlaylistClicked();
+    void onNowPlayingWindowHidden();
 };
 
 #endif // MUSICWINDOW_H

@@ -102,6 +102,9 @@ void InternetRadioWindow::onStationSelected()
 #endif
     window->setAttribute(Qt::WA_DeleteOnClose);
     window->show();
+
+    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    ui->indicator->inhibit();
 }
 
 void InternetRadioWindow::onContextMenuRequested(const QPoint &point)

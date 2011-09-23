@@ -262,7 +262,7 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 #endif
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowDestroyed()));
+    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
 
     window->show();
     window->updatePlaylistState();
@@ -582,9 +582,10 @@ void SinglePlaylistView::onDeleteFromPlaylist()
     this->setSongCount(ui->songList->count());
 }
 
-void SinglePlaylistView::onNowPlayingWindowDestroyed()
+void SinglePlaylistView::onNowPlayingWindowHidden()
 {
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->restore();
     ui->songList->clearSelection();
-    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowDestroyed()));
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
 }

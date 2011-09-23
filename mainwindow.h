@@ -46,9 +46,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    MusicWindow *myMusicWindow;
-    VideosWindow *myVideosWindow;
-    InternetRadioWindow *myInternetRadioWindow;
+    MusicWindow *musicWindow;
     void paintEvent(QPaintEvent*);
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
@@ -104,6 +102,7 @@ private slots:
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
     void pausePlay();
     void onStateChanged(int state);
+    void onNowPlayingWindowHidden();
 #endif
 #ifdef Q_WS_MAEMO_5
     void onBluetoothButtonPressed(QDBusMessage msg);

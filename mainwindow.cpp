@@ -85,9 +85,9 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef MAFW
-    myMusicWindow = new MusicWindow(this, mafwFactory);
+    musicWindow = new MusicWindow(this, mafwFactory);
 #else
-    myMusicWindow = new MusicWindow(this);
+    musicWindow = new MusicWindow(this);
 #endif
 
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
@@ -209,7 +209,7 @@ void MainWindow::setLabelText()
 
 void MainWindow::connectSignals()
 {
-    connect(ui->songsButton, SIGNAL(clicked()), myMusicWindow, SLOT(show()));
+    connect(ui->songsButton, SIGNAL(clicked()), musicWindow, SLOT(show()));
     connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
@@ -219,8 +219,8 @@ void MainWindow::connectSignals()
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-    //connect(myMusicWindow, SIGNAL(shown()), ui->indicator, SLOT(hide()));
-    //connect(myMusicWindow, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
+    connect(musicWindow, SIGNAL(shown()), ui->indicator, SLOT(inhibit()));
+    connect(musicWindow, SIGNAL(hidden()), ui->indicator, SLOT(restore()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     //connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
@@ -272,16 +272,18 @@ void MainWindow::mime_open(const QString &uriString)
 #else
         NowPlayingWindow *window = NowPlayingWindow::acquire(this);
 #endif
-        //connect(window, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
         window->show();
+
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     } else if(qmimetype.startsWith("video")) {
 #ifdef MAFW
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif
-        //connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
         window->showFullScreen();
+
+        connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
 #ifdef MAFW
         window->playObject(objectId);
 #endif
@@ -295,7 +297,7 @@ void MainWindow::mime_open(const QString &uriString)
         connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(resume()));
     }
 #endif
-    //ui->indicator->hide();
+    ui->indicator->inhibit();
 }
 
 void MainWindow::createNowPlayingWindow()
@@ -305,11 +307,12 @@ void MainWindow::createNowPlayingWindow()
 #else
     NowPlayingWindow *window = NowPlayingWindow::acquire(this);
 #endif
-    //connect(window, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
 
     window->show();
     //window->activateWindow();
-    //ui->indicator->hide();
+
+    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->inhibit();
 }
 
 void MainWindow::orientationChanged()
@@ -369,7 +372,7 @@ void MainWindow::processListClicks(QListWidgetItem* item)
 {
     QString itemName = item->statusTip();
     if(itemName == "songs_button")
-        myMusicWindow->show();
+        musicWindow->show();
     else if(itemName == "videos_button")
         this->showVideosWindow();
     else if(itemName == "radio_button")
@@ -388,28 +391,32 @@ void MainWindow::openSettings()
 void MainWindow::showVideosWindow()
 {
 #ifdef MAFW
-    myVideosWindow = new VideosWindow(this, mafwFactory);
+    VideosWindow *window = new VideosWindow(this, mafwFactory);
 #else
-    myVideosWindow = new VideosWindow(this);
+    VideosWindow *window = new VideosWindow(this);
 #endif
-    myVideosWindow->setAttribute(Qt::WA_DeleteOnClose);
-    //connect(myVideosWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
-    myVideosWindow->show();
-    //ui->indicator->hide();
+    window->setAttribute(Qt::WA_DeleteOnClose);
+
+    window->show();
+
+    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    ui->indicator->inhibit();
 }
 
 void MainWindow::showInternetRadioWindow()
 {
 #ifdef MAFW
-    myInternetRadioWindow = new InternetRadioWindow(this, mafwFactory);
+    InternetRadioWindow *window = new InternetRadioWindow(this, mafwFactory);
 #else
-    myInternetRadioWindow = new InternetRadioWindow(this);
+    InternetRadioWindow *window = new InternetRadioWindow(this);
 #endif
-    myInternetRadioWindow->setAttribute(Qt::WA_DeleteOnClose);
-    //connect(myInternetRadioWindow, SIGNAL(destroyed()), ui->indicator, SLOT(autoSetVisibility()));
-    connect(myInternetRadioWindow, SIGNAL(destroyed()), this, SLOT(countRadioStations()));
-    myInternetRadioWindow->show();
-    //ui->indicator->hide();
+    window->setAttribute(Qt::WA_DeleteOnClose);
+
+    window->show();
+
+    connect(window, SIGNAL(destroyed()), this, SLOT(countRadioStations()));
+    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    ui->indicator->inhibit();
 }
 
 #ifdef MAFW
@@ -530,9 +537,11 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint index, Q
         mafwrenderer->play();
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-        //connect(window, SIGNAL(hidden()), ui->indicator, SLOT(autoSetVisibility()));
         window->show();
-        //ui->indicator->hide();
+
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+        ui->indicator->inhibit();
+
         ui->shuffleAllButton->setDisabled(false);
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
@@ -697,3 +706,9 @@ void MainWindow::takeScreenshot()
     XSync (xev.xclient.display, False);
 }
 #endif
+
+void MainWindow::onNowPlayingWindowHidden()
+{
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->restore();
+}
