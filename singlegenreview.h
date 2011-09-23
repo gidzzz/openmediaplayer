@@ -66,6 +66,7 @@ private slots:
     void onShuffleButtonClicked();
     void onContextMenuRequested(QPoint point);
     void addItemToNowPlaying();
+    void onNowPlayingWindowHidden();
 #ifdef MAFW
     void listGenres();
     void browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);

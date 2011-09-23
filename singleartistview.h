@@ -60,6 +60,7 @@ private slots:
     void shuffleAllSongs();
     void onContextMenuRequested(const QPoint &point);
     void onAddAlbumToNowPlaying();
+    void onNowPlayingWindowHidden();
 };
 
 #endif // SINGLEARTISTVIEW_H

@@ -203,9 +203,10 @@ void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
         ui->albumList->setFocus();
     else {
         ui->albumList->clearSelection();
-        ui->indicator->inhibit();
-        if (ui->searchWidget->isHidden())
+        if (ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
             ui->searchWidget->show();
+        }
         if (!ui->searchEdit->hasFocus())
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
@@ -399,3 +400,9 @@ void SingleArtistView::notifyOnAddedToNowPlaying(int songCount)
         QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
 }
 #endif
+
+void SingleArtistView::onNowPlayingWindowHidden()
+{
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->restore();
+}

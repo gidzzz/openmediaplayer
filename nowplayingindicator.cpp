@@ -26,7 +26,7 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
 #endif
 {
     ready = false; // avoid segfaults on requesting info from the playlist too early
-    inhibited = false;
+    inhibited = 0;
     ui->setupUi(this);
     images << QPixmap(idleFrame);
     for (int i = 1; i < 12; i++)
@@ -251,12 +251,16 @@ void NowPlayingIndicator::autoSetVisibility()
 
 void NowPlayingIndicator::inhibit()
 {
-    this->inhibited = true;
+    ++inhibited;
     this->hide();
 }
 
 void NowPlayingIndicator::restore()
 {
-    this->inhibited = false;
+    if (inhibited > 1)
+        --inhibited;
+    else
+        inhibited = 0;
+
     this->autoSetVisibility();
 }

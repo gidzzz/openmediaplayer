@@ -201,8 +201,6 @@ void SingleAlbumView::onItemSelected(QListWidgetItem *item)
     playlist->getSize(); // explained in musicwindow.cpp
     mafwrenderer->gotoIndex(ui->songList->row(item));
     mafwrenderer->play();
-
-    ui->songList->clearSelection();
 }
 
 #endif
@@ -298,9 +296,10 @@ void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
         ui->songList->setFocus();
     else {
         ui->songList->clearSelection();
-        ui->indicator->inhibit();
-        if (ui->searchWidget->isHidden())
+        if (ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
             ui->searchWidget->show();
+        }
         if (!ui->searchEdit->hasFocus())
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
@@ -473,5 +472,7 @@ void SingleAlbumView::notifyOnAddedToNowPlaying(int songCount)
 void SingleAlbumView::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->restore();
+    ui->songList->clearSelection();
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
 }

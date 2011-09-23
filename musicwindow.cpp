@@ -1092,9 +1092,10 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
         this->currentList()->setFocus();
     else {
         this->currentList()->clearSelection();
-        ui->indicator->inhibit();
-        if (ui->searchWidget->isHidden())
+        if (ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
             ui->searchWidget->show();
+        }
         if (!ui->searchEdit->hasFocus())
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();

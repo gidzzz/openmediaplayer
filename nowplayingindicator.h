@@ -63,7 +63,7 @@ private:
     MafwPlaylistAdapter *playlist;
     QMainWindow *window;
     bool ready;
-    bool inhibited;
+    int inhibited;
 #endif
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;

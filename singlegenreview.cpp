@@ -225,8 +225,8 @@ void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
         ui->artistList->setFocus();
     else {
         ui->artistList->clearSelection();
-        ui->indicator->inhibit();
         if (ui->searchWidget->isHidden())
+            ui->indicator->inhibit();
             ui->searchWidget->show();
         if (!ui->searchEdit->hasFocus())
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
@@ -385,3 +385,9 @@ void SingleGenreView::notifyOnAddedToNowPlaying(int songCount)
         QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
 }
 #endif
+
+void SingleGenreView::onNowPlayingWindowHidden()
+{
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->restore();
+}
