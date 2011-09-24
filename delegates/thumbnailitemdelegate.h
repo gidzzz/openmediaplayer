@@ -15,6 +15,10 @@
 #include <QStyleOptionViewItem>
 #include "includes.h"
 
+#ifdef Q_WS_MAEMO_5
+    #include <QMaemo5Style>
+#endif
+
 class ThumbnailItemDelegate : public QStyledItemDelegate
 {
 public:

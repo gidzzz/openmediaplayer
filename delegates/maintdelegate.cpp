@@ -38,8 +38,11 @@ void MainDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     }*/
     QFont f = painter->font();
     QPen defaultPen = painter->pen();
-    QColor gray;
-    gray = QColor(156, 154, 156);
+#ifdef Q_WS_MAEMO_5
+    QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
+#else
+    QColor secondaryColor(156, 154, 156);
+#endif
 
     r = option.rect;
     painter->drawPixmap(r.left(), r.top(), 164, 164, icon);
@@ -56,7 +59,7 @@ void MainDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     r = option.rect;
     f.setPointSize(13);
     painter->setFont(f);
-    painter->setPen(QPen(gray));
+    painter->setPen(QPen(secondaryColor));
     painter->drawText(170, r.top()+86, r.width()-170, r.height()+86, Qt::AlignTop|Qt::AlignLeft, subtitle, &r);
 
     painter->restore();

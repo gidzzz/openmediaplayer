@@ -40,8 +40,11 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     f.setPointSize(13);
     painter->setFont(f);
     QPen defaultPen = painter->pen();
-    QColor gray;
-    gray = QColor(156, 154, 156);
+#ifdef Q_WS_MAEMO_5
+    QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
+#else
+    QColor secondaryColor(156, 154, 156);
+#endif
 
     r = option.rect;
     painter->drawPixmap(r.x() + ((r.width()/2)-(128/2)), r.y()+3, 128, 128, thumbnail);
@@ -56,7 +59,7 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     painter->drawText(r.x(), r.y()+134, r.width(), r.height(), Qt::AlignHCenter, title, &r);
 
     r = option.rect;
-    painter->setPen(QPen(gray));
+    painter->setPen(QPen(secondaryColor));
     duration = fm.elidedText(duration, Qt::ElideRight, 138);
     painter->drawText(r.x(), r.y()+ (142 + painter->font().pointSize()), r.width(), r.height(), Qt::AlignHCenter, duration, &r);
     painter->setPen(defaultPen);

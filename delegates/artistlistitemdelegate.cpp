@@ -58,8 +58,11 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     }
     QFont f = painter->font();
     QPen defaultPen = painter->pen();
-    QColor gray;
-    gray = QColor(156, 154, 156);
+#ifdef Q_WS_MAEMO_5
+    QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
+#else
+    QColor secondaryColor(156, 154, 156);
+#endif
 
     r = option.rect;
     f.setPointSize(18);
@@ -70,7 +73,7 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     f.setPointSize(13);
     painter->setFont(f);
     r.setBottom(r.bottom()-10);
-    painter->setPen(QPen(gray));
+    painter->setPen(QPen(secondaryColor));
     painter->drawText(15, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
     painter->setPen(defaultPen);;
 

@@ -55,9 +55,13 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         }
         QFont f = painter->font();
         QPen defaultPen = painter->pen();
-        QColor gray;
-        gray = QColor(156, 154, 156);
-
+#ifdef Q_WS_MAEMO_5
+        QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
+        QColor activeColor = QMaemo5Style::standardColor("ActiveTextColor");
+#else
+        QColor secondaryColor(156, 154, 156);
+        QColor activeColor(0,255, 0);
+#endif
             r = option.rect;
             f.setPointSize(18);
             QFontMetrics fm(f);
@@ -67,8 +71,7 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
             if (valueText.isEmpty())
             {
-                QColor green(0, 255, 0);
-                painter->setPen(QPen(green));
+                painter->setPen(QPen(activeColor));
                 painter->drawText(15, r.top(), r.width()-pf, r.height(), Qt::AlignVCenter|Qt::AlignCenter, songName, &r);
             }
             else
@@ -78,7 +81,7 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             f.setPointSize(13);
             painter->setFont(f);
             r.setBottom(r.bottom()-10);
-            painter->setPen(QPen(gray));
+            painter->setPen(QPen(secondaryColor));
 
             QFontMetrics fm2(f);
             valueText = fm2.elidedText(valueText, Qt::ElideRight, r.width()-pf-40);

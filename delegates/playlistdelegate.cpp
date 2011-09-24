@@ -54,8 +54,11 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         }
         QFont f = painter->font();
         QPen defaultPen = painter->pen();
-        QColor gray;
-        gray = QColor(156, 154, 156);
+#ifdef Q_WS_MAEMO_5
+    QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
+#else
+    QColor secondaryColor(156, 154, 156);
+#endif
 
         r = option.rect;
         f.setPointSize(18);
@@ -70,7 +73,7 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         f.setPointSize(13);
         painter->setFont(f);
         r.setBottom(r.bottom()-10);
-        painter->setPen(QPen(gray));
+        painter->setPen(QPen(secondaryColor));
 
         QFontMetrics fm2(f);
         songArtistAlbum = fm2.elidedText(songArtistAlbum, Qt::ElideRight, r.width()-40);
