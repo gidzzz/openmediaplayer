@@ -58,6 +58,7 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
     connect(ui->actionAdd_songs_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
+    connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     this->orientationChanged();
 }

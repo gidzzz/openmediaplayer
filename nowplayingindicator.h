@@ -42,6 +42,7 @@ public slots:
     void autoSetVisibility();
     void inhibit();
     void restore();
+    void poke();
 
 signals:
     void clicked();
@@ -55,6 +56,7 @@ private:
     void connectSignals();
     QList<QPixmap> images;
     QTimer *timer;
+    QTimer *pokeTimer;
     int mafwState;
     QString indicatorImage;
 #ifdef MAFW
@@ -63,6 +65,7 @@ private:
     MafwPlaylistAdapter *playlist;
     QMainWindow *window;
     bool ready;
+    bool poked;
     int inhibited;
 #endif
 #ifdef Q_WS_MAEMO_5
@@ -82,6 +85,7 @@ private slots:
     void startAnimation();
     void onWindowDestroyed();
     void onNowPlayingWindowHidden();
+    void onPokeTimeout();
 };
 
 #endif // NOWPLAYINGINDICATOR_H

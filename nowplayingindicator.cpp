@@ -26,7 +26,10 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
 #endif
 {
     ready = false; // avoid segfaults on requesting info from the playlist too early
+    poked = false;
     inhibited = 0;
+    pokeTimer = new QTimer(this);
+    pokeTimer->setInterval(333);
     ui->setupUi(this);
     images << QPixmap(idleFrame);
     for (int i = 1; i < 12; i++)
@@ -67,6 +70,7 @@ void NowPlayingIndicator::connectSignals()
     connect(playlist, SIGNAL(playlistChanged()), this, SLOT(autoSetVisibility()));
 #endif
     connect(timer, SIGNAL(timeout()), this, SLOT(startAnimation()));
+    connect(pokeTimer, SIGNAL(timeout()), this, SLOT(onPokeTimeout()));
 }
 
 #ifdef MAFW
@@ -263,4 +267,20 @@ void NowPlayingIndicator::restore()
         inhibited = 0;
 
     this->autoSetVisibility();
+}
+
+void NowPlayingIndicator::poke()
+{
+    if (!poked) {
+        this->inhibit();
+        poked = true;
+    }
+    pokeTimer->start();
+}
+
+void NowPlayingIndicator::onPokeTimeout()
+{
+    this->restore();
+    pokeTimer->stop();
+    poked = false;
 }

@@ -70,6 +70,7 @@ VideosWindow::~VideosWindow()
 void VideosWindow::connectSignals()
 {
     connect(ui->listWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onVideoSelected(QListWidgetItem*)));
+    connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 }
