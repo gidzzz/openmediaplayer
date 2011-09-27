@@ -35,7 +35,7 @@ public:
         QImage buff(buffSize, QImage::Format_RGB32);
         QPainter p(&buff);
 
-        //Draw into the buffer
+        // Draw into the buffer
         p.fillRect(opt.rect, QBrush(widget->palette().background().color()));
 
         // Paint the item in the image starting from 0,0
@@ -53,7 +53,7 @@ public:
 
         // Draw buffer on the screen
         painter->setOpacity(0.5);
-        painter->drawImage(option->rect.adjusted(0,0,1,1), buff.mirrored());//, opt.rect);
+        painter->drawImage(option->rect.adjusted(0,0,0,1), buff.mirrored());//, opt.rect);
     }
 
 private:

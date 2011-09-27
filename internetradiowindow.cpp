@@ -89,13 +89,17 @@ void InternetRadioWindow::onStationSelected()
 
     mafwrenderer->gotoIndex(ui->listWidget->currentRow());
 
-    QNetworkSession session(QNetworkConfiguration(), this);
+    // Hmmm... doesn't seem to work, even with pointers
+    /*QNetworkSession session(QNetworkConfiguration(), this);
     if (!session.isOpen()) {
         session.open();
         connect(&session, SIGNAL(opened()), mafwrenderer, SLOT(play()));
     } else {
         mafwrenderer->play();
-    }
+    }*/
+
+    // It doesn't do any session magick, but it works
+    mafwrenderer->play();
 
     window = new RadioNowPlayingWindow(this, mafwFactory);
 #else

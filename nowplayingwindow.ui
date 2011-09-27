@@ -106,7 +106,7 @@
              <number>9</number>
             </property>
             <property name="topMargin">
-             <number>5</number>
+             <number>0</number>
             </property>
             <property name="rightMargin">
              <number>18</number>
@@ -437,13 +437,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>80</height>
+           <height>73</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>80</height>
+           <height>73</height>
           </size>
          </property>
          <layout class="QHBoxLayout" name="wLayout">
@@ -745,7 +745,7 @@ border: none;
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>74</height>
+                 <height>73</height>
                 </size>
                </property>
                <property name="maximum">
@@ -779,7 +779,7 @@ border: none;
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>74</height>
+                 <height>73</height>
                 </size>
                </property>
                <layout class="QGridLayout" name="gridLayout">

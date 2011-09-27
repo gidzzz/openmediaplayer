@@ -18,8 +18,6 @@
 
 #include "nowplayingwindow.h"
 
-const int BATCH_SIZE = 100;
-
 NowPlayingWindow* NowPlayingWindow::instance = NULL;
 bool newSong;
 QString currentPlaylistUrl;
@@ -136,31 +134,9 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
     ui->volumeButton->setFixedSize(ui->volumeButton->sizeHint());
-    ui->view->setFixedHeight(360);
-    ui->songPlaylist->setFixedHeight(350);
-    ui->view->setFixedWidth(340);
+    ui->toolBarWidget->setFixedHeight(73);
 
-    // We might be starting NowPlayingWindow in portrait mode.
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    if (screenGeometry.width() < screenGeometry.height()) {
-        ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
-        ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
-        //if(!ui->volumeButton->isHidden())
-            //ui->volWidget->hide();
-        ui->space2->hide();
-        ui->view->setFixedHeight(360);
-        ui->view->setFixedWidth(470);
-        ui->songPlaylist->setFixedHeight(290);
-        //ui->songPlaylist->setFixedHeight(380);
-        ui->volumeWidget->setContentsMargins(18,9,9,9);
-        ui->buttonsLayout->setSpacing(27);
-    }
-
-    ui->lyrics->setFixedHeight(ui->songPlaylist->height());
-    //new TextEditAutoResizer(ui->lyricsText);
-
-
-    ui->toolBarWidget->setFixedHeight(80);
+    this->orientationChanged();
 
 #ifdef MAFW
     playlistQM = new PlaylistQueryManager(this, playlist);
@@ -180,8 +156,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
     data = new QNetworkAccessManager(this);
     connect(data, SIGNAL(finished(QNetworkReply*)), this, SLOT(onLyricsDownloaded(QNetworkReply*)));
-
-    this->orientationChanged(); // before endif?
 #endif
 }
 
@@ -678,9 +652,9 @@ void NowPlayingWindow::orientationChanged()
         if(ui->volWidget->isHidden())
             ui->volWidget->show();
         ui->view->setFixedHeight(360);
-        ui->songPlaylist->setFixedHeight(350);
+        ui->songPlaylist->setFixedHeight(351);
         ui->view->setFixedWidth(340);
-        ui->volumeWidget->setContentsMargins(0,9,9,9);
+        ui->volumeWidget->setContentsMargins(0,0,9,9);
         ui->space2->show();
         ui->buttonsLayout->setSpacing(60);
 
@@ -703,7 +677,7 @@ void NowPlayingWindow::orientationChanged()
         ui->view->setFixedHeight(360);
         ui->view->setFixedWidth(470);
         ui->songPlaylist->setFixedHeight(290);
-        ui->volumeWidget->setContentsMargins(18,9,9,9);
+        ui->volumeWidget->setContentsMargins(18,0,9,9);
         ui->buttonsLayout->setSpacing(27);
 
         ui->songNumberLabel->setAlignment(Qt::AlignHCenter);
