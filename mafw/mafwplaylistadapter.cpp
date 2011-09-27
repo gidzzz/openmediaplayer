@@ -155,7 +155,7 @@ gpointer MafwPlaylistAdapter::getItems(int from, int to)
                                                               MAFW_METADATA_KEY_URI,
                                                               MAFW_METADATA_KEY_DURATION),
                                              MafwPlaylistAdapter::get_items_cb,
-                                             pl, NULL);
+                                             pl, get_items_free_cbarg);
         return pl->op;
     } else return NULL;
 #ifdef DEBUG
@@ -176,7 +176,7 @@ gpointer MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist)
                                                           MAFW_METADATA_KEY_URI,
                                                           MAFW_METADATA_KEY_DURATION),
                                          MafwPlaylistAdapter::get_items_cb,
-                                         pl, NULL);
+                                         pl, get_items_free_cbarg);
     return pl->op;
 }
 
@@ -194,6 +194,10 @@ void MafwPlaylistAdapter::get_items_cb(MafwPlaylist*,
 
 void MafwPlaylistAdapter::get_items_free_cbarg(gpointer user_data)
 {
+    MafwPlaylistAdapter* adapter = static_cast<get_items_cb_payload*>(user_data)->adapter;
+                     gpointer op = static_cast<get_items_cb_payload*>(user_data)->op;
+
+    emit adapter->getItemsComplete(op);
     delete static_cast<get_items_cb_payload*>(user_data);
 }
 

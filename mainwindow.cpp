@@ -516,7 +516,6 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint index, Q
         songAddBuffer[songAddBufferSize] = NULL;
     }
 
-    qDebug() << "MusicWindow::onAddToNowPlayingCallback | index: " << index;
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
 
     if (remainingCount == 0) {

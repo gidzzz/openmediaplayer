@@ -24,6 +24,7 @@
 #include "editlyrics.h"
 #include "tagwindow.h"
 #include "mediaart.h"
+#include "playlistquerymanager.h"
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
@@ -70,7 +71,6 @@ public slots:
 #endif
 
 private:
-    QTime t; int n;
     static NowPlayingWindow *instance;
     explicit NowPlayingWindow(QWidget *parent, MafwAdapterFactory *mafwFactory);
     Ui::NowPlayingWindow *ui;
@@ -83,6 +83,7 @@ private:
     MafwPlaylistAdapter* playlist;
     MafwPlaylist *mafwPlaylist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
+    PlaylistQueryManager *playlistQM;
     int mafwState;
     GConfItem *lastPlayingSong;
     void showEvent(QShowEvent *);
@@ -100,7 +101,6 @@ private:
     bool enableLyrics;
     int songDuration;
     int currentSongPosition;
-    int numberOfSongsToAdd;
     QGraphicsScene *albumArtScene;
     QString albumArtUri;
     mirror *m;
@@ -131,7 +131,7 @@ private slots:
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onRendererMetadataRequested(GHashTable*, QString object_id, QString);
     void onSourceMetadataRequested(QString, GHashTable*, QString);
-    void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index, gpointer op);
+    void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
     void setPosition(int);
     void onPlaylistItemActivated(QListWidgetItem*);
     void clearPlaylist();

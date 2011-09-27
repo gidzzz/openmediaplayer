@@ -45,6 +45,7 @@ public:
 
 signals:
     void onGetItems(QString object_id, GHashTable *metadata, guint index, gpointer op);
+    void getItemsComplete(gpointer op);
     void playlistChanged();
     void contentsChanged(guint from, guint nremove, guint nreplace);
 

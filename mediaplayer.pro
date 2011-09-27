@@ -42,7 +42,8 @@ SOURCES += main.cpp \
     delegates/maintdelegate.cpp \
     editlyrics.cpp \
     tagwindow.cpp \
-    mediaart.cpp
+    mediaart.cpp \
+    playlistquerymanager.cpp
 
 HEADERS  += mainwindow.h \
     musicwindow.h \
@@ -75,7 +76,8 @@ HEADERS  += mainwindow.h \
     delegates/maintdelegate.h \
     editlyrics.h \
     tagwindow.h \
-    mediaart.h
+    mediaart.h \
+    playlistquerymanager.h
 
 FORMS    += mainwindow.ui \
     musicwindow.ui \
