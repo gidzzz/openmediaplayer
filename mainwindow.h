@@ -52,7 +52,6 @@ private:
     void focusOutEvent(QFocusEvent *);
     void changeEvent(QEvent *);
     void closeEvent(QCloseEvent *);
-    bool shuffleNowPlayingWindowCreated;
 
     void loadThemeIcons();
     void setButtonIcons();
@@ -70,7 +69,7 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
     MafwPlaylistAdapter* playlist;
-    uint browseAllSongsId;
+    uint browseSongsId;
     const char* TAGSOURCE_AUDIO_PATH;
     const char* TAGSOURCE_VIDEO_PATH;
     const char* RADIOSOURCE_PATH;
@@ -97,7 +96,7 @@ private slots:
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
     void countRadioResult(QString objectId, GHashTable* metadata, QString error);
     void countRadioStations();
-    void browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
+    void browseSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
     void pausePlay();

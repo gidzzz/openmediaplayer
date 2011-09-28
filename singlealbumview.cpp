@@ -254,9 +254,7 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         delete[] songAddBuffer;
 
         if (shuffle) {
-            uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
             playlist->getSize(); // explained in musicwindow.cpp
-            mafwrenderer->gotoIndex(randomIndex);
             mafwrenderer->play();
         }
 

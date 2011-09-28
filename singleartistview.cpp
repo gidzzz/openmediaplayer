@@ -281,9 +281,7 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint 
         this->browseAllAlbumsId = 0;
 
         if (shuffleRequested) {
-            uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
             playlist->getSize(); // explained in musicwindow.cpp
-            mafwrenderer->gotoIndex(randomIndex);
             mafwrenderer->play();
 
             NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);

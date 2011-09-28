@@ -51,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwTrackerSource = mafwFactory->getTrackerSource();
     mafwRadioSource = mafwFactory->getRadioSource();
     playlist = mafwFactory->getPlaylistAdapter();
-    this->shuffleNowPlayingWindowCreated = false;
     if (mafwrenderer->isRendererReady())
         mafwrenderer->getStatus();
     else
@@ -260,21 +259,59 @@ void MainWindow::mime_open(const QString &uriString)
     const gchar* text_uri = uriToPlay.toUtf8();
     const char* mimetype = gnome_vfs_get_mime_type_for_name(text_uri);
     QString qmimetype = mimetype;
+
     if (qmimetype.startsWith("audio")) {
+
+        // Converting urisource object to localtagfs:
+        // "urisource::file:///home/user/MyDocs/mix.m3u"
+        // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
+        if (qmimetype.endsWith("mpegurl")) {
 #ifdef MAFW
-        playlist->assignAudioPlaylist();
-        playlist->clear();
-        playlist->appendItem(objectId);
+            objectId.remove("urisource::file://");
+            objectId.replace("/", "%2F").replace(" ", "%20");
+            objectId.prepend("localtagfs::music/playlists/");
+            qDebug() << objectId;
+#ifdef Q_WS_MAEMO_5
+            setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+
+            playlist->assignAudioPlaylist();
+            playlist->clear();
+
+            songAddBufferSize = 0;
+
+            qDebug() << "connecting MainWindow to signalSourceBrowseResult";
+            connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                    this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)));
+
+            // for some reason, if metadata fetching is disabled here, IDs for filesystem instead of localtagfs are returned
+            this->browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
+                                                                      MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
+                                                                               MAFW_METADATA_KEY_DURATION,
+                                                                               MAFW_METADATA_KEY_ARTIST,
+                                                                               MAFW_METADATA_KEY_ALBUM),
+                                                                      0, MAFW_SOURCE_BROWSE_ALL);
+#endif
+        }
+
+        else {
+#ifdef MAFW
+            playlist->assignAudioPlaylist();
+            playlist->clear();
+            playlist->appendItem(objectId); // not a localtagfs object, so no metadata
 #endif
 
 #ifdef MAFW
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+            NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
 #else
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this);
+            NowPlayingWindow *window = NowPlayingWindow::acquire(this);
 #endif
-        window->show();
+            window->show();
 
-        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+            connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+            ui->indicator->inhibit();
+        }
+
     } else if(qmimetype.startsWith("video")) {
 #ifdef MAFW
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
@@ -284,20 +321,17 @@ void MainWindow::mime_open(const QString &uriString)
         window->showFullScreen();
 
         connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        ui->indicator->inhibit();
 #ifdef MAFW
         window->playObject(objectId);
 #endif
     }
 #ifdef MAFW
-    if (mafwrenderer->isRendererReady()) {
+    if (mafwrenderer->isRendererReady())
         mafwrenderer->play();
-        mafwrenderer->resume();
-    } else {
+    else
         connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
-        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(resume()));
-    }
 #endif
-    ui->indicator->inhibit();
 }
 
 void MainWindow::createNowPlayingWindow()
@@ -505,9 +539,9 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
         qDebug() << error;
 }
 
-void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* , QString)
+void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* , QString)
 {
-    if(browseId != browseAllSongsId)
+    if(browseId != browseSongsId)
       return;
 
     if (songAddBufferSize == 0) {
@@ -521,18 +555,16 @@ void MainWindow::browseAllSongs(uint browseId, int remainingCount, uint index, Q
     if (remainingCount == 0) {
         qDebug() << "disconnecting MainWindow from signalSourceBrowseResult";
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                   this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+                   this, SLOT(browseSongs(uint, int, uint, QString, GHashTable*, QString)));
 
         playlist->appendItems((const gchar**)songAddBuffer);
 
         for (int i = 0; i < songAddBufferSize; i++)
             delete[] songAddBuffer[i];
         delete[] songAddBuffer;
-        this->browseAllSongsId = 0;
+        this->browseSongsId = 0;
 
-        uint randomIndex = qrand() % ((playlist->getSize() + 1) - 0) + 0;
         playlist->getSize(); // explained in musicwindow.cpp
-        mafwrenderer->gotoIndex(randomIndex);
         mafwrenderer->play();
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
@@ -566,9 +598,9 @@ void MainWindow::onShuffleAllClicked()
 
     qDebug() << "connecting MainWindow to signalSourceBrowseResult";
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+            this, SLOT(browseSongs(uint, int, uint, QString, GHashTable*, QString)));
 
-    this->browseAllSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL, 0,
+    this->browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL, 0,
                                                              0, MAFW_SOURCE_BROWSE_ALL);
 
     ui->shuffleAllButton->setDisabled(true);
