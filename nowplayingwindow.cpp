@@ -58,6 +58,20 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
+    QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
+#else
+    QColor secondaryColor(156, 154, 156);
+#endif
+    ui->songNumberLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                              .arg(secondaryColor.red())
+                              .arg(secondaryColor.green())
+                              .arg(secondaryColor.blue()));
+    ui->albumNameLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                              .arg(secondaryColor.red())
+                              .arg(secondaryColor.green())
+                              .arg(secondaryColor.blue()));
+
+#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5AutoOrientation);
 #endif

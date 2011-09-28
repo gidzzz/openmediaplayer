@@ -158,9 +158,6 @@
                    <pointsize>13</pointsize>
                   </font>
                  </property>
-                 <property name="styleSheet">
-                  <string notr="true">color: rgb(156, 154, 156);</string>
-                 </property>
                  <property name="text">
                   <string>--/-- songs</string>
                  </property>
@@ -316,9 +313,6 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">color: rgb(156, 154, 156);</string>
                  </property>
                  <property name="text">
                   <string>(unknown album)</string>

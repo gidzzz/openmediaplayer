@@ -350,9 +350,6 @@ p, li { white-space: pre-wrap; }
     <property name="layoutDirection">
      <enum>Qt::LeftToRight</enum>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(156, 154, 156);</string>
-    </property>
     <property name="text">
      <string>0 songs</string>
     </property>
@@ -374,9 +371,6 @@ p, li { white-space: pre-wrap; }
       <pointsize>13</pointsize>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(156, 154, 156);</string>
-    </property>
     <property name="text">
      <string>0 clips</string>
     </property>
@@ -384,7 +378,7 @@ p, li { white-space: pre-wrap; }
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="startionCountL">
+   <widget class="QLabel" name="stationCountL">
     <property name="geometry">
      <rect>
       <x>410</x>
@@ -397,9 +391,6 @@ p, li { white-space: pre-wrap; }
      <font>
       <pointsize>13</pointsize>
      </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(156, 154, 156);</string>
     </property>
     <property name="text">
      <string>0 stations</string>

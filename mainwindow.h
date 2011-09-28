@@ -71,6 +71,7 @@ private:
     MafwPlaylistAdapter* playlist;
     uint browseSongsId;
     const char* TAGSOURCE_AUDIO_PATH;
+    const char* TAGSOURCE_PLAYLISTS_PATH;
     const char* TAGSOURCE_VIDEO_PATH;
     const char* RADIOSOURCE_PATH;
     void countSongs();

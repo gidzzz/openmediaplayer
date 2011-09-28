@@ -30,6 +30,16 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #endif
 {
     ui->setupUi(this);
+#ifdef Q_WS_MAEMO_5
+    QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
+#else
+    QColor secondaryColor(156, 154, 156);
+#endif
+    ui->stationLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                              .arg(secondaryColor.red())
+                              .arg(secondaryColor.green())
+                              .arg(secondaryColor.blue()));
+
     ui->volumeSlider->hide();
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5StackedWindow);

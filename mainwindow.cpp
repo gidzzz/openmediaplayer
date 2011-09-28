@@ -34,6 +34,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+#ifdef Q_WS_MAEMO_5
+    QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
+#else
+    QColor secondaryColor(156, 154, 156);
+#endif
+    ui->songCountL->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                              .arg(secondaryColor.red())
+                              .arg(secondaryColor.green())
+                              .arg(secondaryColor.blue()));
+    ui->videoCountL->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                              .arg(secondaryColor.red())
+                              .arg(secondaryColor.green())
+                              .arg(secondaryColor.blue()));
+    ui->stationCountL->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                              .arg(secondaryColor.red())
+                              .arg(secondaryColor.green())
+                              .arg(secondaryColor.blue()));
     this->loadThemeIcons();
     this->setButtonIcons();
     this->setLabelText();
@@ -44,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #ifdef MAFW
     TAGSOURCE_AUDIO_PATH = "localtagfs::music/songs";
+    TAGSOURCE_PLAYLISTS_PATH = "localtagfs::music/playlists";
     TAGSOURCE_VIDEO_PATH = "localtagfs::videos";
     RADIOSOURCE_PATH = "iradiosource::";
     mafwFactory = new MafwAdapterFactory(this);
@@ -75,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->songCountL->clear();
     ui->videoCountL->clear();
-    ui->startionCountL->clear();
+    ui->stationCountL->clear();
 
     updatingIndex = 0;
 #else
@@ -269,7 +287,7 @@ void MainWindow::mime_open(const QString &uriString)
 #ifdef MAFW
             objectId.remove("urisource::file://");
             objectId.replace("/", "%2F").replace(" ", "%20");
-            objectId.prepend("localtagfs::music/playlists/");
+            objectId.prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
             qDebug() << objectId;
 #ifdef Q_WS_MAEMO_5
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
@@ -369,7 +387,7 @@ void MainWindow::orientationChanged()
         ui->shuffleLabel->show();
         ui->songCountL->show();
         ui->videoCountL->show();
-        ui->startionCountL->show();
+        ui->stationCountL->show();
         }
     } else {
         // Portrait mode
@@ -386,7 +404,7 @@ void MainWindow::orientationChanged()
         ui->shuffleLabel->hide();
         ui->songCountL->hide();
         ui->videoCountL->hide();
-        ui->startionCountL->hide();
+        ui->stationCountL->hide();
         ui->listWidget->setGeometry(QRect(0, 0, 480, 800));
         if(ui->listWidget->isHidden())
             ui->listWidget->show();
@@ -529,12 +547,12 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
         count = g_value_get_int(v);
 
     if(count == 1)
-        ui->startionCountL->setText(QString::number(count) + " " + tr("station"));
+        ui->stationCountL->setText(QString::number(count) + " " + tr("station"));
     else if(count == -1)
-        ui->startionCountL->setText(tr("(no stations)"));
+        ui->stationCountL->setText(tr("(no stations)"));
     else
-        ui->startionCountL->setText(QString::number(count) + " " + tr("stations"));
-    ui->listWidget->item(2)->setData(Qt::UserRole+2, ui->startionCountL->text());
+        ui->stationCountL->setText(QString::number(count) + " " + tr("stations"));
+    ui->listWidget->item(2)->setData(Qt::UserRole+2, ui->stationCountL->text());
     if(!error.isEmpty())
         qDebug() << error;
 }
