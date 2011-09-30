@@ -18,7 +18,7 @@
 class MafwRendererAdapter : public QObject
 {
   Q_OBJECT
- 
+
     friend class MafwRendererSignalHelper;
  public:
   MafwRendererAdapter();
@@ -54,9 +54,9 @@ class MafwRendererAdapter : public QObject
   void getVolume();
   void setWindowXid(uint Xid);
   void setColorKey(int colorKey);
-  
+
   bool assignPlaylist(MafwPlaylist* playlist);
-  
+
  signals:
   //MafwRenderer signals
   void rendererReady();

@@ -48,6 +48,7 @@ private slots:
     void onVideoSelected(QListWidgetItem*);
     void onSortingChanged(QAction*);
     void orientationChanged();
+    void onObjectDestroyed(QString objectId);
 #ifdef MAFW
     void listVideos();
     void browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);

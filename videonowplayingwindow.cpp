@@ -110,6 +110,8 @@ void VideoNowPlayingWindow::connectSignals()
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
+    connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
+    connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
@@ -135,6 +137,60 @@ void VideoNowPlayingWindow::connectSignals()
 
 #endif
 }
+
+void VideoNowPlayingWindow::onDeleteClicked()
+{
+#ifdef MAFW
+    mafwrenderer->pause();
+
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                                  tr("Delete video?"),
+                                  tr("Are you sure you want to delete this video?"),
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  this);
+    confirmDelete.exec();
+
+    if(confirmDelete.result() == QMessageBox::Yes) {
+        mafwTrackerSource->destroyObject(objectIdToPlay.toUtf8());
+        emit objectDestroyed(objectIdToPlay);
+        this->close();
+    }
+#endif
+}
+
+void VideoNowPlayingWindow::onShareClicked()
+{
+#ifdef MAFW
+    mafwrenderer->pause();
+    mafwTrackerSource->getUri(this->objectIdToPlay.toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+#endif
+}
+
+#ifdef MAFW
+void VideoNowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+
+    if (objectId != this->objectIdToPlay)
+        return;
+
+    // The code used here (share.(h/cpp/ui) was taken from filebox's source code
+    // C) 2010. Matias Perez
+    QStringList list;
+    QString clip;
+    clip = uri;
+#ifdef DEBUG
+    qDebug() << "Sending file:" << clip;
+#endif
+    list.append(clip);
+#ifdef Q_WS_MAEMO_5
+    Share *share = new Share(this, list);
+    share->setAttribute(Qt::WA_DeleteOnClose);
+    share->show();
+#endif
+}
+#endif
 
 void VideoNowPlayingWindow::toggleVolumeSlider()
 {

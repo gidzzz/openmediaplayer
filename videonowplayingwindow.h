@@ -16,6 +16,7 @@
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
     #include <QSpacerItem>
+    #include "share.h"
 #endif
 
 #ifdef MAFW
@@ -39,6 +40,9 @@ public:
     explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~VideoNowPlayingWindow();
     void playObject(QString objectId);
+
+signals:
+    void objectDestroyed(QString objectId);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -77,6 +81,8 @@ private slots:
     void toggleVolumeSlider();
     void volumeWatcher();
     void orientationChanged();
+    void onShareClicked();
+    void onDeleteClicked();
 #ifdef MAFW
     void onPropertyChanged(const QDBusMessage &msg);
     void stateChanged(int state);
@@ -85,6 +91,7 @@ private slots:
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
     void playVideo();
     void onErrorOccured(const QDBusMessage &msg);
+    void onShareUriReceived(QString objectId, QString uri);
 #endif
 #ifdef Q_WS_MAEMO_5
     void onPortraitMode();

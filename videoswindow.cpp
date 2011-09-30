@@ -87,10 +87,20 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
 #endif
     window->showFullScreen();
 
+    connect(window, SIGNAL(objectDestroyed(QString)), this, SLOT(onObjectDestroyed(QString)));
     connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
     ui->indicator->inhibit();
 
     window->playObject(item->data(UserRoleObjectID).toString());
+}
+
+void VideosWindow::onObjectDestroyed(QString objectId)
+{
+    for (int i = 0; i < ui->listWidget->count(); i++)
+        if (ui->listWidget->item(i)->data(UserRoleObjectID).toString() == objectId) {
+            delete ui->listWidget->takeItem(i);
+            break;
+        }
 }
 
 void VideosWindow::onSortingChanged(QAction *action)
@@ -115,6 +125,12 @@ void VideosWindow::selectView()
 #ifdef MAFW
 void VideosWindow::listVideos()
 {
+#ifdef Q_WS_MAEMO_5
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+
+    ui->listWidget->clear();
+
 #ifdef DEBUG
     qDebug("Source ready");
 #endif
@@ -177,12 +193,14 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
         item->setData(UserRoleObjectID, objectId);
         ui->listWidget->addItem(item);
     }
+
+    if (remainingCount == 0) {
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+                   this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)));
 #ifdef Q_WS_MAEMO_5
-    if (remainingCount != 0)
-        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-    else
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+    }
 }
 #endif
 
