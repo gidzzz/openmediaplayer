@@ -66,6 +66,10 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
+    ui->playlistTimeLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                              .arg(secondaryColor.red())
+                              .arg(secondaryColor.green())
+                              .arg(secondaryColor.blue()));
     ui->albumNameLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
@@ -79,6 +83,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
+    playlistTime = 0;
     browseId = NULL;
     newSong = true;
     albumArtScene = new QGraphicsScene(ui->view);
@@ -266,6 +271,16 @@ void NowPlayingWindow::setSongNumber(int currentSong, int numberOfSongs)
     else
         songNumber.append(tr("songs"));
     ui->songNumberLabel->setText(songNumber);
+}
+
+void NowPlayingWindow::updatePlaylistTimeLabel()
+{
+    QString total;
+    if (playlistTime > 0)
+        total = time_mmss(playlistTime);
+    else
+        total = "--:--";
+    ui->playlistTimeLabel->setText(total + " " + tr("total"));
 }
 
 void NowPlayingWindow::toggleVolumeSlider()
@@ -529,6 +544,10 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
         QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
         if (item) {
+            if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
+                playlistTime -= item->data(UserRoleSongDuration).toInt();
+            if (duration > 0)
+                playlistTime += duration;
             item->setData(UserRoleSongTitle, title);
             item->setData(UserRoleSongDuration, duration);
             item->setData(UserRoleSongAlbum, album);
@@ -672,7 +691,6 @@ void NowPlayingWindow::orientationChanged()
         ui->space2->show();
         ui->buttonsLayout->setSpacing(60);
 
-        ui->songNumberLabel->setAlignment(Qt::AlignLeft);
         ui->songTitleLabel->setAlignment(Qt::AlignLeft);
         ui->artistLabel->setAlignment(Qt::AlignLeft);
         ui->albumNameLabel->setAlignment(Qt::AlignLeft);
@@ -694,7 +712,6 @@ void NowPlayingWindow::orientationChanged()
         ui->volumeWidget->setContentsMargins(18,0,9,9);
         ui->buttonsLayout->setSpacing(27);
 
-        ui->songNumberLabel->setAlignment(Qt::AlignHCenter);
         ui->songTitleLabel->setAlignment(Qt::AlignHCenter);
         ui->artistLabel->setAlignment(Qt::AlignHCenter);
         ui->albumNameLabel->setAlignment(Qt::AlignHCenter);
@@ -942,10 +959,15 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
                                 MAFW_METADATA_KEY_ALBUM);
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
-
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
+
+        if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
+            playlistTime -= item->data(UserRoleSongDuration).toInt();
+        if (duration > 0)
+            playlistTime += duration;
+        this->updatePlaylistTimeLabel();
 
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongDuration, duration);
@@ -1012,6 +1034,7 @@ void NowPlayingWindow::clearPlaylist()
                              this);
     confirmClear.exec();
     if(confirmClear.result() == QMessageBox::Yes) {
+        playlistTime = 0;
         playlist->clear();
         lastPlayingSong->set(1);
         mafwrenderer->stop();
@@ -1264,13 +1287,19 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
     }
 
     if (from + nremove + nreplace == 0) {
+        playlistTime = 0;
         ui->songPlaylist->clear();
         nreplace = playlist->getSize();
     }
 
     if (nremove > 0) {
-        for (int i = 0; i < nremove; i++)
-            delete ui->songPlaylist->takeItem(from);
+        for (int i = 0; i < nremove; i++) {
+            QListWidgetItem *item = ui->songPlaylist->takeItem(from);
+            if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
+                playlistTime -= item->data(UserRoleSongDuration).toInt();
+            delete item;
+            }
+        this->updatePlaylistTimeLabel();
         playlistQM->itemsRemoved(from, nremove);
     }
     else {

@@ -76,6 +76,7 @@ private:
     Ui::NowPlayingWindow *ui;
     EntertainmentView *entertainmentView;
     CarView *carView;
+    int playlistTime;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -91,6 +92,7 @@ private:
 #endif
     void setButtonIcons();
     void setSongNumber(int currentSong, int numberOfSongs);
+    void updatePlaylistTimeLabel();
     void connectSignals();
     QTimer *volumeTimer;
     QTimer *positionTimer;
