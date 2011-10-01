@@ -271,8 +271,10 @@ void VideoNowPlayingWindow::stateChanged(int state)
 #endif
         if(positionTimer->isActive())
             positionTimer->stop();
-        if (this->gotInitialState && !this->errorOccured)
+        if (this->gotInitialState && !this->errorOccured) {
             this->close();
+            delete this; // why is it not deleted automatically, despite WA_DeleteOnClose?
+        }
     }
     else if(state == Transitioning) {
         ui->progressBar->setEnabled(false);

@@ -80,6 +80,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     // Placeholder function
     ui->listWidget->clearSelection();
     //playlist->assignVideoPlaylist();
+    mafwrenderer->stop(); // prevents the audio playlist from starting after the video ends
 #ifdef MAFW
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else

@@ -283,12 +283,15 @@ void MainWindow::mime_open(const QString &uriString)
         // Converting urisource object to localtagfs:
         // "urisource::file:///home/user/MyDocs/mix.m3u"
         // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
+
+        objectId.remove("urisource::file://");
+        objectId.replace("/", "%2F").replace(" ", "%20");
+
         if (qmimetype.endsWith("mpegurl")) {
 #ifdef MAFW
-            objectId.remove("urisource::file://");
-            objectId.replace("/", "%2F").replace(" ", "%20");
             objectId.prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
             qDebug() << objectId;
+
 #ifdef Q_WS_MAEMO_5
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
@@ -314,9 +317,12 @@ void MainWindow::mime_open(const QString &uriString)
 
         else {
 #ifdef MAFW
+            objectId.prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
+            qDebug() << objectId;
+
             playlist->assignAudioPlaylist();
             playlist->clear();
-            playlist->appendItem(objectId); // not a localtagfs object, so no metadata
+            playlist->appendItem(objectId);
 #endif
 
 #ifdef MAFW

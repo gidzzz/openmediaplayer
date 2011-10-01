@@ -147,7 +147,7 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         if (playlistName == "FmpVideoPlaylist" && window == 0) {
             window = new VideoNowPlayingWindow(this, mafwFactory);
             window->setAttribute(Qt::WA_DeleteOnClose);
-            connect(window, SIGNAL(destroyed), this, SLOT(onWindowDestroyed()));
+            connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
             }
         else if (playlistName == "FmpRadioPlaylist" && window == 0)  {
             window = new RadioNowPlayingWindow(this, mafwFactory);
