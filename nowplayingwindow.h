@@ -56,9 +56,11 @@ public:
     QString albumInFolder;
     QNetworkAccessManager* data;
     QString TEartist, TEalbum, TEtitle, TEid;
+    bool eventFilter(QObject *watched, QEvent *event);
 
 signals:
     void hidden();
+    void itemDropped(QListWidgetItem *item, int from);
 
 public slots:
     void reloadLyricsFromFile();
@@ -76,6 +78,7 @@ private:
     Ui::NowPlayingWindow *ui;
     EntertainmentView *entertainmentView;
     CarView *carView;
+    QTimer *editTimer;
     int playlistTime;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -101,6 +104,7 @@ private:
     bool isDefaultArt;
     bool buttonWasDown;
     bool enableLyrics;
+    QListWidgetItem *clickedItem;
     int songDuration;
     int currentSongPosition;
     QGraphicsScene *albumArtScene;
@@ -126,7 +130,10 @@ private slots:
     void showFMTXDialog();
     void toggleList();
     void setRingingTone();
+    void leaveEditMode();
+    void onItemDropped(QListWidgetItem *item, int from);
 #ifdef MAFW
+    void onItemMoved(guint from, guint to);
     void onPropertyChanged(const QDBusMessage &msg);
     void stateChanged(int state);
     void onPositionChanged(int, QString);

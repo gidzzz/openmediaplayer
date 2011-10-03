@@ -27,6 +27,7 @@ public:
     void appendItem(QString objectId);
     void appendItem(MafwPlaylist *playlist, QString objectId);
     void appendItems(const gchar** oid);
+    void moveItem(int from, int to);
     void removeItem(int index);
     void duplicatePlaylist(QString newName);
     int getSize();
@@ -41,6 +42,7 @@ public:
     static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
     static void get_items_free_cbarg(gpointer user_data);
     static void onContentsChanged(MafwPlaylist*, guint from, guint nremove, guint nreplace, gpointer user_data);
+    static void onItemMoved(MafwPlaylist*, guint from, guint to, gpointer user_data);
 
 
 signals:
@@ -48,6 +50,7 @@ signals:
     void getItemsComplete(gpointer op);
     void playlistChanged();
     void contentsChanged(guint from, guint nremove, guint nreplace);
+    void itemMoved(guint from, guint to);
 
 public slots:
     void assignAudioPlaylist();

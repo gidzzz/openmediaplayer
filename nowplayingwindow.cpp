@@ -84,12 +84,22 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     positionTimer->setInterval(1000);
 
     playlistTime = 0;
+    clickedItem = NULL;
     browseId = NULL;
     newSong = true;
     albumArtScene = new QGraphicsScene(ui->view);
     entertainmentView = 0;
     carView = 0;
     enableLyrics = QSettings().value("lyrics/enable").toBool();
+
+    ui->songPlaylist->setDragDropMode(QAbstractItemView::InternalMove);
+    ui->songPlaylist->viewport()->setAcceptDrops(true);
+    ui->songPlaylist->setAutoScrollMargin(70);
+    QApplication::setStartDragDistance(20);
+
+    editTimer = new QTimer(this);
+    editTimer->setInterval(QApplication::doubleClickInterval());
+    editTimer->setSingleShot(true);
 
     ui->volSliderWidget->hide();
     ui->lyrics->hide();
@@ -149,6 +159,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
     this->connectSignals();
 
+    ui->songPlaylist->viewport()->installEventFilter(this);
 
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
@@ -408,6 +419,8 @@ void NowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
     connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(editTimer, SIGNAL(timeout()), this, SLOT(leaveEditMode()));
+    connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
     connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentView()));
     connect(ui->actionCar_view, SIGNAL(triggered()), this, SLOT(showCarView()));
 #ifdef Q_WS_MAEMO_5
@@ -432,7 +445,6 @@ void NowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
-    connect(ui->songPlaylist, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onPlaylistItemActivated(QListWidgetItem*)));
     connect(lastPlayingSong, SIGNAL(valueChanged()), this, SLOT(onGconfValueChanged()));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
@@ -444,6 +456,7 @@ void NowPlayingWindow::connectSignals()
                                           this, SLOT(updatePlaylistState()));
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "playlist_updated", this, SLOT(updatePlaylist()));
     connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(updatePlaylist(guint, guint, guint)));
+    connect(playlist, SIGNAL(itemMoved(guint, guint)), this, SLOT(onItemMoved(guint, guint)));
 #endif
 }
 
@@ -468,6 +481,56 @@ void NowPlayingWindow::showFMTXDialog()
     fmtxDialog->show();
 #endif
 }
+
+void NowPlayingWindow::leaveEditMode()
+{
+    ui->songPlaylist->setDragEnabled(false);
+    clickedItem = NULL;
+}
+
+bool NowPlayingWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::Drop) {
+        leaveEditMode();
+        static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
+        emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
+    }
+
+    else if (event->type() == QEvent::MouseButtonPress) {
+        editTimer->start();
+    }
+
+    else if (event->type() == QEvent::MouseButtonRelease) {
+        if (!clickedItem) {
+            clickedItem = ui->songPlaylist->currentItem();
+            ui->songPlaylist->setDragEnabled(true);
+        }
+        else if (clickedItem == ui->songPlaylist->currentItem())
+            onPlaylistItemActivated(clickedItem);
+    }
+
+    return false;
+}
+
+void NowPlayingWindow::onItemDropped(QListWidgetItem *item, int from)
+{
+#ifdef MAFW
+    playlist->moveItem(from, ui->songPlaylist->row(item));
+#endif
+}
+
+#ifdef MAFW
+void NowPlayingWindow::onItemMoved(guint from, guint to)
+{
+    playlistQM->itemsRemoved(from, 1);
+    playlistQM->itemsInserted(to, 1);
+
+    if (ui->songPlaylist->item(to)->data(UserRoleSongDuration) == Duration::Blank)
+        playlistQM->getItems(to,to);
+
+    mafwrenderer->getStatus();
+}
+#endif
 
 void NowPlayingWindow::onSongSelected(int songNumber, int totalNumberOfSongs, QString song, QString album, QString artist, int duration)
 {
@@ -543,7 +606,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         this->songDuration = duration;
 
         QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
-        if (item) {
+        if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank) {
             if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
                 playlistTime -= item->data(UserRoleSongDuration).toInt();
             if (duration > 0)
@@ -866,7 +929,7 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist* MafwPlaylist, uint index, MafwP
         this->updatePlaylistState();
         this->playlistRequested = true;
     }
-    int indexAsInt = index;
+    int indexAsInt = index; // sometimes the value is wrong, visible mainly while using the playlist editor
     lastPlayingSong->set(indexAsInt);
     this->mafwPlaylist = MafwPlaylist;
     this->setSongNumber(index+1, playlist->getSize());
@@ -1286,7 +1349,9 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         return;
     }
 
-    if (from + nremove + nreplace == 0) {
+    bool synthetic = (from + nremove + nreplace) == 0;
+
+    if (synthetic) {
         playlistTime = 0;
         ui->songPlaylist->clear();
         nreplace = playlist->getSize();
@@ -1328,6 +1393,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 
     }*/
 
+    if (synthetic) selectItemByRow(lastPlayingSong->value().toInt());
 
     mafwrenderer->getStatus();
 

@@ -113,6 +113,12 @@ void MafwPlaylistAdapter::appendItems(const gchar** oid)
         mafw_playlist_append_items (this->mafw_playlist, oid, &error);
 }
 
+void MafwPlaylistAdapter::moveItem(int from, int to)
+{
+    if(mafw_playlist)
+        mafw_playlist_move_item (this->mafw_playlist, from, to, &error);
+}
+
 void MafwPlaylistAdapter::removeItem(int index)
 {
     if(mafw_playlist)
@@ -271,10 +277,18 @@ void MafwPlaylistAdapter::connectPlaylistSignals()
                      "contents-changed",
                      G_CALLBACK(&onContentsChanged),
                      static_cast<void*>(this));
-    // "item-moved" could alo be added here
+    g_signal_connect(mafw_playlist,
+                     "item-moved",
+                     G_CALLBACK(&onItemMoved),
+                     static_cast<void*>(this));
 }
 
 void MafwPlaylistAdapter::onContentsChanged(MafwPlaylist*, guint from, guint nremove, guint nreplace, gpointer user_data)
 {
     emit static_cast<MafwPlaylistAdapter*>(user_data)->contentsChanged(from, nremove, nreplace);
+}
+
+void MafwPlaylistAdapter::onItemMoved(MafwPlaylist*, guint from, guint to, gpointer user_data)
+{
+    emit static_cast<MafwPlaylistAdapter*>(user_data)->itemMoved(from, to);
 }
