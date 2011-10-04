@@ -97,9 +97,9 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui->songPlaylist->setAutoScrollMargin(70);
     QApplication::setStartDragDistance(20);
 
-    editTimer = new QTimer(this);
-    editTimer->setInterval(QApplication::doubleClickInterval());
-    editTimer->setSingleShot(true);
+    clickTimer = new QTimer(this);
+    clickTimer->setInterval(QApplication::doubleClickInterval());
+    clickTimer->setSingleShot(true);
 
     ui->volSliderWidget->hide();
     ui->lyrics->hide();
@@ -419,7 +419,8 @@ void NowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
     connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(editTimer, SIGNAL(timeout()), this, SLOT(leaveEditMode()));
+    connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
+    connect(ui->songPlaylist, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
     connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
     connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentView()));
     connect(ui->actionCar_view, SIGNAL(triggered()), this, SLOT(showCarView()));
@@ -482,34 +483,35 @@ void NowPlayingWindow::showFMTXDialog()
 #endif
 }
 
-void NowPlayingWindow::leaveEditMode()
+void NowPlayingWindow::forgetClick()
 {
-    ui->songPlaylist->setDragEnabled(false);
     clickedItem = NULL;
+    ui->songPlaylist->setDragEnabled(false);
 }
 
-bool NowPlayingWindow::eventFilter(QObject *watched, QEvent *event)
+bool NowPlayingWindow::eventFilter(QObject*, QEvent *event)
 {
     if (event->type() == QEvent::Drop) {
-        leaveEditMode();
         static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
         emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
-    }
-
-    else if (event->type() == QEvent::MouseButtonPress) {
-        editTimer->start();
     }
 
     else if (event->type() == QEvent::MouseButtonRelease) {
         if (!clickedItem) {
             clickedItem = ui->songPlaylist->currentItem();
-            ui->songPlaylist->setDragEnabled(true);
+            clickTimer->start();
         }
         else if (clickedItem == ui->songPlaylist->currentItem())
             onPlaylistItemActivated(clickedItem);
     }
 
     return false;
+}
+
+void NowPlayingWindow::onItemDoubleClicked()
+{
+    ui->songPlaylist->setDragEnabled(true);
+    clickTimer->start();
 }
 
 void NowPlayingWindow::onItemDropped(QListWidgetItem *item, int from)

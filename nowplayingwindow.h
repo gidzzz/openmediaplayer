@@ -78,7 +78,6 @@ private:
     Ui::NowPlayingWindow *ui;
     EntertainmentView *entertainmentView;
     CarView *carView;
-    QTimer *editTimer;
     int playlistTime;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -97,6 +96,7 @@ private:
     void setSongNumber(int currentSong, int numberOfSongs);
     void updatePlaylistTimeLabel();
     void connectSignals();
+    QTimer *clickTimer;
     QTimer *volumeTimer;
     QTimer *positionTimer;
     QLineEdit *playlistNameLineEdit;
@@ -130,7 +130,8 @@ private slots:
     void showFMTXDialog();
     void toggleList();
     void setRingingTone();
-    void leaveEditMode();
+    void forgetClick();
+    void onItemDoubleClicked();
     void onItemDropped(QListWidgetItem *item, int from);
 #ifdef MAFW
     void onItemMoved(guint from, guint to);
