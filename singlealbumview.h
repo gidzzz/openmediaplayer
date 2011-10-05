@@ -63,7 +63,6 @@ private slots:
     void onItemSelected(QListWidgetItem*);
     void onRingingToneUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString objectId, QString uri);
-    void onDeleteUriReceived(QString objectId, QString uri);
 #endif
     void createPlaylist(bool);
     void onShuffleButtonClicked();

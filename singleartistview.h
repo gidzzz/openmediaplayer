@@ -61,6 +61,7 @@ private slots:
     void onContextMenuRequested(const QPoint &point);
     void onAddAlbumToNowPlaying();
     void onNowPlayingWindowHidden();
+    void onDeleteClicked();
 };
 
 #endif // SINGLEARTISTVIEW_H

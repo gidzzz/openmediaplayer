@@ -326,9 +326,26 @@ void SingleArtistView::onContextMenuRequested(const QPoint &point)
         QMenu *contextMenu = new QMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddAlbumToNowPlaying()));
-        contextMenu->addAction(tr("Delete"));
+        contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
         contextMenu->exec(point);
     }
+}
+
+void SingleArtistView::onDeleteClicked()
+{
+#ifdef MAFW
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              " ",
+                              tr("Delete selected item from device?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.exec();
+    if(confirmDelete.result() == QMessageBox::Yes) {
+        mafwTrackerSource->destroyObject(ui->albumList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        delete ui->albumList->currentItem();
+    }
+#endif
+    ui->albumList->clearSelection();
 }
 
 void SingleArtistView::onAddAlbumToNowPlaying()

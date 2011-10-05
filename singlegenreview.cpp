@@ -255,7 +255,6 @@ void SingleGenreView::onContextMenuRequested(QPoint point)
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(addItemToNowPlaying()));
-    contextMenu->addAction(tr("Delete"));
     contextMenu->exec(point);
 }
 
