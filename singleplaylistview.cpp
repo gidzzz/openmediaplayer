@@ -481,41 +481,21 @@ void SinglePlaylistView::onShareUriReceived(QString objectId, QString uri)
 void SinglePlaylistView::onDeleteClicked()
 {
 #ifdef MAFW
-    this->mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
-    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
-#endif
-}
-
-#ifdef MAFW
-void SinglePlaylistView::onDeleteUriReceived(QString objectId, QString uri)
-{
-    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
-
-    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
-        return;
-
-    QFile song(uri);
-    if(song.exists()) {
-#ifdef DEBUG
-        qDebug() << "Song exists";
-#endif
-        QMessageBox confirmDelete(QMessageBox::NoIcon,
-                                  tr("Delete song?"),
-                                  tr("Are you sure you want to delete this song?")+ "\n\n"
-                                  + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
-                                  + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  this);
-        confirmDelete.exec();
-        if(confirmDelete.result() == QMessageBox::Yes) {
-            song.remove();
-            ui->songList->removeItemWidget(ui->songList->currentItem());
-        }
-        else if(confirmDelete.result() == QMessageBox::No)
-            ui->songList->clearSelection();
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              tr("Delete song?"),
+                              tr("Are you sure you want to delete this song?")+ "\n\n"
+                              + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
+                              + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.exec();
+    if(confirmDelete.result() == QMessageBox::Yes) {
+        mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        delete ui->songList->currentItem();
     }
-}
 #endif
+    ui->songList->clearSelection();
+}
 
 void SinglePlaylistView::setSongCount(int count)
 {

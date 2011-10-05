@@ -198,9 +198,9 @@ void MusicWindow::onContextMenuRequested(QPoint point)
             return;
         }
     }
-    if (this->currentList() != ui->playlistList)
+    if (this->currentList() == ui->artistList || this->currentList() == ui->albumList)
         contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-    if (this->currentList() == ui->songList) {
+    else if (this->currentList() == ui->songList) {
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     }
@@ -221,10 +221,9 @@ void MusicWindow::onDeletePlaylistClicked()
             mafw_playlist_manager->deletePlaylist(ui->playlistList->currentItem()->text());
             delete ui->playlistList->currentItem();
         }
-        else if (confirmDelete.result() == QMessageBox::No)
-            ui->playlistList->clearSelection();
     }
 #endif
+    ui->playlistList->clearSelection();
 }
 
 void MusicWindow::setRingingTone()
@@ -285,55 +284,19 @@ void MusicWindow::onShareUriReceived(QString objectId, QString uri)
 void MusicWindow::onDeleteClicked()
 {
 #ifdef MAFW
-    this->mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
-    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
-#endif
-}
-
-#ifdef MAFW
-void MusicWindow::onDeleteUriReceived(QString objectId, QString uri)
-{
-    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onDeleteUriReceived(QString,QString)));
-
-    if (objectId != this->currentList()->currentItem()->data(UserRoleObjectID).toString())
-        return;
-
-    QFile song(uri);
-    if(song.exists()) {
-        if (this->currentList() == ui->songList) {
-            QMessageBox confirmDelete(QMessageBox::NoIcon,
-                                      tr("Delete song?"),
-                                      tr("Are you sure you want to delete this song?")+ "\n\n"
-                                      + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
-                                      + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
-                                      QMessageBox::Yes | QMessageBox::No,
-                                      this);
-            confirmDelete.exec();
-            if(confirmDelete.result() == QMessageBox::Yes) {
-                song.remove();
-                ui->songList->removeItemWidget(ui->songList->currentItem());
-                delete ui->songList->currentItem();
-            }
-            else if(confirmDelete.result() == QMessageBox::No)
-                ui->songList->clearSelection();
-        } else if (this->currentList() == ui->playlistList) {
-            QMessageBox confirmDelete(QMessageBox::NoIcon,
-                                      " ",
-                                      tr("Delete selected item from device?"),
-                                      QMessageBox::Yes | QMessageBox::No,
-                                      this);
-            confirmDelete.exec();
-            if(confirmDelete.result() == QMessageBox::Yes) {
-                song.remove();
-                ui->playlistList->removeItemWidget(ui->playlistList->currentItem());
-                delete ui->playlistList->currentItem();
-            }
-            else if(confirmDelete.result() == QMessageBox::No)
-                ui->playlistList->clearSelection();
-        }
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              " ",
+                              tr("Delete selected item from device?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.exec();
+    if(confirmDelete.result() == QMessageBox::Yes) {
+        mafwTrackerSource->destroyObject(currentList()->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        delete currentList()->currentItem();
     }
-}
 #endif
+    currentList()->clearSelection();
+}
 
 void MusicWindow::onSearchTextChanged(QString text)
 {

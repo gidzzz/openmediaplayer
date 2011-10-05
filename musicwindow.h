@@ -115,7 +115,6 @@ private slots:
     void browseAllGenres(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onAddToNowPlayingCallback(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString);
     void browseAutomaticPlaylists(uint browseId, int, uint, QString, GHashTable* metadata, QString);
-    void onDeleteUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
     void listSongs();
