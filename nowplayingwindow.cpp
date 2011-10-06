@@ -96,10 +96,16 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui->songPlaylist->viewport()->setAcceptDrops(true);
     ui->songPlaylist->setAutoScrollMargin(70);
     QApplication::setStartDragDistance(20);
+    ui->songPlaylist->setDragEnabled(false);
+    dragInProgress = false;
 
     clickTimer = new QTimer(this);
     clickTimer->setInterval(QApplication::doubleClickInterval());
     clickTimer->setSingleShot(true);
+
+    keyTimer = new QTimer(this);
+    keyTimer->setInterval(5000);
+    keyTimer->setSingleShot(true);
 
     ui->volSliderWidget->hide();
     ui->lyrics->hide();
@@ -160,6 +166,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     this->connectSignals();
 
     ui->songPlaylist->viewport()->installEventFilter(this);
+    ui->songPlaylist->installEventFilter(this);
 
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
@@ -419,6 +426,7 @@ void NowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
     connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(keyTimer, SIGNAL(timeout()), this, SLOT(onKeyTimeout()));
     connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
     connect(ui->songPlaylist, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
     connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
@@ -483,26 +491,53 @@ void NowPlayingWindow::showFMTXDialog()
 #endif
 }
 
+void NowPlayingWindow::onKeyTimeout()
+{
+    focusItemByRow(lastPlayingSong->value().toInt());
+}
+
 void NowPlayingWindow::forgetClick()
 {
     clickedItem = NULL;
     ui->songPlaylist->setDragEnabled(false);
+    selectItemByRow(lastPlayingSong->value().toInt());
 }
 
-bool NowPlayingWindow::eventFilter(QObject*, QEvent *event)
+bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
 {
-    if (event->type() == QEvent::Drop) {
-        static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
-        emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
+    if (object == ui->songPlaylist) {
+
+        if (event->type() == QEvent::KeyRelease)
+            keyTimer->start();
+
     }
 
-    else if (event->type() == QEvent::MouseButtonRelease) {
-        if (!clickedItem) {
-            clickedItem = ui->songPlaylist->currentItem();
-            clickTimer->start();
+    else {
+
+        if (event->type() == QEvent::DragMove) {
+            dragInProgress = true;
         }
-        else if (clickedItem == ui->songPlaylist->currentItem())
-            onPlaylistItemActivated(clickedItem);
+
+        else if (event->type() == QEvent::Drop) {
+            static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
+            emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
+            dragInProgress = false;
+        }
+
+        else if (event->type() == QEvent::Leave) {
+            dragInProgress = false;
+            selectItemByRow(lastPlayingSong->value().toInt());
+        }
+
+        else if (event->type() == QEvent::MouseButtonRelease) {
+            if (!clickedItem) {
+                clickedItem = ui->songPlaylist->currentItem();
+                clickTimer->start();
+            }
+            else if (clickedItem == ui->songPlaylist->currentItem())
+                onPlaylistItemActivated(clickedItem);
+        }
+
     }
 
     return false;
@@ -935,6 +970,7 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist* MafwPlaylist, uint index, MafwP
     lastPlayingSong->set(indexAsInt);
     this->mafwPlaylist = MafwPlaylist;
     this->setSongNumber(index+1, playlist->getSize());
+    this->selectItemByRow(indexAsInt);
     this->stateChanged(state);
 }
 
@@ -976,7 +1012,9 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
     if(e->key() == Qt::Key_Backspace)
         this->close();
 #ifdef MAFW
-    else if(e->key() == Qt::Key_Space) {
+    else if (e->key() == Qt::Key_Enter)
+        onPlaylistItemActivated(ui->songPlaylist->currentItem());
+    else if (e->key() == Qt::Key_Space) {
         if (this->mafwState == Playing)
             mafwrenderer->pause();
         else if (this->mafwState == Paused)
@@ -1334,9 +1372,16 @@ void NowPlayingWindow::onDeleteFromNowPlaying()
 
 void NowPlayingWindow::selectItemByRow(int row)
 {
-    if (ui->songPlaylist->item(row)){
+    if (!dragInProgress && ui->songPlaylist->item(row)) {
         ui->songPlaylist->clearSelection();
         ui->songPlaylist->item(row)->setSelected(true);
+    }
+}
+
+void NowPlayingWindow::focusItemByRow(int row)
+{
+    if (!dragInProgress && ui->songPlaylist->item(row)) {
+        selectItemByRow(row);
         ui->songPlaylist->setCurrentRow(row);
         ui->songPlaylist->scrollToItem(ui->songPlaylist->item(row), QAbstractItemView::PositionAtCenter);
     }
@@ -1395,7 +1440,8 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 
     }*/
 
-    if (synthetic) selectItemByRow(lastPlayingSong->value().toInt());
+    if (synthetic)
+        focusItemByRow(lastPlayingSong->value().toInt());
 
     mafwrenderer->getStatus();
 

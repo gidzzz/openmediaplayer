@@ -96,6 +96,7 @@ private:
     void setSongNumber(int currentSong, int numberOfSongs);
     void updatePlaylistTimeLabel();
     void connectSignals();
+    QTimer *keyTimer;
     QTimer *clickTimer;
     QTimer *volumeTimer;
     QTimer *positionTimer;
@@ -104,6 +105,7 @@ private:
     bool isDefaultArt;
     bool buttonWasDown;
     bool enableLyrics;
+    bool dragInProgress;
     QListWidgetItem *clickedItem;
     int songDuration;
     int currentSongPosition;
@@ -130,6 +132,7 @@ private slots:
     void showFMTXDialog();
     void toggleList();
     void setRingingTone();
+    void onKeyTimeout();
     void forgetClick();
     void onItemDoubleClicked();
     void onItemDropped(QListWidgetItem *item, int from);
@@ -173,8 +176,8 @@ private slots:
     void savePlaylist();
     void onSavePlaylistAccepted();
     void onDeleteFromNowPlaying();
-    //void selectItemByText(int numberInPlaylist);
     void selectItemByRow(int row);
+    void focusItemByRow(int row);
 #ifdef Q_WS_MAEMO_5
     void onScreenLocked(bool locked);
 #endif

@@ -350,7 +350,7 @@ void SingleGenreView::addAllToNowPlaying()
 
     ui->artistList->clearSelection();
 
-    qDebug() << "connecting SingleArtistView to signalSourceBrowseResult";
+    qDebug() << "connecting SingleGenreView to signalSourceBrowseResult";
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onNowPlayingBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 
