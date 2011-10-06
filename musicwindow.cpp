@@ -62,7 +62,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->indicator->raise();
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
-    //ui->indicator->autoSetVisibility();
 #endif
     this->connectSignals();
 }

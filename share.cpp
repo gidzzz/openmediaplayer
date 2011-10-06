@@ -20,29 +20,30 @@ Share::~Share()
 
 void Share::on_share_bt_released()
 {
-//    qDebug() << "BluetoothTransfer::sendFile()" << file1;
-    //QString sended = "/opt/filebox/bt \"" + file1 + "\"";
+    //qDebug() << "BluetoothTransfer::sendFile()" << file1;
+    //QString sendCmd = "/opt/filebox/bt \"" + file1 + "\"";
 
-    QString params="";
-    for (int i=0; i < files.count(); ++i)
+    QString params = "";
+    for (int i = 0; i < files.count(); ++i)
     {
         if ( QFileInfo(files.at(i)).isFile() )
         {
-            QString archivo = files.at(i);
-            archivo.replace("#","%2523");
-            archivo.replace(",","%2C");
-            archivo.replace(" ","%20");
-            if ( i == 0 ) params += "\"file://" + archivo + "\"";
-            else params += ",\"file://" + archivo + "\"";
+            QString path = files.at(i);
+            path.replace("#", "%2523");
+            path.replace(",", "%2C");
+            path.replace(" ", "%20");
+
+            if ( i == 0 )
+                params += "\"file://" + path + "\"";
+            else
+                params += ",\"file://" + path + "\"";
         }
     }
 
     if ( params != "" )
     {
-        QString sended = "dbus-send --system --print-reply --dest='com.nokia.icd_ui' /com/nokia/bt_ui com.nokia.bt_ui.show_send_file_dlg array:string:" + params + " > /dev/null";
-        QByteArray ba = sended.toLatin1();
-        const char *str1 = ba.data();
-        system(str1);
+        QString sendCmd = "dbus-send --system --print-reply --dest='com.nokia.icd_ui' /com/nokia/bt_ui com.nokia.bt_ui.show_send_file_dlg array:string:" + params + " > /dev/null";
+        system(sendCmd.toLatin1());
     }
     this->close();
 
@@ -51,33 +52,34 @@ void Share::on_share_bt_released()
 void Share::on_share_mail_released()
 {
     /*QMessage msg;
-    QStringList lista;
-    lista.append(file1);
-    msg.appendAttachments(lista);
-    QMessageService msg2;
-    msg2.send(msg);*/
-    //QString sended = "/opt/filebox/email \"" + file1 + "\"";
+    QStringList fileList;
+    fileList.append(file1);
+    msg.appendAttachments(fileList);
+    QMessageService service;
+    service.send(msg);*/
+    //QString sendCmd = "/opt/filebox/email \"" + file1 + "\"";
 
-    QString params="";
-    for (int i=0; i < files.count(); ++i)
+    QString params = "";
+    for (int i = 0; i < files.count(); ++i)
     {
         if ( QFileInfo(files.at(i)).isFile() )
         {
-            QString archivo = files.at(i);
-            archivo.replace("#","%2523");
-            archivo.replace(",","%2C");
-            archivo.replace(" ","%20");
-            if ( i == 0 ) params += "\"file://" + archivo + "\"";
-            else params += ",\"file://" + archivo + "\"";
+            QString path = files.at(i);
+            path.replace("#", "%2523");
+            path.replace(",", "%2C");
+            path.replace(" ", "%20");
+
+            if ( i == 0 )
+                params += "\"file://" + path + "\"";
+            else
+                params += ",\"file://" + path + "\"";
         }
     }
 
     if ( params != "" )
     {
-        QString sended = "dbus-send --type=method_call --dest=com.nokia.modest /com/nokia/modest com.nokia.modest.ComposeMail string:\"\" string:\"\" string:\"\" string:\"\" string:\"\" string:" + params;
-        QByteArray ba = sended.toLatin1();
-        const char *str1 = ba.data();
-        system(str1);
+        QString sendCmd = "dbus-send --type=method_call --dest=com.nokia.modest /com/nokia/modest com.nokia.modest.ComposeMail string:\"\" string:\"\" string:\"\" string:\"\" string:\"\" string:" + params;
+        system(sendCmd.toLatin1());
     }
     this->close();
 

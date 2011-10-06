@@ -1001,6 +1001,7 @@ void NowPlayingWindow::onMediaChanged(int index, char*)
     newSong = true;
     lastPlayingSong->set(index);
     this->isDefaultArt = true;
+    focusItemByRow(index);
 }
 
 #endif
