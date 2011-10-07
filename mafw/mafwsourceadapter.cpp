@@ -23,7 +23,7 @@ MafwSourceAdapter::MafwSourceAdapter(QString source):
     sourceIsReady(false),
     sourceName(source)
 {
-  mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());  
+  mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
   mafw_shared_init(mafw_registry, NULL);
   findSource();
   connectRegistrySignals();
@@ -31,7 +31,7 @@ MafwSourceAdapter::MafwSourceAdapter(QString source):
 
 MafwSourceAdapter::~MafwSourceAdapter()
 {
-  
+
 }
 
 bool
@@ -67,9 +67,9 @@ MafwSourceAdapter::findSource()
 	  connectSourceSignals();
 	}
       }
-    }  
+    }
     else
-    { 
+    {
 #ifdef DEBUG
       g_print("no source\n");
 #endif
@@ -83,17 +83,17 @@ MafwSourceAdapter::findSource()
   }
 }
 
-void 
+void
 MafwSourceAdapter::connectRegistrySignals()
 {
-  g_signal_connect(mafw_registry, 
-		   "source_added", 
-		   G_CALLBACK(&onSourceAdded), 
+  g_signal_connect(mafw_registry,
+		   "source_added",
+		   G_CALLBACK(&onSourceAdded),
 		   static_cast<void*>(this));
-  
-  g_signal_connect(mafw_registry, 
-		   "source_removed", 
-		   G_CALLBACK(&onSourceRemoved), 
+
+  g_signal_connect(mafw_registry,
+		   "source_removed",
+		   G_CALLBACK(&onSourceRemoved),
 		   static_cast<void*>(this));
 }
 
@@ -146,7 +146,7 @@ MafwSourceAdapter::connectSourceSignals()
 void
 MafwSourceAdapter::disconnectSourceSignals()
 {
-  
+
 }
 
 void

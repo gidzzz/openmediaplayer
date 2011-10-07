@@ -359,7 +359,6 @@ void SingleArtistView::deleteCurrentArtist()
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(artistObjectId.toUtf8());
-        emit artistDestroyed(this->windowTitle());
         this->close();
     }
 #endif
