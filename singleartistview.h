@@ -52,6 +52,7 @@ private slots:
     void browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error);
     void onBrowseAllSongs(uint, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onAddAlbumBrowseResult(uint, int remainingCount, uint, QString objectId, GHashTable*, QString);
+    void onContainerChanged(QString objectId);
 #endif
     void onAlbumSelected(QListWidgetItem*);
     void orientationChanged();

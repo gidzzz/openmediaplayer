@@ -69,6 +69,7 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
 #ifdef MAFW
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllGenres(uint, int, uint, QString, GHashTable*, QString)));
 #endif
@@ -132,7 +133,7 @@ void SingleGenreView::browseGenre(QString objectId)
 void SingleGenreView::listGenres()
 {
 #ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
+    setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
     this->browseGenreId = mafwTrackerSource->sourceBrowse(this->objectIdToBrowse.toUtf8(), false, NULL, NULL,
@@ -145,14 +146,14 @@ void SingleGenreView::listGenres()
 
 void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
-    if(browseId != this->browseGenreId)
+    if (browseId != this->browseGenreId)
       return;
 
     QString title;
     int songCount = -1;
     int albumCount = -1;
     QListWidgetItem *item = new QListWidgetItem();
-    if(metadata != NULL) {
+    if (metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
@@ -166,10 +167,10 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
         songCount = v ? g_value_get_int (v) : -1;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI);
-        if(v != NULL) {
+        if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
                 item->setData(UserRoleAlbumArt, filename);
             }
         }
@@ -185,20 +186,12 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
     item->setData(UserRoleAlbumCount, albumCount);
     item->setData(UserRoleObjectID, objectId);
     ui->artistList->addItem(item);
-    if(!error.isEmpty())
+    if (!error.isEmpty())
         qDebug() << error;
-#ifdef Q_WS_MAEMO_5
-        if(remainingCount != 0)
-            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-        else
-            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
 
 #ifdef Q_WS_MAEMO_5
     if (remainingCount == 0)
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-    else
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 }
 #endif
@@ -332,6 +325,14 @@ void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount
 #endif
         songAddBufferSize = 0;
     }
+}
+#endif
+
+#ifdef MAFW
+void SingleGenreView::onContainerChanged(QString objectId)
+{
+    if (objectId == "localtagfs::music")
+        this->listGenres();
 }
 #endif
 

@@ -71,6 +71,7 @@ private slots:
     void listGenres();
     void browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
     void onNowPlayingBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable*,QString);
+    void onContainerChanged(QString objectId);
 #endif
 };
 

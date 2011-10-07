@@ -73,6 +73,9 @@ void VideosWindow::connectSignals()
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+#ifdef MAFW
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
+#endif
 }
 
 void VideosWindow::onVideoSelected(QListWidgetItem *item)
@@ -93,15 +96,6 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     ui->indicator->inhibit();
 
     window->playObject(item->data(UserRoleObjectID).toString());
-}
-
-void VideosWindow::onObjectDestroyed(QString objectId)
-{
-    for (int i = 0; i < ui->listWidget->count(); i++)
-        if (ui->listWidget->item(i)->data(UserRoleObjectID).toString() == objectId) {
-            delete ui->listWidget->takeItem(i);
-            break;
-        }
 }
 
 void VideosWindow::onSortingChanged(QAction *action)
@@ -202,6 +196,12 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
     }
+}
+
+void VideosWindow::onContainerChanged(QString objectId)
+{
+    if (objectId == "localtagfs::videos")
+        this->listVideos();
 }
 #endif
 

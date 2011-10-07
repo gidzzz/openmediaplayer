@@ -91,6 +91,7 @@ private slots:
     void showInternetRadioWindow();
     void onShuffleAllClicked();
     void createNowPlayingWindow();
+    void onNowPlayingWindowHidden();
 #ifdef MAFW
     void trackerSourceReady();
     void radioSourceReady();
@@ -102,7 +103,7 @@ private slots:
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
     void pausePlay();
     void onStateChanged(int state);
-    void onNowPlayingWindowHidden();
+    void onContainerChanged(QString objectId);
 #endif
 #ifdef Q_WS_MAEMO_5
     void onBluetoothButtonPressed(QDBusMessage msg);

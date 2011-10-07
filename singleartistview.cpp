@@ -47,6 +47,7 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
@@ -82,6 +83,10 @@ void SingleArtistView::browseAlbum(QString album)
 #ifdef MAFW
 void SingleArtistView::listAlbums()
 {
+#ifdef Q_WS_MAEMO_5
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+
     ui->albumList->clear();
     QListWidgetItem *shuffleButton = new QListWidgetItem(ui->albumList);
     shuffleButton->setIcon(QIcon(shuffleIcon124));
@@ -97,7 +102,7 @@ void SingleArtistView::listAlbums()
 
 void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
-    if(browseId != browseAllAlbumsId)
+    if (browseId != browseAllAlbumsId)
         return;
 
     QString albumTitle;
@@ -105,7 +110,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
     int childcount = -1;
     QString albumArt;
     QListWidgetItem *item = new QListWidgetItem();
-    if(metadata != NULL) {
+    if (metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_ALBUM);
@@ -126,7 +131,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         }
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI);
-        if(v != NULL) {
+        if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
             if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
@@ -142,13 +147,11 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
     item->setData(UserRoleObjectID, objectId);
     item->setText(albumTitle);
     ui->albumList->addItem(item);
-    if(!error.isEmpty())
+    if (!error.isEmpty())
         qDebug() << error;
+
 #ifdef Q_WS_MAEMO_5
-        if(remainingCount != 0)
-            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-        else
-            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
 }
 #endif
@@ -418,6 +421,14 @@ void SingleArtistView::onAddAlbumBrowseResult(uint browseId, int remainingCount,
 #endif
         songAddBufferSize = 0;
    }
+}
+#endif
+
+#ifdef MAFW
+void SingleArtistView::onContainerChanged(QString objectId)
+{
+    if (objectId == "localtagfs::music")
+        this->listAlbums();
 }
 #endif
 

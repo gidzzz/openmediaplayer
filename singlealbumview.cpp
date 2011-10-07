@@ -69,6 +69,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
     connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentAlbum()));
 #ifdef MAFW
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
 #endif
@@ -415,6 +416,14 @@ void SingleAlbumView::onShareUriReceived(QString objectId, QString uri)
     share->setAttribute(Qt::WA_DeleteOnClose);
     share->show();
 #endif
+}
+#endif
+
+#ifdef MAFW
+void SingleAlbumView::onContainerChanged(QString objectId)
+{
+    if (objectId == "localtagfs::music")
+        this->listSongs();
 }
 #endif
 

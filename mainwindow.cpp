@@ -240,8 +240,10 @@ void MainWindow::connectSignals()
     connect(musicWindow, SIGNAL(hidden()), ui->indicator, SLOT(restore()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     //connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
     connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
+    connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
     connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
@@ -472,7 +474,6 @@ void MainWindow::showInternetRadioWindow()
 
     window->show();
 
-    connect(window, SIGNAL(destroyed()), this, SLOT(countRadioStations()));
     connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
     ui->indicator->inhibit();
 }
@@ -718,6 +719,16 @@ void MainWindow::pausePlay()
 void MainWindow::onStateChanged(int state)
 {
     this->mafwState = state;
+}
+
+void MainWindow::onContainerChanged(QString objectId)
+{
+    if (objectId == "localtagfs::music")
+        this->countSongs();
+    else if (objectId == "localtagfs::videos")
+        this->countVideos();
+    else if (objectId == "iradiosource::")
+        this->countRadioStations();
 }
 
 #endif

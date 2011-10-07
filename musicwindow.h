@@ -129,6 +129,7 @@ private slots:
     void onGenreSelected(QListWidgetItem*);
     void onPlaylistSelected(QListWidgetItem*);
     void onGetItems(QString objectId, GHashTable*, guint index, gpointer op);
+    void onContainerChanged(QString objectId);
 #endif
     void onAddToNowPlaying();
     void onDeletePlaylistClicked();
