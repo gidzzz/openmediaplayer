@@ -67,6 +67,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
+    connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentAlbum()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
@@ -92,7 +93,7 @@ void SingleAlbumView::listSongs()
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
 #endif
 
-    this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumName.toUtf8(), true, NULL, "+track,+title",
+    this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumObjectId.toUtf8(), true, NULL, "+track,+title",
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,
@@ -181,7 +182,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
 #ifdef MAFW
 void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 {
-    this->albumName = objectId;
+    this->albumObjectId = objectId;
     if(mafwTrackerSource->isReady())
         this->listSongs();
     else
@@ -432,6 +433,22 @@ void SingleAlbumView::onDeleteClicked()
     }
 #endif
     ui->songList->clearSelection();
+}
+
+void SingleAlbumView::deleteCurrentAlbum()
+{
+#ifdef MAFW
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              " ",
+                              tr("Delete all items shown in view?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.exec();
+    if (confirmDelete.result() == QMessageBox::Yes) {
+        mafwTrackerSource->destroyObject(albumObjectId.toUtf8());
+        this->close();
+    }
+#endif
 }
 
 #ifdef Q_WS_MAEMO_5

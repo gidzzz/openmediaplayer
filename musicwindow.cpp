@@ -588,6 +588,10 @@ void MusicWindow::listArtists()
 
 void MusicWindow::listAlbums()
 {
+#ifdef Q_WS_MAEMO_5
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+
     ui->albumList->clear();
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
@@ -934,14 +938,16 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
     else item->setData(Qt::UserRole+50, tr("song"));
 
     ui->albumList->addItem(item);
-    if(!error.isEmpty())
+    if (!error.isEmpty())
         qDebug() << error;
+
+    if (remainingCount == 0) {
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+                   this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
 #ifdef Q_WS_MAEMO_5
-        if(remainingCount != 0)
-            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-        else
-            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+    }
 }
 
 void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString error)

@@ -38,7 +38,7 @@ public:
 
 private:
     Ui::SingleAlbumView *ui;
-    QString albumName;
+    QString albumObjectId;
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
 #ifdef Q_WS_MAEMO_5
@@ -68,6 +68,7 @@ private slots:
     void onShuffleButtonClicked();
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();
+    void deleteCurrentAlbum();
     void onContextMenuRequested(const QPoint &point);
     void setRingingTone();
     void onShareClicked();

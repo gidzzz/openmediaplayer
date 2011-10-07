@@ -58,6 +58,7 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
     connect(ui->actionAdd_songs_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
+    connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentArtist()));
     connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     this->orientationChanged();
@@ -171,7 +172,6 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
     ui->albumList->clearSelection();
 #endif
 }
-
 
 void SingleArtistView::orientationChanged()
 {
@@ -340,12 +340,29 @@ void SingleArtistView::onDeleteClicked()
                               QMessageBox::Yes | QMessageBox::No,
                               this);
     confirmDelete.exec();
-    if(confirmDelete.result() == QMessageBox::Yes) {
+    if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->albumList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         delete ui->albumList->currentItem();
     }
 #endif
     ui->albumList->clearSelection();
+}
+
+void SingleArtistView::deleteCurrentArtist()
+{
+#ifdef MAFW
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              " ",
+                              tr("Delete all items shown in view?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.exec();
+    if (confirmDelete.result() == QMessageBox::Yes) {
+        mafwTrackerSource->destroyObject(artistObjectId.toUtf8());
+        emit artistDestroyed(this->windowTitle());
+        this->close();
+    }
+#endif
 }
 
 void SingleArtistView::onAddAlbumToNowPlaying()

@@ -57,6 +57,7 @@ private slots:
     void orientationChanged();
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();
+    void deleteCurrentArtist();
     void shuffleAllSongs();
     void onContextMenuRequested(const QPoint &point);
     void onAddAlbumToNowPlaying();
