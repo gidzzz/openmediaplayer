@@ -256,8 +256,8 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
     delete[] songAddBuffer;
 
 #ifdef MAFW
-    mafwrenderer->gotoIndex(ui->songList->currentRow());
     playlist->getSize(); // explained in musicwindow.cpp
+    mafwrenderer->gotoIndex(ui->songList->currentRow());
     mafwrenderer->play();
     mafwrenderer->resume();
 #endif

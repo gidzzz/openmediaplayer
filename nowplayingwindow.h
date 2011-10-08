@@ -64,7 +64,6 @@ signals:
 
 public slots:
     void reloadLyricsFromFile();
-    void onSongSelected(int, int, QString, QString, QString, int);
     void setAlbumImage(QString);
     void onShuffleButtonToggled(bool);
     void closeEvent(QCloseEvent *e);
@@ -106,12 +105,15 @@ private:
     bool buttonWasDown;
     bool enableLyrics;
     bool dragInProgress;
+    bool portrait;
     QListWidgetItem *clickedItem;
     int songDuration;
     int currentSongPosition;
-    QGraphicsScene *albumArtScene;
+    QGraphicsScene *albumArtSceneLarge;
+    QGraphicsScene *albumArtSceneSmall;
     QString albumArtUri;
-    mirror *m;
+    mirror *ml;
+    mirror *ms;
     void keyPressEvent(QKeyEvent *);
     QMenu *contextMenu;
     QDialog *savePlaylistDialog;
@@ -123,7 +125,7 @@ private slots:
     QString cleanItem(QString data = "");
     void on_lyricsText_customContextMenuRequested(QPoint pos);
     void onLyricsDownloaded(QNetworkReply *reply);
-    void on_view_customContextMenuRequested(QPoint pos);
+    void onViewContextMenuRequested(QPoint pos);
     void selectAlbumArt();
     void resetAlbumArt();
     void editLyrics();
