@@ -198,7 +198,7 @@ void MusicWindow::onContextMenuRequested(QPoint point)
             return;
         }
     }
-    if (this->currentList() == ui->artistList || this->currentList() == ui->albumList)
+    if (this->currentList() == ui->artistList || this->currentList() == ui->albumList || this->currentList() == ui->songList)
         contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     else if (this->currentList() == ui->songList) {
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
