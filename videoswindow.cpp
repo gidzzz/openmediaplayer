@@ -91,7 +91,6 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
 #endif
     window->showFullScreen();
 
-    connect(window, SIGNAL(objectDestroyed(QString)), this, SLOT(onObjectDestroyed(QString)));
     connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
     ui->indicator->inhibit();
 

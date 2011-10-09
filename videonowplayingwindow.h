@@ -41,9 +41,6 @@ public:
     ~VideoNowPlayingWindow();
     void playObject(QString objectId);
 
-signals:
-    void objectDestroyed(QString objectId);
-
 protected:
     void paintEvent(QPaintEvent *);
     void mouseReleaseEvent(QMouseEvent *);

@@ -87,6 +87,11 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
     /* if (this->mafwState != Paused && this->mafwState != Stopped)
         mafwrenderer->pause();*/
 #ifdef MAFW
+    GHashTable* metadata = mafw_metadata_new();
+    mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, currentPosition);
+    mafwTrackerSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
+    mafw_metadata_release(metadata);
+
     mafwrenderer->stop();
 #endif
     delete ui;
@@ -152,7 +157,6 @@ void VideoNowPlayingWindow::onDeleteClicked()
 
     if(confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(objectIdToPlay.toUtf8());
-        emit objectDestroyed(objectIdToPlay);
         this->close();
     }
 #endif
@@ -263,6 +267,7 @@ void VideoNowPlayingWindow::stateChanged(int state)
             positionTimer->start();
     }
     else if(state == Stopped) {
+        currentPosition = 0;
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));

@@ -113,7 +113,7 @@ MafwSourceSignalHelper::set_metadata_cb(MafwSource* mafw_source,
   }
   const char** failed_key = failed_keys;
   QStringList failed_key_list;
-  while(failed_key)
+  while(*failed_key)
   {
     failed_key_list.push_back(*failed_key);
     failed_key++;
