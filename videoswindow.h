@@ -45,12 +45,16 @@ private:
 #endif
 
 private slots:
+    void onShareClicked();
+    void onDeleteClicked();
+    void onContextMenuRequested(const QPoint &point);
     void onVideoSelected(QListWidgetItem*);
     void onSortingChanged(QAction*);
     void orientationChanged();
 #ifdef MAFW
     void listVideos();
     void browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void onShareUriReceived(QString objectId, QString uri);
     void onContainerChanged(QString objectId);
 #endif
 };

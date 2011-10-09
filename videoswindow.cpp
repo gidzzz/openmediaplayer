@@ -40,6 +40,8 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->listWidget);
     ui->listWidget->setItemDelegate(delegate);
 
+    ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
     sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
     sortByDate = new QAction(tr("Date"), sortByActionGroup);
@@ -70,6 +72,7 @@ VideosWindow::~VideosWindow()
 void VideosWindow::connectSignals()
 {
     connect(ui->listWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onVideoSelected(QListWidgetItem*)));
+    connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
@@ -77,6 +80,65 @@ void VideosWindow::connectSignals()
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
 #endif
 }
+
+void VideosWindow::onContextMenuRequested(const QPoint &point)
+{
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    contextMenu->exec(point);
+}
+
+void VideosWindow::onDeleteClicked()
+{
+#ifdef MAFW
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              tr(" "),
+                              tr("Delete selected item from device?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.exec();
+    if (confirmDelete.result() == QMessageBox::Yes) {
+        mafwTrackerSource->destroyObject(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        delete ui->listWidget->currentItem();
+    }
+#endif
+    ui->listWidget->clearSelection();
+}
+
+void VideosWindow::onShareClicked()
+{
+#ifdef MAFW
+    mafwTrackerSource->getUri(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+#endif
+}
+
+#ifdef MAFW
+void VideosWindow::onShareUriReceived(QString objectId, QString uri)
+{
+    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+
+    if (objectId != ui->listWidget->currentItem()->data(UserRoleObjectID).toString())
+        return;
+
+    // The code used here (share.(h/cpp/ui) was taken from filebox's source code
+    // C) 2010. Matias Perez
+    QStringList list;
+    QString clip;
+    clip = uri;
+#ifdef DEBUG
+    qDebug() << "Sending file:" << clip;
+#endif
+    list.append(clip);
+#ifdef Q_WS_MAEMO_5
+    Share *share = new Share(this, list);
+    share->setAttribute(Qt::WA_DeleteOnClose);
+    share->show();
+#endif
+}
+#endif
 
 void VideosWindow::onVideoSelected(QListWidgetItem *item)
 {

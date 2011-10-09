@@ -489,7 +489,7 @@ void SinglePlaylistView::onDeleteClicked()
                               QMessageBox::Yes | QMessageBox::No,
                               this);
     confirmDelete.exec();
-    if(confirmDelete.result() == QMessageBox::Yes) {
+    if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         delete ui->songList->currentItem();
     }
@@ -503,7 +503,7 @@ void SinglePlaylistView::setSongCount(int count)
     QString songCount;
     songCount = QString::number(count);
     songCount.append(" ");
-    if(count != 1)
+    if (count != 1)
         songCount.append(tr("songs"));
     else
         songCount.append(tr("song"));

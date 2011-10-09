@@ -155,7 +155,7 @@ void VideoNowPlayingWindow::onDeleteClicked()
                                   this);
     confirmDelete.exec();
 
-    if(confirmDelete.result() == QMessageBox::Yes) {
+    if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(objectIdToPlay.toUtf8());
         this->close();
     }
@@ -198,7 +198,7 @@ void VideoNowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
 
 void VideoNowPlayingWindow::toggleVolumeSlider()
 {
-    if(ui->volumeSlider->isHidden()) {
+    if (ui->volumeSlider->isHidden()) {
         ui->buttonWidget->hide();
         ui->volumeSlider->show();
     } else {
