@@ -74,7 +74,10 @@ RadioNowPlayingWindow::~RadioNowPlayingWindow()
 void RadioNowPlayingWindow::connectSignals()
 {
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
-    connect(ui->volumeButton, SIGNAL(clicked()), volumeTimer, SLOT(start()));
+    connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
+    connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
+    connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
+    connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 #ifdef Q_WS_MAEMO_5
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
@@ -88,6 +91,7 @@ void RadioNowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
+    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
     connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onRendererMetadataChanged(QString,QVariant)));
@@ -98,8 +102,24 @@ void RadioNowPlayingWindow::connectSignals()
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
+
+    QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
+                                          "/com/nokia/mafw/renderer/gstrenderer",
+                                          "com.nokia.mafw.extension",
+                                          "property_changed",
+                                          this, SLOT(onPropertyChanged(const QDBusMessage &)));
 #endif
 }
+
+#ifdef MAFW
+void RadioNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
+{
+    if (msg.arguments()[0].toString() == "volume") {
+        if (!ui->volumeSlider->isSliderDown())
+            ui->volumeSlider->setValue(qdbus_cast<QVariant>(msg.arguments()[1]).toInt());
+    }
+}
+#endif
 
 void RadioNowPlayingWindow::setIcons()
 {
@@ -120,6 +140,28 @@ void RadioNowPlayingWindow::toggleVolumeSlider()
         if(volumeTimer->isActive())
             volumeTimer->stop();
     }
+}
+
+void RadioNowPlayingWindow::volumeWatcher()
+{
+    if(!ui->volumeSlider->isHidden())
+        volumeTimer->start();
+}
+
+void RadioNowPlayingWindow::onVolumeSliderPressed()
+{
+    volumeTimer->stop();
+#ifdef MAFW
+    mafwrenderer->setVolume(ui->volumeSlider->value());
+#endif
+}
+
+void RadioNowPlayingWindow::onVolumeSliderReleased()
+{
+    volumeTimer->start();
+#ifdef MAFW
+    mafwrenderer->setVolume(ui->volumeSlider->value());
+#endif
 }
 
 #ifdef MAFW
@@ -175,9 +217,7 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
         this->streamIsSeekable(value.toBool());
     }
     if (name == "duration" /*MAFW_METADATA_KEY_DURATION*/) {
-        QTime t(0, 0);
-        t = t.addSecs(value.toInt());
-        ui->streamLengthLabel->setText(t.toString("mm:ss"));
+        ui->streamLengthLabel->setText(time_mmss(value.toInt()));
     }
     if(name == "renderer-art-uri")
         ui->albumArt->setPixmap(QPixmap(value.toString()));
@@ -201,10 +241,8 @@ void RadioNowPlayingWindow::updateArtistAlbum()
 
 void RadioNowPlayingWindow::onGetPosition(int position, QString)
 {
-    QTime t(0, 0);
-    t = t.addSecs(position);
-    ui->currentPositionLabel->setText(t.toString("mm:ss"));
-    if (ui->streamLengthLabel->text() != "-:--")
+    ui->currentPositionLabel->setText(time_mmss(position));
+    if (ui->streamLengthLabel->text() != "--:--")
         ui->songProgress->setValue(position);
     else {
         if (ui->songProgress->value() != 0)
@@ -283,7 +321,6 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
     QString albumArt;
     bool isSeekable;
     int duration = -1;
-    QTime t(0, 0);
     if(metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
@@ -297,8 +334,6 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
-        if (duration != -1)
-            t = t.addSecs(duration);
         this->streamDuration = duration;
 
         v = mafw_metadata_first(metadata,
@@ -319,10 +354,10 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         ui->stationLabel->setText(organization);
         ui->artistAlbumLabel->setText(artistAlbum);
         if (duration != -1) {
-            ui->streamLengthLabel->setText(t.toString("mm:ss"));
+            ui->streamLengthLabel->setText(time_mmss(duration));
             ui->songProgress->setRange(0, duration);
         } else {
-            ui->streamLengthLabel->setText("-:--");
+            ui->streamLengthLabel->setText("--:--");
         }
         this->streamIsSeekable(isSeekable);
     }

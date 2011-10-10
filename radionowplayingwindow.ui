@@ -443,8 +443,17 @@
          </sizepolicy>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="leftMargin">
+          <number>20</number>
+         </property>
          <item>
           <widget class="QSlider" name="volumeSlider">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>64</height>
+            </size>
+           </property>
            <property name="maximum">
             <number>100</number>
            </property>

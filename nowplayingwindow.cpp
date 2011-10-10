@@ -440,8 +440,8 @@ void NowPlayingWindow::connectSignals()
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
-    connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
-    connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
+    connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
+    connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
     connect(ui->view_large, SIGNAL(clicked()), this, SLOT(toggleList()));
     connect(ui->view_small, SIGNAL(clicked()), this, SLOT(toggleList()));
     connect(ui->repeatButton, SIGNAL(clicked(bool)), this, SLOT(onRepeatButtonToggled(bool)));
@@ -450,6 +450,8 @@ void NowPlayingWindow::connectSignals()
     connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
+    connect(ui->songProgress, SIGNAL(sliderPressed()), this, SLOT(onPositionSliderPressed()));
+    connect(ui->songProgress, SIGNAL(sliderReleased()), this, SLOT(onPositionSliderReleased()));
     connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(ui->view_large, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
     connect(ui->view_small, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
@@ -926,13 +928,40 @@ void NowPlayingWindow::onPrevButtonPressed()
         ui->prevButton->setIcon(QIcon(prevButtonIcon));
 }
 
-void NowPlayingWindow::onPositionSliderMoved(int position)
+void NowPlayingWindow::onVolumeSliderPressed()
 {
+    volumeTimer->stop();
 #ifdef MAFW
-    mafwrenderer->setPosition(SeekAbsolute, position);
-    ui->currentPositionLabel->setText(time_mmss(position));
+    mafwrenderer->setVolume(ui->volumeSlider->value());
 #endif
 }
+
+void NowPlayingWindow::onVolumeSliderReleased()
+{
+    volumeTimer->start();
+#ifdef MAFW
+    mafwrenderer->setVolume(ui->volumeSlider->value());
+#endif
+}
+
+void NowPlayingWindow::onPositionSliderPressed()
+{
+    this->onPositionSliderMoved(ui->songProgress->value());
+}
+
+void NowPlayingWindow::onPositionSliderReleased()
+{
+#ifdef MAFW
+    mafwrenderer->setPosition(SeekAbsolute, ui->songProgress->value());
+    ui->currentPositionLabel->setText(time_mmss(ui->songProgress->value()));
+#endif
+}
+
+void NowPlayingWindow::onPositionSliderMoved(int position)
+{
+    ui->currentPositionLabel->setText(time_mmss(position));
+}
+
 
 #ifdef MAFW
 void NowPlayingWindow::onNextButtonClicked()
@@ -1560,12 +1589,7 @@ void NowPlayingWindow::reloadLyrics()
 QString NowPlayingWindow::cleanItem(QString data)
 {
     data = data.toLower().replace("&","and");
-    int i = data.indexOf("(");
-    if ( i > 0 )
-    {
-        int j = data.indexOf(")");
-        if ( j > 0 ) data.remove(i, j);
-    }
+    data = data.remove(QRegExp("\\([^)]*\\)")); // what about nested parentheses, {}, []?
     data = data.remove(QRegExp("[\\W_]"));
     //qDebug() << data;
     return data;

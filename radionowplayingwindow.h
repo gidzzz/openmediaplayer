@@ -52,7 +52,10 @@ private:
 
 private slots:
     void toggleVolumeSlider();
+    void onVolumeSliderPressed();
+    void onVolumeSliderReleased();
     void orientationChanged();
+    void volumeWatcher();
 #ifdef Q_WS_MAEMO_5
     void showFMTXDialog();
 #endif
@@ -63,6 +66,7 @@ private slots:
     void updateArtistAlbum();
 #ifdef MAFW
     void stateChanged(int state);
+    void onPropertyChanged(const QDBusMessage &msg);
     void onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString);
     void onGetPosition(int position, QString);
     void onBufferingInfo(float);

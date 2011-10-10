@@ -113,8 +113,8 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
-    connect(ui->volumeSlider, SIGNAL(sliderPressed()), volumeTimer, SLOT(stop()));
-    connect(ui->volumeSlider, SIGNAL(sliderReleased()), volumeTimer, SLOT(start()));
+    connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
+    connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
     connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 #ifdef MAFW
@@ -127,6 +127,8 @@ void VideoNowPlayingWindow::connectSignals()
             this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
+    connect(ui->progressBar, SIGNAL(sliderPressed()), this, SLOT(onSliderPressed()));
+    connect(ui->progressBar, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
     connect(ui->progressBar, SIGNAL(sliderMoved(int)), this, SLOT(onSliderMoved(int)));
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -195,6 +197,23 @@ void VideoNowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
 #endif
 }
 #endif
+
+void VideoNowPlayingWindow::onVolumeSliderPressed()
+{
+    volumeTimer->stop();
+#ifdef MAFW
+    mafwrenderer->setVolume(ui->volumeSlider->value());
+#endif
+}
+
+void VideoNowPlayingWindow::onVolumeSliderReleased()
+{
+    volumeTimer->start();
+#ifdef MAFW
+    mafwrenderer->setVolume(ui->volumeSlider->value());
+#endif
+}
+
 
 void VideoNowPlayingWindow::toggleVolumeSlider()
 {
@@ -365,13 +384,11 @@ void VideoNowPlayingWindow::playObject(QString objectId)
 void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
 {
     int duration = -1;
-    QTime t(0, 0);
     if(metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
-        t = t.addSecs(duration);
 
         this->length = duration;
 
@@ -383,7 +400,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
             qDebug() << pausedPosition;
 #endif
 
-        ui->videoLengthLabel->setText(t.toString("mm:ss"));
+        ui->videoLengthLabel->setText(time_mmss(duration));
         ui->progressBar->setRange(0, duration);
     }
 
@@ -448,14 +465,22 @@ void VideoNowPlayingWindow::showOverlay(bool show)
 #endif
 }
 
-void VideoNowPlayingWindow::onSliderMoved(int position)
+void VideoNowPlayingWindow::onSliderPressed()
+{
+    this->onSliderMoved(ui->progressBar->value());
+}
+
+void VideoNowPlayingWindow::onSliderReleased()
 {
 #ifdef MAFW
-    mafwrenderer->setPosition(SeekAbsolute, position);
-    QTime t(0, 0);
-    t = t.addSecs(position);
-    ui->currentPositionLabel->setText(t.toString("mm:ss"));
+    mafwrenderer->setPosition(SeekAbsolute, ui->progressBar->value());
+    ui->currentPositionLabel->setText(time_mmss(ui->progressBar->value()));
 #endif
+}
+
+void VideoNowPlayingWindow::onSliderMoved(int position)
+{
+    ui->currentPositionLabel->setText(time_mmss(position));
 }
 
 #ifdef MAFW
@@ -470,10 +495,8 @@ void VideoNowPlayingWindow::onPositionChanged(int position, QString)
     this->currentPosition = position;
     if (this->mafwState == Paused)
          this->pausedPosition = this->currentPosition;
-    QTime t(0, 0);
-    t = t.addSecs(position);
     if (!ui->progressBar->isSliderDown() && ui->progressBar->isVisible()) {
-        ui->currentPositionLabel->setText(t.toString("mm:ss"));
+        ui->currentPositionLabel->setText(time_mmss(position));
         ui->progressBar->setValue(position);
     }
 }

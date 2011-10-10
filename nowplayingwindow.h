@@ -166,7 +166,11 @@ private slots:
     void orientationChanged();
     void onNextButtonPressed();
     void onPrevButtonPressed();
+    void onPositionSliderPressed();
+    void onPositionSliderReleased();
     void onPositionSliderMoved(int position);
+    void onVolumeSliderPressed();
+    void onVolumeSliderReleased();
     void onContextMenuRequested(const QPoint &point);
     void onShareClicked();
     void showEntertainmentView();

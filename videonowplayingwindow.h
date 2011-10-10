@@ -80,6 +80,8 @@ private slots:
     void orientationChanged();
     void onShareClicked();
     void onDeleteClicked();
+    void onVolumeSliderPressed();
+    void onVolumeSliderReleased();
 #ifdef MAFW
     void onPropertyChanged(const QDBusMessage &msg);
     void stateChanged(int state);
@@ -94,6 +96,8 @@ private slots:
     void onPortraitMode();
     void onLandscapeMode();
 #endif
+    void onSliderPressed();
+    void onSliderReleased();
     void onSliderMoved(int);
 };
 
