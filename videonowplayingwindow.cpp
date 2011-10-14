@@ -83,16 +83,16 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
 VideoNowPlayingWindow::~VideoNowPlayingWindow()
 {
-    // Change this to pause instead of stop later on...
-    /* if (this->mafwState != Paused && this->mafwState != Stopped)
-        mafwrenderer->pause();*/
 #ifdef MAFW
+    if (this->mafwState != Paused && this->mafwState != Stopped)
+        mafwrenderer->pause();
+
     GHashTable* metadata = mafw_metadata_new();
+    if (currentPosition == 0)
+        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
     mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, currentPosition);
     mafwTrackerSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
     mafw_metadata_release(metadata);
-
-    mafwrenderer->stop();
 #endif
     delete ui;
 }

@@ -34,6 +34,7 @@ public:
     ~NowPlayingIndicator();
     void triggerAnimation();
 #ifdef MAFW
+    QString currentObjectId();
     void setFactory(MafwAdapterFactory *mafwFactory = 0);
 #endif
 
@@ -64,6 +65,7 @@ private:
     MafwRendererAdapter *mafwrenderer;
     MafwPlaylistAdapter *playlist;
     QMainWindow *window;
+    QString rendererObjectId;
     bool ready;
     bool poked;
     int inhibited;
@@ -79,6 +81,7 @@ private slots:
 #endif
 #ifdef MAFW
     void onStateChanged(int);
+    void onMediaChanged(int, char* objectId);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onPlaylistReady();
 #endif

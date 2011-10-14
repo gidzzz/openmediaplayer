@@ -55,6 +55,8 @@ private slots:
     void listVideos();
     void browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onShareUriReceived(QString objectId, QString uri);
+    void onMetadataChanged(QString metadata, QVariant value);
+    void onSourceMetadataChanged(QString objectId);
     void onContainerChanged(QString objectId);
 #endif
 };

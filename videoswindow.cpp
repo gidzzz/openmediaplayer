@@ -78,6 +78,8 @@ void VideosWindow::connectSignals()
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
+    connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)), this, SLOT(onSourceMetadataChanged(QString)));
+    connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
 #endif
 }
 
@@ -144,9 +146,9 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
 {
     // Placeholder function
     ui->listWidget->clearSelection();
+#ifdef MAFW
     //playlist->assignVideoPlaylist();
     mafwrenderer->stop(); // prevents the audio playlist from starting after the video ends
-#ifdef MAFW
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
@@ -184,19 +186,19 @@ void VideosWindow::listVideos()
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-
     ui->listWidget->clear();
 
 #ifdef DEBUG
     qDebug("Source ready");
 #endif
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)));
+            this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
-    this->browseAllVideosId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, NULL,
+    this->browseAllVideosId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, "-added,+title",
                                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                                 MAFW_METADATA_KEY_DURATION,
                                                                                 MAFW_METADATA_KEY_THUMBNAIL_URI,
+                                                                                MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
                                                                                 MAFW_METADATA_KEY_URI,
                                                                                 ),
                                                                0, MAFW_SOURCE_BROWSE_ALL);
@@ -204,12 +206,12 @@ void VideosWindow::listVideos()
 
 void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if(browseId != browseAllVideosId)
-      return;
+    if (browseId != browseAllVideosId)
+        return;
 
     QString title;
     int duration = -1;
-    if(metadata != NULL) {
+    if (metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
@@ -220,22 +222,33 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
 
         QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        if(v != NULL) {
+        if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
             if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
                 item->setData(UserRoleSongURI, QString::fromUtf8(filename));
             }
         }
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_THUMBNAIL_URI);
-        if(v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI);
+        if (v != NULL) {
+            const gchar* filename = g_value_get_string(v); // the uri is really a filename
+            if (filename != NULL)
                 item->setIcon(QIcon(QString::fromUtf8(filename)));
-            }
+            else
+                item->setIcon(QIcon(defaultVideoImage));
         } else {
-            item->setIcon(QIcon(defaultVideoImage));
+            v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_THUMBNAIL_URI);
+            if (v != NULL) {
+                const gchar* file_uri = g_value_get_string(v); // here uri is a uri
+                gchar* filename;
+                if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
+                    item->setIcon(QIcon(QString::fromUtf8(filename)));
+                else
+                    item->setIcon(QIcon(defaultVideoImage));
+            } else {
+                item->setIcon(QIcon(defaultVideoImage));
+            }
         }
 
         item->setText(title);
@@ -244,7 +257,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
             t = t.addSecs(duration);
             item->setData(UserRoleValueText, t.toString("h:mm:ss"));
         } else {
-            item->setData(UserRoleValueText, "--:--");
+            item->setData(UserRoleValueText, "-:--:--");
         }
         item->setData(UserRoleObjectID, objectId);
         ui->listWidget->addItem(item);
@@ -257,6 +270,40 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
     }
+}
+
+void VideosWindow::onMetadataChanged(QString metadata, QVariant value)
+{
+    QString thumbFile = value.toString();
+    QString objectId = ui->indicator->currentObjectId();
+    if (metadata == "paused-thumbnail-uri" && objectId.startsWith("localtagfs::videos")) {
+        if (thumbFile.contains("mafw-gst-renderer-")) {
+            QImage thumbnail(thumbFile);
+            if (thumbnail.width() > thumbnail.height()) {
+                thumbnail = thumbnail.scaledToHeight(124, Qt::SmoothTransformation);
+                thumbnail = thumbnail.copy((thumbnail.width()-124)/2, 0, 124, 124);
+            } else {
+                thumbnail = thumbnail.scaledToWidth(124, Qt::SmoothTransformation);
+                thumbnail = thumbnail.copy(0, (thumbnail.height()-124)/2, 124, 124);
+            }
+
+            thumbFile = "/home/user/.fmp_pause_thumbnail/" + QCryptographicHash::hash(objectId.toUtf8(), QCryptographicHash::Md5).toHex() + ".jpeg";
+            thumbnail = thumbnail.scaled(124, 124, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+            thumbnail.save(thumbFile, "JPEG");
+
+            GHashTable* metadata = mafw_metadata_new();
+            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, qstrdup(thumbFile.toUtf8()));
+            mafwTrackerSource->setMetadata(objectId.toUtf8(), metadata);
+            mafw_metadata_release(metadata);
+        }
+        this->listVideos();
+    }
+}
+
+void VideosWindow::onSourceMetadataChanged(QString objectId)
+{
+    if (objectId.startsWith("localtagfs::videos"))
+        this->listVideos();
 }
 
 void VideosWindow::onContainerChanged(QString objectId)
