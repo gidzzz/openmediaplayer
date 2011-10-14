@@ -46,18 +46,14 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     sortByActionGroup->setExclusive(true);
     sortByDate = new QAction(tr("Date"), sortByActionGroup);
     sortByDate->setCheckable(true);
-    this->selectView();
-    if(sortByDate->isChecked())
-        QMainWindow::setWindowTitle(tr("Videos - latest"));
-    else
-        QMainWindow::setWindowTitle(tr("Videos - categories"));
     sortByCategory = new QAction(tr("Category"), sortByActionGroup);
     sortByCategory->setCheckable(true);
     this->menuBar()->addActions(sortByActionGroup->actions());
+    this->selectView();
     this->connectSignals();
     this->orientationChanged();
 #ifdef MAFW
-    if(mafwTrackerSource->isReady())
+    if (mafwTrackerSource->isReady())
         this->listVideos();
     else
         connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listVideos()));
@@ -163,21 +159,25 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
 
 void VideosWindow::onSortingChanged(QAction *action)
 {
-    if(action == sortByDate) {
+    if (action == sortByDate) {
         QMainWindow::setWindowTitle(tr("Videos - latest"));
         QSettings().setValue("Videos/Sortby", "date");
-    } else if(action == sortByCategory) {
+    } else if (action == sortByCategory) {
         QMainWindow::setWindowTitle(tr("Videos - categories"));
-        QSettings().setValue("Videos/Sortby", "caregory");
+        QSettings().setValue("Videos/Sortby", "category");
     }
+    this->listVideos();
 }
 
 void VideosWindow::selectView()
 {
-    if(QSettings().value("Videos/Sortby").toString() == "category")
+    if (QSettings().value("Videos/Sortby").toString() == "category") {
+        QMainWindow::setWindowTitle(tr("Videos - categories"));
         sortByCategory->setChecked(true);
-    else
+    } else {
+        QMainWindow::setWindowTitle(tr("Videos - latest"));
         sortByDate->setChecked(true);
+    }
 }
 
 #ifdef MAFW
@@ -194,7 +194,9 @@ void VideosWindow::listVideos()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
-    this->browseAllVideosId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, "-added,+title",
+    const char *sorting = QSettings().value("Videos/Sortby").toString() == "category" ? "-video-source,+title" : "-added,+title";
+
+    this->browseAllVideosId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sorting,
                                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                                 MAFW_METADATA_KEY_DURATION,
                                                                                 MAFW_METADATA_KEY_THUMBNAIL_URI,
@@ -225,7 +227,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
         if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
                 item->setData(UserRoleSongURI, QString::fromUtf8(filename));
             }
         }
