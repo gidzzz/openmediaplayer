@@ -79,6 +79,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     mafwrenderer->getVolume();
     ui->toolbarOverlay->setStyleSheet(ui->controlOverlay->styleSheet());
 #endif
+    this->grabKeyboard();
 }
 
 VideoNowPlayingWindow::~VideoNowPlayingWindow()
@@ -425,6 +426,32 @@ void VideoNowPlayingWindow::keyPressEvent(QKeyEvent *event)
         else if (this->mafwState == Stopped)
             mafwrenderer->play();
     }
+    else if (event->key() == Qt::Key_Left) {
+        mafwrenderer->setPosition(SeekRelative, -10);
+        if (mafwState == Paused)
+            mafwrenderer->getPosition();
+    }
+    else if (event->key() == Qt::Key_Right) {
+        mafwrenderer->setPosition(SeekRelative, 10);
+        if (mafwState == Paused)
+            mafwrenderer->getPosition();
+    }
+    else if (event->key() == Qt::Key_Up) {
+        mafwrenderer->setPosition(SeekRelative, 60);
+        if (mafwState == Paused)
+            mafwrenderer->getPosition();
+    }
+    else if (event->key() == Qt::Key_Down) {
+        mafwrenderer->setPosition(SeekRelative, -60);
+        if (mafwState == Paused)
+            mafwrenderer->getPosition();
+    }
+#endif
+}
+
+void VideoNowPlayingWindow::keyReleaseEvent(QKeyEvent *event)
+{
+#ifdef MAFW
 #endif
 }
 

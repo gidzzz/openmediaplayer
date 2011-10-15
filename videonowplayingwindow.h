@@ -45,6 +45,7 @@ protected:
     void paintEvent(QPaintEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
 
 private:
     Ui::VideoNowPlayingWindow *ui;

@@ -83,7 +83,7 @@ private slots:
     void onStateChanged(int);
     void onMediaChanged(int, char* objectId);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
-    void onPlaylistReady();
+    void onPlaylistReady(MafwPlaylist*,uint,MafwPlayState, const char* objectId, QString);
 #endif
     void startAnimation();
     void onWindowDestroyed();

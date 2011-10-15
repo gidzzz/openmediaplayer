@@ -185,6 +185,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui->lyrics->setFixedHeight(351);
 
     this->orientationChanged();
+    this->grabKeyboard();
 
 #ifdef MAFW
     playlistQM = new PlaylistQueryManager(this, playlist);

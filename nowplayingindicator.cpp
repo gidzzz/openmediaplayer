@@ -64,7 +64,7 @@ void NowPlayingIndicator::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onPlaylistReady()));
+            this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(autoSetVisibility()));
@@ -211,11 +211,12 @@ void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, 
 #endif
 
 #ifdef MAFW
-void NowPlayingIndicator::onPlaylistReady()
+void NowPlayingIndicator::onPlaylistReady(MafwPlaylist*, uint, MafwPlayState, const char *objectId, QString)
 {
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-               this, SLOT(onPlaylistReady()));
+               this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,const char *,QString)));
     ready = true;
+        this->rendererObjectId = objectId;
     this->autoSetVisibility();
 }
 #endif
