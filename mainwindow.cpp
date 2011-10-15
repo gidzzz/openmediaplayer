@@ -25,9 +25,7 @@
 
 QSettings settings( "/etc/hildon/theme/index.theme", QSettings::IniFormat );
 QString currtheme = settings.value("X-Hildon-Metatheme/IconTheme","hicolor").toString();
-QString musicIcon, videosIcon, radioIcon, shuffleIcon, defaultAlbumArt,
-    defaultAlbumArtMedium, defaultVideoImage, volumeButtonIcon, albumImage,
-    radioImage, shareButtonIcon, deleteButtonIcon;
+QString albumImage, radioImage;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -135,46 +133,6 @@ void MainWindow::paintEvent(QPaintEvent*)
 
 void MainWindow::loadThemeIcons()
 {
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_music.png").exists() )
-        musicIcon = "/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_music.png";
-    else
-        musicIcon = "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_music.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_video.png").exists() )
-        videosIcon = "/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_video.png";
-    else
-        videosIcon = "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_video.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_radio.png").exists() )
-        radioIcon = "/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_radio.png";
-    else
-        radioIcon = "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_radio.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_shuffle.png").exists() )
-        shuffleIcon = "/usr/share/icons/"+currtheme+"/164x164/hildon/mediaplayer_main_button_shuffle.png";
-    else
-        shuffleIcon = "/usr/share/icons/hicolor/164x164/hildon/mediaplayer_main_button_shuffle.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/64x64/hildon/mediaplayer_default_album.png").exists() )
-        defaultAlbumArt = "/usr/share/icons/"+currtheme+"/64x64/hildon/mediaplayer_default_album.png";
-    else
-        defaultAlbumArt = "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_default_album.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/124x124/hildon/mediaplayer_default_album.png").exists() )
-        defaultAlbumArtMedium = "/usr/share/icons/"+currtheme+"/124x124/hildon/mediaplayer_default_album.png";
-    else
-        defaultAlbumArtMedium = "/usr/share/icons/hicolor/124x124/hildon/mediaplayer_default_album.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/124x124/hildon/general_video.png").exists() )
-        defaultVideoImage = "/usr/share/icons/"+currtheme+"/124x124/hildon/general_video.png";
-    else
-        defaultVideoImage = "/usr/share/icons/hicolor/124x124/hildon/general_video.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/64x64/hildon/mediaplayer_volume.png").exists() )
-        volumeButtonIcon = "/usr/share/icons/"+currtheme+"/64x64/hildon/mediaplayer_volume.png";
-    else
-        volumeButtonIcon = "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png";
-
     if ( QFileInfo("/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png").exists() )
         albumImage = "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png";
     else
@@ -184,31 +142,19 @@ void MainWindow::loadThemeIcons()
         radioImage = "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png";
     else
         radioImage = "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_stream.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/48x48/hildon/general_share.png").exists() )
-        shareButtonIcon = "/usr/share/icons/"+currtheme+"/48x48/hildon/general_share.png";
-    else
-        shareButtonIcon = "/usr/share/icons/hicolor/48x48/hildon/general_share.png";
-
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/48x48/hildon/general_delete.png").exists() )
-        deleteButtonIcon = "/usr/share/icons/"+currtheme+"/48x48/hildon/general_delete.png";
-    else
-        deleteButtonIcon = "/usr/share/icons/hicolor/48x48/hildon/general_delete.png";
 }
 
 void MainWindow::setButtonIcons()
 {
-    ui->songsButton->setIcon(QIcon(musicIcon));
-    ui->videosButton->setIcon(QIcon(videosIcon));
-    ui->radioButton->setIcon(QIcon(radioIcon));
-    ui->shuffleAllButton->setIcon(QIcon(shuffleIcon));
+    ui->songsButton->setIcon(QIcon::fromTheme(musicIcon));
+    ui->videosButton->setIcon(QIcon::fromTheme(videosIcon));
+    ui->radioButton->setIcon(QIcon::fromTheme(radioIcon));
+    ui->shuffleAllButton->setIcon(QIcon::fromTheme(shuffleIcon));
 
     ui->listWidget->item(0)->setData(Qt::UserRole+1, musicIcon);
     ui->listWidget->item(1)->setData(Qt::UserRole+1, videosIcon);
     ui->listWidget->item(2)->setData(Qt::UserRole+1, radioIcon);
     ui->listWidget->item(3)->setData(Qt::UserRole+1, shuffleIcon);
-
-
 }
 
 void MainWindow::setLabelText()

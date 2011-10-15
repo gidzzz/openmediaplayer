@@ -93,7 +93,6 @@ private slots:
     void onShareUriReceived(QString objectId, QString uri);
 #endif
 #ifdef Q_WS_MAEMO_5
-    void onPortraitMode();
     void onLandscapeMode();
 #endif
     void onSliderPressed();

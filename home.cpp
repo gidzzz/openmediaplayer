@@ -13,10 +13,8 @@ Home::Home(QWidget *parent, QString target, QString path, QString album) :
     QFileInfo dr(path);
     this->setWindowTitle(target);
 
-    // currtheme is "default" when it should be "hicolor"?
-    qDebug() << "/usr/share/icons/"+currtheme+"/48x48/hildon/filemanager_folder_up.png";
-    ui->pushButton->setIcon( QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/filemanager_folder_up.png") );
-    ui->button->setIcon( QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/general_folder.png") );
+    ui->pushButton->setIcon( QIcon::fromTheme("filemanager_folder_up") );
+    ui->button->setIcon( QIcon::fromTheme("general_folder") );
     ui->button->setText( dr.fileName() );
     if ( path == "/") ui->button->setText( "/" );
     ui->button->setValueText( path );
@@ -68,14 +66,14 @@ void Home::openBrowser(QString directory)
         {
             QListWidgetItem *item = new QListWidgetItem( ui->listWidget );
             item->setText(fileInfo.fileName());
-            item->setIcon(QIcon( "/usr/share/icons/"+currtheme+"/48x48/hildon/general_folder.png") );
+            item->setIcon( QIcon::fromTheme("general_folder") );
             ui->listWidget->insertItem( i, item );
         }
         else if ( fileInfo.completeSuffix() == "jpg" )
         {
             QListWidgetItem *item = new QListWidgetItem( ui->listWidget );
             item->setText(fileInfo.fileName());
-            item->setIcon( QIcon("/usr/share/icons/"+currtheme+"/48x48/hildon/general_image.png") );
+            item->setIcon( QIcon::fromTheme("general_image") );
             ui->listWidget->insertItem( i, item );
         }
 

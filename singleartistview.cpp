@@ -89,7 +89,7 @@ void SingleArtistView::listAlbums()
 
     ui->albumList->clear();
     QListWidgetItem *shuffleButton = new QListWidgetItem(ui->albumList);
-    shuffleButton->setIcon(QIcon(shuffleIcon124));
+    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     shuffleButton->setText(tr("Shuffle songs"));
     shuffleButton->setData(Qt::UserRole, "shuffle");
 
@@ -138,7 +138,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
                 item->setIcon(QIcon(QString::fromUtf8(filename)));
             }
         } else {
-            item->setIcon(QIcon(defaultAlbumArtMedium));
+            item->setIcon(QIcon::fromTheme(defaultAlbumIcon));
         }
     }
 

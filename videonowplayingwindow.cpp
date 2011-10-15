@@ -103,8 +103,8 @@ void VideoNowPlayingWindow::setIcons()
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
-    ui->deleteButton->setIcon(QIcon(deleteButtonIcon));
-    ui->shareButton->setIcon(QIcon(shareButtonIcon));
+    ui->deleteButton->setIcon(QIcon::fromTheme(deleteButtonIcon));
+    ui->shareButton->setIcon(QIcon::fromTheme(shareButtonIcon));
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
 }
 
@@ -323,25 +323,6 @@ void VideoNowPlayingWindow::orientationChanged()
 }
 
 #ifdef Q_WS_MAEMO_5
-void VideoNowPlayingWindow::onPortraitMode()
-{
-    ui->wmCloseButton->setGeometry(0, 0, 56, 112);
-    ui->wmCloseButton->setIconSize(QSize(56, 112));
-    QTransform t;
-    t = t.rotate(-90, Qt::ZAxis);
-    ui->wmCloseButton->setIcon(QIcon(QPixmap(wmCloseIcon).transformed(t)));
-    ui->prevButton->setIcon(QIcon(QPixmap(prevButtonIcon).transformed(t)));
-    ui->playButton->setIcon(QIcon(QPixmap(playButtonIcon).transformed(t)));
-    ui->nextButton->setIcon(QIcon(QPixmap(nextButtonIcon).transformed(t)));
-    ui->deleteButton->setIcon(QIcon(QPixmap(deleteButtonIcon).transformed(t)));
-    ui->shareButton->setIcon(QIcon(QPixmap(shareButtonIcon).transformed(t)));
-    ui->volumeButton->setIcon(QIcon(QPixmap(volumeButtonIcon).transformed(t)));
-    ui->controlLayout->setDirection(QBoxLayout::BottomToTop);
-    ui->controlOverlay->setGeometry(360, 70, 101, 318);
-    if(!ui->toolbarOverlay->isHidden())
-        ui->toolbarOverlay->hide();
-}
-
 void VideoNowPlayingWindow::onLandscapeMode()
 {
     this->setIcons();

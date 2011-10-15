@@ -45,7 +45,7 @@ void MainDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 #endif
 
     r = option.rect;
-    painter->drawPixmap(r.left(), r.top(), 164, 164, icon);
+    painter->drawPixmap(r.left(), r.top(), 164, 164, QIcon::fromTheme(icon).pixmap(164));
 
     r = option.rect;
     f.setPointSize(18);

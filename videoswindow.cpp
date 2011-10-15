@@ -238,7 +238,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
             if (filename != NULL)
                 item->setIcon(QIcon(QString::fromUtf8(filename)));
             else
-                item->setIcon(QIcon(defaultVideoImage));
+                item->setIcon(QIcon::fromTheme(defaultVideoIcon));
         } else {
             v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_THUMBNAIL_URI);
             if (v != NULL) {
@@ -247,9 +247,9 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
                 if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
                     item->setIcon(QIcon(QString::fromUtf8(filename)));
                 else
-                    item->setIcon(QIcon(defaultVideoImage));
+                    item->setIcon(QIcon::fromTheme(defaultVideoIcon));
             } else {
-                item->setIcon(QIcon(defaultVideoImage));
+                item->setIcon(QIcon::fromTheme(defaultVideoIcon));
             }
         }
 

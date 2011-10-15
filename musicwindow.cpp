@@ -940,7 +940,7 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
                 item->setIcon(QIcon(QString::fromUtf8(filename)));
             }
         } else {
-            item->setIcon(QIcon(defaultAlbumArtMedium));
+            item->setIcon(QIcon::fromTheme(defaultAlbumIcon));
         }
     }
 

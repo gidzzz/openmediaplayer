@@ -43,7 +43,7 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     if(!index.data(UserRoleAlbumArt).isNull())
         albumArt = QPixmap(index.data(UserRoleAlbumArt).toString());
     else
-        albumArt = QPixmap(defaultAlbumArt);
+        albumArt = QIcon::fromTheme(defaultAlbumIcon).pixmap(64);
 
     painter->save();
     QRect r = option.rect;
