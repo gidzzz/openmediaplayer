@@ -254,10 +254,10 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
     if (browseId != browseAllStationsId)
       return;
 
-    QString title;
-    QString URI;
-    QString mime;
     if (metadata != NULL) {
+        QString title;
+        QString URI;
+        QString mime;
         GValue *v;
 
         v = mafw_metadata_first(metadata,

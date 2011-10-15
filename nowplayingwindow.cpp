@@ -612,20 +612,19 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_i
                                                                               MAFW_METADATA_KEY_DURATION,
                                                                               MAFW_METADATA_KEY_IS_SEEKABLE,
                                                                               MAFW_METADATA_KEY_LYRICS));
-    if(!error.isNull() && !error.isEmpty())
+    if (!error.isNull() && !error.isEmpty())
         qDebug() << error;
 }
 
 void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
 {
-    QString title;
-    QString artist;
-    QString album;
-    QString albumArt;
-    bool isSeekable;
-    int duration;
-
     if (metadata != NULL) {
+        QString title;
+        QString artist;
+        QString album;
+        QString albumArt;
+        bool isSeekable;
+        int duration;
         GValue *v;
 
         v = mafw_metadata_first(metadata,
@@ -1100,12 +1099,13 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
     if (!item) // in case of query manager's outdated request
         return;
 
-    QString title;
-    QString artist;
-    QString album;
-    int duration;
     if (metadata != NULL) {
+        QString title;
+        QString artist;
+        QString album;
+        int duration;
         GValue *v;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
@@ -1134,8 +1134,10 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleObjectID, object_id);
         item->setData(UserRoleSongIndex, index);
-
-    } else qDebug() << "warning: null metadata";
+    } else {
+        item->setData(UserRoleSongTitle, tr("Information not available"));
+        item->setData(UserRoleSongDuration, Duration::Blank);
+    }
 }
 
 void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)

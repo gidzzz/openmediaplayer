@@ -101,12 +101,16 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
 
     qDebug() << "SinglePlaylistView::onGetItems |" << index;
     numberOfSongsToAdd--;
-    QString title;
-    QString artist;
-    QString album;
-    int duration = -1;
-    if(metadata != NULL) {
+
+    QListWidgetItem *item = new QListWidgetItem();
+
+    if (metadata != NULL) {
+        QString title;
+        QString artist;
+        QString album;
+        int duration;
         GValue *v;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
@@ -123,7 +127,6 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
-        QListWidgetItem *item = new QListWidgetItem();
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongDuration, duration);
@@ -133,24 +136,28 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         item->setData(UserRoleSongIndex, index);
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        if(v != NULL) {
+        if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
                 item->setData(UserRoleSongURI, QString::fromUtf8(filename));
             }
         }
-
-        unsigned theIndex = 0;
-        int position;
-        for (position = 0; position < ui->songList->count(); position++)
-        {
-            theIndex = ui->songList->item(position)->data(UserRoleSongIndex).toInt();
-            if (theIndex > index)
-                break;
-        }
-        ui->songList->insertItem(position, item);
+    } else {
+        item->setText(tr("Information not available"));
+        item->setData(UserRoleSongDuration, Duration::Unknown);
     }
+
+
+    unsigned theIndex = 0;
+    int position;
+    for (position = 0; position < ui->songList->count(); position++)
+    {
+        theIndex = ui->songList->item(position)->data(UserRoleSongIndex).toInt();
+        if (theIndex > index)
+            break;
+    }
+    ui->songList->insertItem(position, item);
 
     if (numberOfSongsToAdd == 0) {
         qDebug() << "disconnecting SinglePlaylistView from onGetItems";
@@ -193,12 +200,15 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
     if (browseId != this->browsePlaylistId)
         return;
 
-    QString title;
-    QString artist;
-    QString album;
-    int duration = -1;
+    QListWidgetItem *item = new QListWidgetItem(ui->songList);
+
     if (metadata != NULL) {
+        QString title;
+        QString artist;
+        QString album;
+        int duration;
         GValue *v;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
@@ -212,16 +222,18 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
-        QListWidgetItem *item = new QListWidgetItem(ui->songList);
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
-
-        ui->songList->addItem(item);
+    } else {
+        item->setText(tr("Information not available"));
+        item->setData(UserRoleSongDuration, Duration::Unknown);
     }
+
+    ui->songList->addItem(item);
 
 #ifdef Q_WS_MAEMO_5
     if (remainingCount == 0)

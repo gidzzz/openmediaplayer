@@ -110,7 +110,9 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
     QString songCount;
     int childcount = -1;
     QString albumArt;
+
     QListWidgetItem *item = new QListWidgetItem();
+
     if (metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata,

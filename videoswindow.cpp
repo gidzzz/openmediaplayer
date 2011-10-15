@@ -212,16 +212,17 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
     if (browseId != browseAllVideosId)
         return;
 
-    QString title;
-    int duration = -1;
     if (metadata != NULL) {
+        QString title;
+        int duration;
         GValue *v;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown clip)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
+        duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
@@ -255,7 +256,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
         }
 
         item->setText(title);
-        if (duration != -1) {
+        if (duration != Duration::Unknown) {
             QTime t(0, 0);
             t = t.addSecs(duration);
             item->setData(UserRoleValueText, t.toString("h:mm:ss"));

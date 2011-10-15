@@ -316,13 +316,14 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
 
 void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
 {
-    QString artistAlbum;
-    QString organization;
-    QString albumArt;
-    bool isSeekable;
-    int duration = -1;
-    if(metadata != NULL) {
+    if (metadata != NULL) {
+        QString artistAlbum;
+        QString organization;
+        QString albumArt;
+        bool isSeekable;
+        int duration;
         GValue *v;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
         artistAlbum = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown artist) / (unknown album)");
@@ -333,7 +334,7 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
+        duration = v ? g_value_get_int (v) : Duration::Unknown;
         this->streamDuration = duration;
 
         v = mafw_metadata_first(metadata,
@@ -341,10 +342,10 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         isSeekable = v ? g_value_get_boolean (v) : false;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
-        if(v != NULL) {
+        if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
                 ui->albumArt->setPixmap(QPixmap(QString::fromUtf8(filename)));
             }
         } else {
@@ -353,7 +354,7 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 
         ui->stationLabel->setText(organization);
         ui->artistAlbumLabel->setText(artistAlbum);
-        if (duration != -1) {
+        if (duration != Duration::Unknown) {
             ui->streamLengthLabel->setText(time_mmss(duration));
             ui->songProgress->setRange(0, duration);
         } else {
@@ -362,7 +363,7 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         this->streamIsSeekable(isSeekable);
     }
 
-    if(!error.isNull() && !error.isEmpty())
+    if (!error.isNull() && !error.isEmpty())
         qDebug() << error;
 }
 #endif

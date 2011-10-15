@@ -817,13 +817,13 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
     if(browseId != browseAllSongsId)
       return;
 
-
-    QString title;
-    QString artist;
-    QString album;
-    int duration = -1;
-    if(metadata != NULL) {
+    if (metadata != NULL) {
+        QString title;
+        QString artist;
+        QString album;
+        int duration;
         GValue *v;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
@@ -848,15 +848,15 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         // sort alphabatically.
         item->setText(title);
         ui->songList->addItem(item);
+    }
 
-        if (remainingCount == 0) {
-            disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                       this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+    if (remainingCount == 0) {
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+                   this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
 #ifdef Q_WS_MAEMO_5
-            this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
-        }
-  }
+    }
 }
 
 void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)

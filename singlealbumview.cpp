@@ -110,13 +110,14 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     if(browseId != browseAllSongsId)
       return;
 
-    QString title;
-    QString artist;
-    QString album;
-    int duration = -1;
-    int trackNumber;
-    if(metadata != NULL) {
+    if (metadata != NULL) {
+        QString title;
+        QString artist;
+        QString album;
+        int duration;
+        int trackNumber;
         GValue *v;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");

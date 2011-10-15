@@ -365,12 +365,13 @@ void VideoNowPlayingWindow::playObject(QString objectId)
 #ifdef MAFW
 void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
 {
-    int duration = -1;
-    if(metadata != NULL) {
+    if (metadata != NULL) {
+        int duration;
         GValue *v;
+
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
+        duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         this->length = duration;
 
