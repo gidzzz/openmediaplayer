@@ -35,6 +35,7 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     ui->albumList->setItemDelegate(delegate);
 
     ui->albumList->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->albumList->installEventFilter(this);
 
 #ifdef MAFW
     shuffleRequested = false;
@@ -178,10 +179,16 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 
 void SingleArtistView::orientationChanged()
 {
-    ui->albumList->setFlow(ui->albumList->flow());
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
+}
+
+bool SingleArtistView::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::Resize)
+        ui->albumList->setFlow(ui->albumList->flow());
+    return false;
 }
 
 void SingleArtistView::onSearchTextChanged(QString text)

@@ -23,6 +23,7 @@ class SingleArtistView : public QMainWindow
 public:
     explicit SingleArtistView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SingleArtistView();
+    bool eventFilter(QObject *, QEvent *event);
     void browseAlbum(QString artistId);
     void setSongCount(int songCount);
 

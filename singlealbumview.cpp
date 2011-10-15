@@ -51,7 +51,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
 
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
+    shuffleAllButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     ui->verticalLayout->removeWidget(ui->songList);
     ui->verticalLayout->removeWidget(ui->searchWidget);
     ui->verticalLayout->addWidget(shuffleAllButton);

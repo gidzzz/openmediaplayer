@@ -56,7 +56,7 @@ public:
     QString albumInFolder;
     QNetworkAccessManager* data;
     QString TEartist, TEalbum, TEtitle, TEid;
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *object, QEvent *event);
 
 signals:
     void hidden();

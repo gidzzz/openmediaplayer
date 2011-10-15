@@ -56,6 +56,8 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->genresList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->playlistList->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    ui->albumList->installEventFilter(this);
+
     this->loadViewState();
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
@@ -330,12 +332,17 @@ void MusicWindow::onSearchTextChanged(QString text)
 
 void MusicWindow::orientationChanged()
 {
-    this->currentList()->scroll(1,1);
-    ui->albumList->setFlow(ui->albumList->flow());
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
                                ui->indicator->width(),ui->indicator->height());
     ui->indicator->raise();
+}
+
+bool MusicWindow::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::Resize)
+        ui->albumList->setFlow(ui->albumList->flow());
+    return false;
 }
 
 void MusicWindow::populateMenuBar()

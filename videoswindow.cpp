@@ -41,6 +41,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->listWidget->setItemDelegate(delegate);
 
     ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->listWidget->installEventFilter(this);
 
     sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
@@ -318,10 +319,15 @@ void VideosWindow::onContainerChanged(QString objectId)
 void VideosWindow::orientationChanged()
 {
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    if (screenGeometry.width() > screenGeometry.height())
-        ui->listWidget->setFlow(ui->listWidget->flow());
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
+}
+
+bool VideosWindow::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::Resize)
+        ui->listWidget->setFlow(ui->listWidget->flow());
+    return false;
 }
 
 void VideosWindow::focusInEvent(QFocusEvent *)
