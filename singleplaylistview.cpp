@@ -433,9 +433,20 @@ void SinglePlaylistView::onAddToNowPlaying()
 void SinglePlaylistView::setRingingTone()
 {
 #ifdef MAFW
-    mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
-    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              tr(" "),
+                              tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
+                              + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
+                              + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.exec();
+    if (confirmDelete.result() == QMessageBox::Yes) {
+        mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
+    }
 #endif
+    ui->songList->clearSelection();
 }
 
 #ifdef MAFW
