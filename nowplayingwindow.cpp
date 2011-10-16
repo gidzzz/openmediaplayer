@@ -171,7 +171,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     this->connectSignals();
 
     ui->songPlaylist->viewport()->installEventFilter(this);
-    ui->songPlaylist->installEventFilter(this);
 
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
@@ -535,39 +534,29 @@ void NowPlayingWindow::forgetClick()
 
 bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
 {
-    if (object == ui->songPlaylist) {
 
-        if (event->type() == QEvent::KeyRelease)
-            keyTimer->start();
-
+    if (event->type() == QEvent::DragMove) {
+        dragInProgress = true;
     }
 
-    else {
+    else if (event->type() == QEvent::Drop) {
+        static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
+        emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
+        dragInProgress = false;
+    }
 
-        if (event->type() == QEvent::DragMove) {
-            dragInProgress = true;
+    else if (event->type() == QEvent::Leave) {
+        dragInProgress = false;
+        selectItemByRow(lastPlayingSong->value().toInt());
+    }
+
+    else if (event->type() == QEvent::MouseButtonRelease) {
+        if (!clickedItem) {
+            clickedItem = ui->songPlaylist->currentItem();
+            clickTimer->start();
         }
-
-        else if (event->type() == QEvent::Drop) {
-            static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
-            emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
-            dragInProgress = false;
-        }
-
-        else if (event->type() == QEvent::Leave) {
-            dragInProgress = false;
-            selectItemByRow(lastPlayingSong->value().toInt());
-        }
-
-        else if (event->type() == QEvent::MouseButtonRelease) {
-            if (!clickedItem) {
-                clickedItem = ui->songPlaylist->currentItem();
-                clickTimer->start();
-            }
-            else if (clickedItem == ui->songPlaylist->currentItem())
-                onPlaylistItemActivated(clickedItem);
-        }
-
+        else if (clickedItem == ui->songPlaylist->currentItem())
+            onPlaylistItemActivated(clickedItem);
     }
 
     return false;
@@ -1082,12 +1071,26 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
     else if (e->key() == Qt::Key_Left)
         mafwrenderer->previous();
 #endif
+    else if (e->key() == Qt::Key_Down) {
+        if (ui->songPlaylist->currentRow() < ui->songPlaylist->count()-1)
+            ui->songPlaylist->setCurrentRow(ui->songPlaylist->currentRow()+1);
+    }
+    else if (e->key() == Qt::Key_Up) {
+        if (ui->songPlaylist->currentRow() > 0)
+            ui->songPlaylist->setCurrentRow(ui->songPlaylist->currentRow()-1);
+    }
     /*else if(e->key() == Qt::Key_Shift) {
         if(ui->menuNow_playing_menu->isHidden())
             ui->menuNow_playing_menu->show();
         else
             ui->menuNow_playing_menu->hide();
     }*/
+}
+
+void NowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
+        keyTimer->start();
 }
 
 #ifdef MAFW

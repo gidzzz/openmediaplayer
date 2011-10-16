@@ -115,6 +115,7 @@ private:
     mirror *ml;
     mirror *ms;
     void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
     QMenu *contextMenu;
     QDialog *savePlaylistDialog;
 #ifdef Q_WS_MAEMO_5
