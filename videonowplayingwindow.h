@@ -55,6 +55,7 @@ private:
     QTimer *volumeTimer;
     QTimer *positionTimer;
     QString objectIdToPlay;
+    bool lazySliders;
     bool portrait;
     bool isOverlayVisible;
     bool gotInitialState;

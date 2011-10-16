@@ -92,6 +92,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     entertainmentView = 0;
     carView = 0;
     enableLyrics = QSettings().value("lyrics/enable").toBool();
+    lazySliders = QSettings().value("main/lazySliders").toBool();
 
     ui->songPlaylist->setDragDropMode(QAbstractItemView::InternalMove);
     ui->songPlaylist->viewport()->setAcceptDrops(true);
@@ -948,6 +949,10 @@ void NowPlayingWindow::onPositionSliderReleased()
 void NowPlayingWindow::onPositionSliderMoved(int position)
 {
     ui->currentPositionLabel->setText(time_mmss(position));
+#ifdef MAFW
+    if (!lazySliders)
+        mafwrenderer->setPosition(SeekAbsolute, position);
+#endif
 }
 
 

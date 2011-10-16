@@ -61,6 +61,8 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
+    lazySliders = QSettings().value("main/lazySliders").toBool();
+
     this->isOverlayVisible = true;
     this->gotInitialState = false;
 #ifdef MAFW
@@ -490,6 +492,10 @@ void VideoNowPlayingWindow::onSliderReleased()
 void VideoNowPlayingWindow::onSliderMoved(int position)
 {
     ui->currentPositionLabel->setText(time_mmss(position));
+#ifdef MAFW
+    if (!lazySliders)
+        mafwrenderer->setPosition(SeekAbsolute, position);
+#endif
 }
 
 #ifdef MAFW

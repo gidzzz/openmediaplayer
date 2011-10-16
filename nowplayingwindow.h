@@ -104,6 +104,7 @@ private:
     bool isDefaultArt;
     bool buttonWasDown;
     bool enableLyrics;
+    bool lazySliders;
     bool dragInProgress;
     bool portrait;
     QListWidgetItem *clickedItem;
@@ -114,8 +115,8 @@ private:
     QString albumArtUri;
     mirror *ml;
     mirror *ms;
-    void keyPressEvent(QKeyEvent *);
-    void keyReleaseEvent(QKeyEvent *);
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
     QMenu *contextMenu;
     QDialog *savePlaylistDialog;
 #ifdef Q_WS_MAEMO_5

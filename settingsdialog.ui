@@ -68,13 +68,20 @@
         </widget>
        </item>
        <item row="3" column="1">
+        <widget class="QCheckBox" name="slidersCheckBox">
+         <property name="text">
+          <string>Lazy sliders</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
         <widget class="QCheckBox" name="fmtxCheckBox">
          <property name="text">
           <string>Override FMTX checks in UI</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="5" column="1">
         <widget class="QLabel" name="fmtxdLabel">
          <property name="font">
           <font>
