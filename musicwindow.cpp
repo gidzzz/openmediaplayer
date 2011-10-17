@@ -124,12 +124,13 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
     if (row >= 1 && row <= 4) {
         SinglePlaylistView *window = new SinglePlaylistView(this, mafwFactory);
         window->setWindowTitle(item->text());
+        int limit = QSettings().value("music/playlistSize").toInt();
         if (row == 1)
-            window->browseAutomaticPlaylist("", "-added", 30);
+            window->browseAutomaticPlaylist("", "-added", limit);
         else if (row == 2)
-            window->browseAutomaticPlaylist("(play-count>0)", "-last-played", 30);
+            window->browseAutomaticPlaylist("(play-count>0)", "-last-played", limit);
         else if (row == 3)
-            window->browseAutomaticPlaylist("(play-count>0)", "-play-count,+title", 30);
+            window->browseAutomaticPlaylist("(play-count>0)", "-play-count,+title", limit);
         else if (row == 4)
             window->browseAutomaticPlaylist("(play-count=)", "", MAFW_SOURCE_BROWSE_ALL);
         window->show();
@@ -719,6 +720,7 @@ void MusicWindow::listAutoPlaylists()
     listItem->setData(UserRoleSongDuration, Duration::Blank);
     ui->playlistList->insertItem(0, listItem);
 
+    int limit = QSettings().value("music/playlistSize").toInt();
     QStringList playlists;
     playlists << tr("Recently added") << tr("Recently played") << tr("Most played") << tr("Never played");
     foreach (QString string, playlists) {
@@ -740,19 +742,19 @@ void MusicWindow::listAutoPlaylists()
                                                                "-play-count,+title",
                                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1,
                                                                                 MAFW_METADATA_KEY_DURATION),
-                                                               0, 30);
+                                                               0, limit);
 
     this->browseRecentlyPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
                                                                    "(play-count>0)",
                                                                    "-last-played",
                                                                    MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1,
                                                                                     MAFW_METADATA_KEY_DURATION),
-                                                                   0, 30);
+                                                                   0, limit);
 
     this->browseRecentlyAddedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, "-added",
                                                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1,
                                                                                    MAFW_METADATA_KEY_DURATION),
-                                                                  0, 30);
+                                                                  0, limit);
 }
 
 void MusicWindow::listImportedPlaylists()
@@ -1150,7 +1152,7 @@ void MusicWindow::onAddToNowPlaying()
         if (row < 5) { // automatic playlist case
             QString filter;
             QString sorting;
-            int limit = 30; // TODO: user-configurable?
+            int limit = QSettings().value("music/playlistSize").toInt();
             switch (row) {
                 case 1: filter = ""; sorting = "-added"; break;
                 case 2: filter = "(play-count>0)"; sorting = "-last-played"; break;

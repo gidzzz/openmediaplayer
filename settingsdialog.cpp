@@ -37,6 +37,10 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     if (QSettings().contains("FMTX/overrideChecks"))
         if (QSettings().value("FMTX/overrideChecks").toBool())
             ui->fmtxCheckBox->setChecked(true);
+
+    ui->playlistSizeBox->setText(QSettings().value("music/playlistSize").toString());
+    ui->playlistSizeBox->setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]{0,3}"), this));
+
     this->orientationChanged();
 }
 
@@ -55,6 +59,10 @@ void SettingsDialog::accept()
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/lazySliders", ui->slidersCheckBox->isChecked());
     NowPlayingWindow::destroy();
+
+    int playlistSize = ui->playlistSizeBox->text().toInt();
+    if (playlistSize == 0) playlistSize = 30;
+    QSettings().setValue("music/playlistSize", playlistSize);
 
     QSettings().setValue("FMTX/overrideChecks", ui->fmtxCheckBox->isChecked());
 
