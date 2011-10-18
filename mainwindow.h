@@ -87,11 +87,13 @@ private slots:
     void showAbout();
     void processListClicks(QListWidgetItem*);
     void openSettings();
+    void showMusicWindow();
     void showVideosWindow();
     void showInternetRadioWindow();
     void onShuffleAllClicked();
     void createNowPlayingWindow();
     void onNowPlayingWindowHidden();
+    void onChildClosed();
 #ifdef MAFW
     void trackerSourceReady();
     void radioSourceReady();

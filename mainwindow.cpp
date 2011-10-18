@@ -172,7 +172,7 @@ void MainWindow::setLabelText()
 
 void MainWindow::connectSignals()
 {
-    connect(ui->songsButton, SIGNAL(clicked()), musicWindow, SLOT(show()));
+    connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
     connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
@@ -182,8 +182,7 @@ void MainWindow::connectSignals()
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-    connect(musicWindow, SIGNAL(shown()), ui->indicator, SLOT(inhibit()));
-    connect(musicWindow, SIGNAL(hidden()), ui->indicator, SLOT(restore()));
+    connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
@@ -377,15 +376,14 @@ void MainWindow::showAbout()
 void MainWindow::processListClicks(QListWidgetItem* item)
 {
     QString itemName = item->statusTip();
-    if(itemName == "songs_button")
-        musicWindow->show();
-    else if(itemName == "videos_button")
+    if (itemName == "songs_button")
+        this->showMusicWindow();
+    else if (itemName == "videos_button")
         this->showVideosWindow();
-    else if(itemName == "radio_button")
+    else if (itemName == "radio_button")
         this->showInternetRadioWindow();
-    else if(itemName == "shuffle_button")
+    else if (itemName == "shuffle_button")
         this->onShuffleAllClicked();
-    ui->listWidget->clearSelection();
 }
 
 void MainWindow::openSettings()
@@ -394,8 +392,20 @@ void MainWindow::openSettings()
     settings->show();
 }
 
+void MainWindow::showMusicWindow()
+{
+    this->setEnabled(false);
+    musicWindow->setEnabled(true);
+
+    musicWindow->show();
+
+    ui->indicator->inhibit();
+}
+
 void MainWindow::showVideosWindow()
 {
+    this->setEnabled(false);
+
 #ifdef MAFW
     VideosWindow *window = new VideosWindow(this, mafwFactory);
 #else
@@ -405,12 +415,14 @@ void MainWindow::showVideosWindow()
 
     window->show();
 
-    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 }
 
 void MainWindow::showInternetRadioWindow()
 {
+    this->setEnabled(false);
+
 #ifdef MAFW
     InternetRadioWindow *window = new InternetRadioWindow(this, mafwFactory);
 #else
@@ -420,7 +432,7 @@ void MainWindow::showInternetRadioWindow()
 
     window->show();
 
-    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 }
 
@@ -544,7 +556,6 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         ui->indicator->inhibit();
 
-        ui->shuffleAllButton->setDisabled(false);
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -557,6 +568,8 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
 void MainWindow::onShuffleAllClicked()
 {
 #ifdef MAFW
+    this->setEnabled(false);
+
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
@@ -573,8 +586,6 @@ void MainWindow::onShuffleAllClicked()
 
     this->browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL, 0,
                                                              0, MAFW_SOURCE_BROWSE_ALL);
-
-    ui->shuffleAllButton->setDisabled(true);
 #endif
 }
 
@@ -722,5 +733,11 @@ void MainWindow::takeScreenshot()
 void MainWindow::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    this->onChildClosed();
+}
+void MainWindow::onChildClosed()
+{
     ui->indicator->restore();
+    ui->listWidget->clearSelection();
+    this->setEnabled(true);
 }
