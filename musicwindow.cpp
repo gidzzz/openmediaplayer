@@ -75,6 +75,8 @@ MusicWindow::~MusicWindow()
 
 void MusicWindow::onSongSelected(QListWidgetItem *)
 {
+    this->setEnabled(false);
+
 #ifdef MAFW
     playlist->assignAudioPlaylist();
     playlist->clear();
@@ -111,8 +113,6 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->inhibit();
-
-    ui->songList->clearSelection();
 }
 
 void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
@@ -120,32 +120,37 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
     if (item->data(Qt::UserRole).toBool())
         return;
 
+    this->setEnabled(false);
+
     int row = ui->playlistList->row(item);
     if (row >= 1 && row <= 4) {
-        SinglePlaylistView *window = new SinglePlaylistView(this, mafwFactory);
-        window->setWindowTitle(item->text());
+        SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
+        playlistView->setWindowTitle(item->text());
         int limit = QSettings().value("music/playlistSize").toInt();
         if (row == 1)
-            window->browseAutomaticPlaylist("", "-added", limit);
+            playlistView->browseAutomaticPlaylist("", "-added", limit);
         else if (row == 2)
-            window->browseAutomaticPlaylist("(play-count>0)", "-last-played", limit);
+            playlistView->browseAutomaticPlaylist("(play-count>0)", "-last-played", limit);
         else if (row == 3)
-            window->browseAutomaticPlaylist("(play-count>0)", "-play-count,+title", limit);
+            playlistView->browseAutomaticPlaylist("(play-count>0)", "-play-count,+title", limit);
         else if (row == 4)
-            window->browseAutomaticPlaylist("(play-count=)", "", MAFW_SOURCE_BROWSE_ALL);
-        window->show();
-        connect(window, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
-    } else if (row > 5) {
-        SinglePlaylistView *window = new SinglePlaylistView(this, mafwFactory);
-        window->setWindowTitle(item->text());
+            playlistView->browseAutomaticPlaylist("(play-count=)", "", MAFW_SOURCE_BROWSE_ALL);
+
+        playlistView->show();
+        connect(playlistView, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
+        connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+    } else if (row >= 6) {
+        SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
+        playlistView->setWindowTitle(item->text());
         if (item->data(UserRoleObjectID).isNull()) // saved playlist case
-            window->browsePlaylist(MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist(item->text())));
+            playlistView->browsePlaylist(MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist(item->text())));
         else // imported playlist case
-            window->browseObjectId(item->data(UserRoleObjectID).toString());
-        window->show();
-        connect(window, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
+            playlistView->browseObjectId(item->data(UserRoleObjectID).toString());
+
+        playlistView->show();
+        connect(playlistView, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
+        connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     }
-    ui->playlistList->clearSelection();
 }
 
 void MusicWindow::connectSignals()
@@ -156,6 +161,7 @@ void MusicWindow::connectSignals()
     connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onSongSelected(QListWidgetItem*)));
 #endif
 #ifdef MAFW
+    connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
     connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onArtistSelected(QListWidgetItem*)));
@@ -509,9 +515,18 @@ void MusicWindow::loadViewState()
     }
 }
 
+void MusicWindow::onChildClosed()
+{
+    ui->indicator->restore();
+    this->currentList()->clearSelection();
+    this->setEnabled(true);
+}
+
 #ifdef MAFW
 void MusicWindow::onAlbumSelected(QListWidgetItem *item)
 {
+    this->setEnabled(false);
+
     SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
     albumView->setAttribute(Qt::WA_DeleteOnClose);
     albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
@@ -519,14 +534,14 @@ void MusicWindow::onAlbumSelected(QListWidgetItem *item)
 
     albumView->show();
 
-    connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
-
-    ui->albumList->clearSelection();
 }
 
 void MusicWindow::onArtistSelected(QListWidgetItem *item)
 {
+    this->setEnabled(false);
+
     int songCount = item->data(UserRoleAlbumCount).toInt();
     if(songCount == 0 || songCount == 1) {
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
@@ -537,7 +552,7 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         albumView->setWindowTitle(item->data(UserRoleSongName).toString());
 
         albumView->show();
-        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
     } else if (songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
@@ -547,28 +562,26 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         artistView->setAttribute(Qt::WA_DeleteOnClose);
 
         artistView->show();
-        connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
     }
-
-    ui->artistList->clearSelection();
 }
 
 void MusicWindow::onGenreSelected(QListWidgetItem *item)
 {
-    SingleGenreView *genreWindow = new SingleGenreView(this, mafwFactory);
-    genreWindow->setAttribute(Qt::WA_DeleteOnClose);
-    genreWindow->setWindowTitle(item->data(UserRoleSongTitle).toString());
+    this->setEnabled(false);
 
-    genreWindow->show();
+    SingleGenreView *genreView = new SingleGenreView(this, mafwFactory);
+    genreView->setAttribute(Qt::WA_DeleteOnClose);
+    genreView->setWindowTitle(item->data(UserRoleSongTitle).toString());
 
-    connect(genreWindow, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    genreView->show();
+
+    connect(genreView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 
-    genreWindow->setSongCount(item->data(UserRoleSongCount).toInt());
-    genreWindow->browseGenre(item->data(UserRoleObjectID).toString());
-
-    ui->genresList->clearSelection();
+    genreView->setSongCount(item->data(UserRoleSongCount).toInt());
+    genreView->browseGenre(item->data(UserRoleObjectID).toString());
 }
 
 void MusicWindow::listSongs()
@@ -1297,5 +1310,5 @@ void MusicWindow::hideEvent(QHideEvent *)
 void MusicWindow::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-    ui->indicator->restore();
+    this->onChildClosed();
 }

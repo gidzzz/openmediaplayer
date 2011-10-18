@@ -135,6 +135,7 @@ private slots:
     void onAddToNowPlaying();
     void onDeletePlaylistClicked();
     void onNowPlayingWindowHidden();
+    void onChildClosed();
 };
 
 #endif // MUSICWINDOW_H
