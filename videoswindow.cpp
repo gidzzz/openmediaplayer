@@ -141,10 +141,9 @@ void VideosWindow::onShareUriReceived(QString objectId, QString uri)
 
 void VideosWindow::onVideoSelected(QListWidgetItem *item)
 {
-    // Placeholder function
-    ui->listWidget->clearSelection();
+    this->setEnabled(false);
+
 #ifdef MAFW
-    //playlist->assignVideoPlaylist();
     mafwrenderer->stop(); // prevents the audio playlist from starting after the video ends
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else
@@ -152,7 +151,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
 #endif
     window->showFullScreen();
 
-    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 
     window->playObject(item->data(UserRoleObjectID).toString());
@@ -329,6 +328,13 @@ bool VideosWindow::eventFilter(QObject *, QEvent *event)
     if (event->type() == QEvent::Resize)
         ui->listWidget->setFlow(ui->listWidget->flow());
     return false;
+}
+
+void VideosWindow::onChildClosed()
+{
+    ui->indicator->restore();
+    ui->listWidget->clearSelection();
+    this->setEnabled(true);
 }
 
 void VideosWindow::focusInEvent(QFocusEvent *)

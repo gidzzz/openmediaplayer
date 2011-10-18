@@ -68,6 +68,7 @@ private slots:
     void onContextMenuRequested(const QPoint &point);
     void onDeleteClicked();
     void orientationChanged();
+    void onChildClosed();
 #ifdef MAFW
     void listStations();
     void browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);

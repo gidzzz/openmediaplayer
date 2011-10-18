@@ -74,6 +74,8 @@ void InternetRadioWindow::showFMTXDialog()
 
 void InternetRadioWindow::onStationSelected()
 {
+    this->setEnabled(false);
+
 #ifdef MAFW
     playlist->assignRadioPlaylist();
 
@@ -108,7 +110,7 @@ void InternetRadioWindow::onStationSelected()
     window->setAttribute(Qt::WA_DeleteOnClose);
     window->show();
 
-    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 }
 
@@ -305,6 +307,13 @@ void InternetRadioWindow::orientationChanged()
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
                                ui->indicator->width(),ui->indicator->height());
     ui->indicator->raise();
+}
+
+void InternetRadioWindow::onChildClosed()
+{
+    ui->indicator->restore();
+    ui->listWidget->clearSelection();
+    this->setEnabled(true);
 }
 
 void InternetRadioWindow::focusInEvent(QFocusEvent *)
