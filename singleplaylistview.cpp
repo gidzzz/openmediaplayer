@@ -246,7 +246,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
 void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 {
-    disconnect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+    this->setEnabled(false);
 
     QString playlistName = playlist->playlistName();
     if (playlistName != "FmpAudioPlaylist")
@@ -275,10 +275,12 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 #endif
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
 
     window->show();
     window->updatePlaylistState();
+
+    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->inhibit();
 }
 
 void SinglePlaylistView::orientationChanged()
@@ -364,7 +366,10 @@ void SinglePlaylistView::onSearchTextChanged(QString text)
 
 void SinglePlaylistView::onShuffleButtonClicked()
 {
+
 #ifdef MAFW
+    this->setEnabled(false);
+
     QString playlistName = playlist->playlistName();
     if (playlistName != "FmpAudioPlaylist" && playlistName != "FmpVideoPlaylist" && playlistName != "FmpRadioPlaylist")
         playlist->assignAudioPlaylist();
@@ -389,6 +394,9 @@ void SinglePlaylistView::onShuffleButtonClicked()
 
     window->show();
     window->updatePlaylistState();
+
+    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->inhibit();
 
     playlist->getSize(); // explained in musicwindow.cpp
     mafwrenderer->play();
@@ -590,5 +598,5 @@ void SinglePlaylistView::onNowPlayingWindowHidden()
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->restore();
     ui->songList->clearSelection();
-    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+    this->setEnabled(true);
 }

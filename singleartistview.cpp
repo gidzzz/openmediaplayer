@@ -162,9 +162,12 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
 void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 {
 #ifdef MAFW
+    this->setEnabled(false);
+
     if (item->data(Qt::UserRole).toString() == "shuffle")
         this->shuffleAllSongs();
     else {
+
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
@@ -172,10 +175,9 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 
         albumView->show();
 
-        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
     }
-    ui->albumList->clearSelection();
 #endif
 }
 
@@ -275,10 +277,6 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint 
 
     qDebug() << "SingleArtistView::onBrowseAllSongs | index: " << index;
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
-
-    // I was not able to encounter such exception, but I guess better not to remove it yet
-    /*if (!objectId.endsWith("/"))
-        playlist->appendItem(objectId);*/
 
     if (remainingCount == 0) {
         playlist->appendItems((const gchar**)songAddBuffer);
@@ -456,5 +454,12 @@ void SingleArtistView::notifyOnAddedToNowPlaying(int songCount)
 void SingleArtistView::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    this->onChildClosed();
+}
+
+void SingleArtistView::onChildClosed()
+{
     ui->indicator->restore();
+    ui->albumList->clearSelection();
+    this->setEnabled(true);
 }

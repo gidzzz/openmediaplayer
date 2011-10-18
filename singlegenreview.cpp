@@ -92,6 +92,8 @@ void SingleGenreView::orientationChanged()
 
 void SingleGenreView::onItemSelected(QListWidgetItem *item)
 {
+    this->setEnabled(false);
+
     int songCount = item->data(UserRoleAlbumCount).toInt();
     if(songCount == 0 || songCount == 1) {
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
@@ -102,7 +104,7 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
         albumView->setWindowTitle(item->data(UserRoleSongName).toString());
 
         albumView->show();
-        connect(albumView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
     } else if(songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
@@ -112,11 +114,10 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
         artistView->setAttribute(Qt::WA_DeleteOnClose);
 
         artistView->show();
-        connect(artistView, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
     }
 
-    ui->artistList->clearSelection();
 }
 
 #ifdef MAFW
@@ -362,6 +363,7 @@ void SingleGenreView::addAllToNowPlaying()
 void SingleGenreView::onShuffleButtonClicked()
 {
 #ifdef MAFW
+    this->setEnabled(false);
     if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
         playlist->assignAudioPlaylist();
 
@@ -388,5 +390,12 @@ void SingleGenreView::notifyOnAddedToNowPlaying(int songCount)
 void SingleGenreView::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    this->onChildClosed();
+}
+
+void SingleGenreView::onChildClosed()
+{
     ui->indicator->restore();
+    ui->artistList->clearSelection();
+    this->setEnabled(true);
 }

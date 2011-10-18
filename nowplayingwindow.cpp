@@ -1177,7 +1177,7 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 
 void NowPlayingWindow::updatePlaylistState()
 {
-    if(playlist->isShuffled()) {
+    if (playlist->isShuffled()) {
         ui->shuffleButton->setIcon(QIcon(shuffleButtonPressed));
         ui->shuffleButton->setChecked(true);
     } else {
@@ -1185,7 +1185,7 @@ void NowPlayingWindow::updatePlaylistState()
         ui->shuffleButton->setChecked(false);
     }
 
-    if(playlist->isRepeat()) {
+    if (playlist->isRepeat()) {
         ui->repeatButton->setIcon(QIcon(repeatButtonPressedIcon));
         ui->repeatButton->setChecked(true);
     } else {
@@ -1202,7 +1202,7 @@ void NowPlayingWindow::clearPlaylist()
                              QMessageBox::Yes | QMessageBox::No,
                              this);
     confirmClear.exec();
-    if(confirmClear.result() == QMessageBox::Yes) {
+    if (confirmClear.result() == QMessageBox::Yes) {
         playlistTime = 0;
         playlist->clear();
         lastPlayingSong->set(1);

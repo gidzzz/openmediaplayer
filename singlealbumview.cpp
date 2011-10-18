@@ -194,8 +194,6 @@ void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 
 void SingleAlbumView::onItemSelected(QListWidgetItem *item)
 {
-    disconnect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
-
 #ifdef MAFW
     playlist->assignAudioPlaylist();
 #endif
@@ -234,6 +232,8 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 {
 #ifdef MAFW
     if (ui->songList->count() > 0) {
+        this->setEnabled(false);
+
 #ifdef DEBUG
         qDebug() << "Clearing playlist";
 #endif
@@ -489,5 +489,5 @@ void SingleAlbumView::onNowPlayingWindowHidden()
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->restore();
     ui->songList->clearSelection();
-    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+    this->setEnabled(true);
 }
