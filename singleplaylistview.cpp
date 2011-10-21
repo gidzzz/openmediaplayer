@@ -36,6 +36,8 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 
 #ifdef MAFW
     ui->indicator->setFactory(factory);
+    browsePlaylistId = NULL;
+    browsePlaylistOp = NULL;
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -90,13 +92,12 @@ void SinglePlaylistView::browsePlaylist(MafwPlaylist *mafwplaylist)
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
             this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
     this->numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
-    this->setSongCount(numberOfSongsToAdd);
-    browsePlaylistId = (uint)playlist->getItemsOf(mafwplaylist);
+    browsePlaylistOp = playlist->getItemsOf(mafwplaylist);
 }
 
 void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guint index, gpointer op)
 {
-    if ((uint)op != browsePlaylistId)
+    if (op != browsePlaylistOp)
         return;
 
     qDebug() << "SinglePlaylistView::onGetItems |" << index;
@@ -151,18 +152,20 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
 
     unsigned theIndex = 0;
     int position;
-    for (position = 0; position < ui->songList->count(); position++)
-    {
+    for (position = 0; position < ui->songList->count(); position++) {
         theIndex = ui->songList->item(position)->data(UserRoleSongIndex).toInt();
         if (theIndex > index)
             break;
     }
     ui->songList->insertItem(position, item);
 
+    this->setSongCount(ui->songList->count());
+
     if (numberOfSongsToAdd == 0) {
         qDebug() << "disconnecting SinglePlaylistView from onGetItems";
         disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
                    this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
+        browsePlaylistOp = NULL;
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -235,13 +238,14 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
     ui->songList->addItem(item);
 
-#ifdef Q_WS_MAEMO_5
-    if (remainingCount == 0)
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-    else
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
     this->setSongCount(ui->songList->count());
+
+    if (remainingCount == 0) {
+        browsePlaylistId = NULL;
+#ifdef Q_WS_MAEMO_5
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
+    }
 }
 
 void SinglePlaylistView::onItemSelected(QListWidgetItem *)
@@ -600,3 +604,17 @@ void SinglePlaylistView::onNowPlayingWindowHidden()
     ui->songList->clearSelection();
     this->setEnabled(true);
 }
+
+#ifdef MAFW
+void SinglePlaylistView::closeEvent(QCloseEvent *e)
+{
+    if (browsePlaylistId) {
+        QString error;
+        mafwTrackerSource->cancelBrowse(browsePlaylistId, error);
+    }
+    if (browsePlaylistOp)
+        mafw_playlist_cancel_get_items_md(browsePlaylistOp);
+
+    e->accept();
+}
+#endif

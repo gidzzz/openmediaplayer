@@ -34,6 +34,9 @@ public:
 
 protected:
     void keyReleaseEvent(QKeyEvent *e);
+#ifdef MAFW
+    void closeEvent(QCloseEvent *e);
+#endif
 
 private:
     Ui::SinglePlaylistView *ui;
@@ -50,6 +53,7 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     uint browsePlaylistId;
+    gpointer browsePlaylistOp;
     int numberOfSongsToAdd;
 #endif
     void setSongCount(int count);
