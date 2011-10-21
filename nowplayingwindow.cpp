@@ -1498,7 +1498,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
             ui->songPlaylist->insertItem(from, item);
         }
 
-        playlistQM->itemsInserted(from, nreplace);
+        if (!synthetic) playlistQM->itemsInserted(from, nreplace);
         playlistQM->getItems(from, from+nreplace);
     }
 
