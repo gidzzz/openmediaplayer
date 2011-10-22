@@ -28,7 +28,7 @@
       </property>
       <property name="source">
        <url>
-        <string>file:///opt/mediaplayer/qml/entertainmentview/entertainmentview.qml</string>
+        <string>file:///opt/openmediaplayer/qml/entertainmentview/entertainmentview.qml</string>
        </url>
       </property>
      </widget>

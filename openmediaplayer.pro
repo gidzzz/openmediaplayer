@@ -4,16 +4,17 @@
 #
 #-------------------------------------------------
 
-QT       += core gui dbus declarative opengl network
+QT += core gui dbus declarative opengl network
 
-TARGET = mediaplayer
+TARGET = openmediaplayer
 TEMPLATE = app
-TRANSLATIONS = mediaplayer.ts
+TRANSLATIONS = openmediaplayer.ts
 
 DEFINES += MAFW
 INCLUDEPATH += /usr/lib/madde/linux-x86_64/sysroots/meego-core-armv7l-madde-sysroot-1.1-fs/usr/include/libmafw/
 
-SOURCES += main.cpp \
+SOURCES += \
+    main.cpp \
     mainwindow.cpp \
     musicwindow.cpp \
     nowplayingwindow.cpp \
@@ -45,7 +46,8 @@ SOURCES += main.cpp \
     mediaart.cpp \
     playlistquerymanager.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS += \
+    mainwindow.h \
     musicwindow.h \
     nowplayingwindow.h \
     videoswindow.h \
@@ -79,7 +81,8 @@ HEADERS  += mainwindow.h \
     mediaart.h \
     playlistquerymanager.h
 
-FORMS    += mainwindow.ui \
+FORMS += \
+    mainwindow.ui \
     musicwindow.ui \
     nowplayingwindow.ui \
     videoswindow.ui \
@@ -110,19 +113,38 @@ symbian {
 }
 
 unix:!symbian {
+
+    isEmpty(PREFIX) {
+        PREFIX = /usr
+    }
+
+    BINDIR = $$PREFIX/bin
+    DATADIR =$$PREFIX/share
+
+    DEFINES += DATADIR=\\\"$$DATADIR\\\" PKGDATADIR=\\\"$$PKGDATADIR\\\"
+
     maemo5 {
         QT += maemo5
         CONFIG += link_pkgconfig
         PKGCONFIG += dbus-1
         DEFINES += MAFW
-        SOURCES +=     maemo5deviceevents.cpp \
-            fmtxdialog.cpp
-        HEADERS +=    maemo5deviceevents.h \
-            fmtxdialog.h
+        SOURCES += maemo5deviceevents.cpp \
+                   fmtxdialog.cpp
+        HEADERS += maemo5deviceevents.h \
+                   fmtxdialog.h
         include(external-includepaths.pro)
     }
-    target.path = /usr/local/bin
-    INSTALLS += target
+
+    INSTALLS += target desktop icon64
+
+    target.path = $$BINDIR
+
+    desktop.path = $$DATADIR/applications/hildon
+    desktop.files += ../extra/$${TARGET}.desktop
+
+    icon64.path = $$DATADIR/icons/hicolor/64x64/apps
+    icon64.files += ../extra/$${TARGET}.png
+
 }
 
 contains(DEFINES, MAFW) {
@@ -130,21 +152,23 @@ contains(DEFINES, MAFW) {
     CONFIG += link_pkgconfig
     PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0
 
-    SOURCES +=      mafw/mafwrenderersignalhelper.cpp \
-            mafw/mafwsourcesignalhelper.cpp \
-            mafw/mafwsourceadapter.cpp \
-            mafw/mafwrendereradapter.cpp \
-            mafw/mafwplaylistadapter.cpp \
-            mafw/mafwplaylistmanageradapter.cpp \
-            mafw/mafwadapterfactory.cpp
+    SOURCES += \
+        mafw/mafwrenderersignalhelper.cpp \
+        mafw/mafwsourcesignalhelper.cpp \
+        mafw/mafwsourceadapter.cpp \
+        mafw/mafwrendereradapter.cpp \
+        mafw/mafwplaylistadapter.cpp \
+        mafw/mafwplaylistmanageradapter.cpp \
+        mafw/mafwadapterfactory.cpp
 
-    HEADERS +=      mafw/mafwrenderersignalhelper.h \
-            mafw/mafwrendereradapter.h \
-            mafw/mafwsourcesignalhelper.h \
-            mafw/mafwsourceadapter.h \
-            mafw/mafwplaylistadapter.h \
-            mafw/mafwplaylistmanageradapter.h \
-            mafw/mafwadapterfactory.h
+    HEADERS += \
+        mafw/mafwrenderersignalhelper.h \
+        mafw/mafwrendereradapter.h \
+        mafw/mafwsourcesignalhelper.h \
+        mafw/mafwsourceadapter.h \
+        mafw/mafwplaylistadapter.h \
+        mafw/mafwplaylistmanageradapter.h \
+        mafw/mafwadapterfactory.h
 }
 
 LIBS += -lhildonthumbnail
@@ -163,7 +187,7 @@ OTHER_FILES += \
 
 qml_entertainmentview.files += qml_entertainmentview/entertainmentview.qml
 qml_entertainmentview.files += qml_entertainmentview/Slider.qml
-qml_entertainmentview.path = /opt/mediaplayer/qml/entertainmentview/
+qml_entertainmentview.path = /opt/openmediaplayer/qml/entertainmentview/
 
 qml_carview.files += qml_carview/carview.qml
 qml_carview.files += qml_carview/Button.qml
@@ -171,7 +195,7 @@ qml_carview.files += qml_carview/MetadataText.qml
 qml_carview.files += qml_carview/Playlist.qml
 qml_carview.files += qml_carview/Slider.qml
 qml_carview.files += qml_carview/SongView.qml
-qml_carview.path = /opt/mediaplayer/qml/carview/
+qml_carview.path = /opt/openmediaplayer/qml/carview/
 
 INSTALLS += qml_entertainmentview
 INSTALLS += qml_carview
