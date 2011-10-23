@@ -32,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->songCountL->setText("0 " + tr("songs"));
+    ui->videoCountL->setText("0 " + tr("clips"));
+    ui->stationCountL->setText("0 " + tr("stations"));
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else

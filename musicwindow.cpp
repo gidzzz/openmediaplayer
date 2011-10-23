@@ -239,7 +239,7 @@ void MusicWindow::setRingingTone()
 {
 #ifdef MAFW
     QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              tr(" "),
+                              " ",
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
                               + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),

@@ -203,7 +203,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>--:--</string>
+                    <string notr="true">--:--</string>
                    </property>
                   </widget>
                  </item>
@@ -254,7 +254,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>00:00</string>
+                    <string notr="true">00:00</string>
                    </property>
                   </widget>
                  </item>
@@ -314,7 +314,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>00:00</string>
+                    <string notr="true">00:00</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignRight|Qt::AlignVCenter</set>
@@ -909,7 +909,7 @@ border: none;
    </property>
    <widget class="QMenu" name="menuNow_playing_menu">
     <property name="title">
-     <string>Now playing menu</string>
+     <string>Options</string>
     </property>
     <addaction name="actionFM_Transmitter"/>
     <addaction name="actionClear_now_playing"/>

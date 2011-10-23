@@ -131,7 +131,7 @@ border: none;
            </sizepolicy>
           </property>
           <property name="text">
-           <string>00:00</string>
+           <string notr="true">00:00</string>
           </property>
          </widget>
         </item>
@@ -154,7 +154,7 @@ border: none;
            </sizepolicy>
           </property>
           <property name="text">
-           <string>00:00</string>
+           <string notr="true">00:00</string>
           </property>
          </widget>
         </item>
@@ -463,7 +463,7 @@ border: none;
            </sizepolicy>
           </property>
           <property name="text">
-           <string>00:00</string>
+           <string notr="true">00:00</string>
           </property>
          </widget>
         </item>
@@ -486,7 +486,7 @@ border: none;
            </sizepolicy>
           </property>
           <property name="text">
-           <string>00:00</string>
+           <string notr="true">00:00</string>
           </property>
          </widget>
         </item>

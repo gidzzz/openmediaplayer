@@ -10,9 +10,6 @@
     <height>70</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <property name="visible">
    <bool>false</bool>
   </property>

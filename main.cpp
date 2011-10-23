@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     // Convert en_GB to English, es_ES to Spanish...
     QLocale::setDefault(lang);
     lang = QLocale::languageToString(QLocale(lang).language());
+    qDebug() << "Your language is" << lang;
 
     // Install language file
     QTranslator translator;

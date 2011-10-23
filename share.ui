@@ -11,20 +11,20 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Share</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QPushButton" name="share_bt">
      <property name="text">
-      <string>PushButton</string>
+      <string>Send via bluetooth</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QPushButton" name="share_mail">
      <property name="text">
-      <string>PushButton</string>
+      <string>Send via e-mail</string>
      </property>
     </widget>
    </item>

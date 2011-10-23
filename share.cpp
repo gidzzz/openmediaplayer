@@ -5,10 +5,7 @@ Share::Share(QWidget *parent, QStringList selected) :
     ui(new Ui::Share)
 {
     ui->setupUi(this);
-    this->setWindowTitle(tr("Share"));
     files = selected;
-    ui->share_bt->setText(tr("Send via bluetooth"));
-    ui->share_mail->setText(tr("Send via e-mail"));
 
 }
 

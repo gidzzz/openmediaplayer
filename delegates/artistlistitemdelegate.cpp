@@ -20,8 +20,6 @@
 
 void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // Translator doesn't load here. I don't know why...
-
     QString artistName = index.data(UserRoleSongName).toString();
     QString albumSongCount;
     QPixmap albumArt;

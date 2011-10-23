@@ -16,9 +16,6 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle">
-   <string>Home folder</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QPushButton" name="pushButton">
@@ -71,9 +68,6 @@
        <width>0</width>
        <height>70</height>
       </size>
-     </property>
-     <property name="text">
-      <string>PushButton</string>
      </property>
     </widget>
    </item>

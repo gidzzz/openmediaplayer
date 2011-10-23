@@ -93,7 +93,7 @@ void VideosWindow::onDeleteClicked()
 {
 #ifdef MAFW
     QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              tr(" "),
+                              " ",
                               tr("Delete selected item from device?"),
                               QMessageBox::Yes | QMessageBox::No,
                               this);

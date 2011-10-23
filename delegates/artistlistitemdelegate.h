@@ -14,6 +14,7 @@
 
 class ArtistListItemDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
 public:
     explicit ArtistListItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
     virtual ~ArtistListItemDelegate() {}

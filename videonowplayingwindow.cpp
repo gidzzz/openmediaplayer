@@ -618,7 +618,7 @@ void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
 
         box->exec();
 #else
-        QMessageBox::critical(this, tr("Unable to play media\n"), errorMsg);
+        QMessageBox::critical(this, tr("Unable to play media") + "\n", errorMsg);
 #endif
     }
 }

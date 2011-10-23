@@ -299,7 +299,7 @@ p, li { white-space: pre-wrap; }
       <string> </string>
      </property>
      <property name="statusTip">
-      <string>songs_button</string>
+      <string notr="true">songs_button</string>
      </property>
     </item>
     <item>
@@ -307,7 +307,7 @@ p, li { white-space: pre-wrap; }
       <string> </string>
      </property>
      <property name="statusTip">
-      <string>videos_button</string>
+      <string notr="true">videos_button</string>
      </property>
     </item>
     <item>
@@ -315,7 +315,7 @@ p, li { white-space: pre-wrap; }
       <string> </string>
      </property>
      <property name="statusTip">
-      <string>radio_button</string>
+      <string notr="true">radio_button</string>
      </property>
     </item>
     <item>
@@ -323,7 +323,7 @@ p, li { white-space: pre-wrap; }
       <string> </string>
      </property>
      <property name="statusTip">
-      <string>shuffle_button</string>
+      <string notr="true">shuffle_button</string>
      </property>
     </item>
    </widget>
@@ -350,9 +350,6 @@ p, li { white-space: pre-wrap; }
     <property name="layoutDirection">
      <enum>Qt::LeftToRight</enum>
     </property>
-    <property name="text">
-     <string>0 songs</string>
-    </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
@@ -371,9 +368,6 @@ p, li { white-space: pre-wrap; }
       <pointsize>13</pointsize>
      </font>
     </property>
-    <property name="text">
-     <string>0 clips</string>
-    </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
@@ -391,9 +385,6 @@ p, li { white-space: pre-wrap; }
      <font>
       <pointsize>13</pointsize>
      </font>
-    </property>
-    <property name="text">
-     <string>0 stations</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -421,7 +412,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>Options</string>
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionAbout_Qt"/>

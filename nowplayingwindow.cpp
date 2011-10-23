@@ -224,7 +224,7 @@ void NowPlayingWindow::onLyricsDownloaded(QNetworkReply *reply)
 
     if (reply->error() != QNetworkReply::NoError) {
         //qDebug() << "error: " << reply->error();
-        ui->lyricsText->setText(tr("Lyrics not found."));
+        ui->lyricsText->setText(tr("Lyrics not found"));
         ui->lyricsText->setWhatsThis("");
     } else {
         QString lyrics = QString::fromUtf8(reply->readAll());
@@ -728,9 +728,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
                     } else
                     {
-                        QString line1 = tr("There is no active Internet connection.");
-                        QString line2 = tr("Please connect to use this function.");
-                        ui->lyricsText->setText(line1+"\n"+line2);
+                        ui->lyricsText->setText("There is no active Internet connection");
                     }
                 }
             }
@@ -1240,7 +1238,7 @@ void NowPlayingWindow::setRingingTone()
 {
 #ifdef MAFW
     QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              tr(" "),
+                              " ",
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
                               + ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString() + "\n"
                               + ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
