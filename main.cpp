@@ -1,6 +1,8 @@
 /**************************************************************************
     Open MediaPlayer
     Copyright (C) 2010-2011 Mohammad Abu-Garbeyyeh
+                            Grzegorz Gidel
+                            Matias Perez
                             Nicolai Hess
                             Timur Kristof
 
@@ -33,7 +35,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QString langPath = "/opt/openmediaplayer/";
-    // This shit returns the device language, not the current language
+    // This thing returns the device language, not the current language
     //QString lang = QLocale::languageToString(QLocale::system().language());
 
     // Open locale file to chech current language

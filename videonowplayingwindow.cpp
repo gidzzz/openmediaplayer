@@ -184,8 +184,6 @@ void VideoNowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
     if (objectId != this->objectIdToPlay)
         return;
 
-    // The code used here (share.(h/cpp/ui) was taken from filebox's source code
-    // C) 2010. Matias Perez
     QStringList list;
     QString clip;
     clip = uri;
