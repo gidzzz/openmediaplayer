@@ -54,6 +54,10 @@ void UpnpView::browseObjectId(QString objectId)
 
 void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
+
+    if (browseId != this->browseId)
+        return;
+
     if (metadata != NULL) {
         QString title;
         QString mime;
@@ -136,9 +140,20 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
 
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         ui->indicator->inhibit();
-    }
 
-    else {
+    } else if (mime.startsWith("video")) {
+        this->setEnabled(false);
+        mafwFactory->getRenderer()->stop(); // prevents the audio playlist from starting after the video ends
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+        window->showFullScreen();
+
+        connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+        ui->indicator->inhibit();
+
+        qDebug() << "attempting to play" << item->data(UserRoleObjectID).toString();
+        window->playObject(item->data(UserRoleObjectID).toString());
+
+    } else {
         ui->objectList->clearSelection();
     }
 }

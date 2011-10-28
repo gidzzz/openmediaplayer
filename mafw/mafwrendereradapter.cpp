@@ -162,8 +162,8 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer*,
 #ifdef DEBUG
     qDebug() << "On Metadata Changed" << name;
 #endif
-    if(strcmp(name, "is-seekable"))
-        emit static_cast<MafwRendererAdapter*>(user_data)->mediaIsSeekable(true);
+    if(strcmp(name, "is-seekable") == 0)
+        emit static_cast<MafwRendererAdapter*>(user_data)->mediaIsSeekable(g_value_get_boolean(g_value_array_get_nth(value, 0)));
     if(value->n_values == 1)
     {
         GValue* v = g_value_array_get_nth(value, 0);

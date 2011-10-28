@@ -6,6 +6,10 @@
 #include "ui_upnpview.h"
 #include "includes.h"
 
+#include "nowplayingwindow.h"
+#include "videonowplayingwindow.h"
+
+
 #include "mafw/mafwadapterfactory.h"
 
 namespace Ui {

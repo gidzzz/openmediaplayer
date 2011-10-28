@@ -125,6 +125,7 @@ void VideoNowPlayingWindow::connectSignals()
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
+    connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->progressBar, SLOT(setEnabled(bool)));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
@@ -276,7 +277,6 @@ void VideoNowPlayingWindow::stateChanged(int state)
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-        ui->progressBar->setEnabled(true);
         if (pausedPosition != -1 && pausedPosition != 0)
             mafwrenderer->setPosition(SeekAbsolute, pausedPosition);
         mafwrenderer->getPosition();
@@ -510,10 +510,10 @@ void VideoNowPlayingWindow::onPositionChanged(int position, QString)
          this->pausedPosition = this->currentPosition;
     if (!ui->progressBar->isSliderDown() && ui->progressBar->isVisible()) {
         ui->currentPositionLabel->setText(time_mmss(position));
-        ui->progressBar->setValue(position);
+        if (ui->progressBar->isEnabled())
+            ui->progressBar->setValue(position);
     }
 }
-
 #endif
 
 #ifdef MAFW
