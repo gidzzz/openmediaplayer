@@ -29,6 +29,21 @@ MafwSourceAdapter::MafwSourceAdapter(QString source):
   connectRegistrySignals();
 }
 
+MafwSourceAdapter::MafwSourceAdapter(MafwSource *source):
+    sourceIsReady(true)
+{
+    sourceName = mafw_extension_get_name(MAFW_EXTENSION(source));
+    mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
+    mafw_shared_init(mafw_registry, NULL);
+    mafw_source = source;
+    connectRegistrySignals();
+}
+
+MafwSource* MafwSourceAdapter::getSourceByUUID(QString uuid)
+{
+    return MAFW_SOURCE(mafw_registry_get_extension_by_uuid(mafw_registry, uuid.toUtf8()));
+}
+
 MafwSourceAdapter::~MafwSourceAdapter()
 {
 
@@ -51,21 +66,22 @@ MafwSourceAdapter::findSource()
       GList* source_elem = sources_list;
       while(source_elem)
       {
-	MafwSource* mafw_source = MAFW_SOURCE(source_elem->data);
+        MafwSource* mafw_source = MAFW_SOURCE(source_elem->data);
 #ifdef DEBUG
-	g_print("source: %s\n", mafw_extension_get_name(MAFW_EXTENSION(mafw_source)));
+        g_print("source: %s\n", mafw_extension_get_name(MAFW_EXTENSION(mafw_source)));
 #endif
-	if(sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(mafw_source))) == 0)
-	{
+        if(sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(mafw_source))) == 0)
+        {
 #ifdef DEBUG
-	  g_print("got source\n");
+          g_print("got source\n");
 #endif
-	  g_object_ref(mafw_source);
-	  this->mafw_source = mafw_source;
-	  this->sourceIsReady = true;
-	  emit sourceReady();
-	  connectSourceSignals();
-	}
+          g_object_ref(mafw_source);
+          this->mafw_source = mafw_source;
+          this->sourceIsReady = true;
+          emit sourceReady();
+          connectSourceSignals();
+        }
+        source_elem = source_elem->next;
       }
     }
     else
@@ -87,37 +103,44 @@ void
 MafwSourceAdapter::connectRegistrySignals()
 {
   g_signal_connect(mafw_registry,
-		   "source_added",
-		   G_CALLBACK(&onSourceAdded),
-		   static_cast<void*>(this));
+                   "source_added",
+                   G_CALLBACK(&onSourceAdded),
+                   static_cast<void*>(this));
 
   g_signal_connect(mafw_registry,
-		   "source_removed",
-		   G_CALLBACK(&onSourceRemoved),
-		   static_cast<void*>(this));
+                   "source_removed",
+                   G_CALLBACK(&onSourceRemoved),
+                   static_cast<void*>(this));
 }
 
 void
 MafwSourceAdapter::onSourceAdded(MafwRegistry*,
-				 GObject* source,
-				 gpointer user_data)
+                                 GObject* source,
+                                 gpointer user_data)
 {
   if(static_cast<MafwSourceAdapter*>(user_data)->sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(source))) == 0)
   {
+    if(QString(mafw_extension_get_name(MAFW_EXTENSION(source))) == "MAFW-UPnP-Control-Source")
+       mafw_extension_set_property_boolean(MAFW_EXTENSION(source), "activate", true);
+
     g_object_ref(source);
     static_cast<MafwSourceAdapter*>(user_data)->mafw_source = MAFW_SOURCE(source);
     static_cast<MafwSourceAdapter*>(user_data)->sourceIsReady = true;
     emit static_cast<MafwSourceAdapter*>(user_data)->sourceReady();
     static_cast<MafwSourceAdapter*>(user_data)->connectSourceSignals();
   }
+
+  emit static_cast<MafwSourceAdapter*>(user_data)->sourceAdded(mafw_extension_get_uuid(MAFW_EXTENSION(source)));
 }
 
 
 void
 MafwSourceAdapter::onSourceRemoved(MafwRegistry*,
-				   GObject* source,
-				   gpointer user_data)
+                                   GObject* source,
+                                   gpointer user_data)
 {
+  emit static_cast<MafwSourceAdapter*>(user_data)->sourceRemoved(mafw_extension_get_uuid(MAFW_EXTENSION(source)));
+
   if(static_cast<MafwSourceAdapter*>(user_data)->sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(source))) == 0)
   {
     g_object_unref(source);
@@ -130,17 +153,17 @@ void
 MafwSourceAdapter::connectSourceSignals()
 {
   g_signal_connect(mafw_source,
-		   "container-changed",
-		   G_CALLBACK(&onContainerChanged),
-		   static_cast<void*>(this));
+                   "container-changed",
+                   G_CALLBACK(&onContainerChanged),
+                   static_cast<void*>(this));
   g_signal_connect(mafw_source,
-		   "metadata-changed",
-		   G_CALLBACK(&onMetadataChanged),
-		   static_cast<void*>(this));
+                   "metadata-changed",
+                   G_CALLBACK(&onMetadataChanged),
+                   static_cast<void*>(this));
   g_signal_connect(mafw_source,
-		   "updating",
-		   G_CALLBACK(&onUpdating),
-		   static_cast<void*>(this));
+                   "updating",
+                   G_CALLBACK(&onUpdating),
+                   static_cast<void*>(this));
 }
 
 void
@@ -214,7 +237,7 @@ MafwSourceAdapter::getUri(const char* object_id)
 
 bool
 MafwSourceAdapter::cancelBrowse(uint browseId,
-				QString& qerror)
+                                QString& qerror)
 {
   bool rc = false;
   if(mafw_source)
@@ -252,7 +275,7 @@ MafwSourceAdapter::destroyObject(const char* object_id)
 
 void
 MafwSourceAdapter::setMetadata(const char* object_id,
-			       GHashTable* metadata)
+                               GHashTable* metadata)
 {
   if(mafw_source)
   {

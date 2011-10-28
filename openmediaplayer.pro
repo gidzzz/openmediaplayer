@@ -44,7 +44,9 @@ SOURCES += \
     editlyrics.cpp \
     tagwindow.cpp \
     mediaart.cpp \
-    playlistquerymanager.cpp
+    playlistquerymanager.cpp \
+    upnpcontrol.cpp \
+    upnpview.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -79,7 +81,9 @@ HEADERS += \
     editlyrics.h \
     tagwindow.h \
     mediaart.h \
-    playlistquerymanager.h
+    playlistquerymanager.h \
+    upnpcontrol.h \
+    upnpview.h
 
 FORMS += \
     mainwindow.ui \
@@ -103,7 +107,9 @@ FORMS += \
     home.ui \
     freqdlg.ui \
     editlyrics.ui \
-    tagwindow.ui
+    tagwindow.ui \
+    upnpview.ui \
+    upnpcontrol.ui
 
 symbian {
     TARGET.UID3 = 0xedf29700

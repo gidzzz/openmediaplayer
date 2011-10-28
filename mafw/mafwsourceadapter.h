@@ -16,7 +16,10 @@ class MafwSourceAdapter : public QObject
 
  public:
   MafwSourceAdapter(QString sourceName);
+  MafwSourceAdapter(MafwSource* source);
   ~MafwSourceAdapter();
+
+  MafwSource* getSourceByUUID(QString uuid);
 
   bool isReady() const;
   static void onSourceAdded(MafwRegistry* mafw_registry,
@@ -74,6 +77,9 @@ class MafwSourceAdapter : public QObject
   //MafwSource signals
   void containerChanged(QString objectId);
   void metadataChanged(QString objectId);
+
+  void sourceAdded(QString uuid);
+  void sourceRemoved(QString uuid);
 
   void updating(int progress,
 		int processed_items,

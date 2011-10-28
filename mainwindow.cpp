@@ -104,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #ifdef MAFW
     musicWindow = new MusicWindow(this, mafwFactory);
+    upnpControl = new UpnpControl(ui->centralWidget, mafwFactory);
 #else
     musicWindow = new MusicWindow(this);
 #endif
@@ -365,8 +366,10 @@ void MainWindow::orientationChanged()
         if(ui->listWidget->isHidden())
             ui->listWidget->show();
     }
+    upnpControl->setGeometry(0, screenGeometry.height()-(70+55),
+                             screenGeometry.width()-122, upnpControl->height());
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
-                               ui->indicator->width(),ui->indicator->height());
+                               ui->indicator->width(), ui->indicator->height());
     ui->indicator->raise();
 }
 

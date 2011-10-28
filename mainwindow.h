@@ -16,6 +16,8 @@
 #include "settingsdialog.h"
 #include "aboutwindow.h"
 
+#include "upnpcontrol.h"
+
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
     #define DBUS_SERVICE   "com.nokia.mediaplayer"
@@ -47,6 +49,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
     MusicWindow *musicWindow;
+    UpnpControl *upnpControl;
     void paintEvent(QPaintEvent*);
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);

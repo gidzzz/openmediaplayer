@@ -6,6 +6,7 @@ MafwAdapterFactory::MafwAdapterFactory(QObject *parent) :
     mafwrenderer = new MafwRendererAdapter();
     mafwTrackerSource = new MafwSourceAdapter("Mafw-Tracker-Source");
     mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
+    mafwUpnpSource = new MafwSourceAdapter("MAFW-UPnP-Control-Source");
     playlist = new MafwPlaylistAdapter(this, mafwrenderer);
 }
 
@@ -22,6 +23,11 @@ MafwSourceAdapter* MafwAdapterFactory::getTrackerSource()
 MafwSourceAdapter* MafwAdapterFactory::getRadioSource()
 {
     return mafwRadioSource;
+}
+
+MafwSourceAdapter* MafwAdapterFactory::getUpnpSource()
+{
+    return mafwUpnpSource;
 }
 
 MafwPlaylistAdapter* MafwAdapterFactory::getPlaylistAdapter()

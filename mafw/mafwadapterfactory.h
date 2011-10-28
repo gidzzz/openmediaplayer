@@ -14,6 +14,7 @@ public:
     MafwRendererAdapter *getRenderer();
     MafwSourceAdapter *getTrackerSource();
     MafwSourceAdapter *getRadioSource();
+    MafwSourceAdapter *getUpnpSource();
     MafwPlaylistAdapter *getPlaylistAdapter();
     int mafwState();
 
@@ -25,6 +26,7 @@ private:
     MafwRendererAdapter *mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
+    MafwSourceAdapter *mafwUpnpSource;
     MafwPlaylistAdapter *playlist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
     int state;
