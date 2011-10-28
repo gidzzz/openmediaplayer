@@ -57,7 +57,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     ui->verticalLayout->addWidget(shuffleAllButton);
     ui->verticalLayout->addWidget(ui->songList);
     ui->verticalLayout->addWidget(ui->searchWidget);
-    ui->searchWidget->hide();
+
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -98,7 +98,6 @@ void SingleAlbumView::listSongs()
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,
-                                                                              MAFW_METADATA_KEY_URI,
                                                                               MAFW_METADATA_KEY_ALBUM_ART_URI,
                                                                               MAFW_METADATA_KEY_DURATION,
                                                                               MAFW_METADATA_KEY_TRACK),
@@ -142,14 +141,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
 
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        if(v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleSongURI, QString::fromUtf8(filename));
-            }
-        }
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
         if(v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
@@ -166,10 +157,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     }
 
 #ifdef Q_WS_MAEMO_5
-    if (remainingCount == 0)
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-    else
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
     QString songCount;
     songCount = QString::number(ui->songList->count());
     songCount.append(" ");
@@ -178,6 +165,9 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     else
         songCount.append(tr("song"));
     shuffleAllButton->setValueText(songCount);
+
+    if (remainingCount == 0)
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
 }
 

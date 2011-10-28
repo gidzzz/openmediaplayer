@@ -281,7 +281,6 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
 
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
-        item->setData(UserRoleSongURI, URI);
         item->setData(UserRoleValueText, URI);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, Duration::Blank);

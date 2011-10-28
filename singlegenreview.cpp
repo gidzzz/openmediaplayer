@@ -58,7 +58,7 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     ui->verticalLayout->addWidget(shuffleAllButton);
     ui->verticalLayout->addWidget(ui->artistList);
     ui->verticalLayout->addWidget(ui->searchWidget);
-    ui->searchWidget->hide();
+
     connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
     connect(ui->artistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));

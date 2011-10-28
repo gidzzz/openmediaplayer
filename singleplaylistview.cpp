@@ -55,8 +55,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    ui->searchWidget->hide();
-
     shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
     ui->verticalLayout->removeWidget(ui->songList);
     ui->verticalLayout->removeWidget(ui->searchWidget);
@@ -136,14 +134,6 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongIndex, index);
 
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        if (v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleSongURI, QString::fromUtf8(filename));
-            }
-        }
     } else {
         item->setText(tr("Information not available"));
         item->setData(UserRoleSongDuration, Duration::Unknown);

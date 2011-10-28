@@ -198,8 +198,7 @@ void VideosWindow::listVideos()
                                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                                 MAFW_METADATA_KEY_DURATION,
                                                                                 MAFW_METADATA_KEY_THUMBNAIL_URI,
-                                                                                MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
-                                                                                MAFW_METADATA_KEY_URI,
+                                                                                MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI
                                                                                 ),
                                                                0, MAFW_SOURCE_BROWSE_ALL);
 }
@@ -222,14 +221,6 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        if (v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleSongURI, QString::fromUtf8(filename));
-            }
-        }
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI);
         if (v != NULL) {

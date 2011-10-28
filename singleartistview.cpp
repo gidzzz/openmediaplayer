@@ -53,7 +53,6 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
             this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
 #endif
-    ui->searchWidget->hide();
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));

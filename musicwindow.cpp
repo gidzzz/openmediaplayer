@@ -39,7 +39,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
 #endif
     ui->centralwidget->setLayout(ui->songsLayout);
-    ui->searchWidget->hide();
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ThumbnailItemDelegate *albumDelegate = new ThumbnailItemDelegate(ui->albumList);
