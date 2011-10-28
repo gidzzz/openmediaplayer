@@ -105,6 +105,8 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef MAFW
     musicWindow = new MusicWindow(this, mafwFactory);
     upnpControl = new UpnpControl(ui->centralWidget, mafwFactory);
+    connect(upnpControl, SIGNAL(childOpened()), this, SLOT(onChildOpened()));
+    connect(upnpControl, SIGNAL(childClosed()), this, SLOT(onChildClosed()));
 #else
     musicWindow = new MusicWindow(this);
 #endif
@@ -735,6 +737,12 @@ void MainWindow::takeScreenshot()
     XSync (xev.xclient.display, False);
 }
 #endif
+
+void MainWindow::onChildOpened()
+{
+    this->setEnabled(false);
+    ui->indicator->inhibit();
+}
 
 void MainWindow::onNowPlayingWindowHidden()
 {

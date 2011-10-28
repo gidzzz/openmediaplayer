@@ -21,10 +21,15 @@ public:
     explicit UpnpControl(QWidget *parent = 0, MafwAdapterFactory *factory = 0);
     ~UpnpControl();
 
+signals:
+    void childOpened();
+    void childClosed();
+
 private slots:
     void onSourceAdded(QString uuid);
     void onSourceRemoved(QString uuid);
     void onItemActivated(QListWidgetItem *item);
+    void onChildClosed();
 
 private:
     Ui::UpnpControl *ui;

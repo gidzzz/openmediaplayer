@@ -95,6 +95,7 @@ private slots:
     void showInternetRadioWindow();
     void onShuffleAllClicked();
     void createNowPlayingWindow();
+    void onChildOpened();
     void onNowPlayingWindowHidden();
     void onChildClosed();
 #ifdef MAFW

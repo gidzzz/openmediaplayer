@@ -31,6 +31,8 @@ private slots:
     void onAddOneToNowPlaying();
     void addAllToNowPlaying();
     int appendAllToPlaylist();
+    void onNowPlayingWindowHidden();
+    void onChildClosed();
 
 private:
     void notifyOnAddedToNowPlaying(int songCount);

@@ -52,6 +52,8 @@ void UpnpControl::onSourceRemoved(QString uuid)
 
 void UpnpControl::onItemActivated(QListWidgetItem *item)
 {
+    emit childOpened();
+
     QString uuid = item->data(UserRoleObjectID).toString();
 
     MafwSourceAdapter *source = new MafwSourceAdapter(mafwUpnpSource->getSourceByUUID(uuid));
@@ -59,4 +61,12 @@ void UpnpControl::onItemActivated(QListWidgetItem *item)
     UpnpView *upnpView = new UpnpView(this, mafwFactory, source);
     upnpView->browseObjectId(uuid + "::");
     upnpView->show();
+
+    connect(upnpView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+}
+
+void UpnpControl::onChildClosed()
+{
+    ui->upnpList->clearSelection();
+    emit childClosed();
 }

@@ -16,11 +16,11 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
 #endif
     this->setAttribute(Qt::WA_DeleteOnClose);
 
-    ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->objectList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
-    connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(ui->objectList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
+    connect(ui->objectList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
+    connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(onOrientationChanged()));
@@ -41,7 +41,7 @@ void UpnpView::browseObjectId(QString objectId)
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    ui->songList->clear();
+    ui->objectList->clear();
 
     connect(mafwSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(onBrowseResult(uint, int, uint, QString, GHashTable*, QString)));
@@ -67,7 +67,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
                                 MAFW_METADATA_KEY_MIME);
         mime = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown mime)");
 
-        QListWidgetItem *item = new QListWidgetItem(ui->songList);
+        QListWidgetItem *item = new QListWidgetItem(ui->objectList);
 
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleMIME, mime);
@@ -84,7 +84,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
         else
             item->setIcon(QIcon::fromTheme("filemanager_unknown_file"));
 
-        ui->songList->addItem(item);
+        ui->objectList->addItem(item);
     }
 
     if (remainingCount == 0) {
@@ -98,7 +98,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
 
 void UpnpView::onContextMenuRequested(const QPoint &point)
 {
-    if (ui->songList->currentItem()->data(UserRoleMIME).toString().startsWith("audio")) {
+    if (ui->objectList->currentItem()->data(UserRoleMIME).toString().startsWith("audio")) {
         QMenu *contextMenu = new QMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddOneToNowPlaying()));
@@ -112,24 +112,34 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
     QString mime = item->data(UserRoleMIME).toString();
 
     if (mime == "x-mafw/container") {
+        this->setEnabled(false);
         UpnpView *window = new UpnpView(this, mafwFactory, mafwSource);
         window->browseObjectId(objectId);
         window->show();
-    } else {
+
+        connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+        ui->indicator->inhibit();
+
+    } else if (mime.startsWith("audio")) {
+        this->setEnabled(false);
         playlist->assignAudioPlaylist();
         playlist->clear();
         appendAllToPlaylist();
 
         MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
         playlist->getSize(); // explained in musicwindow.cpp
-        mafwrenderer->gotoIndex(ui->songList->row(item)); // selects a wrong song when the directory contains more than audio
+        mafwrenderer->gotoIndex(ui->objectList->row(item)); // selects a wrong song when the directory contains more than audio
         mafwrenderer->play();
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
         window->show();
 
-        //connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-        //ui->indicator->inhibit();
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+        ui->indicator->inhibit();
+    }
+
+    else {
+        ui->objectList->clearSelection();
     }
 }
 
@@ -138,7 +148,7 @@ void UpnpView::onAddOneToNowPlaying()
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    playlist->appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());
+    playlist->appendItem(ui->objectList->currentItem()->data(UserRoleObjectID).toString());
 
     notifyOnAddedToNowPlaying(1);
 }
@@ -153,13 +163,13 @@ void UpnpView::addAllToNowPlaying()
 
 int UpnpView::appendAllToPlaylist()
 {
-    int itemCount = ui->songList->count();
+    int itemCount = ui->objectList->count();
     gchar** songAddBuffer = new gchar*[itemCount+1];
 
     int songCount = 0;
     for (int i = 0; i < itemCount; i++)
-        if (ui->songList->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
-            songAddBuffer[songCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
+            songAddBuffer[songCount++] = qstrdup(ui->objectList->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
     songAddBuffer[songCount] = NULL;
 
@@ -189,4 +199,19 @@ void UpnpView::onOrientationChanged()
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     ui->indicator->raise();
+}
+
+void UpnpView::onNowPlayingWindowHidden()
+{
+    disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->restore();
+    ui->objectList->clearSelection();
+    this->setEnabled(true);
+}
+
+void UpnpView::onChildClosed()
+{
+    ui->indicator->restore();
+    ui->objectList->clearSelection();
+    this->setEnabled(true);
 }
