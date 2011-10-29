@@ -8,6 +8,7 @@
 
 #include "nowplayingwindow.h"
 #include "videonowplayingwindow.h"
+#include "delegates/mediawithicondelegate.h"
 
 
 #include "mafw/mafwadapterfactory.h"

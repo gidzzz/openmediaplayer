@@ -72,7 +72,7 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             if (valueText.isEmpty() && duration == Duration::Blank)
             {
                 painter->setPen(QPen(activeColor));
-                painter->drawText(15, r.top(), r.width()-pf, r.height(), Qt::AlignVCenter|Qt::AlignCenter, songName, &r);
+                painter->drawText(r, Qt::AlignVCenter|Qt::AlignCenter, songName, &r);
             }
             else
                 painter->drawText(15, r.top()+5, r.width()-pf, r.height(), Qt::AlignTop|Qt::AlignLeft, songName, &r);

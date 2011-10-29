@@ -16,6 +16,7 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
 #endif
     this->setAttribute(Qt::WA_DeleteOnClose);
 
+    ui->objectList->setItemDelegate(new MediaWithIconDelegate(ui->objectList));
     ui->objectList->setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(ui->objectList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
@@ -47,9 +48,10 @@ void UpnpView::browseObjectId(QString objectId)
             this, SLOT(onBrowseResult(uint, int, uint, QString, GHashTable*, QString)));
 
     this->browseId = mafwSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                              MAFW_METADATA_KEY_MIME),
-                                                             0, MAFW_SOURCE_BROWSE_ALL);
+                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                               MAFW_METADATA_KEY_DURATION,
+                                                               MAFW_METADATA_KEY_MIME),
+                                              0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
@@ -61,19 +63,26 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
     if (metadata != NULL) {
         QString title;
         QString mime;
+        int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_MIME);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
         mime = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown mime)");
+
+        if (mime.startsWith("audio") || mime.startsWith("video")) {
+            v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
+            duration = v ? g_value_get_int(v) : Duration::Unknown;
+        } else {
+            duration = Duration::Blank;
+        }
 
         QListWidgetItem *item = new QListWidgetItem(ui->objectList);
 
         item->setData(UserRoleObjectID, objectId);
+        item->setData(UserRoleSongDuration, duration);
         item->setData(UserRoleMIME, mime);
         item->setText(title + " (" + mime + ")");
 

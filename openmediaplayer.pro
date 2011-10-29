@@ -46,7 +46,8 @@ SOURCES += \
     mediaart.cpp \
     playlistquerymanager.cpp \
     upnpcontrol.cpp \
-    upnpview.cpp
+    upnpview.cpp \
+    delegates/mediawithicondelegate.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -83,7 +84,8 @@ HEADERS += \
     mediaart.h \
     playlistquerymanager.h \
     upnpcontrol.h \
-    upnpview.h
+    upnpview.h \
+    delegates/mediawithicondelegate.h
 
 FORMS += \
     mainwindow.ui \
