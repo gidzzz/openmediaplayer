@@ -29,7 +29,7 @@ void UpnpControl::onSourceAdded(QString uuid)
         QListWidgetItem *item = new QListWidgetItem(ui->upnpList);
 
         item->setIcon(QIcon::fromTheme("mediaplayer_upnp_server"));
-        item->setText(uuid.left(10));
+        item->setText(mafwUpnpSource->getNameByUUID(uuid));
         item->setData(UserRoleObjectID, uuid);
 
         ui->upnpList->addItem(item);

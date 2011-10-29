@@ -20,6 +20,7 @@ class MafwSourceAdapter : public QObject
   ~MafwSourceAdapter();
 
   MafwSource* getSourceByUUID(QString uuid);
+  QString getNameByUUID(QString uuid);
 
   bool isReady() const;
   static void onSourceAdded(MafwRegistry* mafw_registry,
@@ -45,7 +46,7 @@ class MafwSourceAdapter : public QObject
 			 gint remaining_time,
 			 gpointer user_data);
 
-  public slots:
+ public slots:
 
   uint sourceBrowse(const char* object_id,
 		    bool  recursive,
