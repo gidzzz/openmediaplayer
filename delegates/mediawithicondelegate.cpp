@@ -53,13 +53,16 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
             titleWidth = r.width();
         }
 
-        titleWidth = titleWidth - (15+48+15) - 15;
+        int isz = option.decorationSize.width(); // icon size
+        if (isz < 0) isz = 48;
+
+        titleWidth = titleWidth - (15+isz+15) - 15;
         title = fm.elidedText(title, Qt::ElideRight, titleWidth);
-        painter->drawText(15+48+15, r.top(), titleWidth, r.height(), Qt::AlignVCenter|Qt::AlignLeft, title);
+        painter->drawText(15+isz+15, r.top(), titleWidth, r.height(), Qt::AlignVCenter|Qt::AlignLeft, title);
 
         if (index.data(Qt::DecorationRole).type() == QVariant::Icon) {
-            QPixmap icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole)).pixmap(48);
-            painter->drawPixmap(15, r.top()+11, 48, 48, icon);
+            QPixmap icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole)).pixmap(isz);
+            painter->drawPixmap(15, r.top()+(70-isz)/2, isz, isz, icon);
         }
     }
 

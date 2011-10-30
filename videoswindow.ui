@@ -37,8 +37,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>128</width>
-         <height>128</height>
+         <width>64</width>
+         <height>64</height>
         </size>
        </property>
        <property name="movement">

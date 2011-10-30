@@ -51,6 +51,12 @@
        <property name="uniformItemSizes">
         <bool>true</bool>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
        <property name="sortingEnabled">
         <bool>false</bool>
        </property>
