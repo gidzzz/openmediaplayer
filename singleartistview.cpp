@@ -90,7 +90,7 @@ void SingleArtistView::listAlbums()
     ui->albumList->clear();
     QListWidgetItem *shuffleButton = new QListWidgetItem(ui->albumList);
     shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
-    shuffleButton->setText(tr("Shuffle songs"));
+    shuffleButton->setData(UserRoleTitle, tr("Shuffle songs"));
     shuffleButton->setData(Qt::UserRole, "shuffle");
 
     this->browseAllAlbumsId = mafwTrackerSource->sourceBrowse(this->artistObjectId.toUtf8(), false, NULL, NULL,
@@ -147,7 +147,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
     item->setData(UserRoleValueText, songCount);
     item->setData(UserRoleSongCount, childcount);
     item->setData(UserRoleObjectID, objectId);
-    item->setText(albumTitle);
+    item->setData(UserRoleTitle, albumTitle);
     ui->albumList->addItem(item);
     if (!error.isEmpty())
         qDebug() << error;

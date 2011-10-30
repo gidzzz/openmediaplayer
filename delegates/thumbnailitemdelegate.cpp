@@ -20,7 +20,7 @@
 
 void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QString title = index.data(Qt::DisplayRole).toString();
+    QString title = index.data(UserRoleTitle).toString();
     QPixmap thumbnail = QIcon(index.data(Qt::DecorationRole).value<QIcon>()).pixmap(128, 128);
     QString duration = index.data(UserRoleValueText).toString();
 
@@ -36,10 +36,7 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         painter->fillRect(r, option.palette.highlight().color());
 #endif
     }
-    QFont f = painter->font();
-    f.setPointSize(13);
-    painter->setFont(f);
-    QPen defaultPen = painter->pen();
+
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
@@ -53,7 +50,7 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     r.setLeft(r.left()+10);
     r.setRight(r.right()-10);
 
-    QFontMetrics fm(f);
+    QFontMetrics fm(painter->font());
     title = fm.elidedText(title, Qt::ElideRight, 138);
 
     painter->drawText(r.x(), r.y()+134, r.width(), r.height(), Qt::AlignHCenter, title, &r);
@@ -62,7 +59,6 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     painter->setPen(QPen(secondaryColor));
     duration = fm.elidedText(duration, Qt::ElideRight, 138);
     painter->drawText(r.x(), r.y()+ (142 + painter->font().pointSize()), r.width(), r.height(), Qt::AlignHCenter, duration, &r);
-    painter->setPen(defaultPen);
 
     painter->restore();
 }

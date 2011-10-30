@@ -42,7 +42,7 @@ extern QString albumImage, radioImage;
 
 // Enums
 enum UserRoles { UserRoleName=Qt::UserRole,
-                 UserRoleSongName,
+                 UserRoleTitle,
                  UserRoleSongTitle,
                  UserRoleSongAlbum,
                  UserRoleSongArtist,

@@ -101,7 +101,7 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
             albumView->isSingleAlbum = true;
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
-        albumView->setWindowTitle(item->data(UserRoleSongName).toString());
+        albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 
         albumView->show();
         connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -109,7 +109,7 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
     } else if(songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
-        artistView->setWindowTitle(item->data(UserRoleSongName).toString());
+        artistView->setWindowTitle(item->data(UserRoleTitle).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -182,7 +182,7 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
         title = tr("(unknown artist)");
 
     item->setText(title);
-    item->setData(UserRoleSongName, title);
+    item->setData(UserRoleTitle, title);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
     item->setData(UserRoleObjectID, objectId);

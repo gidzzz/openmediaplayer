@@ -546,7 +546,7 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
             albumView->isSingleAlbum = true;
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setAttribute(Qt::WA_DeleteOnClose);
-        albumView->setWindowTitle(item->data(UserRoleSongName).toString());
+        albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 
         albumView->show();
         connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -554,7 +554,7 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
     } else if (songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
-        artistView->setWindowTitle(item->data(UserRoleSongName).toString());
+        artistView->setWindowTitle(item->data(UserRoleTitle).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
         artistView->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -919,7 +919,7 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
         title = tr("(unknown artist)");
 
     item->setText(title);
-    item->setData(UserRoleSongName, title);
+    item->setData(UserRoleTitle, title);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
 
@@ -980,7 +980,7 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
         item->setData(UserRoleValueText, tr("Various artists"));
     item->setData(UserRoleObjectID, objectId);
     item->setData(UserRoleSongCount, songCount);
-    item->setText(albumTitle);
+    item->setData(UserRoleTitle, albumTitle);
 
     if ( songCount > 1 ) item->setData(Qt::UserRole+50, tr("songs"));
     else item->setData(Qt::UserRole+50, tr("song"));

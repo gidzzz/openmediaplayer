@@ -9,6 +9,7 @@
 #include "ui_videoswindow.h"
 #include "videonowplayingwindow.h"
 #include "delegates/thumbnailitemdelegate.h"
+#include "delegates/mediawithicondelegate.h"
 
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
@@ -36,13 +37,12 @@ private:
     QAction *sortByDate;
     QAction *sortByCategory;
     void connectSignals();
-    void selectView();
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
-    unsigned int browseAllVideosId;
+    unsigned int browseId;
 #endif
 
 private slots:
@@ -53,6 +53,7 @@ private slots:
     void onSortingChanged(QAction*);
     void orientationChanged();
     void onChildClosed();
+    void selectView();
 #ifdef MAFW
     void listVideos();
     void browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);

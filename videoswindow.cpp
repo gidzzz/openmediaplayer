@@ -50,14 +50,13 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     sortByCategory = new QAction(tr("Category"), sortByActionGroup);
     sortByCategory->setCheckable(true);
     this->menuBar()->addActions(sortByActionGroup->actions());
-    this->selectView();
     this->connectSignals();
     this->orientationChanged();
 #ifdef MAFW
     if (mafwTrackerSource->isReady())
-        this->listVideos();
+        this->selectView();
     else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listVideos()));
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(selectView()));
 #endif
 }
 
@@ -82,11 +81,13 @@ void VideosWindow::connectSignals()
 
 void VideosWindow::onContextMenuRequested(const QPoint &point)
 {
-    QMenu *contextMenu = new QMenu(this);
-    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
-    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-    contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-    contextMenu->exec(point);
+    if (!ui->listWidget->currentItem()->data(UserRoleObjectID).toString().isEmpty()) {
+        QMenu *contextMenu = new QMenu(this);
+        contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+        contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+        contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+        contextMenu->exec(point);
+    }
 }
 
 void VideosWindow::onDeleteClicked()
@@ -160,21 +161,41 @@ void VideosWindow::onSortingChanged(QAction *action)
     if (action == sortByDate) {
         QMainWindow::setWindowTitle(tr("Videos - latest"));
         QSettings().setValue("Videos/Sortby", "date");
+
+        QFont font; font.setPointSize(13); ui->listWidget->setFont(font);
+        ui->listWidget->setSortingEnabled(false);
+        ui->listWidget->setAlternatingRowColors(false);
+        ui->listWidget->setViewMode(QListView::IconMode);
+        ui->listWidget->setItemDelegate(new ThumbnailItemDelegate(ui->listWidget));
+        ui->listWidget->setWrapping(true);
+        ui->listWidget->setGridSize(QSize(155,215));
+        ui->listWidget->setFlow(QListView::LeftToRight);
+
     } else if (action == sortByCategory) {
         QMainWindow::setWindowTitle(tr("Videos - categories"));
         QSettings().setValue("Videos/Sortby", "category");
+
+        QFont font; font.setPointSize(18); ui->listWidget->setFont(font);
+        ui->listWidget->setSortingEnabled(true);
+        ui->listWidget->setAlternatingRowColors(true);
+        ui->listWidget->setViewMode(QListView::ListMode);
+        ui->listWidget->setItemDelegate(new MediaWithIconDelegate(ui->listWidget));
+        ui->listWidget->setWrapping(false);
+        ui->listWidget->setGridSize(QSize());
+        ui->listWidget->setFlow(QListView::TopToBottom);
     }
+
     this->listVideos();
 }
 
 void VideosWindow::selectView()
 {
     if (QSettings().value("Videos/Sortby").toString() == "category") {
-        QMainWindow::setWindowTitle(tr("Videos - categories"));
         sortByCategory->setChecked(true);
+        onSortingChanged(sortByCategory);
     } else {
-        QMainWindow::setWindowTitle(tr("Videos - latest"));
         sortByDate->setChecked(true);
+        onSortingChanged(sortByDate);
     }
 }
 
@@ -192,32 +213,33 @@ void VideosWindow::listVideos()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
-    const char *sorting = QSettings().value("Videos/Sortby").toString() == "category" ? "-video-source,+title" : "-added,+title";
-
-    this->browseAllVideosId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sorting,
-                                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                                MAFW_METADATA_KEY_DURATION,
-                                                                                MAFW_METADATA_KEY_THUMBNAIL_URI,
-                                                                                MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI
-                                                                                ),
-                                                               0, MAFW_SOURCE_BROWSE_ALL);
+    this->browseId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : NULL,
+                                                     MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                      MAFW_METADATA_KEY_DURATION,
+                                                                      MAFW_METADATA_KEY_THUMBNAIL_URI,
+                                                                      MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
+                                                                      MAFW_METADATA_KEY_VIDEO_SOURCE),
+                                                     0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if (browseId != browseAllVideosId)
+    if (this->browseId != browseId)
         return;
 
     if (metadata != NULL) {
         QString title;
+        QString source;
         int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown clip)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_VIDEO_SOURCE);
+        source = v ? QString::fromUtf8(g_value_get_string (v)) : "";
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
@@ -243,21 +265,43 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
             }
         }
 
-        item->setText(title);
-        if (duration != Duration::Unknown) {
-            QTime t(0, 0);
-            t = t.addSecs(duration);
-            item->setData(UserRoleValueText, t.toString("h:mm:ss"));
-        } else {
-            item->setData(UserRoleValueText, "-:--:--");
-        }
         item->setData(UserRoleObjectID, objectId);
+        item->setData(UserRoleTitle, title);
+
+        if (sortByCategory->isChecked()) {
+            item->setText((source.startsWith("noki://") ? "1_" : "3_") + title);
+            item->setData(UserRoleSongDuration, duration);
+        }
+        else { // sortByDate->isChecked()
+            if (duration != Duration::Unknown) {
+                QTime t(0, 0);
+                t = t.addSecs(duration);
+                item->setData(UserRoleValueText, t.toString("h:mm:ss"));
+            } else
+                item->setData(UserRoleValueText, "-:--:--");
+        }
+
         ui->listWidget->addItem(item);
     }
 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)));
+
+        if (sortByCategory->isChecked()) {
+            QListWidgetItem *item;
+            item = new QListWidgetItem(ui->listWidget);
+            item->setText("0_");
+            item->setData(UserRoleSongDuration, Duration::Blank);
+            item->setData(UserRoleTitle, "Recorded by device camera");
+            ui->listWidget->addItem(item);
+            item = new QListWidgetItem(ui->listWidget);
+            item->setText("2_");
+            item->setData(UserRoleSongDuration, Duration::Blank);
+            item->setData(UserRoleTitle, "Films");
+            ui->listWidget->addItem(item);
+        }
+
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif

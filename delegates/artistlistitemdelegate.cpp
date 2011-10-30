@@ -20,7 +20,7 @@
 
 void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QString artistName = index.data(UserRoleSongName).toString();
+    QString artistName = index.data(UserRoleTitle).toString();
     QString albumSongCount;
     QPixmap albumArt;
 

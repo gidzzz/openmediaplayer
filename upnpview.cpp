@@ -84,7 +84,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
         item->setData(UserRoleMIME, mime);
-        item->setText(title);
+        item->setData(UserRoleTitle, title);
 
         if (mime == "x-mafw/container")
             item->setIcon(QIcon::fromTheme("general_folder"));
