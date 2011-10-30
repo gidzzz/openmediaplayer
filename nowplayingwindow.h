@@ -183,6 +183,7 @@ private slots:
     void nullCarView();
     void savePlaylist();
     void onSavePlaylistAccepted();
+    void onDialogDestroyed();
     void onDeleteFromNowPlaying();
     void selectItemByRow(int row);
     void focusItemByRow(int row);

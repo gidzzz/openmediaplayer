@@ -18,18 +18,11 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     }
 
     else {
-        QString songLength;
         int duration = index.data(UserRoleSongDuration).toInt();
-        switch (duration) {
-            case Duration::Blank:
-                songLength = "";
-                break;
-            case Duration::Unknown:
-                songLength = "--:--";
-                break;
-            default:
-                songLength = time_mmss(duration);
-        }
+
+        QString songLength = duration == Duration::Blank ? "" :
+                             duration == Duration::Unknown ? "--:--" :
+                                         time_mmss(duration);
 
         if (option.state & QStyle::State_Selected) {
     #ifdef Q_WS_MAEMO_5
@@ -41,7 +34,6 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
         QFont f = painter->font();
         QFontMetrics fm(f);
-        QPen defaultPen = painter->pen();
 
         int titleWidth;
         if (!songLength.isEmpty()) {
@@ -49,9 +41,8 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
             painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
             titleWidth = r.left();
             r = option.rect;
-        } else {
+        } else
             titleWidth = r.width();
-        }
 
         int isz = option.decorationSize.width(); // icon size
         if (isz < 0) isz = 48;

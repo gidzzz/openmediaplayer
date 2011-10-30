@@ -1372,7 +1372,7 @@ void NowPlayingWindow::savePlaylist()
     savePlaylistDialog->setWindowTitle(tr("Save playlist"));
     savePlaylistDialog->setAttribute(Qt::WA_DeleteOnClose);
 
-    QGridLayout *layout = new QGridLayout(savePlaylistDialog);
+    QHBoxLayout *layout = new QHBoxLayout(savePlaylistDialog);
 
     QLabel *nameLabel = new QLabel(savePlaylistDialog);
     nameLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
@@ -1380,17 +1380,20 @@ void NowPlayingWindow::savePlaylist()
     nameLabel->setText(tr("Name"));
 
     playlistNameLineEdit = new QLineEdit(savePlaylistDialog);
-    playlistNameLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
+    playlistNameLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save, Qt::Horizontal, this);
+    buttonBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
     buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(onSavePlaylistAccepted()));
 
-    layout->addWidget(nameLabel, 0, 0);
-    layout->addWidget(playlistNameLineEdit, 0, 1);
-    layout->addWidget(buttonBox, 0, 2);
+    layout->addWidget(nameLabel);
+    layout->addWidget(playlistNameLineEdit);
+    layout->addWidget(buttonBox);
 
     savePlaylistDialog->show();
+    connect(savePlaylistDialog, SIGNAL(destroyed()), this, SLOT(onDialogDestroyed()));
+    this->releaseKeyboard();
 }
 
 void NowPlayingWindow::onSavePlaylistAccepted()
@@ -1416,23 +1419,26 @@ void NowPlayingWindow::onSavePlaylistAccepted()
                               savePlaylistDialog);
         overwrite.exec();
         if (overwrite.result() == QMessageBox::Yes) {
+            savePlaylistDialog->close();
             mafw_playlist_manager->deletePlaylist(playlistNameLineEdit->text());
             playlist->duplicatePlaylist(playlistNameLineEdit->text());
-            savePlaylistDialog->close();
-        }
-        else if (overwrite.result() == QMessageBox::No) {
-            overwrite.close();
 #ifdef Q_WS_MAEMO_5
-            QMaemo5InformationBox::information(this, tr("Playlist not saved"));
+            QMaemo5InformationBox::information(this, tr("Playlist saved"));
 #endif
         }
-    }       else {
-        playlist->duplicatePlaylist(playlistNameLineEdit->text());
+    } else {
         savePlaylistDialog->close();
-    }
-#else
-    savePlaylistDialog->close();
+        playlist->duplicatePlaylist(playlistNameLineEdit->text());
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(this, tr("Playlist saved"));
 #endif
+    }
+#endif
+}
+
+void NowPlayingWindow::onDialogDestroyed()
+{
+    this->grabKeyboard();
 }
 
 void NowPlayingWindow::onDeleteFromNowPlaying()

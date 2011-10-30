@@ -114,7 +114,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
-        mime = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown mime)");
+        mime = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown type)");
 
         if (mime.startsWith("audio") || mime.startsWith("video")) {
             v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);

@@ -21,62 +21,51 @@
 void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QString artistName = index.data(UserRoleTitle).toString();
-    QString albumSongCount;
-    QPixmap albumArt;
 
-    albumSongCount.append(index.data(UserRoleAlbumCount).toString() + " ");
-    if(index.data(UserRoleAlbumCount).toInt() == 1)
-        albumSongCount.append(tr("album"));
-    else
-        albumSongCount.append(tr("albums"));
-
+    QString albumSongCount = index.data(UserRoleAlbumCount).toString() + " ";
+    albumSongCount.append( (index.data(UserRoleAlbumCount).toInt() == 1) ? tr("album") : tr("albums") );
     albumSongCount.append(", ");
-
     albumSongCount.append(index.data(UserRoleSongCount).toString() + " ");
-    if(index.data(UserRoleSongCount).toInt() == 1)
-        albumSongCount.append(tr("song"));
-    else
-        albumSongCount.append(tr("songs"));
+    albumSongCount.append( (index.data(UserRoleSongCount).toInt() == 1) ? tr("song") : tr("songs") );
 
-    if(!index.data(UserRoleAlbumArt).isNull())
-        albumArt = QPixmap(index.data(UserRoleAlbumArt).toString());
-    else
-        albumArt = QIcon::fromTheme(defaultAlbumIcon).pixmap(64);
+    QPixmap albumArt = index.data(UserRoleAlbumArt).isNull() ? QIcon::fromTheme(defaultAlbumIcon).pixmap(64) :
+                                                               QPixmap(index.data(UserRoleAlbumArt).toString());
 
     painter->save();
     QRect r = option.rect;
-    if(option.state & QStyle::State_Selected)
-    {
-        r = option.rect;
+
+    if (option.state & QStyle::State_Selected) {
 #ifdef Q_WS_MAEMO_5
         painter->drawImage(r, QImage("/etc/hildon/theme/images/TouchListBackgroundPressed.png"));
 #else
         painter->fillRect(r, option.palette.highlight().color());
 #endif
     }
-    QFont f = painter->font();
-    QPen defaultPen = painter->pen();
+
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
     QColor secondaryColor(156, 154, 156);
 #endif
 
-    r = option.rect;
+    painter->drawPixmap(r.right()-70+3, r.top()+3, 64, 64, albumArt);
+    int textWidth = r.width() - (15+70+15);
+
+    QFont f = painter->font();
+
     f.setPointSize(18);
     painter->setFont(f);
-    painter->drawText(15, r.top()+5, r.width(), r.height(), Qt::AlignTop|Qt::AlignLeft, artistName, &r);
+    QFontMetrics fm1(f);
+    artistName = fm1.elidedText(artistName, Qt::ElideRight, textWidth);
+    painter->drawText(15, r.top()+5, textWidth, r.height(), Qt::AlignTop|Qt::AlignLeft, artistName);
 
-    r = option.rect;
+    r.setBottom(r.bottom()-10);
     f.setPointSize(13);
     painter->setFont(f);
-    r.setBottom(r.bottom()-10);
     painter->setPen(QPen(secondaryColor));
-    painter->drawText(15, r.top(), r.width(), r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount, &r);
-    painter->setPen(defaultPen);;
-
-    r = option.rect;
-    painter->drawPixmap(r.right()-70, r.top()+3, 64, 64, albumArt);
+    QFontMetrics fm2(f);
+    artistName = fm2.elidedText(albumSongCount, Qt::ElideRight, textWidth);
+    painter->drawText(15, r.top(), textWidth, r.height(), Qt::AlignBottom|Qt::AlignLeft, albumSongCount);
 
     painter->restore();
 }
