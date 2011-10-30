@@ -326,7 +326,7 @@ void MusicWindow::onSearchTextChanged(QString text)
              else
                  ui->songList->item(i)->setHidden(true);
         } else if (this->currentList() == ui->albumList) {
-             if (ui->albumList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
+             if (ui->albumList->item(i)->data(UserRoleTitle).toString().toLower().indexOf(text.toLower()) != -1 ||
                  ui->albumList->item(i)->data(UserRoleValueText).toString().toLower().indexOf(text.toLower()) != -1)
                  ui->albumList->item(i)->setHidden(false);
              else
@@ -527,7 +527,7 @@ void MusicWindow::onAlbumSelected(QListWidgetItem *item)
     SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
     albumView->setAttribute(Qt::WA_DeleteOnClose);
     albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-    albumView->setWindowTitle(item->data(Qt::DisplayRole).toString());
+    albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 
     albumView->show();
 

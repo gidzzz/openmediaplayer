@@ -24,6 +24,12 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
 
+    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
+
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
+
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(onOrientationChanged()));
 
     ui->indicator->setFactory(factory);
@@ -54,9 +60,47 @@ void UpnpView::browseObjectId(QString objectId)
                                               0, MAFW_SOURCE_BROWSE_ALL);
 }
 
+void UpnpView::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
+void UpnpView::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
+        return;
+    else if ((e->key() == Qt::Key_Up || e->key() == Qt::Key_Down) && !ui->searchWidget->isHidden())
+        ui->objectList->setFocus();
+    else {
+        ui->objectList->clearSelection();
+        if (ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
+            ui->searchWidget->show();
+        }
+        if (!ui->searchEdit->hasFocus())
+            ui->searchEdit->setText(ui->searchEdit->text() + e->text());
+        ui->searchEdit->setFocus();
+    }
+}
+
+void UpnpView::onSearchTextChanged(QString text)
+{
+    for (int i = 0; i < ui->objectList->count(); i++) {
+        if (ui->objectList->item(i)->data(UserRoleTitle).toString().toLower().indexOf(text.toLower()) == -1)
+            ui->objectList->item(i)->setHidden(true);
+        else
+            ui->objectList->item(i)->setHidden(false);
+    }
+
+    if (text.isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    }
+}
+
 void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-
     if (browseId != this->browseId)
         return;
 

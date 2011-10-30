@@ -39,8 +39,8 @@ public:
 private:
     Ui::SingleAlbumView *ui;
     QString albumObjectId;
-    void keyPressEvent(QKeyEvent *);
-    void keyReleaseEvent(QKeyEvent *);
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleAllButton;
     void notifyOnAddedToNowPlaying(int songCount);

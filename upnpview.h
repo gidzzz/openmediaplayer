@@ -30,6 +30,7 @@ public slots:
 
 private slots:
     void onOrientationChanged();
+    void onSearchTextChanged(QString text);
     void onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
     void onContextMenuRequested(const QPoint &point);
     void onItemActivated(QListWidgetItem *item);
@@ -40,6 +41,8 @@ private slots:
     void onChildClosed();
 
 private:
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
     void notifyOnAddedToNowPlaying(int songCount);
     Ui::UpnpView *ui;
     uint browseId;

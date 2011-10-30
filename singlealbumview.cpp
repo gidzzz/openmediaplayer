@@ -106,7 +106,7 @@ void SingleAlbumView::listSongs()
 
 void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if(browseId != browseAllSongsId)
+    if (browseId != browseAllSongsId)
       return;
 
     if (metadata != NULL) {
@@ -142,7 +142,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         item->setData(UserRoleSongDuration, duration);
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
-        if(v != NULL) {
+        if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
             if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
@@ -175,7 +175,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
 void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 {
     this->albumObjectId = objectId;
-    if(mafwTrackerSource->isReady())
+    if (mafwTrackerSource->isReady())
         this->listSongs();
     else
         connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
@@ -209,7 +209,7 @@ void SingleAlbumView::orientationChanged()
 
 void SingleAlbumView::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key() == Qt::Key_Backspace)
+    if (e->key() == Qt::Key_Backspace)
         this->close();
 }
 
@@ -267,7 +267,7 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 
 void SingleAlbumView::onSearchTextChanged(QString text)
 {
-    for (int i=0; i < ui->songList->count(); i++) {
+    for (int i = 0; i < ui->songList->count(); i++) {
         if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
             ui->songList->item(i)->setHidden(true);
         else
@@ -436,7 +436,7 @@ void SingleAlbumView::onDeleteClicked()
                               QMessageBox::Yes | QMessageBox::No,
                               this);
     confirmDelete.exec();
-    if(confirmDelete.result() == QMessageBox::Yes) {
+    if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         delete ui->songList->currentItem();
     }
