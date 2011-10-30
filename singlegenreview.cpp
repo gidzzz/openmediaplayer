@@ -38,12 +38,12 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    shuffleAllButton = new QMaemo5ValueButton(shuffleText, this);
-    shuffleAllButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
-    shuffleAllButton->setValueText(" songs");
+    shuffleButton = new QMaemo5ValueButton(shuffleText, this);
+    shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
+    shuffleButton->setValueText(" songs");
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #else
-    shuffleAllButton = new QPushButton(shuffleText, this);
+    shuffleButton = new QPushButton(shuffleText, this);
 #endif
     ArtistListItemDelegate *delegate = new ArtistListItemDelegate(ui->artistList);
     ui->artistList->setItemDelegate(delegate);
@@ -52,17 +52,17 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 
     this->isShuffling = false;
 
-    shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
+    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     ui->verticalLayout->removeWidget(ui->artistList);
     ui->verticalLayout->removeWidget(ui->searchWidget);
-    ui->verticalLayout->addWidget(shuffleAllButton);
+    ui->verticalLayout->addWidget(shuffleButton);
     ui->verticalLayout->addWidget(ui->artistList);
     ui->verticalLayout->addWidget(ui->searchWidget);
 
     connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
     connect(ui->artistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
+    connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
@@ -208,7 +208,7 @@ void SingleGenreView::setSongCount(int count)
         songCount.append(tr("songs"));
     else
         songCount.append(tr("song"));
-    shuffleAllButton->setValueText(songCount);
+    shuffleButton->setValueText(songCount);
 #endif
 }
 

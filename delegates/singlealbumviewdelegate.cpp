@@ -20,52 +20,40 @@
 
 void SingleAlbumViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-        // Thanks to hqh for fapman, this code is based on the list in it.
-        QString songName = index.data(UserRoleSongTitle).toString();
+    QString title = index.data(UserRoleSongTitle).toString();
 
-        int duration = index.data(UserRoleSongDuration).toInt();
-        QString songLength;
-        switch (duration) {
-            case Duration::Blank:
-                songLength = "";
-                break;
-            case Duration::Unknown:
-                songLength = "--:--";
-                break;
-            default:
-                songLength = time_mmss(duration);
-        }
+    int duration = index.data(UserRoleSongDuration).toInt();
+    QString songLength = duration == Duration::Blank ? "" :
+                         duration == Duration::Unknown ? "--:--" :
+                                     time_mmss(duration);
 
-        painter->save();
-        QRect r = option.rect;
-        if(option.state & QStyle::State_Selected)
-        {
-            r = option.rect;
+    painter->save();
+    QRect r = option.rect;
+
+    if (option.state & QStyle::State_Selected) {
 #ifdef Q_WS_MAEMO_5
-            painter->drawImage(r, QImage("/etc/hildon/theme/images/TouchListBackgroundPressed.png"));
+        painter->drawImage(r, QImage("/etc/hildon/theme/images/TouchListBackgroundPressed.png"));
 #else
-            painter->fillRect(r, option.palette.highlight().color());
+        painter->fillRect(r, option.palette.highlight().color());
 #endif
-        }
-        QFont f = painter->font();
+    }
 
-        r = option.rect;
-        f.setPointSize(18);
-        QFontMetrics fm(f);
-        painter->setFont(f);
-        int pf = fm.width(songLength);
-        songName = fm.elidedText(songName, Qt::ElideRight, r.width()-pf-40);
+    QFontMetrics fm(painter->font());
 
-        painter->drawText(15, r.top(), r.width()-pf, r.height(), Qt::AlignVCenter|Qt::AlignLeft, songName, &r);
-
-        r = option.rect;
+    int titleWidth;
+    if (!songLength.isEmpty()) {
         r.setRight(r.right()-12);
-        f.setPointSize(18);
-        painter->setFont(f);
         painter->drawText(r, Qt::AlignVCenter|Qt::AlignRight, songLength, &r);
+        titleWidth = r.left();
+        r = option.rect;
+    } else
+        titleWidth = r.width();
 
-        painter->restore();
+    titleWidth = titleWidth - 15 - 15; // left and right margin
+    title = fm.elidedText(title, Qt::ElideRight, titleWidth);
+    painter->drawText(15, r.top(), titleWidth, r.height(), Qt::AlignVCenter|Qt::AlignLeft, title);
 
+    painter->restore();
 }
 
 QSize SingleAlbumViewDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const

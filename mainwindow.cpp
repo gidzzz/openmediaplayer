@@ -55,10 +55,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->loadThemeIcons();
     this->setButtonIcons();
     this->setLabelText();
-    ui->listWidget->hide();
+    ui->menuList->hide();
 
-    MainDelegate *delegate = new MainDelegate(ui->listWidget);
-    ui->listWidget->setItemDelegate(delegate);
+    ui->menuList->setItemDelegate(new MainDelegate(ui->menuList));
 
 #ifdef MAFW
     TAGSOURCE_AUDIO_PATH = "localtagfs::music/songs";
@@ -157,10 +156,10 @@ void MainWindow::setButtonIcons()
     ui->radioButton->setIcon(QIcon::fromTheme(radioIcon));
     ui->shuffleAllButton->setIcon(QIcon::fromTheme(shuffleIcon));
 
-    ui->listWidget->item(0)->setData(Qt::UserRole+1, musicIcon);
-    ui->listWidget->item(1)->setData(Qt::UserRole+1, videosIcon);
-    ui->listWidget->item(2)->setData(Qt::UserRole+1, radioIcon);
-    ui->listWidget->item(3)->setData(Qt::UserRole+1, shuffleIcon);
+    ui->menuList->item(0)->setIcon(QIcon::fromTheme(musicIcon));
+    ui->menuList->item(1)->setIcon(QIcon::fromTheme(videosIcon));
+    ui->menuList->item(2)->setIcon(QIcon::fromTheme(radioIcon));
+    ui->menuList->item(3)->setIcon(QIcon::fromTheme(shuffleIcon));
 }
 
 void MainWindow::setLabelText()
@@ -170,10 +169,10 @@ void MainWindow::setLabelText()
     ui->radioButtonLabel->setText(tr("Internet Radio"));
     ui->shuffleLabel->setText(tr("Shuffle all songs"));
 
-    ui->listWidget->item(0)->setData(Qt::UserRole, tr("Music"));
-    ui->listWidget->item(1)->setData(Qt::UserRole, tr("Videos"));
-    ui->listWidget->item(2)->setData(Qt::UserRole, tr("Internet Radio"));
-    ui->listWidget->item(3)->setData(Qt::UserRole, tr("Shuffle all songs"));
+    ui->menuList->item(0)->setText(tr("Music"));
+    ui->menuList->item(1)->setText(tr("Videos"));
+    ui->menuList->item(2)->setText(tr("Internet Radio"));
+    ui->menuList->item(3)->setText(tr("Shuffle all songs"));
 }
 
 void MainWindow::connectSignals()
@@ -182,7 +181,7 @@ void MainWindow::connectSignals()
     connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
-    connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
+    connect(ui->menuList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
     // TODO: Connect this to a slot.
     // connect(ui->indicator, SIGNAL(clicked()), this, SLOT();
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
@@ -334,8 +333,8 @@ void MainWindow::orientationChanged()
 #ifdef DEBUG
         qDebug() << "MainWindow: Orientation changed: Landscape.";
 #endif
-        if(!ui->listWidget->isHidden()) {
-            ui->listWidget->hide();
+        if(!ui->menuList->isHidden()) {
+            ui->menuList->hide();
         ui->songsButton->show();
         ui->songsButtonLabel->show();
         ui->videosButton->show();
@@ -364,9 +363,9 @@ void MainWindow::orientationChanged()
         ui->songCountL->hide();
         ui->videoCountL->hide();
         ui->stationCountL->hide();
-        ui->listWidget->setGeometry(QRect(0, 0, 480, 800));
-        if(ui->listWidget->isHidden())
-            ui->listWidget->show();
+        ui->menuList->setGeometry(QRect(0, 0, 480, 800));
+        if(ui->menuList->isHidden())
+            ui->menuList->show();
     }
     upnpControl->setGeometry(0, screenGeometry.height()-(70+55),
                              screenGeometry.width()-122, upnpControl->height());
@@ -495,7 +494,7 @@ void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, Q
         else
             countStr.append(" " + tr("songs"));
         ui->songCountL->setText(countStr);
-        ui->listWidget->item(0)->setData(Qt::UserRole+2, countStr);
+        ui->menuList->item(0)->setData(UserRoleValueText, countStr);
     } else if(objectId == TAGSOURCE_VIDEO_PATH) {
         if(count == 1)
             countStr.append(" " + tr("clip"));
@@ -504,7 +503,7 @@ void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, Q
         else
             countStr.append(" " + tr("clips"));
         ui->videoCountL->setText(countStr);
-        ui->listWidget->item(1)->setData(Qt::UserRole+2, countStr);
+        ui->menuList->item(1)->setData(UserRoleValueText, countStr);
     }
     if(!error.isEmpty())
         qDebug() << error;
@@ -525,7 +524,7 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
         ui->stationCountL->setText(tr("(no stations)"));
     else
         ui->stationCountL->setText(QString::number(count) + " " + tr("stations"));
-    ui->listWidget->item(2)->setData(Qt::UserRole+2, ui->stationCountL->text());
+    ui->menuList->item(2)->setData(UserRoleValueText, ui->stationCountL->text());
     if(!error.isEmpty())
         qDebug() << error;
 }
@@ -752,6 +751,6 @@ void MainWindow::onNowPlayingWindowHidden()
 void MainWindow::onChildClosed()
 {
     ui->indicator->restore();
-    ui->listWidget->clearSelection();
+    ui->menuList->clearSelection();
     this->setEnabled(true);
 }

@@ -170,7 +170,7 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-        albumView->setWindowTitle(item->text());
+        albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 
         albumView->show();
 

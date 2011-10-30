@@ -21,15 +21,13 @@
 void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QString title = index.data(UserRoleTitle).toString();
-    QPixmap thumbnail = QIcon(index.data(Qt::DecorationRole).value<QIcon>()).pixmap(128, 128);
-    QString duration = index.data(UserRoleValueText).toString();
+    QString description = index.data(UserRoleValueText).toString();
 
     painter->save();
     painter->setRenderHint(QPainter::SmoothPixmapTransform);
     QRect r = option.rect;
-    if(option.state & QStyle::State_Selected)
-    {
-        r = option.rect;
+
+    if (option.state & QStyle::State_Selected) {
 #ifdef Q_WS_MAEMO_5
         painter->drawImage(r, QImage("/etc/hildon/theme/images/TouchListBackgroundPressed.png"));
 #else
@@ -43,22 +41,22 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     QColor secondaryColor(156, 154, 156);
 #endif
 
-    r = option.rect;
-    painter->drawPixmap(r.x() + ((r.width()/2)-(128/2)), r.y()+3, 128, 128, thumbnail);
+    painter->drawPixmap(r.x()+(r.width()-128)/2, r.y()+3, 128, 128,
+                        qvariant_cast<QIcon>(index.data(Qt::DecorationRole)).pixmap(128, 128));
 
-    r = option.rect;
-    r.setLeft(r.left()+10);
-    r.setRight(r.right()-10);
+    int margin = ( r.width() - (10+128+10) )/2;
+    r.setLeft(r.left()+margin);
+    r.setRight(r.right()-margin);
 
     QFontMetrics fm(painter->font());
-    title = fm.elidedText(title, Qt::ElideRight, 138);
 
-    painter->drawText(r.x(), r.y()+134, r.width(), r.height(), Qt::AlignHCenter, title, &r);
+    title = fm.elidedText(title, Qt::ElideRight, r.width());
+    painter->drawText(r.x(), r.top()+134, r.width(), r.height(), Qt::AlignHCenter, title);
 
-    r = option.rect;
     painter->setPen(QPen(secondaryColor));
-    duration = fm.elidedText(duration, Qt::ElideRight, 138);
-    painter->drawText(r.x(), r.y()+ (142 + painter->font().pointSize()), r.width(), r.height(), Qt::AlignHCenter, duration, &r);
+
+    description = fm.elidedText(description, Qt::ElideRight, r.width());
+    painter->drawText(r.x(), r.top()+142+painter->font().pointSize(), r.width(), r.height(), Qt::AlignHCenter, description);
 
     painter->restore();
 }

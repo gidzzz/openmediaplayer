@@ -43,29 +43,29 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-    shuffleAllButton = new QMaemo5ValueButton(shuffleText, this);
-    shuffleAllButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
-    shuffleAllButton->setValueText("  songs");
+    shuffleButton = new QMaemo5ValueButton(shuffleText, this);
+    shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
+    shuffleButton->setValueText("  songs");
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #else
-    shuffleAllButton = new QPushButton(shuffleText, this);
+    shuffleButton = new QPushButton(shuffleText, this);
 #endif
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
 
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    shuffleAllButton->setIcon(QIcon(shuffleButtonIcon));
+    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     ui->verticalLayout->removeWidget(ui->songList);
     ui->verticalLayout->removeWidget(ui->searchWidget);
-    ui->verticalLayout->addWidget(shuffleAllButton);
+    ui->verticalLayout->addWidget(shuffleButton);
     ui->verticalLayout->addWidget(ui->songList);
     ui->verticalLayout->addWidget(ui->searchWidget);
 
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onBrowserContextMenuRequested(QPoint)));
-    connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
+    connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
@@ -530,7 +530,7 @@ void SinglePlaylistView::setSongCount(int count)
         songCount.append(tr("songs"));
     else
         songCount.append(tr("song"));
-    shuffleAllButton->setValueText(songCount);
+    shuffleButton->setValueText(songCount);
 #endif
 }
 

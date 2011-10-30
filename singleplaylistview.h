@@ -41,10 +41,10 @@ protected:
 private:
     Ui::SinglePlaylistView *ui;
 #ifdef Q_WS_MAEMO_5
-    QMaemo5ValueButton *shuffleAllButton;
+    QMaemo5ValueButton *shuffleButton;
     void notifyOnAddedToNowPlaying(int songCount);
 #else
-    QPushButton *shuffleAllButton;
+    QPushButton *shuffleButton;
 #endif
 
 #ifdef MAFW

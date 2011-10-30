@@ -242,7 +242,7 @@ border: none;
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QListWidget" name="menuList">
     <property name="geometry">
      <rect>
       <x>290</x>

@@ -387,6 +387,7 @@ void MusicWindow::hideLayoutContents()
 
 void MusicWindow::showAlbumView()
 {
+    ui->searchEdit->clear();
     this->hideLayoutContents();
     ui->albumList->show();
     this->populateMenuBar();
@@ -404,6 +405,7 @@ void MusicWindow::showAlbumView()
 
 void MusicWindow::showArtistView()
 {
+    ui->searchEdit->clear();
     this->hideLayoutContents();
     ui->artistList->show();
     this->populateMenuBar();
@@ -421,6 +423,7 @@ void MusicWindow::showArtistView()
 
 void MusicWindow::showGenresView()
 {
+    ui->searchEdit->clear();
     this->hideLayoutContents();
     ui->genresList->show();
     this->populateMenuBar();
@@ -438,6 +441,7 @@ void MusicWindow::showGenresView()
 
 void MusicWindow::showSongsView()
 {
+    ui->searchEdit->clear();
     this->hideLayoutContents();
     ui->songList->show();
     this->populateMenuBar();
@@ -455,6 +459,7 @@ void MusicWindow::showSongsView()
 
 void MusicWindow::showPlayListView()
 {
+    ui->searchEdit->clear();
     this->hideLayoutContents();
     ui->playlistList->show();
     this->populateMenuBar();

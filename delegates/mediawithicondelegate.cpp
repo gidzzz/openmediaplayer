@@ -19,7 +19,6 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     else {
         int duration = index.data(UserRoleSongDuration).toInt();
-
         QString songLength = duration == Duration::Blank ? "" :
                              duration == Duration::Unknown ? "--:--" :
                                          time_mmss(duration);
@@ -32,8 +31,7 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     #endif
         }
 
-        QFont f = painter->font();
-        QFontMetrics fm(f);
+        QFontMetrics fm(painter->font());
 
         int titleWidth;
         if (!songLength.isEmpty()) {
@@ -51,10 +49,9 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         title = fm.elidedText(title, Qt::ElideRight, titleWidth);
         painter->drawText(15+isz+15, r.top(), titleWidth, r.height(), Qt::AlignVCenter|Qt::AlignLeft, title);
 
-        if (index.data(Qt::DecorationRole).type() == QVariant::Icon) {
-            QPixmap icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole)).pixmap(isz);
-            painter->drawPixmap(15, r.top()+(70-isz)/2, isz, isz, icon);
-        }
+        if (index.data(Qt::DecorationRole).type() == QVariant::Icon)
+            painter->drawPixmap(15, r.top()+(70-isz)/2, isz, isz,
+                                qvariant_cast<QIcon>(index.data(Qt::DecorationRole)).pixmap(isz));
     }
 
     painter->restore();
