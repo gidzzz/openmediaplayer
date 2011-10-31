@@ -26,13 +26,8 @@ void MainDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     painter->save();
     QRect r = option.rect;
 
-    if (option.state & QStyle::State_Selected) {
-#ifdef Q_WS_MAEMO_5
-        painter->drawImage(r, QImage("/etc/hildon/theme/images/TouchListBackgroundPressed.png"));
-#else
-        painter->fillRect(r, option.palette.highlight().color());
-#endif
-    }
+    if (option.state & QStyle::State_Selected)
+        QStyledItemDelegate::paint(painter, option, QModelIndex());
 
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");

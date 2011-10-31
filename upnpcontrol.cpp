@@ -7,6 +7,13 @@ UpnpControl::UpnpControl(QWidget *parent, MafwAdapterFactory *factory) :
 {
     ui->setupUi(this);
 
+    QColor c = QMaemo5Style::standardColor("ActiveTextColor");
+
+    ui->upnpList->setStyleSheet(QString("QListWidget {background-color: transparent;}"
+                                        "QListWidget::item {background-color: transparent;}"
+                                        "QListWidget::item {selection-color: rgb(%1, %2, %3);}")
+                                        .arg(c.red()).arg(c.green()).arg(c.blue()));
+
     mafwUpnpSource = mafwFactory->getUpnpSource();
 
     connect(mafwUpnpSource, SIGNAL(sourceAdded(QString)), this, SLOT(onSourceAdded(QString)));

@@ -1163,6 +1163,7 @@ void MusicWindow::onAddToNowPlaying()
         if (row < 5) { // automatic playlist case
             QString filter;
             QString sorting;
+            songAddBufferSize = 0;
             int limit = QSettings().value("music/playlistSize").toInt();
             switch (row) {
                 case 1: filter = ""; sorting = "-added"; break;
@@ -1170,6 +1171,7 @@ void MusicWindow::onAddToNowPlaying()
                 case 3: filter = "(play-count>0)"; sorting = "-play-count,+title"; break;
                 case 4: filter = "(play-count=)"; sorting = "";
             }
+
             qDebug() << "connecting MusicWindow to signalSourceBrowseResult";
             connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                     this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));

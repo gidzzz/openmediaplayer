@@ -371,6 +371,7 @@ void MainWindow::orientationChanged()
                              screenGeometry.width()-122, upnpControl->height());
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
                                ui->indicator->width(), ui->indicator->height());
+    upnpControl->raise();
     ui->indicator->raise();
 }
 
