@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion("0.1");
     QApplication a(argc, argv);
 
-    QString langPath = "/opt/openmediaplayer/";
+    QString langPath = "/opt/openmediaplayer/lang/";
     // This thing returns the device language, not the current language
     //QString lang = QLocale::languageToString(QLocale::system().language());
 

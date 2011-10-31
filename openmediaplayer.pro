@@ -8,7 +8,8 @@ QT += core gui dbus declarative opengl network
 
 TARGET = openmediaplayer
 TEMPLATE = app
-TRANSLATIONS = openmediaplayer.ts
+TRANSLATIONS = lang/openmediaplayer.ts \
+               lang/Polish.ts
 
 DEFINES += MAFW
 INCLUDEPATH += /usr/lib/madde/linux-x86_64/sysroots/meego-core-armv7l-madde-sysroot-1.1-fs/usr/include/libmafw/
@@ -191,7 +192,8 @@ OTHER_FILES += \
     qml_carview/Playlist.qml \
     qml_carview/Slider.qml \
     qml_carview/SongView.qml \
-    qtc_packaging/meego.spec
+    qtc_packaging/meego.spec \
+    lang/Polish.qm
 
 qml_entertainmentview.files += qml_entertainmentview/entertainmentview.qml
 qml_entertainmentview.files += qml_entertainmentview/Slider.qml
@@ -205,5 +207,9 @@ qml_carview.files += qml_carview/Slider.qml
 qml_carview.files += qml_carview/SongView.qml
 qml_carview.path = /opt/openmediaplayer/qml/carview/
 
+lang.files += lang/Polish.qm
+lang.path = /opt/openmediaplayer/lang/
+
 INSTALLS += qml_entertainmentview
 INSTALLS += qml_carview
+INSTALLS += lang

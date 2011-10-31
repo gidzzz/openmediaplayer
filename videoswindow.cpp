@@ -293,12 +293,12 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
             item = new QListWidgetItem(ui->listWidget);
             item->setText("0_");
             item->setData(UserRoleSongDuration, Duration::Blank);
-            item->setData(UserRoleTitle, "Recorded by device camera");
+            item->setData(UserRoleTitle, tr("Recorded by device camera"));
             ui->listWidget->addItem(item);
             item = new QListWidgetItem(ui->listWidget);
             item->setText("2_");
             item->setData(UserRoleSongDuration, Duration::Blank);
-            item->setData(UserRoleTitle, "Films");
+            item->setData(UserRoleTitle, tr("Films"));
             ui->listWidget->addItem(item);
         }
 
