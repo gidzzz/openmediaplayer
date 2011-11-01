@@ -699,16 +699,8 @@ void MusicWindow::listPlaylists()
             listItem->setText(playlistName);
             listItem->setData(UserRoleSongCount, playlistCount);
             listItem->setData(UserRoleSongDuration, Duration::Blank);
-            QString valueText = QString::number(playlistCount) + " ";
+            listItem->setData(UserRoleValueText, tr("%n song(s)", "", playlistCount));
 
-            if ( playlistCount > 1 ) listItem->setData(Qt::UserRole+50, tr("songs"));
-            else listItem->setData(Qt::UserRole+50, tr("song"));
-
-            if (playlistCount == 1)
-                valueText.append(tr("song"));
-            else
-                valueText.append(tr("songs"));
-            listItem->setData(UserRoleValueText, valueText);
             ui->playlistList->addItem(listItem);
         }
     }
@@ -782,55 +774,33 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int, uint, QString obj
     GValue *v;
     if (browseId == this->browseRecentlyAddedId) {
         recentlyAddedCount++;
-        QString valueText = QString::number(recentlyAddedCount) + " ";
-        if (recentlyAddedCount == 1)
-            valueText.append(tr("song"));
-        else
-            valueText.append(tr("songs"));
-        ui->playlistList->item(1)->setData(UserRoleValueText, valueText);
+        ui->playlistList->item(1)->setData(UserRoleValueText, tr("%n song(s)", "", recentlyAddedCount));
+
     } else if (browseId == this->browseRecentlyPlayedId) {
         recentlyPlayedCount++;
-        QString valueText = QString::number(recentlyPlayedCount) + " ";
-        if (recentlyPlayedCount == 1)
-            valueText.append(tr("song"));
-        else
-            valueText.append(tr("songs"));
-        ui->playlistList->item(2)->setData(UserRoleValueText, valueText);
+        ui->playlistList->item(2)->setData(UserRoleValueText, tr("%n song(s)", "", recentlyPlayedCount));
+
     } else if (browseId == this->browseMostPlayedId) {
         mostPlayedCount++;
-        QString valueText = QString::number(mostPlayedCount) + " ";
-        if (mostPlayedCount == 1)
-            valueText.append(tr("song"));
-        else
-            valueText.append(tr("songs"));
-        ui->playlistList->item(3)->setData(UserRoleValueText, valueText);
+        ui->playlistList->item(3)->setData(UserRoleValueText, tr("%n song(s)", "", mostPlayedCount));
+
     } else if (browseId == this->browseNeverPlayedId) {
         neverPlayedCount++;
-        QString valueText = QString::number(neverPlayedCount) + " ";
-        if (neverPlayedCount == 1)
-            valueText.append(tr("song"));
-        else
-            valueText.append(tr("songs"));
-        ui->playlistList->item(4)->setData(UserRoleValueText, valueText);
+        ui->playlistList->item(4)->setData(UserRoleValueText, tr("%n song(s)", "", neverPlayedCount));
+
     } else if (browseId == this->browseImportedPlaylistsId) {
         QListWidgetItem *listItem = new QListWidgetItem();
+
         listItem->setData(UserRoleObjectID, objectId);
-        v = mafw_metadata_first (metadata,
-                                 MAFW_METADATA_KEY_TITLE);
+
+        v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
         listItem->setText(g_value_get_string (v));
 
-        v = mafw_metadata_first (metadata,
-                                 MAFW_METADATA_KEY_CHILDCOUNT_1);
+        v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
+        listItem->setData(UserRoleValueText, tr("%n song(s)", "", g_value_get_int(v)));
 
-        int songCount = g_value_get_int (v);
-
-        QString valueText = QString::number(songCount) + " ";
-        if (songCount == 1)
-            valueText.append(tr("song"));
-        else
-            valueText.append(tr("songs"));
-        listItem->setData(UserRoleValueText, valueText);
         listItem->setData(UserRoleSongDuration, Duration::Blank);
+
         ui->playlistList->addItem(listItem);
     }
     ui->playlistList->scroll(0,0);
@@ -848,17 +818,16 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ARTIST);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
         artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ALBUM);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem(ui->songList);
@@ -951,42 +920,33 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
     QListWidgetItem *item = new QListWidgetItem();
     if (metadata != NULL) {
         GValue *v;
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ALBUM);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown album)";
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ARTIST);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
         artist = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown artist)";
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_CHILDCOUNT_1);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
         songCount = v ? g_value_get_int(v) : -1;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI);
         if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
-            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
                 item->setIcon(QIcon(QString::fromUtf8(filename)));
-            }
         } else {
             item->setIcon(QIcon::fromTheme(defaultAlbumIcon));
         }
     }
 
-    if (artist != "__VV__")
-        item->setData(UserRoleValueText, artist);
-    else
-        item->setData(UserRoleValueText, tr("Various artists"));
+    item->setData(UserRoleValueText, (artist == "__VV__") ? tr("Various artists") : artist );
+    item->setData(UserRoleTitle, albumTitle);
     item->setData(UserRoleObjectID, objectId);
     item->setData(UserRoleSongCount, songCount);
-    item->setData(UserRoleTitle, albumTitle);
-
-    if ( songCount > 1 ) item->setData(Qt::UserRole+50, tr("songs"));
-    else item->setData(Qt::UserRole+50, tr("song"));
 
     ui->albumList->addItem(item);
+
     if (!error.isEmpty())
         qDebug() << error;
 
@@ -1005,10 +965,9 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
         return;
 
     QString title;
-    QString valueText;
-    int songCount = -1;
-    int albumCount = -1;
-    int artistCount = -1;
+    int songCount;
+    int albumCount;
+    int artistCount;
     GValue *v;
 
     v = mafw_metadata_first (metadata,
@@ -1039,44 +998,16 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     item->setData(UserRoleObjectID, objectId);
     item->setData(UserRoleSongDuration, Duration::Blank);
 
-    if ( songCount > 1 ) item->setData(Qt::UserRole+50, tr("songs"));
-    else item->setData(Qt::UserRole+50, tr("song"));
-    if ( albumCount > 1 ) item->setData(Qt::UserRole+51, tr("albums"));
-    else item->setData(Qt::UserRole+51, tr("album"));
-
-    valueText.append(QString::number(songCount));
-    valueText.append(" ");
-
-    if (songCount == 1)
-        valueText.append(tr("song"));
-    else
-        valueText.append(tr("songs"));
-
-    valueText.append(", ");
-
-    valueText.append(QString::number(albumCount));
-    valueText.append(" ");
-
-    if (albumCount == 1)
-        valueText.append(tr("album"));
-    else
-        valueText.append(tr("albums"));
-
-    valueText.append(", ");
-
-    valueText.append(QString::number(artistCount));
-    valueText.append(" ");
-
-    if (artistCount == 1)
-        valueText.append(tr("artist"));
-    else
-        valueText.append(tr("artists"));
-
+    QString valueText = tr("%n song(s)", "", songCount)
+                      + ", "
+                      + tr("%n album(s)", "", albumCount)
+                      + ", "
+                      + tr("%n artist(s)", "", artistCount);
     item->setData(UserRoleValueText, valueText);
 
     ui->genresList->addItem(item);
 
-    if(!error.isEmpty())
+    if (!error.isEmpty())
         qDebug() << error;
 
     if (remainingCount == 0) {
@@ -1288,12 +1219,7 @@ void MusicWindow::onAddToNowPlayingCallback(uint browseId, int remainingCount, u
 #ifdef Q_WS_MAEMO_5
 void MusicWindow::notifyOnAddedToNowPlaying(int songCount)
 {
-        QString addedToNp;
-        if (songCount == 1)
-            addedToNp = tr("clip added to now playing");
-        else
-            addedToNp = tr("clips added to now playing");
-        QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
+    QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
 #endif
 

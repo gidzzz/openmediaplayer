@@ -22,11 +22,10 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 {
     QString artistName = index.data(UserRoleTitle).toString();
 
-    QString albumSongCount = index.data(UserRoleAlbumCount).toString() + " ";
-    albumSongCount.append( (index.data(UserRoleAlbumCount).toInt() == 1) ? tr("album") : tr("albums") );
+    QString albumSongCount;
+    albumSongCount.append(tr("%n album(s)", "", index.data(UserRoleAlbumCount).toInt()));
     albumSongCount.append(", ");
-    albumSongCount.append(index.data(UserRoleSongCount).toString() + " ");
-    albumSongCount.append( (index.data(UserRoleSongCount).toInt() == 1) ? tr("song") : tr("songs") );
+    albumSongCount.append(tr("%n song(s)", "", index.data(UserRoleSongCount).toInt()));
 
     QPixmap albumArt = index.data(UserRoleAlbumArt).isNull() ? QIcon::fromTheme(defaultAlbumIcon).pixmap(64) :
                                                                QPixmap(index.data(UserRoleAlbumArt).toString());

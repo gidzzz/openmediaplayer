@@ -40,7 +40,6 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     setAttribute(Qt::WA_Maemo5StackedWindow);
     shuffleButton = new QMaemo5ValueButton(shuffleText, this);
     shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
-    shuffleButton->setValueText(" songs");
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #else
     shuffleButton = new QPushButton(shuffleText, this);
@@ -201,14 +200,7 @@ void SingleGenreView::setSongCount(int count)
 {
     this->songsInGenre = count;
 #ifdef Q_WS_MAEMO_5
-    QString songCount;
-    songCount = QString::number(count);
-    songCount.append(" ");
-    if(count != 1)
-        songCount.append(tr("songs"));
-    else
-        songCount.append(tr("song"));
-    shuffleButton->setValueText(songCount);
+    shuffleButton->setValueText(tr("%n song(s)", "", count));
 #endif
 }
 
@@ -378,12 +370,7 @@ void SingleGenreView::onShuffleButtonClicked()
 #ifdef Q_WS_MAEMO_5
 void SingleGenreView::notifyOnAddedToNowPlaying(int songCount)
 {
-        QString addedToNp;
-        if (songCount == 1)
-            addedToNp = tr("clip added to now playing");
-        else
-            addedToNp = tr("clips added to now playing");
-        QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
+    QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
 #endif
 

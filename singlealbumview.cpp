@@ -41,7 +41,6 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     setAttribute(Qt::WA_Maemo5StackedWindow);
     shuffleAllButton = new QMaemo5ValueButton(shuffleText, this);
     shuffleAllButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
-    shuffleAllButton->setValueText("  songs");
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #else
     shuffleAllButton = new QPushButton(shuffleText, this);
@@ -157,14 +156,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     }
 
 #ifdef Q_WS_MAEMO_5
-    QString songCount;
-    songCount = QString::number(ui->songList->count());
-    songCount.append(" ");
-    if(ui->songList->count() != 1)
-        songCount.append(tr("songs"));
-    else
-        songCount.append(tr("song"));
-    shuffleAllButton->setValueText(songCount);
+    shuffleAllButton->setValueText(tr("%n song(s)", "", ui->songList->count()));
 
     if (remainingCount == 0)
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
@@ -463,12 +455,7 @@ void SingleAlbumView::deleteCurrentAlbum()
 #ifdef Q_WS_MAEMO_5
 void SingleAlbumView::notifyOnAddedToNowPlaying(int songCount)
 {
-        QString addedToNp;
-        if (songCount == 1)
-            addedToNp = tr("clip added to now playing");
-        else
-            addedToNp = tr("clips added to now playing");
-        QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
+    QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
 #endif
 

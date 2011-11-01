@@ -304,16 +304,7 @@ void NowPlayingWindow::setAlbumImage(QString image)
 
 void NowPlayingWindow::setSongNumber(int currentSong, int numberOfSongs)
 {
-    QString songNumber;
-    songNumber.append(QString::number(currentSong));
-    songNumber.append("/");
-    songNumber.append(QString::number(numberOfSongs));
-    songNumber.append(" ");
-    if (numberOfSongs == 1)
-        songNumber.append(tr("song"));
-    else
-        songNumber.append(tr("songs"));
-    ui->songNumberLabel->setText(songNumber);
+    ui->songNumberLabel->setText(currentSong + " / " + tr("%n song(s)", "", numberOfSongs));
 }
 
 void NowPlayingWindow::updatePlaylistTimeLabel()

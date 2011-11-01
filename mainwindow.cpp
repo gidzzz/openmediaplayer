@@ -477,56 +477,40 @@ void MainWindow::countRadioStations()
 
 void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, QString error)
 {
-    int count = -1;
-    GValue *v;
-    v = mafw_metadata_first(metadata,
-                            MAFW_METADATA_KEY_CHILDCOUNT_1);
-    if(v)
-        count = g_value_get_int(v);
+    GValue *v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
+    int count = v ? g_value_get_int(v) : -1;
 
-    QString countStr;
-    countStr.setNum(count);
+    if (objectId == TAGSOURCE_AUDIO_PATH) {
+        QString countStr = (count == -1) ? tr("(no songs)") :
+                                           tr("%n song(s)", "", count);
 
-    if(objectId == TAGSOURCE_AUDIO_PATH) {
-        if(count == 1)
-            countStr.append(" " + tr("song"));
-        else if(count == -1)
-            countStr = tr("(no songs)");
-        else
-            countStr.append(" " + tr("songs"));
         ui->songCountL->setText(countStr);
         ui->menuList->item(0)->setData(UserRoleValueText, countStr);
-    } else if(objectId == TAGSOURCE_VIDEO_PATH) {
-        if(count == 1)
-            countStr.append(" " + tr("clip"));
-        else if(count == -1)
-            countStr = tr("(no videos)");
-        else
-            countStr.append(" " + tr("clips"));
+
+    } else if (objectId == TAGSOURCE_VIDEO_PATH) {
+        QString countStr = (count == -1) ? tr("(no videos)") :
+                                           tr("%n clip(s)", "", count);
+
         ui->videoCountL->setText(countStr);
         ui->menuList->item(1)->setData(UserRoleValueText, countStr);
     }
-    if(!error.isEmpty())
+
+    if (!error.isEmpty())
         qDebug() << error;
 }
 
 void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
 {
-    int count = -1;
-    GValue *v;
-    v = mafw_metadata_first(metadata,
-                            MAFW_METADATA_KEY_CHILDCOUNT_1);
-    if(v)
-        count = g_value_get_int(v);
+    GValue *v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
+    int count = v ? g_value_get_int(v) : -1;
 
-    if(count == 1)
-        ui->stationCountL->setText(QString::number(count) + " " + tr("station"));
-    else if(count == -1)
-        ui->stationCountL->setText(tr("(no stations)"));
-    else
-        ui->stationCountL->setText(QString::number(count) + " " + tr("stations"));
-    ui->menuList->item(2)->setData(UserRoleValueText, ui->stationCountL->text());
-    if(!error.isEmpty())
+    QString countStr = (count == -1) ? tr("(no stations)") :
+                                       tr("%n station(s)", "", count);
+
+    ui->stationCountL->setText(countStr);
+    ui->menuList->item(2)->setData(UserRoleValueText, countStr);
+
+    if (!error.isEmpty())
         qDebug() << error;
 }
 

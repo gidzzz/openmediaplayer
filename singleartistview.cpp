@@ -114,23 +114,15 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
 
     if (metadata != NULL) {
         GValue *v;
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ALBUM);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown album)";
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_CHILDCOUNT_1);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
         childcount = v ? g_value_get_int(v) : -1;
 
-        if (childcount != -1) {
-            songCount.append(QString::number(childcount));
-            songCount.append(" ");
-
-            if (childcount == 1)
-                songCount.append(tr("song"));
-            else
-                songCount.append(tr("songs"));
-        }
+        if (childcount != -1)
+            songCount = tr("%n song(s)", "", childcount);
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI);
         if (v != NULL) {
@@ -233,7 +225,7 @@ void SingleArtistView::setSongCount(int songCount)
     this->numberOfSongs = songCount;
 #endif
     if (songCount != -1) {
-        ui->albumList->item(0)->setData(UserRoleValueText, QString::number(songCount) + " " + tr("songs"));
+        ui->albumList->item(0)->setData(UserRoleValueText, tr("%n song(s)", "", songCount));
         ui->albumList->scroll(1, 1);
     }
 }
@@ -441,12 +433,7 @@ void SingleArtistView::onContainerChanged(QString objectId)
 #ifdef Q_WS_MAEMO_5
 void SingleArtistView::notifyOnAddedToNowPlaying(int songCount)
 {
-        QString addedToNp;
-        if (songCount == 1)
-            addedToNp = tr("clip added to now playing");
-        else
-            addedToNp = tr("clips added to now playing");
-        QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
+    QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
 #endif
 
