@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl_PL">
+<TS version="2.0" language="pl" sourcelanguage="en">
 <context>
     <name>AboutWindow</name>
     <message>
@@ -591,6 +591,11 @@ p, li { white-space: pre-wrap; }
             <numerusform>%n utwory</numerusform>
             <numerusform>%n utworów</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="725"/>
+        <source>There is no active Internet connection</source>
+        <translation>Brak połączenia z Internetem</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1138"/>

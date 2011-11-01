@@ -722,7 +722,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
                     } else
                     {
-                        ui->lyricsText->setText("There is no active Internet connection");
+                        ui->lyricsText->setText(tr("There is no active Internet connection"));
                     }
                 }
             }

@@ -573,6 +573,11 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../nowplayingwindow.cpp" line="725"/>
+        <source>There is no active Internet connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../nowplayingwindow.cpp" line="1138"/>
         <source>Information not available</source>
         <translation type="unfinished"></translation>
