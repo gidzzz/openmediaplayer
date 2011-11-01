@@ -532,23 +532,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="621"/>
-        <location filename="../nowplayingwindow.cpp" line="625"/>
-        <location filename="../nowplayingwindow.cpp" line="1117"/>
+        <location filename="../nowplayingwindow.cpp" line="624"/>
+        <location filename="../nowplayingwindow.cpp" line="628"/>
+        <location filename="../nowplayingwindow.cpp" line="1120"/>
         <source>(unknown song)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="629"/>
-        <location filename="../nowplayingwindow.cpp" line="1121"/>
+        <location filename="../nowplayingwindow.cpp" line="632"/>
+        <location filename="../nowplayingwindow.cpp" line="1124"/>
         <source>(unknown artist)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="633"/>
-        <location filename="../nowplayingwindow.cpp" line="1125"/>
+        <location filename="../nowplayingwindow.cpp" line="636"/>
+        <location filename="../nowplayingwindow.cpp" line="1128"/>
         <source>(unknown album)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -564,14 +564,14 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1232"/>
+        <location filename="../nowplayingwindow.cpp" line="1235"/>
         <source>Clear now playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1228"/>
-        <location filename="../nowplayingwindow.cpp" line="1372"/>
+        <location filename="../nowplayingwindow.cpp" line="1231"/>
+        <location filename="../nowplayingwindow.cpp" line="1375"/>
         <source>Save playlist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -606,90 +606,90 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="686"/>
+        <location filename="../nowplayingwindow.cpp" line="689"/>
         <source>Loading lyrics...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="717"/>
-        <location filename="../nowplayingwindow.cpp" line="1607"/>
+        <location filename="../nowplayingwindow.cpp" line="720"/>
+        <location filename="../nowplayingwindow.cpp" line="1610"/>
         <source>Fetching lyrics...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1144"/>
+        <location filename="../nowplayingwindow.cpp" line="1147"/>
         <source>Information not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1199"/>
+        <location filename="../nowplayingwindow.cpp" line="1202"/>
         <source>Clear all songs from now playing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1230"/>
+        <location filename="../nowplayingwindow.cpp" line="1233"/>
         <source>Set as ringing tone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1231"/>
+        <location filename="../nowplayingwindow.cpp" line="1234"/>
         <source>Delete from now playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1233"/>
+        <location filename="../nowplayingwindow.cpp" line="1236"/>
         <source>Share</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1242"/>
+        <location filename="../nowplayingwindow.cpp" line="1245"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1380"/>
+        <location filename="../nowplayingwindow.cpp" line="1383"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1387"/>
+        <location filename="../nowplayingwindow.cpp" line="1390"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1417"/>
+        <location filename="../nowplayingwindow.cpp" line="1420"/>
         <source>Playlist with the same name exists, overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1426"/>
-        <location filename="../nowplayingwindow.cpp" line="1433"/>
+        <location filename="../nowplayingwindow.cpp" line="1429"/>
+        <location filename="../nowplayingwindow.cpp" line="1436"/>
         <source>Playlist saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1532"/>
-        <location filename="../nowplayingwindow.cpp" line="1539"/>
+        <location filename="../nowplayingwindow.cpp" line="1535"/>
+        <location filename="../nowplayingwindow.cpp" line="1542"/>
         <source>Select album art</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1533"/>
+        <location filename="../nowplayingwindow.cpp" line="1536"/>
         <source>Reset album art</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1550"/>
+        <location filename="../nowplayingwindow.cpp" line="1553"/>
         <source>Reset album art?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1561"/>
+        <location filename="../nowplayingwindow.cpp" line="1564"/>
         <source>Edit lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1562"/>
+        <location filename="../nowplayingwindow.cpp" line="1565"/>
         <source>Reload lyrics</source>
         <translation type="unfinished"></translation>
     </message>
