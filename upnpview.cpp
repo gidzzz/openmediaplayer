@@ -253,12 +253,7 @@ int UpnpView::appendAllToPlaylist()
 void UpnpView::notifyOnAddedToNowPlaying(int songCount)
 {
 #ifdef Q_WS_MAEMO_5
-        QString addedToNp;
-        if (songCount == 1)
-            addedToNp = tr("clip added to now playing");
-        else
-            addedToNp = tr("clips added to now playing");
-        QMaemo5InformationBox::information(this, QString::number(songCount) + " " + addedToNp);
+    QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 #endif
 }
 

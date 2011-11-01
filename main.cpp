@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
     // This thing returns the device language, not the current language
     //QString lang = QLocale::languageToString(QLocale::system().language());
 
-    // Open locale file to chech current language
-    QString line, lang;
+    // Open locale file to check current locale
+    QString line, locale;
     QFile data( "/etc/osso-af-init/locale" );
     if (data.open(QFile::ReadOnly | QFile::Truncate))
     {
@@ -49,28 +49,23 @@ int main(int argc, char *argv[])
             line = out.readLine();
             if ( line.indexOf("export LANG") == 0 )
             {
-                lang = line;
-                lang.replace("export LANG=","");
+                locale = line;
+                locale.replace("export LANG=","");
             }
         }
     }
     data.close();
 
-    // Convert en_GB to English, es_ES to Spanish...
-    QLocale::setDefault(lang);
-    lang = QLocale::languageToString(QLocale(lang).language());
-    qDebug() << "Your language is" << lang;
+    QLocale::setDefault(locale);
+    qDebug() << "Your locale is" << locale;
 
     // Install language file
     QTranslator translator;
-    if (!lang.isEmpty() && !langPath.isEmpty())
-    {
-        if (QFile::exists(langPath + lang + ".qm"))
-        {
-            translator.load(langPath + lang);
-            a.installTranslator(&translator);
-        }
-    }
+    if (translator.load(langPath + "openmediaplayer." + locale)) {
+        qDebug() << "Translator successfully loaded";
+        a.installTranslator(&translator);
+    } else
+        qDebug() << "Translator failed to load";
 
     QTime t(0,0);
     t.start();
