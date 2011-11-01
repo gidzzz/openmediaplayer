@@ -528,9 +528,10 @@ void NowPlayingWindow::onKeyTimeout()
 
 void NowPlayingWindow::forgetClick()
 {
-    clickedItem = NULL;
+    if (clickedItem) onPlaylistItemActivated(clickedItem);
     ui->songPlaylist->setDragEnabled(false);
     selectItemByRow(lastPlayingSong->value().toInt());
+    clickedItem = NULL;
 }
 
 bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
@@ -551,13 +552,14 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
         selectItemByRow(lastPlayingSong->value().toInt());
     }
 
+    else if (event->type() == QEvent::MouseButtonPress) {
+        clickedItem = ui->songPlaylist->itemAt(0, static_cast<QMouseEvent*>(event)->y());
+    }
+
     else if (event->type() == QEvent::MouseButtonRelease) {
-        if (!clickedItem) {
-            clickedItem = ui->songPlaylist->currentItem();
-            clickTimer->start();
-        }
-        else if (clickedItem == ui->songPlaylist->currentItem())
-            onPlaylistItemActivated(clickedItem);
+        if (clickedItem != ui->songPlaylist->currentItem())
+            clickedItem = NULL;
+        clickTimer->start();
     }
 
     return false;
@@ -566,6 +568,7 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
 void NowPlayingWindow::onItemDoubleClicked()
 {
     ui->songPlaylist->setDragEnabled(true);
+    clickedItem = NULL;
     clickTimer->start();
 }
 
