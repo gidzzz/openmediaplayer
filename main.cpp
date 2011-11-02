@@ -64,8 +64,15 @@ int main(int argc, char *argv[])
     if (translator.load(langPath + "openmediaplayer." + locale)) {
         qDebug() << "Translator successfully loaded";
         a.installTranslator(&translator);
-    } else
+    } else {
         qDebug() << "Translator failed to load";
+        qDebug() << "Falling back to English";
+        if (translator.load(langPath + "openmediaplayer.en")) {
+            qDebug() << "Translator successfully loaded";
+            a.installTranslator(&translator);
+        } else
+            qDebug() << "Translator failed to load";
+    }
 
     QTime t(0,0);
     t.start();
