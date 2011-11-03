@@ -43,16 +43,16 @@ p, li { white-space: pre-wrap; }
         <location filename="../delegates/artistlistitemdelegate.cpp" line="26"/>
         <source>%n album(s)</source>
         <translation>
-            <numerusform>album</numerusform>
-            <numerusform>album</numerusform>
+            <numerusform>%n album</numerusform>
+            <numerusform>%n album</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../delegates/artistlistitemdelegate.cpp" line="28"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>låt</numerusform>
-            <numerusform>låtar</numerusform>
+            <numerusform>%n låt</numerusform>
+            <numerusform>%n låtar</numerusform>
         </translation>
     </message>
 </context>
@@ -255,8 +255,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../mainwindow.cpp" line="485"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>låt</numerusform>
-            <numerusform>låtar</numerusform>
+            <numerusform>%n låt</numerusform>
+            <numerusform>%n låtar</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -429,8 +429,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../musicwindow.cpp" line="1001"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>låt</numerusform>
-            <numerusform>låtar</numerusform>
+            <numerusform>%n låt</numerusform>
+            <numerusform>%n låtar</numerusform>
         </translation>
     </message>
     <message>
@@ -494,16 +494,16 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../musicwindow.cpp" line="1003"/>
         <source>%n album(s)</source>
         <translation>
-            <numerusform>album</numerusform>
-            <numerusform>album</numerusform>
+            <numerusform>%n album</numerusform>
+            <numerusform>%n album</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="1005"/>
         <source>%n artist(s)</source>
         <translation>
-            <numerusform>artist</numerusform>
-            <numerusform>artister</numerusform>
+            <numerusform>%n artist</numerusform>
+            <numerusform>%n artister</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -591,8 +591,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../nowplayingwindow.cpp" line="307"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>låt</numerusform>
-            <numerusform>låtar</numerusform>
+            <numerusform>%n låt</numerusform>
+            <numerusform>%n låtar</numerusform>
         </translation>
     </message>
     <message>
@@ -842,8 +842,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlealbumview.cpp" line="159"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>låt</numerusform>
-            <numerusform>låtar</numerusform>
+            <numerusform>%n låt</numerusform>
+            <numerusform>%n låtar</numerusform>
         </translation>
     </message>
     <message>
@@ -914,8 +914,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleartistview.cpp" line="228"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>låt</numerusform>
-            <numerusform>låtar</numerusform>
+            <numerusform>%n låt</numerusform>
+            <numerusform>%n låtar</numerusform>
         </translation>
     </message>
     <message>
@@ -974,8 +974,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlegenreview.cpp" line="203"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>låt</numerusform>
-            <numerusform>låtar</numerusform>
+            <numerusform>%n låt</numerusform>
+            <numerusform>%n låtar</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1092,8 +1092,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.cpp" line="520"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>låt</numerusform>
-            <numerusform>låtar</numerusform>
+            <numerusform>%n låt</numerusform>
+            <numerusform>%n låtar</numerusform>
         </translation>
     </message>
 </context>
