@@ -24,6 +24,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
+    ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
+
     this->setAttribute(Qt::WA_DeleteOnClose);
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")

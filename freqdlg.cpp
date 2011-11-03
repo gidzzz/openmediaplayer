@@ -7,13 +7,13 @@ FreqDlg::FreqDlg(QWidget *parent) :
     ui(new Ui::FreqDlg)
 {
     ui->setupUi(this);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Done"));
+
     res = "";
 
-    this->setWindowTitle(dgettext("osso-fm-transmitter", "fmtx_ti_select_frequency"));
+    this->setWindowTitle(tr("Select frequency"));
     frequency = new GConfItem("/system/fmtx/frequency");
     refreshFreqValues();
-
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Done"));
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     this->orientationChanged();
@@ -51,7 +51,7 @@ double FreqDlg::selectedFreq() const
 void FreqDlg::setSelectedFreq(double d)
 {
     int selectedInteger = d;
-    int selectedFraction = ((d - selectedInteger) * 10);
+    int selectedFraction = qCeil((d - selectedInteger) * 10);
     ui->integers->setCurrentRow(selectedInteger - _minFreq);
     for (int i = 0; i < ui->fractions->count(); i++) {
         if (ui->fractions->item(i)->text().toInt() == selectedFraction) {
@@ -65,11 +65,7 @@ void FreqDlg::setSelectedFreq(double d)
 
 QString FreqDlg::currentValueText() const
 {
-    double num = frequency->value().toDouble() / 1000;
-    QString res = QString::number(num);
-    res.append(" Mhz");
-    return res;
-    //return ui->integers->currentItem()->text() + "." + ui->fractions->currentItem()->text() + " " + tr("MHz");
+    return ui->integers->currentItem()->text() + "." + ui->fractions->currentItem()->text() + " " + tr("MHz");
 }
 
 void FreqDlg::refreshFreqValues()
@@ -157,6 +153,6 @@ void FreqDlg::setValue(QString property, QVariant value)
 
 void FreqDlg::on_buttonBox_accepted()
 {
-    res = ui->integers->currentItem()->text() + "." + ui->fractions->currentItem()->text() + " " + tr("MHz");
+    res = currentValueText();
     this->accept();
 }

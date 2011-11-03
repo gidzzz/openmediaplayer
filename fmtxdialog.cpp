@@ -24,14 +24,16 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
     selector(new FreqDlg(this))
 {
     ui->setupUi(this);
+    ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
+
     setAttribute(Qt::WA_DeleteOnClose);
 
 #ifdef Q_WS_MAEMO_5
-    freqButton = new QMaemo5ValueButton(" " + QString(dgettext("osso-fm-transmitter", "fmtx_fi_frequency")), this);
+    freqButton = new QMaemo5ValueButton(" " + tr("Frequency"), this);
     freqButton->setValueLayout(QMaemo5ValueButton::ValueBesideText);
     //freqButton->setPickSelector(selector);
-    ui->fmtxCheckbox->setText(dgettext("osso-fm-transmitter", "fmtx_fi_fmtx_on_off"));
-    this->setWindowTitle(dgettext("osso-fm-transmitter", "fmtx_ti_fm_transmitter"));
+    ui->fmtxCheckbox->setText(tr("FM transmitter on"));
+    this->setWindowTitle(tr("FM transmitter"));
 #else
     freqButton = new QPushButton("Frequency", this);
 #endif
@@ -47,10 +49,9 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
     else if (state == "n/a") {
         ui->fmtxCheckbox->setEnabled(false);
 #ifdef Q_WS_MAEMO_5
-        ui->fmtxCheckbox->setText(dgettext("osso-fm-transmitter", "fmtx_ni_disabled"));
+        ui->fmtxCheckbox->setText(tr("FM transmitter disabled"));
 #endif
     }
-    ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
     connect(freqButton, SIGNAL(clicked()), this, SLOT(showDialog()));
     connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
@@ -128,10 +129,12 @@ void FMTXDialog::onCheckboxClicked()
         if (startable == "true")
             return;
         else if (startable == "Headphones are connected") {
-            this->showErrorNote(dgettext("osso-fm-transmitter", "fmtx_ni_cable_error"));
+            this->showErrorNote(tr("Unable to use FM transmitter while headset or TV out cable is connected.\n"
+                                   "Unplug cable to continue using FM transmitter."));
         }
         else if (startable == "Usb device is connected") {
-            this->showErrorNote(dgettext("osso-fm-transmitter", "fmtx_ni_usb_error"));
+            this->showErrorNote(tr("Unable to use FM transmitter while USB is connected.\n"
+                                   "Unplug USB to continue using FM transmitter."));
         }
     }
 #endif

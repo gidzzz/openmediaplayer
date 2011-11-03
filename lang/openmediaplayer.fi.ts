@@ -103,29 +103,58 @@ p, li { white-space: pre-wrap; }
     <name>FMTXDialog</name>
     <message>
         <location filename="../fmtxdialog.ui" line="14"/>
+        <location filename="../fmtxdialog.cpp" line="36"/>
         <source>FM transmitter</source>
         <translation>FM-lähetin</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.ui" line="45"/>
+        <location filename="../fmtxdialog.cpp" line="35"/>
         <source>FM transmitter on</source>
         <translation>FM-lähetin käytössä</translation>
     </message>
     <message>
-        <location filename="../fmtxdialog.cpp" line="53"/>
+        <location filename="../fmtxdialog.cpp" line="27"/>
         <source>Save</source>
         <translation>Tallenna</translation>
+    </message>
+    <message>
+        <location filename="../fmtxdialog.cpp" line="32"/>
+        <source>Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fmtxdialog.cpp" line="52"/>
+        <source>FM transmitter disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fmtxdialog.cpp" line="132"/>
+        <source>Unable to use FM transmitter while headset or TV out cable is connected.
+Unplug cable to continue using FM transmitter.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fmtxdialog.cpp" line="136"/>
+        <source>Unable to use FM transmitter while USB is connected.
+Unplug USB to continue using FM transmitter.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FreqDlg</name>
     <message>
-        <location filename="../freqdlg.cpp" line="16"/>
+        <location filename="../freqdlg.cpp" line="10"/>
         <source>Done</source>
         <translation>Valmis</translation>
     </message>
     <message>
-        <location filename="../freqdlg.cpp" line="160"/>
+        <location filename="../freqdlg.cpp" line="14"/>
+        <source>Select frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../freqdlg.cpp" line="68"/>
         <source>MHz</source>
         <translation>MHz</translation>
     </message>
@@ -637,7 +666,7 @@ p, li { white-space: pre-wrap; }
         <translation>Nimi</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1381"/>
+        <location filename="../nowplayingwindow.cpp" line="1380"/>
         <source>Save</source>
         <translation>Tallenna</translation>
     </message>
@@ -760,6 +789,11 @@ p, li { white-space: pre-wrap; }
         <location filename="../settingsdialog.ui" line="110"/>
         <source>* Requires modified FMTXD</source>
         <translation>* Vaatii muokatun FMTXD:n</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="27"/>
+        <source>Save</source>
+        <translation>Tallenna</translation>
     </message>
 </context>
 <context>

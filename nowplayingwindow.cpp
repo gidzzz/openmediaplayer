@@ -1377,8 +1377,8 @@ void NowPlayingWindow::savePlaylist()
     playlistNameLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save, Qt::Horizontal, this);
-    buttonBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
     buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
+    buttonBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(onSavePlaylistAccepted()));
 
     layout->addWidget(nameLabel);

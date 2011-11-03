@@ -61,18 +61,25 @@ int main(int argc, char *argv[])
 
     // Install language file
     QTranslator translator;
-    if (translator.load(langPath + "openmediaplayer." + locale)) {
+    if (translator.load("openmediaplayer." + locale, langPath)) {
         qDebug() << "Translator successfully loaded";
         a.installTranslator(&translator);
     } else {
         qDebug() << "Translator failed to load";
         qDebug() << "Falling back to English";
-        if (translator.load(langPath + "openmediaplayer.en")) {
+        if (translator.load("openmediaplayer.en", langPath)) {
             qDebug() << "Translator successfully loaded";
             a.installTranslator(&translator);
         } else
             qDebug() << "Translator failed to load";
     }
+
+    QTranslator translator_qt;
+    if (translator_qt.load("qt_" + locale, "/usr/share/qt4/translations/"))
+        qDebug() << "Standard Qt translation successfully loaded";
+    else
+        qDebug() << "Standard Qt translation failed to load";
+    a.installTranslator(&translator_qt);
 
     QTime t(0,0);
     t.start();

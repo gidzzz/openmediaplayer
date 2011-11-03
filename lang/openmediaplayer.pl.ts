@@ -91,29 +91,61 @@ p, li { white-space: pre-wrap; }
     <name>FMTXDialog</name>
     <message>
         <location filename="../fmtxdialog.ui" line="14"/>
+        <location filename="../fmtxdialog.cpp" line="36"/>
         <source>FM transmitter</source>
         <translation>Nadajnik FM</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.ui" line="45"/>
+        <location filename="../fmtxdialog.cpp" line="35"/>
         <source>FM transmitter on</source>
         <translation>Nadajnik FM włączony</translation>
     </message>
     <message>
-        <location filename="../fmtxdialog.cpp" line="53"/>
+        <location filename="../fmtxdialog.cpp" line="27"/>
         <source>Save</source>
         <translation>Zapisz</translation>
+    </message>
+    <message>
+        <location filename="../fmtxdialog.cpp" line="32"/>
+        <source>Frequency</source>
+        <translation>Częstotliwość</translation>
+    </message>
+    <message>
+        <location filename="../fmtxdialog.cpp" line="52"/>
+        <source>FM transmitter disabled</source>
+        <translation>Nadajnik FM niedostępny</translation>
+    </message>
+    <message>
+        <location filename="../fmtxdialog.cpp" line="132"/>
+        <source>Unable to use FM transmitter while headset or TV out cable is connected.
+Unplug cable to continue using FM transmitter.</source>
+        <translation>Nie można korzystać z nadajnika FM po podłączeniu słuchawek lub kabla TV.
+Aby korzystać z nadajnika, odłącz kabel.
+        </translation>
+    </message>
+    <message>
+        <location filename="../fmtxdialog.cpp" line="136"/>
+        <source>Unable to use FM transmitter while USB is connected.
+Unplug USB to continue using FM transmitter.</source>
+        <translation>Nie można korzystać z nadajnika FM po podłączeniu kabla USB.
+Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
 </context>
 <context>
     <name>FreqDlg</name>
     <message>
-        <location filename="../freqdlg.cpp" line="16"/>
+        <location filename="../freqdlg.cpp" line="10"/>
         <source>Done</source>
         <translation>Gotowe</translation>
     </message>
     <message>
-        <location filename="../freqdlg.cpp" line="160"/>
+        <location filename="../freqdlg.cpp" line="14"/>
+        <source>Select frequency</source>
+        <translation>Wybierz częstotliwość</translation>
+    </message>
+    <message>
+        <location filename="../freqdlg.cpp" line="68"/>
         <source>MHz</source>
         <translation>MHz</translation>
     </message>
@@ -633,7 +665,7 @@ p, li { white-space: pre-wrap; }
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1381"/>
+        <location filename="../nowplayingwindow.cpp" line="1380"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
@@ -756,6 +788,11 @@ p, li { white-space: pre-wrap; }
         <location filename="../settingsdialog.ui" line="110"/>
         <source>* Requires modified FMTXD</source>
         <translation>* Wymaga zmodyfikowanego FMTXD</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="27"/>
+        <source>Save</source>
+        <translation>Zapisz</translation>
     </message>
 </context>
 <context>
