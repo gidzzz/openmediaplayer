@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fi" sourcelanguage="en">
+<TS version="2.0" language="fi_FI" sourcelanguage="en">
 <context>
     <name>AboutWindow</name>
     <message>
@@ -15,7 +15,11 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;Open Media Player&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;Open Media Player&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../aboutwindow.ui" line="82"/>
@@ -121,24 +125,26 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../fmtxdialog.cpp" line="32"/>
         <source>Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Taajuus</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="52"/>
         <source>FM transmitter disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>FM-lähetin ei käytössä</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="132"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>FM-lähetintä ei voi käyttää, kun kuulokemikrofoni tai TV-lähtö-kaapeli on kytketty.
+Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="136"/>
         <source>Unable to use FM transmitter while USB is connected.
 Unplug USB to continue using FM transmitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>FM-lähetintä ei voi käyttää, kun USB-kaapeli on kytketty.
+Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     </message>
 </context>
 <context>
@@ -151,7 +157,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../freqdlg.cpp" line="14"/>
         <source>Select frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse taajuus</translation>
     </message>
     <message>
         <location filename="../freqdlg.cpp" line="68"/>
@@ -241,7 +247,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>Media player</source>
-        <translation>Mediasoitin</translation>
+        <translation>Media player</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="390"/>
@@ -263,6 +269,33 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../mainwindow.ui" line="416"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../mainwindow.cpp" line="35"/>
+        <location filename="../mainwindow.cpp" line="485"/>
+        <source>%n song(s)</source>
+        <translation>
+            <numerusform>%n kappale</numerusform>
+            <numerusform>%n kappaletta</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../mainwindow.cpp" line="36"/>
+        <location filename="../mainwindow.cpp" line="492"/>
+        <source>%n clip(s)</source>
+        <translation>
+            <numerusform>%n leike</numerusform>
+            <numerusform>%n leikettä</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../mainwindow.cpp" line="37"/>
+        <location filename="../mainwindow.cpp" line="508"/>
+        <source>%n station(s)</source>
+        <translation>
+            <numerusform>%n asema</numerusform>
+            <numerusform>%n asemaa</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="167"/>
@@ -288,24 +321,6 @@ Unplug USB to continue using FM transmitter.</source>
         <source>Shuffle all songs</source>
         <translation>Satunnaistoisto</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="485"/>
-        <source>%n song(s)</source>
-        <translation>
-            <numerusform>%n kappale</numerusform>
-            <numerusform>%n kappaletta</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="492"/>
-        <source>%n clip(s)</source>
-        <translation>
-            <numerusform>%n leike</numerusform>
-            <numerusform>%n leikettä</numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../mainwindow.cpp" line="484"/>
         <source>(no songs)</source>
@@ -320,15 +335,6 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../mainwindow.cpp" line="507"/>
         <source>(no stations)</source>
         <translation>(ei asemia)</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="508"/>
-        <source>%n station(s)</source>
-        <translation>
-            <numerusform>%n asema</numerusform>
-            <numerusform>%n asemaa</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="624"/>
@@ -470,7 +476,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="728"/>
         <source>Most played</source>
-        <translation>Suosituimmat</translation>
+        <translation>Eniten soitetut</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="728"/>
@@ -638,7 +644,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1193"/>
         <source>Clear all songs from now playing?</source>
-        <translation>Poista kaikki kappaleet nyt soitettavista?</translation>
+        <translation>Poistetaanko kaikki kappaleet nyt soitettavista?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1224"/>
@@ -679,7 +685,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../nowplayingwindow.cpp" line="1420"/>
         <location filename="../nowplayingwindow.cpp" line="1427"/>
         <source>Playlist saved</source>
-        <translation>Tallennettu</translation>
+        <translation>Soittolista tallennettu</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1526"/>
@@ -695,7 +701,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1544"/>
         <source>Reset album art?</source>
-        <translation>Nollaa kansikuva?</translation>
+        <translation>Nollataanko kansikuva?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1555"/>
@@ -753,7 +759,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="45"/>
         <source>On Media Player exit:</source>
-        <translation>Suljettaessa:</translation>
+        <translation>Suljettaessa sovellus:</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="53"/>
@@ -824,7 +830,8 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Lisää kappaleet nyt soitettaviin</translation>
+        <translation>Lisää kappaleet
+nyt soitettaviin</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
@@ -915,7 +922,8 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>Lisää kappaleet nyt soitettaviin</translation>
+        <translation>Lisää kappaleet
+nyt soitettaviin</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
@@ -1095,12 +1103,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleplaylistview.cpp" line="502"/>
         <source>Delete song?</source>
-        <translation>Poista kappale?</translation>
+        <translation>Poistetaanko kappale?</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="503"/>
         <source>Are you sure you want to delete this song?</source>
-        <translation>Poistetaanko valittu kappale?</translation>
+        <translation>Oletko varma, että haluat poistaa tämän kappaleen?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="520"/>
@@ -1149,7 +1157,8 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>Lisää kappaleet nyt soitettaviin</translation>
+        <translation>Lisää kappaleet
+nyt soitettaviin</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="114"/>
@@ -1185,12 +1194,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="158"/>
         <source>Delete video?</source>
-        <translation>Poista video?</translation>
+        <translation>Poistetaanko video?</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="159"/>
         <source>Are you sure you want to delete this video?</source>
-        <translation>Poistetaanko valittu video?</translation>
+        <translation>Oletko varma, että haluat poistaa tämän videon?</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="526"/>
@@ -1296,17 +1305,17 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="574"/>
         <source>No playlist assigned</source>
-        <translation>Soittolistaa ei määrätty</translation>
+        <translation>Soittolistaa ei määritetty</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="576"/>
         <source>Media index is not in bound with playlist items</source>
-        <translation>Mediaindeksiä ei ole sidottu soittolistan kohteisiin</translation>
+        <translation>Mediaindeksi ei ole sidottuna soittolistan kohteisiin</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="578"/>
         <source>Unable to start playback</source>
-        <translation>Ei voi toistaa</translation>
+        <translation>Toistoa ei voi aloittaa</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="580"/>
@@ -1321,12 +1330,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="584"/>
         <source>Unable to seek position in media</source>
-        <translation>Videon kohtaa ei voi hakea</translation>
+        <translation>Median toistokohtaa ei voi hakea</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="586"/>
         <source>Unable to retrieve current position in media</source>
-        <translation>Median nykyistä kohtaa ei voi hakea</translation>
+        <translation>Median nykyistä toistokohtaa ei voi hakea</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="588"/>
@@ -1374,7 +1383,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videoswindow.cpp" line="175"/>
         <source>Videos - categories</source>
-        <translation>Videos - luokat</translation>
+        <translation>Videot - luokat</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="237"/>
