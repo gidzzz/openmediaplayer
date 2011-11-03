@@ -12,7 +12,8 @@ TRANSLATIONS = lang/openmediaplayer.ts \
                lang/openmediaplayer.en.ts\
                lang/openmediaplayer.es.ts \
                lang/openmediaplayer.fi.ts \
-               lang/openmediaplayer.pl.ts
+               lang/openmediaplayer.pl.ts \
+               lang/openmediaplayer.sv.ts
 
 DEFINES += MAFW
 INCLUDEPATH += /usr/lib/madde/linux-x86_64/sysroots/meego-core-armv7l-madde-sysroot-1.1-fs/usr/include/libmafw/
@@ -199,7 +200,8 @@ OTHER_FILES += \
     lang/openmediaplayer.en.qm \
     lang/openmediaplayer.es.qm \
     lang/openmediaplayer.fi.qm \
-    lang/openmediaplayer.pl.qm
+    lang/openmediaplayer.pl.qm \
+    lang/openmediaplayer.sv.qm
 
 qml_entertainmentview.files += qml_entertainmentview/entertainmentview.qml
 qml_entertainmentview.files += qml_entertainmentview/Slider.qml
@@ -217,6 +219,7 @@ lang.files += lang/openmediaplayer.en.qm
 lang.files += lang/openmediaplayer.es.qm
 lang.files += lang/openmediaplayer.fi.qm
 lang.files += lang/openmediaplayer.pl.qm
+lang.files += lang/openmediaplayer.sv.qm
 lang.path = /opt/openmediaplayer/lang/
 
 INSTALLS += qml_entertainmentview
