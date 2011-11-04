@@ -93,6 +93,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     carView = 0;
     enableLyrics = QSettings().value("lyrics/enable").toBool();
     lazySliders = QSettings().value("main/lazySliders").toBool();
+    reverseTime = QSettings().value("main/reverseTime").toBool();
 
     ui->songPlaylist->setDragDropMode(QAbstractItemView::InternalMove);
     ui->songPlaylist->viewport()->setAcceptDrops(true);
@@ -172,6 +173,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     this->connectSignals();
 
     ui->songPlaylist->viewport()->installEventFilter(this);
+    ui->currentPositionLabel->installEventFilter(this);
 
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
@@ -528,29 +530,38 @@ void NowPlayingWindow::forgetClick()
 bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
 {
 
-    if (event->type() == QEvent::DragMove) {
-        dragInProgress = true;
+    if (object == ui->currentPositionLabel && event->type() == QEvent::MouseButtonPress) {
+        reverseTime = !reverseTime;
+        QSettings().setValue("main/reverseTime", reverseTime);
+        ui->currentPositionLabel->setText(time_mmss(reverseTime ? ui->songProgress->value()-songDuration :
+                                                                  ui->songProgress->value()));
     }
 
-    else if (event->type() == QEvent::Drop) {
-        static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
-        emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
-        dragInProgress = false;
-    }
+    else { // object == ui->songPlaylist
+        if (event->type() == QEvent::DragMove) {
+            dragInProgress = true;
+        }
 
-    else if (event->type() == QEvent::Leave) {
-        dragInProgress = false;
-        selectItemByRow(lastPlayingSong->value().toInt());
-    }
+        else if (event->type() == QEvent::Drop) {
+            static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
+            emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
+            dragInProgress = false;
+        }
 
-    else if (event->type() == QEvent::MouseButtonPress) {
-        clickedItem = ui->songPlaylist->itemAt(0, static_cast<QMouseEvent*>(event)->y());
-    }
+        else if (event->type() == QEvent::Leave) {
+            dragInProgress = false;
+            selectItemByRow(lastPlayingSong->value().toInt());
+        }
 
-    else if (event->type() == QEvent::MouseButtonRelease) {
-        if (clickedItem != ui->songPlaylist->currentItem())
-            clickedItem = NULL;
-        clickTimer->start();
+        else if (event->type() == QEvent::MouseButtonPress) {
+            clickedItem = ui->songPlaylist->itemAt(0, static_cast<QMouseEvent*>(event)->y());
+        }
+
+        else if (event->type() == QEvent::MouseButtonRelease) {
+            if (clickedItem != ui->songPlaylist->currentItem())
+                clickedItem = NULL;
+            clickTimer->start();
+        }
     }
 
     return false;
@@ -593,7 +604,6 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_i
                                                                               MAFW_METADATA_KEY_ALBUM_ART_URI,
                                                                               MAFW_METADATA_KEY_RENDERER_ART_URI,
                                                                               MAFW_METADATA_KEY_DURATION,
-                                                                              MAFW_METADATA_KEY_IS_SEEKABLE,
                                                                               MAFW_METADATA_KEY_LYRICS));
     if (!error.isNull() && !error.isEmpty())
         qDebug() << error;
@@ -606,7 +616,6 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         QString artist;
         QString album;
         QString albumArt;
-        bool isSeekable;
         int duration;
         GValue *v;
 
@@ -648,11 +657,6 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
         if ( newSong || (title!=ui->songTitleLabel->whatsThis()) )
         {
-
-            v = mafw_metadata_first(metadata,
-                                    MAFW_METADATA_KEY_IS_SEEKABLE);
-            isSeekable = v ? g_value_get_boolean (v) : false;
-
             v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
             if (v != NULL) {
                 const gchar* file_uri = g_value_get_string(v);
@@ -741,8 +745,6 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
             ui->trackLengthLabel->setText(time_mmss(duration));
             ui->songProgress->setRange(0, duration);
-            if (isSeekable)
-                ui->songProgress->setEnabled(true);
 
             newSong = false;
 
@@ -934,19 +936,20 @@ void NowPlayingWindow::onPositionSliderReleased()
 {
 #ifdef MAFW
     mafwrenderer->setPosition(SeekAbsolute, ui->songProgress->value());
-    ui->currentPositionLabel->setText(time_mmss(ui->songProgress->value()));
+    int position = ui->songProgress->value();
+    ui->currentPositionLabel->setText(time_mmss(reverseTime ? ui->songProgress->value()-songDuration :
+                                                              ui->songProgress->value()));
 #endif
 }
 
 void NowPlayingWindow::onPositionSliderMoved(int position)
 {
-    ui->currentPositionLabel->setText(time_mmss(position));
+    ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-songDuration : position));
 #ifdef MAFW
     if (!lazySliders)
         mafwrenderer->setPosition(SeekAbsolute, position);
 #endif
 }
-
 
 #ifdef MAFW
 void NowPlayingWindow::onNextButtonClicked()
@@ -986,7 +989,7 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
 {
     currentSongPosition = position;
     if (!ui->songProgress->isSliderDown())
-        ui->currentPositionLabel->setText(time_mmss(position));
+        ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-songDuration : position));
 
     if (this->songDuration != 0 && this->songDuration != -1 && entertainmentView == 0 && carView == 0) {
 #ifdef DEBUG

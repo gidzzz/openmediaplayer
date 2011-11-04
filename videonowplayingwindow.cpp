@@ -62,6 +62,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     positionTimer->setInterval(1000);
 
     lazySliders = QSettings().value("main/lazySliders").toBool();
+    reverseTime = QSettings().value("main/reverseTime").toBool();
 
     this->isOverlayVisible = true;
     this->gotInitialState = false;
@@ -72,6 +73,8 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     this->setIcons();
     this->connectSignals();
     ui->volumeSlider->hide();
+
+    ui->currentPositionLabel->installEventFilter(this);
 
     this->showOverlay(false);
 
@@ -98,6 +101,21 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
     mafw_metadata_release(metadata);
 #endif
     delete ui;
+}
+
+bool VideoNowPlayingWindow::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonRelease)
+        return true;
+
+    if (event->type() == QEvent::MouseButtonPress) {
+        reverseTime = !reverseTime;
+        QSettings().setValue("main/reverseTime", reverseTime);
+        ui->currentPositionLabel->setText(time_mmss(reverseTime ? ui->progressBar->value()-videoLength :
+                                                                  ui->progressBar->value()));
+        return true;
+    }
+    return false;
 }
 
 void VideoNowPlayingWindow::setIcons()
@@ -260,7 +278,7 @@ void VideoNowPlayingWindow::stateChanged(int state)
 {
     this->mafwState = state;
 
-    if(state == Paused) {
+    if (state == Paused) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
@@ -270,10 +288,10 @@ void VideoNowPlayingWindow::stateChanged(int state)
         mafwrenderer->getPosition();
         this->pausedPosition = this->currentPosition;
         mafwrenderer->getPosition();
-        if(positionTimer->isActive())
+        if (positionTimer->isActive())
             positionTimer->stop();
     }
-    else if(state == Playing) {
+    else if (state == Playing) {
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
@@ -283,10 +301,10 @@ void VideoNowPlayingWindow::stateChanged(int state)
 #ifdef Q_WS_MAEMO_5
         this->setDNDAtom(true);
 #endif
-        if(!positionTimer->isActive())
+        if (!positionTimer->isActive())
             positionTimer->start();
     }
-    else if(state == Stopped) {
+    else if (state == Stopped) {
         currentPosition = 0;
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
@@ -294,14 +312,14 @@ void VideoNowPlayingWindow::stateChanged(int state)
 #ifdef Q_WS_MAEMO_5
         this->setDNDAtom(false);
 #endif
-        if(positionTimer->isActive())
+        if (positionTimer->isActive())
             positionTimer->stop();
         if (this->gotInitialState && !this->errorOccured) {
             this->close();
             delete this; // why is it not deleted automatically, despite WA_DeleteOnClose?
         }
     }
-    else if(state == Transitioning) {
+    else if (state == Transitioning) {
         ui->progressBar->setEnabled(false);
         ui->progressBar->setValue(0);
         ui->currentPositionLabel->setText("00:00");
@@ -373,7 +391,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
                                 MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
-        this->length = duration;
+        this->videoLength = duration;
 
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_PAUSED_POSITION);
@@ -483,13 +501,14 @@ void VideoNowPlayingWindow::onSliderReleased()
 {
 #ifdef MAFW
     mafwrenderer->setPosition(SeekAbsolute, ui->progressBar->value());
-    ui->currentPositionLabel->setText(time_mmss(ui->progressBar->value()));
+    ui->currentPositionLabel->setText(time_mmss(reverseTime ? ui->progressBar->value()-videoLength :
+                                                              ui->progressBar->value()));
 #endif
 }
 
 void VideoNowPlayingWindow::onSliderMoved(int position)
 {
-    ui->currentPositionLabel->setText(time_mmss(position));
+    ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-videoLength : position));
 #ifdef MAFW
     if (!lazySliders)
         mafwrenderer->setPosition(SeekAbsolute, position);
@@ -509,7 +528,7 @@ void VideoNowPlayingWindow::onPositionChanged(int position, QString)
     if (this->mafwState == Paused)
          this->pausedPosition = this->currentPosition;
     if (!ui->progressBar->isSliderDown() && ui->progressBar->isVisible()) {
-        ui->currentPositionLabel->setText(time_mmss(position));
+        ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-videoLength : position));
         if (ui->progressBar->isEnabled())
             ui->progressBar->setValue(position);
     }

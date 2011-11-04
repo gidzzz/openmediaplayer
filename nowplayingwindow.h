@@ -107,6 +107,7 @@ private:
     bool lazySliders;
     bool dragInProgress;
     bool portrait;
+    bool reverseTime;
     QListWidgetItem *clickedItem;
     int songDuration;
     int currentSongPosition;

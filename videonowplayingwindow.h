@@ -40,6 +40,7 @@ public:
     explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~VideoNowPlayingWindow();
     void playObject(QString objectId);
+    bool eventFilter(QObject *object, QEvent *event);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -56,6 +57,7 @@ private:
     QTimer *positionTimer;
     QString objectIdToPlay;
     bool lazySliders;
+    bool reverseTime;
     bool portrait;
     bool isOverlayVisible;
     bool gotInitialState;
@@ -69,7 +71,7 @@ private:
     MafwPlaylistAdapter* playlist;
     int colorkey;
     int mafwState;
-    int length;
+    int videoLength;
     int pausedPosition;
     int currentPosition;
     bool errorOccured;
