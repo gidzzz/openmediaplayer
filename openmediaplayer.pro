@@ -120,6 +120,18 @@ FORMS += \
     upnpview.ui \
     upnpcontrol.ui
 
+#generate translations
+isEmpty(QMAKE_LRELEASE) {
+  win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe
+  else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+}
+
+for(TSFILE, TRANSLATIONS) {
+    exists($$TSFILE) {
+	system($$QMAKE_LRELEASE $$TSFILE)
+    }
+}
+
 symbian {
     TARGET.UID3 = 0xedf29700
     # TARGET.CAPABILITY += 
