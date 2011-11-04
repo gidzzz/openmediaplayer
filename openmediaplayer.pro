@@ -9,7 +9,8 @@ QT += core gui dbus declarative opengl network
 TARGET = openmediaplayer
 TEMPLATE = app
 TRANSLATIONS = lang/openmediaplayer.ts \
-               lang/openmediaplayer.en.ts\
+               lang/openmediaplayer.de.ts \
+               lang/openmediaplayer.en.ts \
                lang/openmediaplayer.es.ts \
                lang/openmediaplayer.fi.ts \
                lang/openmediaplayer.pl.ts \
@@ -197,6 +198,7 @@ OTHER_FILES += \
     qml_carview/Slider.qml \
     qml_carview/SongView.qml \
     qtc_packaging/meego.spec \
+    lang/openmediaplayer.de.qm \
     lang/openmediaplayer.en.qm \
     lang/openmediaplayer.es.qm \
     lang/openmediaplayer.fi.qm \
@@ -215,6 +217,7 @@ qml_carview.files += qml_carview/Slider.qml
 qml_carview.files += qml_carview/SongView.qml
 qml_carview.path = /opt/openmediaplayer/qml/carview/
 
+lang.files += lang/openmediaplayer.de.qm
 lang.files += lang/openmediaplayer.en.qm
 lang.files += lang/openmediaplayer.es.qm
 lang.files += lang/openmediaplayer.fi.qm
