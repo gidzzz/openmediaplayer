@@ -255,8 +255,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../mainwindow.cpp" line="492"/>
         <source>%n clip(s)</source>
         <translation type="unfinished">
-            <numerusform>%n lagt till klipp till i nu spelas</numerusform>
-            <numerusform>%n lagt till klippen till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
+            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -501,8 +501,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../musicwindow.cpp" line="1222"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n lagt till klipp till i nu spelas</numerusform>
-            <numerusform>%n lagt till klippen till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
+            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
         </translation>
     </message>
 </context>
@@ -871,8 +871,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlealbumview.cpp" line="458"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n lagt till klipp till i nu spelas</numerusform>
-            <numerusform>%n lagt till klippen till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
+            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
         </translation>
     </message>
 </context>
@@ -928,8 +928,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleartistview.cpp" line="436"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n lagt till klipp till i nu spelas</numerusform>
-            <numerusform>%n lagt till klippen till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
+            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
         </translation>
     </message>
 </context>
@@ -973,8 +973,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlegenreview.cpp" line="373"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n lagt till klipp till i nu spelas</numerusform>
-            <numerusform>%n lagt till klippen till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
+            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
         </translation>
     </message>
 </context>
@@ -1040,8 +1040,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.cpp" line="316"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n lagt till klipp till i nu spelas</numerusform>
-            <numerusform>%n lagt till klippen till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
+            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
         </translation>
     </message>
     <message>
@@ -1147,8 +1147,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../upnpview.cpp" line="256"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n lagt till klipp till i nu spelas</numerusform>
-            <numerusform>%n lagt till klippen till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
+            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
         </translation>
     </message>
 </context>
