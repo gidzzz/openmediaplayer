@@ -24,14 +24,13 @@
 #include <X11/Xutil.h>
 #endif
 
-VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
+VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapter *mafwSource) :
     QMainWindow(parent),
     ui(new Ui::VideoNowPlayingWindow)
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
-    mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter())
+    mafwSource(mafwSource ? mafwSource : factory->getTrackerSource())
 #endif
 {
     /* Make Qt do the work of keeping the overlay the magic color  */
@@ -97,7 +96,7 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
     if (currentPosition == 0)
         mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
     mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, currentPosition);
-    mafwTrackerSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
+    mafwSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
     mafw_metadata_release(metadata);
 #endif
     delete ui;
@@ -145,7 +144,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->progressBar, SLOT(setEnabled(bool)));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
-    connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
@@ -180,7 +179,7 @@ void VideoNowPlayingWindow::onDeleteClicked()
     confirmDelete.exec();
 
     if (confirmDelete.result() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(objectIdToPlay.toUtf8());
+        mafwSource->destroyObject(objectIdToPlay.toUtf8());
         this->close();
     }
 #endif
@@ -190,15 +189,15 @@ void VideoNowPlayingWindow::onShareClicked()
 {
 #ifdef MAFW
     mafwrenderer->pause();
-    mafwTrackerSource->getUri(this->objectIdToPlay.toUtf8());
-    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+    mafwSource->getUri(this->objectIdToPlay.toUtf8());
+    connect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 #endif
 }
 
 #ifdef MAFW
 void VideoNowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
 {
-    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
+    disconnect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
     if (objectId != this->objectIdToPlay)
         return;
@@ -345,8 +344,6 @@ void VideoNowPlayingWindow::orientationChanged()
 void VideoNowPlayingWindow::onLandscapeMode()
 {
     this->setIcons();
-    ui->deleteButton->show();
-    ui->shareButton->show();
     ui->volumeButton->show();
     //QRect screenGeometry = QApplication::desktop()->screenGeometry();
     QRect screenGeometry = QRect(0,0,800,480);
@@ -373,8 +370,18 @@ void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 void VideoNowPlayingWindow::playObject(QString objectId)
 {
 #ifdef MAFW
+    if (objectId.startsWith("_uuid_")) { // check whether the object comes from UPnP
+        ui->shareButton->hide();
+        ui->deleteButton->hide();
+        ui->toolbarLayout->setContentsMargins(20,0,0,0);
+    } else {
+        ui->shareButton->show();
+        ui->deleteButton->show();
+        ui->toolbarLayout->setContentsMargins(0,0,0,0);
+    }
+
     this->objectIdToPlay = objectId;
-    this->mafwTrackerSource->getMetadata(objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
+    this->mafwSource->getMetadata(objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
                                                                              MAFW_METADATA_KEY_PAUSED_POSITION));
     QTimer::singleShot(200, this, SLOT(playVideo()));
 #endif
@@ -387,14 +394,12 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         this->videoLength = duration;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_PAUSED_POSITION);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_POSITION);
         pausedPosition = v ? g_value_get_int (v) : -1;
 #ifdef MAFW
         if (pausedPosition != -1)

@@ -37,7 +37,7 @@ class VideoNowPlayingWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0, MafwSourceAdapter *mafwSource = 0);
     ~VideoNowPlayingWindow();
     void playObject(QString objectId);
     bool eventFilter(QObject *object, QEvent *event);
@@ -67,8 +67,7 @@ private:
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter *mafwTrackerSource;
-    MafwPlaylistAdapter* playlist;
+    MafwSourceAdapter *mafwSource;
     int colorkey;
     int mafwState;
     int videoLength;

@@ -62,7 +62,7 @@ namespace Duration {
         Unknown = -1,
         Blank = -2
     };
-};
+}
 
 // handy function to generate "mm:ss" time string
 inline QString time_mmss(int seconds)

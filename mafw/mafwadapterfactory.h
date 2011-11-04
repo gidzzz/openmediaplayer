@@ -18,10 +18,6 @@ public:
     MafwPlaylistAdapter *getPlaylistAdapter();
     int mafwState();
 
-signals:
-
-public slots:
-
 private:
     MafwRendererAdapter *mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;

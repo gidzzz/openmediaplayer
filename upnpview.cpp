@@ -197,7 +197,7 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
     } else if (mime.startsWith("video")) {
         this->setEnabled(false);
         mafwFactory->getRenderer()->stop(); // prevents the audio playlist from starting after the video ends
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory, mafwSource);
         window->showFullScreen();
 
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));

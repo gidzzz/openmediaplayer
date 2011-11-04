@@ -1153,18 +1153,23 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 
     QFont f = ui->songTitleLabel->font();
     QFontMetrics fm(f);
+
     ui->songTitleLabel->setWhatsThis(item->data(UserRoleSongTitle).toString());
     QString temp = fm.elidedText(item->data(UserRoleSongTitle).toString(), Qt::ElideRight, 420);
     ui->songTitleLabel->setText(temp);
+
     ui->artistLabel->setWhatsThis(item->data(UserRoleSongArtist).toString());
     temp = fm.elidedText(item->data(UserRoleSongArtist).toString(), Qt::ElideRight, 420);
     ui->artistLabel->setText(temp);
+
     ui->albumNameLabel->setWhatsThis(item->data(UserRoleSongAlbum).toString());
     temp = fm.elidedText(item->data(UserRoleSongAlbum).toString(), Qt::ElideRight, 420);
     ui->albumNameLabel->setText(temp);
+
     ui->currentPositionLabel->setText("00:00");
     this->songDuration = item->data(UserRoleSongDuration).toInt();
     ui->trackLengthLabel->setText(time_mmss(songDuration));
+
     mafwrenderer->gotoIndex(ui->songPlaylist->row(item));
     if (this->mafwState == Stopped)
         mafwrenderer->play();
