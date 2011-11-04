@@ -13,6 +13,7 @@ TRANSLATIONS = lang/openmediaplayer.ts \
                lang/openmediaplayer.en.ts \
                lang/openmediaplayer.es.ts \
                lang/openmediaplayer.fi.ts \
+               lang/openmediaplayer.fr.ts \
                lang/openmediaplayer.pl.ts \
                lang/openmediaplayer.sv.ts
 
@@ -202,6 +203,7 @@ OTHER_FILES += \
     lang/openmediaplayer.en.qm \
     lang/openmediaplayer.es.qm \
     lang/openmediaplayer.fi.qm \
+    lang/openmediaplayer.fr.qm \
     lang/openmediaplayer.pl.qm \
     lang/openmediaplayer.sv.qm
 
@@ -221,6 +223,7 @@ lang.files += lang/openmediaplayer.de.qm
 lang.files += lang/openmediaplayer.en.qm
 lang.files += lang/openmediaplayer.es.qm
 lang.files += lang/openmediaplayer.fi.qm
+lang.files += lang/openmediaplayer.fr.qm
 lang.files += lang/openmediaplayer.pl.qm
 lang.files += lang/openmediaplayer.sv.qm
 lang.path = /opt/openmediaplayer/lang/
