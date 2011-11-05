@@ -32,6 +32,7 @@ MafwSourceAdapter::MafwSourceAdapter(QString source):
 MafwSourceAdapter::MafwSourceAdapter(MafwSource *source):
     sourceIsReady(true)
 {
+    g_object_ref(source);
     sourceName = mafw_extension_get_name(MAFW_EXTENSION(source));
     mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
     mafw_shared_init(mafw_registry, NULL);
@@ -51,7 +52,7 @@ QString MafwSourceAdapter::getNameByUUID(QString uuid)
 
 MafwSourceAdapter::~MafwSourceAdapter()
 {
-
+    g_object_unref(mafw_source);
 }
 
 bool
@@ -149,7 +150,7 @@ MafwSourceAdapter::onSourceRemoved(MafwRegistry*,
   if(static_cast<MafwSourceAdapter*>(user_data)->sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(source))) == 0)
   {
     g_object_unref(source);
-    static_cast<MafwSourceAdapter*>(user_data)->mafw_source = MAFW_SOURCE(source);
+    static_cast<MafwSourceAdapter*>(user_data)->mafw_source = NULL;
     static_cast<MafwSourceAdapter*>(user_data)->disconnectSourceSignals();
   }
 }

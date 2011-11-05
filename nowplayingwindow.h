@@ -82,6 +82,7 @@ private:
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
+    MafwSourceAdapter *metadataSource;
     MafwPlaylistAdapter* playlist;
     MafwPlaylist *mafwPlaylist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;

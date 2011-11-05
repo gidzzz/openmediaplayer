@@ -51,6 +51,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
+    metadataSource(NULL),
     playlist(factory->getPlaylistAdapter())
 #else
     ui(new Ui::NowPlayingWindow)
@@ -469,8 +470,6 @@ void NowPlayingWindow::connectSignals()
             this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->songProgress, SLOT(setEnabled(bool)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
-    connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
@@ -597,7 +596,14 @@ void NowPlayingWindow::onItemMoved(guint from, guint to)
 #ifdef MAFW
 void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_id, QString error)
 {
-    this->mafwTrackerSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+    if (metadataSource)
+        metadataSource->deleteLater(); // hmmm... instant delete causes segfaults
+
+    metadataSource = new MafwSourceAdapter(mafwTrackerSource->getSourceByUUID(object_id.left(object_id.indexOf("::"))));
+    connect(metadataSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
+
+    metadataSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,
                                                                               MAFW_METADATA_KEY_URI,
@@ -605,7 +611,7 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_i
                                                                               MAFW_METADATA_KEY_RENDERER_ART_URI,
                                                                               MAFW_METADATA_KEY_DURATION,
                                                                               MAFW_METADATA_KEY_LYRICS));
-    if (!error.isNull() && !error.isEmpty())
+    if (!error.isEmpty())
         qDebug() << error;
 }
 
@@ -753,11 +759,9 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         this->updateEntertainmentViewMetadata();
         this->updateCarViewMetadata();
 
-        if (!error.isNull() && !error.isEmpty())
+        if (!error.isEmpty())
             qDebug() << error;
-
     }
-
 }
 
 #endif
