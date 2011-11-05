@@ -40,13 +40,12 @@ public:
     explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0, MafwSourceAdapter *mafwSource = 0);
     ~VideoNowPlayingWindow();
     void playObject(QString objectId);
-    bool eventFilter(QObject *object, QEvent *event);
+    bool eventFilter(QObject, QEvent *event);
 
 protected:
     void paintEvent(QPaintEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *);
-    void keyReleaseEvent(QKeyEvent *);
 
 private:
     Ui::VideoNowPlayingWindow *ui;

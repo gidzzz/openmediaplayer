@@ -1490,7 +1490,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
     }
 
     if (nremove > 0) {
-        for (int i = 0; i < nremove; i++) {
+        for (uint i = 0; i < nremove; i++) {
             QListWidgetItem *item = ui->songPlaylist->takeItem(from);
             if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
                 playlistTime -= item->data(UserRoleSongDuration).toInt();
@@ -1500,7 +1500,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         playlistQM->itemsRemoved(from, nremove);
     }
     else {
-        for (int i = 0; i < nreplace; i++) {
+        for (uint i = 0; i < nreplace; i++) {
             QListWidgetItem *item = new QListWidgetItem();
             item->setData(UserRoleValueText, " ");
             item->setData(UserRoleSongDuration, Duration::Blank);

@@ -102,7 +102,7 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
     delete ui;
 }
 
-bool VideoNowPlayingWindow::eventFilter(QObject *object, QEvent *event)
+bool VideoNowPlayingWindow::eventFilter(QObject, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonRelease)
         return true;
@@ -470,12 +470,6 @@ void VideoNowPlayingWindow::keyPressEvent(QKeyEvent *event)
         if (mafwState == Paused)
             mafwrenderer->getPosition();
     }
-#endif
-}
-
-void VideoNowPlayingWindow::keyReleaseEvent(QKeyEvent *event)
-{
-#ifdef MAFW
 #endif
 }
 

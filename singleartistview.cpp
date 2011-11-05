@@ -141,11 +141,13 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
     item->setData(UserRoleObjectID, objectId);
     item->setData(UserRoleTitle, albumTitle);
     ui->albumList->addItem(item);
+
     if (!error.isEmpty())
         qDebug() << error;
 
 #ifdef Q_WS_MAEMO_5
-    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+    if (remainingCount == 0)
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
 }
 #endif
