@@ -74,13 +74,6 @@ int main(int argc, char *argv[])
             qDebug() << "Translator failed to load";
     }
 
-    QTranslator translator_qt;
-    if (translator_qt.load("qt_" + locale, "/usr/share/qt4/translations/"))
-        qDebug() << "Standard Qt translation successfully loaded";
-    else
-        qDebug() << "Standard Qt translation failed to load";
-    a.installTranslator(&translator_qt);
-
     QTime t(0,0);
     t.start();
     // TODO: Add a full list of contributors here when we're ready to release.
