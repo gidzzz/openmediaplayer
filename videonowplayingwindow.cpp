@@ -421,6 +421,7 @@ void VideoNowPlayingWindow::playVideo()
     mafwrenderer->setWindowXid(windowId);
 
     mafwrenderer->playObject(this->objectIdToPlay.toUtf8());
+
 }
 #endif
 
@@ -517,8 +518,12 @@ void VideoNowPlayingWindow::onSliderMoved(int position)
 #ifdef MAFW
 void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
 {
+    // The renderer can send send Stopped state a few times before starting the
+    // actual playback, so it is necessary to filter those signals out, avoiding
+    // premature destruction of the window.
+    if (!gotInitialState && state != 0) this->gotInitialState = true;
+
     this->stateChanged(state);
-    this->gotInitialState = true;
 }
 
 void VideoNowPlayingWindow::onPositionChanged(int position, QString)

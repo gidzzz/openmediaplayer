@@ -240,14 +240,14 @@ void MainWindow::mime_open(const QString &uriString)
     const char* mimetype = gnome_vfs_get_mime_type_for_name(text_uri);
     QString qmimetype = mimetype;
 
+    // Converting urisource object to localtagfs:
+    // "urisource::file:///home/user/MyDocs/mix.m3u"
+    // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
+
+    objectId.remove("urisource::file://");
+    objectId.replace("/", "%2F");
+
     if (qmimetype.startsWith("audio")) {
-
-        // Converting urisource object to localtagfs:
-        // "urisource::file:///home/user/MyDocs/mix.m3u"
-        // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
-
-        objectId.remove("urisource::file://");
-        objectId.replace("/", "%2F");
 
         if (qmimetype.endsWith("mpegurl")) {
 #ifdef MAFW
@@ -298,8 +298,18 @@ void MainWindow::mime_open(const QString &uriString)
             ui->indicator->inhibit();
         }
 
+#ifdef MAFW
+        if (mafwrenderer->isRendererReady())
+            mafwrenderer->play();
+        else
+            connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
+#endif
+
     } else if (qmimetype.startsWith("video")) {
 #ifdef MAFW
+        objectId.prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
+        qDebug() << objectId;
+
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
@@ -312,12 +322,6 @@ void MainWindow::mime_open(const QString &uriString)
         window->playObject(objectId);
 #endif
     }
-#ifdef MAFW
-    if (mafwrenderer->isRendererReady())
-        mafwrenderer->play();
-    else
-        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
-#endif
 }
 
 void MainWindow::createNowPlayingWindow()
