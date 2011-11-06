@@ -112,6 +112,7 @@ private slots:
     void onContainerChanged(QString objectId);
 #endif
 #ifdef Q_WS_MAEMO_5
+    void registerDbusService();
     void onBluetoothButtonPressed(QDBusMessage msg);
     void takeScreenshot();
 #endif

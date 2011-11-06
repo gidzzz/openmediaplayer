@@ -76,18 +76,6 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef Q_WS_MAEMO_5
-    if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE)) {
-        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
-    }
-
-    if (!QDBusConnection::sessionBus().registerObject(DBUS_PATH, this, QDBusConnection::ExportScriptableSlots)) {
-        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
-    }
-
-    if (!QDBusConnection::sessionBus().registerObject("/com/nokia/mediaplayer", this, QDBusConnection::ExportScriptableSlots)) {
-        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
-    }
-
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5AutoOrientation);
 
@@ -121,6 +109,11 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef Q_WS_MAEMO_5
+    if (mafwTrackerSource->isReady())
+        registerDbusService();
+    else
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(registerDbusService()));
+
     QTimer::singleShot(1000, this, SLOT(takeScreenshot()));
 #endif
 }
@@ -129,6 +122,23 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+#ifdef Q_WS_MAEMO_5
+void MainWindow::registerDbusService()
+{
+    if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE)) {
+        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
+    }
+
+    if (!QDBusConnection::sessionBus().registerObject(DBUS_PATH, this, QDBusConnection::ExportScriptableSlots)) {
+        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
+    }
+
+    if (!QDBusConnection::sessionBus().registerObject("/com/nokia/mediaplayer", this, QDBusConnection::ExportScriptableSlots)) {
+        qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
+    }
+}
+#endif
 
 void MainWindow::paintEvent(QPaintEvent*)
 {
@@ -237,7 +247,7 @@ void MainWindow::mime_open(const QString &uriString)
         // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
 
         objectId.remove("urisource::file://");
-        objectId.replace("/", "%2F").replace(" ", "%20");
+        objectId.replace("/", "%2F");
 
         if (qmimetype.endsWith("mpegurl")) {
 #ifdef MAFW
@@ -288,7 +298,7 @@ void MainWindow::mime_open(const QString &uriString)
             ui->indicator->inhibit();
         }
 
-    } else if(qmimetype.startsWith("video")) {
+    } else if (qmimetype.startsWith("video")) {
 #ifdef MAFW
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else

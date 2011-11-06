@@ -40,7 +40,7 @@ public:
     explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0, MafwSourceAdapter *mafwSource = 0);
     ~VideoNowPlayingWindow();
     void playObject(QString objectId);
-    bool eventFilter(QObject, QEvent *event);
+    bool eventFilter(QObject*, QEvent *event);
 
 protected:
     void paintEvent(QPaintEvent *);

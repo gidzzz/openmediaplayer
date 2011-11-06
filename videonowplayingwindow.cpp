@@ -102,7 +102,7 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
     delete ui;
 }
 
-bool VideoNowPlayingWindow::eventFilter(QObject, QEvent *event)
+bool VideoNowPlayingWindow::eventFilter(QObject*, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonRelease)
         return true;
@@ -410,7 +410,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         ui->progressBar->setRange(0, duration);
     }
 
-    if(!error.isNull() && !error.isEmpty())
+    if(!error.isEmpty())
         qDebug() << error;
 }
 
