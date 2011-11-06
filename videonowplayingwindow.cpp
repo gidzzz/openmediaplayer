@@ -176,6 +176,8 @@ void VideoNowPlayingWindow::onDeleteClicked()
                                   tr("Are you sure you want to delete this video?"),
                                   QMessageBox::Yes | QMessageBox::No,
                                   this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
 
     if (confirmDelete.result() == QMessageBox::Yes) {

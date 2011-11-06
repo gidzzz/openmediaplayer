@@ -436,6 +436,8 @@ void SinglePlaylistView::setRingingTone()
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No,
                               this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
@@ -505,6 +507,8 @@ void SinglePlaylistView::onDeleteClicked()
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No,
                               this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());

@@ -116,7 +116,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
-        albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown album)";
+        albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
         childcount = v ? g_value_get_int(v) : -1;
@@ -342,6 +342,8 @@ void SingleArtistView::onDeleteClicked()
                               tr("Delete selected item from device?"),
                               QMessageBox::Yes | QMessageBox::No,
                               this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->albumList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
@@ -359,6 +361,8 @@ void SingleArtistView::deleteCurrentArtist()
                               tr("Delete all items shown in view?"),
                               QMessageBox::Yes | QMessageBox::No,
                               this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(artistObjectId.toUtf8());

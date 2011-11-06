@@ -157,7 +157,7 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
         GValue *v;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown artist)";
+        title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_CHILDCOUNT_1);
         albumCount = v ? g_value_get_int (v) : -1;

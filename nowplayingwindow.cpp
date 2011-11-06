@@ -1204,6 +1204,8 @@ void NowPlayingWindow::clearPlaylist()
                              tr("Clear all songs from now playing?"),
                              QMessageBox::Yes | QMessageBox::No,
                              this);
+    confirmClear.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmClear.button(QMessageBox::No)->setText(tr("No"));
     confirmClear.exec();
     if (confirmClear.result() == QMessageBox::Yes) {
         playlistTime = 0;
@@ -1251,6 +1253,8 @@ void NowPlayingWindow::setRingingTone()
                               + ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No,
                               this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->getUri(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
@@ -1419,13 +1423,15 @@ void NowPlayingWindow::onSavePlaylistAccepted()
     }
 
     if (playlistExists) {
-        QMessageBox overwrite(QMessageBox::NoIcon,
-                              " ",
-                              tr("Playlist with the same name exists, overwrite?"),
-                              QMessageBox::Yes | QMessageBox::No,
-                              savePlaylistDialog);
-        overwrite.exec();
-        if (overwrite.result() == QMessageBox::Yes) {
+        QMessageBox confirm(QMessageBox::NoIcon,
+                            " ",
+                            tr("Playlist with the same name exists, overwrite?"),
+                            QMessageBox::Yes | QMessageBox::No,
+                            savePlaylistDialog);
+        confirm.button(QMessageBox::Yes)->setText(tr("Yes"));
+        confirm.button(QMessageBox::No)->setText(tr("No"));
+        confirm.exec();
+        if (confirm.result() == QMessageBox::Yes) {
             savePlaylistDialog->close();
             mafw_playlist_manager->deletePlaylist(playlistNameLineEdit->text());
             playlist->duplicatePlaylist(playlistNameLineEdit->text());
@@ -1557,6 +1563,8 @@ void NowPlayingWindow::resetAlbumArt()
                              tr("Reset album art?"),
                              QMessageBox::Yes | QMessageBox::No,
                              this);
+    confirm.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirm.button(QMessageBox::No)->setText(tr("No"));
     confirm.exec();
     if(confirm.result() == QMessageBox::Yes)
         setAlbumImage(MediaArt::setAlbumImage(ui->albumNameLabel->text(), ""));

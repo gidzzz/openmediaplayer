@@ -98,6 +98,8 @@ void VideosWindow::onDeleteClicked()
                               tr("Delete selected item from device?"),
                               QMessageBox::Yes | QMessageBox::No,
                               this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());

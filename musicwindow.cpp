@@ -220,6 +220,8 @@ void MusicWindow::onDeletePlaylistClicked()
                                   tr("Delete selected item from device?"),
                                   QMessageBox::Yes | QMessageBox::No,
                                   this);
+        confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+        confirmDelete.button(QMessageBox::No)->setText(tr("No"));
         confirmDelete.exec();
         if (confirmDelete.result() == QMessageBox::Yes) {
             mafw_playlist_manager->deletePlaylist(ui->playlistList->currentItem()->text());
@@ -240,6 +242,8 @@ void MusicWindow::setRingingTone()
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No,
                               this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
@@ -302,8 +306,10 @@ void MusicWindow::onDeleteClicked()
                               tr("Delete selected item from device?"),
                               QMessageBox::Yes | QMessageBox::No,
                               this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
-    if(confirmDelete.result() == QMessageBox::Yes) {
+    if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(currentList()->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         delete currentList()->currentItem();
     }
@@ -865,7 +871,7 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
         GValue *v;
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown artist)";
+        title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
         v = mafw_metadata_first(metadata,
                                 MAFW_METADATA_KEY_CHILDCOUNT_1);
         albumCount = v ? g_value_get_int (v) : -1;
@@ -921,10 +927,10 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
     if (metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
-        albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown album)";
+        albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
-        artist = v ? QString::fromUtf8(g_value_get_string(v)) : "(unknown artist)";
+        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
         songCount = v ? g_value_get_int(v) : -1;
