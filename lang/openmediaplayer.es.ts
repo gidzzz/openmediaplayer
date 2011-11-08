@@ -6,7 +6,7 @@
     <message>
         <location filename="../aboutwindow.ui" line="14"/>
         <source>About</source>
-        <translation>Acerca</translation>
+        <translation>Acerca de</translation>
     </message>
     <message>
         <location filename="../aboutwindow.ui" line="82"/>
@@ -25,7 +25,21 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (for the MAFW Renderer and Source adapters).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (FMTX UI and help with Qt/C++).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt; Sustitución en código abierto del reproductor multimedia Media Player, de serie en Maemo 5.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2010-2011 Mohammad Abu-Garbeyyeh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Grzegorz Gidel&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Matias Perez&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt; Bajo licencia GPLv3.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt; Agradecimientos a:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (por el rederizador MAFW y adaptación de código).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (interfaz de usuario de FMTX y soporte en Qt/C++).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -52,7 +66,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../carview.ui" line="14"/>
         <source>Car View</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista Coche</translation>
     </message>
 </context>
 <context>
@@ -60,7 +74,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../editlyrics.ui" line="14"/>
         <source>Lyrics editor</source>
-        <translation>Editor de Letras</translation>
+        <translation>Editor de letras de canciones</translation>
     </message>
     <message>
         <location filename="../editlyrics.ui" line="25"/>
@@ -98,24 +112,24 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../fmtxdialog.cpp" line="32"/>
         <source>Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Frecuencia</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="52"/>
         <source>FM transmitter disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Trasmisor FM apagado</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="132"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposible usar el transmisor FM. Por favor, desconecte el cable de los auriculares o de la conexión a TV</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="136"/>
         <source>Unable to use FM transmitter while USB is connected.
 Unplug USB to continue using FM transmitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposible usar el transmisor FM. Por favor, desconecte el cable USB</translation>
     </message>
 </context>
 <context>
@@ -128,7 +142,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../freqdlg.cpp" line="14"/>
         <source>Select frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccione la frecuencia</translation>
     </message>
     <message>
         <location filename="../freqdlg.cpp" line="68"/>
@@ -141,7 +155,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../internetradiowindow.ui" line="14"/>
         <source>Internet radio stations</source>
-        <translation>Emisoras de radion en Internet</translation>
+        <translation>Emisoras de radio en Internet</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="58"/>
@@ -152,7 +166,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../internetradiowindow.ui" line="67"/>
         <location filename="../internetradiowindow.cpp" line="137"/>
         <source>Add radio bookmark</source>
-        <translation>Agregar favorito de radio</translation>
+        <translation>Añadir emisora de radio a favoritos</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="72"/>
@@ -194,7 +208,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../internetradiowindow.cpp" line="215"/>
         <source>Media bookmark saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Favorito guardado</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="224"/>
@@ -218,7 +232,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>Media player</source>
-        <translation>Reproductor</translation>
+        <translation>Reproductor multimedia</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="177"/>
@@ -230,7 +244,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../mainwindow.cpp" line="178"/>
         <location filename="../mainwindow.cpp" line="183"/>
         <source>Videos</source>
-        <translation>Video</translation>
+        <translation>Videos</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="179"/>
@@ -242,7 +256,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../mainwindow.cpp" line="180"/>
         <location filename="../mainwindow.cpp" line="185"/>
         <source>Shuffle all songs</source>
-        <translation>Mezclar todas</translation>
+        <translation>Mezclar todas las canciones</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="390"/>
@@ -253,7 +267,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../mainwindow.ui" line="406"/>
         <source>About</source>
-        <translation>Acerca</translation>
+        <translation>Acerca de</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="411"/>
@@ -294,8 +308,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../mainwindow.cpp" line="506"/>
         <source>%n clip(s)</source>
         <translation>
-            <numerusform>%n clip</numerusform>
-            <numerusform>%n clips</numerusform>
+            <numerusform>%n videoclip</numerusform>
+            <numerusform>%n videoclips</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -310,12 +324,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../mainwindow.cpp" line="638"/>
         <source>Processed items:</source>
-        <translation>Items procesados:</translation>
+        <translation>Elementos procesados:</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="642"/>
         <source>Remaining items:</source>
-        <translation>Items restantes:</translation>
+        <translation>Elementos restantes:</translation>
     </message>
 </context>
 <context>
@@ -361,13 +375,13 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="194"/>
         <source>Add to now playing</source>
-        <translation>Agregar a la reproducción en curso</translation>
+        <translation>Añadir a lista en curso</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="198"/>
         <location filename="../musicwindow.cpp" line="200"/>
         <source>Delete playlist</source>
-        <translation>Suprimir lista de reproducción</translation>
+        <translation>Suprimir de lista en curso</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="205"/>
@@ -377,7 +391,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="207"/>
         <source>Set as ringing tone</source>
-        <translation>Definir como tono de llamada</translation>
+        <translation>Establecer como tono de llamada</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="208"/>
@@ -393,7 +407,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="400"/>
         <source>Albums</source>
-        <translation>Albumes</translation>
+        <translation>Álbumes</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="454"/>
@@ -403,12 +417,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="690"/>
         <source>Saved</source>
-        <translation>Guardado</translation>
+        <translation>Listas de reproducción guardadas</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="240"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Está seguro de que desea establecer esta canción como tono de llamada?</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="223"/>
@@ -451,7 +465,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="734"/>
         <source>Recently added</source>
-        <translation>Agregadas recientemente</translation>
+        <translation>Añadidas recientemente</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="734"/>
@@ -490,7 +504,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="949"/>
         <source>Various artists</source>
-        <translation>Artistas varios</translation>
+        <translation>Varios artistas</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="981"/>
@@ -518,8 +532,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../musicwindow.cpp" line="1228"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n clip agregado a la reproducción en curso</numerusform>
-            <numerusform>%n clips agregados a la reproducción en curso</numerusform>
+            <numerusform>%n videoclip añadido a la lista en curso</numerusform>
+            <numerusform>%n videoclips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
 </context>
@@ -571,7 +585,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../nowplayingwindow.ui" line="929"/>
         <location filename="../nowplayingwindow.cpp" line="1242"/>
         <source>Clear now playing</source>
-        <translation>Borrar reproducción en curso</translation>
+        <translation>Suprimir lista en curso</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="934"/>
@@ -588,23 +602,23 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.ui" line="944"/>
         <source>Car view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista Coche</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="690"/>
         <source>Loading lyrics...</source>
-        <translation>Cargando letras...</translation>
+        <translation>Cargando letra de la canción...</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="721"/>
         <location filename="../nowplayingwindow.cpp" line="1622"/>
         <source>Fetching lyrics...</source>
-        <translation>Descargando letras...</translation>
+        <translation>Descargando letra de la canción ...</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="230"/>
         <source>Lyrics not found</source>
-        <translation>No se encontraron letras</translation>
+        <translation>No se encontró la letra de la canción</translation>
     </message>
     <message numerus="yes">
         <location filename="../nowplayingwindow.cpp" line="310"/>
@@ -617,32 +631,32 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="320"/>
         <source>total</source>
-        <translation type="unfinished"></translation>
+        <translation>total</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="735"/>
         <source>There is no active Internet connection</source>
-        <translation>No hay una conexion a Internet activa</translation>
+        <translation> No hay conexión activa a Internet </translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1144"/>
         <source>Information not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Información no disponible</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1204"/>
         <source>Clear all songs from now playing?</source>
-        <translation>¿Suprimir todas las canciones de la reproducción en curso?</translation>
+        <translation>¿Suprimir todas las canciones de la lista en curso?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1238"/>
         <source>Set as ringing tone</source>
-        <translation>Definir como tono de llamada</translation>
+        <translation>Establecer como tono de llamada</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1241"/>
         <source>Delete from now playing</source>
-        <translation>Suprimir de la reproducción en curso</translation>
+        <translation>Suprimir de la lista en curso</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1239"/>
@@ -668,7 +682,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1251"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Está seguro de que desea establecer esta canción como tono de llamada?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1391"/>
@@ -683,13 +697,13 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1428"/>
         <source>Playlist with the same name exists, overwrite?</source>
-        <translation>Ya existe una lista de reproducción con el mismo nombre. Sobreescribir?</translation>
+        <translation> Ya existe una lista de reproducción con el mismo nombre. ¿desea reemplazarla?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1439"/>
         <location filename="../nowplayingwindow.cpp" line="1446"/>
         <source>Playlist saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de reproducción guardada</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1545"/>
@@ -700,22 +714,22 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1546"/>
         <source>Reset album art</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir carátula del álbum</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1563"/>
         <source>Reset album art?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Suprimir carátula del álbum?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1576"/>
         <source>Edit lyrics</source>
-        <translation>Editar letras</translation>
+        <translation>Editar letra de la canción</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1577"/>
         <source>Reload lyrics</source>
-        <translation>Recargar letras</translation>
+        <translation>Recargar letra de la canción</translation>
     </message>
 </context>
 <context>
@@ -750,7 +764,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../radionowplayingwindow.ui" line="528"/>
         <source>Add radio bookmark</source>
-        <translation>Agregar favorito de radio</translation>
+        <translation>Añadir emisora de radio a favoritos</translation>
     </message>
 </context>
 <context>
@@ -778,17 +792,17 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="66"/>
         <source>Enable lyrics</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar letras de canciones</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="75"/>
         <source>Size of automatic playlists</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño de las listas de reproducción automáticas</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="91"/>
         <source>Lazy sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>No reproducir mientras desplaza</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="98"/>
@@ -834,7 +848,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Agregar canciones a la reproducción en curso</translation>
+        <translation>Añadir canciones a la reproducción en curso</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
@@ -873,7 +887,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.cpp" line="352"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Está seguro de que desea establecer esta canción como tono de llamada?</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="357"/>
@@ -892,30 +906,30 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.cpp" line="429"/>
         <source>Delete selected item from device?</source>
-        <translation>¿Suprimir elemento seleccionado del dispositivo?</translation>
+        <translation>¿Suprimir el elemento seleccionado del dispositivo?</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="448"/>
         <source>Delete all items shown in view?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Suprimir todos los elementos de la vista?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="464"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n clip agregado a la reproducción en curso</numerusform>
-            <numerusform>%n clips agregados a la reproducción en curso</numerusform>
+            <numerusform>%n videoclip añadido a la lista en curso</numerusform>
+            <numerusform>%n videoclips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="325"/>
         <source>Add to now playing</source>
-        <translation>Agregar a la reproducción en curso</translation>
+        <translation>Añadir a la lista en curso</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="327"/>
         <source>Set as ringing tone</source>
-        <translation>Definir como tono de llamada</translation>
+        <translation>Establecer como tono de llamada</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="328"/>
@@ -929,7 +943,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleartistview.ui" line="72"/>
         <location filename="../singleartistview.cpp" line="93"/>
         <source>Shuffle songs</source>
-        <translation>Mezclar canciones</translation>
+        <translation>Mezclar canciones de la lista</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="126"/>
@@ -939,7 +953,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>Agregar canciones a la reproducción en curso</translation>
+        <translation>Añadir canciones a la lista en curso</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
@@ -964,7 +978,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleartistview.cpp" line="331"/>
         <source>Add to now playing</source>
-        <translation>Agregar a la reproducción en curso</translation>
+        <translation>Añadir a la lista en curso</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="342"/>
@@ -986,14 +1000,14 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleartistview.cpp" line="361"/>
         <source>Delete all items shown in view?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Suprimir todos los elementos de la vista?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="442"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n clip agregado a la reproducción en curso</numerusform>
-            <numerusform>%n clips agregados a la reproducción en curso</numerusform>
+            <numerusform>%n videoclip añadido a la lista en curso</numerusform>
+            <numerusform>%n videoclips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
 </context>
@@ -1008,7 +1022,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlegenreview.ui" line="108"/>
         <location filename="../singlegenreview.cpp" line="243"/>
         <source>Add to now playing</source>
-        <translation>Agregar a la reproducción en curso</translation>
+        <translation>Añadir a la lista en curso</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="113"/>
@@ -1038,8 +1052,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlegenreview.cpp" line="373"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n clip agregado a la reproducción en curso</numerusform>
-            <numerusform>%n clips agregados a la reproducción en curso</numerusform>
+            <numerusform>%n videoclip añadido a la lista en curso</numerusform>
+            <numerusform>%n videoclips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
 </context>
@@ -1053,7 +1067,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleplaylistview.ui" line="109"/>
         <source>Edit playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar lista de reproducción</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="114"/>
@@ -1064,7 +1078,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.ui" line="119"/>
         <location filename="../singleplaylistview.cpp" line="399"/>
         <source>Add to now playing</source>
-        <translation>Agregar a la reproducción en curso</translation>
+        <translation>Añadir a la lista en curso</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="124"/>
@@ -1075,7 +1089,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleplaylistview.cpp" line="34"/>
         <source>Shuffle songs</source>
-        <translation>Mezclar canciones</translation>
+        <translation>Mezclar canciones de la lista</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="114"/>
@@ -1099,14 +1113,14 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.cpp" line="137"/>
         <location filename="../singleplaylistview.cpp" line="224"/>
         <source>Information not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Información no disponible</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="316"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n clip agregado a la reproducción en curso</numerusform>
-            <numerusform>%n clips agregados a la reproducción en curso</numerusform>
+            <numerusform>%n videoclip añadido a la lista en curso</numerusform>
+            <numerusform>%n videoclips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
     <message>
@@ -1117,7 +1131,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleplaylistview.cpp" line="401"/>
         <source>Set as ringing tone</source>
-        <translation>Definir como tono de llamada</translation>
+        <translation>Establecer como tono de llamada</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="402"/>
@@ -1127,12 +1141,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleplaylistview.cpp" line="410"/>
         <source>Delete from playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Suprimir de la lista de reproducción</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="434"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Está seguro de que desea establecer esta canción como tono de llamada?</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="439"/>
@@ -1180,7 +1194,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../tagwindow.ui" line="30"/>
         <source>Album</source>
-        <translation>Album</translation>
+        <translation>Álbum</translation>
     </message>
     <message>
         <location filename="../tagwindow.ui" line="40"/>
@@ -1203,7 +1217,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>Agregar canciones a la reproducción en curso</translation>
+        <translation>Añadir canciones a la lista en curso</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="114"/>
@@ -1213,19 +1227,19 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../upnpview.cpp" line="117"/>
         <source>(unknown type)</source>
-        <translation type="unfinished"></translation>
+        <translation>(tipo desconocido)</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="161"/>
         <source>Add to now playing</source>
-        <translation>Agregar a la reproducción en curso</translation>
+        <translation>Añadir a la lista en curso</translation>
     </message>
     <message numerus="yes">
         <location filename="../upnpview.cpp" line="256"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n clip agregado a la reproducción en curso</numerusform>
-            <numerusform>%n clips agregados a la reproducción en curso</numerusform>
+            <numerusform>%n videoclip añadido a la lista en curso</numerusform>
+            <numerusform>%n videoclips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
 </context>
@@ -1239,12 +1253,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="175"/>
         <source>Delete video?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Suprimir video?</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="176"/>
         <source>Are you sure you want to delete this video?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Está seguro de que desea suprimir este video?</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="179"/>
@@ -1270,17 +1284,17 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="557"/>
         <source>URI not available</source>
-        <translation>URL no disponible</translation>
+        <translation>Dirección web no disponible</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="559"/>
         <source>Invalid URI</source>
-        <translation>URL inválida</translation>
+        <translation>Dirección web no válida</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="561"/>
         <source>Unable to open media</source>
-        <translation>Inposible abrir el archivo</translation>
+        <translation>Imposible abrir el archivo</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="563"/>
@@ -1295,7 +1309,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="567"/>
         <source>General error occured, unable to continue playback</source>
-        <translation>Error general, imposible continuar reproducción</translation>
+        <translation>Error general, imposible continuar con la reproducción</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="569"/>
@@ -1315,12 +1329,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="575"/>
         <source>Unsupported framerate</source>
-        <translation>Framerate no soportado</translation>
+        <translation>Velocidad de fotogramas no soportada</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="577"/>
         <source>Media is protected by DRM</source>
-        <translation>Recurso protegido por DRM</translation>
+        <translation>Archivo protegido por DRM (derechos de autor)</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="579"/>
@@ -1365,37 +1379,37 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="601"/>
         <source>Media index is not in bound with playlist items</source>
-        <translation>Indice de medios no vinculado con los elementos de la lista de reproducción</translation>
+        <translation>El índice de archivos no encaja con los elementos de la lista de reproducción</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="603"/>
         <source>Unable to start playback</source>
-        <translation>Imposible iniciar reproducción</translation>
+        <translation>Imposible iniciar la reproducción</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="605"/>
         <source>Unable to stop playback</source>
-        <translation>Imposible detener reproducción</translation>
+        <translation>Imposible detener la reproducción</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="607"/>
         <source>Unable to pause playback</source>
-        <translation>Imposible pausar reproducción</translation>
+        <translation>Imposible pausar la reproducción</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="609"/>
         <source>Unable to seek position in media</source>
-        <translation>Imposible buscar posición en el archivo</translation>
+        <translation>Imposible buscar la posición en el archivo</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="611"/>
         <source>Unable to retrieve current position in media</source>
-        <translation>Imposible obtener posición actual en el archivo</translation>
+        <translation>Imposible obtener la posición actual en el archivo</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="613"/>
         <source>Unable to get current playback status</source>
-        <translation>Imposible obtener estado actual de la reproducción</translation>
+        <translation>Imposible obtener el estado actual de la reproducción</translation>
     </message>
 </context>
 <context>
@@ -1438,7 +1452,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videoswindow.cpp" line="164"/>
         <source>Videos - latest</source>
-        <translation>Videos: los más reciente</translation>
+        <translation>Videos: los más recientes</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="177"/>
@@ -1448,12 +1462,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videoswindow.cpp" line="298"/>
         <source>Recorded by device camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Grabado con la cámara del dispositivo</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="303"/>
         <source>Films</source>
-        <translation type="unfinished"></translation>
+        <translation>Películas</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="50"/>
@@ -1463,7 +1477,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../videoswindow.cpp" line="239"/>
         <source>(unknown clip)</source>
-        <translation>(clip desconocido)</translation>
+        <translation>(videoclip desconocido)</translation>
     </message>
 </context>
 </TS>
