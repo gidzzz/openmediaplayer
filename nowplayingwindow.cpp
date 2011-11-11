@@ -141,7 +141,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
             data.close();
         }
     }
-    //qDebug() << "Current playlist: " << currentPlaylistUrl;
 
 
     this->playlistRequested = false;
@@ -712,7 +711,6 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
                     ui->lyricsText->setText(lines);
                     ui->lyricsText->setWhatsThis(lyricsFile);
                     QApplication::processEvents();
-                    //qDebug() << "loading from file..." << lyricsPath;
                 }
                 else
                 {
@@ -1101,8 +1099,6 @@ void NowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
 #ifdef MAFW
 void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index)
 {
-    //qDebug() << "NowPlayingWindow::onGetPlaylistItems | index: " << index;
-
     QListWidgetItem *item =  ui->songPlaylist->item(index);
     if (!item) // in case of query manager's outdated request
         return;
@@ -1582,7 +1578,7 @@ void NowPlayingWindow::resetAlbumArt()
             args.append(currentMIME);
             msg.setArguments(args);
             QDBusConnection::sessionBus().send(msg);
-            QTimer::singleShot(2000, this, SLOT(refreshAlbumArt()));
+            QTimer::singleShot(3000, this, SLOT(refreshAlbumArt()));
         }
 #endif
     }
@@ -1640,7 +1636,6 @@ void NowPlayingWindow::reloadLyricsFromFile()
 
 void NowPlayingWindow::reloadLyrics()
 {
-    //qDebug() << ui->lyricsText->whatsThis();
     if ( ui->lyricsText->whatsThis() != "" )
     {
         data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + ui->lyricsText->whatsThis().replace("-", "/") ) ) );
@@ -1654,7 +1649,6 @@ QString NowPlayingWindow::cleanItem(QString data)
     data = data.toLower().replace("&","and");
     data = data.remove(QRegExp("\\([^)]*\\)")); // what about nested parentheses, {}, []?
     data = data.remove(QRegExp("[\\W_]"));
-    //qDebug() << data;
     return data;
 }
 

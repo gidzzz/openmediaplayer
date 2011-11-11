@@ -15,7 +15,6 @@ EditLyrics::EditLyrics(QWidget *parent, QString lyricsFile, QString artist, QStr
 
     ui->label->setText(artist + " - " + title);
     file = "/home/user/.lyrics/" + lyricsFile;
-    //qDebug() << file;
 
     if ( QFileInfo(file).exists() )
     {

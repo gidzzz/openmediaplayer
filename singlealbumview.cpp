@@ -116,20 +116,19 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         int trackNumber;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ARTIST);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
         artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ALBUM);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TRACK);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TRACK);
         trackNumber = v ? g_value_get_int (v) : -1;
 
         QListWidgetItem *item = new QListWidgetItem(ui->songList);

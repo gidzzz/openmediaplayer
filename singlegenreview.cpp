@@ -155,15 +155,13 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
     QListWidgetItem *item = new QListWidgetItem();
     if (metadata != NULL) {
         GValue *v;
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_CHILDCOUNT_1);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
         albumCount = v ? g_value_get_int (v) : -1;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_CHILDCOUNT_2);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_2);
         songCount = v ? g_value_get_int (v) : -1;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI);

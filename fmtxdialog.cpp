@@ -69,10 +69,7 @@ void FMTXDialog::showDialog()
 {
     selector->exec();
     if ( selector->res != "" )
-    {
-        //qDebug() << selector->res;
         freqButton->setValueText(selector->res);
-    }
 }
 
 void FMTXDialog::showEvent(QShowEvent *event)
