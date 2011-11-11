@@ -249,17 +249,15 @@ void NowPlayingWindow::onLyricsDownloaded(QNetworkReply *reply)
 
 void NowPlayingWindow::setAlbumImage(QString image)
 {
-    //qDebug() << image;
-
     qDeleteAll(albumArtSceneLarge->items());
     qDeleteAll(albumArtSceneSmall->items());
     this->albumArtUri = image;
     if (image == albumImage)
     {
-        // If there's no album art, search for it song's directory
+        // If there's no album art, search for it in song's directory
+        QString albumInFolder = currentURI;
         albumInFolder.remove("file://").replace("%20"," ");
-        int x = albumInFolder.lastIndexOf("/");
-        albumInFolder.remove(x, albumInFolder.length()-x);
+        albumInFolder.truncate(albumInFolder.lastIndexOf("/"));
 
         if ( QFileInfo(albumInFolder + "/cover.jpg").exists() )
             albumInFolder.append("/cover.jpg");
@@ -370,22 +368,27 @@ void NowPlayingWindow::metadataChanged(QString name, QVariant value)
 
     QFont f = ui->songTitleLabel->font();
     QFontMetrics fm(f);
-    QString temp = fm.elidedText(value.toString(), Qt::ElideRight, 420);
+    QString elided = fm.elidedText(value.toString(), Qt::ElideRight, 420);
 
-    if(name == "title" /*MAFW_METADATA_KEY_TITLE*/)
-        ui->songTitleLabel->setText(temp);
+    if (name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
+        ui->songTitleLabel->setText(elided);
         ui->songTitleLabel->setWhatsThis(value.toString());
-    if(name == "artist" /*MAFW_METADATA_KEY_ARTIST*/)
-        ui->artistLabel->setText(temp);
-        ui->artistLabel->setWhatsThis(value.toString());
-    if(name == "album" /*MAFW_METADATA_KEY_ALBUM*/)
-    {
-        ui->albumNameLabel->setWhatsThis(value.toString());
-        ui->albumNameLabel->setText(temp);
     }
-    if(name == "uri")
-        albumInFolder = value.toString();
-    if(name == "renderer-art-uri")
+
+    if (name == "artist" /*MAFW_METADATA_KEY_ARTIST*/) {
+        ui->artistLabel->setText(elided);
+        ui->artistLabel->setWhatsThis(value.toString());
+    }
+
+    if (name == "album" /*MAFW_METADATA_KEY_ALBUM*/) {
+        ui->albumNameLabel->setWhatsThis(value.toString());
+        ui->albumNameLabel->setText(elided);
+    }
+
+    if (name == "uri")
+        currentURI = value.toString();
+
+    if (name == "renderer-art-uri")
         this->setAlbumImage(value.toString());
 }
 
@@ -607,6 +610,7 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_i
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,
                                                                               MAFW_METADATA_KEY_URI,
+                                                                              MAFW_METADATA_KEY_MIME,
                                                                               MAFW_METADATA_KEY_ALBUM_ART_URI,
                                                                               MAFW_METADATA_KEY_RENDERER_ART_URI,
                                                                               MAFW_METADATA_KEY_DURATION,
@@ -625,24 +629,22 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_URI);
-        albumInFolder = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
+        currentURI = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ARTIST);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
+        currentMIME = v ? QString::fromUtf8(g_value_get_string (v)) : "audio/unknown";
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
         artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ALBUM);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : -1;
         this->songDuration = duration;
 
@@ -1158,16 +1160,16 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     QFontMetrics fm(f);
 
     ui->songTitleLabel->setWhatsThis(item->data(UserRoleSongTitle).toString());
-    QString temp = fm.elidedText(item->data(UserRoleSongTitle).toString(), Qt::ElideRight, 420);
-    ui->songTitleLabel->setText(temp);
+    QString elided = fm.elidedText(item->data(UserRoleSongTitle).toString(), Qt::ElideRight, 420);
+    ui->songTitleLabel->setText(elided);
 
     ui->artistLabel->setWhatsThis(item->data(UserRoleSongArtist).toString());
-    temp = fm.elidedText(item->data(UserRoleSongArtist).toString(), Qt::ElideRight, 420);
-    ui->artistLabel->setText(temp);
+    elided = fm.elidedText(item->data(UserRoleSongArtist).toString(), Qt::ElideRight, 420);
+    ui->artistLabel->setText(elided);
 
     ui->albumNameLabel->setWhatsThis(item->data(UserRoleSongAlbum).toString());
-    temp = fm.elidedText(item->data(UserRoleSongAlbum).toString(), Qt::ElideRight, 420);
-    ui->albumNameLabel->setText(temp);
+    elided = fm.elidedText(item->data(UserRoleSongAlbum).toString(), Qt::ElideRight, 420);
+    ui->albumNameLabel->setText(elided);
 
     ui->currentPositionLabel->setText("00:00");
     this->songDuration = item->data(UserRoleSongDuration).toInt();
@@ -1566,8 +1568,31 @@ void NowPlayingWindow::resetAlbumArt()
     confirm.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirm.button(QMessageBox::No)->setText(tr("No"));
     confirm.exec();
-    if(confirm.result() == QMessageBox::Yes)
+    if (confirm.result() == QMessageBox::Yes) {
         setAlbumImage(MediaArt::setAlbumImage(ui->albumNameLabel->text(), ""));
+#ifdef Q_WS_MAEMO_5
+        if (isDefaultArt) {
+            QDBusMessage msg = QDBusMessage::createMethodCall("org.freedesktop.Tracker.Extract",
+                                                              "/org/freedesktop/Tracker/Extract",
+                                                              "", "GetMetadata");
+            QList<QVariant> args;
+            QString file = currentURI;
+            file.remove("file://");
+            args.append(file);
+            args.append(currentMIME);
+            msg.setArguments(args);
+            QDBusConnection::sessionBus().send(msg);
+            QTimer::singleShot(2000, this, SLOT(refreshAlbumArt()));
+        }
+#endif
+    }
+}
+
+void NowPlayingWindow::refreshAlbumArt()
+{
+    QString image = MediaArt::albumArtPath(ui->albumNameLabel->text());
+    if (QFileInfo(image).exists())
+        this->setAlbumImage(image);
 }
 
 void NowPlayingWindow::on_lyricsText_customContextMenuRequested(QPoint pos)

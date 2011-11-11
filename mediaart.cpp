@@ -21,7 +21,7 @@ QString MediaArt::setAlbumImage(QString album, QString image)
     // Get thumbnail path
     uri = g_filename_to_uri(newArtFile.toUtf8(), NULL, NULL);
     file = hildon_thumbnail_get_uri(uri, 124, 124, true);
-    QString newThumbFile = QString::fromUtf8(file);
+    QString newThumbFile = QString::fromUtf8(file).remove("file://");
     delete file;
 
     // Remove old thumbnail
@@ -38,7 +38,15 @@ QString MediaArt::setAlbumImage(QString album, QString image)
         g_object_unref(factory);
     }
 
-    g_free(uri);
+    delete uri;
 
     return image.isEmpty() ? albumImage : newArtFile;
+}
+
+QString MediaArt::albumArtPath(QString album)
+{
+    gchar *path = hildon_albumart_get_path(NULL, album.toUtf8(), "album");
+    QString path_qstr = QString::fromUtf8(path);
+    delete path;
+    return path_qstr;
 }

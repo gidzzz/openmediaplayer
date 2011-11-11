@@ -53,7 +53,8 @@ public:
     static NowPlayingWindow* acquire(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     static void destroy();
     ~NowPlayingWindow();
-    QString albumInFolder;
+    QString currentURI;
+    QString currentMIME;
     QNetworkAccessManager* data;
     QString TEartist, TEalbum, TEtitle, TEid;
     bool eventFilter(QObject *object, QEvent *event);
@@ -132,6 +133,7 @@ private slots:
     void onViewContextMenuRequested(QPoint pos);
     void selectAlbumArt();
     void resetAlbumArt();
+    void refreshAlbumArt();
     void editLyrics();
     void reloadLyrics();
     void toggleVolumeSlider();

@@ -10,6 +10,8 @@ namespace MediaArt
 {
     // Returns: path to the new image
     QString setAlbumImage(QString album, QString image);
+
+    QString albumArtPath(QString album);
 };
 
 #endif // MEDIAART_H
