@@ -531,7 +531,7 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="310"/>
+        <location filename="../nowplayingwindow.cpp" line="308"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n song</numerusform>
@@ -539,116 +539,116 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="320"/>
+        <location filename="../nowplayingwindow.cpp" line="318"/>
         <source>total</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="690"/>
+        <location filename="../nowplayingwindow.cpp" line="692"/>
         <source>Loading lyrics...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="721"/>
-        <location filename="../nowplayingwindow.cpp" line="1622"/>
+        <location filename="../nowplayingwindow.cpp" line="723"/>
+        <location filename="../nowplayingwindow.cpp" line="1647"/>
         <source>Fetching lyrics...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="735"/>
+        <location filename="../nowplayingwindow.cpp" line="737"/>
         <source>There is no active Internet connection</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1144"/>
+        <location filename="../nowplayingwindow.cpp" line="1146"/>
         <source>Information not available</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1204"/>
+        <location filename="../nowplayingwindow.cpp" line="1206"/>
         <source>Clear all songs from now playing?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1238"/>
+        <location filename="../nowplayingwindow.cpp" line="1240"/>
         <source>Set as ringing tone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1241"/>
+        <location filename="../nowplayingwindow.cpp" line="1243"/>
         <source>Delete from now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1239"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
         <source>Share</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1207"/>
-        <location filename="../nowplayingwindow.cpp" line="1256"/>
-        <location filename="../nowplayingwindow.cpp" line="1431"/>
-        <location filename="../nowplayingwindow.cpp" line="1566"/>
+        <location filename="../nowplayingwindow.cpp" line="1209"/>
+        <location filename="../nowplayingwindow.cpp" line="1258"/>
+        <location filename="../nowplayingwindow.cpp" line="1433"/>
+        <location filename="../nowplayingwindow.cpp" line="1568"/>
         <source>Yes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1208"/>
-        <location filename="../nowplayingwindow.cpp" line="1257"/>
-        <location filename="../nowplayingwindow.cpp" line="1432"/>
-        <location filename="../nowplayingwindow.cpp" line="1567"/>
+        <location filename="../nowplayingwindow.cpp" line="1210"/>
+        <location filename="../nowplayingwindow.cpp" line="1259"/>
+        <location filename="../nowplayingwindow.cpp" line="1434"/>
+        <location filename="../nowplayingwindow.cpp" line="1569"/>
         <source>No</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1251"/>
+        <location filename="../nowplayingwindow.cpp" line="1253"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1391"/>
+        <location filename="../nowplayingwindow.cpp" line="1393"/>
         <source>Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1397"/>
+        <location filename="../nowplayingwindow.cpp" line="1399"/>
         <source>Save</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1428"/>
+        <location filename="../nowplayingwindow.cpp" line="1430"/>
         <source>Playlist with the same name exists, overwrite?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1439"/>
-        <location filename="../nowplayingwindow.cpp" line="1446"/>
+        <location filename="../nowplayingwindow.cpp" line="1441"/>
+        <location filename="../nowplayingwindow.cpp" line="1448"/>
         <source>Playlist saved</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1545"/>
-        <location filename="../nowplayingwindow.cpp" line="1552"/>
+        <location filename="../nowplayingwindow.cpp" line="1547"/>
+        <location filename="../nowplayingwindow.cpp" line="1554"/>
         <source>Select album art</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1546"/>
+        <location filename="../nowplayingwindow.cpp" line="1548"/>
         <source>Reset album art</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1563"/>
+        <location filename="../nowplayingwindow.cpp" line="1565"/>
         <source>Reset album art?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1576"/>
+        <location filename="../nowplayingwindow.cpp" line="1601"/>
         <source>Edit lyrics</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1577"/>
+        <location filename="../nowplayingwindow.cpp" line="1602"/>
         <source>Reload lyrics</source>
         <translation></translation>
     </message>
@@ -664,23 +664,23 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="630"/>
-        <location filename="../nowplayingwindow.cpp" line="634"/>
-        <location filename="../nowplayingwindow.cpp" line="1117"/>
+        <location filename="../nowplayingwindow.cpp" line="633"/>
+        <location filename="../nowplayingwindow.cpp" line="636"/>
+        <location filename="../nowplayingwindow.cpp" line="1119"/>
         <source>(unknown song)</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="638"/>
-        <location filename="../nowplayingwindow.cpp" line="1121"/>
+        <location filename="../nowplayingwindow.cpp" line="642"/>
+        <location filename="../nowplayingwindow.cpp" line="1123"/>
         <source>(unknown artist)</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="642"/>
-        <location filename="../nowplayingwindow.cpp" line="1125"/>
+        <location filename="../nowplayingwindow.cpp" line="645"/>
+        <location filename="../nowplayingwindow.cpp" line="1127"/>
         <source>(unknown album)</source>
         <translation></translation>
     </message>
@@ -696,14 +696,14 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1242"/>
+        <location filename="../nowplayingwindow.cpp" line="1244"/>
         <source>Clear now playing</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1235"/>
-        <location filename="../nowplayingwindow.cpp" line="1383"/>
+        <location filename="../nowplayingwindow.cpp" line="1237"/>
+        <location filename="../nowplayingwindow.cpp" line="1385"/>
         <source>Save playlist</source>
         <translation></translation>
     </message>
