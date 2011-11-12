@@ -79,7 +79,6 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
 #ifdef MAFW
     mafwrenderer->setColorKey(199939);
-    mafwrenderer->getStatus();
     mafwrenderer->getVolume();
     ui->toolbarOverlay->setStyleSheet(ui->controlOverlay->styleSheet());
 #endif
@@ -138,8 +137,6 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 #ifdef MAFW
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->progressBar, SLOT(setEnabled(bool)));
@@ -277,6 +274,11 @@ void VideoNowPlayingWindow::volumeWatcher()
 #ifdef MAFW
 void VideoNowPlayingWindow::stateChanged(int state)
 {
+    // The renderer can send Stopped state a few times before starting the
+    // actual playback, so it is necessary to filter those signals out, avoiding
+    // premature destruction of the window.
+    if (!gotInitialState && state != 0) this->gotInitialState = true;
+
     this->mafwState = state;
 
     if (state == Paused) {
@@ -518,15 +520,6 @@ void VideoNowPlayingWindow::onSliderMoved(int position)
 }
 
 #ifdef MAFW
-void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
-{
-    // The renderer can send send Stopped state a few times before starting the
-    // actual playback, so it is necessary to filter those signals out, avoiding
-    // premature destruction of the window.
-    if (!gotInitialState && state != 0) this->gotInitialState = true;
-
-    this->stateChanged(state);
-}
 
 void VideoNowPlayingWindow::onPositionChanged(int position, QString)
 {

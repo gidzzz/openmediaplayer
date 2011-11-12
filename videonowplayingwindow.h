@@ -87,7 +87,6 @@ private slots:
 #ifdef MAFW
     void onPropertyChanged(const QDBusMessage &msg);
     void stateChanged(int state);
-    void onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString);
     void onPositionChanged(int position, QString);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
     void playVideo();
