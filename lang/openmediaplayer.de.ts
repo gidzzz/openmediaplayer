@@ -123,7 +123,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../fmtxdialog.cpp" line="129"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
-        <translation>Benutzung des UKW-Senders ist nicht möglich wenn Kopfhörer oderTV Kabel angeschlossen sind.
+        <translation>Benutzung des UKW-Senders ist nicht möglich, wenn Kopfhörer oder TV Kabel angeschlossen sind.
 Bitte Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message>
@@ -149,7 +149,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../freqdlg.cpp" line="68"/>
         <source>MHz</source>
-        <translation>Frequenz</translation>
+        <translation>MHz</translation>
     </message>
 </context>
 <context>
@@ -221,12 +221,12 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="274"/>
         <source>(unknown station)</source>
-        <translation>(unbekannter Sender)</translation>
+        <translation>(Unbekannter Sender)</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="278"/>
         <source>(unknown)</source>
-        <translation>(unbekannt)</translation>
+        <translation>(Unbekannt)</translation>
     </message>
 </context>
 <context>
@@ -311,17 +311,17 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../mainwindow.cpp" line="498"/>
         <source>(no songs)</source>
-        <translation>(keine Lieder)</translation>
+        <translation>(Keine Lieder)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="505"/>
         <source>(no videos)</source>
-        <translation>(keine Videos)</translation>
+        <translation>(Keine Videos)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="521"/>
         <source>(no stations)</source>
-        <translation>(keine Sender)</translation>
+        <translation>(Keine Sender)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="638"/>
@@ -487,7 +487,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="828"/>
         <source>(unknown song)</source>
-        <translation>(unbekanntes Lied)</translation>
+        <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="831"/>
@@ -495,13 +495,13 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../musicwindow.cpp" line="895"/>
         <location filename="../musicwindow.cpp" line="933"/>
         <source>(unknown artist)</source>
-        <translation>(unbekannter Interpret)</translation>
+        <translation>(Unbekannter Interpret)</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="834"/>
         <location filename="../musicwindow.cpp" line="930"/>
         <source>(unknown album)</source>
-        <translation>(unbekanntes Album)</translation>
+        <translation>(Unbekanntes Album)</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="949"/>
@@ -557,21 +557,21 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../nowplayingwindow.cpp" line="635"/>
         <location filename="../nowplayingwindow.cpp" line="1115"/>
         <source>(unknown song)</source>
-        <translation>(unbekanntes Lied)</translation>
+        <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
         <location filename="../nowplayingwindow.cpp" line="641"/>
         <location filename="../nowplayingwindow.cpp" line="1119"/>
         <source>(unknown artist)</source>
-        <translation>(unbekannter Interpret)</translation>
+        <translation>(Unbekannter Interpret)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
         <location filename="../nowplayingwindow.cpp" line="644"/>
         <location filename="../nowplayingwindow.cpp" line="1123"/>
         <source>(unknown album)</source>
-        <translation>(unbekanntes Album)</translation>
+        <translation>(Unbekanntes Album)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="912"/>
@@ -638,7 +638,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="735"/>
         <source>There is no active Internet connection</source>
-        <translation>Keine Internet Verbindung verfügbar</translation>
+        <translation>Keine Internetverbindung verfügbar</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1142"/>
@@ -745,13 +745,14 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../radionowplayingwindow.ui" line="163"/>
         <location filename="../radionowplayingwindow.cpp" line="333"/>
         <source>(unknown station)</source>
-        <translation>(unbekannter Sender)</translation>
+        <translation>(Unbekannter Sender)</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="170"/>
         <location filename="../radionowplayingwindow.cpp" line="329"/>
         <source>(unknown artist) / (unknown album)</source>
-        <translation>(unbekannter Interpret) / (unbekanntes Album)</translation>
+        <translation>(Unbekannter Interpret)
+(Unbekanntes Album)</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="514"/>
@@ -850,7 +851,8 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Zur Wiedergabeliste hinzufügen</translation>
+        <translation>Lieder zur Wiedergabeliste
+hinzufügen</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
@@ -866,17 +868,17 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="120"/>
         <source>(unknown song)</source>
-        <translation>(unbekanntes Lied)</translation>
+        <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="123"/>
         <source>(unknown artist)</source>
-        <translation>(unbekannter Interpret)</translation>
+        <translation>(Unbekannter Interpret)</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="126"/>
         <source>(unknown album)</source>
-        <translation>(unbekanntes Album)</translation>
+        <translation>(Unbekanntes Album)</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="158"/>
@@ -945,7 +947,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../singleartistview.ui" line="72"/>
         <location filename="../singleartistview.cpp" line="93"/>
         <source>Shuffle songs</source>
-        <translation>Zufallswiedergabe</translation>
+        <translation>Zufallsmodus</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="126"/>
@@ -966,7 +968,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singleartistview.cpp" line="119"/>
         <source>(unknown album)</source>
-        <translation>(unbekanntes Album)</translation>
+        <translation>(Unbekanntes Album)</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="125"/>
@@ -980,7 +982,8 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singleartistview.cpp" line="331"/>
         <source>Add to now playing</source>
-        <translation>Zur aktuellen Wiedergabeliste hinzufügen</translation>
+        <translation>Lieder zur Wiedergabeliste
+hinzufügen</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="342"/>
@@ -1029,18 +1032,18 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singlegenreview.ui" line="113"/>
         <source>Delete</source>
-        <translation>Lösche</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../singlegenreview.cpp" line="32"/>
         <source>Shuffle songs</source>
-        <translation>Zufallswiedergabe</translation>
+        <translation>Lieder im Zufallsmodus abspielen</translation>
     </message>
     <message>
         <location filename="../singlegenreview.cpp" line="159"/>
         <location filename="../singlegenreview.cpp" line="179"/>
         <source>(unknown artist)</source>
-        <translation>(unbekannter Interpret)</translation>
+        <translation>(Unbekannter Interpret)</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="201"/>
@@ -1091,25 +1094,25 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singleplaylistview.cpp" line="34"/>
         <source>Shuffle songs</source>
-        <translation>Zufallswiedergabe</translation>
+        <translation>Lieder im Zufallsmodus abspielen</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="114"/>
         <location filename="../singleplaylistview.cpp" line="206"/>
         <source>(unknown song)</source>
-        <translation>(unbekanntes Lied)</translation>
+        <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="118"/>
         <location filename="../singleplaylistview.cpp" line="209"/>
         <source>(unknown artist)</source>
-        <translation>(unbekannter Interpret)</translation>
+        <translation>(Unbekannter Interpret)</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="122"/>
         <location filename="../singleplaylistview.cpp" line="212"/>
         <source>(unknown album)</source>
-        <translation>(unbekanntes Album)</translation>
+        <translation>(Unbekanntes Album)</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="137"/>
@@ -1128,7 +1131,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singleplaylistview.cpp" line="400"/>
         <source>Delete</source>
-        <translation>Lösche</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="401"/>
@@ -1224,12 +1227,12 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../upnpview.cpp" line="114"/>
         <source>(unknown song)</source>
-        <translation>(unbekanntes Lied)</translation>
+        <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="117"/>
         <source>(unknown type)</source>
-        <translation>(unbekannter Typ)</translation>
+        <translation>(Unbekannter Typ)</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="161"/>
@@ -1253,163 +1256,163 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <translation>Aktueller Titel</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="175"/>
+        <location filename="../videonowplayingwindow.cpp" line="172"/>
         <source>Delete video?</source>
         <translation>Video löschen?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="176"/>
+        <location filename="../videonowplayingwindow.cpp" line="173"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Sind sie sicher?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="179"/>
+        <location filename="../videonowplayingwindow.cpp" line="176"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="180"/>
+        <location filename="../videonowplayingwindow.cpp" line="177"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="551"/>
-        <location filename="../videonowplayingwindow.cpp" line="644"/>
+        <location filename="../videonowplayingwindow.cpp" line="544"/>
+        <location filename="../videonowplayingwindow.cpp" line="637"/>
         <source>Unable to play media</source>
         <translation>Kann Medium nicht abspielen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="555"/>
+        <location filename="../videonowplayingwindow.cpp" line="548"/>
         <source>Media not found</source>
         <translation>Medium nicht gefunden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="557"/>
+        <location filename="../videonowplayingwindow.cpp" line="550"/>
         <source>URI not available</source>
         <translation>URI nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="559"/>
+        <location filename="../videonowplayingwindow.cpp" line="552"/>
         <source>Invalid URI</source>
         <translation>Ungültiger URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="561"/>
+        <location filename="../videonowplayingwindow.cpp" line="554"/>
         <source>Unable to open media</source>
         <translation>Kann Medium nicht öffnen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="563"/>
+        <location filename="../videonowplayingwindow.cpp" line="556"/>
         <source>Playback stream no longer available</source>
         <translation>Wiedergabe Stream nicht mehr verfügbar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="565"/>
+        <location filename="../videonowplayingwindow.cpp" line="558"/>
         <source>Could not determine MIME-type</source>
         <translation>Kann MIME-Typ nicht ermitteln</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="567"/>
+        <location filename="../videonowplayingwindow.cpp" line="560"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Allgemeiner Fehler, Wiedergabe nicht möglich</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="569"/>
+        <location filename="../videonowplayingwindow.cpp" line="562"/>
         <source>General error occured</source>
         <translation>Allgemeiner Fehler</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="571"/>
+        <location filename="../videonowplayingwindow.cpp" line="564"/>
         <source>Unsupported media</source>
         <translation>Nicht unterstütztes Medium</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="573"/>
+        <location filename="../videonowplayingwindow.cpp" line="566"/>
         <source>Unsupported resolution</source>
         <translation>Nicht unterstützte Auflösung</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="575"/>
+        <location filename="../videonowplayingwindow.cpp" line="568"/>
         <source>Unsupported framerate</source>
         <translation>Bildrate nicht unterstützt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="577"/>
+        <location filename="../videonowplayingwindow.cpp" line="570"/>
         <source>Media is protected by DRM</source>
         <translation>Medium ist DRM geschützt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="579"/>
+        <location filename="../videonowplayingwindow.cpp" line="572"/>
         <source>System sound device is unavailable</source>
-        <translation>System Sound Device nicht verfügbar</translation>
+        <translation>System Audio Gerät nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="581"/>
+        <location filename="../videonowplayingwindow.cpp" line="574"/>
         <source>Media corrupted</source>
         <translation>Medium beschädigt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="583"/>
+        <location filename="../videonowplayingwindow.cpp" line="576"/>
         <source>Error while parsing playlist</source>
         <translation>Fehler beim Analysieren der Wiedergabeliste</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="584"/>
+        <location filename="../videonowplayingwindow.cpp" line="577"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Wiedergabeliste beschädigt oder leer</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="587"/>
+        <location filename="../videonowplayingwindow.cpp" line="580"/>
         <source>Codec not found:</source>
         <translation>Codec nicht gefunden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="591"/>
+        <location filename="../videonowplayingwindow.cpp" line="584"/>
         <source>Video codec not found:</source>
-        <translation>Video Codec  nicht gefunden:</translation>
+        <translation>Video Codec nicht gefunden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="595"/>
+        <location filename="../videonowplayingwindow.cpp" line="588"/>
         <source>Audio codec not found:</source>
-        <translation>Audio Codec  nicht gefunden:</translation>
+        <translation>Audio Codec nicht gefunden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="599"/>
+        <location filename="../videonowplayingwindow.cpp" line="592"/>
         <source>No playlist assigned</source>
         <translation>Keine Wiedergabeliste zugeteilt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="601"/>
+        <location filename="../videonowplayingwindow.cpp" line="594"/>
         <source>Media index is not in bound with playlist items</source>
-        <translation>Medium Index nicht mit Wiedergabeliste verbunden</translation>
+        <translation>Medium Index ist nicht mit der Wiedergabeliste verbunden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="603"/>
+        <location filename="../videonowplayingwindow.cpp" line="596"/>
         <source>Unable to start playback</source>
         <translation>Kann Wiedergabe nicht starten</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="605"/>
+        <location filename="../videonowplayingwindow.cpp" line="598"/>
         <source>Unable to stop playback</source>
         <translation>Kann Wiedergabe nicht stoppen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="607"/>
+        <location filename="../videonowplayingwindow.cpp" line="600"/>
         <source>Unable to pause playback</source>
-        <translation>Wiedergabe pausieren nicht möglich</translation>
+        <translation>Pausieren der Wiedergabe nicht möglich</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="609"/>
+        <location filename="../videonowplayingwindow.cpp" line="602"/>
         <source>Unable to seek position in media</source>
         <translation>Kann Position im Medium nicht suchen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="611"/>
+        <location filename="../videonowplayingwindow.cpp" line="604"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Kann gegenwärtige Position im Medium nicht finden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="613"/>
+        <location filename="../videonowplayingwindow.cpp" line="606"/>
         <source>Unable to get current playback status</source>
         <translation>Gegenwärtiger Wiedergabe Status nicht verfügbar</translation>
     </message>
@@ -1434,7 +1437,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../videoswindow.cpp" line="87"/>
         <source>Delete</source>
-        <translation>Lösche</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="88"/>
@@ -1469,7 +1472,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../videoswindow.cpp" line="239"/>
         <source>(unknown clip)</source>
-        <translation>(unbekannter Clip)</translation>
+        <translation>(Unbekannter Clip)</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="298"/>

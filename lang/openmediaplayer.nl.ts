@@ -1253,163 +1253,163 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <translation>Nu Spelen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="175"/>
+        <location filename="../videonowplayingwindow.cpp" line="172"/>
         <source>Delete video?</source>
         <translation>Verwijder video?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="176"/>
+        <location filename="../videonowplayingwindow.cpp" line="173"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Weet u zeker dat u deze video wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="179"/>
+        <location filename="../videonowplayingwindow.cpp" line="176"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="180"/>
+        <location filename="../videonowplayingwindow.cpp" line="177"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="551"/>
-        <location filename="../videonowplayingwindow.cpp" line="644"/>
+        <location filename="../videonowplayingwindow.cpp" line="544"/>
+        <location filename="../videonowplayingwindow.cpp" line="637"/>
         <source>Unable to play media</source>
         <translation>Kan media niet afspelen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="555"/>
+        <location filename="../videonowplayingwindow.cpp" line="548"/>
         <source>Media not found</source>
         <translation>Media niet gevonden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="557"/>
+        <location filename="../videonowplayingwindow.cpp" line="550"/>
         <source>URI not available</source>
         <translation>URI niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="559"/>
+        <location filename="../videonowplayingwindow.cpp" line="552"/>
         <source>Invalid URI</source>
         <translation>Foutieve URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="561"/>
+        <location filename="../videonowplayingwindow.cpp" line="554"/>
         <source>Unable to open media</source>
         <translation>Kan media niet openen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="563"/>
+        <location filename="../videonowplayingwindow.cpp" line="556"/>
         <source>Playback stream no longer available</source>
         <translation>Afspeel stream is niet meer beschikbaar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="565"/>
+        <location filename="../videonowplayingwindow.cpp" line="558"/>
         <source>Could not determine MIME-type</source>
         <translation>Kon MIME-type niet bepalen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="567"/>
+        <location filename="../videonowplayingwindow.cpp" line="560"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Algemene fout opgetreden, verder afspelen onmogelijk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="569"/>
+        <location filename="../videonowplayingwindow.cpp" line="562"/>
         <source>General error occured</source>
         <translation>Algemene fout opgetreden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="571"/>
+        <location filename="../videonowplayingwindow.cpp" line="564"/>
         <source>Unsupported media</source>
         <translation>Niet ondersteunde media</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="573"/>
+        <location filename="../videonowplayingwindow.cpp" line="566"/>
         <source>Unsupported resolution</source>
         <translation>Niet ondersteunde resolutie</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="575"/>
+        <location filename="../videonowplayingwindow.cpp" line="568"/>
         <source>Unsupported framerate</source>
         <translation>Niet ondersteunde framerate</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="577"/>
+        <location filename="../videonowplayingwindow.cpp" line="570"/>
         <source>Media is protected by DRM</source>
         <translation>Media is beveiligd met DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="579"/>
+        <location filename="../videonowplayingwindow.cpp" line="572"/>
         <source>System sound device is unavailable</source>
         <translation>Geluidsapparaat is niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="581"/>
+        <location filename="../videonowplayingwindow.cpp" line="574"/>
         <source>Media corrupted</source>
         <translation>Media beschadigd</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="583"/>
+        <location filename="../videonowplayingwindow.cpp" line="576"/>
         <source>Error while parsing playlist</source>
         <translation>Fout bij doorgeven afspeellijst</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="584"/>
+        <location filename="../videonowplayingwindow.cpp" line="577"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Afspeellijst mogelijk beschadigd of leeg</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="587"/>
+        <location filename="../videonowplayingwindow.cpp" line="580"/>
         <source>Codec not found:</source>
         <translation>Codec niet gevonden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="591"/>
+        <location filename="../videonowplayingwindow.cpp" line="584"/>
         <source>Video codec not found:</source>
         <translation>Video codec niet gevonden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="595"/>
+        <location filename="../videonowplayingwindow.cpp" line="588"/>
         <source>Audio codec not found:</source>
         <translation>Audio codec niet gevonden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="599"/>
+        <location filename="../videonowplayingwindow.cpp" line="592"/>
         <source>No playlist assigned</source>
         <translation>Geen afspeellijst toegewezen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="601"/>
+        <location filename="../videonowplayingwindow.cpp" line="594"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Media index niet in overeenstemming met afspeellijst items</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="603"/>
+        <location filename="../videonowplayingwindow.cpp" line="596"/>
         <source>Unable to start playback</source>
         <translation>Starten van afspelen niet mogelijk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="605"/>
+        <location filename="../videonowplayingwindow.cpp" line="598"/>
         <source>Unable to stop playback</source>
         <translation>Stoppen met afspelen niet mogelijk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="607"/>
+        <location filename="../videonowplayingwindow.cpp" line="600"/>
         <source>Unable to pause playback</source>
         <translation>Pauzeren van afspelen niet mogelijk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="609"/>
+        <location filename="../videonowplayingwindow.cpp" line="602"/>
         <source>Unable to seek position in media</source>
         <translation>Kan niet naar positie in media doorspoelen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="611"/>
+        <location filename="../videonowplayingwindow.cpp" line="604"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Kan huidige positie in media niet bepalen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="613"/>
+        <location filename="../videonowplayingwindow.cpp" line="606"/>
         <source>Unable to get current playback status</source>
         <translation>Kan huidige afspeel status niet bepalen</translation>
     </message>
