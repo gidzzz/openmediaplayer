@@ -25,7 +25,21 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (for the MAFW Renderer and Source adapters).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (FMTX UI and help with Qt/C++).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;En öppen källkod ersättning för beståndet Maemo 5 Media Player.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Upphovsrätt 2010-2011 Mohammad Abu-Garbeyyeh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Upphovsrätt 2011 Grzegorz Gidel&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Upphovsrätt 2011 Matias Perez&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Licensierad under GPLv3.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;Thanks to:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (För MAFW Renderer och adaptrar Source).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (FMTX UI och hjälp med Qt / C + +).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -98,24 +112,26 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../fmtxdialog.cpp" line="32"/>
         <source>Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Frekvens</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="52"/>
         <source>FM transmitter disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>FM-sändare avaktiverad</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="129"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att använda FM-sändare medan headset eller TV-ut-kabel är ansluten.
+Koppla ur kabeln för att fortsätta använda FM-sändare.</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="133"/>
         <source>Unable to use FM transmitter while USB is connected.
 Unplug USB to continue using FM transmitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att använda FM-sändare, medan USB är ansluten.
+Koppla ur USB fortsätta använda FM-sändare.</translation>
     </message>
 </context>
 <context>
@@ -128,7 +144,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../freqdlg.cpp" line="14"/>
         <source>Select frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj frekvens</translation>
     </message>
     <message>
         <location filename="../freqdlg.cpp" line="68"/>
@@ -254,9 +270,9 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../mainwindow.cpp" line="36"/>
         <location filename="../mainwindow.cpp" line="506"/>
         <source>%n clip(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
-            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
+        <translation>
+            <numerusform>%n klipp</numerusform>
+            <numerusform>%n klipp</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -517,9 +533,9 @@ Unplug USB to continue using FM transmitter.</source>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="1228"/>
         <source>%n clip(s) added to now playing</source>
-        <translation type="unfinished">
-            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
-            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
+        <translation>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
 </context>
@@ -622,7 +638,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="735"/>
         <source>There is no active Internet connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Det finns ingen aktiv Internet-anslutning</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1142"/>
@@ -917,9 +933,9 @@ Unplug USB to continue using FM transmitter.</source>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="463"/>
         <source>%n clip(s) added to now playing</source>
-        <translation type="unfinished">
-            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
-            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
+        <translation>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
 </context>
@@ -992,8 +1008,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleartistview.cpp" line="442"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
-            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
 </context>
@@ -1037,9 +1053,9 @@ Unplug USB to continue using FM transmitter.</source>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="371"/>
         <source>%n clip(s) added to now playing</source>
-        <translation type="unfinished">
-            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
-            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
+        <translation>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
 </context>
@@ -1105,8 +1121,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.cpp" line="316"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
-            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
     <message>
@@ -1223,9 +1239,9 @@ Unplug USB to continue using FM transmitter.</source>
     <message numerus="yes">
         <location filename="../upnpview.cpp" line="256"/>
         <source>%n clip(s) added to now playing</source>
-        <translation type="unfinished">
-            <numerusform>%n klipp har lagts till i nu spelas</numerusform>
-            <numerusform>%n klippen har lagts till i nu spelas</numerusform>
+        <translation>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
+            <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
 </context>
