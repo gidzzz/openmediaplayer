@@ -35,7 +35,7 @@ void Home::openBrowser(QString directory)
 {
 
     currentPath = directory;
-    QDir dir ( directory, "*" );
+    QDir dir ( directory );
     dir.setFilter ( QDir::Dirs | QDir::Hidden );
     if ( !dir.isReadable() )
           return;
@@ -69,7 +69,7 @@ void Home::openBrowser(QString directory)
             item->setIcon( QIcon::fromTheme("general_folder") );
             ui->listWidget->insertItem( i, item );
         }
-        else if ( fileInfo.completeSuffix() == "jpg" )
+        else if ( fileInfo.suffix() == "jpg" )
         {
             QListWidgetItem *item = new QListWidgetItem( ui->listWidget );
             item->setText(fileInfo.fileName());

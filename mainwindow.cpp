@@ -228,12 +228,89 @@ void MainWindow::open_mp_now_playing()
     }
 }
 
+#ifdef MAFW
+void MainWindow::openDirectory(QString path) {
+    path = path.left(path.lastIndexOf('/'))
+               .remove("file://")
+               .replace("%20", " ");
+
+    QDir dir(path);
+    dir.setFilter(QDir::Files);
+    QStringList entries = dir.entryList();
+
+    connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
+            this, SLOT(openDirectoryProxy(QString, GHashTable*, QString)));
+
+    songAddBufferSize = entries.size();
+    for (int i = 0; i < songAddBufferSize; i++) {
+        QString objectId = entries.at(i);
+        objectId.prepend(path + "/")
+                .replace(" ", "%20")
+                .replace("/", "%2F")
+                .prepend("localtagfs::music/songs/");
+        mafwTrackerSource->getMetadata(objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_MIME));
+    }
+
+    songAddBuffer = new gchar*[songAddBufferSize+1];
+    songAddBufferPos = 0;
+}
+#endif
+
+#ifdef MAFW
+void MainWindow::openDirectoryProxy(QString objectId, GHashTable *metadata, QString) {
+    --songAddBufferSize; // potential collisions with shuffle-all?
+
+    if (metadata) {
+        GValue *v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_MIME);
+        QString mime = v ? g_value_get_string (v) : "";
+
+        // maybe there's a better way to ignore playlists
+        if (mime.startsWith("audio") && mime != "audio/mpegurl"
+                                     && mime != "audio/x-mpegurl")
+            songAddBuffer[songAddBufferPos++] = qstrdup(objectId.toUtf8());
+    }
+
+    if (songAddBufferSize == 0) {
+        disconnect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
+                   this, SLOT(openDirectoryProxy(QString, GHashTable*, QString)));
+
+        songAddBuffer[songAddBufferPos] = NULL;
+
+        playlist->assignAudioPlaylist();
+        playlist->clear();
+
+        playlist->appendItems((const gchar**)songAddBuffer);
+
+        for (int i = 0; i < songAddBufferPos; i++) {
+            if (songAddBuffer[i] == objectIdToPlay) {
+                playlist->getSize(); // explained in musicwindow.cpp (but it seems like it's not enough here?)
+                mafwrenderer->gotoIndex(i);
+                mafwrenderer->play();
+                break;
+            }
+        }
+
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+        window->show();
+
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+        ui->indicator->inhibit();
+
+        for (int i = 0; i < songAddBufferPos; i++)
+            delete[] songAddBuffer[i];
+        delete[] songAddBuffer;
+
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+    }
+}
+#endif
+
 void MainWindow::mime_open(const QString &uriString)
 {
     this->activateWindow();
     this->uriToPlay = uriString;
     if (uriToPlay.startsWith("/"))
-        uriToPlay.prepend("file:/");
+        uriToPlay.prepend("file://");
     QString objectId = mafwTrackerSource->createObjectId(uriToPlay);
     qDebug() << objectId;
     const gchar* text_uri = uriToPlay.toUtf8();
@@ -243,7 +320,6 @@ void MainWindow::mime_open(const QString &uriString)
     // Converting urisource object to localtagfs:
     // "urisource::file:///home/user/MyDocs/mix.m3u"
     // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
-
     objectId.remove("urisource::file://");
     objectId.replace("/", "%2F");
 
@@ -251,12 +327,11 @@ void MainWindow::mime_open(const QString &uriString)
 
         if (qmimetype.endsWith("mpegurl")) {
 #ifdef MAFW
-            objectId.prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
-            qDebug() << objectId;
-
 #ifdef Q_WS_MAEMO_5
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
+            objectId.prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
+            qDebug() << objectId;
 
             playlist->assignAudioPlaylist();
             playlist->clear();
@@ -269,11 +344,21 @@ void MainWindow::mime_open(const QString &uriString)
 
             // for some reason, if metadata fetching is disabled here, IDs for filesystem instead of localtagfs are returned
             this->browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                                      MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                                               MAFW_METADATA_KEY_DURATION,
-                                                                               MAFW_METADATA_KEY_ARTIST,
-                                                                               MAFW_METADATA_KEY_ALBUM),
-                                                                      0, MAFW_SOURCE_BROWSE_ALL);
+                                                                  MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
+                                                                           MAFW_METADATA_KEY_DURATION,
+                                                                           MAFW_METADATA_KEY_ARTIST,
+                                                                           MAFW_METADATA_KEY_ALBUM),
+                                                                  0, MAFW_SOURCE_BROWSE_ALL);
+#endif
+        }
+
+        else if (QSettings().value("main/openFolders").toBool()) {
+#ifdef MAFW
+#ifdef Q_WS_MAEMO_5
+            setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+            objectIdToPlay = TAGSOURCE_AUDIO_PATH + ("/" + objectId);
+            openDirectory(uriString);
 #endif
         }
 
@@ -530,7 +615,7 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
 
 void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* , QString)
 {
-    if(browseId != browseSongsId)
+    if (browseId != browseSongsId)
       return;
 
     if (songAddBufferSize == 0) {

@@ -33,6 +33,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     if (QSettings().contains("lyrics/enable"))
         if (QSettings().value("lyrics/enable").toBool())
             ui->lyricsCheckBox->setChecked(true);
+    if (QSettings().contains("main/openFolders"))
+        if (QSettings().value("main/openFolders").toBool())
+            ui->foldersCheckBox->setChecked(true);
     if (QSettings().contains("main/lazySliders"))
         if (QSettings().value("main/lazySliders").toBool())
             ui->slidersCheckBox->setChecked(true);
@@ -59,6 +62,7 @@ void SettingsDialog::accept()
         QSettings().setValue("main/onApplicationExit", "stop-playback");
 
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
+    QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());
     QSettings().setValue("main/lazySliders", ui->slidersCheckBox->isChecked());
     NowPlayingWindow::destroy();
 

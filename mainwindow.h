@@ -82,7 +82,9 @@ private:
     int mafwState;
     int rendererStatusNotifications;
     int songAddBufferSize;
+    int songAddBufferPos;
     gchar** songAddBuffer;
+    QString objectIdToPlay;
 #endif
 
 private slots:
@@ -110,12 +112,15 @@ private slots:
     void pausePlay();
     void onStateChanged(int state);
     void onContainerChanged(QString objectId);
+    void openDirectory(QString directory);
+    void openDirectoryProxy(QString objectId, GHashTable *metadata, QString);
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();
     void onBluetoothButtonPressed(QDBusMessage msg);
     void takeScreenshot();
 #endif
+
 };
 
 #endif // MAINWINDOW_H
