@@ -28,7 +28,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     this->setAttribute(Qt::WA_DeleteOnClose);
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-    if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
+    if (QSettings().value("main/onApplicationExit").toString() == "do-nothing")
         ui->onExitBox->setCurrentIndex(1);
     if (QSettings().contains("lyrics/enable"))
         if (QSettings().value("lyrics/enable").toBool())
@@ -57,9 +57,9 @@ SettingsDialog::~SettingsDialog()
 void SettingsDialog::accept()
 {
     if (ui->onExitBox->currentIndex() == 0)
-        QSettings().setValue("main/onApplicationExit", "do-nothing");
-    else if (ui->onExitBox->currentIndex() == 1)
         QSettings().setValue("main/onApplicationExit", "stop-playback");
+    else if (ui->onExitBox->currentIndex() == 1)
+        QSettings().setValue("main/onApplicationExit", "do-nothing");
 
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());

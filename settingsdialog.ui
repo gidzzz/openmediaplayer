@@ -50,12 +50,12 @@
         <widget class="QComboBox" name="onExitBox">
          <item>
           <property name="text">
-           <string>Do nothing</string>
+           <string>Stop playback</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Stop playback</string>
+           <string>Do nothing</string>
           </property>
          </item>
         </widget>
