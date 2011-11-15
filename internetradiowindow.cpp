@@ -57,7 +57,7 @@ InternetRadioWindow::~InternetRadioWindow()
 void InternetRadioWindow::connectSignals()
 {
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
-    connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showAddBookmarkDialog()));
+    connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showBookmarkDialog()));
     connect(ui->listWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(onStationSelected()));
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -118,8 +118,17 @@ void InternetRadioWindow::onContextMenuRequested(const QPoint &point)
 {
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Edit"), this, SLOT(onEditClicked()));
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->exec(point);
+}
+
+void InternetRadioWindow::onEditClicked()
+{
+    QListWidgetItem *item = ui->listWidget->currentItem();
+    bookmarkObjectId = item->data(UserRoleObjectID).toString();
+    showBookmarkDialog(item->data(UserRoleSongTitle).toString(),
+                       item->data(UserRoleValueText).toString());
 }
 
 void InternetRadioWindow::onDeleteClicked()
@@ -131,8 +140,10 @@ void InternetRadioWindow::onDeleteClicked()
 #endif
 }
 
-void InternetRadioWindow::showAddBookmarkDialog()
+void InternetRadioWindow::showBookmarkDialog(QString name, QString address)
 {
+    if (name.isEmpty()) bookmarkObjectId = "";
+
     bookmarkDialog = new QDialog(this);
     bookmarkDialog->setWindowTitle(tr("Add radio bookmark"));
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
@@ -145,8 +156,9 @@ void InternetRadioWindow::showAddBookmarkDialog()
 
     // Input boxes
     nameBox = new QLineEdit(bookmarkDialog);
+    nameBox->setText(name);
     addressBox = new QLineEdit(bookmarkDialog);
-    addressBox->setText("http://");
+    addressBox->setText(address.isEmpty() ? "http://" : address);
 
     // Spacer above save button
     QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -208,7 +220,12 @@ void InternetRadioWindow::onSaveClicked()
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_TITLE, nameBox->text().toUtf8().data());
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_URI, addressBox->text().toUtf8().data());
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_MIME, "audio/unknown");
-            mafwRadioSource->createObject("iradiosource::", metadata);
+
+            if (bookmarkObjectId.isEmpty())
+                mafwRadioSource->createObject("iradiosource::", metadata);
+            else
+                mafwRadioSource->setMetadata(bookmarkObjectId.toUtf8(), metadata);
+
             mafw_metadata_release(metadata);
 
 #ifdef Q_WS_MAEMO_5

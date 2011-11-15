@@ -45,6 +45,7 @@ private:
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
     QDialog *bookmarkDialog;
+    QString bookmarkObjectId;
     QLabel *nameLabel;
     QLabel *addressLabel;
     QPushButton *saveButton;
@@ -62,7 +63,8 @@ private:
 
 private slots:
     void showFMTXDialog();
-    void showAddBookmarkDialog();
+    void showBookmarkDialog(QString name = "", QString address = "");
+    void onEditClicked();
     void onSaveClicked();
     void onStationSelected();
     void onContextMenuRequested(const QPoint &point);
