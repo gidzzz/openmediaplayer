@@ -247,7 +247,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="499"/>
+        <location filename="../mainwindow.cpp" line="584"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n melodie</numerusform>
@@ -257,7 +257,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="506"/>
+        <location filename="../mainwindow.cpp" line="591"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n clip</numerusform>
@@ -267,7 +267,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="522"/>
+        <location filename="../mainwindow.cpp" line="607"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n post</numerusform>
@@ -300,27 +300,27 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <translation>Amesteca toate melodiile</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../mainwindow.cpp" line="583"/>
         <source>(no songs)</source>
         <translation>(fara melodii)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="505"/>
+        <location filename="../mainwindow.cpp" line="590"/>
         <source>(no videos)</source>
         <translation>(fara videoclipuri)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="521"/>
+        <location filename="../mainwindow.cpp" line="606"/>
         <source>(no stations)</source>
         <translation>(fara posturi radio)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="638"/>
+        <location filename="../mainwindow.cpp" line="723"/>
         <source>Processed items:</source>
         <translation>elemente procesate</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="642"/>
+        <location filename="../mainwindow.cpp" line="727"/>
         <source>Remaining items:</source>
         <translation>Elemente ramase</translation>
     </message>
@@ -778,12 +778,12 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <translation>La iesirea din Media Player:</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="53"/>
+        <location filename="../settingsdialog.ui" line="58"/>
         <source>Do nothing</source>
         <translation>Nu face nimic</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="58"/>
+        <location filename="../settingsdialog.ui" line="53"/>
         <source>Stop playback</source>
         <translation>Opreste redarea</translation>
     </message>
@@ -793,22 +793,27 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <translation>Activeaza versurile</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="75"/>
+        <location filename="../settingsdialog.ui" line="73"/>
+        <source>Open whole folders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="82"/>
         <source>Size of automatic playlists</source>
         <translation>Marimea listelor de redare automate</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="91"/>
+        <location filename="../settingsdialog.ui" line="98"/>
         <source>Lazy sliders</source>
         <translation>Slidere incete</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="98"/>
+        <location filename="../settingsdialog.ui" line="105"/>
         <source>Override FMTX checks in UI</source>
         <translation>Suprascrie verificarile FMTX in UI</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="110"/>
+        <location filename="../settingsdialog.ui" line="117"/>
         <source>* Requires modified FMTXD</source>
         <translation>* Necesita FMTXD modificat</translation>
     </message>

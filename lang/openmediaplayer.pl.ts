@@ -25,7 +25,21 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (for the MAFW Renderer and Source adapters).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (FMTX UI and help with Qt/C++).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Otwarta alternatywa dla standardowego odtwarzacza Maemo 5.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2010-2011 Mohammad Abu-Garbeyyeh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Grzegorz Gidel&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Matias Perez&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Program dostępny na licencji GPLv3.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;Podziękowania:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (za interfejs do MAFW Renderer i MAFW Source).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (za okienko nadajnika FM i pomoc w Qt/C++).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -271,23 +285,23 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Wymieszaj wszystko</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../mainwindow.cpp" line="583"/>
         <source>(no songs)</source>
         <translation>(brak utworów)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="505"/>
+        <location filename="../mainwindow.cpp" line="590"/>
         <source>(no videos)</source>
         <translation>(brak filmów)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="521"/>
+        <location filename="../mainwindow.cpp" line="606"/>
         <source>(no stations)</source>
         <translation>(brak stacji)</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="499"/>
+        <location filename="../mainwindow.cpp" line="584"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n utwór</numerusform>
@@ -297,7 +311,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="506"/>
+        <location filename="../mainwindow.cpp" line="591"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n film</numerusform>
@@ -307,7 +321,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="522"/>
+        <location filename="../mainwindow.cpp" line="607"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n stacja</numerusform>
@@ -316,12 +330,12 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="638"/>
+        <location filename="../mainwindow.cpp" line="723"/>
         <source>Processed items:</source>
         <translation>Przetworzone obiekty</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="642"/>
+        <location filename="../mainwindow.cpp" line="727"/>
         <source>Remaining items:</source>
         <translation>Oczekujące obiekty</translation>
     </message>
@@ -779,12 +793,12 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Przy zamykaniu programu:</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="53"/>
+        <location filename="../settingsdialog.ui" line="58"/>
         <source>Do nothing</source>
         <translation>Nie rób nic</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="58"/>
+        <location filename="../settingsdialog.ui" line="53"/>
         <source>Stop playback</source>
         <translation>Zatrzymaj odtwarzanie</translation>
     </message>
@@ -794,22 +808,27 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Teksty piosenek</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="75"/>
+        <location filename="../settingsdialog.ui" line="73"/>
+        <source>Open whole folders</source>
+        <translation>Otwieranie całego folderu</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="82"/>
         <source>Size of automatic playlists</source>
         <translation>Rozmiar automatycznych list</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="91"/>
+        <location filename="../settingsdialog.ui" line="98"/>
         <source>Lazy sliders</source>
         <translation>Leniwe suwaki</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="98"/>
+        <location filename="../settingsdialog.ui" line="105"/>
         <source>Override FMTX checks in UI</source>
         <translation>Nie sprawdzaj FMTX</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="110"/>
+        <location filename="../settingsdialog.ui" line="117"/>
         <source>* Requires modified FMTXD</source>
         <translation>* Wymaga zmodyfikowanego FMTXD</translation>
     </message>

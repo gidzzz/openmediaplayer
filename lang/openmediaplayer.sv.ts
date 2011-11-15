@@ -259,7 +259,7 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="499"/>
+        <location filename="../mainwindow.cpp" line="584"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n låt</numerusform>
@@ -268,7 +268,7 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="506"/>
+        <location filename="../mainwindow.cpp" line="591"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n klipp</numerusform>
@@ -277,7 +277,7 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="522"/>
+        <location filename="../mainwindow.cpp" line="607"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n station</numerusform>
@@ -309,27 +309,27 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
         <translation>Blanda alla låtar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../mainwindow.cpp" line="583"/>
         <source>(no songs)</source>
         <translation>(inga låtar)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="505"/>
+        <location filename="../mainwindow.cpp" line="590"/>
         <source>(no videos)</source>
         <translation>(inga filmer)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="521"/>
+        <location filename="../mainwindow.cpp" line="606"/>
         <source>(no stations)</source>
         <translation>(inga stationer)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="638"/>
+        <location filename="../mainwindow.cpp" line="723"/>
         <source>Processed items:</source>
         <translation>Bearbetade projekt:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="642"/>
+        <location filename="../mainwindow.cpp" line="727"/>
         <source>Remaining items:</source>
         <translation>Återstående projekt:</translation>
     </message>
@@ -782,12 +782,12 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
         <translation>När Mediaspelarn stängs:</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="53"/>
+        <location filename="../settingsdialog.ui" line="58"/>
         <source>Do nothing</source>
         <translation>Gör inget</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="58"/>
+        <location filename="../settingsdialog.ui" line="53"/>
         <source>Stop playback</source>
         <translation>Stoppa uppspelning</translation>
     </message>
@@ -797,22 +797,27 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
         <translation>Aktivera lyrics</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="75"/>
+        <location filename="../settingsdialog.ui" line="73"/>
+        <source>Open whole folders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="82"/>
         <source>Size of automatic playlists</source>
         <translation>Storlek på automatiska spellistor</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="91"/>
+        <location filename="../settingsdialog.ui" line="98"/>
         <source>Lazy sliders</source>
         <translation>Lata reglage</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="98"/>
+        <location filename="../settingsdialog.ui" line="105"/>
         <source>Override FMTX checks in UI</source>
         <translation>Överskrid FMTX kontrollerar UI</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="110"/>
+        <location filename="../settingsdialog.ui" line="117"/>
         <source>* Requires modified FMTXD</source>
         <translation>*Modifierad FMTXD behövs</translation>
     </message>

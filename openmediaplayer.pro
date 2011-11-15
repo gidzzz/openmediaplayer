@@ -17,6 +17,7 @@ TRANSLATIONS = lang/openmediaplayer.ts \
                lang/openmediaplayer.nl.ts \
                lang/openmediaplayer.pl.ts \
                lang/openmediaplayer.ro.ts \
+               lang/openmediaplayer.ru.ts \
                lang/openmediaplayer.sv.ts
 
 DEFINES += MAFW
@@ -221,6 +222,7 @@ OTHER_FILES += \
     lang/openmediaplayer.nl.qm \
     lang/openmediaplayer.pl.qm \
     lang/openmediaplayer.ro.qm \
+    lang/openmediaplayer.ru.qm \
     lang/openmediaplayer.sv.qm
 
 qml_entertainmentview.files += qml_entertainmentview/entertainmentview.qml
@@ -243,6 +245,7 @@ lang.files += lang/openmediaplayer.fr.qm
 lang.files += lang/openmediaplayer.nl.qm
 lang.files += lang/openmediaplayer.pl.qm
 lang.files += lang/openmediaplayer.ro.qm
+lang.files += lang/openmediaplayer.ru.qm
 lang.files += lang/openmediaplayer.sv.qm
 lang.path = /opt/openmediaplayer/lang/
 
