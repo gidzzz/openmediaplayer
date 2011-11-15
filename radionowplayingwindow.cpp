@@ -35,10 +35,10 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #else
     QColor secondaryColor(156, 154, 156);
 #endif
-    ui->stationLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                              .arg(secondaryColor.red())
-                              .arg(secondaryColor.green())
-                              .arg(secondaryColor.blue()));
+    ui->artistAlbumLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                                        .arg(secondaryColor.red())
+                                        .arg(secondaryColor.green())
+                                        .arg(secondaryColor.blue()));
 
     ui->volumeSlider->hide();
 #ifdef Q_WS_MAEMO_5

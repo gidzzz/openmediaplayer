@@ -169,6 +169,11 @@
            <property name="text">
             <string>(unknown artist) / (unknown album)</string>
            </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
           </widget>
          </item>
          <item>
