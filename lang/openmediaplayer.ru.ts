@@ -35,8 +35,8 @@ p, li { white-space: pre-wrap; }
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n альбом</numerusform>
+            <numerusform>%n альбома</numerusform>
             <numerusform>%n альбомов</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -44,8 +44,8 @@ p, li { white-space: pre-wrap; }
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
+            <numerusform>%n песни</numerusform>
             <numerusform>%n песен</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -225,8 +225,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
+            <numerusform>%n песни</numerusform>
             <numerusform>%n песен</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -235,8 +235,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n клип</numerusform>
+            <numerusform>%n клипа</numerusform>
             <numerusform>%n клипов</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -246,7 +246,7 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>
             <numerusform>%n станция</numerusform>
             <numerusform>%n станции</numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n станций</numerusform>
         </translation>
     </message>
     <message>
@@ -404,8 +404,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
+            <numerusform>%n песни</numerusform>
             <numerusform>%n песен</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -473,8 +473,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n альбом</numerusform>
+            <numerusform>%n альбома</numerusform>
             <numerusform>%n альбомов</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -483,7 +483,7 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>
             <numerusform>%n исполнитель</numerusform>
             <numerusform>%n исполнителей</numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n исполнителей</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -491,8 +491,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n файл добавлен в список воспроизведения</numerusform>
+            <numerusform>%n файла добавлено в список воспроизведения</numerusform>
             <numerusform>%n файлов добавлено в список воспроизведения</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -546,8 +546,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
+            <numerusform>%n песни</numerusform>
             <numerusform>%n песен</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -868,8 +868,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
+            <numerusform>%n песни</numerusform>
             <numerusform>%n песен</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -921,8 +921,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n файл добавлен в список воспроизведения</numerusform>
+            <numerusform>%n файла добавлено в список воспроизведения</numerusform>
             <numerusform>%n файлов добавлено в список воспроизведения</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -955,8 +955,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
+            <numerusform>%n песни</numerusform>
             <numerusform>%n песен</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -991,8 +991,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n файл добавлен в список воспроизведения</numerusform>
+            <numerusform>%n файла добавлено в список воспроизведения</numerusform>
             <numerusform>%n файлов добавлено в список воспроизведения</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1036,8 +1036,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
+            <numerusform>%n песни</numerusform>
             <numerusform>%n песен</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1045,8 +1045,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n файл добавлен в список воспроизведения</numerusform>
+            <numerusform>%n файла добавлено в список воспроизведения</numerusform>
             <numerusform>%n файлов добавлено в список воспроизведения</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1102,8 +1102,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n файл добавлен в список воспроизведения</numerusform>
+            <numerusform>%n файла добавлено в список воспроизведения</numerusform>
             <numerusform>%n файлов добавлено в список воспроизведения</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1158,8 +1158,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
+            <numerusform>%n песни</numerusform>
             <numerusform>%n песен</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1240,8 +1240,8 @@ Unplug USB to continue using FM transmitter.</source>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n файл добавлен в список воспроизведения</numerusform>
+            <numerusform>%n файла добавлено в список воспроизведения</numerusform>
             <numerusform>%n файлов добавлено в список воспроизведения</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
