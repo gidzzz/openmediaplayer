@@ -87,7 +87,7 @@ void RadioNowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
 #ifdef MAFW
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
@@ -132,20 +132,20 @@ void RadioNowPlayingWindow::setIcons()
 
 void RadioNowPlayingWindow::toggleVolumeSlider()
 {
-    if(ui->volumeSlider->isHidden()) {
+    if (ui->volumeSlider->isHidden()) {
         ui->buttonsWidget->hide();
         ui->volumeSlider->show();
     } else {
         ui->volumeSlider->hide();
         ui->buttonsWidget->show();
-        if(volumeTimer->isActive())
+        if (volumeTimer->isActive())
             volumeTimer->stop();
     }
 }
 
 void RadioNowPlayingWindow::volumeWatcher()
 {
-    if(!ui->volumeSlider->isHidden())
+    if (!ui->volumeSlider->isHidden())
         volumeTimer->start();
 }
 
@@ -166,40 +166,40 @@ void RadioNowPlayingWindow::onVolumeSliderReleased()
 }
 
 #ifdef MAFW
-void RadioNowPlayingWindow::stateChanged(int state)
+void RadioNowPlayingWindow::onStateChanged(int state)
 {
     this->mafwState = state;
 
-    if(state == Paused) {
+    if (state == Paused) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
         disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
         disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
         mafwrenderer->getPosition();
-        if(positionTimer->isActive())
+        if (positionTimer->isActive())
             positionTimer->stop();
     }
-    else if(state == Playing) {
+    else if (state == Playing) {
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
         disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
         disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
         mafwrenderer->getPosition();
-        if(!positionTimer->isActive())
+        if (!positionTimer->isActive())
             positionTimer->start();
     }
-    else if(state == Stopped) {
+    else if (state == Stopped) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
         disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
         disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
-        if(positionTimer->isActive())
+        if (positionTimer->isActive())
             positionTimer->stop();
     }
-    else if(state == Transitioning) {
+    else if (state == Transitioning) {
         ui->songProgress->setEnabled(false);
         ui->songProgress->setValue(0);
         ui->songProgress->setRange(0, 99);
@@ -207,7 +207,7 @@ void RadioNowPlayingWindow::stateChanged(int state)
     }
 }
 
-void RadioNowPlayingWindow::onMediaChanged(int index, char* objectId)
+void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
     ui->artistAlbumLabel->setText(tr("(unknown artist) / (unknown album)"));
 
@@ -240,7 +240,7 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
 
 void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
 {
-    this->stateChanged(state);
+    this->onStateChanged(state);
 }
 
 void RadioNowPlayingWindow::updateArtistAlbum()
@@ -265,15 +265,22 @@ void RadioNowPlayingWindow::onBufferingInfo(float buffer)
         int percentage = (int)(buffer*100);
         ui->bufferBar->setRange(0, 100);
         ui->bufferBar->setValue(percentage);
+
+        ui->bufferBar->setFormat(tr("Buffering") + " %p%");
+
         if (buffer == 1.0) {
             ui->bufferBar->hide();
             ui->seekWidget->show();
             if (!positionTimer->isActive())
                 positionTimer->start();
         }
-    } else {
+    } else { // buffer == 0.0
         ui->bufferBar->setRange(0, 0);
         ui->bufferBar->setValue(-1);
+
+        // Qt doesn't want to display the label in the bouncing mode
+        /*ui->bufferBar->setFormat(tr("Connecting"));*/
+
         if (positionTimer->isActive())
             positionTimer->stop();
     }
@@ -431,7 +438,7 @@ void RadioNowPlayingWindow::streamIsSeekable(bool seekable)
 #ifdef MAFW
     if (seekable) {
         if (this->mafwState == Playing) {
-            this->stateChanged(Playing);
+            this->onStateChanged(Playing);
         }
     } else {
         if (this->mafwState == Playing) {
@@ -441,7 +448,7 @@ void RadioNowPlayingWindow::streamIsSeekable(bool seekable)
             connect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
             connect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
             mafwrenderer->getPosition();
-            if(!positionTimer->isActive())
+            if (!positionTimer->isActive())
                 positionTimer->start();
         }
     }
