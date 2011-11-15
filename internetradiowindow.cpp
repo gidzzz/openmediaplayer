@@ -244,11 +244,11 @@ void InternetRadioWindow::listStations()
     connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
 
-    this->browseAllStationsId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
-                                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                                MAFW_METADATA_KEY_URI,
-                                                                                MAFW_METADATA_KEY_MIME),
-                                                               0, MAFW_SOURCE_BROWSE_ALL);
+    browseAllStationsId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
+                                                        MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                         MAFW_METADATA_KEY_URI,
+                                                                         MAFW_METADATA_KEY_MIME),
+                                                        0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)

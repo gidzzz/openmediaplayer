@@ -66,6 +66,7 @@ private slots:
     void updateArtistAlbum();
 #ifdef MAFW
     void stateChanged(int state);
+    void onMediaChanged(int index, char* objectId);
     void onPropertyChanged(const QDBusMessage &msg);
     void onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString);
     void onGetPosition(int position, QString);

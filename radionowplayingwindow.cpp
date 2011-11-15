@@ -88,6 +88,7 @@ void RadioNowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
@@ -206,20 +207,28 @@ void RadioNowPlayingWindow::stateChanged(int state)
     }
 }
 
+void RadioNowPlayingWindow::onMediaChanged(int index, char* objectId)
+{
+    ui->artistAlbumLabel->setText(tr("(unknown artist) / (unknown album)"));
+
+    if (objectId)
+        mafwRadioSource->getMetadata(objectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE));
+    else
+        ui->stationLabel->setText(tr("(unknown station)"));
+}
+
 void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant value)
 {
-#ifdef MAFW
-    this->mafwrenderer->getCurrentMetadata();
-#endif
+    mafwrenderer->getCurrentMetadata();
 
-    if(name == "is-seekable" /*MAFW_METADATA_KEY_IS_SEEKABLE*/) {
+    if (name == "is-seekable" /*MAFW_METADATA_KEY_IS_SEEKABLE*/) {
         ui->songProgress->setEnabled(value.toBool());
         this->streamIsSeekable(value.toBool());
     }
     if (name == "duration" /*MAFW_METADATA_KEY_DURATION*/) {
         ui->streamLengthLabel->setText(time_mmss(value.toInt()));
     }
-    if(name == "renderer-art-uri")
+    if (name == "renderer-art-uri")
         ui->albumArt->setPixmap(QPixmap(value.toString()));
     if (name == "artist")
         this->artistName = value.toString();
@@ -303,19 +312,6 @@ void RadioNowPlayingWindow::onPreviousButtonClicked()
 
 void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString object_id, QString error)
 {
-    /*this->mafwRadioSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                              MAFW_METADATA_KEY_ALBUM,
-                                                                              MAFW_METADATA_KEY_ARTIST,
-                                                                              MAFW_METADATA_KEY_ALBUM_ART_URI,
-                                                                              MAFW_METADATA_KEY_DURATION,
-                                                                              MAFW_METADATA_KEY_IS_SEEKABLE));*/
-    this->onSourceMetadataRequested(object_id, metadata, "");
-    if(!error.isNull() && !error.isEmpty())
-        qDebug() << error;
-}
-
-void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
-{
     if (metadata != NULL) {
         QString artistAlbum;
         QString organization;
@@ -324,21 +320,17 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         artistAlbum = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown artist) / (unknown album)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ORGANIZATION);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ORGANIZATION);
         organization = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
         this->streamDuration = duration;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_IS_SEEKABLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_IS_SEEKABLE);
         isSeekable = v ? g_value_get_boolean (v) : false;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
@@ -363,7 +355,23 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         this->streamIsSeekable(isSeekable);
     }
 
-    if (!error.isNull() && !error.isEmpty())
+    if (!error.isEmpty())
+        qDebug() << error;
+}
+
+void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
+{
+    if (metadata != NULL) {
+        QString station;
+        GValue *v;
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
+        station = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
+
+        ui->stationLabel->setText(station);
+    }
+
+    if (!error.isEmpty())
         qDebug() << error;
 }
 #endif

@@ -1048,6 +1048,7 @@ void NowPlayingWindow::onMediaChanged(int index, char*)
     lastPlayingSong->set(index);
     this->isDefaultArt = true;
     focusItemByRow(index);
+    mafwrenderer->getCurrentMetadata();
 }
 
 #endif
