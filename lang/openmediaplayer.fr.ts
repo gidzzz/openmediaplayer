@@ -164,7 +164,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Editer</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="122"/>
@@ -769,7 +769,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="280"/>
         <source>Buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>Mise en cache</translation>
     </message>
 </context>
 <context>
@@ -802,7 +802,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir tous les morceaux des dossiers</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
@@ -812,7 +812,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="98"/>
         <source>Lazy sliders</source>
-        <translation type="unfinished">Curseurs peu actifs</translation>
+        <translation type="unfinished">Curseurs peu nerveux</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="105"/>
