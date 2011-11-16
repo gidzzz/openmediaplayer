@@ -35,10 +35,10 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #else
     QColor secondaryColor(156, 154, 156);
 #endif
-    ui->artistAlbumLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                                        .arg(secondaryColor.red())
-                                        .arg(secondaryColor.green())
-                                        .arg(secondaryColor.blue()));
+    ui->songLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                                 .arg(secondaryColor.red())
+                                 .arg(secondaryColor.green())
+                                 .arg(secondaryColor.blue()));
 
     ui->volumeSlider->hide();
 #ifdef Q_WS_MAEMO_5
@@ -209,7 +209,7 @@ void RadioNowPlayingWindow::onStateChanged(int state)
 
 void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
-    ui->artistAlbumLabel->setText(tr("(unknown artist) / (unknown album)"));
+    ui->songLabel->setText(tr("(unknown artist) / (unknown song)"));
 
     if (objectId)
         mafwRadioSource->getMetadata(objectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE));
@@ -225,17 +225,20 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
         ui->songProgress->setEnabled(value.toBool());
         this->streamIsSeekable(value.toBool());
     }
-    if (name == "duration" /*MAFW_METADATA_KEY_DURATION*/) {
+    else if (name == "artist") {
+        this->artist = value.toString();
+        this->updateSongLabel();
+    }
+    else if (name == "title") {
+        this->title = value.toString();
+        this->updateSongLabel();
+    }
+    else if (name == "duration" /*MAFW_METADATA_KEY_DURATION*/) {
         ui->streamLengthLabel->setText(time_mmss(value.toInt()));
     }
-    if (name == "renderer-art-uri")
+    else if (name == "renderer-art-uri") {
         ui->albumArt->setPixmap(QPixmap(value.toString()));
-    if (name == "artist")
-        this->artistName = value.toString();
-    if (name == "album")
-        this->albumName = value.toString();
-    if (name == "artist" || name == "album")
-        this->updateArtistAlbum();
+    }
 }
 
 void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
@@ -243,9 +246,16 @@ void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state
     this->onStateChanged(state);
 }
 
-void RadioNowPlayingWindow::updateArtistAlbum()
+void RadioNowPlayingWindow::updateSongLabel()
 {
-    ui->artistAlbumLabel->setText(this->artistName + " / " + this->albumName);
+    QString labelText = this->title;
+
+    if (title.isEmpty())
+        labelText = tr("(unknown artist) / (unknown song)");
+    else if (!artist.isEmpty())
+        labelText.prepend(artist + " / ");
+
+    ui->songLabel->setText(labelText);
 }
 
 void RadioNowPlayingWindow::onGetPosition(int position, QString)
@@ -320,18 +330,20 @@ void RadioNowPlayingWindow::onPreviousButtonClicked()
 void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString object_id, QString error)
 {
     if (metadata != NULL) {
-        QString artistAlbum;
-        QString organization;
+        QString station;
         QString albumArt;
         bool isSeekable;
         int duration;
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        artistAlbum = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown artist) / (unknown album)");
+        this->title = v ? QString::fromUtf8(g_value_get_string (v)) : "";
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
+        this->artist = v ? QString::fromUtf8(g_value_get_string (v)) : "";
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ORGANIZATION);
-        organization = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
+        station = v ? QString::fromUtf8(g_value_get_string (v)) : "";
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
@@ -351,14 +363,17 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
             ui->albumArt->setPixmap(QPixmap(radioImage));
         }
 
-        ui->stationLabel->setText(organization);
-        ui->artistAlbumLabel->setText(artistAlbum);
+        this->updateSongLabel();
+
+        if (!station.isEmpty())
+            ui->stationLabel->setText(station);
+
         if (duration != Duration::Unknown) {
             ui->streamLengthLabel->setText(time_mmss(duration));
             ui->songProgress->setRange(0, duration);
-        } else {
+        } else
             ui->streamLengthLabel->setText("--:--");
-        }
+
         this->streamIsSeekable(isSeekable);
     }
 

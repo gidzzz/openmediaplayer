@@ -165,9 +165,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="artistAlbumLabel">
+          <widget class="QLabel" name="songLabel">
            <property name="text">
-            <string>(unknown artist) / (unknown album)</string>
+            <string>(unknown artist) / (unknown song)</string>
            </property>
            <property name="font">
             <font>

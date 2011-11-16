@@ -46,8 +46,8 @@ private:
     MafwPlaylistAdapter* playlist;
     int mafwState;
     int streamDuration;
-    QString artistName;
-    QString albumName;
+    QString artist;
+    QString title;
 #endif
 
 private slots:
@@ -63,7 +63,7 @@ private slots:
     void onPrevButtonPressed();
     void onStopButtonPressed();
     void streamIsSeekable(bool seekable);
-    void updateArtistAlbum();
+    void updateSongLabel();
 #ifdef MAFW
     void onStateChanged(int state);
     void onMediaChanged(int, char* objectId);
