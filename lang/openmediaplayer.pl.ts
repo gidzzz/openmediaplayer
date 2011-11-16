@@ -310,7 +310,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n utwór</numerusform>
-            <numerusform>%n utowry</numerusform>
+            <numerusform>%n utwory</numerusform>
             <numerusform>%n utworów</numerusform>
         </translation>
     </message>
@@ -444,7 +444,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="454"/>
         <source>Songs</source>
-        <translation>Utowry</translation>
+        <translation>Utwory</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="690"/>
@@ -747,7 +747,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
-        <translation>Odświerz tekst</translation>
+        <translation>Odśwież tekst</translation>
     </message>
 </context>
 <context>
@@ -916,7 +916,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n utwór</numerusform>
-            <numerusform>%n utowry</numerusform>
+            <numerusform>%n utwory</numerusform>
             <numerusform>%n utworów</numerusform>
         </translation>
     </message>
@@ -1217,7 +1217,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n utwór</numerusform>
-            <numerusform>%n utowry</numerusform>
+            <numerusform>%n utwory</numerusform>
             <numerusform>%n utworów</numerusform>
         </translation>
     </message>
@@ -1363,7 +1363,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="564"/>
         <source>Unsupported media</source>
-        <translation>Nieobłsugiwany plik</translation>
+        <translation>Nieobsługiwany plik</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="566"/>
