@@ -39,6 +39,7 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
                                  .arg(secondaryColor.red())
                                  .arg(secondaryColor.green())
                                  .arg(secondaryColor.blue()));
+    this->updateSongLabel();
 
     ui->volumeSlider->hide();
 #ifdef Q_WS_MAEMO_5
@@ -209,7 +210,7 @@ void RadioNowPlayingWindow::onStateChanged(int state)
 
 void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
-    ui->songLabel->setText(tr("(unknown artist) / (unknown song)"));
+    ui->songLabel->setText(tr("(unknown artist)") + " / " + tr("(unknown song)"));
 
     if (objectId)
         mafwRadioSource->getMetadata(objectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE));
@@ -251,7 +252,7 @@ void RadioNowPlayingWindow::updateSongLabel()
     QString labelText = this->title;
 
     if (title.isEmpty())
-        labelText = tr("(unknown artist) / (unknown song)");
+        labelText = tr("(unknown artist)") + " / " + tr("(unknown song)");
     else if (!artist.isEmpty())
         labelText.prepend(artist + " / ");
 

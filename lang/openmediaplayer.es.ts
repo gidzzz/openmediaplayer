@@ -166,7 +166,7 @@ Por favor, desconecte el cable USB</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="137"/>
+        <location filename="../internetradiowindow.cpp" line="148"/>
         <source>Add radio bookmark</source>
         <translation>Añadir emisora de radio
 a favoritos</translation>
@@ -178,54 +178,59 @@ a favoritos</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="122"/>
         <source>Delete</source>
         <translation>Suprimir</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="142"/>
+        <location filename="../internetradiowindow.cpp" line="153"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="144"/>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Web address</source>
         <translation>Dirección Web</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="156"/>
+        <location filename="../internetradiowindow.cpp" line="168"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="199"/>
-        <location filename="../internetradiowindow.cpp" line="201"/>
+        <location filename="../internetradiowindow.cpp" line="211"/>
+        <location filename="../internetradiowindow.cpp" line="213"/>
         <source>Unable to add empty bookmark</source>
         <translation>Imposible añadir favoritos vacíos</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="201"/>
-        <location filename="../internetradiowindow.cpp" line="226"/>
+        <location filename="../internetradiowindow.cpp" line="213"/>
+        <location filename="../internetradiowindow.cpp" line="243"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="215"/>
+        <location filename="../internetradiowindow.cpp" line="232"/>
         <source>Media bookmark saved</source>
         <translation>Favorito guardado</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="224"/>
-        <location filename="../internetradiowindow.cpp" line="226"/>
+        <location filename="../internetradiowindow.cpp" line="241"/>
+        <location filename="../internetradiowindow.cpp" line="243"/>
         <source>Invalid URL</source>
         <translation>Dirección web no válida</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="274"/>
+        <location filename="../internetradiowindow.cpp" line="291"/>
         <source>(unknown station)</source>
         <translation>(emisora desconocida)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="278"/>
+        <location filename="../internetradiowindow.cpp" line="295"/>
         <source>(unknown)</source>
         <translation>(desconocido)</translation>
     </message>
@@ -556,21 +561,21 @@ a favoritos</translation>
         <location filename="../nowplayingwindow.ui" line="237"/>
         <location filename="../nowplayingwindow.cpp" line="632"/>
         <location filename="../nowplayingwindow.cpp" line="635"/>
-        <location filename="../nowplayingwindow.cpp" line="1115"/>
+        <location filename="../nowplayingwindow.cpp" line="1116"/>
         <source>(unknown song)</source>
         <translation>(canción desconocida)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
         <location filename="../nowplayingwindow.cpp" line="641"/>
-        <location filename="../nowplayingwindow.cpp" line="1119"/>
+        <location filename="../nowplayingwindow.cpp" line="1120"/>
         <source>(unknown artist)</source>
         <translation>(artista desconocido)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
         <location filename="../nowplayingwindow.cpp" line="644"/>
-        <location filename="../nowplayingwindow.cpp" line="1123"/>
+        <location filename="../nowplayingwindow.cpp" line="1124"/>
         <source>(unknown album)</source>
         <translation>(álbum desconocido)</translation>
     </message>
@@ -586,14 +591,14 @@ a favoritos</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1240"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
         <source>Clear now playing</source>
         <translation>Suprimir lista en curso</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1233"/>
-        <location filename="../nowplayingwindow.cpp" line="1381"/>
+        <location filename="../nowplayingwindow.cpp" line="1234"/>
+        <location filename="../nowplayingwindow.cpp" line="1382"/>
         <source>Save playlist</source>
         <translation>Guardar lista de reproducción</translation>
     </message>
@@ -614,7 +619,7 @@ a favoritos</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="721"/>
-        <location filename="../nowplayingwindow.cpp" line="1642"/>
+        <location filename="../nowplayingwindow.cpp" line="1643"/>
         <source>Fetching lyrics...</source>
         <translation>Descargando letra de la canción...</translation>
     </message>
@@ -642,95 +647,95 @@ a favoritos</translation>
         <translation> No hay conexión activa a Internet </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1142"/>
+        <location filename="../nowplayingwindow.cpp" line="1143"/>
         <source>Information not available</source>
         <translation>Información no disponible</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1202"/>
+        <location filename="../nowplayingwindow.cpp" line="1203"/>
         <source>Clear all songs from now playing?</source>
         <translation>¿Suprimir todas las canciones de la lista en curso?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1236"/>
+        <location filename="../nowplayingwindow.cpp" line="1237"/>
         <source>Set as ringing tone</source>
         <translation>Establecer como tono de llamada</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1239"/>
+        <location filename="../nowplayingwindow.cpp" line="1240"/>
         <source>Delete from now playing</source>
         <translation>Suprimir de la lista en curso</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1237"/>
+        <location filename="../nowplayingwindow.cpp" line="1238"/>
         <source>Share</source>
         <translation>Compartir</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="1205"/>
-        <location filename="../nowplayingwindow.cpp" line="1254"/>
-        <location filename="../nowplayingwindow.cpp" line="1429"/>
-        <location filename="../nowplayingwindow.cpp" line="1564"/>
-        <source>Yes</source>
-        <translation>Sí</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1206"/>
         <location filename="../nowplayingwindow.cpp" line="1255"/>
         <location filename="../nowplayingwindow.cpp" line="1430"/>
         <location filename="../nowplayingwindow.cpp" line="1565"/>
+        <source>Yes</source>
+        <translation>Sí</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1207"/>
+        <location filename="../nowplayingwindow.cpp" line="1256"/>
+        <location filename="../nowplayingwindow.cpp" line="1431"/>
+        <location filename="../nowplayingwindow.cpp" line="1566"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1249"/>
+        <location filename="../nowplayingwindow.cpp" line="1250"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>¿Está seguro de que desea establecer esta canción como tono de llamada?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1389"/>
+        <location filename="../nowplayingwindow.cpp" line="1390"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1395"/>
+        <location filename="../nowplayingwindow.cpp" line="1396"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1426"/>
+        <location filename="../nowplayingwindow.cpp" line="1427"/>
         <source>Playlist with the same name exists, overwrite?</source>
         <translation> Ya existe una lista de reproducción con el mismo nombre. ¿Desea reemplazarla?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1437"/>
-        <location filename="../nowplayingwindow.cpp" line="1444"/>
+        <location filename="../nowplayingwindow.cpp" line="1438"/>
+        <location filename="../nowplayingwindow.cpp" line="1445"/>
         <source>Playlist saved</source>
         <translation>Lista de reproducción guardada</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1543"/>
-        <location filename="../nowplayingwindow.cpp" line="1550"/>
+        <location filename="../nowplayingwindow.cpp" line="1544"/>
+        <location filename="../nowplayingwindow.cpp" line="1551"/>
         <source>Select album art</source>
         <translation>Cambiar carátula del álbum</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1544"/>
+        <location filename="../nowplayingwindow.cpp" line="1545"/>
         <source>Reset album art</source>
         <translation>Suprimir carátula del álbum</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1561"/>
+        <location filename="../nowplayingwindow.cpp" line="1562"/>
         <source>Reset album art?</source>
         <translation>¿Suprimir carátula del álbum?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1597"/>
+        <location filename="../nowplayingwindow.cpp" line="1598"/>
         <source>Edit lyrics</source>
         <translation>Editar letra de la canción</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1598"/>
+        <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
         <translation>Recargar letra de la canción</translation>
     </message>
@@ -744,31 +749,43 @@ a favoritos</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="163"/>
-        <location filename="../radionowplayingwindow.cpp" line="333"/>
+        <location filename="../radionowplayingwindow.cpp" line="218"/>
+        <location filename="../radionowplayingwindow.cpp" line="392"/>
         <source>(unknown station)</source>
         <translation>(emisora desconocida)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="170"/>
-        <location filename="../radionowplayingwindow.cpp" line="329"/>
-        <source>(unknown artist) / (unknown album)</source>
-        <translation>(artista desconocido) / (álbum desconocido)</translation>
-    </message>
-    <message>
-        <location filename="../radionowplayingwindow.ui" line="514"/>
+        <location filename="../radionowplayingwindow.ui" line="516"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="523"/>
+        <location filename="../radionowplayingwindow.ui" line="525"/>
         <source>FM transmitter</source>
         <translation>Transmisor FM</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="528"/>
+        <location filename="../radionowplayingwindow.ui" line="530"/>
         <source>Add radio bookmark</source>
         <translation>Añadir emisora de radio
 a favoritos</translation>
+    </message>
+    <message>
+        <location filename="../radionowplayingwindow.cpp" line="213"/>
+        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <source>(unknown artist)</source>
+        <translation>(artista desconocido)</translation>
+    </message>
+    <message>
+        <location filename="../radionowplayingwindow.cpp" line="213"/>
+        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <source>(unknown song)</source>
+        <translation>(canción desconocida)</translation>
+    </message>
+    <message>
+        <location filename="../radionowplayingwindow.cpp" line="280"/>
+        <source>Buffering</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -166,7 +166,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="137"/>
+        <location filename="../internetradiowindow.cpp" line="148"/>
         <source>Add radio bookmark</source>
         <translation>Lesezeichen hinzufügen</translation>
     </message>
@@ -177,54 +177,59 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="122"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="142"/>
+        <location filename="../internetradiowindow.cpp" line="153"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="144"/>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Web address</source>
         <translation>Internetadresse</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="156"/>
+        <location filename="../internetradiowindow.cpp" line="168"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="199"/>
-        <location filename="../internetradiowindow.cpp" line="201"/>
+        <location filename="../internetradiowindow.cpp" line="211"/>
+        <location filename="../internetradiowindow.cpp" line="213"/>
         <source>Unable to add empty bookmark</source>
         <translation>Es kann kein leeres Lesezeichen hinzugefügt werden</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="201"/>
-        <location filename="../internetradiowindow.cpp" line="226"/>
+        <location filename="../internetradiowindow.cpp" line="213"/>
+        <location filename="../internetradiowindow.cpp" line="243"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="215"/>
+        <location filename="../internetradiowindow.cpp" line="232"/>
         <source>Media bookmark saved</source>
         <translation>Lesezeichen gespeichert</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="224"/>
-        <location filename="../internetradiowindow.cpp" line="226"/>
+        <location filename="../internetradiowindow.cpp" line="241"/>
+        <location filename="../internetradiowindow.cpp" line="243"/>
         <source>Invalid URL</source>
         <translation>Ungültige URL</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="274"/>
+        <location filename="../internetradiowindow.cpp" line="291"/>
         <source>(unknown station)</source>
         <translation>(Unbekannter Sender)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="278"/>
+        <location filename="../internetradiowindow.cpp" line="295"/>
         <source>(unknown)</source>
         <translation>(Unbekannt)</translation>
     </message>
@@ -555,21 +560,21 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../nowplayingwindow.ui" line="237"/>
         <location filename="../nowplayingwindow.cpp" line="632"/>
         <location filename="../nowplayingwindow.cpp" line="635"/>
-        <location filename="../nowplayingwindow.cpp" line="1115"/>
+        <location filename="../nowplayingwindow.cpp" line="1116"/>
         <source>(unknown song)</source>
         <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
         <location filename="../nowplayingwindow.cpp" line="641"/>
-        <location filename="../nowplayingwindow.cpp" line="1119"/>
+        <location filename="../nowplayingwindow.cpp" line="1120"/>
         <source>(unknown artist)</source>
         <translation>(Unbekannter Interpret)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
         <location filename="../nowplayingwindow.cpp" line="644"/>
-        <location filename="../nowplayingwindow.cpp" line="1123"/>
+        <location filename="../nowplayingwindow.cpp" line="1124"/>
         <source>(unknown album)</source>
         <translation>(Unbekanntes Album)</translation>
     </message>
@@ -585,14 +590,14 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1240"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
         <source>Clear now playing</source>
         <translation>Wiedergabeliste löschen</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1233"/>
-        <location filename="../nowplayingwindow.cpp" line="1381"/>
+        <location filename="../nowplayingwindow.cpp" line="1234"/>
+        <location filename="../nowplayingwindow.cpp" line="1382"/>
         <source>Save playlist</source>
         <translation>Wiedergabeliste speichern</translation>
     </message>
@@ -631,7 +636,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="721"/>
-        <location filename="../nowplayingwindow.cpp" line="1642"/>
+        <location filename="../nowplayingwindow.cpp" line="1643"/>
         <source>Fetching lyrics...</source>
         <translation>Hole Liedtext...</translation>
     </message>
@@ -641,95 +646,95 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <translation>Keine Internetverbindung verfügbar</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1142"/>
+        <location filename="../nowplayingwindow.cpp" line="1143"/>
         <source>Information not available</source>
         <translation>Information nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1202"/>
+        <location filename="../nowplayingwindow.cpp" line="1203"/>
         <source>Clear all songs from now playing?</source>
         <translation>Alle Lieder aus aktueller Widergabeliste entfernen?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1236"/>
+        <location filename="../nowplayingwindow.cpp" line="1237"/>
         <source>Set as ringing tone</source>
         <translation>Als Klingelton einrichten</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1239"/>
+        <location filename="../nowplayingwindow.cpp" line="1240"/>
         <source>Delete from now playing</source>
         <translation>Von Wiedergabeliste löschen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1237"/>
+        <location filename="../nowplayingwindow.cpp" line="1238"/>
         <source>Share</source>
         <translation>Freigeben</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="1205"/>
-        <location filename="../nowplayingwindow.cpp" line="1254"/>
-        <location filename="../nowplayingwindow.cpp" line="1429"/>
-        <location filename="../nowplayingwindow.cpp" line="1564"/>
-        <source>Yes</source>
-        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1206"/>
         <location filename="../nowplayingwindow.cpp" line="1255"/>
         <location filename="../nowplayingwindow.cpp" line="1430"/>
         <location filename="../nowplayingwindow.cpp" line="1565"/>
+        <source>Yes</source>
+        <translation>Ja</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1207"/>
+        <location filename="../nowplayingwindow.cpp" line="1256"/>
+        <location filename="../nowplayingwindow.cpp" line="1431"/>
+        <location filename="../nowplayingwindow.cpp" line="1566"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1249"/>
+        <location filename="../nowplayingwindow.cpp" line="1250"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>Sind sie sicher?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1389"/>
+        <location filename="../nowplayingwindow.cpp" line="1390"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1395"/>
+        <location filename="../nowplayingwindow.cpp" line="1396"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1426"/>
+        <location filename="../nowplayingwindow.cpp" line="1427"/>
         <source>Playlist with the same name exists, overwrite?</source>
         <translation>Wiedergabeliste überschreiben?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1437"/>
-        <location filename="../nowplayingwindow.cpp" line="1444"/>
+        <location filename="../nowplayingwindow.cpp" line="1438"/>
+        <location filename="../nowplayingwindow.cpp" line="1445"/>
         <source>Playlist saved</source>
         <translation>Wiedergabeliste gespeichert</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1543"/>
-        <location filename="../nowplayingwindow.cpp" line="1550"/>
+        <location filename="../nowplayingwindow.cpp" line="1544"/>
+        <location filename="../nowplayingwindow.cpp" line="1551"/>
         <source>Select album art</source>
         <translation>Wähle Album Bild aus</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1544"/>
+        <location filename="../nowplayingwindow.cpp" line="1545"/>
         <source>Reset album art</source>
         <translation>Setze Album Bild zurück</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1561"/>
+        <location filename="../nowplayingwindow.cpp" line="1562"/>
         <source>Reset album art?</source>
         <translation>Album Bild zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1597"/>
+        <location filename="../nowplayingwindow.cpp" line="1598"/>
         <source>Edit lyrics</source>
         <translation>Liedtext editieren</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1598"/>
+        <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
         <translation>Liedtext neu laden</translation>
     </message>
@@ -743,31 +748,42 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="163"/>
-        <location filename="../radionowplayingwindow.cpp" line="333"/>
+        <location filename="../radionowplayingwindow.cpp" line="218"/>
+        <location filename="../radionowplayingwindow.cpp" line="392"/>
         <source>(unknown station)</source>
         <translation>(Unbekannter Sender)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="170"/>
-        <location filename="../radionowplayingwindow.cpp" line="329"/>
-        <source>(unknown artist) / (unknown album)</source>
-        <translation>(Unbekannter Interpret)
-(Unbekanntes Album)</translation>
-    </message>
-    <message>
-        <location filename="../radionowplayingwindow.ui" line="514"/>
+        <location filename="../radionowplayingwindow.ui" line="516"/>
         <source>Options</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="523"/>
+        <location filename="../radionowplayingwindow.ui" line="525"/>
         <source>FM transmitter</source>
         <translation>UKW-Sender</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="528"/>
+        <location filename="../radionowplayingwindow.ui" line="530"/>
         <source>Add radio bookmark</source>
         <translation>Lesezeichen hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../radionowplayingwindow.cpp" line="213"/>
+        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <source>(unknown artist)</source>
+        <translation>(Unbekannter Interpret)</translation>
+    </message>
+    <message>
+        <location filename="../radionowplayingwindow.cpp" line="213"/>
+        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <source>(unknown song)</source>
+        <translation>(Unbekanntes Lied)</translation>
+    </message>
+    <message>
+        <location filename="../radionowplayingwindow.cpp" line="280"/>
+        <source>Buffering</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
