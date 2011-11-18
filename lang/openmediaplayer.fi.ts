@@ -37,7 +37,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;Kiitokset:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (MAFW-renderoijasta ja lähdesovittimista)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (MAFW-renderoijasta ja -lähdesovittimista)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (FMTX UI:stä ja Qt/C++-avusta)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -178,7 +178,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Muokkaa</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="122"/>
@@ -428,7 +428,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="240"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Asetetaanko valittu kappale soittoääneksi?</translation>
+        <translation>Asetetaanko kappale soittoääneksi?</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="400"/>
@@ -643,7 +643,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="735"/>
         <source>There is no active Internet connection</source>
-        <translation>Ei käytettävissä olevaa yhteyttä</translation>
+        <translation>Ei käytettävissä olevaa Internet-yhteyttä</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1143"/>
@@ -689,7 +689,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1250"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Asetetaanko valittu kappale soittoääneksi?</translation>
+        <translation>Asetetaanko kappale soittoääneksi?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1390"/>
@@ -736,7 +736,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
-        <translation>Uudelleenlataa sanoitukset</translation>
+        <translation>Lataa sanoitukset uudelleen</translation>
     </message>
 </context>
 <context>
@@ -783,7 +783,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="280"/>
         <source>Buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>Puskuroidaan</translation>
     </message>
 </context>
 <context>
@@ -816,7 +816,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avaa koko kansio</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
@@ -927,7 +927,7 @@ nyt soitettaviin</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="351"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Asetetaanko valittu kappale soittoääneksi?</translation>
+        <translation>Asetetaanko kappale soittoääneksi?</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="356"/>
@@ -1172,7 +1172,7 @@ nyt soitettaviin</translation>
     <message>
         <location filename="../singleplaylistview.cpp" line="434"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Asetetaanko valittu kappale soittoääneksi?</translation>
+        <translation>Asetetaanko kappale soittoääneksi?</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="439"/>
@@ -1194,7 +1194,7 @@ nyt soitettaviin</translation>
     <message>
         <location filename="../singleplaylistview.cpp" line="505"/>
         <source>Are you sure you want to delete this song?</source>
-        <translation>Oletko varma, että haluat poistaa tämän kappaleen?</translation>
+        <translation>Haluatko varmasti poistaa tämän kappaleen?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="524"/>
@@ -1285,7 +1285,7 @@ nyt soitettaviin</translation>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="173"/>
         <source>Are you sure you want to delete this video?</source>
-        <translation>Oletko varma, että haluat poistaa tämän videon?</translation>
+        <translation>Haluatko varmasti poistaa tämän videon?</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="176"/>
@@ -1436,7 +1436,7 @@ nyt soitettaviin</translation>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="606"/>
         <source>Unable to get current playback status</source>
-        <translation>Nykyistä toistotilaa ei voi saada</translation>
+        <translation>Nykyistä toistotilaa ei voi tunnistaa</translation>
     </message>
 </context>
 <context>
