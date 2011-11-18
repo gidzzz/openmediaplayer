@@ -123,14 +123,14 @@ p, li { white-space: pre-wrap; }
         <location filename="../fmtxdialog.cpp" line="129"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
-        <translation>Kan de FM zender niet gebruiken zolang de koptelefoon of TV uit kabel is aangeloten.
+        <translation>Kan de FM zender niet gebruiken zolang de koptelefoon of TV uit kabel is aangesloten.
 Verwijder de kabel om de FM zender te kunnnen gebruiken.</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="133"/>
         <source>Unable to use FM transmitter while USB is connected.
 Unplug USB to continue using FM transmitter.</source>
-        <translation>Kan de FM zender niet gebruiken zolang de USB kabel is aangeloten.
+        <translation>Kan de FM zender niet gebruiken zolang de USB kabel is aangesloten.
 Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     </message>
 </context>
@@ -178,7 +178,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewerken</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="122"/>
@@ -783,7 +783,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="280"/>
         <source>Buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>Buffering</translation>
     </message>
 </context>
 <context>
@@ -816,7 +816,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Open volledige map</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
