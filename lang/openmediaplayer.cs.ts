@@ -167,7 +167,7 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Upravit</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="122"/>
@@ -783,7 +783,7 @@ Nahradit stávající seznam stop?</translation>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="280"/>
         <source>Buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukládání do vyrovnávací paměti</translation>
     </message>
 </context>
 <context>
@@ -816,7 +816,7 @@ Nahradit stávající seznam stop?</translation>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Otevírat celé složky</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
