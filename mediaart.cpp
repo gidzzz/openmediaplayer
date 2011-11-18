@@ -11,7 +11,7 @@ QString MediaArt::setAlbumImage(QString album, QString image)
     delete file;
 
     // Remove old album art
-    if (QFileInfo(newArtFile).exists())
+    if (image.isEmpty() && QFileInfo(newArtFile).exists())
         QFile::remove(newArtFile);
 
     // Store new album art
@@ -25,7 +25,7 @@ QString MediaArt::setAlbumImage(QString album, QString image)
     delete file;
 
     // Remove old thumbnail
-    if (QFileInfo(newThumbFile).exists())
+    if (image.isEmpty() && QFileInfo(newThumbFile).exists())
         QFile::remove(newThumbFile);
 
     // Generate new thumbanil
