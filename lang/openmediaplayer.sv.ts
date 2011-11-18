@@ -178,7 +178,7 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="122"/>
@@ -357,21 +357,21 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
         <location filename="../musicwindow.cpp" line="371"/>
         <location filename="../musicwindow.cpp" line="418"/>
         <source>Artists</source>
-        <translation>Artist</translation>
+        <translation>Artister</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="184"/>
         <location filename="../musicwindow.cpp" line="375"/>
         <location filename="../musicwindow.cpp" line="436"/>
         <source>Genres</source>
-        <translation>Genre</translation>
+        <translation>Genrer</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="189"/>
         <location filename="../musicwindow.cpp" line="377"/>
         <location filename="../musicwindow.cpp" line="472"/>
         <source>Playlists</source>
-        <translation>Spellista</translation>
+        <translation>Spellistor</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="194"/>
@@ -783,7 +783,7 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="280"/>
         <source>Buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>Buffrar</translation>
     </message>
 </context>
 <context>
@@ -816,7 +816,7 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna hela mappen</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
