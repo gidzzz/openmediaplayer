@@ -178,7 +178,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="122"/>
@@ -731,7 +731,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1598"/>
         <source>Edit lyrics</source>
-        <translation>Liedtext editieren</translation>
+        <translation>Liedtext bearbeiten</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1599"/>
@@ -783,7 +783,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="280"/>
         <source>Buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten werden gepuffert</translation>
     </message>
 </context>
 <context>
@@ -816,7 +816,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganze Ordner öffnen</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
@@ -978,7 +978,8 @@ hinzufügen</translation>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>Lieder zur aktuellen Wiedergabeliste hinzufügen</translation>
+        <translation>Lieder zur Wiedergabeliste
+hinzufügen</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
@@ -1003,8 +1004,7 @@ hinzufügen</translation>
     <message>
         <location filename="../singleartistview.cpp" line="331"/>
         <source>Add to now playing</source>
-        <translation>Lieder zur Wiedergabeliste
-hinzufügen</translation>
+        <translation>Lieder zur Wiedergabeliste hinzufügen</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="342"/>
