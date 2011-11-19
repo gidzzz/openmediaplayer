@@ -31,6 +31,7 @@ public:
 
 private:
     Ui::VideosWindow *ui;
+    QListWidget bufferList;
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
     QActionGroup *sortByActionGroup;

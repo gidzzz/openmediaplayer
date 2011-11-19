@@ -165,7 +165,6 @@ void VideosWindow::onSortingChanged(QAction *action)
         QSettings().setValue("Videos/Sortby", "date");
 
         QFont font; font.setPointSize(13); ui->listWidget->setFont(font);
-        ui->listWidget->setSortingEnabled(false);
         ui->listWidget->setAlternatingRowColors(false);
         ui->listWidget->setViewMode(QListView::IconMode);
         ui->listWidget->setItemDelegate(new ThumbnailItemDelegate(ui->listWidget));
@@ -178,7 +177,6 @@ void VideosWindow::onSortingChanged(QAction *action)
         QSettings().setValue("Videos/Sortby", "category");
 
         QFont font; font.setPointSize(18); ui->listWidget->setFont(font);
-        ui->listWidget->setSortingEnabled(true);
         ui->listWidget->setAlternatingRowColors(true);
         ui->listWidget->setViewMode(QListView::ListMode);
         ui->listWidget->setItemDelegate(new MediaWithIconDelegate(ui->listWidget));
@@ -187,6 +185,7 @@ void VideosWindow::onSortingChanged(QAction *action)
         ui->listWidget->setFlow(QListView::TopToBottom);
     }
 
+    ui->listWidget->clear();
     this->listVideos();
 }
 
@@ -207,7 +206,6 @@ void VideosWindow::listVideos()
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-    ui->listWidget->clear();
 
 #ifdef DEBUG
     qDebug("Source ready");
@@ -224,10 +222,22 @@ void VideosWindow::listVideos()
                                                      0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
+void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
 {
     if (this->browseId != browseId)
         return;
+
+    if (index == 0) {
+        int delta = remainingCount - ui->listWidget->count() + (sortByDate->isChecked() ? 1 : 3); // one for the current item, additional 2 for the labels
+        if (delta > 0)
+            for (int i = 0; i < delta; i++)
+                ui->listWidget->addItem(new QListWidgetItem());
+        else
+            for (int i = delta; i < 0; i++)
+                delete ui->listWidget->item(ui->listWidget->count()-1);
+
+        if (sortByCategory->isChecked()) bufferList.clear();
+    }
 
     if (metadata != NULL) {
         QString title;
@@ -244,7 +254,8 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
-        QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+        QListWidgetItem *item = sortByCategory->isChecked() ? new QListWidgetItem(&bufferList) :
+                                                              ui->listWidget->item(index);
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI);
         if (v != NULL) {
@@ -282,8 +293,6 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
             } else
                 item->setData(UserRoleValueText, "-:--:--");
         }
-
-        ui->listWidget->addItem(item);
     }
 
     if (remainingCount == 0) {
@@ -292,16 +301,23 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint, QStr
 
         if (sortByCategory->isChecked()) {
             QListWidgetItem *item;
-            item = new QListWidgetItem(ui->listWidget);
+            item = new QListWidgetItem(&bufferList);
             item->setText("0_");
             item->setData(UserRoleSongDuration, Duration::Blank);
             item->setData(UserRoleTitle, tr("Recorded by device camera"));
-            ui->listWidget->addItem(item);
-            item = new QListWidgetItem(ui->listWidget);
+            item = new QListWidgetItem(&bufferList);
             item->setText("2_");
             item->setData(UserRoleSongDuration, Duration::Blank);
             item->setData(UserRoleTitle, tr("Films"));
-            ui->listWidget->addItem(item);
+            bufferList.sortItems();
+            for (int i = 0; i < ui->listWidget->count(); i++) {
+                ui->listWidget->item(i)->setData(UserRoleObjectID, bufferList.item(i)->data(UserRoleObjectID));
+                ui->listWidget->item(i)->setData(UserRoleTitle, bufferList.item(i)->data(UserRoleTitle));
+                ui->listWidget->item(i)->setData(UserRoleValueText, bufferList.item(i)->data(UserRoleValueText));
+                ui->listWidget->item(i)->setData(UserRoleSongDuration, bufferList.item(i)->data(UserRoleSongDuration));
+                ui->listWidget->item(i)->setIcon(bufferList.item(i)->icon());
+            }
+            bufferList.clear();
         }
 
 #ifdef Q_WS_MAEMO_5
@@ -347,7 +363,7 @@ void VideosWindow::onSourceMetadataChanged(QString objectId)
 void VideosWindow::onContainerChanged(QString objectId)
 {
     if (objectId == "localtagfs::videos")
-        this->listVideos();
+        QTimer::singleShot(3000, this, SLOT(listVideos())); // some time for the thumbnailer to finish
 }
 #endif
 
