@@ -169,7 +169,7 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer*,
         GValue* v = g_value_array_get_nth(value, 0);
         switch(G_VALUE_TYPE(v))
         {
-        case G_TYPE_STRING:
+            case G_TYPE_STRING:
             {
                 const gchar* str_value = g_value_get_string(v);
                 QVariant data = QVariant(str_value);
@@ -179,15 +179,27 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer*,
                 emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
             }
             break;
-        case G_TYPE_INT:
-            int int_value = g_value_get_int(v);
-            QVariant data = QVariant(int_value);
+
+            case G_TYPE_INT:
+            {
+                int int_value = g_value_get_int(v);
+                QVariant data = QVariant(int_value);
 #ifdef DEBUG
-            qDebug() << "int: " << QString::number(data.toInt());
+                qDebug() << "int: " << QString::number(data.toInt());
 #endif
-            emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
+                emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
+            }
+            break;
+
+            case G_TYPE_INT64:
+            {
+                qint64 int64_value = g_value_get_int64(v);
+                QVariant data = QVariant(int64_value);
+                emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
+            }
             break;
         }
+
     }
 }
 

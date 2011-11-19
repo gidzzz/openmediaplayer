@@ -144,6 +144,8 @@ void VideoNowPlayingWindow::connectSignals()
     connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
+    connect(mafwrenderer, SIGNAL(metadataChanged(QString,QVariant)),
+            this, SLOT(onMetadataChanged(QString,QVariant)));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->progressBar, SIGNAL(sliderPressed()), this, SLOT(onSliderPressed()));
     connect(ui->progressBar, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
@@ -161,6 +163,15 @@ void VideoNowPlayingWindow::connectSignals()
                                           this, SLOT(onErrorOccured(const QDBusMessage &)));
 
 #endif
+}
+
+void VideoNowPlayingWindow::onMetadataChanged(QString metadata, QVariant value)
+{
+    if (metadata == "duration") {
+        videoLength = value.toInt();
+        ui->videoLengthLabel->setText(time_mmss(videoLength));
+        ui->progressBar->setRange(0, videoLength);
+    }
 }
 
 void VideoNowPlayingWindow::onDeleteClicked()
@@ -374,14 +385,14 @@ void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 void VideoNowPlayingWindow::playObject(QString objectId)
 {
 #ifdef MAFW
-    if (objectId.startsWith("_uuid_")) { // check whether the object comes from UPnP
-        ui->shareButton->hide();
-        ui->deleteButton->hide();
-        ui->toolbarLayout->setContentsMargins(20,0,0,0);
-    } else {
+    if (objectId.startsWith("localtagfs::videos")) { // local storage
         ui->shareButton->show();
         ui->deleteButton->show();
         ui->toolbarLayout->setContentsMargins(0,0,0,0);
+    } else { // remote sources
+        ui->shareButton->hide();
+        ui->deleteButton->hide();
+        ui->toolbarLayout->setContentsMargins(20,0,0,0);
     }
 
     this->objectIdToPlay = objectId;
@@ -395,23 +406,19 @@ void VideoNowPlayingWindow::playObject(QString objectId)
 void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
 {
     if (metadata != NULL) {
-        int duration;
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : Duration::Unknown;
-
-        this->videoLength = duration;
+        videoLength = v ? g_value_get_int (v) : Duration::Unknown;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_POSITION);
         pausedPosition = v ? g_value_get_int (v) : -1;
-#ifdef MAFW
+
         if (pausedPosition != -1)
             qDebug() << pausedPosition;
-#endif
 
-        ui->videoLengthLabel->setText(time_mmss(duration));
-        ui->progressBar->setRange(0, duration);
+        ui->videoLengthLabel->setText(time_mmss(videoLength));
+        ui->progressBar->setRange(0, videoLength);
     }
 
     if(!error.isEmpty())

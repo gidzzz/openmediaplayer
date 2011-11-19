@@ -86,6 +86,7 @@ private slots:
     void onVolumeSliderReleased();
 #ifdef MAFW
     void onPropertyChanged(const QDBusMessage &msg);
+    void onMetadataChanged(QString metadata, QVariant value);
     void stateChanged(int state);
     void onPositionChanged(int position, QString);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);

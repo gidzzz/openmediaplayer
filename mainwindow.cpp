@@ -192,8 +192,6 @@ void MainWindow::connectSignals()
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->menuList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
-    // TODO: Connect this to a slot.
-    // connect(ui->indicator, SIGNAL(clicked()), this, SLOT();
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -317,12 +315,6 @@ void MainWindow::mime_open(const QString &uriString)
     const char* mimetype = gnome_vfs_get_mime_type_for_name(text_uri);
     QString qmimetype = mimetype;
 
-    // Converting urisource object to localtagfs:
-    // "urisource::file:///home/user/MyDocs/mix.m3u"
-    // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
-    objectId.remove("urisource::file://");
-    objectId.replace("/", "%2F");
-
     if (qmimetype.startsWith("audio")) {
 
         if (qmimetype.endsWith("mpegurl")) {
@@ -330,7 +322,12 @@ void MainWindow::mime_open(const QString &uriString)
 #ifdef Q_WS_MAEMO_5
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-            objectId.prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
+            // Converting urisource object to localtagfs:
+            // "urisource::file:///home/user/MyDocs/mix.m3u"
+            // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
+            objectId = objectId.remove("urisource::file://")
+                               .replace("/", "%2F")
+                               .prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
             qDebug() << objectId;
 
             playlist->assignAudioPlaylist();
@@ -357,14 +354,18 @@ void MainWindow::mime_open(const QString &uriString)
 #ifdef Q_WS_MAEMO_5
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-            objectIdToPlay = TAGSOURCE_AUDIO_PATH + ("/" + objectId);
+            objectIdToPlay = objectId.remove("urisource::file://")
+                                     .replace("/", "%2F")
+                                     .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
             openDirectory(uriString);
 #endif
         }
 
         else {
 #ifdef MAFW
-            objectId.prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
+            objectId = objectId.remove("urisource::file://")
+                               .replace("/", "%2F")
+                               .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
             qDebug() << objectId;
 
             playlist->assignAudioPlaylist();
@@ -392,9 +393,26 @@ void MainWindow::mime_open(const QString &uriString)
 
     } else if (qmimetype.startsWith("video")) {
 #ifdef MAFW
-        objectId.prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
+        objectId = objectId.remove("urisource::file://")
+                           .replace("/", "%2F")
+                           .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
         qDebug() << objectId;
 
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+#else
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
+#endif
+        window->showFullScreen();
+
+        connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        ui->indicator->inhibit();
+#ifdef MAFW
+        window->playObject(objectId);
+#endif
+    }
+
+    else if (qmimetype == "application/octet-stream") {
+#ifdef MAFW
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
