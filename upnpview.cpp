@@ -172,6 +172,7 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
         this->setEnabled(false);
         UpnpView *window = new UpnpView(this, mafwFactory, mafwSource);
         window->browseObjectId(objectId);
+        window->setWindowTitle(item->data(UserRoleTitle).toString());
         window->show();
 
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));

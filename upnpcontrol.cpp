@@ -67,6 +67,7 @@ void UpnpControl::onItemActivated(QListWidgetItem *item)
 
     UpnpView *upnpView = new UpnpView(this, mafwFactory, source);
     upnpView->browseObjectId(uuid + "::");
+    upnpView->setWindowTitle(item->text());
     upnpView->show();
 
     connect(upnpView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
