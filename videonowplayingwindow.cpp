@@ -30,7 +30,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
-    mafwSource(mafwSource ? mafwSource : factory->getTrackerSource())
+    mafwSource(mafwSource)
 #endif
 {
     /* Make Qt do the work of keeping the overlay the magic color  */
@@ -91,12 +91,14 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
     if (this->mafwState != Paused && this->mafwState != Stopped)
         mafwrenderer->pause();
 
-    GHashTable* metadata = mafw_metadata_new();
-    if (currentPosition == 0)
-        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
-    mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, currentPosition);
-    mafwSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
-    mafw_metadata_release(metadata);
+    if (mafwSource) {
+        GHashTable* metadata = mafw_metadata_new();
+        if (currentPosition == 0)
+            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
+        mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, currentPosition);
+        mafwSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
+        mafw_metadata_release(metadata);
+    }
 #endif
     delete ui;
 }
@@ -167,7 +169,8 @@ void VideoNowPlayingWindow::connectSignals()
 
 void VideoNowPlayingWindow::onMetadataChanged(QString metadata, QVariant value)
 {
-    if (metadata == "duration") {
+    // duration sometimes is misreported for UPnP, so don't set it from here unnecessarily
+    if (videoLength == Duration::Unknown && metadata == "duration") {
         videoLength = value.toInt();
         ui->videoLengthLabel->setText(time_mmss(videoLength));
         ui->progressBar->setRange(0, videoLength);
@@ -385,7 +388,7 @@ void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 void VideoNowPlayingWindow::playObject(QString objectId)
 {
 #ifdef MAFW
-    if (objectId.startsWith("localtagfs::videos")) { // local storage
+    if (mafwSource && objectId.startsWith("localtagfs::videos")) { // local storage
         ui->shareButton->show();
         ui->deleteButton->show();
         ui->toolbarLayout->setContentsMargins(0,0,0,0);
@@ -395,9 +398,12 @@ void VideoNowPlayingWindow::playObject(QString objectId)
         ui->toolbarLayout->setContentsMargins(20,0,0,0);
     }
 
+    videoLength = Duration::Unknown;
+    if (mafwSource)
+        mafwSource->getMetadata(objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
+                                                                    MAFW_METADATA_KEY_PAUSED_POSITION));
+
     this->objectIdToPlay = objectId;
-    this->mafwSource->getMetadata(objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
-                                                                             MAFW_METADATA_KEY_PAUSED_POSITION));
     QTimer::singleShot(200, this, SLOT(playVideo()));
 #endif
 }
@@ -409,7 +415,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        videoLength = v ? g_value_get_int (v) : Duration::Unknown;
+        if (v) videoLength = g_value_get_int (v);
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_POSITION);
         pausedPosition = v ? g_value_get_int (v) : -1;

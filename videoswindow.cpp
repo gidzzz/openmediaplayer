@@ -146,7 +146,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
 
 #ifdef MAFW
     mafwrenderer->stop(); // prevents the audio playlist from starting after the video ends
-    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory, mafwTrackerSource);
 #else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif

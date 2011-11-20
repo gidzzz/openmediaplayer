@@ -398,7 +398,7 @@ void MainWindow::mime_open(const QString &uriString)
                            .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
         qDebug() << objectId;
 
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory, mafwTrackerSource);
 #else
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif
