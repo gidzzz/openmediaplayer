@@ -253,7 +253,7 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="584"/>
+        <location filename="../mainwindow.cpp" line="602"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -263,7 +263,7 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="591"/>
+        <location filename="../mainwindow.cpp" line="609"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n klip</numerusform>
@@ -273,7 +273,7 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="607"/>
+        <location filename="../mainwindow.cpp" line="625"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n stanice</numerusform>
@@ -306,27 +306,27 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
         <translation>Zamíchat skladby</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="583"/>
+        <location filename="../mainwindow.cpp" line="601"/>
         <source>(no songs)</source>
         <translation>(žádné skladby)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="590"/>
+        <location filename="../mainwindow.cpp" line="608"/>
         <source>(no videos)</source>
         <translation>(žádná videa)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="606"/>
+        <location filename="../mainwindow.cpp" line="624"/>
         <source>(no stations)</source>
         <translation>(žádné stanice)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="723"/>
+        <location filename="../mainwindow.cpp" line="741"/>
         <source>Processed items:</source>
         <translation>Zpracované položky:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="727"/>
+        <location filename="../mainwindow.cpp" line="745"/>
         <source>Remaining items:</source>
         <translation>Zbývající položky:</translation>
     </message>
@@ -1270,7 +1270,7 @@ aktuálně přehrávaných</translation>
         <translation>Přidat do aktuálně přehrávaných</translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="256"/>
+        <location filename="../upnpview.cpp" line="257"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klip přidán do aktuálně přehrávaných</numerusform>
@@ -1287,163 +1287,163 @@ aktuálně přehrávaných</translation>
         <translation>Přehrává se</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="172"/>
+        <location filename="../videonowplayingwindow.cpp" line="186"/>
         <source>Delete video?</source>
         <translation>Odstranit video?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="173"/>
+        <location filename="../videonowplayingwindow.cpp" line="187"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Opravdu chcete toto video odstranit z přístroje?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="176"/>
+        <location filename="../videonowplayingwindow.cpp" line="190"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="177"/>
+        <location filename="../videonowplayingwindow.cpp" line="191"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="544"/>
-        <location filename="../videonowplayingwindow.cpp" line="637"/>
+        <location filename="../videonowplayingwindow.cpp" line="557"/>
+        <location filename="../videonowplayingwindow.cpp" line="650"/>
         <source>Unable to play media</source>
         <translation>Zdroj nelze přehrát</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="548"/>
+        <location filename="../videonowplayingwindow.cpp" line="561"/>
         <source>Media not found</source>
         <translation>Zdroj nenalezen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="550"/>
+        <location filename="../videonowplayingwindow.cpp" line="563"/>
         <source>URI not available</source>
         <translation>URI není k dispozici</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="552"/>
+        <location filename="../videonowplayingwindow.cpp" line="565"/>
         <source>Invalid URI</source>
         <translation>Neplatný URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="554"/>
+        <location filename="../videonowplayingwindow.cpp" line="567"/>
         <source>Unable to open media</source>
         <translation>Zdroj nelze otevřít</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="556"/>
+        <location filename="../videonowplayingwindow.cpp" line="569"/>
         <source>Playback stream no longer available</source>
         <translation>Proud přehrávání již není k dispozici</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="558"/>
+        <location filename="../videonowplayingwindow.cpp" line="571"/>
         <source>Could not determine MIME-type</source>
         <translation>Nelze určit typ MIME</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="560"/>
+        <location filename="../videonowplayingwindow.cpp" line="573"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Došlo k obecné chybě, nelze pokračovat v přehrávání</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="562"/>
+        <location filename="../videonowplayingwindow.cpp" line="575"/>
         <source>General error occured</source>
         <translation>Došlo k obecné chybě</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="564"/>
+        <location filename="../videonowplayingwindow.cpp" line="577"/>
         <source>Unsupported media</source>
         <translation>Nepodporovaný typ zdroje</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="566"/>
+        <location filename="../videonowplayingwindow.cpp" line="579"/>
         <source>Unsupported resolution</source>
         <translation>Nepodporované rozlišení</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="568"/>
+        <location filename="../videonowplayingwindow.cpp" line="581"/>
         <source>Unsupported framerate</source>
         <translation>Nepodporovaná snímková frekvence</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="570"/>
+        <location filename="../videonowplayingwindow.cpp" line="583"/>
         <source>Media is protected by DRM</source>
         <translation>Zdroj je chráněn DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="572"/>
+        <location filename="../videonowplayingwindow.cpp" line="585"/>
         <source>System sound device is unavailable</source>
         <translation>Zvukový systém přístroje není dostupný</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="574"/>
+        <location filename="../videonowplayingwindow.cpp" line="587"/>
         <source>Media corrupted</source>
         <translation>Zdroj je poškozen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="576"/>
+        <location filename="../videonowplayingwindow.cpp" line="589"/>
         <source>Error while parsing playlist</source>
         <translation>Chyba při zpracovávání seznamu stop</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="577"/>
+        <location filename="../videonowplayingwindow.cpp" line="590"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Seznam stop může být poškozený nebo prázdný</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="580"/>
+        <location filename="../videonowplayingwindow.cpp" line="593"/>
         <source>Codec not found:</source>
         <translation>Kodek nenalezen:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="584"/>
+        <location filename="../videonowplayingwindow.cpp" line="597"/>
         <source>Video codec not found:</source>
         <translation>Obrazový kodek nenalezen:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="588"/>
+        <location filename="../videonowplayingwindow.cpp" line="601"/>
         <source>Audio codec not found:</source>
         <translation>Zvukový kodek nenalezen:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="592"/>
+        <location filename="../videonowplayingwindow.cpp" line="605"/>
         <source>No playlist assigned</source>
         <translation>Žádný přiřazený seznam stop</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="594"/>
+        <location filename="../videonowplayingwindow.cpp" line="607"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Index zdroje není uvnitř seznamu stop</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="596"/>
+        <location filename="../videonowplayingwindow.cpp" line="609"/>
         <source>Unable to start playback</source>
         <translation>Nelze spustit přehrávání</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="598"/>
+        <location filename="../videonowplayingwindow.cpp" line="611"/>
         <source>Unable to stop playback</source>
         <translation>Nelze zastavit přehrávání</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="600"/>
+        <location filename="../videonowplayingwindow.cpp" line="613"/>
         <source>Unable to pause playback</source>
         <translation>Nelze pozastavit přehrávání</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="602"/>
+        <location filename="../videonowplayingwindow.cpp" line="615"/>
         <source>Unable to seek position in media</source>
         <translation>Nelze posunout na pozici ve zdroji</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="604"/>
+        <location filename="../videonowplayingwindow.cpp" line="617"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Nelze získat současnou pozici ve zdroji</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="606"/>
+        <location filename="../videonowplayingwindow.cpp" line="619"/>
         <source>Unable to get current playback status</source>
         <translation>Nelze zjistit současný stav přehrávání</translation>
     </message>
@@ -1496,22 +1496,22 @@ aktuálně přehrávaných</translation>
         <translation>Videa - nejnovější</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="177"/>
+        <location filename="../videoswindow.cpp" line="176"/>
         <source>Videos - categories</source>
         <translation>Videa - kategorie</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="239"/>
+        <location filename="../videoswindow.cpp" line="249"/>
         <source>(unknown clip)</source>
         <translation>(neznámý klip)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="298"/>
+        <location filename="../videoswindow.cpp" line="307"/>
         <source>Recorded by device camera</source>
         <translation>Nahraná kamerou přístroje</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="303"/>
+        <location filename="../videoswindow.cpp" line="311"/>
         <source>Films</source>
         <translation>Filmy</translation>
     </message>

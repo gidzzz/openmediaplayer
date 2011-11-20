@@ -34,14 +34,14 @@ p, li { white-space: pre-wrap; }
         <location filename="../delegates/artistlistitemdelegate.cpp" line="26"/>
         <source>%n album(s)</source>
         <translation>
-            <numerusform>%n专辑</numerusform>
+            <numerusform>%n张专辑</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../delegates/artistlistitemdelegate.cpp" line="28"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n歌曲</numerusform>
+            <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
 </context>
@@ -58,7 +58,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../editlyrics.ui" line="14"/>
         <source>Lyrics editor</source>
-        <translation>编辑歌词</translation>
+        <translation>歌词编辑</translation>
     </message>
     <message>
         <location filename="../editlyrics.ui" line="25"/>
@@ -107,7 +107,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../fmtxdialog.cpp" line="129"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
-        <translation>当耳机或电视输出连接,无法使用调频发射器.</translation>
+        <translation>当耳机或电视输出连接时,无法使用调频发射器,拔出线缆继续使用.</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="133"/>
@@ -186,7 +186,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../internetradiowindow.cpp" line="211"/>
         <location filename="../internetradiowindow.cpp" line="213"/>
         <source>Unable to add empty bookmark</source>
-        <translation>不能添加空书签</translation>
+        <translation>无法添加空书签</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="213"/>
@@ -203,7 +203,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../internetradiowindow.cpp" line="241"/>
         <location filename="../internetradiowindow.cpp" line="243"/>
         <source>Invalid URL</source>
-        <translation>无效链接</translation>
+        <translation>无效网址</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="291"/>
@@ -246,26 +246,26 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="584"/>
+        <location filename="../mainwindow.cpp" line="602"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n歌曲</numerusform>
+            <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="591"/>
+        <location filename="../mainwindow.cpp" line="609"/>
         <source>%n clip(s)</source>
         <translation>
-            <numerusform>%n剪辑</numerusform>
+            <numerusform>%n个剪辑</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="607"/>
+        <location filename="../mainwindow.cpp" line="625"/>
         <source>%n station(s)</source>
         <translation>
-            <numerusform>%n电台</numerusform>
+            <numerusform>%n个电台</numerusform>
         </translation>
     </message>
     <message>
@@ -293,29 +293,29 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>随机播放所有歌曲</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="583"/>
+        <location filename="../mainwindow.cpp" line="601"/>
         <source>(no songs)</source>
         <translation>(没有歌曲)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="590"/>
+        <location filename="../mainwindow.cpp" line="608"/>
         <source>(no videos)</source>
         <translation>(没有视频)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="606"/>
+        <location filename="../mainwindow.cpp" line="624"/>
         <source>(no stations)</source>
         <translation>(没有电台)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="723"/>
+        <location filename="../mainwindow.cpp" line="741"/>
         <source>Processed items:</source>
-        <translation>未处理项目:</translation>
+        <translation>已处理项目:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="727"/>
+        <location filename="../mainwindow.cpp" line="745"/>
         <source>Remaining items:</source>
-        <translation>已处理项目:</translation>
+        <translation>未处理项目:</translation>
     </message>
 </context>
 <context>
@@ -361,7 +361,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="194"/>
         <source>Add to now playing</source>
-        <translation>添加歌曲到播放列表</translation>
+        <translation>添加到&apos;正在播放&apos;</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="198"/>
@@ -377,18 +377,18 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="207"/>
         <source>Set as ringing tone</source>
-        <translation>设置为来电铃声</translation>
+        <translation>设为来电铃声</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="208"/>
         <source>Share</source>
-        <translation>共享</translation>
+        <translation>分享</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="220"/>
         <location filename="../musicwindow.cpp" line="306"/>
         <source>Delete selected item from device?</source>
-        <translation>删除选定的设备项目?</translation>
+        <translation>删除选定的项目?</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="223"/>
@@ -407,7 +407,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="240"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>确定设置歌曲为铃声?</translation>
+        <translation>确定将这首歌曲设为来电铃声?</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="400"/>
@@ -434,18 +434,18 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../musicwindow.cpp" line="1007"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n歌曲</numerusform>
+            <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="717"/>
         <source>Imported playlists</source>
-        <translation>载入播放列表</translation>
+        <translation>已导入</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="727"/>
         <source>Automatic playlists</source>
-        <translation>分类播放列表</translation>
+        <translation>自动分类</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="734"/>
@@ -460,12 +460,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="734"/>
         <source>Most played</source>
-        <translation>已播放</translation>
+        <translation>最常播放</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="734"/>
         <source>Never played</source>
-        <translation>未播放</translation>
+        <translation>从未播放</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="828"/>
@@ -478,7 +478,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../musicwindow.cpp" line="895"/>
         <location filename="../musicwindow.cpp" line="933"/>
         <source>(unknown artist)</source>
-        <translation>(未知群星)</translation>
+        <translation>(未知艺术家)</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="834"/>
@@ -501,21 +501,21 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../musicwindow.cpp" line="1009"/>
         <source>%n album(s)</source>
         <translation>
-            <numerusform>%n专辑</numerusform>
+            <numerusform>%n张专辑</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="1011"/>
         <source>%n artist(s)</source>
         <translation>
-            <numerusform>%n艺术家</numerusform>
+            <numerusform>%n位艺术家</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="1228"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>添加%n剪辑到播放列表</numerusform>
+            <numerusform>已添加%n个剪辑到&apos;正在播放&apos;</numerusform>
         </translation>
     </message>
 </context>
@@ -529,7 +529,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.ui" line="185"/>
         <source>--/-- songs</source>
-        <translation>--/--歌曲</translation>
+        <translation>--/--首歌曲</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="237"/>
@@ -544,7 +544,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../nowplayingwindow.cpp" line="641"/>
         <location filename="../nowplayingwindow.cpp" line="1120"/>
         <source>(unknown artist)</source>
-        <translation>(未知群星)</translation>
+        <translation>(未知艺术家)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
@@ -589,13 +589,13 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="229"/>
         <source>Lyrics not found</source>
-        <translation>找不到歌词</translation>
+        <translation>未找到歌词</translation>
     </message>
     <message numerus="yes">
         <location filename="../nowplayingwindow.cpp" line="307"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n歌曲</numerusform>
+            <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
     <message>
@@ -606,13 +606,13 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="691"/>
         <source>Loading lyrics...</source>
-        <translation>加载歌词...</translation>
+        <translation>加载歌词……</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="721"/>
         <location filename="../nowplayingwindow.cpp" line="1643"/>
         <source>Fetching lyrics...</source>
-        <translation>搜索歌词...</translation>
+        <translation>搜索歌词……</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="735"/>
@@ -622,27 +622,27 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1143"/>
         <source>Information not available</source>
-        <translation>无效信息</translation>
+        <translation>信息不可用</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1203"/>
         <source>Clear all songs from now playing?</source>
-        <translation>清除当前播放列表所有歌曲?</translation>
+        <translation>从&apos;正在播放&apos;清除所有歌曲?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1237"/>
         <source>Set as ringing tone</source>
-        <translation>设置为来电铃声</translation>
+        <translation>设为来电铃声</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1240"/>
         <source>Delete from now playing</source>
-        <translation>从播放列表中删除</translation>
+        <translation>从&apos;正在播放&apos;删除</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1238"/>
         <source>Share</source>
-        <translation>共享</translation>
+        <translation>分享</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1206"/>
@@ -663,7 +663,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1250"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>确定设置歌曲为铃声?</translation>
+        <translation>确定将这首歌曲设为来电铃声?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1390"/>
@@ -678,7 +678,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1427"/>
         <source>Playlist with the same name exists, overwrite?</source>
-        <translation>存在相同播放列表名称,确定覆盖?</translation>
+        <translation>存在同名的播放列表,确定覆盖?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1438"/>
@@ -780,7 +780,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="53"/>
         <source>Stop playback</source>
-        <translation>后台停止播放</translation>
+        <translation>停止播放</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="66"/>
@@ -795,12 +795,13 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
         <source>Size of automatic playlists</source>
-        <translation>设置分类播放列表歌曲数目</translation>
+        <translation>自动分类播放列表的歌曲数</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="98"/>
         <source>Lazy sliders</source>
-        <translation>开启滑动条效果</translation>
+        <translatorcomment>When sliders aren&apos;t lazy, song/movie progress is adjusted immediately to the slider position. With the lazy option, playback position is changed after releasing the slider. The latter is smoother, but some people prefer immediate preview.</translatorcomment>
+        <translation>开启延迟拖动(在放开滑块时播放进度才进行调整)</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="105"/>
@@ -810,6 +811,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="117"/>
         <source>* Requires modified FMTXD</source>
+        <translatorcomment>* 需要修改版FMTXD</translatorcomment>
         <translation>*需要修改FMTXD</translation>
     </message>
     <message>
@@ -823,7 +825,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../share.ui" line="14"/>
         <source>Share</source>
-        <translation>共享</translation>
+        <translation>分享</translation>
     </message>
     <message>
         <location filename="../share.ui" line="20"/>
@@ -833,7 +835,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../share.ui" line="27"/>
         <source>Send via e-mail</source>
-        <translation>通过邮箱发送</translation>
+        <translation>通过电子邮件发送</translation>
     </message>
 </context>
 <context>
@@ -846,7 +848,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>歌曲添加到正在播放</translation>
+        <translation>添加歌曲到&apos;正在播放&apos;</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
@@ -857,7 +859,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.cpp" line="32"/>
         <source>Shuffle songs</source>
-        <translation>随机播放所有歌曲</translation>
+        <translation>随机播放</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="120"/>
@@ -867,7 +869,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.cpp" line="123"/>
         <source>(unknown artist)</source>
-        <translation>(未知群星)</translation>
+        <translation>(未知艺术家)</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="126"/>
@@ -878,28 +880,28 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlealbumview.cpp" line="158"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n歌曲</numerusform>
+            <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="324"/>
         <source>Add to now playing</source>
-        <translation>添加到播放列表</translation>
+        <translation>添加到&apos;正在播放&apos;</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="326"/>
         <source>Set as ringing tone</source>
-        <translation>设置为来电铃声</translation>
+        <translation>设为来电铃声</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="327"/>
         <source>Share</source>
-        <translation>共享</translation>
+        <translation>分享</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="351"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>确定设置歌曲为铃声?</translation>
+        <translation>确定将这首歌曲设为来电铃声?</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="356"/>
@@ -918,7 +920,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.cpp" line="428"/>
         <source>Delete selected item from device?</source>
-        <translation>删除选定的设备项目?</translation>
+        <translation>删除选定的项目?</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="447"/>
@@ -929,7 +931,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlealbumview.cpp" line="463"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>添加%n剪辑到播放列表</numerusform>
+            <numerusform>已添加%n个剪辑到&apos;正在播放&apos;</numerusform>
         </translation>
     </message>
 </context>
@@ -939,7 +941,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleartistview.ui" line="72"/>
         <location filename="../singleartistview.cpp" line="93"/>
         <source>Shuffle songs</source>
-        <translation>随机播放所有歌曲</translation>
+        <translation>随机播放</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="126"/>
@@ -949,7 +951,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>歌曲添加到正在播放</translation>
+        <translation>添加歌曲到&apos;正在播放&apos;</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
@@ -967,18 +969,18 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleartistview.cpp" line="230"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n歌曲</numerusform>
+            <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="331"/>
         <source>Add to now playing</source>
-        <translation>添加歌曲到播放列表</translation>
+        <translation>添加到&apos;正在播放&apos;</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="342"/>
         <source>Delete selected item from device?</source>
-        <translation>删除选定的设备项目?</translation>
+        <translation>删除选定的项目?</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="345"/>
@@ -995,13 +997,13 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleartistview.cpp" line="361"/>
         <source>Delete all items shown in view?</source>
-        <translation>删除选定的设备项目?</translation>
+        <translation>删除所有项目?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="442"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>添加%n剪辑到播放列表</numerusform>
+            <numerusform>已添加%n个剪辑到&apos;正在播放&apos;</numerusform>
         </translation>
     </message>
 </context>
@@ -1016,7 +1018,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlegenreview.ui" line="108"/>
         <location filename="../singlegenreview.cpp" line="241"/>
         <source>Add to now playing</source>
-        <translation>添加歌曲到播放列表</translation>
+        <translation>添加到&apos;正在播放&apos;</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="113"/>
@@ -1026,26 +1028,26 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlegenreview.cpp" line="32"/>
         <source>Shuffle songs</source>
-        <translation>随机播放所有歌曲</translation>
+        <translation>随机播放</translation>
     </message>
     <message>
         <location filename="../singlegenreview.cpp" line="159"/>
         <location filename="../singlegenreview.cpp" line="179"/>
         <source>(unknown artist)</source>
-        <translation>(未知群星)</translation>
+        <translation>(未知艺术家)</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="201"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n歌曲</numerusform>
+            <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="371"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>添加%n剪辑到播放列表</numerusform>
+            <numerusform>已添加%n个剪辑到&apos;正在播放&apos;</numerusform>
         </translation>
     </message>
 </context>
@@ -1070,7 +1072,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.ui" line="119"/>
         <location filename="../singleplaylistview.cpp" line="399"/>
         <source>Add to now playing</source>
-        <translation>添加歌曲到播放列表</translation>
+        <translation>添加到&apos;正在播放&apos;</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="124"/>
@@ -1081,7 +1083,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleplaylistview.cpp" line="34"/>
         <source>Shuffle songs</source>
-        <translation>随机播放所有歌曲</translation>
+        <translation>随机播放</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="114"/>
@@ -1093,7 +1095,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.cpp" line="118"/>
         <location filename="../singleplaylistview.cpp" line="209"/>
         <source>(unknown artist)</source>
-        <translation>(未知群星)</translation>
+        <translation>(未知艺术家)</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="122"/>
@@ -1105,13 +1107,13 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.cpp" line="137"/>
         <location filename="../singleplaylistview.cpp" line="224"/>
         <source>Information not available</source>
-        <translation>无效信息</translation>
+        <translation>信息不可用</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="316"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>添加%n剪辑到播放列表</numerusform>
+            <numerusform>已添加%n个剪辑到&apos;正在播放&apos;</numerusform>
         </translation>
     </message>
     <message>
@@ -1122,22 +1124,22 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleplaylistview.cpp" line="401"/>
         <source>Set as ringing tone</source>
-        <translation>设置为来电铃声</translation>
+        <translation>设为来电铃声</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="402"/>
         <source>Share</source>
-        <translation>共享</translation>
+        <translation>分享</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="410"/>
         <source>Delete from playlist</source>
-        <translation>从当前播放列表中删除</translation>
+        <translation>从播放列表中删除</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="434"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>确定设置歌曲为铃声?</translation>
+        <translation>确定将这首歌曲设为来电铃声?</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="439"/>
@@ -1159,13 +1161,13 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleplaylistview.cpp" line="505"/>
         <source>Are you sure you want to delete this song?</source>
-        <translation>确定删除歌曲?</translation>
+        <translation>确定删除这首歌曲?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="524"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n歌曲</numerusform>
+            <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
 </context>
@@ -1174,7 +1176,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../tagwindow.ui" line="14"/>
         <source>Tags editor</source>
-        <translation>编辑标签</translation>
+        <translation>标签编辑</translation>
     </message>
     <message>
         <location filename="../tagwindow.ui" line="20"/>
@@ -1207,7 +1209,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>歌曲添加到正在播放</translation>
+        <translation>添加歌曲到&apos;正在播放&apos;</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="114"/>
@@ -1222,13 +1224,13 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../upnpview.cpp" line="161"/>
         <source>Add to now playing</source>
-        <translation>添加歌曲到播放列表</translation>
+        <translation>添加到&apos;正在播放&apos;</translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="256"/>
+        <location filename="../upnpview.cpp" line="257"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>添加%n剪辑到播放列表</numerusform>
+            <numerusform>已添加%n个剪辑到&apos;正在播放&apos;</numerusform>
         </translation>
     </message>
 </context>
@@ -1240,163 +1242,163 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>正在播放</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="172"/>
+        <location filename="../videonowplayingwindow.cpp" line="186"/>
         <source>Delete video?</source>
         <translation>删除视频?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="173"/>
+        <location filename="../videonowplayingwindow.cpp" line="187"/>
         <source>Are you sure you want to delete this video?</source>
-        <translation>确定删除视频?</translation>
+        <translation>确定删除这个视频?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="176"/>
+        <location filename="../videonowplayingwindow.cpp" line="190"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="177"/>
+        <location filename="../videonowplayingwindow.cpp" line="191"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="544"/>
-        <location filename="../videonowplayingwindow.cpp" line="637"/>
+        <location filename="../videonowplayingwindow.cpp" line="557"/>
+        <location filename="../videonowplayingwindow.cpp" line="650"/>
         <source>Unable to play media</source>
         <translation>无法播放影片</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="548"/>
+        <location filename="../videonowplayingwindow.cpp" line="561"/>
         <source>Media not found</source>
-        <translation>没找到影片</translation>
+        <translation>未找到影片</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="550"/>
+        <location filename="../videonowplayingwindow.cpp" line="563"/>
         <source>URI not available</source>
         <translation>资源不可用</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="552"/>
+        <location filename="../videonowplayingwindow.cpp" line="565"/>
         <source>Invalid URI</source>
         <translation>无效资源</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="554"/>
+        <location filename="../videonowplayingwindow.cpp" line="567"/>
         <source>Unable to open media</source>
-        <translation>无法播放影片</translation>
+        <translation>无法打开影片</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="556"/>
+        <location filename="../videonowplayingwindow.cpp" line="569"/>
         <source>Playback stream no longer available</source>
         <translation>流媒体不可用</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="558"/>
+        <location filename="../videonowplayingwindow.cpp" line="571"/>
         <source>Could not determine MIME-type</source>
         <translation>无法确定媒体类型</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="560"/>
+        <location filename="../videonowplayingwindow.cpp" line="573"/>
         <source>General error occured, unable to continue playback</source>
         <translation>出现错误,无法继续播放</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="562"/>
+        <location filename="../videonowplayingwindow.cpp" line="575"/>
         <source>General error occured</source>
         <translation>出现错误</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="564"/>
+        <location filename="../videonowplayingwindow.cpp" line="577"/>
         <source>Unsupported media</source>
         <translation>不支持此媒体</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="566"/>
+        <location filename="../videonowplayingwindow.cpp" line="579"/>
         <source>Unsupported resolution</source>
         <translation>不支持此分辨率</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="568"/>
+        <location filename="../videonowplayingwindow.cpp" line="581"/>
         <source>Unsupported framerate</source>
         <translation>不支持此帧速率</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="570"/>
+        <location filename="../videonowplayingwindow.cpp" line="583"/>
         <source>Media is protected by DRM</source>
         <translation>影片受数字版权保护</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="572"/>
+        <location filename="../videonowplayingwindow.cpp" line="585"/>
         <source>System sound device is unavailable</source>
-        <translation>系统音频解码器不可用</translation>
+        <translation>系统声音设备不可用</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="574"/>
+        <location filename="../videonowplayingwindow.cpp" line="587"/>
         <source>Media corrupted</source>
-        <translation>影片不可用</translation>
+        <translation>影片损坏</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="576"/>
+        <location filename="../videonowplayingwindow.cpp" line="589"/>
         <source>Error while parsing playlist</source>
-        <translation>分析播放列表时出错</translation>
+        <translation>解析播放列表时出错</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="577"/>
+        <location filename="../videonowplayingwindow.cpp" line="590"/>
         <source>Playlist may be corrupt or empty</source>
-        <translation>播放列表可能已损坏或无文件</translation>
+        <translation>播放列表可能损坏或为空</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="580"/>
+        <location filename="../videonowplayingwindow.cpp" line="593"/>
         <source>Codec not found:</source>
-        <translation>没找到解码器:</translation>
+        <translation>未找到解码器:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="584"/>
+        <location filename="../videonowplayingwindow.cpp" line="597"/>
         <source>Video codec not found:</source>
         <translation>未找到视频解码器:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="588"/>
+        <location filename="../videonowplayingwindow.cpp" line="601"/>
         <source>Audio codec not found:</source>
         <translation>未找到音频解码器:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="592"/>
+        <location filename="../videonowplayingwindow.cpp" line="605"/>
         <source>No playlist assigned</source>
         <translation>没有指定播放列表</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="594"/>
+        <location filename="../videonowplayingwindow.cpp" line="607"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>播放列表没有媒体索引</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="596"/>
+        <location filename="../videonowplayingwindow.cpp" line="609"/>
         <source>Unable to start playback</source>
-        <translation>无法在后台开始播放</translation>
+        <translation>无法开始播放</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="598"/>
+        <location filename="../videonowplayingwindow.cpp" line="611"/>
         <source>Unable to stop playback</source>
-        <translation>无法在后台停止播放</translation>
+        <translation>无法停止播放</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="600"/>
+        <location filename="../videonowplayingwindow.cpp" line="613"/>
         <source>Unable to pause playback</source>
-        <translation>无法在后台暂停播放</translation>
+        <translation>无法暂停播放</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="602"/>
+        <location filename="../videonowplayingwindow.cpp" line="615"/>
         <source>Unable to seek position in media</source>
-        <translation>无法获取媒体目录</translation>
+        <translation>无法拖动播放进度</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="604"/>
+        <location filename="../videonowplayingwindow.cpp" line="617"/>
         <source>Unable to retrieve current position in media</source>
-        <translation>无法检索当前位置中的媒体</translation>
+        <translation>无法检索媒体的播放进度</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="606"/>
+        <location filename="../videonowplayingwindow.cpp" line="619"/>
         <source>Unable to get current playback status</source>
         <translation>无法获取当前播放状态</translation>
     </message>
@@ -1449,22 +1451,22 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>最近播放</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="177"/>
+        <location filename="../videoswindow.cpp" line="176"/>
         <source>Videos - categories</source>
         <translation>视频目录</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="239"/>
+        <location filename="../videoswindow.cpp" line="249"/>
         <source>(unknown clip)</source>
         <translation>(未知剪辑)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="298"/>
+        <location filename="../videoswindow.cpp" line="307"/>
         <source>Recorded by device camera</source>
         <translation>从视频目录加载</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="303"/>
+        <location filename="../videoswindow.cpp" line="311"/>
         <source>Films</source>
         <translation>影片</translation>
     </message>

@@ -264,7 +264,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="584"/>
+        <location filename="../mainwindow.cpp" line="602"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n kappale</numerusform>
@@ -273,7 +273,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="591"/>
+        <location filename="../mainwindow.cpp" line="609"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n leike</numerusform>
@@ -282,7 +282,7 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="607"/>
+        <location filename="../mainwindow.cpp" line="625"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n asema</numerusform>
@@ -314,27 +314,27 @@ Jatka FM-lähettimen käyttämistä irrottamalla kaapeli.</translation>
         <translation>Satunnaistoisto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="583"/>
+        <location filename="../mainwindow.cpp" line="601"/>
         <source>(no songs)</source>
         <translation>(ei kappaleita)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="590"/>
+        <location filename="../mainwindow.cpp" line="608"/>
         <source>(no videos)</source>
         <translation>(ei videoita)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="606"/>
+        <location filename="../mainwindow.cpp" line="624"/>
         <source>(no stations)</source>
         <translation>(ei asemia)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="723"/>
+        <location filename="../mainwindow.cpp" line="741"/>
         <source>Processed items:</source>
         <translation>Käsitellyt kohteet:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="727"/>
+        <location filename="../mainwindow.cpp" line="745"/>
         <source>Remaining items:</source>
         <translation>Jäljellä olevat kohteet:</translation>
     </message>
@@ -1262,7 +1262,7 @@ nyt soitettaviin</translation>
         <translation>Lisää nyt soitettaviin</translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="256"/>
+        <location filename="../upnpview.cpp" line="257"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n leike lisätty nyt soitettaviin</numerusform>
@@ -1278,163 +1278,163 @@ nyt soitettaviin</translation>
         <translation>Nyt soitetaan</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="172"/>
+        <location filename="../videonowplayingwindow.cpp" line="186"/>
         <source>Delete video?</source>
         <translation>Poistetaanko video?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="173"/>
+        <location filename="../videonowplayingwindow.cpp" line="187"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Haluatko varmasti poistaa tämän videon?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="176"/>
+        <location filename="../videonowplayingwindow.cpp" line="190"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="177"/>
+        <location filename="../videonowplayingwindow.cpp" line="191"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="544"/>
-        <location filename="../videonowplayingwindow.cpp" line="637"/>
+        <location filename="../videonowplayingwindow.cpp" line="557"/>
+        <location filename="../videonowplayingwindow.cpp" line="650"/>
         <source>Unable to play media</source>
         <translation>Mediaa ei voi toistaa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="548"/>
+        <location filename="../videonowplayingwindow.cpp" line="561"/>
         <source>Media not found</source>
         <translation>Mediaa ei löytynyt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="550"/>
+        <location filename="../videonowplayingwindow.cpp" line="563"/>
         <source>URI not available</source>
         <translation>URI ei saatavilla</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="552"/>
+        <location filename="../videonowplayingwindow.cpp" line="565"/>
         <source>Invalid URI</source>
         <translation>Virheellinen URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="554"/>
+        <location filename="../videonowplayingwindow.cpp" line="567"/>
         <source>Unable to open media</source>
         <translation>Mediaa ei voi avata</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="556"/>
+        <location filename="../videonowplayingwindow.cpp" line="569"/>
         <source>Playback stream no longer available</source>
         <translation>Toistovirtaa ei enää saatavilla</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="558"/>
+        <location filename="../videonowplayingwindow.cpp" line="571"/>
         <source>Could not determine MIME-type</source>
         <translation>MIME-tyyppiä ei voi määritellä</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="560"/>
+        <location filename="../videonowplayingwindow.cpp" line="573"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Yleinen virhe, toistoa ei voi jatkaa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="562"/>
+        <location filename="../videonowplayingwindow.cpp" line="575"/>
         <source>General error occured</source>
         <translation>Yleinen virhe</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="564"/>
+        <location filename="../videonowplayingwindow.cpp" line="577"/>
         <source>Unsupported media</source>
         <translation>Mediaa ei tueta</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="566"/>
+        <location filename="../videonowplayingwindow.cpp" line="579"/>
         <source>Unsupported resolution</source>
         <translation>Resoluutiota ei tueta</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="568"/>
+        <location filename="../videonowplayingwindow.cpp" line="581"/>
         <source>Unsupported framerate</source>
         <translation>Kuvataajuutta ei tueta</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="570"/>
+        <location filename="../videonowplayingwindow.cpp" line="583"/>
         <source>Media is protected by DRM</source>
         <translation>Media on DRM-suojattu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="572"/>
+        <location filename="../videonowplayingwindow.cpp" line="585"/>
         <source>System sound device is unavailable</source>
         <translation>Järjestelmä-äänilaite ei saatavilla</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="574"/>
+        <location filename="../videonowplayingwindow.cpp" line="587"/>
         <source>Media corrupted</source>
         <translation>Media vioittunut</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="576"/>
+        <location filename="../videonowplayingwindow.cpp" line="589"/>
         <source>Error while parsing playlist</source>
         <translation>Virhe jäsentäessä soittolistaa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="577"/>
+        <location filename="../videonowplayingwindow.cpp" line="590"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Soittolista saattaa olla vioittunut tai tyhjä</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="580"/>
+        <location filename="../videonowplayingwindow.cpp" line="593"/>
         <source>Codec not found:</source>
         <translation>Koodekkia ei löytynyt:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="584"/>
+        <location filename="../videonowplayingwindow.cpp" line="597"/>
         <source>Video codec not found:</source>
         <translation>Videokoodekkia ei löytynyt:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="588"/>
+        <location filename="../videonowplayingwindow.cpp" line="601"/>
         <source>Audio codec not found:</source>
         <translation>Audiokoodekkia ei löytynyt:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="592"/>
+        <location filename="../videonowplayingwindow.cpp" line="605"/>
         <source>No playlist assigned</source>
         <translation>Soittolistaa ei määritetty</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="594"/>
+        <location filename="../videonowplayingwindow.cpp" line="607"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Mediaindeksi ei ole sidottuna soittolistan kohteisiin</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="596"/>
+        <location filename="../videonowplayingwindow.cpp" line="609"/>
         <source>Unable to start playback</source>
         <translation>Toistoa ei voi aloittaa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="598"/>
+        <location filename="../videonowplayingwindow.cpp" line="611"/>
         <source>Unable to stop playback</source>
         <translation>Toistoa ei voi pysäyttää</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="600"/>
+        <location filename="../videonowplayingwindow.cpp" line="613"/>
         <source>Unable to pause playback</source>
         <translation>Toistoa ei voi keskeyttää</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="602"/>
+        <location filename="../videonowplayingwindow.cpp" line="615"/>
         <source>Unable to seek position in media</source>
         <translation>Median toistokohtaa ei voi hakea</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="604"/>
+        <location filename="../videonowplayingwindow.cpp" line="617"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Median nykyistä toistokohtaa ei voi hakea</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="606"/>
+        <location filename="../videonowplayingwindow.cpp" line="619"/>
         <source>Unable to get current playback status</source>
         <translation>Nykyistä toistotilaa ei voi tunnistaa</translation>
     </message>
@@ -1487,22 +1487,22 @@ nyt soitettaviin</translation>
         <translation>Videot - uusimmat</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="177"/>
+        <location filename="../videoswindow.cpp" line="176"/>
         <source>Videos - categories</source>
         <translation>Videot - luokat</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="239"/>
+        <location filename="../videoswindow.cpp" line="249"/>
         <source>(unknown clip)</source>
         <translation>(tuntematon leike)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="298"/>
+        <location filename="../videoswindow.cpp" line="307"/>
         <source>Recorded by device camera</source>
         <translation>Tallennettu laitteen kameralla</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="303"/>
+        <location filename="../videoswindow.cpp" line="311"/>
         <source>Films</source>
         <translation>Elokuvat</translation>
     </message>

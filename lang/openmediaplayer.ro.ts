@@ -252,7 +252,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="584"/>
+        <location filename="../mainwindow.cpp" line="602"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n melodie</numerusform>
@@ -262,7 +262,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="591"/>
+        <location filename="../mainwindow.cpp" line="609"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n clip</numerusform>
@@ -272,7 +272,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="607"/>
+        <location filename="../mainwindow.cpp" line="625"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n post</numerusform>
@@ -305,27 +305,27 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <translation>Amesteca toate melodiile</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="583"/>
+        <location filename="../mainwindow.cpp" line="601"/>
         <source>(no songs)</source>
         <translation>(fara melodii)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="590"/>
+        <location filename="../mainwindow.cpp" line="608"/>
         <source>(no videos)</source>
         <translation>(fara videoclipuri)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="606"/>
+        <location filename="../mainwindow.cpp" line="624"/>
         <source>(no stations)</source>
         <translation>(fara posturi radio)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="723"/>
+        <location filename="../mainwindow.cpp" line="741"/>
         <source>Processed items:</source>
         <translation>elemente procesate</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="727"/>
+        <location filename="../mainwindow.cpp" line="745"/>
         <source>Remaining items:</source>
         <translation>Elemente ramase</translation>
     </message>
@@ -1263,7 +1263,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <translation>Adauga in lista de redare curenta</translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="256"/>
+        <location filename="../upnpview.cpp" line="257"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n videoclip adaugat in lista de redare curenta</numerusform>
@@ -1280,163 +1280,163 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <translation>Redare curenta</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="172"/>
+        <location filename="../videonowplayingwindow.cpp" line="186"/>
         <source>Delete video?</source>
         <translation>Stergere film?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="173"/>
+        <location filename="../videonowplayingwindow.cpp" line="187"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Esti sigur ca vrei sa stergi acest film?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="176"/>
+        <location filename="../videonowplayingwindow.cpp" line="190"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="177"/>
+        <location filename="../videonowplayingwindow.cpp" line="191"/>
         <source>No</source>
         <translation>Nu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="544"/>
-        <location filename="../videonowplayingwindow.cpp" line="637"/>
+        <location filename="../videonowplayingwindow.cpp" line="557"/>
+        <location filename="../videonowplayingwindow.cpp" line="650"/>
         <source>Unable to play media</source>
         <translation>Nu se poate reda media</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="548"/>
+        <location filename="../videonowplayingwindow.cpp" line="561"/>
         <source>Media not found</source>
         <translation>Fisier media negasit</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="550"/>
+        <location filename="../videonowplayingwindow.cpp" line="563"/>
         <source>URI not available</source>
         <translation>URI nedisponibil</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="552"/>
+        <location filename="../videonowplayingwindow.cpp" line="565"/>
         <source>Invalid URI</source>
         <translation>URI nevalid</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="554"/>
+        <location filename="../videonowplayingwindow.cpp" line="567"/>
         <source>Unable to open media</source>
         <translation>Nu se poate reda media</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="556"/>
+        <location filename="../videonowplayingwindow.cpp" line="569"/>
         <source>Playback stream no longer available</source>
         <translation>Fluxul de redare nu mai este disponibil</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="558"/>
+        <location filename="../videonowplayingwindow.cpp" line="571"/>
         <source>Could not determine MIME-type</source>
         <translation>nu pot determina tipul MIME</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="560"/>
+        <location filename="../videonowplayingwindow.cpp" line="573"/>
         <source>General error occured, unable to continue playback</source>
         <translation>eroare generala aparuta, nu se mai poate continua redarea</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="562"/>
+        <location filename="../videonowplayingwindow.cpp" line="575"/>
         <source>General error occured</source>
         <translation>Eroare generala aparuta</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="564"/>
+        <location filename="../videonowplayingwindow.cpp" line="577"/>
         <source>Unsupported media</source>
         <translation>Media nesuportat</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="566"/>
+        <location filename="../videonowplayingwindow.cpp" line="579"/>
         <source>Unsupported resolution</source>
         <translation>Rezolutie nesuportata</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="568"/>
+        <location filename="../videonowplayingwindow.cpp" line="581"/>
         <source>Unsupported framerate</source>
         <translation>Numar de cadre nesuportat</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="570"/>
+        <location filename="../videonowplayingwindow.cpp" line="583"/>
         <source>Media is protected by DRM</source>
         <translation>Media este protejata de DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="572"/>
+        <location filename="../videonowplayingwindow.cpp" line="585"/>
         <source>System sound device is unavailable</source>
         <translation>Dispozitivul de sunet al sistemului nu este disponibil</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="574"/>
+        <location filename="../videonowplayingwindow.cpp" line="587"/>
         <source>Media corrupted</source>
         <translation>Fisier media stricat</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="576"/>
+        <location filename="../videonowplayingwindow.cpp" line="589"/>
         <source>Error while parsing playlist</source>
         <translation>Eroare in timpul analizei listei de redare</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="577"/>
+        <location filename="../videonowplayingwindow.cpp" line="590"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Lista de redare poate fi stricata sau goala</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="580"/>
+        <location filename="../videonowplayingwindow.cpp" line="593"/>
         <source>Codec not found:</source>
         <translation>Codecul nu a fost gasit:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="584"/>
+        <location filename="../videonowplayingwindow.cpp" line="597"/>
         <source>Video codec not found:</source>
         <translation>Codecul video nu a fost gasit:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="588"/>
+        <location filename="../videonowplayingwindow.cpp" line="601"/>
         <source>Audio codec not found:</source>
         <translation>Codecul audio nu a fost gasit:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="592"/>
+        <location filename="../videonowplayingwindow.cpp" line="605"/>
         <source>No playlist assigned</source>
         <translation>Nu a fost atribuita nici o lista de redare</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="594"/>
+        <location filename="../videonowplayingwindow.cpp" line="607"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Indexul media nu este legat cu elementele din lista de redare</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="596"/>
+        <location filename="../videonowplayingwindow.cpp" line="609"/>
         <source>Unable to start playback</source>
         <translation>Nu se poate incepe redarea</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="598"/>
+        <location filename="../videonowplayingwindow.cpp" line="611"/>
         <source>Unable to stop playback</source>
         <translation>Nu se poate opri redarea</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="600"/>
+        <location filename="../videonowplayingwindow.cpp" line="613"/>
         <source>Unable to pause playback</source>
         <translation>Nu se poate pune pauza redarii</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="602"/>
+        <location filename="../videonowplayingwindow.cpp" line="615"/>
         <source>Unable to seek position in media</source>
         <translation>Nu se poate cauta pozitia in media</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="604"/>
+        <location filename="../videonowplayingwindow.cpp" line="617"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Nu se poate restabili pozitia in media</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="606"/>
+        <location filename="../videonowplayingwindow.cpp" line="619"/>
         <source>Unable to get current playback status</source>
         <translation>Nu se poate stabili situatia curenta a redarii</translation>
     </message>
@@ -1489,22 +1489,22 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <translation>Video - ultimele</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="177"/>
+        <location filename="../videoswindow.cpp" line="176"/>
         <source>Videos - categories</source>
         <translation>Video - categorii</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="239"/>
+        <location filename="../videoswindow.cpp" line="249"/>
         <source>(unknown clip)</source>
         <translation>(video necunoscut)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="298"/>
+        <location filename="../videoswindow.cpp" line="307"/>
         <source>Recorded by device camera</source>
         <translation>Inregistrate de camera aparatului</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="303"/>
+        <location filename="../videoswindow.cpp" line="311"/>
         <source>Films</source>
         <translation>Filme</translation>
     </message>
