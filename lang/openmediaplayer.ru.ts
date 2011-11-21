@@ -166,7 +166,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактировать</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="122"/>
@@ -301,12 +301,12 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../mainwindow.cpp" line="741"/>
         <source>Processed items:</source>
-        <translation type="unfinished"></translation>
+        <translation>Обрабатываемые файлы</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="745"/>
         <source>Remaining items:</source>
-        <translation type="unfinished"></translation>
+        <translation>Остальные файлы</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
@@ -784,7 +784,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="280"/>
         <source>Buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>Буферизация</translation>
     </message>
 </context>
 <context>
@@ -817,7 +817,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Открывать полные папки</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
@@ -827,7 +827,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="98"/>
         <source>Lazy sliders</source>
-        <translation>Ленивый слайдер перемотки</translation>
+        <translation>Ленивый ползунок перемотки</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="105"/>
