@@ -142,11 +142,13 @@ void InternetRadioWindow::onDeleteClicked()
 
 void InternetRadioWindow::showBookmarkDialog(QString name, QString address)
 {
-    if (name.isEmpty()) bookmarkObjectId = "";
-
     bookmarkDialog = new QDialog(this);
-    bookmarkDialog->setWindowTitle(tr("Add radio bookmark"));
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+
+    if (name.isEmpty()) {
+        bookmarkObjectId = "";
+        bookmarkDialog->setWindowTitle(tr("Add radio bookmark"));
+    } else
+        bookmarkDialog->setWindowTitle(tr("Edit radio bookmark"));
 
     // Labels
     nameLabel = new QLabel(bookmarkDialog);
@@ -179,6 +181,8 @@ void InternetRadioWindow::showBookmarkDialog(QString name, QString address)
     QVBoxLayout *boxLayout = new QVBoxLayout();
     boxLayout->addWidget(nameBox);
     boxLayout->addWidget(addressBox);
+
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
 
     QHBoxLayout *dialogLayout = new QHBoxLayout();
     if (screenGeometry.width() < screenGeometry.height()) {
