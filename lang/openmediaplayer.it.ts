@@ -166,7 +166,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="148"/>
+        <location filename="../internetradiowindow.cpp" line="149"/>
         <source>Add radio bookmark</source>
         <translation>Aggiungi radio preferita</translation>
     </message>
@@ -186,50 +186,55 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="153"/>
+        <location filename="../internetradiowindow.cpp" line="151"/>
+        <source>Edit radio bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="155"/>
+        <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Web address</source>
         <translation>Indirizzo Web</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="168"/>
+        <location filename="../internetradiowindow.cpp" line="170"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="211"/>
-        <location filename="../internetradiowindow.cpp" line="213"/>
+        <location filename="../internetradiowindow.cpp" line="215"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
         <source>Unable to add empty bookmark</source>
         <translation>Impossibile aggiungere preferito vuoto</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="213"/>
-        <location filename="../internetradiowindow.cpp" line="243"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
+        <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="232"/>
+        <location filename="../internetradiowindow.cpp" line="236"/>
         <source>Media bookmark saved</source>
         <translation>Preferito salvato</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="241"/>
-        <location filename="../internetradiowindow.cpp" line="243"/>
+        <location filename="../internetradiowindow.cpp" line="245"/>
+        <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Invalid URL</source>
         <translation>URL non valido</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="291"/>
+        <location filename="../internetradiowindow.cpp" line="295"/>
         <source>(unknown station)</source>
         <translation>(stazione sconosciuta)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="295"/>
+        <location filename="../internetradiowindow.cpp" line="299"/>
         <source>(unknown)</source>
         <translation>(sconosciuto)</translation>
     </message>

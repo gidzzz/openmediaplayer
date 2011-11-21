@@ -148,7 +148,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="148"/>
+        <location filename="../internetradiowindow.cpp" line="149"/>
         <source>Add radio bookmark</source>
         <translation>添加电台书签</translation>
     </message>
@@ -168,50 +168,55 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="153"/>
+        <location filename="../internetradiowindow.cpp" line="151"/>
+        <source>Edit radio bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="155"/>
+        <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Web address</source>
         <translation>网址</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="168"/>
+        <location filename="../internetradiowindow.cpp" line="170"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="211"/>
-        <location filename="../internetradiowindow.cpp" line="213"/>
+        <location filename="../internetradiowindow.cpp" line="215"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
         <source>Unable to add empty bookmark</source>
         <translation>无法添加空书签</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="213"/>
-        <location filename="../internetradiowindow.cpp" line="243"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
+        <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="232"/>
+        <location filename="../internetradiowindow.cpp" line="236"/>
         <source>Media bookmark saved</source>
         <translation>书签已保存</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="241"/>
-        <location filename="../internetradiowindow.cpp" line="243"/>
+        <location filename="../internetradiowindow.cpp" line="245"/>
+        <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Invalid URL</source>
         <translation>无效网址</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="291"/>
+        <location filename="../internetradiowindow.cpp" line="295"/>
         <source>(unknown station)</source>
         <translation>(未知电台)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="295"/>
+        <location filename="../internetradiowindow.cpp" line="299"/>
         <source>(unknown)</source>
         <translation>(未知)</translation>
     </message>

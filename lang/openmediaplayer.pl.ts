@@ -169,7 +169,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="148"/>
+        <location filename="../internetradiowindow.cpp" line="149"/>
         <source>Add radio bookmark</source>
         <translation>Dodaj zakładkę</translation>
     </message>
@@ -189,81 +189,90 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="153"/>
+        <location filename="../internetradiowindow.cpp" line="151"/>
+        <source>Edit radio bookmark</source>
+        <translation>Edytuj zakładkę</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="155"/>
+        <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Web address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="168"/>
+        <location filename="../internetradiowindow.cpp" line="170"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="211"/>
-        <location filename="../internetradiowindow.cpp" line="213"/>
+        <location filename="../internetradiowindow.cpp" line="215"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
         <source>Unable to add empty bookmark</source>
         <translation>Nie można dodać pustej zakładki</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="213"/>
-        <location filename="../internetradiowindow.cpp" line="243"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
+        <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Error</source>
         <translation>Błąd</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="232"/>
+        <location filename="../internetradiowindow.cpp" line="236"/>
         <source>Media bookmark saved</source>
         <translation>Zakładka zapisana</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="241"/>
-        <location filename="../internetradiowindow.cpp" line="243"/>
+        <location filename="../internetradiowindow.cpp" line="245"/>
+        <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Invalid URL</source>
         <translation>Niepoprawny URL</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="291"/>
+        <location filename="../internetradiowindow.cpp" line="295"/>
         <source>(unknown station)</source>
         <translation>(nieznana stacja)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="295"/>
+        <location filename="../internetradiowindow.cpp" line="299"/>
         <source>(unknown)</source>
         <translation>(nieznane)</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <location filename="../mainwindow.ui" line="14"/>
-        <source>Media player</source>
-        <translation>Odtwarzacz</translation>
+    <message numerus="yes">
+        <location filename="../mainwindow.cpp" line="35"/>
+        <location filename="../mainwindow.cpp" line="602"/>
+        <source>%n song(s)</source>
+        <translation>
+            <numerusform>%n utwór</numerusform>
+            <numerusform>%n utwory</numerusform>
+            <numerusform>%n utworów</numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../mainwindow.ui" line="390"/>
-        <location filename="../mainwindow.ui" line="397"/>
-        <source>Options</source>
-        <translation>Opcje</translation>
+    <message numerus="yes">
+        <location filename="../mainwindow.cpp" line="36"/>
+        <location filename="../mainwindow.cpp" line="609"/>
+        <source>%n clip(s)</source>
+        <translation>
+            <numerusform>%n film</numerusform>
+            <numerusform>%n filmy</numerusform>
+            <numerusform>%n filmów</numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../mainwindow.ui" line="406"/>
-        <source>About</source>
-        <translation>O programie</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="411"/>
-        <source>About Qt</source>
-        <translation>O Qt</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="416"/>
-        <source>Settings</source>
-        <translation>Ustawienia</translation>
+    <message numerus="yes">
+        <location filename="../mainwindow.cpp" line="37"/>
+        <location filename="../mainwindow.cpp" line="625"/>
+        <source>%n station(s)</source>
+        <translation>
+            <numerusform>%n stacja</numerusform>
+            <numerusform>%n stacje</numerusform>
+            <numerusform>%n stacji</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="177"/>
@@ -304,36 +313,6 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <source>(no stations)</source>
         <translation>(brak stacji)</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="602"/>
-        <source>%n song(s)</source>
-        <translation>
-            <numerusform>%n utwór</numerusform>
-            <numerusform>%n utwory</numerusform>
-            <numerusform>%n utworów</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="609"/>
-        <source>%n clip(s)</source>
-        <translation>
-            <numerusform>%n film</numerusform>
-            <numerusform>%n filmy</numerusform>
-            <numerusform>%n filmów</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="625"/>
-        <source>%n station(s)</source>
-        <translation>
-            <numerusform>%n stacja</numerusform>
-            <numerusform>%n stacje</numerusform>
-            <numerusform>%n stacji</numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../mainwindow.cpp" line="741"/>
         <source>Processed items:</source>
@@ -344,47 +323,35 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <source>Remaining items:</source>
         <translation>Oczekujące obiekty</translation>
     </message>
-</context>
-<context>
-    <name>MusicWindow</name>
     <message>
-        <location filename="../musicwindow.ui" line="167"/>
+        <location filename="../mainwindow.ui" line="14"/>
+        <source>Media player</source>
+        <translation>Odtwarzacz</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="390"/>
+        <location filename="../mainwindow.ui" line="397"/>
         <source>Options</source>
         <translation>Opcje</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="174"/>
-        <location filename="../musicwindow.cpp" line="369"/>
-        <source>All albums</source>
-        <translation>Wszystkie albumy</translation>
+        <location filename="../mainwindow.ui" line="406"/>
+        <source>About</source>
+        <translation>O programie</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="179"/>
-        <location filename="../musicwindow.cpp" line="371"/>
-        <location filename="../musicwindow.cpp" line="418"/>
-        <source>Artists</source>
-        <translation>Wykonawcy</translation>
+        <location filename="../mainwindow.ui" line="411"/>
+        <source>About Qt</source>
+        <translation>O Qt</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="184"/>
-        <location filename="../musicwindow.cpp" line="375"/>
-        <location filename="../musicwindow.cpp" line="436"/>
-        <source>Genres</source>
-        <translation>Gatunki</translation>
+        <location filename="../mainwindow.ui" line="416"/>
+        <source>Settings</source>
+        <translation>Ustawienia</translation>
     </message>
-    <message>
-        <location filename="../musicwindow.ui" line="189"/>
-        <location filename="../musicwindow.cpp" line="377"/>
-        <location filename="../musicwindow.cpp" line="472"/>
-        <source>Playlists</source>
-        <translation>Listy odtwarzania</translation>
-    </message>
-    <message>
-        <location filename="../musicwindow.ui" line="194"/>
-        <location filename="../musicwindow.cpp" line="373"/>
-        <source>All songs</source>
-        <translation>Wszystkie utwory</translation>
-    </message>
+</context>
+<context>
+    <name>MusicWindow</name>
     <message>
         <location filename="../musicwindow.cpp" line="194"/>
         <source>Add to now playing</source>
@@ -553,78 +520,60 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
             <numerusform>%n utworów dodanych do odtwarzania</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.ui" line="14"/>
-        <source>Now playing</source>
-        <translation>Teraz odtwarzane</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="185"/>
-        <source>--/-- songs</source>
-        <translation>--/-- utworów</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="632"/>
-        <location filename="../nowplayingwindow.cpp" line="635"/>
-        <location filename="../nowplayingwindow.cpp" line="1116"/>
-        <source>(unknown song)</source>
-        <translation>(nieznany utwór)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="641"/>
-        <location filename="../nowplayingwindow.cpp" line="1120"/>
-        <source>(unknown artist)</source>
-        <translation>(nieznany wykonawca)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="644"/>
-        <location filename="../nowplayingwindow.cpp" line="1124"/>
-        <source>(unknown album)</source>
-        <translation>(nieznany album)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="912"/>
+        <location filename="../musicwindow.ui" line="167"/>
         <source>Options</source>
         <translation>Opcje</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="924"/>
-        <source>FM Transmitter</source>
-        <translation>Nadajnik FM</translation>
+        <location filename="../musicwindow.ui" line="174"/>
+        <location filename="../musicwindow.cpp" line="369"/>
+        <source>All albums</source>
+        <translation>Wszystkie albumy</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1241"/>
-        <source>Clear now playing</source>
-        <translation>Wyczyść listę odtwarzania</translation>
+        <location filename="../musicwindow.ui" line="179"/>
+        <location filename="../musicwindow.cpp" line="371"/>
+        <location filename="../musicwindow.cpp" line="418"/>
+        <source>Artists</source>
+        <translation>Wykonawcy</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1234"/>
-        <location filename="../nowplayingwindow.cpp" line="1382"/>
-        <source>Save playlist</source>
-        <translation>Zapisz listę odtwarzania</translation>
+        <location filename="../musicwindow.ui" line="184"/>
+        <location filename="../musicwindow.cpp" line="375"/>
+        <location filename="../musicwindow.cpp" line="436"/>
+        <source>Genres</source>
+        <translation>Gatunki</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="939"/>
-        <source>Entertainment view</source>
-        <translation>Widok pokazowy</translation>
+        <location filename="../musicwindow.ui" line="189"/>
+        <location filename="../musicwindow.cpp" line="377"/>
+        <location filename="../musicwindow.cpp" line="472"/>
+        <source>Playlists</source>
+        <translation>Listy odtwarzania</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="944"/>
-        <source>Car view</source>
-        <translation>Widok samochodowy</translation>
+        <location filename="../musicwindow.ui" line="194"/>
+        <location filename="../musicwindow.cpp" line="373"/>
+        <source>All songs</source>
+        <translation>Wszystkie utwory</translation>
     </message>
+</context>
+<context>
+    <name>NowPlayingWindow</name>
     <message>
         <location filename="../nowplayingwindow.cpp" line="229"/>
         <source>Lyrics not found</source>
         <translation>Nie znaleziono tekstu</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../nowplayingwindow.cpp" line="307"/>
+        <source>%n song(s)</source>
+        <translation>
+            <numerusform>%n utwór</numerusform>
+            <numerusform>%n utwory</numerusform>
+            <numerusform>%n utworów</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="317"/>
@@ -641,15 +590,6 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <location filename="../nowplayingwindow.cpp" line="1643"/>
         <source>Fetching lyrics...</source>
         <translation>Pobieranie tekstu...</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="307"/>
-        <source>%n song(s)</source>
-        <translation>
-            <numerusform>%n utwór</numerusform>
-            <numerusform>%n utwory</numerusform>
-            <numerusform>%n utworów</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="735"/>
@@ -748,6 +688,71 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
         <translation>Odśwież tekst</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="14"/>
+        <source>Now playing</source>
+        <translation>Teraz odtwarzane</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="185"/>
+        <source>--/-- songs</source>
+        <translation>--/-- utworów</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="237"/>
+        <location filename="../nowplayingwindow.cpp" line="632"/>
+        <location filename="../nowplayingwindow.cpp" line="635"/>
+        <location filename="../nowplayingwindow.cpp" line="1116"/>
+        <source>(unknown song)</source>
+        <translation>(nieznany utwór)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="351"/>
+        <location filename="../nowplayingwindow.cpp" line="641"/>
+        <location filename="../nowplayingwindow.cpp" line="1120"/>
+        <source>(unknown artist)</source>
+        <translation>(nieznany wykonawca)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="364"/>
+        <location filename="../nowplayingwindow.cpp" line="644"/>
+        <location filename="../nowplayingwindow.cpp" line="1124"/>
+        <source>(unknown album)</source>
+        <translation>(nieznany album)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="912"/>
+        <source>Options</source>
+        <translation>Opcje</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="924"/>
+        <source>FM Transmitter</source>
+        <translation>Nadajnik FM</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="929"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
+        <source>Clear now playing</source>
+        <translation>Wyczyść listę odtwarzania</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="934"/>
+        <location filename="../nowplayingwindow.cpp" line="1234"/>
+        <location filename="../nowplayingwindow.cpp" line="1382"/>
+        <source>Save playlist</source>
+        <translation>Zapisz listę odtwarzania</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="939"/>
+        <source>Entertainment view</source>
+        <translation>Widok pokazowy</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="944"/>
+        <source>Car view</source>
+        <translation>Widok samochodowy</translation>
     </message>
 </context>
 <context>
@@ -876,22 +881,6 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.ui" line="98"/>
-        <source>Options</source>
-        <translation>Opcje</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.ui" line="107"/>
-        <source>Add songs to now playing</source>
-        <translation>Dodaj do odtwarzania</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.ui" line="112"/>
-        <location filename="../singlealbumview.cpp" line="325"/>
-        <source>Delete</source>
-        <translation>Usuń</translation>
-    </message>
-    <message>
         <location filename="../singlealbumview.cpp" line="32"/>
         <source>Shuffle songs</source>
         <translation>Wymieszaj</translation>
@@ -973,31 +962,25 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
             <numerusform>%n utworów dodanych do odtwarzania</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SingleArtistView</name>
     <message>
-        <location filename="../singleartistview.ui" line="72"/>
-        <location filename="../singleartistview.cpp" line="93"/>
-        <source>Shuffle songs</source>
-        <translation>Wymieszaj</translation>
-    </message>
-    <message>
-        <location filename="../singleartistview.ui" line="126"/>
+        <location filename="../singlealbumview.ui" line="98"/>
         <source>Options</source>
         <translation>Opcje</translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="135"/>
+        <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
         <translation>Dodaj do odtwarzania</translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="140"/>
-        <location filename="../singleartistview.cpp" line="332"/>
+        <location filename="../singlealbumview.ui" line="112"/>
+        <location filename="../singlealbumview.cpp" line="325"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
+</context>
+<context>
+    <name>SingleArtistView</name>
     <message>
         <location filename="../singleartistview.cpp" line="119"/>
         <source>(unknown album)</source>
@@ -1045,29 +1028,35 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n utwór dodany do odtwarzania</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n utwory dodane do odtwarzania</numerusform>
+            <numerusform>%n utworów dodanych do odtwarzania</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.ui" line="100"/>
+        <location filename="../singleartistview.ui" line="72"/>
+        <location filename="../singleartistview.cpp" line="93"/>
+        <source>Shuffle songs</source>
+        <translation>Wymieszaj</translation>
+    </message>
+    <message>
+        <location filename="../singleartistview.ui" line="126"/>
         <source>Options</source>
         <translation>Opcje</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="108"/>
-        <location filename="../singlegenreview.cpp" line="241"/>
-        <source>Add to now playing</source>
+        <location filename="../singleartistview.ui" line="135"/>
+        <source>Add songs to now playing</source>
         <translation>Dodaj do odtwarzania</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="113"/>
+        <location filename="../singleartistview.ui" line="140"/>
+        <location filename="../singleartistview.cpp" line="332"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
+</context>
+<context>
+    <name>SingleGenreView</name>
     <message>
         <location filename="../singlegenreview.cpp" line="32"/>
         <source>Shuffle songs</source>
@@ -1097,36 +1086,25 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
             <numerusform>%n utworów dodanych do odtwarzania</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.ui" line="98"/>
+        <location filename="../singlegenreview.ui" line="100"/>
         <source>Options</source>
         <translation>Opcje</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="109"/>
-        <source>Edit playlist</source>
-        <translation>Edytuj listę odtwarzania</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="114"/>
-        <source>Save playlist</source>
-        <translation>Zapisz listę odtwarzania</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="119"/>
-        <location filename="../singleplaylistview.cpp" line="399"/>
+        <location filename="../singlegenreview.ui" line="108"/>
+        <location filename="../singlegenreview.cpp" line="241"/>
         <source>Add to now playing</source>
         <translation>Dodaj do odtwarzania</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="124"/>
-        <location filename="../singleplaylistview.ui" line="129"/>
-        <source>Delete playlist</source>
-        <translation>Usuń listę odtwarzania</translation>
+        <location filename="../singlegenreview.ui" line="113"/>
+        <source>Delete</source>
+        <translation>Usuń</translation>
     </message>
+</context>
+<context>
+    <name>SinglePlaylistView</name>
     <message>
         <location filename="../singleplaylistview.cpp" line="34"/>
         <source>Shuffle songs</source>
@@ -1221,6 +1199,33 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
             <numerusform>%n utworów</numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="98"/>
+        <source>Options</source>
+        <translation>Opcje</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="109"/>
+        <source>Edit playlist</source>
+        <translation>Edytuj listę odtwarzania</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="114"/>
+        <source>Save playlist</source>
+        <translation>Zapisz listę odtwarzania</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="119"/>
+        <location filename="../singleplaylistview.cpp" line="399"/>
+        <source>Add to now playing</source>
+        <translation>Dodaj do odtwarzania</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="124"/>
+        <location filename="../singleplaylistview.ui" line="129"/>
+        <source>Delete playlist</source>
+        <translation>Usuń listę odtwarzania</translation>
+    </message>
 </context>
 <context>
     <name>TagWindow</name>
@@ -1253,16 +1258,6 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.ui" line="104"/>
-        <source>Options</source>
-        <translation>Opcje</translation>
-    </message>
-    <message>
-        <location filename="../upnpview.ui" line="112"/>
-        <source>Add songs to now playing</source>
-        <translation>Dodaj do odtwarzania</translation>
-    </message>
-    <message>
         <location filename="../upnpview.cpp" line="114"/>
         <source>(unknown song)</source>
         <translation>(nieznany utwór)</translation>
@@ -1285,6 +1280,16 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
             <numerusform>%n utwory dodane do odtwarzania</numerusform>
             <numerusform>%n utworów dodanych do odtwarzania</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../upnpview.ui" line="104"/>
+        <source>Options</source>
+        <translation>Opcje</translation>
+    </message>
+    <message>
+        <location filename="../upnpview.ui" line="112"/>
+        <source>Add songs to now playing</source>
+        <translation>Dodaj do odtwarzania</translation>
     </message>
 </context>
 <context>

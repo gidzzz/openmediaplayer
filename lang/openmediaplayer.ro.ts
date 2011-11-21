@@ -154,7 +154,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="148"/>
+        <location filename="../internetradiowindow.cpp" line="149"/>
         <source>Add radio bookmark</source>
         <translation>Adauga semn de carte radio </translation>
     </message>
@@ -174,50 +174,55 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <translation>Sterge</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="153"/>
+        <location filename="../internetradiowindow.cpp" line="151"/>
+        <source>Edit radio bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Name</source>
         <translation>Nume</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="155"/>
+        <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Web address</source>
         <translation>Adresa Web</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="168"/>
+        <location filename="../internetradiowindow.cpp" line="170"/>
         <source>Save</source>
         <translation>Salveaza</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="211"/>
-        <location filename="../internetradiowindow.cpp" line="213"/>
+        <location filename="../internetradiowindow.cpp" line="215"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
         <source>Unable to add empty bookmark</source>
         <translation>Nu pot adauga un semn de carte gol</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="213"/>
-        <location filename="../internetradiowindow.cpp" line="243"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
+        <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Error</source>
         <translation>Eroare</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="232"/>
+        <location filename="../internetradiowindow.cpp" line="236"/>
         <source>Media bookmark saved</source>
         <translation>Semn de carte media salvat</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="241"/>
-        <location filename="../internetradiowindow.cpp" line="243"/>
+        <location filename="../internetradiowindow.cpp" line="245"/>
+        <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Invalid URL</source>
         <translation>URL nevalabil</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="291"/>
+        <location filename="../internetradiowindow.cpp" line="295"/>
         <source>(unknown station)</source>
         <translation>(Post necunoscut)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="295"/>
+        <location filename="../internetradiowindow.cpp" line="299"/>
         <source>(unknown)</source>
         <translation>(necunoscut)</translation>
     </message>
