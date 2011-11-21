@@ -448,7 +448,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../musicwindow.cpp" line="690"/>
         <source>Saved</source>
-        <translation>Salvato</translation>
+        <translation>Salvate</translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="708"/>
@@ -877,7 +877,8 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Aggiungi brani alla riproduzione in corso</translation>
+        <translation>Aggiungi brani
+alla riproduzione in corso</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
@@ -982,7 +983,8 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>Aggiungi brani alla riproduzione in corso</translation>
+        <translation>Aggiungi brani
+alla riproduzione in corso</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
@@ -1246,7 +1248,8 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>Aggiungi brani alla riproduzione in corso</translation>
+        <translation>Aggiungi brani
+alla riproduzione in corso</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="114"/>
