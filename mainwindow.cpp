@@ -84,6 +84,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stationCountL->clear();
 
     updatingIndex = 0;
+
+    wasRinging = false;
+    wasPlaying = false;
 #else
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
@@ -214,6 +217,9 @@ void MainWindow::connectSignals()
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::systemBus().connect("", "", "org.freedesktop.Hal.Device", "Condition",
                                          this, SLOT(onBluetoothButtonPressed(QDBusMessage)));
+
+    QDBusConnection::systemBus().connect("", "", "com.nokia.mce.signal", "sig_call_state_ind",
+                                         this, SLOT(onCallStateChanged(QDBusMessage)));
 #endif
 }
 
@@ -808,6 +814,27 @@ void MainWindow::onBluetoothButtonPressed(QDBusMessage msg)
             mafwrenderer->next();
         else if (msg.arguments()[1] == "previous-song")
             mafwrenderer->previous();
+    }
+}
+
+void MainWindow::onCallStateChanged(QDBusMessage msg)
+{
+    QString state = msg.arguments()[0].toString();
+
+    if (state == "ringing") {
+        wasRinging = true;
+        wasPlaying = mafwState == Playing;
+        if (wasPlaying) mafwrenderer->pause();
+    }
+
+    else if (!wasRinging && state == "active") {
+        wasPlaying = mafwState == Playing;
+        if (wasPlaying) mafwrenderer->pause();
+    }
+
+    else if (state == "none") {
+        wasRinging = false;
+        if (wasPlaying) mafwrenderer->resume();
     }
 }
 

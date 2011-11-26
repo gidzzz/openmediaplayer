@@ -65,6 +65,8 @@ private:
     QMaemo5InformationBox *updatingIndex;
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
+    bool wasPlaying;
+    bool wasRinging;
 #endif
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -118,6 +120,7 @@ private slots:
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();
     void onBluetoothButtonPressed(QDBusMessage msg);
+    void onCallStateChanged(QDBusMessage msg);
     void takeScreenshot();
 #endif
 
