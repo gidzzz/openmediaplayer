@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sv_SE" sourcelanguage="en">
+<TS version="2.0" language="sv" sourcelanguage="en">
 <context>
     <name>AboutWindow</name>
     <message>
@@ -241,32 +241,6 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <location filename="../mainwindow.ui" line="14"/>
-        <source>Media player</source>
-        <translation>Media spelare</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="390"/>
-        <location filename="../mainwindow.ui" line="397"/>
-        <source>Options</source>
-        <translation>Alternativ</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="406"/>
-        <source>About</source>
-        <translation>Om</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="411"/>
-        <source>About Qt</source>
-        <translation>Om QT</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="416"/>
-        <source>Settings</source>
-        <translation>Inställningar</translation>
-    </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
         <location filename="../mainwindow.cpp" line="608"/>
@@ -343,47 +317,35 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
         <source>Remaining items:</source>
         <translation>Återstående projekt:</translation>
     </message>
-</context>
-<context>
-    <name>MusicWindow</name>
     <message>
-        <location filename="../musicwindow.ui" line="167"/>
+        <location filename="../mainwindow.ui" line="14"/>
+        <source>Media player</source>
+        <translation>Media spelare</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="390"/>
+        <location filename="../mainwindow.ui" line="397"/>
         <source>Options</source>
         <translation>Alternativ</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="174"/>
-        <location filename="../musicwindow.cpp" line="378"/>
-        <source>All albums</source>
-        <translation>Alla album</translation>
+        <location filename="../mainwindow.ui" line="406"/>
+        <source>About</source>
+        <translation>Om</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="179"/>
-        <location filename="../musicwindow.cpp" line="380"/>
-        <location filename="../musicwindow.cpp" line="427"/>
-        <source>Artists</source>
-        <translation>Artister</translation>
+        <location filename="../mainwindow.ui" line="411"/>
+        <source>About Qt</source>
+        <translation>Om QT</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="184"/>
-        <location filename="../musicwindow.cpp" line="384"/>
-        <location filename="../musicwindow.cpp" line="445"/>
-        <source>Genres</source>
-        <translation>Genrer</translation>
+        <location filename="../mainwindow.ui" line="416"/>
+        <source>Settings</source>
+        <translation>Inställningar</translation>
     </message>
-    <message>
-        <location filename="../musicwindow.ui" line="189"/>
-        <location filename="../musicwindow.cpp" line="386"/>
-        <location filename="../musicwindow.cpp" line="481"/>
-        <source>Playlists</source>
-        <translation>Spellistor</translation>
-    </message>
-    <message>
-        <location filename="../musicwindow.ui" line="194"/>
-        <location filename="../musicwindow.cpp" line="382"/>
-        <source>All songs</source>
-        <translation>Alla låtar</translation>
-    </message>
+</context>
+<context>
+    <name>MusicWindow</name>
     <message>
         <location filename="../musicwindow.cpp" line="193"/>
         <source>Add to now playing</source>
@@ -548,74 +510,47 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
             <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.ui" line="14"/>
-        <source>Now playing</source>
-        <translation>Nu spelas</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="185"/>
-        <source>--/-- songs</source>
-        <translation>--/--låtar</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="632"/>
-        <location filename="../nowplayingwindow.cpp" line="635"/>
-        <location filename="../nowplayingwindow.cpp" line="1116"/>
-        <source>(unknown song)</source>
-        <translation>(okänd låt)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="641"/>
-        <location filename="../nowplayingwindow.cpp" line="1120"/>
-        <source>(unknown artist)</source>
-        <translation>(okänd artist)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="644"/>
-        <location filename="../nowplayingwindow.cpp" line="1124"/>
-        <source>(unknown album)</source>
-        <translation>(okänt album)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="912"/>
+        <location filename="../musicwindow.ui" line="167"/>
         <source>Options</source>
         <translation>Alternativ</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="924"/>
-        <source>FM Transmitter</source>
-        <translation>FM sändare</translation>
+        <location filename="../musicwindow.ui" line="174"/>
+        <location filename="../musicwindow.cpp" line="378"/>
+        <source>All albums</source>
+        <translation>Alla album</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1241"/>
-        <source>Clear now playing</source>
-        <translation>Rensa nu spelas</translation>
+        <location filename="../musicwindow.ui" line="179"/>
+        <location filename="../musicwindow.cpp" line="380"/>
+        <location filename="../musicwindow.cpp" line="427"/>
+        <source>Artists</source>
+        <translation>Artister</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1234"/>
-        <location filename="../nowplayingwindow.cpp" line="1382"/>
-        <source>Save playlist</source>
-        <translation>spara spellista</translation>
+        <location filename="../musicwindow.ui" line="184"/>
+        <location filename="../musicwindow.cpp" line="384"/>
+        <location filename="../musicwindow.cpp" line="445"/>
+        <source>Genres</source>
+        <translation>Genrer</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="939"/>
-        <source>Entertainment view</source>
-        <translation>Underhållnings Läge</translation>
+        <location filename="../musicwindow.ui" line="189"/>
+        <location filename="../musicwindow.cpp" line="386"/>
+        <location filename="../musicwindow.cpp" line="481"/>
+        <source>Playlists</source>
+        <translation>Spellistor</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="944"/>
-        <source>Car view</source>
-        <translation>Bil Läge</translation>
+        <location filename="../musicwindow.ui" line="194"/>
+        <location filename="../musicwindow.cpp" line="382"/>
+        <source>All songs</source>
+        <translation>Alla låtar</translation>
     </message>
+</context>
+<context>
+    <name>NowPlayingWindow</name>
     <message>
         <location filename="../nowplayingwindow.cpp" line="229"/>
         <source>Lyrics not found</source>
@@ -742,6 +677,71 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
         <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
         <translation>Ladda om lytics</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="14"/>
+        <source>Now playing</source>
+        <translation>Nu spelas</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="185"/>
+        <source>--/-- songs</source>
+        <translation>--/--låtar</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="237"/>
+        <location filename="../nowplayingwindow.cpp" line="632"/>
+        <location filename="../nowplayingwindow.cpp" line="635"/>
+        <location filename="../nowplayingwindow.cpp" line="1116"/>
+        <source>(unknown song)</source>
+        <translation>(okänd låt)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="351"/>
+        <location filename="../nowplayingwindow.cpp" line="641"/>
+        <location filename="../nowplayingwindow.cpp" line="1120"/>
+        <source>(unknown artist)</source>
+        <translation>(okänd artist)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="364"/>
+        <location filename="../nowplayingwindow.cpp" line="644"/>
+        <location filename="../nowplayingwindow.cpp" line="1124"/>
+        <source>(unknown album)</source>
+        <translation>(okänt album)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="912"/>
+        <source>Options</source>
+        <translation>Alternativ</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="924"/>
+        <source>FM Transmitter</source>
+        <translation>FM sändare</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="929"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
+        <source>Clear now playing</source>
+        <translation>Rensa nu spelas</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="934"/>
+        <location filename="../nowplayingwindow.cpp" line="1234"/>
+        <location filename="../nowplayingwindow.cpp" line="1382"/>
+        <source>Save playlist</source>
+        <translation>spara spellista</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="939"/>
+        <source>Entertainment view</source>
+        <translation>Underhållnings Läge</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="944"/>
+        <source>Car view</source>
+        <translation>Bil Läge</translation>
     </message>
 </context>
 <context>
@@ -870,22 +870,6 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.ui" line="98"/>
-        <source>Options</source>
-        <translation>Alternativ</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.ui" line="107"/>
-        <source>Add songs to now playing</source>
-        <translation>Lägg till låt i nu spelas</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.ui" line="112"/>
-        <location filename="../singlealbumview.cpp" line="333"/>
-        <source>Delete</source>
-        <translation>Ta bort</translation>
-    </message>
-    <message>
         <location filename="../singlealbumview.cpp" line="32"/>
         <source>Shuffle songs</source>
         <translation>Blanda låtar</translation>
@@ -965,31 +949,25 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
             <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SingleArtistView</name>
     <message>
-        <location filename="../singleartistview.ui" line="72"/>
-        <location filename="../singleartistview.cpp" line="92"/>
-        <source>Shuffle songs</source>
-        <translation>Blanda låtar</translation>
-    </message>
-    <message>
-        <location filename="../singleartistview.ui" line="126"/>
+        <location filename="../singlealbumview.ui" line="98"/>
         <source>Options</source>
         <translation>Alternativ</translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="135"/>
+        <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
         <translation>Lägg till låt i nu spelas</translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="140"/>
-        <location filename="../singleartistview.cpp" line="340"/>
+        <location filename="../singlealbumview.ui" line="112"/>
+        <location filename="../singlealbumview.cpp" line="333"/>
         <source>Delete</source>
         <translation>Ta bort</translation>
     </message>
+</context>
+<context>
+    <name>SingleArtistView</name>
     <message>
         <location filename="../singleartistview.cpp" line="118"/>
         <source>(unknown album)</source>
@@ -1039,25 +1017,31 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
             <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.ui" line="100"/>
+        <location filename="../singleartistview.ui" line="72"/>
+        <location filename="../singleartistview.cpp" line="92"/>
+        <source>Shuffle songs</source>
+        <translation>Blanda låtar</translation>
+    </message>
+    <message>
+        <location filename="../singleartistview.ui" line="126"/>
         <source>Options</source>
         <translation>Alternativ</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="108"/>
-        <location filename="../singlegenreview.cpp" line="249"/>
-        <source>Add to now playing</source>
-        <translation>Lägg till i nu spelas</translation>
+        <location filename="../singleartistview.ui" line="135"/>
+        <source>Add songs to now playing</source>
+        <translation>Lägg till låt i nu spelas</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="113"/>
+        <location filename="../singleartistview.ui" line="140"/>
+        <location filename="../singleartistview.cpp" line="340"/>
         <source>Delete</source>
         <translation>Ta bort</translation>
     </message>
+</context>
+<context>
+    <name>SingleGenreView</name>
     <message>
         <location filename="../singlegenreview.cpp" line="32"/>
         <source>Shuffle songs</source>
@@ -1085,36 +1069,25 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
             <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.ui" line="98"/>
+        <location filename="../singlegenreview.ui" line="100"/>
         <source>Options</source>
         <translation>Alternativ</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="109"/>
-        <source>Edit playlist</source>
-        <translation>Ändra spellista</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="114"/>
-        <source>Save playlist</source>
-        <translation>Spara spellista</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="119"/>
-        <location filename="../singleplaylistview.cpp" line="407"/>
+        <location filename="../singlegenreview.ui" line="108"/>
+        <location filename="../singlegenreview.cpp" line="249"/>
         <source>Add to now playing</source>
         <translation>Lägg till i nu spelas</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="124"/>
-        <location filename="../singleplaylistview.ui" line="129"/>
-        <source>Delete playlist</source>
-        <translation>Ta bort spellista</translation>
+        <location filename="../singlegenreview.ui" line="113"/>
+        <source>Delete</source>
+        <translation>Ta bort</translation>
     </message>
+</context>
+<context>
+    <name>SinglePlaylistView</name>
     <message>
         <location filename="../singleplaylistview.cpp" line="34"/>
         <source>Shuffle songs</source>
@@ -1207,6 +1180,33 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
             <numerusform>%n låtar</numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="98"/>
+        <source>Options</source>
+        <translation>Alternativ</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="109"/>
+        <source>Edit playlist</source>
+        <translation>Ändra spellista</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="114"/>
+        <source>Save playlist</source>
+        <translation>Spara spellista</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="119"/>
+        <location filename="../singleplaylistview.cpp" line="407"/>
+        <source>Add to now playing</source>
+        <translation>Lägg till i nu spelas</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="124"/>
+        <location filename="../singleplaylistview.ui" line="129"/>
+        <source>Delete playlist</source>
+        <translation>Ta bort spellista</translation>
+    </message>
 </context>
 <context>
     <name>TagWindow</name>
@@ -1239,16 +1239,6 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.ui" line="104"/>
-        <source>Options</source>
-        <translation>Alternativ</translation>
-    </message>
-    <message>
-        <location filename="../upnpview.ui" line="112"/>
-        <source>Add songs to now playing</source>
-        <translation>Lägg till låt i nu spelas</translation>
-    </message>
-    <message>
         <location filename="../upnpview.cpp" line="122"/>
         <source>(unknown song)</source>
         <translation>(okänd låt)</translation>
@@ -1270,6 +1260,16 @@ Koppla ur USB fortsätta använda FM-sändare.</translation>
             <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
             <numerusform>%n klipp har lagts till i Nu spelas</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../upnpview.ui" line="104"/>
+        <source>Options</source>
+        <translation>Alternativ</translation>
+    </message>
+    <message>
+        <location filename="../upnpview.ui" line="112"/>
+        <source>Add songs to now playing</source>
+        <translation>Lägg till låt i nu spelas</translation>
     </message>
 </context>
 <context>

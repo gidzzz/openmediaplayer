@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ" sourcelanguage="en">
+<TS version="2.0" language="cs" sourcelanguage="en">
 <context>
     <name>AboutWindow</name>
     <message>
@@ -25,7 +25,21 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (for the MAFW Renderer and Source adapters).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (FMTX UI and help with Qt/C++).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Open-source náhrada stadardního přehrávače médií v Maemo 5.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2010-2011 Mohammad Abu-Garbeyyeh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Grzegorz Gidel&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Matias Perez&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Program je dostupný pod licencí GPLv3.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;Poděkování:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt; font-weight:600; text-decoration: underline;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Nicolai Hess (za propojení do MAFW Renderer a MAFW Source).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timur Kristof (za FMTX UI a pomoc s Qt/C++).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -105,7 +119,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../fmtxdialog.cpp" line="52"/>
         <source>FM transmitter disabled</source>
-        <translatorcomment>not exact translation, used label from original player</translatorcomment>
         <translation>FM vysílač zapnut</translation>
     </message>
     <message>
@@ -177,7 +190,7 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="151"/>
         <source>Edit radio bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Upravit záložku rádia</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="155"/>
@@ -230,32 +243,6 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <location filename="../mainwindow.ui" line="14"/>
-        <source>Media player</source>
-        <translation>Přehrávač médií</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="390"/>
-        <location filename="../mainwindow.ui" line="397"/>
-        <source>Options</source>
-        <translation>Možnosti</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="406"/>
-        <source>About</source>
-        <translation>O aplikaci</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="411"/>
-        <source>About Qt</source>
-        <translation>O knihovně Qt</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="416"/>
-        <source>Settings</source>
-        <translation>Nastavení</translation>
-    </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
         <location filename="../mainwindow.cpp" line="608"/>
@@ -335,47 +322,35 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
         <source>Remaining items:</source>
         <translation>Zbývající položky:</translation>
     </message>
-</context>
-<context>
-    <name>MusicWindow</name>
     <message>
-        <location filename="../musicwindow.ui" line="167"/>
+        <location filename="../mainwindow.ui" line="14"/>
+        <source>Media player</source>
+        <translation>Přehrávač médií</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="390"/>
+        <location filename="../mainwindow.ui" line="397"/>
         <source>Options</source>
         <translation>Možnosti</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="174"/>
-        <location filename="../musicwindow.cpp" line="378"/>
-        <source>All albums</source>
-        <translation>Všechna alba</translation>
+        <location filename="../mainwindow.ui" line="406"/>
+        <source>About</source>
+        <translation>O aplikaci</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="179"/>
-        <location filename="../musicwindow.cpp" line="380"/>
-        <location filename="../musicwindow.cpp" line="427"/>
-        <source>Artists</source>
-        <translation>Interpreti</translation>
+        <location filename="../mainwindow.ui" line="411"/>
+        <source>About Qt</source>
+        <translation>O knihovně Qt</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="184"/>
-        <location filename="../musicwindow.cpp" line="384"/>
-        <location filename="../musicwindow.cpp" line="445"/>
-        <source>Genres</source>
-        <translation>Žánry</translation>
+        <location filename="../mainwindow.ui" line="416"/>
+        <source>Settings</source>
+        <translation>Nastavení</translation>
     </message>
-    <message>
-        <location filename="../musicwindow.ui" line="189"/>
-        <location filename="../musicwindow.cpp" line="386"/>
-        <location filename="../musicwindow.cpp" line="481"/>
-        <source>Playlists</source>
-        <translation>Seznamy stop</translation>
-    </message>
-    <message>
-        <location filename="../musicwindow.ui" line="194"/>
-        <location filename="../musicwindow.cpp" line="382"/>
-        <source>All songs</source>
-        <translation>Všechny skladby</translation>
-    </message>
+</context>
+<context>
+    <name>MusicWindow</name>
     <message>
         <location filename="../musicwindow.cpp" line="193"/>
         <source>Add to now playing</source>
@@ -544,75 +519,47 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
             <numerusform>%n klipů přidáno do aktuálně přehrávaných</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.ui" line="14"/>
-        <source>Now playing</source>
-        <translation>Přehrává se</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="185"/>
-        <source>--/-- songs</source>
-        <translation>skladba --/--</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="632"/>
-        <location filename="../nowplayingwindow.cpp" line="635"/>
-        <location filename="../nowplayingwindow.cpp" line="1116"/>
-        <source>(unknown song)</source>
-        <translation>(neznámá skladba)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="641"/>
-        <location filename="../nowplayingwindow.cpp" line="1120"/>
-        <source>(unknown artist)</source>
-        <translation>(neznámý interpret)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="644"/>
-        <location filename="../nowplayingwindow.cpp" line="1124"/>
-        <source>(unknown album)</source>
-        <translation>(neznámé album)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="912"/>
+        <location filename="../musicwindow.ui" line="167"/>
         <source>Options</source>
         <translation>Možnosti</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="924"/>
-        <source>FM Transmitter</source>
-        <translation>FM vysílač</translation>
+        <location filename="../musicwindow.ui" line="174"/>
+        <location filename="../musicwindow.cpp" line="378"/>
+        <source>All albums</source>
+        <translation>Všechna alba</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1241"/>
-        <source>Clear now playing</source>
-        <translation>Vymazat
-aktuálně přehrávané</translation>
+        <location filename="../musicwindow.ui" line="179"/>
+        <location filename="../musicwindow.cpp" line="380"/>
+        <location filename="../musicwindow.cpp" line="427"/>
+        <source>Artists</source>
+        <translation>Interpreti</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1234"/>
-        <location filename="../nowplayingwindow.cpp" line="1382"/>
-        <source>Save playlist</source>
-        <translation>Uložit seznam stop</translation>
+        <location filename="../musicwindow.ui" line="184"/>
+        <location filename="../musicwindow.cpp" line="384"/>
+        <location filename="../musicwindow.cpp" line="445"/>
+        <source>Genres</source>
+        <translation>Žánry</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="939"/>
-        <source>Entertainment view</source>
-        <translation>Zábavní zobrazení</translation>
+        <location filename="../musicwindow.ui" line="189"/>
+        <location filename="../musicwindow.cpp" line="386"/>
+        <location filename="../musicwindow.cpp" line="481"/>
+        <source>Playlists</source>
+        <translation>Seznamy stop</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="944"/>
-        <source>Car view</source>
-        <translation>Zobrazení pro vozidlo</translation>
+        <location filename="../musicwindow.ui" line="194"/>
+        <location filename="../musicwindow.cpp" line="382"/>
+        <source>All songs</source>
+        <translation>Všechny skladby</translation>
     </message>
+</context>
+<context>
+    <name>NowPlayingWindow</name>
     <message>
         <location filename="../nowplayingwindow.cpp" line="229"/>
         <source>Lyrics not found</source>
@@ -725,7 +672,6 @@ Nahradit stávající seznam stop?</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1545"/>
         <source>Reset album art</source>
-        <translatorcomment>not sure what this really does</translatorcomment>
         <translation>Vrátit původní obal</translation>
     </message>
     <message>
@@ -742,6 +688,72 @@ Nahradit stávající seznam stop?</translation>
         <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
         <translation>Znovu načíst text skladby</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="14"/>
+        <source>Now playing</source>
+        <translation>Přehrává se</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="185"/>
+        <source>--/-- songs</source>
+        <translation>skladba --/--</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="237"/>
+        <location filename="../nowplayingwindow.cpp" line="632"/>
+        <location filename="../nowplayingwindow.cpp" line="635"/>
+        <location filename="../nowplayingwindow.cpp" line="1116"/>
+        <source>(unknown song)</source>
+        <translation>(neznámá skladba)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="351"/>
+        <location filename="../nowplayingwindow.cpp" line="641"/>
+        <location filename="../nowplayingwindow.cpp" line="1120"/>
+        <source>(unknown artist)</source>
+        <translation>(neznámý interpret)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="364"/>
+        <location filename="../nowplayingwindow.cpp" line="644"/>
+        <location filename="../nowplayingwindow.cpp" line="1124"/>
+        <source>(unknown album)</source>
+        <translation>(neznámé album)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="912"/>
+        <source>Options</source>
+        <translation>Možnosti</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="924"/>
+        <source>FM Transmitter</source>
+        <translation>FM vysílač</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="929"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
+        <source>Clear now playing</source>
+        <translation>Vymazat
+aktuálně přehrávané</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="934"/>
+        <location filename="../nowplayingwindow.cpp" line="1234"/>
+        <location filename="../nowplayingwindow.cpp" line="1382"/>
+        <source>Save playlist</source>
+        <translation>Uložit seznam stop</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="939"/>
+        <source>Entertainment view</source>
+        <translation>Zábavní zobrazení</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="944"/>
+        <source>Car view</source>
+        <translation>Zobrazení pro vozidlo</translation>
     </message>
 </context>
 <context>
@@ -870,23 +882,6 @@ Nahradit stávající seznam stop?</translation>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.ui" line="98"/>
-        <source>Options</source>
-        <translation>Možnosti</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.ui" line="107"/>
-        <source>Add songs to now playing</source>
-        <translation>Přidat skladby do
-aktuálně přehrávaných</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.ui" line="112"/>
-        <location filename="../singlealbumview.cpp" line="333"/>
-        <source>Delete</source>
-        <translation>Odstranit</translation>
-    </message>
-    <message>
         <location filename="../singlealbumview.cpp" line="32"/>
         <source>Shuffle songs</source>
         <translation>Zamíchat skladby</translation>
@@ -968,32 +963,26 @@ aktuálně přehrávaných</translation>
             <numerusform>%n klipů přidáno do aktuálně přehrávaných</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SingleArtistView</name>
     <message>
-        <location filename="../singleartistview.ui" line="72"/>
-        <location filename="../singleartistview.cpp" line="92"/>
-        <source>Shuffle songs</source>
-        <translation>Zamíchat skladby</translation>
-    </message>
-    <message>
-        <location filename="../singleartistview.ui" line="126"/>
+        <location filename="../singlealbumview.ui" line="98"/>
         <source>Options</source>
         <translation>Možnosti</translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="135"/>
+        <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
         <translation>Přidat skladby do
 aktuálně přehrávaných</translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="140"/>
-        <location filename="../singleartistview.cpp" line="340"/>
+        <location filename="../singlealbumview.ui" line="112"/>
+        <location filename="../singlealbumview.cpp" line="333"/>
         <source>Delete</source>
         <translation>Odstranit</translation>
     </message>
+</context>
+<context>
+    <name>SingleArtistView</name>
     <message>
         <location filename="../singleartistview.cpp" line="118"/>
         <source>(unknown album)</source>
@@ -1045,25 +1034,32 @@ aktuálně přehrávaných</translation>
             <numerusform>%n klipů přidáno do aktuálně přehrávaných</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.ui" line="100"/>
+        <location filename="../singleartistview.ui" line="72"/>
+        <location filename="../singleartistview.cpp" line="92"/>
+        <source>Shuffle songs</source>
+        <translation>Zamíchat skladby</translation>
+    </message>
+    <message>
+        <location filename="../singleartistview.ui" line="126"/>
         <source>Options</source>
         <translation>Možnosti</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="108"/>
-        <location filename="../singlegenreview.cpp" line="249"/>
-        <source>Add to now playing</source>
-        <translation>Přidat do aktuálně přehrávaných</translation>
+        <location filename="../singleartistview.ui" line="135"/>
+        <source>Add songs to now playing</source>
+        <translation>Přidat skladby do
+aktuálně přehrávaných</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="113"/>
+        <location filename="../singleartistview.ui" line="140"/>
+        <location filename="../singleartistview.cpp" line="340"/>
         <source>Delete</source>
         <translation>Odstranit</translation>
     </message>
+</context>
+<context>
+    <name>SingleGenreView</name>
     <message>
         <location filename="../singlegenreview.cpp" line="32"/>
         <source>Shuffle songs</source>
@@ -1093,36 +1089,25 @@ aktuálně přehrávaných</translation>
             <numerusform>%n klipů přidáno do aktuálně přehrávaných</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.ui" line="98"/>
+        <location filename="../singlegenreview.ui" line="100"/>
         <source>Options</source>
         <translation>Možnosti</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="109"/>
-        <source>Edit playlist</source>
-        <translation>Upravit seznam stop</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="114"/>
-        <source>Save playlist</source>
-        <translation>Uložit seznam stop</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="119"/>
-        <location filename="../singleplaylistview.cpp" line="407"/>
+        <location filename="../singlegenreview.ui" line="108"/>
+        <location filename="../singlegenreview.cpp" line="249"/>
         <source>Add to now playing</source>
         <translation>Přidat do aktuálně přehrávaných</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="124"/>
-        <location filename="../singleplaylistview.ui" line="129"/>
-        <source>Delete playlist</source>
-        <translation>Odstranit seznam stop</translation>
+        <location filename="../singlegenreview.ui" line="113"/>
+        <source>Delete</source>
+        <translation>Odstranit</translation>
     </message>
+</context>
+<context>
+    <name>SinglePlaylistView</name>
     <message>
         <location filename="../singleplaylistview.cpp" line="34"/>
         <source>Shuffle songs</source>
@@ -1217,6 +1202,33 @@ aktuálně přehrávaných</translation>
             <numerusform>%n skladeb</numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="98"/>
+        <source>Options</source>
+        <translation>Možnosti</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="109"/>
+        <source>Edit playlist</source>
+        <translation>Upravit seznam stop</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="114"/>
+        <source>Save playlist</source>
+        <translation>Uložit seznam stop</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="119"/>
+        <location filename="../singleplaylistview.cpp" line="407"/>
+        <source>Add to now playing</source>
+        <translation>Přidat do aktuálně přehrávaných</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="124"/>
+        <location filename="../singleplaylistview.ui" line="129"/>
+        <source>Delete playlist</source>
+        <translation>Odstranit seznam stop</translation>
+    </message>
 </context>
 <context>
     <name>TagWindow</name>
@@ -1249,17 +1261,6 @@ aktuálně přehrávaných</translation>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.ui" line="104"/>
-        <source>Options</source>
-        <translation>Možnosti</translation>
-    </message>
-    <message>
-        <location filename="../upnpview.ui" line="112"/>
-        <source>Add songs to now playing</source>
-        <translation>Přidat skladby do
-aktuálně přehrávaných</translation>
-    </message>
-    <message>
         <location filename="../upnpview.cpp" line="122"/>
         <source>(unknown song)</source>
         <translation>(neznámá skladba)</translation>
@@ -1282,6 +1283,17 @@ aktuálně přehrávaných</translation>
             <numerusform>%n klipy přidány do aktuálně přehrávaných</numerusform>
             <numerusform>%n klipů přidáno do aktuálně přehrávaných</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../upnpview.ui" line="104"/>
+        <source>Options</source>
+        <translation>Možnosti</translation>
+    </message>
+    <message>
+        <location filename="../upnpview.ui" line="112"/>
+        <source>Add songs to now playing</source>
+        <translation>Přidat skladby do
+aktuálně přehrávaných</translation>
     </message>
 </context>
 <context>

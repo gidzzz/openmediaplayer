@@ -242,71 +242,6 @@ a favoritos</translation>
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <location filename="../mainwindow.ui" line="14"/>
-        <source>Media player</source>
-        <translation>Reproductor multimedia</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="180"/>
-        <location filename="../mainwindow.cpp" line="185"/>
-        <source>Music</source>
-        <translation>Música</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="181"/>
-        <location filename="../mainwindow.cpp" line="186"/>
-        <source>Videos</source>
-        <translation>Videos</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="182"/>
-        <location filename="../mainwindow.cpp" line="187"/>
-        <source>Internet Radio</source>
-        <translation>Radio por Internet</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="183"/>
-        <location filename="../mainwindow.cpp" line="188"/>
-        <source>Shuffle all songs</source>
-        <translation>Mezclar todas</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="390"/>
-        <location filename="../mainwindow.ui" line="397"/>
-        <source>Options</source>
-        <translation>Opciones</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="406"/>
-        <source>About</source>
-        <translation>Acerca de</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="411"/>
-        <source>About Qt</source>
-        <translation>Acerca de Qt</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="416"/>
-        <source>Settings</source>
-        <translation>Configuración</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="607"/>
-        <source>(no songs)</source>
-        <translation>(no hay canciones)</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="614"/>
-        <source>(no videos)</source>
-        <translation>(no hay videos)</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="630"/>
-        <source>(no stations)</source>
-        <translation>(no hay emisoras)</translation>
-    </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
         <location filename="../mainwindow.cpp" line="608"/>
@@ -335,6 +270,45 @@ a favoritos</translation>
         </translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="180"/>
+        <location filename="../mainwindow.cpp" line="185"/>
+        <source>Music</source>
+        <translation>Música</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="181"/>
+        <location filename="../mainwindow.cpp" line="186"/>
+        <source>Videos</source>
+        <translation>Videos</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="182"/>
+        <location filename="../mainwindow.cpp" line="187"/>
+        <source>Internet Radio</source>
+        <translation>Radio por Internet</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="183"/>
+        <location filename="../mainwindow.cpp" line="188"/>
+        <source>Shuffle all songs</source>
+        <translation>Mezclar todas</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="607"/>
+        <source>(no songs)</source>
+        <translation>(no hay canciones)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="614"/>
+        <source>(no videos)</source>
+        <translation>(no hay videos)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="630"/>
+        <source>(no stations)</source>
+        <translation>(no hay emisoras)</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="747"/>
         <source>Processed items:</source>
         <translation>Elementos procesados:</translation>
@@ -344,47 +318,35 @@ a favoritos</translation>
         <source>Remaining items:</source>
         <translation>Elementos restantes:</translation>
     </message>
-</context>
-<context>
-    <name>MusicWindow</name>
     <message>
-        <location filename="../musicwindow.ui" line="167"/>
+        <location filename="../mainwindow.ui" line="14"/>
+        <source>Media player</source>
+        <translation>Reproductor multimedia</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="390"/>
+        <location filename="../mainwindow.ui" line="397"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="174"/>
-        <location filename="../musicwindow.cpp" line="378"/>
-        <source>All albums</source>
-        <translation>Todos los álbumes</translation>
+        <location filename="../mainwindow.ui" line="406"/>
+        <source>About</source>
+        <translation>Acerca de</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="179"/>
-        <location filename="../musicwindow.cpp" line="380"/>
-        <location filename="../musicwindow.cpp" line="427"/>
-        <source>Artists</source>
-        <translation>Artistas</translation>
+        <location filename="../mainwindow.ui" line="411"/>
+        <source>About Qt</source>
+        <translation>Acerca de Qt</translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="184"/>
-        <location filename="../musicwindow.cpp" line="384"/>
-        <location filename="../musicwindow.cpp" line="445"/>
-        <source>Genres</source>
-        <translation>Géneros</translation>
+        <location filename="../mainwindow.ui" line="416"/>
+        <source>Settings</source>
+        <translation>Configuración</translation>
     </message>
-    <message>
-        <location filename="../musicwindow.ui" line="189"/>
-        <location filename="../musicwindow.cpp" line="386"/>
-        <location filename="../musicwindow.cpp" line="481"/>
-        <source>Playlists</source>
-        <translation>Listas de reproducción</translation>
-    </message>
-    <message>
-        <location filename="../musicwindow.ui" line="194"/>
-        <location filename="../musicwindow.cpp" line="382"/>
-        <source>All songs</source>
-        <translation>Todas las canciones</translation>
-    </message>
+</context>
+<context>
+    <name>MusicWindow</name>
     <message>
         <location filename="../musicwindow.cpp" line="193"/>
         <source>Add to now playing</source>
@@ -418,6 +380,25 @@ a favoritos</translation>
         <translation>¿Suprimir elemento seleccionado del dispositivo?</translation>
     </message>
     <message>
+        <location filename="../musicwindow.cpp" line="222"/>
+        <location filename="../musicwindow.cpp" line="244"/>
+        <location filename="../musicwindow.cpp" line="308"/>
+        <source>Yes</source>
+        <translation>Sí</translation>
+    </message>
+    <message>
+        <location filename="../musicwindow.cpp" line="223"/>
+        <location filename="../musicwindow.cpp" line="245"/>
+        <location filename="../musicwindow.cpp" line="309"/>
+        <source>No</source>
+        <translation>No</translation>
+    </message>
+    <message>
+        <location filename="../musicwindow.cpp" line="239"/>
+        <source>Are you sure you want to set this song as ringing tone?</source>
+        <translation>¿Está seguro de que desea establecer esta canción como tono de llamada?</translation>
+    </message>
+    <message>
         <location filename="../musicwindow.cpp" line="409"/>
         <source>Albums</source>
         <translation>Álbumes</translation>
@@ -431,25 +412,6 @@ a favoritos</translation>
         <location filename="../musicwindow.cpp" line="699"/>
         <source>Saved</source>
         <translation>Listas de reproducción guardadas</translation>
-    </message>
-    <message>
-        <location filename="../musicwindow.cpp" line="239"/>
-        <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>¿Está seguro de que desea establecer esta canción como tono de llamada?</translation>
-    </message>
-    <message>
-        <location filename="../musicwindow.cpp" line="222"/>
-        <location filename="../musicwindow.cpp" line="244"/>
-        <location filename="../musicwindow.cpp" line="308"/>
-        <source>Yes</source>
-        <translation>Sí</translation>
-    </message>
-    <message>
-        <location filename="../musicwindow.cpp" line="223"/>
-        <location filename="../musicwindow.cpp" line="245"/>
-        <location filename="../musicwindow.cpp" line="309"/>
-        <source>No</source>
-        <translation>No</translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="717"/>
@@ -549,85 +511,47 @@ a favoritos</translation>
             <numerusform>%n clips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.ui" line="14"/>
-        <source>Now playing</source>
-        <translation>Reproducción en curso</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="185"/>
-        <source>--/-- songs</source>
-        <translation>--/-- canciones</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="632"/>
-        <location filename="../nowplayingwindow.cpp" line="635"/>
-        <location filename="../nowplayingwindow.cpp" line="1116"/>
-        <source>(unknown song)</source>
-        <translation>(canción desconocida)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="641"/>
-        <location filename="../nowplayingwindow.cpp" line="1120"/>
-        <source>(unknown artist)</source>
-        <translation>(artista desconocido)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="644"/>
-        <location filename="../nowplayingwindow.cpp" line="1124"/>
-        <source>(unknown album)</source>
-        <translation>(álbum desconocido)</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.ui" line="912"/>
+        <location filename="../musicwindow.ui" line="167"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="924"/>
-        <source>FM Transmitter</source>
-        <translation>Transmisor FM</translation>
+        <location filename="../musicwindow.ui" line="174"/>
+        <location filename="../musicwindow.cpp" line="378"/>
+        <source>All albums</source>
+        <translation>Todos los álbumes</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1241"/>
-        <source>Clear now playing</source>
-        <translation>Suprimir lista en curso</translation>
+        <location filename="../musicwindow.ui" line="179"/>
+        <location filename="../musicwindow.cpp" line="380"/>
+        <location filename="../musicwindow.cpp" line="427"/>
+        <source>Artists</source>
+        <translation>Artistas</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1234"/>
-        <location filename="../nowplayingwindow.cpp" line="1382"/>
-        <source>Save playlist</source>
-        <translation>Guardar lista de reproducción</translation>
+        <location filename="../musicwindow.ui" line="184"/>
+        <location filename="../musicwindow.cpp" line="384"/>
+        <location filename="../musicwindow.cpp" line="445"/>
+        <source>Genres</source>
+        <translation>Géneros</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="939"/>
-        <source>Entertainment view</source>
-        <translation>Vista Entretenimiento</translation>
+        <location filename="../musicwindow.ui" line="189"/>
+        <location filename="../musicwindow.cpp" line="386"/>
+        <location filename="../musicwindow.cpp" line="481"/>
+        <source>Playlists</source>
+        <translation>Listas de reproducción</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="944"/>
-        <source>Car view</source>
-        <translation>Vista Coche</translation>
+        <location filename="../musicwindow.ui" line="194"/>
+        <location filename="../musicwindow.cpp" line="382"/>
+        <source>All songs</source>
+        <translation>Todas las canciones</translation>
     </message>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="691"/>
-        <source>Loading lyrics...</source>
-        <translation>Cargando letra de la canción...</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="721"/>
-        <location filename="../nowplayingwindow.cpp" line="1643"/>
-        <source>Fetching lyrics...</source>
-        <translation>Descargando letra de la canción...</translation>
-    </message>
+</context>
+<context>
+    <name>NowPlayingWindow</name>
     <message>
         <location filename="../nowplayingwindow.cpp" line="229"/>
         <source>Lyrics not found</source>
@@ -645,6 +569,17 @@ a favoritos</translation>
         <location filename="../nowplayingwindow.cpp" line="317"/>
         <source>total</source>
         <translation>total</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="691"/>
+        <source>Loading lyrics...</source>
+        <translation>Cargando letra de la canción...</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="721"/>
+        <location filename="../nowplayingwindow.cpp" line="1643"/>
+        <source>Fetching lyrics...</source>
+        <translation>Descargando letra de la canción...</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="735"/>
@@ -743,6 +678,71 @@ a favoritos</translation>
         <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
         <translation>Recargar letra de la canción</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="14"/>
+        <source>Now playing</source>
+        <translation>Reproducción en curso</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="185"/>
+        <source>--/-- songs</source>
+        <translation>--/-- canciones</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="237"/>
+        <location filename="../nowplayingwindow.cpp" line="632"/>
+        <location filename="../nowplayingwindow.cpp" line="635"/>
+        <location filename="../nowplayingwindow.cpp" line="1116"/>
+        <source>(unknown song)</source>
+        <translation>(canción desconocida)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="351"/>
+        <location filename="../nowplayingwindow.cpp" line="641"/>
+        <location filename="../nowplayingwindow.cpp" line="1120"/>
+        <source>(unknown artist)</source>
+        <translation>(artista desconocido)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="364"/>
+        <location filename="../nowplayingwindow.cpp" line="644"/>
+        <location filename="../nowplayingwindow.cpp" line="1124"/>
+        <source>(unknown album)</source>
+        <translation>(álbum desconocido)</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="912"/>
+        <source>Options</source>
+        <translation>Opciones</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="924"/>
+        <source>FM Transmitter</source>
+        <translation>Transmisor FM</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="929"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
+        <source>Clear now playing</source>
+        <translation>Suprimir lista en curso</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="934"/>
+        <location filename="../nowplayingwindow.cpp" line="1234"/>
+        <location filename="../nowplayingwindow.cpp" line="1382"/>
+        <source>Save playlist</source>
+        <translation>Guardar lista de reproducción</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="939"/>
+        <source>Entertainment view</source>
+        <translation>Vista Entretenimiento</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="944"/>
+        <source>Car view</source>
+        <translation>Vista Coche</translation>
     </message>
 </context>
 <context>
@@ -873,23 +873,6 @@ de reproducción automáticas</translation>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.ui" line="98"/>
-        <source>Options</source>
-        <translation>Opciones</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.ui" line="107"/>
-        <source>Add songs to now playing</source>
-        <translation>Añadir canciones
-a la reproducción en curso</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.ui" line="112"/>
-        <location filename="../singlealbumview.cpp" line="333"/>
-        <source>Delete</source>
-        <translation>Suprimir</translation>
-    </message>
-    <message>
         <location filename="../singlealbumview.cpp" line="32"/>
         <source>Shuffle songs</source>
         <translation>Mezclar canciones</translation>
@@ -916,6 +899,21 @@ a la reproducción en curso</translation>
             <numerusform>%n canción</numerusform>
             <numerusform>%n canciones</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../singlealbumview.cpp" line="332"/>
+        <source>Add to now playing</source>
+        <translation>Añadir a la lista en curso</translation>
+    </message>
+    <message>
+        <location filename="../singlealbumview.cpp" line="334"/>
+        <source>Set as ringing tone</source>
+        <translation>Establecer como tono de llamada</translation>
+    </message>
+    <message>
+        <location filename="../singlealbumview.cpp" line="335"/>
+        <source>Share</source>
+        <translation>Compartir</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="359"/>
@@ -955,46 +953,25 @@ a la reproducción en curso</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="332"/>
-        <source>Add to now playing</source>
-        <translation>Añadir a la lista en curso</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.cpp" line="334"/>
-        <source>Set as ringing tone</source>
-        <translation>Establecer como tono de llamada</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.cpp" line="335"/>
-        <source>Share</source>
-        <translation>Compartir</translation>
-    </message>
-</context>
-<context>
-    <name>SingleArtistView</name>
-    <message>
-        <location filename="../singleartistview.ui" line="72"/>
-        <location filename="../singleartistview.cpp" line="92"/>
-        <source>Shuffle songs</source>
-        <translation>Mezclar canciones</translation>
-    </message>
-    <message>
-        <location filename="../singleartistview.ui" line="126"/>
+        <location filename="../singlealbumview.ui" line="98"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="135"/>
+        <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
         <translation>Añadir canciones
-a la lista en curso</translation>
+a la reproducción en curso</translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="140"/>
-        <location filename="../singleartistview.cpp" line="340"/>
+        <location filename="../singlealbumview.ui" line="112"/>
+        <location filename="../singlealbumview.cpp" line="333"/>
         <source>Delete</source>
         <translation>Suprimir</translation>
     </message>
+</context>
+<context>
+    <name>SingleArtistView</name>
     <message>
         <location filename="../singleartistview.cpp" line="118"/>
         <source>(unknown album)</source>
@@ -1044,25 +1021,32 @@ a la lista en curso</translation>
             <numerusform>%n clips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.ui" line="100"/>
+        <location filename="../singleartistview.ui" line="72"/>
+        <location filename="../singleartistview.cpp" line="92"/>
+        <source>Shuffle songs</source>
+        <translation>Mezclar canciones</translation>
+    </message>
+    <message>
+        <location filename="../singleartistview.ui" line="126"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="108"/>
-        <location filename="../singlegenreview.cpp" line="249"/>
-        <source>Add to now playing</source>
-        <translation>Añadir a la lista en curso</translation>
+        <location filename="../singleartistview.ui" line="135"/>
+        <source>Add songs to now playing</source>
+        <translation>Añadir canciones
+a la lista en curso</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="113"/>
+        <location filename="../singleartistview.ui" line="140"/>
+        <location filename="../singleartistview.cpp" line="340"/>
         <source>Delete</source>
         <translation>Suprimir</translation>
     </message>
+</context>
+<context>
+    <name>SingleGenreView</name>
     <message>
         <location filename="../singlegenreview.cpp" line="32"/>
         <source>Shuffle songs</source>
@@ -1090,36 +1074,25 @@ a la lista en curso</translation>
             <numerusform>%n clips añadidos a la lista en curso</numerusform>
         </translation>
     </message>
-</context>
-<context>
-    <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.ui" line="98"/>
+        <location filename="../singlegenreview.ui" line="100"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="109"/>
-        <source>Edit playlist</source>
-        <translation>Editar lista de reproducción</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="114"/>
-        <source>Save playlist</source>
-        <translation>Guardar lista de reproducción</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="119"/>
-        <location filename="../singleplaylistview.cpp" line="407"/>
+        <location filename="../singlegenreview.ui" line="108"/>
+        <location filename="../singlegenreview.cpp" line="249"/>
         <source>Add to now playing</source>
         <translation>Añadir a la lista en curso</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="124"/>
-        <location filename="../singleplaylistview.ui" line="129"/>
-        <source>Delete playlist</source>
-        <translation>Suprimir lista de reproducción</translation>
+        <location filename="../singlegenreview.ui" line="113"/>
+        <source>Delete</source>
+        <translation>Suprimir</translation>
     </message>
+</context>
+<context>
+    <name>SinglePlaylistView</name>
     <message>
         <location filename="../singleplaylistview.cpp" line="34"/>
         <source>Shuffle songs</source>
@@ -1212,6 +1185,33 @@ a la lista en curso</translation>
             <numerusform>%n canciones</numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="98"/>
+        <source>Options</source>
+        <translation>Opciones</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="109"/>
+        <source>Edit playlist</source>
+        <translation>Editar lista de reproducción</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="114"/>
+        <source>Save playlist</source>
+        <translation>Guardar lista de reproducción</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="119"/>
+        <location filename="../singleplaylistview.cpp" line="407"/>
+        <source>Add to now playing</source>
+        <translation>Añadir a la lista en curso</translation>
+    </message>
+    <message>
+        <location filename="../singleplaylistview.ui" line="124"/>
+        <location filename="../singleplaylistview.ui" line="129"/>
+        <source>Delete playlist</source>
+        <translation>Suprimir lista de reproducción</translation>
+    </message>
 </context>
 <context>
     <name>TagWindow</name>
@@ -1244,17 +1244,6 @@ a la lista en curso</translation>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.ui" line="104"/>
-        <source>Options</source>
-        <translation>Opciones</translation>
-    </message>
-    <message>
-        <location filename="../upnpview.ui" line="112"/>
-        <source>Add songs to now playing</source>
-        <translation>Añadir canciones
-a la lista en curso</translation>
-    </message>
-    <message>
         <location filename="../upnpview.cpp" line="122"/>
         <source>(unknown song)</source>
         <translation>(canción desconocida)</translation>
@@ -1276,6 +1265,17 @@ a la lista en curso</translation>
             <numerusform>%n clip añadido a la lista en curso</numerusform>
             <numerusform>%n clips añadidos a la lista en curso</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../upnpview.ui" line="104"/>
+        <source>Options</source>
+        <translation>Opciones</translation>
+    </message>
+    <message>
+        <location filename="../upnpview.ui" line="112"/>
+        <source>Add songs to now playing</source>
+        <translation>Añadir canciones
+a la lista en curso</translation>
     </message>
 </context>
 <context>
@@ -1460,6 +1460,11 @@ a la lista en curso</translation>
         <translation>Fecha</translation>
     </message>
     <message>
+        <location filename="../videoswindow.cpp" line="50"/>
+        <source>Category</source>
+        <translation>Categoría</translation>
+    </message>
+    <message>
         <location filename="../videoswindow.cpp" line="87"/>
         <source>Delete</source>
         <translation>Suprimir</translation>
@@ -1495,6 +1500,11 @@ a la lista en curso</translation>
         <translation>Videos: categorías</translation>
     </message>
     <message>
+        <location filename="../videoswindow.cpp" line="249"/>
+        <source>(unknown clip)</source>
+        <translation>(videoclip desconocido)</translation>
+    </message>
+    <message>
         <location filename="../videoswindow.cpp" line="307"/>
         <source>Recorded by device camera</source>
         <translation>Grabado con la cámara del dispositivo</translation>
@@ -1503,16 +1513,6 @@ a la lista en curso</translation>
         <location filename="../videoswindow.cpp" line="311"/>
         <source>Films</source>
         <translation>Películas</translation>
-    </message>
-    <message>
-        <location filename="../videoswindow.cpp" line="50"/>
-        <source>Category</source>
-        <translation>Categoría</translation>
-    </message>
-    <message>
-        <location filename="../videoswindow.cpp" line="249"/>
-        <source>(unknown clip)</source>
-        <translation>(videoclip desconocido)</translation>
     </message>
 </context>
 </TS>

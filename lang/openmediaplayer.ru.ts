@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU" sourcelanguage="en">
+<TS version="2.0" language="ru" sourcelanguage="en">
 <context>
     <name>AboutWindow</name>
     <message>
@@ -817,7 +817,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation>Открывать полные папки</translation>
+        <translation>Открывать папки полностью в качестве плейлистов</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
