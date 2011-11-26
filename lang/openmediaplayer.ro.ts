@@ -67,7 +67,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../editlyrics.ui" line="25"/>
         <source>Save</source>
-        <translation>Salveaza</translation>
+        <translation>Salvează</translation>
     </message>
 </context>
 <context>
@@ -84,42 +84,42 @@ p, li { white-space: pre-wrap; }
         <location filename="../fmtxdialog.ui" line="14"/>
         <location filename="../fmtxdialog.cpp" line="36"/>
         <source>FM transmitter</source>
-        <translation>Transmitator FM</translation>
+        <translation>Transmițător FM</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.ui" line="45"/>
         <location filename="../fmtxdialog.cpp" line="35"/>
         <source>FM transmitter on</source>
-        <translation>Transmitator FM activat</translation>
+        <translation>Transmițător FM activat</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="27"/>
         <source>Save</source>
-        <translation>Salveaza</translation>
+        <translation>Salvează</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="32"/>
         <source>Frequency</source>
-        <translation>Frecventa</translation>
+        <translation>Frecvență</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="52"/>
         <source>FM transmitter disabled</source>
-        <translation>Transmitator FM dezactivat</translation>
+        <translation>Transmițător FM dezactivat</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="129"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
-        <translation>Nu se poate folosi transmitatorul FM atata timp cat castile sau cablul TV-out sunt conectate.
-Deconectati cablul pentru a continua folosirea transmitatorului FM.</translation>
+        <translation>Nu se poate folosi transmițătorul FM atâta timp cat caștile sau cablul TV-out sunt conectate.
+Deconectați cablul pentru a continua folosirea transmițătorului FM.</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="133"/>
         <source>Unable to use FM transmitter while USB is connected.
 Unplug USB to continue using FM transmitter.</source>
-        <translation>Nu se poate folosi transmitatorul FM atata timp cat USB-ul este conectat.
-Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation>
+        <translation>Nu se poate folosi transmițătorul FM atâta timp cat USB-ul este conectat.
+Deconectați USB-ul pentru a continua folosirea transmițătorului FM.</translation>
     </message>
 </context>
 <context>
@@ -132,7 +132,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../freqdlg.cpp" line="14"/>
         <source>Select frequency</source>
-        <translation>Selecteaza frecventa</translation>
+        <translation>Selectează frecvența</translation>
     </message>
     <message>
         <location filename="../freqdlg.cpp" line="68"/>
@@ -145,7 +145,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../internetradiowindow.ui" line="14"/>
         <source>Internet radio stations</source>
-        <translation>Statii radio online</translation>
+        <translation>Stații radio online</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="58"/>
@@ -156,27 +156,27 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../internetradiowindow.ui" line="67"/>
         <location filename="../internetradiowindow.cpp" line="149"/>
         <source>Add radio bookmark</source>
-        <translation>Adauga semn de carte radio </translation>
+        <translation>Adaugă semn de carte radio </translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="72"/>
         <source>FM transmitter</source>
-        <translation>Transmitator FM</translation>
+        <translation>Transmițător FM</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="121"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Editează</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="122"/>
         <source>Delete</source>
-        <translation>Sterge</translation>
+        <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="151"/>
         <source>Edit radio bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Editează semn de carte radio</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="155"/>
@@ -186,18 +186,18 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Web address</source>
-        <translation>Adresa Web</translation>
+        <translation>Adresă Web</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="170"/>
         <source>Save</source>
-        <translation>Salveaza</translation>
+        <translation>Salvează</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="215"/>
         <location filename="../internetradiowindow.cpp" line="217"/>
         <source>Unable to add empty bookmark</source>
-        <translation>Nu pot adauga un semn de carte gol</translation>
+        <translation>Nu se poate adăuga un semn de carte gol</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="217"/>
@@ -214,7 +214,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../internetradiowindow.cpp" line="245"/>
         <location filename="../internetradiowindow.cpp" line="247"/>
         <source>Invalid URL</source>
-        <translation>URL nevalabil</translation>
+        <translation>URL invalid</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="295"/>
@@ -263,7 +263,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../mainwindow.cpp" line="180"/>
         <location filename="../mainwindow.cpp" line="185"/>
         <source>Music</source>
-        <translation>Muzica</translation>
+        <translation>Muzică</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="181"/>
@@ -275,38 +275,38 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../mainwindow.cpp" line="182"/>
         <location filename="../mainwindow.cpp" line="187"/>
         <source>Internet Radio</source>
-        <translation>Internet Radio</translation>
+        <translation>Radio Online</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="183"/>
         <location filename="../mainwindow.cpp" line="188"/>
         <source>Shuffle all songs</source>
-        <translation>Amesteca toate melodiile</translation>
+        <translation>Redare aleatorie</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="607"/>
         <source>(no songs)</source>
-        <translation>(fara melodii)</translation>
+        <translation>(fără melodii)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="614"/>
         <source>(no videos)</source>
-        <translation>(fara videoclipuri)</translation>
+        <translation>(fără videoclipuri)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="630"/>
         <source>(no stations)</source>
-        <translation>(fara posturi radio)</translation>
+        <translation>(fără posturi radio)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="747"/>
         <source>Processed items:</source>
-        <translation>elemente procesate</translation>
+        <translation>Elemente procesate</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="751"/>
         <source>Remaining items:</source>
-        <translation>Elemente ramase</translation>
+        <translation>Elemente rămase</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
@@ -317,7 +317,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../mainwindow.ui" line="390"/>
         <location filename="../mainwindow.ui" line="397"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="406"/>
@@ -332,7 +332,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../mainwindow.ui" line="416"/>
         <source>Settings</source>
-        <translation>Setari</translation>
+        <translation>Setări</translation>
     </message>
 </context>
 <context>
@@ -340,34 +340,34 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../musicwindow.cpp" line="193"/>
         <source>Add to now playing</source>
-        <translation>Adauga in lista curenta</translation>
+        <translation>Adaugă în lista &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="197"/>
         <location filename="../musicwindow.cpp" line="199"/>
         <source>Delete playlist</source>
-        <translation>Sterge lista de redare</translation>
+        <translation>Șterge lista de redare</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="204"/>
         <source>Delete</source>
-        <translation>Sterge</translation>
+        <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="206"/>
         <source>Set as ringing tone</source>
-        <translation>Seteaza ca ton de apel</translation>
+        <translation>Setează ca ton de apel</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="207"/>
         <source>Share</source>
-        <translation>Share</translation>
+        <translation>Partajează</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="219"/>
         <location filename="../musicwindow.cpp" line="305"/>
         <source>Delete selected item from device?</source>
-        <translation>Stergi elemetul selectat din aparat?</translation>
+        <translation>Doriți ștergerea din aparat a elementului selectat?</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="222"/>
@@ -386,7 +386,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../musicwindow.cpp" line="239"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Esti sigur ca vrei sa setezi aceasta melodie ca ton de apel?</translation>
+        <translation>Sunteți sigur că doriți setarea acestei melodii ca ton de apel?</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="409"/>
@@ -431,7 +431,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../musicwindow.cpp" line="743"/>
         <source>Recently added</source>
-        <translation>Adaugate recent</translation>
+        <translation>Adăugate recent</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="743"/>
@@ -446,12 +446,12 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../musicwindow.cpp" line="743"/>
         <source>Never played</source>
-        <translation>Niciodata redate</translation>
+        <translation>Niciodată redate</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="837"/>
         <source>(unknown song)</source>
-        <translation>(melodie necunoscuta)</translation>
+        <translation>(melodie necunoscută)</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="840"/>
@@ -470,7 +470,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../musicwindow.cpp" line="958"/>
         <source>Various artists</source>
-        <translation>Diversi artisti</translation>
+        <translation>Artiști diverși</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="990"/>
@@ -500,15 +500,15 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../musicwindow.cpp" line="1237"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n videoclip adaugat in lista de redare curenta</numerusform>
-            <numerusform>%n videoclipuri adaugate in lista de redare curenta</numerusform>
+            <numerusform>%n videoclip adăugat la lista &quot;În redare&quot;</numerusform>
+            <numerusform>%n videoclipuri adăugate la lista &quot;În redare&quot;</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="167"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="174"/>
@@ -521,7 +521,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../musicwindow.cpp" line="380"/>
         <location filename="../musicwindow.cpp" line="427"/>
         <source>Artists</source>
-        <translation>Artisti</translation>
+        <translation>Artiști</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="184"/>
@@ -549,7 +549,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../nowplayingwindow.cpp" line="229"/>
         <source>Lyrics not found</source>
-        <translation>Versurile nu au fost gasite</translation>
+        <translation>Versurile nu au fost găsite</translation>
     </message>
     <message numerus="yes">
         <location filename="../nowplayingwindow.cpp" line="307"/>
@@ -568,7 +568,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../nowplayingwindow.cpp" line="691"/>
         <source>Loading lyrics...</source>
-        <translation>Incarcare versuri...</translation>
+        <translation>Încărcare versuri...</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="721"/>
@@ -579,32 +579,32 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../nowplayingwindow.cpp" line="735"/>
         <source>There is no active Internet connection</source>
-        <translation>Nu exista o conexiune internet activa</translation>
+        <translation>Nicio conexiune de Internet activă</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1143"/>
         <source>Information not available</source>
-        <translation>Informatiile nu sunt disponibile</translation>
+        <translation>Informațiile nu sunt disponibile</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1203"/>
         <source>Clear all songs from now playing?</source>
-        <translation>Sterge toate cantecele din lista de redare curenta?</translation>
+        <translation>Ștergeți toate melodiile din lista &quot;În redare&quot;?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1237"/>
         <source>Set as ringing tone</source>
-        <translation>Seteaza ca ton de apel</translation>
+        <translation>Setează ca ton de apel</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1240"/>
         <source>Delete from now playing</source>
-        <translation>Sterge din lista de redare curenta</translation>
+        <translation>Șterge din lista &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1238"/>
         <source>Share</source>
-        <translation>Share</translation>
+        <translation>Partajează</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1206"/>
@@ -625,7 +625,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../nowplayingwindow.cpp" line="1250"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Esti sigur ca vrei sa setezi aceasta melodie ca ton de apel</translation>
+        <translation>Sunteți sigur că doriți setarea melodiei ca ton de apel?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1390"/>
@@ -635,29 +635,29 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../nowplayingwindow.cpp" line="1396"/>
         <source>Save</source>
-        <translation>Salveaza</translation>
+        <translation>Salvează</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1427"/>
         <source>Playlist with the same name exists, overwrite?</source>
-        <translation>Exista o lista de redare cu acelasi nume. O inlocuiesti?</translation>
+        <translation>Există o listă de redare cu același nume. Doriți să o înlocuiți?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1438"/>
         <location filename="../nowplayingwindow.cpp" line="1445"/>
         <source>Playlist saved</source>
-        <translation>Lista de redare salvata</translation>
+        <translation>Listă de redare salvată</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1544"/>
         <location filename="../nowplayingwindow.cpp" line="1551"/>
         <source>Select album art</source>
-        <translation>Selecteza &quot;album art&quot;</translation>
+        <translation>Selectează &quot;album art&quot;</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1545"/>
         <source>Reset album art</source>
-        <translation>Reseteaza &quot;album art&quot;</translation>
+        <translation>Resetează &quot;album art&quot;</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1562"/>
@@ -672,12 +672,12 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../nowplayingwindow.cpp" line="1599"/>
         <source>Reload lyrics</source>
-        <translation>Reincarcare versuri</translation>
+        <translation>Reîncărcare versuri</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="14"/>
         <source>Now playing</source>
-        <translation>Acum se reda</translation>
+        <translation>În redare</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="185"/>
@@ -690,7 +690,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../nowplayingwindow.cpp" line="635"/>
         <location filename="../nowplayingwindow.cpp" line="1116"/>
         <source>(unknown song)</source>
-        <translation>(melodie necunoscuta)</translation>
+        <translation>(melodie necunoscută)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
@@ -709,25 +709,25 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../nowplayingwindow.ui" line="912"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="924"/>
         <source>FM Transmitter</source>
-        <translation>Transmitator FM</translation>
+        <translation>Transmițător FM</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="929"/>
         <location filename="../nowplayingwindow.cpp" line="1241"/>
         <source>Clear now playing</source>
-        <translation>Curata lista curenta de redare</translation>
+        <translation>Curăță &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="934"/>
         <location filename="../nowplayingwindow.cpp" line="1234"/>
         <location filename="../nowplayingwindow.cpp" line="1382"/>
         <source>Save playlist</source>
-        <translation>Salveaza lista deredare</translation>
+        <translation>Salvează lista de redare</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="939"/>
@@ -745,7 +745,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../radionowplayingwindow.ui" line="14"/>
         <source>Now playing</source>
-        <translation>Acum se reda</translation>
+        <translation>Acum se redă</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="163"/>
@@ -757,17 +757,17 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../radionowplayingwindow.ui" line="516"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="525"/>
         <source>FM transmitter</source>
-        <translation>Transmitator FM</translation>
+        <translation>Transmițător FM</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="530"/>
         <source>Add radio bookmark</source>
-        <translation>Adauga bookmark radio</translation>
+        <translation>Adaugă semn de carte radio</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="213"/>
@@ -779,12 +779,12 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../radionowplayingwindow.cpp" line="213"/>
         <location filename="../radionowplayingwindow.cpp" line="255"/>
         <source>(unknown song)</source>
-        <translation>(melodie necunoscuta)</translation>
+        <translation>(melodie necunoscută)</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="280"/>
         <source>Buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>Încărcare</translation>
     </message>
 </context>
 <context>
@@ -792,57 +792,57 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../settingsdialog.ui" line="14"/>
         <source>Media player - Settings</source>
-        <translation>Media Player - Setari</translation>
+        <translation>Media Player - Setări</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="45"/>
         <source>On Media Player exit:</source>
-        <translation>La iesirea din Media Player:</translation>
+        <translation>La ieșirea din Media Player:</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="58"/>
         <source>Do nothing</source>
-        <translation>Nu face nimic</translation>
+        <translation>Nicio acțiune</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="53"/>
         <source>Stop playback</source>
-        <translation>Opreste redarea</translation>
+        <translation>Oprește redarea</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="66"/>
         <source>Enable lyrics</source>
-        <translation>Activeaza versurile</translation>
+        <translation>Activează versurile</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="73"/>
         <source>Open whole folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Deschide tot dosarul</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="82"/>
         <source>Size of automatic playlists</source>
-        <translation>Marimea listelor de redare automate</translation>
+        <translation>Mărimea listelor automate de redare</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="98"/>
         <source>Lazy sliders</source>
-        <translation>Slidere incete</translation>
+        <translation>Cursor leneș</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="105"/>
         <source>Override FMTX checks in UI</source>
-        <translation>Suprascrie verificarile FMTX in UI</translation>
+        <translation>Evitarea verificărilor FMTX in UI</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="117"/>
         <source>* Requires modified FMTXD</source>
-        <translation>* Necesita FMTXD modificat</translation>
+        <translation>* Necesită FMTXD modificat</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="27"/>
         <source>Save</source>
-        <translation>Salveaza</translation>
+        <translation>Salvează</translation>
     </message>
 </context>
 <context>
@@ -850,17 +850,17 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../share.ui" line="14"/>
         <source>Share</source>
-        <translation>Share</translation>
+        <translation>Partajează</translation>
     </message>
     <message>
         <location filename="../share.ui" line="20"/>
         <source>Send via bluetooth</source>
-        <translation>Trimite prin Bluetooth </translation>
+        <translation>Partajează prin Bluetooth </translation>
     </message>
     <message>
         <location filename="../share.ui" line="27"/>
         <source>Send via e-mail</source>
-        <translation>Trimite prin E-mail</translation>
+        <translation>Partajează prin E-mail</translation>
     </message>
 </context>
 <context>
@@ -868,12 +868,12 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singlealbumview.cpp" line="32"/>
         <source>Shuffle songs</source>
-        <translation>Amesteca melodiile</translation>
+        <translation>Amestecă melodiile</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="119"/>
         <source>(unknown song)</source>
-        <translation>(melodie necunoscuta)</translation>
+        <translation>(melodie necunoscută)</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="122"/>
@@ -897,22 +897,22 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singlealbumview.cpp" line="332"/>
         <source>Add to now playing</source>
-        <translation>Adauga la lista de redare curenta</translation>
+        <translation>Adaugă la lista &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="334"/>
         <source>Set as ringing tone</source>
-        <translation>Seteaza ca ton de apel</translation>
+        <translation>Setează ca ton de apel</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="335"/>
         <source>Share</source>
-        <translation>Share</translation>
+        <translation>Partajează</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="359"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Sunteti sigur ca doriti sa setati aceasta melodie ca ton de apel?</translation>
+        <translation>Sunteți sigur că doriti setarea acestei melodii ca ton de apel?</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="364"/>
@@ -931,37 +931,37 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singlealbumview.cpp" line="436"/>
         <source>Delete selected item from device?</source>
-        <translation>Sterge elementul selectat din aparat?</translation>
+        <translation>Șterge elementul selectat din aparat?</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="455"/>
         <source>Delete all items shown in view?</source>
-        <translation>Sterge toate elementele aratate in imagine?</translation>
+        <translation>Ștergeți toate elementele arătate în imagine?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="471"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n videoclip adaugat in lista de redare curenta</numerusform>
-            <numerusform>%n videoclipuri adaugate in lista de redare curenta</numerusform>
+            <numerusform>%n videoclip adăugat la lista &quot;În redare&quot;</numerusform>
+            <numerusform>%n videoclipuri adăugate la lista &quot;În redare&quot;</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="98"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Adauga melodiile in lista de redare curenta</translation>
+        <translation>Adaugă melodiile la lista &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
         <location filename="../singlealbumview.cpp" line="333"/>
         <source>Delete</source>
-        <translation>Sterge</translation>
+        <translation>Șterge</translation>
     </message>
 </context>
 <context>
@@ -984,12 +984,12 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singleartistview.cpp" line="339"/>
         <source>Add to now playing</source>
-        <translation>Adauga la lista de redare curenta</translation>
+        <translation>Adaugă la lista &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="350"/>
         <source>Delete selected item from device?</source>
-        <translation>Stergi elementul selectat din aparat</translation>
+        <translation>Șterg elementul selectat din aparat?</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="353"/>
@@ -1006,14 +1006,14 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singleartistview.cpp" line="369"/>
         <source>Delete all items shown in view?</source>
-        <translation>Stergi toate elementele aratate in imagine?</translation>
+        <translation>Ștergi toate elementele arătate în imagine?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="450"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n videoclip adaugat la lista de redare curenta</numerusform>
-            <numerusform>%n videoclipuri adaugate la lista de redare curenta</numerusform>
+            <numerusform>%n videoclip adăugat la lista &quot;În redare&quot;</numerusform>
+            <numerusform>%n videoclipuri adăugate la lista &quot;În redare&quot;</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -1026,18 +1026,18 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singleartistview.ui" line="126"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>Adauga melodii la lista de redare curenta</translation>
+        <translation>Adaugă melodii la lista &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
         <location filename="../singleartistview.cpp" line="340"/>
         <source>Delete</source>
-        <translation>Sterge</translation>
+        <translation>Șterge</translation>
     </message>
 </context>
 <context>
@@ -1045,7 +1045,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singlegenreview.cpp" line="32"/>
         <source>Shuffle songs</source>
-        <translation>Amesteca melodiile</translation>
+        <translation>Amestecă melodiile</translation>
     </message>
     <message>
         <location filename="../singlegenreview.cpp" line="158"/>
@@ -1066,26 +1066,26 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../singlegenreview.cpp" line="379"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n videoclip adaugat la lista de redare curenta</numerusform>
-            <numerusform>%n videoclipuri adaugate la lista de redare curenta</numerusform>
+            <numerusform>%n videoclip adăugat la lista &quot;În redare&quot;</numerusform>
+            <numerusform>%n videoclipuri adăugate la lista &quot;În redare&quot;</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="100"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="108"/>
         <location filename="../singlegenreview.cpp" line="249"/>
         <source>Add to now playing</source>
-        <translation>Adauga la lista de redare curenta</translation>
+        <translation>Adaugă la lista &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="113"/>
         <source>Delete</source>
-        <translation>Sterge</translation>
+        <translation>Șterge</translation>
     </message>
 </context>
 <context>
@@ -1099,7 +1099,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../singleplaylistview.cpp" line="113"/>
         <location filename="../singleplaylistview.cpp" line="205"/>
         <source>(unknown song)</source>
-        <translation>(melodie necunoscuta)</translation>
+        <translation>(melodie necunoscută)</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="117"/>
@@ -1117,41 +1117,41 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
         <location filename="../singleplaylistview.cpp" line="136"/>
         <location filename="../singleplaylistview.cpp" line="223"/>
         <source>Information not available</source>
-        <translation>Informatii nedisponibile</translation>
+        <translation>Informații nedisponibile</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="315"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n videoclip adaugat in lista de redare curenta</numerusform>
-            <numerusform>%n videoclipuri adaugate in lista de redare curenta</numerusform>
+            <numerusform>%n videoclip adăugat la lista &quot;În redare&quot;</numerusform>
+            <numerusform>%n videoclipuri adăugate la lista &quot;În redare&quot;</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="408"/>
         <source>Delete</source>
-        <translation>Sterge</translation>
+        <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="409"/>
         <source>Set as ringing tone</source>
-        <translation>Seteaza ca ton de apel</translation>
+        <translation>Setează ca ton de apel</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="410"/>
         <source>Share</source>
-        <translation>Share</translation>
+        <translation>Partajează</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="418"/>
         <source>Delete from playlist</source>
-        <translation>Sterge din lista de redare</translation>
+        <translation>Șterge din lista de redare</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="442"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Esti sigur ca vrei sa setezi aceasta melodie ca ton de apel?</translation>
+        <translation>Ești sigur că vrei să setezi această melodie ca ton de apel?</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="447"/>
@@ -1168,12 +1168,12 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singleplaylistview.cpp" line="512"/>
         <source>Delete song?</source>
-        <translation>Stergi melodia?</translation>
+        <translation>Ștergi melodia?</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="513"/>
         <source>Are you sure you want to delete this song?</source>
-        <translation>Esti sigur ca vrei sa stergi aceasta melodie?</translation>
+        <translation>Ești sigur că vrei să ștergi această melodie?</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="532"/>
@@ -1187,29 +1187,29 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../singleplaylistview.ui" line="98"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="109"/>
         <source>Edit playlist</source>
-        <translation>Editare lista de redare</translation>
+        <translation>Editare listă de redare</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="114"/>
         <source>Save playlist</source>
-        <translation>Salveaza lista de redare</translation>
+        <translation>Salvează lista de redare</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="119"/>
         <location filename="../singleplaylistview.cpp" line="407"/>
         <source>Add to now playing</source>
-        <translation>Adauga in lista de redare curenta</translation>
+        <translation>Adaugă la lista &quot;În redare&quot;</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="124"/>
         <location filename="../singleplaylistview.ui" line="129"/>
         <source>Delete playlist</source>
-        <translation>Sterge lista de redare</translation>
+        <translation>Șterge lista de redare</translation>
     </message>
 </context>
 <context>
@@ -1237,7 +1237,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../tagwindow.ui" line="50"/>
         <source>Save</source>
-        <translation>Salveaza</translation>
+        <translation>Salvează</translation>
     </message>
 </context>
 <context>
@@ -1245,7 +1245,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../upnpview.cpp" line="122"/>
         <source>(unknown song)</source>
-        <translation>(melodie necunoscuta)</translation>
+        <translation>(melodie necunoscută)</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="125"/>
@@ -1255,26 +1255,26 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../upnpview.cpp" line="169"/>
         <source>Add to now playing</source>
-        <translation>Adauga in lista de redare curenta</translation>
+        <translation>Adaugă in lista &quot;În redare&quot;</translation>
     </message>
     <message numerus="yes">
         <location filename="../upnpview.cpp" line="265"/>
         <source>%n clip(s) added to now playing</source>
         <translation type="unfinished">
-            <numerusform>%n videoclip adaugat in lista de redare curenta</numerusform>
-            <numerusform>%n videoclipuri adaugate in lista de redare curenta</numerusform>
+            <numerusform>%n videoclip adăugat la lista &quot;În redare&quot;</numerusform>
+            <numerusform>%n videoclipuri adăugate la lista &quot;În redare&quot;</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../upnpview.ui" line="104"/>
         <source>Options</source>
-        <translation>Optiuni</translation>
+        <translation>Opțiuni</translation>
     </message>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>adauga melodii in lista de redare curenta</translation>
+        <translation>Adaugă melodii in lista &quot;În redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -1282,17 +1282,17 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videonowplayingwindow.ui" line="14"/>
         <source>Now Playing</source>
-        <translation>Redare curenta</translation>
+        <translation>În redare</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="186"/>
         <source>Delete video?</source>
-        <translation>Stergere film?</translation>
+        <translation>Ștergere film?</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="187"/>
         <source>Are you sure you want to delete this video?</source>
-        <translation>Esti sigur ca vrei sa stergi acest film?</translation>
+        <translation>Ești sigur că vrei să ștergi acest film?</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="190"/>
@@ -1313,7 +1313,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videonowplayingwindow.cpp" line="561"/>
         <source>Media not found</source>
-        <translation>Fisier media negasit</translation>
+        <translation>Fișier media negăsit</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="563"/>
@@ -1323,7 +1323,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videonowplayingwindow.cpp" line="565"/>
         <source>Invalid URI</source>
-        <translation>URI nevalid</translation>
+        <translation>URI invalid</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="567"/>
@@ -1338,17 +1338,17 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videonowplayingwindow.cpp" line="571"/>
         <source>Could not determine MIME-type</source>
-        <translation>nu pot determina tipul MIME</translation>
+        <translation>Nu pot determina tipul MIME</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="573"/>
         <source>General error occured, unable to continue playback</source>
-        <translation>eroare generala aparuta, nu se mai poate continua redarea</translation>
+        <translation>Eroare generală întâmpinată, nu se poate continua redarea</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="575"/>
         <source>General error occured</source>
-        <translation>Eroare generala aparuta</translation>
+        <translation>Eroare generală întâmpinată</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="577"/>
@@ -1358,17 +1358,17 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videonowplayingwindow.cpp" line="579"/>
         <source>Unsupported resolution</source>
-        <translation>Rezolutie nesuportata</translation>
+        <translation>Rezoluție nesuportată</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="581"/>
         <source>Unsupported framerate</source>
-        <translation>Numar de cadre nesuportat</translation>
+        <translation>Număr de cadre nesuportat</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="583"/>
         <source>Media is protected by DRM</source>
-        <translation>Media este protejata de DRM</translation>
+        <translation>Media este protejată de DRM</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="585"/>
@@ -1378,37 +1378,37 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videonowplayingwindow.cpp" line="587"/>
         <source>Media corrupted</source>
-        <translation>Fisier media stricat</translation>
+        <translation>Fișier media corupt</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="589"/>
         <source>Error while parsing playlist</source>
-        <translation>Eroare in timpul analizei listei de redare</translation>
+        <translation>Eroare în timpul analizei listei de redare</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="590"/>
         <source>Playlist may be corrupt or empty</source>
-        <translation>Lista de redare poate fi stricata sau goala</translation>
+        <translation>Lista de redare poate fi stricată sau goală</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="593"/>
         <source>Codec not found:</source>
-        <translation>Codecul nu a fost gasit:</translation>
+        <translation>Codecul nu a fost găsit:</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="597"/>
         <source>Video codec not found:</source>
-        <translation>Codecul video nu a fost gasit:</translation>
+        <translation>Codecul video nu a fost găsit:</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="601"/>
         <source>Audio codec not found:</source>
-        <translation>Codecul audio nu a fost gasit:</translation>
+        <translation>Codecul audio nu a fost găsit:</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="605"/>
         <source>No playlist assigned</source>
-        <translation>Nu a fost atribuita nici o lista de redare</translation>
+        <translation>Nu a fost atribuită nicio listă de redare</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="607"/>
@@ -1418,7 +1418,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videonowplayingwindow.cpp" line="609"/>
         <source>Unable to start playback</source>
-        <translation>Nu se poate incepe redarea</translation>
+        <translation>Nu se poate începe redarea</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="611"/>
@@ -1428,22 +1428,22 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videonowplayingwindow.cpp" line="613"/>
         <source>Unable to pause playback</source>
-        <translation>Nu se poate pune pauza redarii</translation>
+        <translation>Nu se poate pune pauză redarii</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="615"/>
         <source>Unable to seek position in media</source>
-        <translation>Nu se poate cauta pozitia in media</translation>
+        <translation>Nu se poate căuta poziția în media</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="617"/>
         <source>Unable to retrieve current position in media</source>
-        <translation>Nu se poate restabili pozitia in media</translation>
+        <translation>Nu se poate restabili poziția în media</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="619"/>
         <source>Unable to get current playback status</source>
-        <translation>Nu se poate stabili situatia curenta a redarii</translation>
+        <translation>Nu se poate stabili situația curentă a redarii</translation>
     </message>
 </context>
 <context>
@@ -1466,17 +1466,17 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videoswindow.cpp" line="87"/>
         <source>Delete</source>
-        <translation>Sterge</translation>
+        <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="88"/>
         <source>Share</source>
-        <translation>Share</translation>
+        <translation>Partajează</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="98"/>
         <source>Delete selected item from device?</source>
-        <translation>Stergeti elementul selectat din dispozitiv?</translation>
+        <translation>Ștergeți elementul selectat din dispozitiv?</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="101"/>
@@ -1506,7 +1506,7 @@ Deconectati USB-ul pentru a continua folosirea transmitatorului FM.</translation
     <message>
         <location filename="../videoswindow.cpp" line="307"/>
         <source>Recorded by device camera</source>
-        <translation>Inregistrate de camera aparatului</translation>
+        <translation>Înregistrate de camera aparatului</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="311"/>
