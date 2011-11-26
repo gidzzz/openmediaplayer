@@ -57,6 +57,7 @@ private slots:
 #endif
     void onAlbumSelected(QListWidgetItem*);
     void orientationChanged();
+    void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();
     void deleteCurrentArtist();

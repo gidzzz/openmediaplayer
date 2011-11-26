@@ -108,6 +108,7 @@ private slots:
     void showArtistView();
     void showSongsView();
     void showGenresView();
+    void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);
 #ifdef MAFW
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);

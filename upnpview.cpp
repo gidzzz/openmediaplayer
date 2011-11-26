@@ -27,8 +27,7 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(onOrientationChanged()));
 
@@ -82,6 +81,15 @@ void UpnpView::keyReleaseEvent(QKeyEvent *e)
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
     }
+}
+
+void UpnpView::onSearchHideButtonClicked()
+{
+    if (ui->searchEdit->text().isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    } else
+        ui->searchEdit->clear();
 }
 
 void UpnpView::onSearchTextChanged(QString text)

@@ -180,8 +180,7 @@ void MusicWindow::connectSignals()
     connect(ui->playlistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 }
 
 void MusicWindow::onContextMenuRequested(QPoint point)
@@ -315,6 +314,16 @@ void MusicWindow::onDeleteClicked()
     }
 #endif
     currentList()->clearSelection();
+}
+
+
+void MusicWindow::onSearchHideButtonClicked()
+{
+    if (ui->searchEdit->text().isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    } else
+        ui->searchEdit->clear();
 }
 
 void MusicWindow::onSearchTextChanged(QString text)

@@ -63,8 +63,7 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
     connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentAlbum()));
 #ifdef MAFW
@@ -254,6 +253,15 @@ void SingleAlbumView::createPlaylist(bool shuffle)
         ui->indicator->inhibit();
     }
 #endif
+}
+
+void SingleAlbumView::onSearchHideButtonClicked()
+{
+    if (ui->searchEdit->text().isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    } else
+        ui->searchEdit->clear();
 }
 
 void SingleAlbumView::onSearchTextChanged(QString text)

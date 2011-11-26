@@ -61,6 +61,7 @@ private:
 private slots:
     void orientationChanged();
     void onItemSelected(QListWidgetItem *item);
+    void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void addAllToNowPlaying();
     void onShuffleButtonClicked();

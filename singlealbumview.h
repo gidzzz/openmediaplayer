@@ -67,6 +67,7 @@ private slots:
 #endif
     void createPlaylist(bool);
     void onShuffleButtonClicked();
+    void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();
     void deleteCurrentAlbum();

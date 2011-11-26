@@ -56,8 +56,7 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_songs_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
     connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentArtist()));
     connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
@@ -186,6 +185,15 @@ bool SingleArtistView::eventFilter(QObject *, QEvent *event)
     if (event->type() == QEvent::Resize)
         ui->albumList->setFlow(ui->albumList->flow());
     return false;
+}
+
+void SingleArtistView::onSearchHideButtonClicked()
+{
+    if (ui->searchEdit->text().isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    } else
+        ui->searchEdit->clear();
 }
 
 void SingleArtistView::onSearchTextChanged(QString text)

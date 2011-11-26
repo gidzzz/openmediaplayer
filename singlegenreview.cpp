@@ -64,8 +64,7 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchWidget, SLOT(hide()));
-    connect(ui->searchHideButton, SIGNAL(clicked()), ui->searchEdit, SLOT(clear()));
+    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
@@ -217,6 +216,15 @@ void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
     }
+}
+
+void SingleGenreView::onSearchHideButtonClicked()
+{
+    if (ui->searchEdit->text().isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    } else
+        ui->searchEdit->clear();
 }
 
 void SingleGenreView::onSearchTextChanged(QString text)

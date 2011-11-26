@@ -68,6 +68,7 @@ private slots:
 #endif
     void onItemSelected(QListWidgetItem *);
     void addAllToNowPlaying();
+    void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void onShuffleButtonClicked();
     void onBrowserContextMenuRequested(const QPoint &point);
