@@ -226,7 +226,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QLabel" name="songTitleLabel">
+                <widget class="QLabel" name="titleLabel">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                    <horstretch>0</horstretch>

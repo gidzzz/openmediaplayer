@@ -166,7 +166,7 @@ private slots:
     void onShareUriReceived(QString objectId, QString uri);
 #endif
     void editTags();
-    void metadataChanged(QString name, QVariant value);
+    void onMetadataChanged(QString name, QVariant value);
     void volumeWatcher();
     void onRepeatButtonToggled(bool);
     void orientationChanged();
@@ -187,7 +187,7 @@ private slots:
     void nullCarView();
     void savePlaylist();
     void onSavePlaylistAccepted();
-    void onDialogDestroyed();
+    void onChildDestroyed();
     void onDeleteFromNowPlaying();
     void selectItemByRow(int row);
     void focusItemByRow(int row);

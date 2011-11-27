@@ -19,8 +19,6 @@
 #include "nowplayingwindow.h"
 
 NowPlayingWindow* NowPlayingWindow::instance = NULL;
-bool newSong;
-QString currentPlaylistUrl;
 
 NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory *mafwFactory)
 {
@@ -87,7 +85,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     playlistTime = 0;
     clickedItem = NULL;
     browseId = NULL;
-    newSong = true;
     albumArtSceneLarge = new QGraphicsScene(ui->view_large);
     albumArtSceneSmall = new QGraphicsScene(ui->view_small);
     entertainmentView = 0;
@@ -115,33 +112,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui->volSliderWidget->hide();
     ui->songPlaylist->hide();
     ui->lyrics->hide();
-
-    currentPlaylistUrl = "";
-    QDir dir ( "/home/user/.mafw-playlists/", "*" );
-    dir.setFilter( QDir::AllEntries | QDir::NoDotAndDotDot );
-    QFileInfoList list = dir.entryInfoList();
-    for (int i = 0; i < list.size(); ++i)
-    {
-        if ( currentPlaylistUrl == "" )
-        {
-            QFile data("/home/user/.mafw-playlists/"+QFileInfo(list.at(i)).baseName());
-            if (data.open(QFile::ReadOnly | QFile::Truncate))
-            {
-                QTextStream out(&data);
-                while ( !out.atEnd() && currentPlaylistUrl=="")
-                {
-                    QString line = out.readLine();
-                    if ( line.contains(playlist->playlistName()) )
-                    {
-                        currentPlaylistUrl = "/home/user/.mafw-playlists/"+QFileInfo(list.at(i)).baseName();
-                        break;
-                    }
-                }
-            }
-            data.close();
-        }
-    }
-
 
     this->playlistRequested = false;
 
@@ -212,38 +182,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 NowPlayingWindow::~NowPlayingWindow()
 {
     delete ui;
-}
-
-void NowPlayingWindow::onLyricsDownloaded(QNetworkReply *reply)
-{
-    QString lyricsFile = reply->url().toString();
-    //lyricsFile.remove("http://www.leoslyrics.com/").replace("/","-");
-    lyricsFile.remove("http://lyrics.mirkforce.net/").replace("/", "-");
-
-    //if ( ! lyricsFile.contains( ui->songTitleLabel->text().toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") ) )
-    if ( ! lyricsFile.contains( cleanItem(ui->songTitleLabel->whatsThis()) ) )
-        return;
-
-    if (reply->error() != QNetworkReply::NoError) {
-        //qDebug() << "error: " << reply->error();
-        ui->lyricsText->setText(tr("Lyrics not found"));
-        ui->lyricsText->setWhatsThis("");
-    } else {
-        QString lyrics = QString::fromUtf8(reply->readAll());
-        //str.remove(QRegExp("(.*)oncontextmenu=\"return false;\">"));
-        //str.remove(QRegExp("</p>(.*)"));
-        //str.remove(QRegExp("<(.*)>"));
-        ui->lyricsText->setText(lyrics);
-        ui->lyricsText->setWhatsThis(lyricsFile);
-        QString lyricsPath = "/home/user/.lyrics/";
-        lyricsPath.append(lyricsFile);
-        QFile file(lyricsPath);
-        file.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite );
-        QTextStream out(&file);
-        //out.setCodec("UTF-8");
-        out << lyrics;
-        file.close();
-    }
 }
 
 void NowPlayingWindow::setAlbumImage(QString image)
@@ -359,36 +297,44 @@ void NowPlayingWindow::setButtonIcons()
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
 }
 
-void NowPlayingWindow::metadataChanged(QString name, QVariant value)
+void NowPlayingWindow::onMetadataChanged(QString name, QVariant value)
 {
-#ifdef MAFW
-    this->mafwrenderer->getCurrentMetadata();
-#endif
-
-    QFont f = ui->songTitleLabel->font();
+    QFont f = ui->titleLabel->font();
     QFontMetrics fm(f);
     QString elided = fm.elidedText(value.toString(), Qt::ElideRight, 420);
 
     if (name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
-        ui->songTitleLabel->setText(elided);
-        ui->songTitleLabel->setWhatsThis(value.toString());
+        ui->titleLabel->setText(elided);
+        ui->titleLabel->setWhatsThis(value.toString());
     }
 
-    if (name == "artist" /*MAFW_METADATA_KEY_ARTIST*/) {
+    else if (name == "artist" /*MAFW_METADATA_KEY_ARTIST*/) {
         ui->artistLabel->setText(elided);
         ui->artistLabel->setWhatsThis(value.toString());
     }
 
-    if (name == "album" /*MAFW_METADATA_KEY_ALBUM*/) {
+    else if (name == "album" /*MAFW_METADATA_KEY_ALBUM*/) {
         ui->albumNameLabel->setWhatsThis(value.toString());
         ui->albumNameLabel->setText(elided);
     }
 
-    if (name == "uri")
+    else if (name == "duration") {
+        songDuration = value.toInt();
+        ui->trackLengthLabel->setText(time_mmss(songDuration));
+        ui->songProgress->setRange(0, songDuration);
+    }
+
+    else if (name == "uri")
         currentURI = value.toString();
 
-    if (name == "renderer-art-uri")
+    // else if (name == "mime");
+
+    // else if (name == "album-art-uri");
+
+    else if (name == "renderer-art-uri")
         this->setAlbumImage(value.toString());
+
+    // else if (name == "lyrics");
 }
 
 #ifdef MAFW
@@ -463,7 +409,7 @@ void NowPlayingWindow::connectSignals()
 #endif
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
-    connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(metadataChanged(QString, QVariant)));
+    connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(onMetadataChanged(QString, QVariant)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int, char*)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
@@ -596,7 +542,7 @@ void NowPlayingWindow::onItemMoved(guint from, guint to)
 #endif
 
 #ifdef MAFW
-void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_id, QString error)
+void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString object_id, QString error)
 {
     if (metadataSource)
         metadataSource->deleteLater(); // hmmm... instant delete causes segfaults
@@ -605,15 +551,80 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_i
     connect(metadataSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
 
-    metadataSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                              MAFW_METADATA_KEY_ALBUM,
-                                                                              MAFW_METADATA_KEY_ARTIST,
-                                                                              MAFW_METADATA_KEY_URI,
-                                                                              MAFW_METADATA_KEY_MIME,
-                                                                              MAFW_METADATA_KEY_ALBUM_ART_URI,
-                                                                              MAFW_METADATA_KEY_RENDERER_ART_URI,
-                                                                              MAFW_METADATA_KEY_DURATION,
-                                                                              MAFW_METADATA_KEY_LYRICS));
+    QString title;
+    QString artist;
+    QString album;
+    GValue *v;
+
+    const char **keys = new const char *[5];
+    char currentKey = 0;
+
+    QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
+
+    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE) )) {
+        title = QString::fromUtf8(g_value_get_string (v));
+        if (item && item->data(UserRoleSongTitle).toString().isEmpty())
+            item->setData(UserRoleSongTitle, title);
+    } else {
+        title = tr("(unknown song)");
+        keys[currentKey++] = MAFW_METADATA_KEY_TITLE;
+    }
+
+    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST) )) {
+        artist = QString::fromUtf8(g_value_get_string(v));
+        if (item && item->data(UserRoleSongArtist).toString().isEmpty())
+            item->setData(UserRoleSongArtist, artist);
+    } else {
+        artist = tr("(unknown artist)");
+        keys[currentKey++] = MAFW_METADATA_KEY_ARTIST;
+    }
+
+    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM) )) {
+        album = QString::fromUtf8(g_value_get_string(v));
+        if (item && item->data(UserRoleSongAlbum).toString().isEmpty())
+            item->setData(UserRoleSongAlbum, album);
+    } else {
+        album = tr("(unknown album)");
+        keys[currentKey++] = MAFW_METADATA_KEY_ALBUM;
+    }
+
+    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION) )) {
+        songDuration = g_value_get_int64 (v);
+        if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank)
+            item->setData(UserRoleSongDuration, songDuration);
+    } else {
+        songDuration = Duration::Unknown;
+        keys[currentKey++] = MAFW_METADATA_KEY_DURATION;
+    }
+
+    keys[currentKey] = NULL;
+    metadataSource->getMetadata(object_id.toUtf8(), keys);
+    delete[] keys;
+
+    QFont f = ui->titleLabel->font();
+    QFontMetrics fm(f);
+
+    ui->titleLabel->setWhatsThis(title);
+    title = fm.elidedText(title, Qt::ElideRight, 420);
+    ui->titleLabel->setText(title);
+
+    ui->artistLabel->setWhatsThis(artist);
+    artist = fm.elidedText(artist, Qt::ElideRight, 420);
+    ui->artistLabel->setText(artist);
+
+    ui->albumNameLabel->setWhatsThis(album);
+    album = fm.elidedText(album, Qt::ElideRight, 420);
+    ui->albumNameLabel->setText(album);
+
+    ui->trackLengthLabel->setText(time_mmss(songDuration));
+    ui->songProgress->setRange(0, songDuration);
+
+    metadataSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI,
+                                                                     MAFW_METADATA_KEY_MIME,
+                                                                     MAFW_METADATA_KEY_ALBUM_ART_URI,
+                                                                     MAFW_METADATA_KEY_RENDERER_ART_URI,
+                                                                     /*MAFW_METADATA_KEY_LYRICS*/));
+
     if (!error.isEmpty())
         qDebug() << error;
 }
@@ -621,139 +632,110 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable*, QString object_i
 void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
 {
     if (metadata != NULL) {
-        QString title;
-        QString artist;
-        QString album;
         QString albumArt;
-        int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+        QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
+
+        QFont f = ui->titleLabel->font();
+        QFontMetrics fm(f);
+
+        if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE) )) {
+            QString title = QString::fromUtf8(g_value_get_string (v));
+            ui->titleLabel->setWhatsThis(title);
+            title = fm.elidedText(title, Qt::ElideRight, 420);
+            ui->titleLabel->setText(title);
+            if (item && item->data(UserRoleSongTitle).toString().isEmpty())
+                item->setData(UserRoleSongTitle, title);
+        }
+
+        if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST) )) {
+            QString artist = QString::fromUtf8(g_value_get_string(v));
+            ui->artistLabel->setWhatsThis(artist);
+            artist = fm.elidedText(artist, Qt::ElideRight, 420);
+            ui->artistLabel->setText(artist);
+            if (item && item->data(UserRoleSongArtist).toString().isEmpty())
+                item->setData(UserRoleSongArtist, artist);
+        }
+
+        if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM) )) {
+            QString album = QString::fromUtf8(g_value_get_string(v));
+            ui->albumNameLabel->setWhatsThis(album);
+            album = fm.elidedText(album, Qt::ElideRight, 420);
+            ui->albumNameLabel->setText(album);
+            if (item && item->data(UserRoleSongAlbum).toString().isEmpty())
+                item->setData(UserRoleSongAlbum, album);
+        }
+
+        if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION) )) {
+            songDuration = g_value_get_int (v);
+            ui->trackLengthLabel->setText(time_mmss(songDuration));
+            ui->songProgress->setRange(0, songDuration);
+            if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank)
+                item->setData(UserRoleSongDuration, songDuration);
+        }
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        currentURI = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+        currentURI = v ? QString::fromUtf8(g_value_get_string (v)) : "";
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
         currentMIME = v ? QString::fromUtf8(g_value_get_string (v)) : "audio/unknown";
 
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
-        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
-        album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : -1;
-        this->songDuration = duration;
-
-        QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
-        if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank) {
+        /*if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank) {
             if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
                 playlistTime -= item->data(UserRoleSongDuration).toInt();
             if (duration > 0)
                 playlistTime += duration;
-            item->setData(UserRoleSongTitle, title);
-            item->setData(UserRoleSongDuration, duration);
-            item->setData(UserRoleSongAlbum, album);
-            item->setData(UserRoleSongArtist, artist);
-        }
+        }*/
 
-        QFont f = ui->songTitleLabel->font();
-        QFontMetrics fm(f);
-
-        if ( newSong || (title!=ui->songTitleLabel->whatsThis()) )
-        {
-            v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
+        if (v != NULL) {
+            const gchar* file_uri = g_value_get_string(v);
+            gchar* filename = NULL;
+            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                this->setAlbumImage(QString::fromUtf8(filename));
+            }
+        } else {
+            v = mafw_metadata_first(metadata,
+                                    MAFW_METADATA_KEY_RENDERER_ART_URI);
             if (v != NULL) {
                 const gchar* file_uri = g_value_get_string(v);
                 gchar* filename = NULL;
-                if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+                if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
                     this->setAlbumImage(QString::fromUtf8(filename));
-                }
-            } else {
-                v = mafw_metadata_first(metadata,
-                                        MAFW_METADATA_KEY_RENDERER_ART_URI);
-                if (v != NULL) {
-                    const gchar* file_uri = g_value_get_string(v);
-                    gchar* filename = NULL;
-                    if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
-                        this->setAlbumImage(QString::fromUtf8(filename));
-                } else
-                    this->setAlbumImage(albumImage);
-            }
+            } else
+                this->setAlbumImage(albumImage);
+        }
 
-            if (enableLyrics) {
-                v = mafw_metadata_first(metadata,
-                                        MAFW_METADATA_KEY_LYRICS);
-                QString lyrics = v ? QString::fromUtf8(g_value_get_string(v)) : "NOLYRICS";
+        if (enableLyrics) {
+            QString cleanArtist = cleanItem(ui->artistLabel->whatsThis());
+            QString cleanTitle = cleanItem(ui->titleLabel->whatsThis());
+            QString lyricsFile = (cleanArtist.isEmpty() ? QString("_") : cleanArtist) + "-"
+                               + (cleanTitle.isEmpty() ? QString("_") : cleanTitle) + ".txt";
+
+            if (ui->lyricsText->whatsThis() != lyricsFile) {
+                /*v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_LYRICS);
+                QString lyrics = v ? QString::fromUtf8(g_value_get_string(v)) : "NOLYRICS";*/
 
                 ui->lyricsText->setText(tr("Loading lyrics..."));
-                ui->lyricsText->setWhatsThis("");
+                ui->lyricsText->setWhatsThis(lyricsFile);
                 QApplication::processEvents();
 
                 QString lyricsPath = "/home/user/.lyrics/";
-                QString lyricsFile = cleanItem(artist) + "-" + cleanItem(title) + ".txt";
-                QDir d;
-                d.mkdir(lyricsPath);
-                lyricsPath.append(lyricsFile);
-                if ( QFileInfo(lyricsPath).exists() )
-                {
-                    QString lines;
-                    QFile data(lyricsPath);
-                    if ( data.open(QFile::ReadOnly) )
-                    {
-                        QTextStream out(&data);
-                        while ( !out.atEnd() )
-                            lines += out.readLine()+"\n";
-                    }
-                    data.close();
-                    ui->lyricsText->setText(lines);
-                    ui->lyricsText->setWhatsThis(lyricsFile);
-                    QApplication::processEvents();
-                }
-                else
-                {
+                QDir d; d.mkdir(lyricsPath);
+
+                if (QFileInfo(lyricsPath + lyricsFile).exists())
+                    reloadLyricsFromFile();
+                else {
                     QNetworkConfigurationManager mgr;
                     QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
-                    if ( activeConfigs.count() > 0 )
-                    {
-                        ui->lyricsText->setText(tr("Fetching lyrics..."));
-                        ui->lyricsText->setWhatsThis("");
-                        QApplication::processEvents();
 
-                        data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + lyricsFile.replace("-", "/") ) ) );
-
-                        /*QString salida = "http://www.leoslyrics.com/";
-                        salida += artist.toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") + "/";
-                        salida += title.toLower().replace(" ","aeiou").remove(QRegExp("\\W")).replace("aeiou","-") + "-lyrics/" ;
-                        data->get(QNetworkRequest(QUrl(salida)));*/
-                        //qDebug() << salida;
-
-                    } else
-                    {
+                    if (activeConfigs.count() > 0)
+                        reloadLyrics();
+                    else
                         ui->lyricsText->setText(tr("There is no active Internet connection"));
-                    }
                 }
             }
-
-            ui->songTitleLabel->setWhatsThis(title);
-            title = fm.elidedText(title, Qt::ElideRight, 420);
-            ui->songTitleLabel->setText(title);
-
-            ui->artistLabel->setWhatsThis(artist);
-            artist = fm.elidedText(artist, Qt::ElideRight, 420);
-            ui->artistLabel->setText(artist);
-
-            ui->albumNameLabel->setWhatsThis(album);
-            album = fm.elidedText(album, Qt::ElideRight, 420);
-            ui->albumNameLabel->setText(album);
-
-            ui->trackLengthLabel->setText(time_mmss(duration));
-            ui->songProgress->setRange(0, duration);
-
-            newSong = false;
-
         }
 
         this->updateEntertainmentViewMetadata();
@@ -765,6 +747,65 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 }
 
 #endif
+
+void NowPlayingWindow::reloadLyricsFromFile()
+{
+    if ( !ui->lyricsText->whatsThis().isEmpty() )
+    {
+        QString lines;
+        QString file = "/home/user/.lyrics/" + ui->lyricsText->whatsThis();
+        QFile data(file);
+        if (data.open(QFile::ReadOnly))
+        {
+            QTextStream out(&data);
+            while ( !out.atEnd() )
+                lines += out.readLine()+"\n";
+        }
+        data.close();
+        QApplication::processEvents();
+        ui->lyricsText->setText(lines);
+    }
+}
+
+void NowPlayingWindow::reloadLyrics()
+{
+    if ( !ui->lyricsText->whatsThis().isEmpty() )
+    {
+        data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + ui->lyricsText->whatsThis().replace("-", "/") ) ) );
+        ui->lyricsText->setText(tr("Fetching lyrics..."));
+    }
+}
+
+void NowPlayingWindow::onLyricsDownloaded(QNetworkReply *reply)
+{
+    QString lyricsFile = reply->url().toString();
+    lyricsFile.remove("http://lyrics.mirkforce.net/").replace("/", "-");
+
+    if ( lyricsFile != ui->lyricsText->whatsThis() )
+        return;
+
+    if (reply->error() != QNetworkReply::NoError) {
+        ui->lyricsText->setText(tr("Lyrics not found"));
+    } else {
+        QString lyrics = QString::fromUtf8(reply->readAll());
+        ui->lyricsText->setText(lyrics);
+
+        QFile file("/home/user/.lyrics/" + lyricsFile);
+        file.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite );
+        QTextStream out(&file);
+        out << lyrics;
+        file.close();
+    }
+}
+
+void NowPlayingWindow::editLyrics()
+{
+    EditLyrics* el = new EditLyrics(this, ui->lyricsText->whatsThis(),
+                                    ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis() );
+    el->show();
+    connect(el, SIGNAL(destroyed()), this, SLOT(onChildDestroyed()));
+    this->releaseKeyboard();
+}
 
 void NowPlayingWindow::orientationChanged()
 {
@@ -784,7 +825,7 @@ void NowPlayingWindow::orientationChanged()
         ui->space2->show();
         ui->buttonsLayout->setSpacing(60);
 
-        ui->songTitleLabel->setAlignment(Qt::AlignLeft);
+        ui->titleLabel->setAlignment(Qt::AlignLeft);
         ui->artistLabel->setAlignment(Qt::AlignLeft);
         ui->albumNameLabel->setAlignment(Qt::AlignLeft);
         ui->lyricsText->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
@@ -807,7 +848,7 @@ void NowPlayingWindow::orientationChanged()
         ui->volumeWidget->setContentsMargins(18,0,9,9);
         ui->buttonsLayout->setSpacing(27);
 
-        ui->songTitleLabel->setAlignment(Qt::AlignHCenter);
+        ui->titleLabel->setAlignment(Qt::AlignHCenter);
         ui->artistLabel->setAlignment(Qt::AlignHCenter);
         ui->albumNameLabel->setAlignment(Qt::AlignHCenter);
         ui->lyricsText->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
@@ -1025,11 +1066,9 @@ void NowPlayingWindow::setPosition(int newPosition)
     mafwrenderer->getPosition();
 }
 
-#ifdef MAFW
 void NowPlayingWindow::showEvent(QShowEvent *)
 {
     this->grabKeyboard();
-    mafwrenderer->getCurrentMetadata();
     mafwrenderer->getStatus();
     this->updatePlaylistState();
     if (positionTimer->isActive())
@@ -1044,15 +1083,11 @@ void NowPlayingWindow::onGconfValueChanged()
 
 void NowPlayingWindow::onMediaChanged(int index, char*)
 {
-    newSong = true;
     lastPlayingSong->set(index);
     this->isDefaultArt = true;
     focusItemByRow(index);
     mafwrenderer->getCurrentMetadata();
 }
-
-#endif
-
 #endif
 
 void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
@@ -1111,20 +1146,16 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ARTIST);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
         artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ALBUM);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
@@ -1153,12 +1184,12 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     this->setSongNumber(ui->songPlaylist->currentRow()+1, ui->songPlaylist->count());
     lastPlayingSong->set(ui->songPlaylist->currentRow());
 
-    QFont f = ui->songTitleLabel->font();
+    QFont f = ui->titleLabel->font();
     QFontMetrics fm(f);
 
-    ui->songTitleLabel->setWhatsThis(item->data(UserRoleSongTitle).toString());
+    ui->titleLabel->setWhatsThis(item->data(UserRoleSongTitle).toString());
     QString elided = fm.elidedText(item->data(UserRoleSongTitle).toString(), Qt::ElideRight, 420);
-    ui->songTitleLabel->setText(elided);
+    ui->titleLabel->setText(elided);
 
     ui->artistLabel->setWhatsThis(item->data(UserRoleSongArtist).toString());
     elided = fm.elidedText(item->data(UserRoleSongArtist).toString(), Qt::ElideRight, 420);
@@ -1339,7 +1370,7 @@ void NowPlayingWindow::showCarView()
 void NowPlayingWindow::updateEntertainmentViewMetadata()
 {
     if (entertainmentView) {
-        entertainmentView->setMetadata(ui->songTitleLabel->text(),
+        entertainmentView->setMetadata(ui->titleLabel->text(),
                                        ui->albumNameLabel->text(),
                                        ui->artistLabel->text(),
                                        this->albumArtUri,
@@ -1351,7 +1382,7 @@ void NowPlayingWindow::updateEntertainmentViewMetadata()
 void NowPlayingWindow::updateCarViewMetadata()
 {
     if (carView) {
-        carView->setMetadata(ui->songTitleLabel->text(),
+        carView->setMetadata(ui->titleLabel->text(),
                                        ui->albumNameLabel->text(),
                                        ui->artistLabel->text(),
                                        this->albumArtUri,
@@ -1402,7 +1433,7 @@ void NowPlayingWindow::savePlaylist()
     layout->addWidget(buttonBox);
 
     savePlaylistDialog->show();
-    connect(savePlaylistDialog, SIGNAL(destroyed()), this, SLOT(onDialogDestroyed()));
+    connect(savePlaylistDialog, SIGNAL(destroyed()), this, SLOT(onChildDestroyed()));
     this->releaseKeyboard();
 }
 
@@ -1448,7 +1479,7 @@ void NowPlayingWindow::onSavePlaylistAccepted()
 #endif
 }
 
-void NowPlayingWindow::onDialogDestroyed()
+void NowPlayingWindow::onChildDestroyed()
 {
     this->grabKeyboard();
 }
@@ -1599,50 +1630,6 @@ void NowPlayingWindow::on_lyricsText_customContextMenuRequested(QPoint pos)
     contextMenu->addAction(tr("Reload lyrics"), this, SLOT(reloadLyrics()));
     contextMenu->exec(mapToGlobal(pos));
 
-}
-
-void NowPlayingWindow::editLyrics()
-{
-    if ( ui->lyricsText->whatsThis() == "" )
-    {
-        QString str = cleanItem(ui->artistLabel->whatsThis()) + "-" +
-                      cleanItem(ui->songTitleLabel->whatsThis()) + ".txt";
-        ui->lyricsText->setWhatsThis(str);
-    }
-
-    if ( ui->lyricsText->whatsThis() != "" )
-    {
-        EditLyrics* el = new EditLyrics(this, ui->lyricsText->whatsThis(),
-                                        ui->artistLabel->whatsThis(), ui->songTitleLabel->whatsThis() );
-        el->show();
-    }
-
-}
-
-void NowPlayingWindow::reloadLyricsFromFile()
-{
-    QString lines = "";
-    QString file = "/home/user/.lyrics/" + ui->lyricsText->whatsThis();
-    QFile data(file);
-    if (data.open(QFile::ReadOnly))
-    {
-        QTextStream out(&data);
-        while ( !out.atEnd() )
-            lines += out.readLine()+"\n";
-    }
-    data.close();
-    QApplication::processEvents();
-    ui->lyricsText->setText(lines);
-}
-
-void NowPlayingWindow::reloadLyrics()
-{
-    if ( ui->lyricsText->whatsThis() != "" )
-    {
-        data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + ui->lyricsText->whatsThis().replace("-", "/") ) ) );
-        ui->lyricsText->setText(tr("Fetching lyrics..."));
-        ui->lyricsText->setWhatsThis("");
-    }
 }
 
 QString NowPlayingWindow::cleanItem(QString data)

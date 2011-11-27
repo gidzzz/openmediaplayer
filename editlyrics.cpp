@@ -31,6 +31,7 @@ EditLyrics::EditLyrics(QWidget *parent, QString lyricsFile, QString artist, QStr
         ui->content->setPlainText(lines);
     }
 
+    ui->content->setFocus();
 }
 
 EditLyrics::~EditLyrics()
