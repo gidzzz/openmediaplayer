@@ -410,7 +410,6 @@ void NowPlayingWindow::connectSignals()
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(onMetadataChanged(QString, QVariant)));
-    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int, char*)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
@@ -544,6 +543,8 @@ void NowPlayingWindow::onItemMoved(guint from, guint to)
 #ifdef MAFW
 void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString object_id, QString error)
 {
+    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int, char*)), Qt::UniqueConnection);
+
     if (metadataSource)
         metadataSource->deleteLater(); // hmmm... instant delete causes segfaults
 
@@ -556,8 +557,13 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     QString album;
     GValue *v;
 
-    const char **keys = new const char *[5];
-    char currentKey = 0;
+    const char **keys = new const char *[9];
+    keys[0] = MAFW_METADATA_KEY_URI;
+    keys[1] = MAFW_METADATA_KEY_MIME;
+    keys[2] = MAFW_METADATA_KEY_ALBUM_ART_URI;
+    keys[3] = MAFW_METADATA_KEY_RENDERER_ART_URI;
+    //keys[4] = MAFW_METADATA_KEY_LYRICS;
+    char currentKey = 4;
 
     QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
 
@@ -618,12 +624,6 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
 
     ui->trackLengthLabel->setText(time_mmss(songDuration));
     ui->songProgress->setRange(0, songDuration);
-
-    metadataSource->getMetadata(object_id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI,
-                                                                     MAFW_METADATA_KEY_MIME,
-                                                                     MAFW_METADATA_KEY_ALBUM_ART_URI,
-                                                                     MAFW_METADATA_KEY_RENDERER_ART_URI,
-                                                                     /*MAFW_METADATA_KEY_LYRICS*/));
 
     if (!error.isEmpty())
         qDebug() << error;
