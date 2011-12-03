@@ -64,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent) :
     TAGSOURCE_PLAYLISTS_PATH = "localtagfs::music/playlists";
     TAGSOURCE_VIDEO_PATH = "localtagfs::videos";
     RADIOSOURCE_PATH = "iradiosource::";
+
     mafwFactory = new MafwAdapterFactory(this);
     mafwrenderer = mafwFactory->getRenderer();
     mafwTrackerSource = mafwFactory->getTrackerSource();
@@ -700,7 +701,7 @@ void MainWindow::onShuffleAllClicked()
             this, SLOT(browseSongs(uint, int, uint, QString, GHashTable*, QString)));
 
     this->browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL, 0,
-                                                             0, MAFW_SOURCE_BROWSE_ALL);
+                                                          0, MAFW_SOURCE_BROWSE_ALL);
 #endif
 }
 

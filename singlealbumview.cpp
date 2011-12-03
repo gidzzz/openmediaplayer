@@ -147,9 +147,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
             }
         }
 
-        // Although we don't need this to show the song title, we need it to
-        // sort alphabatically.
-        item->setText(title);
         ui->songList->addItem(item);
     }
 

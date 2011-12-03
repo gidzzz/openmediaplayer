@@ -26,11 +26,15 @@ class SinglePlaylistView : public QMainWindow
 public:
     explicit SinglePlaylistView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SinglePlaylistView();
+    bool eventFilter(QObject *, QEvent *e);
 #ifdef MAFW
     void browsePlaylist(MafwPlaylist *mafwplaylist);
     void browseObjectId(QString objectId);
     void browseAutomaticPlaylist(QString filter, QString sorting, int maxCount);
 #endif
+
+signals:
+    void itemDropped(QListWidgetItem *item, int from);
 
 protected:
     void keyReleaseEvent(QKeyEvent *e);
@@ -40,6 +44,8 @@ protected:
 
 private:
     Ui::SinglePlaylistView *ui;
+    QTimer *clickTimer;
+    QListWidgetItem *clickedItem;
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleButton;
     void notifyOnAddedToNowPlaying(int songCount);
@@ -71,15 +77,15 @@ private slots:
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void onShuffleButtonClicked();
-    void onBrowserContextMenuRequested(const QPoint &point);
-    void onEditorContextMenuRequested(const QPoint &point);
+    void onContextMenuRequested(const QPoint &point);
     void onAddToNowPlaying();
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();
     void onDeleteFromPlaylist();
-    void enterEditMode();
-    void leaveEditMode();
+    void forgetClick();
+    void onItemDoubleClicked();
+    void onItemDropped(QListWidgetItem *item, int from);
     void saveCurrentPlaylist();
     void onNowPlayingWindowHidden();
 };

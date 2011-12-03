@@ -54,6 +54,19 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    ui->songList->viewport()->installEventFilter(this);
+
+    ui->songList->setDragDropMode(QAbstractItemView::InternalMove);
+    ui->songList->viewport()->setAcceptDrops(true);
+    ui->songList->setAutoScrollMargin(70);
+    QApplication::setStartDragDistance(20);
+    ui->songList->setDragEnabled(false);
+
+    clickedItem = NULL;
+    clickTimer = new QTimer(this);
+    clickTimer->setInterval(QApplication::doubleClickInterval());
+    clickTimer->setSingleShot(true);
+
     shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     ui->verticalLayout->removeWidget(ui->songList);
     ui->verticalLayout->removeWidget(ui->searchWidget);
@@ -61,18 +74,18 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     ui->verticalLayout->addWidget(ui->songList);
     ui->verticalLayout->addWidget(ui->searchWidget);
 
-    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onBrowserContextMenuRequested(QPoint)));
+    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
 
-    connect(ui->actionEdit_playlist, SIGNAL(triggered()), this, SLOT(enterEditMode()));
-    connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(leaveEditMode()));
-    ui->menuOptions->removeAction(ui->actionSave_playlist);
+    connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
+    connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
+    connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
+    connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(saveCurrentPlaylist()));
 
     this->orientationChanged();
 }
@@ -175,7 +188,7 @@ void SinglePlaylistView::browseObjectId(QString objectId)
 void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting, int maxCount)
 {
     ui->menuOptions->removeAction(ui->actionDelete_playlist);
-    ui->menuOptions->removeAction(ui->actionEdit_playlist);
+    ui->menuOptions->removeAction(ui->actionSave_playlist);
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
     this->browsePlaylistId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
@@ -318,8 +331,10 @@ void SinglePlaylistView::notifyOnAddedToNowPlaying(int songCount)
 
 void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
+    if (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
         return;
+    else if (e->key() == Qt::Key_Enter)
+        onItemSelected(ui->songList->currentItem());
     else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
         ui->songList->setFocus();
     else {
@@ -400,22 +415,15 @@ void SinglePlaylistView::onShuffleButtonClicked()
 
 }
 
-void SinglePlaylistView::onBrowserContextMenuRequested(const QPoint &point)
+void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
 {
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
-    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
-    contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-    contextMenu->exec(point);
-}
-
-void SinglePlaylistView::onEditorContextMenuRequested(const QPoint &point)
-{
-    QMenu *contextMenu = new QMenu(this);
-    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
+    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     contextMenu->exec(point);
 }
 
@@ -533,35 +541,45 @@ void SinglePlaylistView::setSongCount(int count)
 #endif
 }
 
-void SinglePlaylistView::enterEditMode()
+void SinglePlaylistView::forgetClick()
 {
-    qDebug() << "entering playlist edit mode";
-
-    ui->menuOptions->removeAction(ui->actionEdit_playlist);
-    ui->menuOptions->insertAction(ui->actionDelete_playlist, ui->actionSave_playlist);
-
-    disconnect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onBrowserContextMenuRequested(QPoint)));
-    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onEditorContextMenuRequested(QPoint)));
-
-    ui->songList->viewport()->setAcceptDrops(true);
-    ui->songList->setDragEnabled(true);
-    ui->songList->setDragDropMode(QAbstractItemView::InternalMove);
-    ui->songList->setAutoScrollMargin(120);
+    if (clickedItem) onItemSelected(clickedItem);
+    ui->songList->setDragEnabled(false);
+    clickedItem = NULL;
 }
 
-void SinglePlaylistView::leaveEditMode()
+bool SinglePlaylistView::eventFilter(QObject *, QEvent *e)
 {
-    qDebug() << "leaving playlist edit mode";
+    if (e->type() == QEvent::Drop) {
+        static_cast<QDropEvent*>(e)->setDropAction(Qt::MoveAction);
+        emit itemDropped(ui->songList->currentItem(), ui->songList->currentRow());
+    }
 
-    ui->menuOptions->removeAction(ui->actionSave_playlist);
-    ui->menuOptions->insertAction(ui->actionDelete_playlist, ui->actionEdit_playlist);
+    else if (e->type() == QEvent::MouseButtonPress) {
+        clickedItem = ui->songList->itemAt(0, static_cast<QMouseEvent*>(e)->y());
+    }
 
-    disconnect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onEditorContextMenuRequested(QPoint)));
-    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onBrowserContextMenuRequested(QPoint)));
+    else if (e->type() == QEvent::MouseButtonRelease) {
+        if (clickedItem != ui->songList->currentItem())
+            clickedItem = NULL;
+        clickTimer->start();
+    }
 
-    ui->songList->setDragEnabled(false);
+    return false;
+}
 
-    this->saveCurrentPlaylist();
+void SinglePlaylistView::onItemDoubleClicked()
+{
+    ui->songList->setDragEnabled(true);
+    clickedItem = NULL;
+    clickTimer->start();
+}
+
+void SinglePlaylistView::onItemDropped(QListWidgetItem *item, int from)
+{
+#ifdef MAFW
+    playlist->moveItem(from, ui->songList->row(item));
+#endif
 }
 
 void SinglePlaylistView::saveCurrentPlaylist()
