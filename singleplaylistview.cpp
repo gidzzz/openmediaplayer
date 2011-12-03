@@ -49,6 +49,8 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 #else
     shuffleButton = new QPushButton(shuffleText, this);
 #endif
+    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
+
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
 
@@ -66,13 +68,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     clickTimer = new QTimer(this);
     clickTimer->setInterval(QApplication::doubleClickInterval());
     clickTimer->setSingleShot(true);
-
-    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
-    ui->verticalLayout->removeWidget(ui->songList);
-    ui->verticalLayout->removeWidget(ui->searchWidget);
-    ui->verticalLayout->addWidget(shuffleButton);
-    ui->verticalLayout->addWidget(ui->songList);
-    ui->verticalLayout->addWidget(ui->searchWidget);
 
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -100,6 +95,9 @@ void SinglePlaylistView::browsePlaylist(MafwPlaylist *mafwplaylist)
     qDebug() << "connecting SinglePlaylistView to onGetItems";
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
             this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
+
+    ui->songList->addItem(new QListWidgetItem);
+    ui->songList->setItemWidget(ui->songList->item(0), shuffleButton);
     this->numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
     browsePlaylistOp = playlist->getItemsOf(mafwplaylist);
 }
@@ -121,20 +119,16 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ARTIST);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
         artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ALBUM);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         item->setText(title);
@@ -150,17 +144,13 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         item->setData(UserRoleSongDuration, Duration::Unknown);
     }
 
-
-    unsigned theIndex = 0;
     int position;
-    for (position = 0; position < ui->songList->count(); position++) {
-        theIndex = ui->songList->item(position)->data(UserRoleSongIndex).toInt();
-        if (theIndex > index)
+    for (position = 1; position < ui->songList->count(); position++)
+        if (ui->songList->item(position)->data(UserRoleSongIndex).toInt() > index)
             break;
-    }
     ui->songList->insertItem(position, item);
 
-    this->setSongCount(ui->songList->count());
+    this->setSongCount(ui->songList->count()-1);
 
     if (numberOfSongsToAdd == 0) {
         qDebug() << "disconnecting SinglePlaylistView from onGetItems";
@@ -213,17 +203,13 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
         int duration;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ARTIST);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
         artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_ALBUM);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_DURATION);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         item->setText(title);
@@ -239,7 +225,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
     ui->songList->addItem(item);
 
-    this->setSongCount(ui->songList->count());
+    this->setSongCount(ui->songList->count()-1);
 
     if (remainingCount == 0) {
         browsePlaylistId = NULL;
@@ -251,6 +237,11 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
 void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 {
+    if (ui->songList->currentRow() == 0) {
+        onShuffleButtonClicked();
+        return;
+    }
+
     this->setEnabled(false);
 
     QString playlistName = playlist->playlistName();
@@ -260,10 +251,10 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
     playlist->clear();
 
     int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount+1];
+    gchar** songAddBuffer = new gchar*[songCount--];
 
     for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
     songAddBuffer[songCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
@@ -274,7 +265,7 @@ void SinglePlaylistView::onItemSelected(QListWidgetItem *)
 
 #ifdef MAFW
     playlist->getSize(); // explained in musicwindow.cpp
-    mafwrenderer->gotoIndex(ui->songList->currentRow());
+    mafwrenderer->gotoIndex(ui->songList->currentRow()-1);
     mafwrenderer->play();
     mafwrenderer->resume();
 #endif
@@ -304,10 +295,10 @@ void SinglePlaylistView::addAllToNowPlaying()
         playlist->assignAudioPlaylist();
 
     int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount+1];
+    gchar** songAddBuffer = new gchar*[songCount--];
 
     for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
     songAddBuffer[songCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
@@ -317,7 +308,7 @@ void SinglePlaylistView::addAllToNowPlaying()
     delete[] songAddBuffer;
 
 #ifdef Q_WS_MAEMO_5
-    this->notifyOnAddedToNowPlaying(ui->songList->count());
+    this->notifyOnAddedToNowPlaying(songCount);
 #endif
 #endif
 }
@@ -360,7 +351,7 @@ void SinglePlaylistView::onSearchHideButtonClicked()
 
 void SinglePlaylistView::onSearchTextChanged(QString text)
 {
-    for (int i=0; i < ui->songList->count(); i++) {
+    for (int i = 1; i < ui->songList->count(); i++) {
         if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
             ui->songList->item(i)->data(UserRoleSongArtist).toString().toLower().indexOf(text.toLower()) != -1 ||
             ui->songList->item(i)->data(UserRoleSongAlbum).toString().toLower().indexOf(text.toLower()) != -1)
@@ -389,10 +380,10 @@ void SinglePlaylistView::onShuffleButtonClicked()
     playlist->setShuffled(true);
 
     int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount+1];
+    gchar** songAddBuffer = new gchar*[songCount--];
 
     for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
     songAddBuffer[songCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
@@ -577,8 +568,10 @@ void SinglePlaylistView::onItemDoubleClicked()
 
 void SinglePlaylistView::onItemDropped(QListWidgetItem *item, int from)
 {
+    int to = ui->songList->row(item);
+    if (to == 0) ui->songList->insertItem(++to, ui->songList->takeItem(0));
 #ifdef MAFW
-    playlist->moveItem(from, ui->songList->row(item));
+    playlist->moveItem(from-1, to-1);
 #endif
 }
 
@@ -591,7 +584,7 @@ void SinglePlaylistView::saveCurrentPlaylist()
     MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(playlist->mafw_playlist_manager->createPlaylist(playlistName));
     playlist->clear(targetPlaylist);
 
-    for (int i = 0; i < songCount; i++)
+    for (int i = 1; i < songCount; i++)
         playlist->appendItem(targetPlaylist, ui->songList->item(i)->data(UserRoleObjectID).toString());
 #endif
 }
@@ -599,7 +592,7 @@ void SinglePlaylistView::saveCurrentPlaylist()
 void SinglePlaylistView::onDeleteFromPlaylist()
 {
     delete ui->songList->takeItem(ui->songList->currentRow());
-    this->setSongCount(ui->songList->count());
+    this->setSongCount(ui->songList->count()-1);
 }
 
 void SinglePlaylistView::onNowPlayingWindowHidden()
