@@ -104,6 +104,7 @@ private:
     QLineEdit *playlistNameLineEdit;
     bool playlistRequested;
     bool isDefaultArt;
+    bool isMediaSeekable;
     bool buttonWasDown;
     bool enableLyrics;
     bool lazySliders;
@@ -147,7 +148,7 @@ private slots:
 #ifdef MAFW
     void onItemMoved(guint from, guint to);
     void onPropertyChanged(const QDBusMessage &msg);
-    void stateChanged(int state);
+    void onStateChanged(int state);
     void onPositionChanged(int, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onRendererMetadataRequested(GHashTable*, QString object_id, QString);
@@ -159,6 +160,7 @@ private slots:
     void onPlaylistChanged();
     void onGconfValueChanged();
     void onMediaChanged(int index, char*);
+    void onMediaIsSeekable(bool seekable);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
     void updatePlaylist(guint from = 0, guint nremove = 0, guint nreplace = 0);
