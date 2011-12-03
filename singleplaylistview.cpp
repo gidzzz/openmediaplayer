@@ -50,6 +50,8 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     shuffleButton = new QPushButton(shuffleText, this);
 #endif
     shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
+    ui->songList->addItem(new QListWidgetItem);
+    ui->songList->setItemWidget(ui->songList->item(0), shuffleButton);
 
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
@@ -96,8 +98,6 @@ void SinglePlaylistView::browsePlaylist(MafwPlaylist *mafwplaylist)
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
             this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
 
-    ui->songList->addItem(new QListWidgetItem);
-    ui->songList->setItemWidget(ui->songList->item(0), shuffleButton);
     this->numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
     browsePlaylistOp = playlist->getItemsOf(mafwplaylist);
 }

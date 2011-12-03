@@ -36,7 +36,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
 #ifdef MAFW
-    mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
+    mafwPlaylistManager = new MafwPlaylistManagerAdapter(this);
 #endif
     ui->centralwidget->setLayout(ui->songsLayout);
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
@@ -142,7 +142,7 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
         SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
         playlistView->setWindowTitle(item->text());
         if (item->data(UserRoleObjectID).isNull()) // saved playlist case
-            playlistView->browsePlaylist(MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist(item->text())));
+            playlistView->browsePlaylist(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(item->text())));
         else // imported playlist case
             playlistView->browseObjectId(item->data(UserRoleObjectID).toString());
 
@@ -223,7 +223,7 @@ void MusicWindow::onDeletePlaylistClicked()
         confirmDelete.button(QMessageBox::No)->setText(tr("No"));
         confirmDelete.exec();
         if (confirmDelete.result() == QMessageBox::Yes) {
-            mafw_playlist_manager->deletePlaylist(ui->playlistList->currentItem()->text());
+            mafwPlaylistManager->deletePlaylist(ui->playlistList->currentItem()->text());
             delete ui->playlistList->currentItem();
         }
     }
@@ -678,11 +678,7 @@ void MusicWindow::listGenres()
 
 void MusicWindow::listPlaylists()
 {
-    for (int x = 0; x < ui->playlistList->count(); x++) {
-        ui->playlistList->removeItemWidget(ui->playlistList->item(x));
-        delete ui->playlistList->item(x);
-        ui->playlistList->clear();
-    }
+    ui->playlistList->clear();
 
     recentlyAddedCount = 0;
     recentlyPlayedCount = 0;
@@ -691,7 +687,7 @@ void MusicWindow::listPlaylists()
 
     this->listAutoPlaylists();
 
-    GArray* playlists = mafw_playlist_manager->listPlaylists();
+    GArray* playlists = mafwPlaylistManager->listPlaylists();
     QString playlistName;
 
     if (playlists->len != 0) {
@@ -706,7 +702,7 @@ void MusicWindow::listPlaylists()
         MafwPlaylistManagerItem* item = &g_array_index(playlists, MafwPlaylistManagerItem, i);
 
         playlistName = QString::fromUtf8(item->name);
-        int playlistCount = playlist->getSizeOf(MAFW_PLAYLIST (mafw_playlist_manager->getPlaylist(item->id)));
+        int playlistCount = playlist->getSizeOf(MAFW_PLAYLIST (mafwPlaylistManager->getPlaylist(item->id)));
 
         if (playlistName != "FmpAudioPlaylist" && playlistName != "FmpVideoPlaylist" && playlistName != "FmpRadioPlaylist"
             && playlistCount != 0) {
@@ -1126,7 +1122,7 @@ void MusicWindow::onAddToNowPlaying()
                                                                      MAFW_SOURCE_NO_KEYS, 0, limit);
         }
         else if (item->data(UserRoleObjectID).isNull()) { // saved playlist case
-            MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist(item->text()));
+            MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(item->text()));
             songAddBufferSize = numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
 
             if (numberOfSongsToAdd > 0) {
