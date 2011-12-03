@@ -342,30 +342,30 @@ void NowPlayingWindow::stateChanged(int state)
 {
     this->mafwState = state;
 
-    if(state == Paused) {
+    if (state == Paused) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
         mafwrenderer->getPosition();
-        if(positionTimer->isActive())
+        if (positionTimer->isActive())
             positionTimer->stop();
     }
-    else if(state == Playing) {
+    else if (state == Playing) {
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
         mafwrenderer->getPosition();
-        if(!positionTimer->isActive())
+        if (!positionTimer->isActive())
             positionTimer->start();
     }
-    else if(state == Stopped) {
+    else if (state == Stopped) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
-        if(positionTimer->isActive())
+        if (positionTimer->isActive())
             positionTimer->stop();
     }
-    else if(state == Transitioning) {
+    else if (state == Transitioning) {
         ui->songProgress->setEnabled(false);
         ui->songProgress->setValue(0);
         ui->songProgress->setRange(0, 99);

@@ -46,8 +46,7 @@ class MafwRendererAdapter : public QObject
   void next();
   void previous();
   void gotoIndex(uint index);
-  void setPosition(MafwRendererSeekMode mode,
-           int seconds);
+  void setPosition(MafwRendererSeekMode mode, int seconds);
   void getPosition();
   void getCurrentMetadata();
   void setVolume(int volume);

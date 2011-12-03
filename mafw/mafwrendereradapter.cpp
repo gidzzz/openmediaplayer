@@ -172,7 +172,7 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer*,
             case G_TYPE_STRING:
             {
                 const gchar* str_value = g_value_get_string(v);
-                QVariant data = QVariant(str_value);
+                QVariant data = QVariant(QString::fromUtf8(str_value));
 #ifdef DEBUG
                 qDebug() << "string: " << data.toString();
 #endif
