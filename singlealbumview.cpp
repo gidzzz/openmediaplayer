@@ -29,8 +29,10 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
 #endif
 {
     ui->setupUi(this);
-    QString shuffleText(tr("Shuffle songs"));
     ui->centralwidget->setLayout(ui->verticalLayout);
+    setupShuffleButton();
+
+    setAttribute(Qt::WA_DeleteOnClose);
 
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
@@ -39,28 +41,17 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    shuffleAllButton = new QMaemo5ValueButton(shuffleText, this);
-    shuffleAllButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
-#else
-    shuffleAllButton = new QPushButton(shuffleText, this);
 #endif
+
     SingleAlbumViewDelegate *delegate = new SingleAlbumViewDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
 
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    shuffleAllButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
-    ui->verticalLayout->removeWidget(ui->songList);
-    ui->verticalLayout->removeWidget(ui->searchWidget);
-    ui->verticalLayout->addWidget(shuffleAllButton);
-    ui->verticalLayout->addWidget(ui->songList);
-    ui->verticalLayout->addWidget(ui->searchWidget);
-
-    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
@@ -79,6 +70,30 @@ SingleAlbumView::~SingleAlbumView()
     delete ui;
 }
 
+void SingleAlbumView::setupShuffleButton()
+{
+#ifdef Q_WS_MAEMO_5
+    shuffleButton = new QMaemo5ValueButton();
+    shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
+#else
+    shuffleButton = new QPushButton();
+#endif
+    connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
+
+    shuffleButton->setText(tr("Shuffle songs"));
+    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
+
+    ui->songList->insertItem(0, new QListWidgetItem);
+    ui->songList->setItemWidget(ui->songList->item(0), shuffleButton);
+}
+
+void SingleAlbumView::updateSongCount()
+{
+#ifdef Q_WS_MAEMO_5
+    shuffleButton->setValueText(tr("%n song(s)", "", ui->songList->count()-1));
+#endif
+}
+
 #ifdef MAFW
 void SingleAlbumView::listSongs()
 {
@@ -87,6 +102,7 @@ void SingleAlbumView::listSongs()
 #endif
 
     ui->songList->clear();
+    setupShuffleButton();
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
@@ -151,14 +167,13 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     }
 
 #ifdef Q_WS_MAEMO_5
-    shuffleAllButton->setValueText(tr("%n song(s)", "", ui->songList->count()));
+    updateSongCount();
 
     if (remainingCount == 0)
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
 }
 
-#ifdef MAFW
 void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 {
     this->albumObjectId = objectId;
@@ -167,18 +182,20 @@ void SingleAlbumView::browseAlbumByObjectId(QString objectId)
     else
         connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
 }
-#endif
 
-void SingleAlbumView::onItemSelected(QListWidgetItem *item)
+void SingleAlbumView::onItemActivated(QListWidgetItem *item)
 {
-#ifdef MAFW
+    if (ui->songList->row(item) == 0) {
+        onShuffleButtonClicked();
+        return;
+    }
+
     playlist->assignAudioPlaylist();
-#endif
 
     this->createPlaylist(false);
 
     playlist->getSize(); // explained in musicwindow.cpp
-    mafwrenderer->gotoIndex(ui->songList->row(item));
+    mafwrenderer->gotoIndex(ui->songList->row(item)-1);
     mafwrenderer->play();
 }
 
@@ -208,47 +225,35 @@ void SingleAlbumView::onShuffleButtonClicked()
 void SingleAlbumView::createPlaylist(bool shuffle)
 {
 #ifdef MAFW
-    if (ui->songList->count() > 0) {
-        this->setEnabled(false);
+    this->setEnabled(false);
 
-#ifdef DEBUG
-        qDebug() << "Clearing playlist";
-#endif
-        playlist->clear();
-        playlist->setShuffled(shuffle);
-#ifdef DEBUG
-        qDebug() << "Playlist cleared";
-#endif
+    playlist->clear();
+    playlist->setShuffled(shuffle);
 
-        int songCount = ui->songList->count();
-        gchar** songAddBuffer = new gchar*[songCount+1];
+    int songCount = ui->songList->count();
+    gchar** songAddBuffer = new gchar*[songCount--];
 
-        for (int i = 0; i < songCount; i++)
-            songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
-        songAddBuffer[songCount] = NULL;
+    for (int i = 0; i < songCount; i++)
+        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[songCount] = NULL;
 
-        playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**)songAddBuffer);
 
-        for (int i = 0; i < songCount; i++)
-            delete[] songAddBuffer[i];
-        delete[] songAddBuffer;
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
 
-        if (shuffle) {
-            playlist->getSize(); // explained in musicwindow.cpp
-            mafwrenderer->play();
-        }
-
-#ifdef DEBUG
-        qDebug() << "Playlist created";
-#endif
-
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-
-        window->show();
-
-        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-        ui->indicator->inhibit();
+    if (shuffle) {
+        playlist->getSize(); // explained in musicwindow.cpp
+        mafwrenderer->play();
     }
+
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+
+    window->show();
+
+    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->inhibit();
 #endif
 }
 
@@ -263,7 +268,7 @@ void SingleAlbumView::onSearchHideButtonClicked()
 
 void SingleAlbumView::onSearchTextChanged(QString text)
 {
-    for (int i = 0; i < ui->songList->count(); i++) {
+    for (int i = 1; i < ui->songList->count(); i++) {
         if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
             ui->songList->item(i)->setHidden(true);
         else
@@ -296,30 +301,28 @@ void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
 
 void SingleAlbumView::addAllToNowPlaying()
 {
-    if (ui->songList->count() > 0) {
 #ifdef MAFW
-        if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
-            playlist->assignAudioPlaylist();
+    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+        playlist->assignAudioPlaylist();
 
-        int songCount = ui->songList->count();
-        gchar** songAddBuffer = new gchar*[songCount+1];
+    int songCount = ui->songList->count();
+    gchar** songAddBuffer = new gchar*[songCount--];
 
-        for (int i = 0; i < songCount; i++)
-            songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
-        songAddBuffer[songCount] = NULL;
+    for (int i = 0; i < songCount; i++)
+        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[songCount] = NULL;
 
-        playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**)songAddBuffer);
 
-        for (int i = 0; i < songCount; i++)
-            delete[] songAddBuffer[i];
-        delete[] songAddBuffer;
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
 
 #ifdef Q_WS_MAEMO_5
-        this->notifyOnAddedToNowPlaying(songCount);
+    this->notifyOnAddedToNowPlaying(songCount);
 #endif
 
 #endif
-    }
 }
 
 void SingleAlbumView::onContextMenuRequested(const QPoint &point)
@@ -342,7 +345,7 @@ void SingleAlbumView::onAddToNowPlaying()
     playlist->appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());
 
 #ifdef Q_WS_MAEMO_5
-    this->notifyOnAddedToNowPlaying(ui->songList->selectedItems().count());
+    this->notifyOnAddedToNowPlaying(1);
 #endif
 
 #endif
@@ -441,6 +444,7 @@ void SingleAlbumView::onDeleteClicked()
         delete ui->songList->currentItem();
     }
 #endif
+    updateSongCount();
     ui->songList->clearSelection();
 }
 

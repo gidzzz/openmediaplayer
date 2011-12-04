@@ -541,7 +541,6 @@ void MusicWindow::onAlbumSelected(QListWidgetItem *item)
     this->setEnabled(false);
 
     SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
-    albumView->setAttribute(Qt::WA_DeleteOnClose);
     albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
     albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 
@@ -561,7 +560,6 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         if (songCount == 1)
             albumView->isSingleAlbum = true;
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-        albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 
         albumView->show();
@@ -572,7 +570,6 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleTitle).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
-        artistView->setAttribute(Qt::WA_DeleteOnClose);
 
         artistView->show();
         connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -585,7 +582,6 @@ void MusicWindow::onGenreSelected(QListWidgetItem *item)
     this->setEnabled(false);
 
     SingleGenreView *genreView = new SingleGenreView(this, mafwFactory);
-    genreView->setAttribute(Qt::WA_DeleteOnClose);
     genreView->setWindowTitle(item->data(UserRoleSongTitle).toString());
 
     genreView->show();

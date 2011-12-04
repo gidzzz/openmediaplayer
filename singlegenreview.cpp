@@ -32,6 +32,8 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     QString shuffleText(tr("Shuffle songs"));
     ui->centralwidget->setLayout(ui->verticalLayout);
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
 #ifdef MAFW
     ui->indicator->setFactory(factory);
 #endif
@@ -98,7 +100,6 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
         if (songCount == 1)
             albumView->isSingleAlbum = true;
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-        albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 
         albumView->show();
@@ -109,7 +110,6 @@ void SingleGenreView::onItemSelected(QListWidgetItem *item)
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleTitle).toString());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
-        artistView->setAttribute(Qt::WA_DeleteOnClose);
 
         artistView->show();
         connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));

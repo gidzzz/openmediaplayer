@@ -31,6 +31,8 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
 {
     ui->setupUi(this);
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
     ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->albumList);
     ui->albumList->setItemDelegate(delegate);
 
@@ -161,7 +163,6 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
     else {
 
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
-        albumView->setAttribute(Qt::WA_DeleteOnClose);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 

@@ -42,10 +42,11 @@ private:
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
 #ifdef Q_WS_MAEMO_5
-    QMaemo5ValueButton *shuffleAllButton;
+    QMaemo5ValueButton *shuffleButton;
+    void setupShuffleButton();
     void notifyOnAddedToNowPlaying(int songCount);
 #else
-    QPushButton *shuffleAllButton;
+    QPushButton *shuffleButton;
 #endif
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -54,13 +55,14 @@ private:
     MafwPlaylistAdapter* playlist;
     unsigned int browseAllSongsId;
 #endif
+    void updateSongCount();
 
 private slots:
     void orientationChanged();
 #ifdef MAFW
     void listSongs();
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void onItemSelected(QListWidgetItem*);
+    void onItemActivated(QListWidgetItem *item);
     void onRingingToneUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString objectId, QString uri);
     void onContainerChanged(QString objectId);

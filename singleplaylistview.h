@@ -48,6 +48,7 @@ private:
     QListWidgetItem *clickedItem;
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleButton;
+    void setupShuffleButton();
     void notifyOnAddedToNowPlaying(int songCount);
 #else
     QPushButton *shuffleButton;
@@ -62,7 +63,7 @@ private:
     gpointer browsePlaylistOp;
     int numberOfSongsToAdd;
 #endif
-    void setSongCount(int count);
+    void updateSongCount();
 
 private slots:
     void orientationChanged();
@@ -72,7 +73,7 @@ private slots:
     void onShareUriReceived(QString objectId, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
-    void onItemSelected(QListWidgetItem *);
+    void onItemActivated(QListWidgetItem *item);
     void addAllToNowPlaying();
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
