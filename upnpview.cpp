@@ -69,7 +69,7 @@ void UpnpView::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
         return;
-    else if ((e->key() == Qt::Key_Up || e->key() == Qt::Key_Down) && !ui->searchWidget->isHidden())
+    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
         ui->objectList->setFocus();
     else {
         ui->objectList->clearSelection();
