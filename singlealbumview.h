@@ -43,7 +43,6 @@ private:
     void keyReleaseEvent(QKeyEvent *e);
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleButton;
-    void setupShuffleButton();
     void notifyOnAddedToNowPlaying(int songCount);
 #else
     QPushButton *shuffleButton;
@@ -55,6 +54,7 @@ private:
     MafwPlaylistAdapter* playlist;
     unsigned int browseAllSongsId;
 #endif
+    void setupShuffleButton();
     void updateSongCount();
 
 private slots:

@@ -29,8 +29,8 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 #endif
 {
     ui->setupUi(this);
-    QString shuffleText(tr("Shuffle songs"));
     ui->centralwidget->setLayout(ui->verticalLayout);
+    setupShuffleButton();
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -40,11 +40,7 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    shuffleButton = new QMaemo5ValueButton(shuffleText, this);
-    shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
-#else
-    shuffleButton = new QPushButton(shuffleText, this);
 #endif
     ArtistListItemDelegate *delegate = new ArtistListItemDelegate(ui->artistList);
     ui->artistList->setItemDelegate(delegate);
@@ -53,17 +49,9 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 
     this->isShuffling = false;
 
-    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
-    ui->verticalLayout->removeWidget(ui->artistList);
-    ui->verticalLayout->removeWidget(ui->searchWidget);
-    ui->verticalLayout->addWidget(shuffleButton);
-    ui->verticalLayout->addWidget(ui->artistList);
-    ui->verticalLayout->addWidget(ui->searchWidget);
-
-    connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemSelected(QListWidgetItem*)));
+    connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
     connect(ui->artistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
@@ -81,6 +69,23 @@ SingleGenreView::~SingleGenreView()
     delete ui;
 }
 
+void SingleGenreView::setupShuffleButton()
+{
+#ifdef Q_WS_MAEMO_5
+    shuffleButton = new QMaemo5ValueButton();
+    shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
+#else
+    shuffleButton = new QPushButton();
+#endif
+    connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
+
+    shuffleButton->setText(tr("Shuffle songs"));
+    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
+
+    ui->artistList->insertItem(0, new QListWidgetItem);
+    ui->artistList->setItemWidget(ui->artistList->item(0), shuffleButton);
+}
+
 void SingleGenreView::orientationChanged()
 {
     ui->artistList->scroll(1,1);
@@ -90,8 +95,13 @@ void SingleGenreView::orientationChanged()
     ui->indicator->raise();
 }
 
-void SingleGenreView::onItemSelected(QListWidgetItem *item)
+void SingleGenreView::onItemActivated(QListWidgetItem *item)
 {
+    if (ui->artistList->row(item) == 0) {
+        onShuffleButtonClicked();
+        return;
+    }
+
     this->setEnabled(false);
 
     int songCount = item->data(UserRoleAlbumCount).toInt();
@@ -205,7 +215,7 @@ void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
         return;
-    else if ((e->key() == Qt::Key_Up || e->key() == Qt::Key_Down) && !ui->searchWidget->isHidden())
+    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
         ui->artistList->setFocus();
     else {
         ui->artistList->clearSelection();
@@ -229,7 +239,7 @@ void SingleGenreView::onSearchHideButtonClicked()
 
 void SingleGenreView::onSearchTextChanged(QString text)
 {
-    for (int i=0; i < ui->artistList->count(); i++) {
+    for (int i = 1; i < ui->artistList->count(); i++) {
         if (ui->artistList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
             ui->artistList->item(i)->setHidden(true);
         else

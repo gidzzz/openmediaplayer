@@ -57,10 +57,11 @@ private:
 #else
     QPushButton *shuffleButton;
 #endif
+    void setupShuffleButton();
 
 private slots:
     void orientationChanged();
-    void onItemSelected(QListWidgetItem *item);
+    void onItemActivated(QListWidgetItem *item);
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void addAllToNowPlaying();
