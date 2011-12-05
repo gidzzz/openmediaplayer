@@ -309,7 +309,7 @@ void SingleAlbumView::addAllToNowPlaying()
     gchar** songAddBuffer = new gchar*[songCount--];
 
     for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
     songAddBuffer[songCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
