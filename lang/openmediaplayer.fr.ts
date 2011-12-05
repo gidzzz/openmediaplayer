@@ -132,11 +132,6 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <source>Select frequency</source>
         <translation>Fréquence</translation>
     </message>
-    <message>
-        <location filename="../freqdlg.cpp" line="68"/>
-        <source>MHz</source>
-        <translation>MHz</translation>
-    </message>
 </context>
 <context>
     <name>InternetRadioWindow</name>
@@ -152,7 +147,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="149"/>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Add radio bookmark</source>
         <translation>Ajouter un signet radio</translation>
     </message>
@@ -162,65 +157,80 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>Émetteur FM</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="121"/>
+        <location filename="../internetradiowindow.cpp" line="117"/>
         <source>Edit</source>
         <translation>Editer</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="122"/>
+        <location filename="../internetradiowindow.cpp" line="118"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="151"/>
+        <location filename="../internetradiowindow.cpp" line="135"/>
+        <source>Delete selected item from device?</source>
+        <translation>Effacer l&apos;élément sélectionné du téléphone ?</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="138"/>
+        <source>Yes</source>
+        <translation>Oui</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="139"/>
+        <source>No</source>
+        <translation>Non</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Edit radio bookmark</source>
         <translation>Modifier un signet radio</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="155"/>
+        <location filename="../internetradiowindow.cpp" line="161"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="157"/>
+        <location filename="../internetradiowindow.cpp" line="163"/>
         <source>Web address</source>
         <translation>Adresse internet</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="170"/>
+        <location filename="../internetradiowindow.cpp" line="176"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="215"/>
-        <location filename="../internetradiowindow.cpp" line="217"/>
+        <location filename="../internetradiowindow.cpp" line="221"/>
+        <location filename="../internetradiowindow.cpp" line="223"/>
         <source>Unable to add empty bookmark</source>
         <translation>Impossible d&apos;ajouter un signet vide</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="217"/>
-        <location filename="../internetradiowindow.cpp" line="247"/>
+        <location filename="../internetradiowindow.cpp" line="223"/>
+        <location filename="../internetradiowindow.cpp" line="253"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="236"/>
+        <location filename="../internetradiowindow.cpp" line="242"/>
         <source>Media bookmark saved</source>
         <translation>Signet sauvegardé</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="245"/>
-        <location filename="../internetradiowindow.cpp" line="247"/>
+        <location filename="../internetradiowindow.cpp" line="251"/>
+        <location filename="../internetradiowindow.cpp" line="253"/>
         <source>Invalid URL</source>
         <translation>Adresse invalide</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="295"/>
+        <location filename="../internetradiowindow.cpp" line="301"/>
         <source>(unknown station)</source>
         <translation>(station inconnue)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="299"/>
+        <location filename="../internetradiowindow.cpp" line="305"/>
         <source>(unknown)</source>
         <translation>(inconnu)</translation>
     </message>
@@ -737,8 +747,8 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="163"/>
-        <location filename="../radionowplayingwindow.cpp" line="218"/>
-        <location filename="../radionowplayingwindow.cpp" line="392"/>
+        <location filename="../radionowplayingwindow.cpp" line="232"/>
+        <location filename="../radionowplayingwindow.cpp" line="406"/>
         <source>(unknown station)</source>
         <translation>(station inconnue)</translation>
     </message>
@@ -758,19 +768,19 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>Ajouter un signet radio</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="213"/>
-        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <location filename="../radionowplayingwindow.cpp" line="227"/>
+        <location filename="../radionowplayingwindow.cpp" line="269"/>
         <source>(unknown artist)</source>
         <translation>(artiste inconnu)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="213"/>
-        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <location filename="../radionowplayingwindow.cpp" line="227"/>
+        <location filename="../radionowplayingwindow.cpp" line="269"/>
         <source>(unknown song)</source>
         <translation>(morceau inconnu)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="280"/>
+        <location filename="../radionowplayingwindow.cpp" line="294"/>
         <source>Buffering</source>
         <translation>Mise en cache</translation>
     </message>
@@ -1195,17 +1205,17 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>Editeur de tags</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="20"/>
+        <location filename="../tagwindow.ui" line="30"/>
         <source>Artist</source>
         <translation>Artiste</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="30"/>
+        <location filename="../tagwindow.ui" line="40"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="40"/>
+        <location filename="../tagwindow.ui" line="20"/>
         <source>Title</source>
         <translation>Titre</translation>
     </message>

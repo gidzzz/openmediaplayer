@@ -149,11 +149,6 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <source>Select frequency</source>
         <translation>Wybierz częstotliwość</translation>
     </message>
-    <message>
-        <location filename="../freqdlg.cpp" line="68"/>
-        <source>MHz</source>
-        <translation>MHz</translation>
-    </message>
 </context>
 <context>
     <name>InternetRadioWindow</name>
@@ -169,7 +164,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="149"/>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Add radio bookmark</source>
         <translation>Dodaj zakładkę</translation>
     </message>
@@ -179,65 +174,80 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Nadajnik FM</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="121"/>
+        <location filename="../internetradiowindow.cpp" line="117"/>
         <source>Edit</source>
         <translation>Edytuj</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="122"/>
+        <location filename="../internetradiowindow.cpp" line="118"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="151"/>
+        <location filename="../internetradiowindow.cpp" line="135"/>
+        <source>Delete selected item from device?</source>
+        <translation>Usunąć wybrany obiekt z urządzenia?</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="138"/>
+        <source>Yes</source>
+        <translation>Tak</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="139"/>
+        <source>No</source>
+        <translation>Nie</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Edit radio bookmark</source>
         <translation>Edytuj zakładkę</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="155"/>
+        <location filename="../internetradiowindow.cpp" line="161"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="157"/>
+        <location filename="../internetradiowindow.cpp" line="163"/>
         <source>Web address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="170"/>
+        <location filename="../internetradiowindow.cpp" line="176"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="215"/>
-        <location filename="../internetradiowindow.cpp" line="217"/>
+        <location filename="../internetradiowindow.cpp" line="221"/>
+        <location filename="../internetradiowindow.cpp" line="223"/>
         <source>Unable to add empty bookmark</source>
         <translation>Nie można dodać pustej zakładki</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="217"/>
-        <location filename="../internetradiowindow.cpp" line="247"/>
+        <location filename="../internetradiowindow.cpp" line="223"/>
+        <location filename="../internetradiowindow.cpp" line="253"/>
         <source>Error</source>
         <translation>Błąd</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="236"/>
+        <location filename="../internetradiowindow.cpp" line="242"/>
         <source>Media bookmark saved</source>
         <translation>Zakładka zapisana</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="245"/>
-        <location filename="../internetradiowindow.cpp" line="247"/>
+        <location filename="../internetradiowindow.cpp" line="251"/>
+        <location filename="../internetradiowindow.cpp" line="253"/>
         <source>Invalid URL</source>
         <translation>Niepoprawny URL</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="295"/>
+        <location filename="../internetradiowindow.cpp" line="301"/>
         <source>(unknown station)</source>
         <translation>(nieznana stacja)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="299"/>
+        <location filename="../internetradiowindow.cpp" line="305"/>
         <source>(unknown)</source>
         <translation>(nieznane)</translation>
     </message>
@@ -762,8 +772,8 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="163"/>
-        <location filename="../radionowplayingwindow.cpp" line="218"/>
-        <location filename="../radionowplayingwindow.cpp" line="392"/>
+        <location filename="../radionowplayingwindow.cpp" line="232"/>
+        <location filename="../radionowplayingwindow.cpp" line="406"/>
         <source>(unknown station)</source>
         <translation>(nieznana stacja)</translation>
     </message>
@@ -783,19 +793,19 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Dodaj zakładkę</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="213"/>
-        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <location filename="../radionowplayingwindow.cpp" line="227"/>
+        <location filename="../radionowplayingwindow.cpp" line="269"/>
         <source>(unknown artist)</source>
         <translation>(nieznany wykonawca)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="213"/>
-        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <location filename="../radionowplayingwindow.cpp" line="227"/>
+        <location filename="../radionowplayingwindow.cpp" line="269"/>
         <source>(unknown song)</source>
         <translation>(nieznany utwór)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="280"/>
+        <location filename="../radionowplayingwindow.cpp" line="294"/>
         <source>Buffering</source>
         <translation>Buforowanie</translation>
     </message>
@@ -1228,17 +1238,17 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Edytor tagów</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="20"/>
+        <location filename="../tagwindow.ui" line="30"/>
         <source>Artist</source>
         <translation>Wykonawca</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="30"/>
+        <location filename="../tagwindow.ui" line="40"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="40"/>
+        <location filename="../tagwindow.ui" line="20"/>
         <source>Title</source>
         <translation>Tytuł</translation>
     </message>

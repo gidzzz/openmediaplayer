@@ -146,11 +146,6 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <source>Select frequency</source>
         <translation>Selecteer frequentie</translation>
     </message>
-    <message>
-        <location filename="../freqdlg.cpp" line="68"/>
-        <source>MHz</source>
-        <translation>MHz</translation>
-    </message>
 </context>
 <context>
     <name>InternetRadioWindow</name>
@@ -166,7 +161,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="67"/>
-        <location filename="../internetradiowindow.cpp" line="149"/>
+        <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Add radio bookmark</source>
         <translation>Voeg radio favoriet toe</translation>
     </message>
@@ -176,65 +171,80 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <translation>FM zender</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="121"/>
+        <location filename="../internetradiowindow.cpp" line="117"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="122"/>
+        <location filename="../internetradiowindow.cpp" line="118"/>
         <source>Delete</source>
         <translation>Verwijder</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="151"/>
+        <location filename="../internetradiowindow.cpp" line="135"/>
+        <source>Delete selected item from device?</source>
+        <translation>Item van apparaat verwijderen?</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="138"/>
+        <source>Yes</source>
+        <translation>Ja</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="139"/>
+        <source>No</source>
+        <translation>Nee</translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Edit radio bookmark</source>
         <translation>Bewerk radio favoriet</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="155"/>
+        <location filename="../internetradiowindow.cpp" line="161"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="157"/>
+        <location filename="../internetradiowindow.cpp" line="163"/>
         <source>Web address</source>
         <translation>Web adres</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="170"/>
+        <location filename="../internetradiowindow.cpp" line="176"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="215"/>
-        <location filename="../internetradiowindow.cpp" line="217"/>
+        <location filename="../internetradiowindow.cpp" line="221"/>
+        <location filename="../internetradiowindow.cpp" line="223"/>
         <source>Unable to add empty bookmark</source>
         <translation>Kan geen lege favoriet toevoegen</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="217"/>
-        <location filename="../internetradiowindow.cpp" line="247"/>
+        <location filename="../internetradiowindow.cpp" line="223"/>
+        <location filename="../internetradiowindow.cpp" line="253"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="236"/>
+        <location filename="../internetradiowindow.cpp" line="242"/>
         <source>Media bookmark saved</source>
         <translation>Media favoriet opgeslagen</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="245"/>
-        <location filename="../internetradiowindow.cpp" line="247"/>
+        <location filename="../internetradiowindow.cpp" line="251"/>
+        <location filename="../internetradiowindow.cpp" line="253"/>
         <source>Invalid URL</source>
         <translation>Foutieve URL</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="295"/>
+        <location filename="../internetradiowindow.cpp" line="301"/>
         <source>(unknown station)</source>
         <translation>onbekende zender</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="299"/>
+        <location filename="../internetradiowindow.cpp" line="305"/>
         <source>(unknown)</source>
         <translation>onbekend</translation>
     </message>
@@ -751,8 +761,8 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="163"/>
-        <location filename="../radionowplayingwindow.cpp" line="218"/>
-        <location filename="../radionowplayingwindow.cpp" line="392"/>
+        <location filename="../radionowplayingwindow.cpp" line="232"/>
+        <location filename="../radionowplayingwindow.cpp" line="406"/>
         <source>(unknown station)</source>
         <translation>(onbekende zender)</translation>
     </message>
@@ -772,19 +782,19 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <translation>Radiofavoriet toevoegen</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="213"/>
-        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <location filename="../radionowplayingwindow.cpp" line="227"/>
+        <location filename="../radionowplayingwindow.cpp" line="269"/>
         <source>(unknown artist)</source>
         <translation>(onbekende artiest)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="213"/>
-        <location filename="../radionowplayingwindow.cpp" line="255"/>
+        <location filename="../radionowplayingwindow.cpp" line="227"/>
+        <location filename="../radionowplayingwindow.cpp" line="269"/>
         <source>(unknown song)</source>
         <translation>(onbekend nummer)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="280"/>
+        <location filename="../radionowplayingwindow.cpp" line="294"/>
         <source>Buffering</source>
         <translation>Buffering</translation>
     </message>
@@ -1209,17 +1219,17 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <translation>Label bewerker</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="20"/>
+        <location filename="../tagwindow.ui" line="30"/>
         <source>Artist</source>
         <translation>Artiest</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="30"/>
+        <location filename="../tagwindow.ui" line="40"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../tagwindow.ui" line="40"/>
+        <location filename="../tagwindow.ui" line="20"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
