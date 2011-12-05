@@ -130,10 +130,20 @@ void InternetRadioWindow::onEditClicked()
 void InternetRadioWindow::onDeleteClicked()
 {
 #ifdef MAFW
-    QString objectId = ui->listWidget->currentItem()->data(UserRoleObjectID).toString();
-    mafwRadioSource->destroyObject(objectId.toUtf8().data());
-    delete ui->listWidget->takeItem(ui->listWidget->currentRow());
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              " ",
+                              tr("Delete selected item from device?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
+    confirmDelete.exec();
+    if (confirmDelete.result() == QMessageBox::Yes) {
+        mafwRadioSource->destroyObject(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        delete ui->listWidget->currentItem();
+    }
 #endif
+    ui->listWidget->clearSelection();
 }
 
 void InternetRadioWindow::showBookmarkDialog(QString name, QString address)
