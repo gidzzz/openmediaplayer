@@ -65,7 +65,7 @@ void FreqDlg::setSelectedFreq(double d)
 
 QString FreqDlg::currentValueText() const
 {
-    return ui->integers->currentItem()->text() + "." + ui->fractions->currentItem()->text() + " " + tr("MHz");
+    return ui->integers->currentItem()->text() + "." + ui->fractions->currentItem()->text() + " MHz";
 }
 
 void FreqDlg::refreshFreqValues()
