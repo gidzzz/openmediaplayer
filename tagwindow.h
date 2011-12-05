@@ -4,6 +4,12 @@
 #include <QDialog>
 #include <QString>
 
+#include "ui_tagwindow.h"
+//#include "mafw/mafwsourceadapter.h"
+//#include "mafw/mafwadapterfactory.h"
+//#include "nowplayingwindow.h"
+//#include "glib-2.0/glib/ghash.h"
+
 namespace Ui {
     class TagWindow;
 }
@@ -13,17 +19,19 @@ class TagWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit TagWindow(QWidget *parent = 0, QString d1 = "",
-                       QString d2 = "", QString d3 = "", QString d4 = "");
+    explicit TagWindow(QWidget *parent = 0, QString id = "", QString title = "", QString artist = "", QString album = "");
     ~TagWindow();
-    QString id;
-    QString artist, album, title;
+
+    QString objectId;
+    QString title;
+    QString artist;
+    QString album;
 
 private:
     Ui::TagWindow *ui;
 
 private slots:
-    void on_pushButton_pressed();
+    void on_saveButton_pressed();
 
 };
 

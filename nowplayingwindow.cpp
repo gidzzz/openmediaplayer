@@ -1652,19 +1652,19 @@ QString NowPlayingWindow::cleanItem(QString data)
 void NowPlayingWindow::editTags()
 {
     TEid = ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString();
-    TagWindow* tw = new TagWindow(this, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString(),
+    TagWindow *tw = new TagWindow(this, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString(),
+                                  ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString(),
                                   ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
-                                  ui->songPlaylist->currentItem()->data(UserRoleSongAlbum).toString(),
-                                  ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString());
+                                  ui->songPlaylist->currentItem()->data(UserRoleSongAlbum).toString());
     int result = tw->exec();
 
     if ( result == QDialog::Accepted )
     {
+        TEtitle = tw->title;
         TEartist = tw->artist;
         TEalbum = tw->album;
-        TEtitle = tw->title;
 
-        qDebug() << TEartist << TEalbum << TEtitle;
+        qDebug() << TEtitle << TEartist << TEalbum;
         GHashTable* hash = g_hash_table_new(g_str_hash, g_str_equal);
         const gchar *val1 = MAFW_METADATA_KEY_TITLE;
         const gchar *val2 = TEtitle.toUtf8();
