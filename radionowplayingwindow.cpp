@@ -30,6 +30,9 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #endif
 {
     ui->setupUi(this);
+
+    setAttribute(Qt::WA_DeleteOnClose);
+
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
@@ -194,7 +197,7 @@ void RadioNowPlayingWindow::onStateChanged(int state)
     else if (state == Stopped) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+        connect(ui->playButton, SIGNAL(clicked()), this, SLOT(play()));
         disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
         disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
         if (positionTimer->isActive())
@@ -206,6 +209,17 @@ void RadioNowPlayingWindow::onStateChanged(int state)
         ui->songProgress->setRange(0, 99);
         ui->currentPositionLabel->setText("00:00");
     }
+}
+
+void RadioNowPlayingWindow::play()
+{
+    QNetworkConfigurationManager manager;
+    QNetworkSession session(manager.defaultConfiguration());
+    if (!session.isOpen()) {
+        session.open();
+        session.waitForOpened();
+    }
+    mafwrenderer->play();
 }
 
 void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)

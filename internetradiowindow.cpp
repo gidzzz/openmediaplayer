@@ -79,36 +79,32 @@ void InternetRadioWindow::onStationSelected()
 #ifdef MAFW
     playlist->assignRadioPlaylist();
 
-    qDebug() << "Clearing playlist";
     playlist->clear();
-    qDebug() << "Playlist cleared";
 
-    for (int i = 0; i < ui->listWidget->count(); i++) {
-        QListWidgetItem *item = ui->listWidget->item(i);
-        playlist->appendItem(item->data(UserRoleObjectID).toString());
-    }
-    qDebug() << "Playlist created";
+    int songCount = ui->listWidget->count();
+    gchar** songAddBuffer = new gchar*[songCount+1];
 
+    for (int i = 0; i < songCount; i++)
+        songAddBuffer[i] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[songCount] = NULL;
+
+    playlist->appendItems((const gchar**)songAddBuffer);
+
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
+
+    playlist->getSize(); // explained in musicwindow.cpp
     mafwrenderer->gotoIndex(ui->listWidget->currentRow());
-
-    // Hmmm... doesn't seem to work, even with pointers
-    /*QNetworkSession session(QNetworkConfiguration(), this);
-    if (!session.isOpen()) {
-        session.open();
-        connect(&session, SIGNAL(opened()), mafwrenderer, SLOT(play()));
-    } else {
-        mafwrenderer->play();
-    }*/
-
-    // It doesn't do any session magick, but it works
-    mafwrenderer->play();
 
     window = new RadioNowPlayingWindow(this, mafwFactory);
 #else
     window = new RadioNowPlayingWindow(this);
 #endif
-    window->setAttribute(Qt::WA_DeleteOnClose);
     window->show();
+#ifdef MAFW
+    window->play();
+#endif
 
     connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();

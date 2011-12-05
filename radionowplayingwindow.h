@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QTime>
+#include <QNetworkConfigurationManager>
 #include <QNetworkSession>
 
 #ifdef Q_WS_MAEMO_5
@@ -31,6 +32,9 @@ class RadioNowPlayingWindow : public QMainWindow
 public:
     explicit RadioNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~RadioNowPlayingWindow();
+
+public slots:
+    void play();
 
 private:
     Ui::RadioNowPlayingWindow *ui;
