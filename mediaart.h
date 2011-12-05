@@ -8,8 +8,15 @@
 
 namespace MediaArt
 {
+    struct destructor_payload
+    {
+        HildonThumbnailFactory *factory;
+        HildonThumbnailRequest *request;
+    };
+
     // Returns: path to the new image
     QString setAlbumImage(QString album, QString image);
+    void destructor(gpointer user_data);
 
     QString albumArtPath(QString album);
 }

@@ -11,7 +11,7 @@ QString MediaArt::setAlbumImage(QString album, QString image)
     delete file;
 
     // Remove old album art
-    if (image.isEmpty() && QFileInfo(newArtFile).exists())
+    if (QFileInfo(newArtFile).exists())
         QFile::remove(newArtFile);
 
     // Store new album art
@@ -30,18 +30,25 @@ QString MediaArt::setAlbumImage(QString album, QString image)
 
     // Generate new thumbanil
     if (!image.isEmpty()) {
-        HildonThumbnailFactory* factory = hildon_thumbnail_factory_get_instance();
-        HildonThumbnailRequest* request = hildon_thumbnail_factory_request_uri(factory, uri, 124, 124, true, "image/jpeg", NULL, NULL, NULL);
-
-        hildon_thumbnail_request_join(request);
-        g_object_unref(request);
-        g_object_unref(factory);
+        destructor_payload *payload = new destructor_payload;
+        payload->factory = hildon_thumbnail_factory_get_instance();
+        payload->request = hildon_thumbnail_factory_request_uri(payload->factory, uri,
+                                                                124, 124, true, "image/jpeg",
+                                                                NULL, payload, destructor);
     }
 
     delete uri;
 
     return image.isEmpty() ? albumImage : newArtFile;
 }
+
+void MediaArt::destructor(gpointer user_data)
+{
+    destructor_payload *payload = static_cast<destructor_payload*>(user_data);
+    g_object_unref(payload->request);
+    g_object_unref(payload->factory);
+    delete payload;
+};
 
 QString MediaArt::albumArtPath(QString album)
 {
