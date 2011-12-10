@@ -1,4 +1,4 @@
-#include "entertainmentview.h"
+#include "qmlview.h"
 
 #ifdef Q_WS_MAEMO_5
 #include <QtGui/QX11Info>
@@ -7,9 +7,9 @@
 #include <X11/Xutil.h>
 #endif
 
-EntertainmentView::EntertainmentView(QWidget *parent, MafwAdapterFactory *factory ) :
+QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
     QMainWindow(parent),
-    ui(new Ui::EntertainmentView)
+    ui(new Ui::QmlView)
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
@@ -18,7 +18,10 @@ EntertainmentView::EntertainmentView(QWidget *parent, MafwAdapterFactory *factor
 #endif
 {
     ui->setupUi(this);
+    ui->declarativeView->setSource(source);
     ui->declarativeView->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+
+    setAttribute(Qt::WA_DeleteOnClose);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5NonComposited);
@@ -72,12 +75,12 @@ EntertainmentView::EntertainmentView(QWidget *parent, MafwAdapterFactory *factor
 #endif
 }
 
-EntertainmentView::~EntertainmentView()
+QmlView::~QmlView()
 {
     delete ui;
 }
 
-void EntertainmentView::setMetadata(QString songName, QString albumName, QString artistName, QString albumArtUri, int duration)
+void QmlView::setMetadata(QString songName, QString albumName, QString artistName, QString albumArtUri, int duration)
 {
     this->title = songName;
     this->album = albumName;
@@ -94,7 +97,7 @@ void EntertainmentView::setMetadata(QString songName, QString albumName, QString
 }
 
 #ifdef Q_WS_MAEMO_5
-void EntertainmentView::setDNDAtom(bool dnd)
+void QmlView::setDNDAtom(bool dnd)
 {
     quint32 enable;
     if (dnd)
@@ -107,14 +110,14 @@ void EntertainmentView::setDNDAtom(bool dnd)
 #endif
 
 #ifdef MAFW
-void EntertainmentView::onPositionChanged(int position, QString)
+void QmlView::onPositionChanged(int position, QString)
 {
     duration = time_mmss(position) + "/" + time_mmss(songDuration);
     emit durationTextChanged(duration);
     emit positionChanged(position);
 }
 
-void EntertainmentView::stateChanged(int state)
+void QmlView::stateChanged(int state)
 {
     this->mafwState = state;
     QString playButtonIconString;
@@ -154,12 +157,12 @@ void EntertainmentView::stateChanged(int state)
     emit stateIconChanged(playButtonIconString);
 }
 
-void EntertainmentView::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)
+void QmlView::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)
 {
     this->stateChanged(state);
 }
 
-void EntertainmentView::onPlayClicked()
+void QmlView::onPlayClicked()
 {
     if (this->mafwState == Playing)
         mafwrenderer->pause();
@@ -169,12 +172,12 @@ void EntertainmentView::onPlayClicked()
         mafwrenderer->resume();
 }
 
-void EntertainmentView::onSliderValueChanged(int position)
+void QmlView::onSliderValueChanged(int position)
 {
     mafwrenderer->setPosition(SeekAbsolute, position);
 }
 
-void EntertainmentView::addItemToPlaylist(QListWidgetItem *item, int index)
+void QmlView::addItemToPlaylist(QListWidgetItem *item, int index)
 {
     int duration = item->data(UserRoleSongDuration).toInt();
     emit addToPlaylist(item->data(UserRoleSongTitle).toString(),
@@ -183,12 +186,12 @@ void EntertainmentView::addItemToPlaylist(QListWidgetItem *item, int index)
                        index);
 }
 
-void EntertainmentView::onPlaylistItemChanged(int index)
+void QmlView::onPlaylistItemChanged(int index)
 {
     mafwrenderer->gotoIndex(index);
 }
 
-void EntertainmentView::setCurrentRow(int row)
+void QmlView::setCurrentRow(int row)
 {
     emit rowChanged(row);
 }

@@ -17,8 +17,7 @@
 #include "ui_nowplayingwindow.h"
 #include "includes.h"
 #include "delegates/playlistdelegate.h"
-#include "entertainmentview.h"
-#include "carview.h"
+#include "qmlview.h"
 #include "texteditautoresizer.h"
 #include "home.h"
 #include "editlyrics.h"
@@ -75,8 +74,7 @@ private:
     static NowPlayingWindow *instance;
     explicit NowPlayingWindow(QWidget *parent, MafwAdapterFactory *mafwFactory);
     Ui::NowPlayingWindow *ui;
-    EntertainmentView *entertainmentView;
-    CarView *carView;
+    QmlView *qmlView;
     int playlistTime;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -181,11 +179,10 @@ private slots:
     void onContextMenuRequested(const QPoint &point);
     void onShareClicked();
     void showEntertainmentView();
-    void updateEntertainmentViewMetadata();
-    void nullEntertainmentView();
     void showCarView();
-    void updateCarViewMetadata();
-    void nullCarView();
+    void createQmlView(QUrl source);
+    void updateQmlViewMetadata();
+    void nullQmlView();
     void savePlaylist();
     void onSavePlaylistAccepted();
     void onChildDestroyed();

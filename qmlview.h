@@ -1,5 +1,5 @@
-#ifndef ENTERTAINMENTVIEW_H
-#define ENTERTAINMENTVIEW_H
+#ifndef QMLVIEW_H
+#define QMLVIEW_H
 
 #include <QMainWindow>
 #include <QDeclarativeView>
@@ -8,7 +8,7 @@
 #include <QTimer>
 #include <QListWidgetItem>
 
-#include "ui_entertainmentview.h"
+#include "ui_qmlview.h"
 #include "includes.h"
 
 #ifdef MAFW
@@ -16,16 +16,16 @@
 #endif
 
 namespace Ui {
-    class EntertainmentView;
+    class QmlView;
 }
 
-class EntertainmentView : public QMainWindow
+class QmlView : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit EntertainmentView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
-    ~EntertainmentView();
+    explicit QmlView(QUrl source, QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    ~QmlView();
     void setMetadata(QString songName, QString albumName, QString artistName, QString albumArtUri, int duration);
     void addItemToPlaylist(QListWidgetItem *item, int index);
     void setCurrentRow(int);
@@ -43,7 +43,7 @@ signals:
     void rowChanged(QVariant);
 
 private:
-    Ui::EntertainmentView *ui;
+    Ui::QmlView *ui;
     QVariant title;
     QVariant album;
     QVariant artist;
@@ -75,4 +75,4 @@ private slots:
 #endif
 };
 
-#endif // ENTERTAINMENTVIEW_H
+#endif // QMLVIEW_H

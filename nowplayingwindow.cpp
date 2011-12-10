@@ -87,8 +87,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     browseId = NULL;
     albumArtSceneLarge = new QGraphicsScene(ui->view_large);
     albumArtSceneSmall = new QGraphicsScene(ui->view_small);
-    entertainmentView = 0;
-    carView = 0;
+    qmlView = 0;
     enableLyrics = QSettings().value("lyrics/enable").toBool();
     lazySliders = QSettings().value("main/lazySliders").toBool();
     reverseTime = QSettings().value("main/reverseTime").toBool();
@@ -741,8 +740,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             }
         }
 
-        this->updateEntertainmentViewMetadata();
-        this->updateCarViewMetadata();
+        this->updateQmlViewMetadata();
 
         if (!error.isEmpty())
             qDebug() << error;
@@ -1038,7 +1036,7 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
     if (!ui->songProgress->isSliderDown())
         ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-songDuration : position));
 
-    if (this->songDuration != 0 && this->songDuration != -1 && entertainmentView == 0 && carView == 0) {
+    if (this->songDuration != 0 && this->songDuration != -1 && qmlView == 0) {
 #ifdef DEBUG
         qDebug() << "Current position: " << position;
         qDebug() << "Song Length: " << this->songDuration;
@@ -1354,63 +1352,41 @@ void NowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
 
 void NowPlayingWindow::showEntertainmentView()
 {
-    entertainmentView = new EntertainmentView(this, mafwFactory);
-    entertainmentView->setAttribute(Qt::WA_DeleteOnClose);
-    for (int i = 0; i < ui->songPlaylist->count(); i++) {
-        entertainmentView->addItemToPlaylist(ui->songPlaylist->item(i), i);
-    }
-    connect(entertainmentView, SIGNAL(destroyed()), this, SLOT(nullEntertainmentView()));
-    this->updateEntertainmentViewMetadata();
-    entertainmentView->showFullScreen();
+    createQmlView(QUrl("file:///opt/openmediaplayer/qml/entertainmentview/entertainmentview.qml"));
 }
 
 void NowPlayingWindow::showCarView()
 {
-    carView = new CarView(this, mafwFactory);
-    carView->setAttribute(Qt::WA_DeleteOnClose);
-    for (int i = 0; i < ui->songPlaylist->count(); i++) {
-        carView->addItemToPlaylist(ui->songPlaylist->item(i), i);
-    }
-    connect(carView, SIGNAL(destroyed()), this, SLOT(nullCarView()));
-    this->updateCarViewMetadata();
-    carView->showFullScreen();
+    createQmlView(QUrl("file:///opt/openmediaplayer/qml/carview/carview.qml"));
 }
 
-void NowPlayingWindow::updateEntertainmentViewMetadata()
+void NowPlayingWindow::createQmlView(QUrl source)
 {
-    if (entertainmentView) {
-        entertainmentView->setMetadata(ui->titleLabel->text(),
-                                       ui->albumNameLabel->text(),
-                                       ui->artistLabel->text(),
-                                       this->albumArtUri,
-                                       this->songDuration);
-        entertainmentView->setCurrentRow(ui->songPlaylist->row(ui->songPlaylist->currentItem()));
+    if (!qmlView) {
+        qmlView = new QmlView(source, this, mafwFactory);
+        for (int i = 0; i < ui->songPlaylist->count(); i++)
+            qmlView->addItemToPlaylist(ui->songPlaylist->item(i), i);
+        connect(qmlView, SIGNAL(destroyed()), this, SLOT(nullQmlView()));
+        this->updateQmlViewMetadata();
     }
+    qmlView->showFullScreen();
 }
 
-void NowPlayingWindow::updateCarViewMetadata()
+void NowPlayingWindow::updateQmlViewMetadata()
 {
-    if (carView) {
-        carView->setMetadata(ui->titleLabel->text(),
-                                       ui->albumNameLabel->text(),
-                                       ui->artistLabel->text(),
-                                       this->albumArtUri,
-                                       this->songDuration);
-        carView->setCurrentRow(ui->songPlaylist->row(ui->songPlaylist->currentItem()));
+    if (qmlView) {
+        qmlView->setMetadata(ui->titleLabel->text(),
+                             ui->albumNameLabel->text(),
+                             ui->artistLabel->text(),
+                             this->albumArtUri,
+                             this->songDuration);
+        qmlView->setCurrentRow(ui->songPlaylist->currentRow());
     }
 }
 
-void NowPlayingWindow::nullEntertainmentView()
+void NowPlayingWindow::nullQmlView()
 {
-    entertainmentView = 0;
-#ifdef MAFW
-    mafwrenderer->getPosition();
-#endif
-}
-
-void NowPlayingWindow::nullCarView()
-{
-    carView = 0;
+    qmlView = 0;
 #ifdef MAFW
     mafwrenderer->getPosition();
 #endif

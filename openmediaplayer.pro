@@ -45,8 +45,7 @@ SOURCES += \
     delegates/singlealbumviewdelegate.cpp \
     singleartistview.cpp \
     settingsdialog.cpp \
-    entertainmentview.cpp \
-    carview.cpp \
+    qmlview.cpp \
     delegates/thumbnailitemdelegate.cpp \
     singlegenreview.cpp \
     singleplaylistview.cpp \
@@ -82,8 +81,7 @@ HEADERS += \
     delegates/singlealbumviewdelegate.h \
     singleartistview.h \
     settingsdialog.h \
-    entertainmentview.h \
-    carview.h \
+    qmlview.h \
     delegates/thumbnailitemdelegate.h \
     singlegenreview.h \
     singleplaylistview.h \
@@ -114,8 +112,7 @@ FORMS += \
     singlealbumview.ui \
     singleartistview.ui \
     settingsdialog.ui \
-    entertainmentview.ui \
-    carview.ui \
+    qmlview.ui \
     singlegenreview.ui \
     singleplaylistview.ui \
     aboutwindow.ui \

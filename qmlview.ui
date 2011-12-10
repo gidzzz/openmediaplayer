@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CarView</class>
- <widget class="QMainWindow" name="CarView">
+ <class>QmlView</class>
+ <widget class="QMainWindow" name="EntertainmentView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -9,9 +9,6 @@
     <width>800</width>
     <height>480</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Car View</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -22,16 +19,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QDeclarativeView" name="declarativeView">
-      <property name="resizeMode">
-       <enum>QDeclarativeView::SizeRootObjectToView</enum>
-      </property>
-      <property name="source">
-       <url>
-        <string notr="true">file:///opt/openmediaplayer/qml/carview/carview.qml</string>
-       </url>
-      </property>
-     </widget>
+     <widget class="QDeclarativeView" name="declarativeView"/>
     </item>
    </layout>
   </widget>
