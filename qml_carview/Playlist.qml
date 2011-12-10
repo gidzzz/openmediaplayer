@@ -49,4 +49,8 @@ Item {
     delegate: listDelegate
     highlight: highlight
   }
+
+  function setCurrentIndex(index) {
+    listView.currentIndex = index;
+  }
 }

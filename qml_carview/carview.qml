@@ -196,8 +196,7 @@ Rectangle {
   }
 
   function onRowChanged(row) {
-    //console.log (listView.count)
-    //console.log (row)
+    playlist.setCurrentIndex(row)
   }
 }
 //1

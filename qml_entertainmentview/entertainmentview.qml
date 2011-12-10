@@ -508,7 +508,6 @@ Rectangle {
     }
 
     function onRowChanged(row) {
-        console.log (listView.count)
-        console.log (row)
+        listView.currentIndex = row;
     }
 }
