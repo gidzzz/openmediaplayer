@@ -36,6 +36,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     if (QSettings().contains("main/openFolders"))
         if (QSettings().value("main/openFolders").toBool())
             ui->foldersCheckBox->setChecked(true);
+    if (QSettings().contains("main/appendSongs"))
+        if (QSettings().value("main/appendSongs").toBool())
+            ui->appendCheckBox->setChecked(true);
     if (QSettings().contains("main/lazySliders"))
         if (QSettings().value("main/lazySliders").toBool())
             ui->slidersCheckBox->setChecked(true);
@@ -63,12 +66,12 @@ void SettingsDialog::accept()
 
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());
+    QSettings().setValue("main/appendSongs", ui->appendCheckBox->isChecked());
     QSettings().setValue("main/lazySliders", ui->slidersCheckBox->isChecked());
     NowPlayingWindow::destroy();
 
     int playlistSize = ui->playlistSizeBox->text().toInt();
-    if (playlistSize == 0) playlistSize = 30;
-    QSettings().setValue("music/playlistSize", playlistSize);
+    QSettings().setValue("music/playlistSize", playlistSize ? playlistSize : 30);
 
     QSettings().setValue("FMTX/overrideChecks", ui->fmtxCheckBox->isChecked());
 

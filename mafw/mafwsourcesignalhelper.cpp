@@ -42,7 +42,7 @@ MafwSourceSignalHelper::metadata_result_cb(MafwSource* mafw_source, const char* 
   {
     qerror = QString(error->message);
   }
-  emit static_cast<MafwSourceAdapter*>(user_data)->signalMetadataResult(object_id, metadata_keys, qerror);
+  emit static_cast<MafwSourceAdapter*>(user_data)->signalMetadataResult(QString::fromUtf8(object_id), metadata_keys, qerror);
 }
 
 void
@@ -65,7 +65,7 @@ MafwSourceSignalHelper::uri_result_cb(MafwSource* mafw_source, const char* objec
 
   objectId = QString::fromUtf8(object_id);
 
-  emit static_cast<MafwSourceAdapter*>(user_data)->signalGotUri(object_id, uri);
+  emit static_cast<MafwSourceAdapter*>(user_data)->signalGotUri(QString::fromUtf8(object_id), uri);
 }
 
 void
@@ -80,7 +80,7 @@ MafwSourceSignalHelper::create_object_cb(MafwSource* mafw_source,
   {
     qerror = error->message;
   }
-  emit static_cast<MafwSourceAdapter*>(user_data)->signalCreateObjectResult(object_id, qerror);
+  emit static_cast<MafwSourceAdapter*>(user_data)->signalCreateObjectResult(QString::fromUtf8(object_id), qerror);
 }
 
 void
@@ -95,7 +95,7 @@ MafwSourceSignalHelper::destroy_object_cb(MafwSource* mafw_source,
   {
     qerror = error->message;
   }
-  emit static_cast<MafwSourceAdapter*>(user_data)->signalDestroyObjectResult(object_id, qerror);
+  emit static_cast<MafwSourceAdapter*>(user_data)->signalDestroyObjectResult(QString::fromUtf8(object_id), qerror);
 }
 
 void
@@ -119,7 +119,7 @@ MafwSourceSignalHelper::set_metadata_cb(MafwSource* mafw_source,
     failed_key++;
   }
 
-  emit static_cast<MafwSourceAdapter*>(user_data)->signalMetadataSetResult(object_id,
+  emit static_cast<MafwSourceAdapter*>(user_data)->signalMetadataSetResult(QString::fromUtf8(object_id),
                                                                            failed_key_list,
                                                                            qerror);
 }

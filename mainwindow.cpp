@@ -281,25 +281,25 @@ void MainWindow::openDirectoryProxy(QString objectId, GHashTable *metadata, QStr
 
         songAddBuffer[songAddBufferPos] = NULL;
 
-        playlist->assignAudioPlaylist();
-        playlist->clear();
+        if (playlist->playlistName() != "FmpAudioPlaylist")
+            playlist->assignAudioPlaylist();
+        if (!QSettings().value("main/appendSongs").toBool())
+            playlist->clear();
 
         playlist->appendItems((const gchar**)songAddBuffer);
 
-        for (int i = 0; i < songAddBufferPos; i++) {
-            if (songAddBuffer[i] == objectIdToPlay) {
-                playlist->getSize(); // explained in musicwindow.cpp (but it seems like it's not enough here?)
-                mafwrenderer->gotoIndex(i);
-                mafwrenderer->play();
-                break;
+        if (!QSettings().value("main/appendSongs").toBool()) {
+            for (int i = 0; i < songAddBufferPos; i++) {
+                if (songAddBuffer[i] == objectIdToPlay) {
+                    playlist->getSize(); // explained in musicwindow.cpp (but it seems like it's not enough here?)
+                    mafwrenderer->gotoIndex(i);
+                    mafwrenderer->play();
+                    break;
+                }
             }
         }
 
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-        window->show();
-
-        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-        ui->indicator->inhibit();
+        createNowPlayingWindow();
 
         for (int i = 0; i < songAddBufferPos; i++)
             delete[] songAddBuffer[i];
@@ -312,11 +312,7 @@ void MainWindow::openDirectoryProxy(QString objectId, GHashTable *metadata, QStr
 
 void MainWindow::mime_open(const QString &uriString)
 {
-    QList<QMainWindow*> children = findChildren<QMainWindow*>();
-    for (int i = 0; i < children.size(); i++)
-        children.at(i)->close();
-
-    this->activateWindow();
+    //this->activateWindow();
     this->uriToPlay = uriString;
     if (uriToPlay.startsWith("/"))
         uriToPlay.prepend("file://");
@@ -379,28 +375,23 @@ void MainWindow::mime_open(const QString &uriString)
                                .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
             qDebug() << objectId;
 
-            playlist->assignAudioPlaylist();
-            playlist->clear();
+            if (playlist->playlistName() != "FmpAudioPlaylist")
+                playlist->assignAudioPlaylist();
+            if (!QSettings().value("main/appendSongs").toBool())
+                playlist->clear();
             playlist->appendItem(objectId);
 #endif
 
+            if (!QSettings().value("main/appendSongs").toBool()) {
 #ifdef MAFW
-            NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-#else
-            NowPlayingWindow *window = NowPlayingWindow::acquire(this);
+                if (mafwrenderer->isRendererReady()) mafwrenderer->play();
+                else connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
 #endif
-            window->show();
+            }
 
-            connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-            ui->indicator->inhibit();
+            createNowPlayingWindow();
+
         }
-
-#ifdef MAFW
-        if (mafwrenderer->isRendererReady())
-            mafwrenderer->play();
-        else
-            connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
-#endif
 
     } else if (qmimetype.startsWith("video")) {
 #ifdef MAFW
@@ -440,6 +431,10 @@ void MainWindow::mime_open(const QString &uriString)
 
 void MainWindow::createNowPlayingWindow()
 {
+    QList<QMainWindow*> windows = findChildren<QMainWindow*>();
+    for (int i = 0; i < windows.size(); i++)
+        windows.at(i)->close();
+
 #ifdef MAFW
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
 #else
@@ -670,11 +665,7 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
         playlist->getSize(); // explained in musicwindow.cpp
         mafwrenderer->play();
 
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-        window->show();
-
-        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-        ui->indicator->inhibit();
+        createNowPlayingWindow();
 
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);

@@ -184,8 +184,7 @@ MafwSourceAdapter::onContainerChanged(MafwSource*, gchar* object_id, gpointer us
 #ifdef DEBUG
   g_print("on container changed %s\n", object_id);
 #endif
-  QString objectId(object_id);
-  emit static_cast<MafwSourceAdapter*>(user_data)->containerChanged(objectId);
+  emit static_cast<MafwSourceAdapter*>(user_data)->containerChanged(QString::fromUtf8(object_id));
 }
 
 void
@@ -194,8 +193,7 @@ MafwSourceAdapter::onMetadataChanged(MafwSource*, gchar* object_id, gpointer use
 #ifdef DEBUG
   g_print("on metadata changed %s\n", object_id);
 #endif
-  QString objectId(object_id);
-  emit static_cast<MafwSourceAdapter*>(user_data)->metadataChanged(objectId);
+  emit static_cast<MafwSourceAdapter*>(user_data)->metadataChanged(QString::fromUtf8(object_id));
 }
 
 void
