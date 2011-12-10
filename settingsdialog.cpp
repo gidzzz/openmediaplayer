@@ -82,12 +82,12 @@ void SettingsDialog::orientationChanged()
 {
     ui->gridLayout->removeWidget(ui->buttonBox);
     if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
-        this->setFixedHeight(320);
+        this->setFixedHeight(600);
         ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount()); // portrait
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else {
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
         ui->gridLayout->addWidget(ui->buttonBox, 2, 1, 1, 1, Qt::AlignBottom); // landscape
-        this->setFixedHeight(240);
+        this->setFixedHeight(360);
     }
 }
