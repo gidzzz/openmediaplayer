@@ -1237,6 +1237,9 @@ void MusicWindow::showEvent(QShowEvent *)
 
 void MusicWindow::hideEvent(QHideEvent *)
 {
+    QMainWindow *child = findChild<QMainWindow*>();
+    if (child) child->close();
+
     emit hidden();
 }
 

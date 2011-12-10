@@ -312,6 +312,10 @@ void MainWindow::openDirectoryProxy(QString objectId, GHashTable *metadata, QStr
 
 void MainWindow::mime_open(const QString &uriString)
 {
+    QList<QMainWindow*> children = findChildren<QMainWindow*>();
+    for (int i = 0; i < children.size(); i++)
+        children.at(i)->close();
+
     this->activateWindow();
     this->uriToPlay = uriString;
     if (uriToPlay.startsWith("/"))
