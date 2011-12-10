@@ -258,7 +258,7 @@ void NowPlayingWindow::updatePlaylistTimeLabel()
 
 void NowPlayingWindow::toggleVolumeSlider()
 {
-    if(ui->volSliderWidget->isHidden()) {
+    if (ui->volSliderWidget->isHidden()) {
         ui->buttonsWidget->hide();
         ui->volSliderWidget->show();
 
@@ -266,7 +266,7 @@ void NowPlayingWindow::toggleVolumeSlider()
         ui->volSliderWidget->hide();
         ui->buttonsWidget->show();
 
-        if(volumeTimer->isActive())
+        if (volumeTimer->isActive())
             volumeTimer->stop();
     }
 }
@@ -695,7 +695,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
-            if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
                 this->setAlbumImage(QString::fromUtf8(filename));
             }
         } else {
@@ -704,7 +704,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             if (v != NULL) {
                 const gchar* file_uri = g_value_get_string(v);
                 gchar* filename = NULL;
-                if(file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
+                if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
                     this->setAlbumImage(QString::fromUtf8(filename));
             } else
                 this->setAlbumImage(albumImage);
@@ -912,13 +912,13 @@ void NowPlayingWindow::toggleList()
 
 void NowPlayingWindow::volumeWatcher()
 {
-    if(!ui->volSliderWidget->isHidden())
+    if (!ui->volSliderWidget->isHidden())
         volumeTimer->start();
 }
 
 void NowPlayingWindow::onShuffleButtonToggled(bool checked)
 {
-    if(checked) {
+    if (checked) {
         ui->shuffleButton->setIcon(QIcon(shuffleButtonPressed));
     } else {
         ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
@@ -931,7 +931,7 @@ void NowPlayingWindow::onShuffleButtonToggled(bool checked)
 
 void NowPlayingWindow::onRepeatButtonToggled(bool checked)
 {
-    if(checked) {
+    if (checked) {
         ui->repeatButton->setIcon(QIcon(repeatButtonPressedIcon));
     } else {
         ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
@@ -944,7 +944,7 @@ void NowPlayingWindow::onRepeatButtonToggled(bool checked)
 
 void NowPlayingWindow::onNextButtonPressed()
 {
-    if(ui->nextButton->isDown()) {
+    if (ui->nextButton->isDown()) {
         ui->nextButton->setIcon(QIcon(nextButtonPressedIcon));
     } else {
         ui->nextButton->setIcon(QIcon(nextButtonIcon));
@@ -953,7 +953,7 @@ void NowPlayingWindow::onNextButtonPressed()
 
 void NowPlayingWindow::onPrevButtonPressed()
 {
-    if(ui->prevButton->isDown())
+    if (ui->prevButton->isDown())
         ui->prevButton->setIcon(QIcon(prevButtonPressedIcon));
     else
         ui->prevButton->setIcon(QIcon(prevButtonIcon));
@@ -1101,7 +1101,7 @@ void NowPlayingWindow::onMediaIsSeekable(bool seekable)
 
 void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key() == Qt::Key_Backspace)
+    if (e->key() == Qt::Key_Backspace)
         this->close();
 #ifdef MAFW
     else if (e->key() == Qt::Key_Enter)
@@ -1127,8 +1127,8 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
         if (ui->songPlaylist->currentRow() > 0)
             ui->songPlaylist->setCurrentRow(ui->songPlaylist->currentRow()-1);
     }
-    /*else if(e->key() == Qt::Key_Shift) {
-        if(ui->menuNow_playing_menu->isHidden())
+    /*else if (e->key() == Qt::Key_Shift) {
+        if (ui->menuNow_playing_menu->isHidden())
             ui->menuNow_playing_menu->show();
         else
             ui->menuNow_playing_menu->hide();
@@ -1565,9 +1565,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
             item->setData(UserRoleSongDuration, Duration::Blank);
             ui->songPlaylist->addItem(item);
         }
-
         playlistQM->getItems(0, -1);
-
     }*/
 
     if (synthetic)
@@ -1651,28 +1649,24 @@ QString NowPlayingWindow::cleanItem(QString data)
 
 void NowPlayingWindow::editTags()
 {
-    TEid = ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString();
+    QString objectId = ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString();
     TagWindow *tw = new TagWindow(this, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString(),
                                   ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString(),
                                   ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
                                   ui->songPlaylist->currentItem()->data(UserRoleSongAlbum).toString());
-    int result = tw->exec();
 
-    if ( result == QDialog::Accepted )
-    {
-        TEtitle = tw->title;
-        TEartist = tw->artist;
-        TEalbum = tw->album;
-
-        qDebug() << TEtitle << TEartist << TEalbum;
-        GHashTable* hash = g_hash_table_new(g_str_hash, g_str_equal);
-        const gchar *val1 = MAFW_METADATA_KEY_TITLE;
-        const gchar *val2 = TEtitle.toUtf8();
-        g_hash_table_insert(hash, &val1, &val2);
-        this->mafwTrackerSource->setMetadata(TEid.toUtf8(),hash);
-        g_hash_table_destroy(hash);
-
+    this->releaseKeyboard();
+    if ( tw->exec() == QDialog::Accepted ) {
+        qDebug() << objectId << tw->title << tw->artist << tw->album;
+        GHashTable *metadata = mafw_metadata_new();
+        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_TITLE, tw->title.toUtf8().data());
+        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_ARTIST, tw->artist.toUtf8().data());
+        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_ALBUM, tw->album.toUtf8().data());
+        mafwTrackerSource->setMetadata(objectId.toUtf8(), metadata);
+        mafw_metadata_release(metadata);
     }
+    this->grabKeyboard();
+    delete tw;
 }
 
 void NowPlayingWindow::closeEvent(QCloseEvent *e)

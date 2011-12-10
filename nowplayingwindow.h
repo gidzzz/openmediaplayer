@@ -56,7 +56,6 @@ public:
     QString currentURI;
     QString currentMIME;
     QNetworkAccessManager* data;
-    QString TEartist, TEalbum, TEtitle, TEid;
     bool eventFilter(QObject *object, QEvent *event);
 
 signals:
