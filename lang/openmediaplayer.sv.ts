@@ -62,14 +62,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>CarView</name>
-    <message>
-        <location filename="../carview.ui" line="14"/>
-        <source>Car View</source>
-        <translation>Vy för bil</translation>
-    </message>
-</context>
-<context>
     <name>EditLyrics</name>
     <message>
         <location filename="../editlyrics.ui" line="14"/>
@@ -80,14 +72,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../editlyrics.ui" line="25"/>
         <source>Save</source>
         <translation>Spara</translation>
-    </message>
-</context>
-<context>
-    <name>EntertainmentView</name>
-    <message>
-        <location filename="../entertainmentview.ui" line="14"/>
-        <source>Entertainment View</source>
-        <translation>Vy för underhållning</translation>
     </message>
 </context>
 <context>
@@ -124,14 +108,14 @@ p, li { white-space: pre-wrap; }
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
         <translation>Kan inte använda FM-sändare medan headset eller TV-ut kabel är kopplad.
-Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
+Koppla ur kabel för att fortsätta använda FM-sändare.</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="133"/>
         <source>Unable to use FM transmitter while USB is connected.
 Unplug USB to continue using FM transmitter.</source>
         <translation>Kan inte använda FM-sändare medan USB-kabel är kopplad.
-Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
+Koppla ur kabel för att fortsätta använda FM-sändare.</translation>
     </message>
 </context>
 <context>
@@ -163,7 +147,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../internetradiowindow.ui" line="67"/>
         <location filename="../internetradiowindow.cpp" line="155"/>
         <source>Add radio bookmark</source>
-        <translation>Läggtill radiobokmärke</translation>
+        <translation>Lägg till radiobokmärke</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="72"/>
@@ -198,7 +182,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Edit radio bookmark</source>
-        <translation>Redigera radiobokmärken</translation>
+        <translation>Redigera radiobokmärke</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="161"/>
@@ -219,7 +203,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../internetradiowindow.cpp" line="221"/>
         <location filename="../internetradiowindow.cpp" line="223"/>
         <source>Unable to add empty bookmark</source>
-        <translation>Kan inte lägga till ett tomt bokmärke</translation>
+        <translation>Kan inte lägga till tomt bokmärke</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="223"/>
@@ -241,19 +225,19 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="301"/>
         <source>(unknown station)</source>
-        <translation>(Okänd station)</translation>
+        <translation>(okänd station)</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="305"/>
         <source>(unknown)</source>
-        <translation>(Okänd)</translation>
+        <translation>(okänd)</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="609"/>
+        <location filename="../mainwindow.cpp" line="605"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n sång</numerusform>
@@ -262,7 +246,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="616"/>
+        <location filename="../mainwindow.cpp" line="612"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n klipp</numerusform>
@@ -271,7 +255,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="632"/>
+        <location filename="../mainwindow.cpp" line="628"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n station</numerusform>
@@ -303,27 +287,27 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <translation>Blanda alla låtar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="608"/>
+        <location filename="../mainwindow.cpp" line="604"/>
         <source>(no songs)</source>
         <translation>(inga låtar)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="615"/>
+        <location filename="../mainwindow.cpp" line="611"/>
         <source>(no videos)</source>
         <translation>(inga videor)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="631"/>
+        <location filename="../mainwindow.cpp" line="627"/>
         <source>(no stations)</source>
         <translation>(inga stationer)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="748"/>
+        <location filename="../mainwindow.cpp" line="740"/>
         <source>Processed items:</source>
         <translation>Bearbetade objekt:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="752"/>
+        <location filename="../mainwindow.cpp" line="744"/>
         <source>Remaining items:</source>
         <translation>Återstående objekt:</translation>
     </message>
@@ -359,7 +343,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="193"/>
         <source>Add to now playing</source>
-        <translation>Lägg till nu spelande</translation>
+        <translation>Lägg till nu spelas</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="197"/>
@@ -405,7 +389,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="239"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Är du säker att du vill sätta denna låt som ringsignal</translation>
+        <translation>Är du säker att du vill sätta denna låt som ringsignal?</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="409"/>
@@ -420,7 +404,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="691"/>
         <source>Saved</source>
-        <translation>Spara</translation>
+        <translation>Sparade</translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="709"/>
@@ -449,22 +433,22 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="735"/>
         <source>Recently added</source>
-        <translation>Nyligen tillaggd</translation>
+        <translation>Nyligen tillagda</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="735"/>
         <source>Recently played</source>
-        <translation>Nyligen spelad</translation>
+        <translation>Nyligen spelade</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="735"/>
         <source>Most played</source>
-        <translation>Mest spelad</translation>
+        <translation>Mest spelade</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="735"/>
         <source>Never played</source>
-        <translation>Aldrig spelad</translation>
+        <translation>Aldrig spelade</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="829"/>
@@ -516,8 +500,8 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../musicwindow.cpp" line="1229"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n klipp tillaggda i nu spelande</numerusform>
-            <numerusform>%n klipp tillaggda i nu spelande</numerusform>
+            <numerusform>%n klipp tillagda i nu spelas</numerusform>
+            <numerusform>%n klipp tillagda i nu spelas</numerusform>
         </translation>
     </message>
     <message>
@@ -550,7 +534,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../musicwindow.cpp" line="386"/>
         <location filename="../musicwindow.cpp" line="481"/>
         <source>Playlists</source>
-        <translation>Spellista</translation>
+        <translation>Spellistor</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="194"/>
@@ -562,12 +546,12 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="791"/>
+        <location filename="../nowplayingwindow.cpp" line="789"/>
         <source>Lyrics not found</source>
         <translation>Låttext kunde inte hittas</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="246"/>
+        <location filename="../nowplayingwindow.cpp" line="245"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n låt</numerusform>
@@ -575,122 +559,132 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="256"/>
+        <location filename="../nowplayingwindow.cpp" line="255"/>
         <source>total</source>
         <translation>totalt</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="723"/>
+        <location filename="../nowplayingwindow.cpp" line="722"/>
         <source>Loading lyrics...</source>
         <translation>Laddar låttext...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="778"/>
+        <location filename="../nowplayingwindow.cpp" line="776"/>
         <source>Fetching lyrics...</source>
         <translation>Hämtar låttext...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="739"/>
+        <location filename="../nowplayingwindow.cpp" line="738"/>
         <source>There is no active Internet connection</source>
         <translation>Det finns ingen aktiv internetanslutning</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1183"/>
+        <location filename="../nowplayingwindow.cpp" line="1181"/>
         <source>Information not available</source>
         <translation>Information är inte tillgänglig</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1243"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
         <source>Clear all songs from now playing?</source>
-        <translation>Rensa alla låtar från nu spelande?</translation>
+        <translation>Rensa alla låtar från nu spelas?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1277"/>
+        <location filename="../nowplayingwindow.cpp" line="1275"/>
         <source>Set as ringing tone</source>
         <translation>Sätt som ringsignal</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1280"/>
+        <location filename="../nowplayingwindow.cpp" line="1278"/>
         <source>Delete from now playing</source>
-        <translation>Ta bort från nu spelande</translation>
+        <translation>Ta bort från nu spelas</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1278"/>
+        <location filename="../nowplayingwindow.cpp" line="1276"/>
         <source>Share</source>
         <translation>Dela</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1246"/>
-        <location filename="../nowplayingwindow.cpp" line="1295"/>
-        <location filename="../nowplayingwindow.cpp" line="1470"/>
-        <location filename="../nowplayingwindow.cpp" line="1605"/>
+        <location filename="../nowplayingwindow.cpp" line="1244"/>
+        <location filename="../nowplayingwindow.cpp" line="1293"/>
+        <location filename="../nowplayingwindow.cpp" line="1447"/>
+        <location filename="../nowplayingwindow.cpp" line="1580"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1247"/>
-        <location filename="../nowplayingwindow.cpp" line="1296"/>
-        <location filename="../nowplayingwindow.cpp" line="1471"/>
-        <location filename="../nowplayingwindow.cpp" line="1606"/>
+        <location filename="../nowplayingwindow.cpp" line="1245"/>
+        <location filename="../nowplayingwindow.cpp" line="1294"/>
+        <location filename="../nowplayingwindow.cpp" line="1448"/>
+        <location filename="../nowplayingwindow.cpp" line="1581"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1290"/>
+        <location filename="../nowplayingwindow.cpp" line="1288"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>Är du säker på att du vill sätta denna låt som ringsignal?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1430"/>
+        <location filename="../nowplayingwindow.cpp" line="1355"/>
+        <source>Entertainment View</source>
+        <translation>Underhållningsvy</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1360"/>
+        <source>Car View</source>
+        <translation>Bilvy</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1407"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1436"/>
+        <location filename="../nowplayingwindow.cpp" line="1413"/>
         <source>Save</source>
         <translation>Spara</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1467"/>
+        <location filename="../nowplayingwindow.cpp" line="1444"/>
         <source>Playlist with the same name exists, overwrite?</source>
-        <translation>Spellista med samma namn existerar redan. Skriva över?</translation>
+        <translation>En spellista med samma namn existerar redan. Skriva över?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1478"/>
-        <location filename="../nowplayingwindow.cpp" line="1485"/>
+        <location filename="../nowplayingwindow.cpp" line="1455"/>
+        <location filename="../nowplayingwindow.cpp" line="1462"/>
         <source>Playlist saved</source>
         <translation>Spellista sparad</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1584"/>
-        <location filename="../nowplayingwindow.cpp" line="1591"/>
+        <location filename="../nowplayingwindow.cpp" line="1559"/>
+        <location filename="../nowplayingwindow.cpp" line="1566"/>
         <source>Select album art</source>
         <translation>Välj skivomslag</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1585"/>
+        <location filename="../nowplayingwindow.cpp" line="1560"/>
         <source>Reset album art</source>
         <translation>Återställ skivomslag</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1602"/>
+        <location filename="../nowplayingwindow.cpp" line="1577"/>
         <source>Reset album art?</source>
         <translation>Återställ skivomslag?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1638"/>
+        <location filename="../nowplayingwindow.cpp" line="1613"/>
         <source>Edit lyrics</source>
         <translation>Redigera låttext</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1639"/>
+        <location filename="../nowplayingwindow.cpp" line="1614"/>
         <source>Reload lyrics</source>
         <translation>Ladda om låttext</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="14"/>
         <source>Now playing</source>
-        <translation>Nu spelande</translation>
+        <translation>Nu spelas</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="185"/>
@@ -699,22 +693,22 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="578"/>
-        <location filename="../nowplayingwindow.cpp" line="1159"/>
+        <location filename="../nowplayingwindow.cpp" line="577"/>
+        <location filename="../nowplayingwindow.cpp" line="1157"/>
         <source>(unknown song)</source>
         <translation>(okänd låt)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="587"/>
-        <location filename="../nowplayingwindow.cpp" line="1162"/>
+        <location filename="../nowplayingwindow.cpp" line="586"/>
+        <location filename="../nowplayingwindow.cpp" line="1160"/>
         <source>(unknown artist)</source>
         <translation>(okänd artist)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="596"/>
-        <location filename="../nowplayingwindow.cpp" line="1165"/>
+        <location filename="../nowplayingwindow.cpp" line="595"/>
+        <location filename="../nowplayingwindow.cpp" line="1163"/>
         <source>(unknown album)</source>
         <translation>(okänt album)</translation>
     </message>
@@ -726,30 +720,30 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../nowplayingwindow.ui" line="924"/>
         <source>FM Transmitter</source>
-        <translation>Fm-sändare</translation>
+        <translation>FM-sändare</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1281"/>
+        <location filename="../nowplayingwindow.cpp" line="1279"/>
         <source>Clear now playing</source>
-        <translation>Rensa nu spelande</translation>
+        <translation>Rensa nu spelas</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1274"/>
-        <location filename="../nowplayingwindow.cpp" line="1422"/>
+        <location filename="../nowplayingwindow.cpp" line="1272"/>
+        <location filename="../nowplayingwindow.cpp" line="1399"/>
         <source>Save playlist</source>
         <translation>Spara spellista</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="939"/>
         <source>Entertainment view</source>
-        <translation>Vy för underhållning</translation>
+        <translation>Underhållningsvy</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="944"/>
         <source>Car view</source>
-        <translation>Vy för bil</translation>
+        <translation>Bilvy</translation>
     </message>
 </context>
 <context>
@@ -757,7 +751,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../radionowplayingwindow.ui" line="14"/>
         <source>Now playing</source>
-        <translation>Nu spelande</translation>
+        <translation>Nu spelas</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="163"/>
@@ -832,24 +826,30 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <translation>Öppna hela mappar</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="82"/>
+        <location filename="../settingsdialog.ui" line="80"/>
+        <source>Append opened songs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="89"/>
         <source>Size of automatic playlists</source>
         <translation>Storlek på automatisk spellista</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="98"/>
+        <location filename="../settingsdialog.ui" line="105"/>
         <source>Lazy sliders</source>
         <translation>Lata reglage</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="105"/>
+        <location filename="../settingsdialog.ui" line="112"/>
         <source>Override FMTX checks in UI</source>
-        <translation>Åsidosätt kontroll av FMTX i användargränssnittet</translation>
+        <translation>Åsidosätt kontroll av FMTX
+i gränssnittet</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="117"/>
+        <location filename="../settingsdialog.ui" line="124"/>
         <source>* Requires modified FMTXD</source>
-        <translation>* Kräver en modifierad FMTXD</translation>
+        <translation>* Kräver modifierad FMTXD</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="27"/>
@@ -867,7 +867,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../share.ui" line="20"/>
         <source>Send via bluetooth</source>
-        <translation>Skicka via blåtand</translation>
+        <translation>Skicka via bluetooth</translation>
     </message>
     <message>
         <location filename="../share.ui" line="27"/>
@@ -908,7 +908,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="332"/>
         <source>Add to now playing</source>
-        <translation>Lägg till i nu spelande</translation>
+        <translation>Lägg till i nu spelas</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="334"/>
@@ -953,8 +953,8 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../singlealbumview.cpp" line="472"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
+            <numerusform>%n klipp tillagt i nu spelas</numerusform>
+            <numerusform>%n klipp tillagda i nu spelas</numerusform>
         </translation>
     </message>
     <message>
@@ -965,7 +965,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Lägg till låt till nu spelande</translation>
+        <translation>Lägg till låtar till nu spelas</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
@@ -993,7 +993,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../singleartistview.cpp" line="340"/>
         <source>Add to now playing</source>
-        <translation>Lägg till i nu spelande</translation>
+        <translation>Lägg till i nu spelas</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="351"/>
@@ -1021,8 +1021,8 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../singleartistview.cpp" line="451"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
+            <numerusform>%n klipp tillagt i nu spelas</numerusform>
+            <numerusform>%n klipp tillagda i nu spelas</numerusform>
         </translation>
     </message>
     <message>
@@ -1039,7 +1039,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>Lägg till låt i nu spelande</translation>
+        <translation>Lägg till låt i nu spelas</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
@@ -1073,8 +1073,8 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../singlegenreview.cpp" line="389"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
+            <numerusform>%n klipp tillagt i nu spelas</numerusform>
+            <numerusform>%n klipp tillagda i nu spelas</numerusform>
         </translation>
     </message>
     <message>
@@ -1086,7 +1086,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../singlegenreview.ui" line="108"/>
         <location filename="../singlegenreview.cpp" line="259"/>
         <source>Add to now playing</source>
-        <translation>Lägg till i nu spelande</translation>
+        <translation>Lägg till i nu spelas</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="113"/>
@@ -1129,8 +1129,8 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../singleplaylistview.cpp" line="335"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
+            <numerusform>%n klipp tillagt i nu spelas</numerusform>
+            <numerusform>%n klipp tillagda i nu spelas</numerusform>
         </translation>
     </message>
     <message>
@@ -1202,7 +1202,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
         <location filename="../singleplaylistview.ui" line="113"/>
         <location filename="../singleplaylistview.cpp" line="427"/>
         <source>Add to now playing</source>
-        <translation>Lägg till i nu spelande</translation>
+        <translation>Lägg till i nu spelas</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="118"/>
@@ -1254,14 +1254,14 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../upnpview.cpp" line="169"/>
         <source>Add to now playing</source>
-        <translation>Lägg till i nu spelande</translation>
+        <translation>Lägg till i nu spelas</translation>
     </message>
     <message numerus="yes">
         <location filename="../upnpview.cpp" line="265"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
-            <numerusform>%n klipp tillaggd i nu spelande</numerusform>
+            <numerusform>%n klipp tillagt i nu spelas</numerusform>
+            <numerusform>%n klipp tillagda i nu spelas</numerusform>
         </translation>
     </message>
     <message>
@@ -1272,7 +1272,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>Lägg till låtar i nu spelande</translation>
+        <translation>Lägg till låtar i nu spelas</translation>
     </message>
 </context>
 <context>
@@ -1280,7 +1280,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../videonowplayingwindow.ui" line="14"/>
         <source>Now Playing</source>
-        <translation>Nu spelande</translation>
+        <translation>Nu spelas</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="186"/>
@@ -1331,7 +1331,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="569"/>
         <source>Playback stream no longer available</source>
-        <translation>Uppspelningsström in längre tillgänglig</translation>
+        <translation>Uppspelningsström inte längre tillgänglig</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="571"/>
@@ -1371,17 +1371,17 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="585"/>
         <source>System sound device is unavailable</source>
-        <translation>Ljud för system är inte tillgängligt</translation>
+        <translation>System-ljudenhet är inte tillgängligt</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="587"/>
         <source>Media corrupted</source>
-        <translation>Media är korrupt</translation>
+        <translation>Media korrupt</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="589"/>
         <source>Error while parsing playlist</source>
-        <translation>Fel uppstod när spellista analyserades</translation>
+        <translation>Fel uppstod när spellista lästes in</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="590"/>
@@ -1396,12 +1396,12 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="597"/>
         <source>Video codec not found:</source>
-        <translation>Video codec gick inte att hitta:</translation>
+        <translation>Videocodec gick inte att hitta:</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="601"/>
         <source>Audio codec not found:</source>
-        <translation>Ljud codec gick inte att hitta:</translation>
+        <translation>Ljudcodec gick inte att hitta:</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="605"/>
@@ -1411,7 +1411,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="607"/>
         <source>Media index is not in bound with playlist items</source>
-        <translation>Mediaindex är inte i lag med spellistobjekten</translation>
+        <translation>Mediaindex stämmer inte överens med objekt i spellistan</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="609"/>
@@ -1441,7 +1441,7 @@ Koppla ur kabel för att kunna fortsätta använda FM-sändare.</translation>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="619"/>
         <source>Unable to get current playback status</source>
-        <translation>Kunde inte få nuvarande status för uppspelning</translation>
+        <translation>Kunde inte hämta nuvarande status för uppspelning</translation>
     </message>
 </context>
 <context>

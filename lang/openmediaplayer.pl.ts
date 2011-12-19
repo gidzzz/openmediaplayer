@@ -64,14 +64,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>CarView</name>
-    <message>
-        <location filename="../carview.ui" line="14"/>
-        <source>Car View</source>
-        <translation>Widok samochodowy</translation>
-    </message>
-</context>
-<context>
     <name>EditLyrics</name>
     <message>
         <location filename="../editlyrics.ui" line="14"/>
@@ -82,14 +74,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../editlyrics.ui" line="25"/>
         <source>Save</source>
         <translation>Zapisz</translation>
-    </message>
-</context>
-<context>
-    <name>EntertainmentView</name>
-    <message>
-        <location filename="../entertainmentview.ui" line="14"/>
-        <source>Entertainment View</source>
-        <translation>Widok pokazowy</translation>
     </message>
 </context>
 <context>
@@ -256,7 +240,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="609"/>
+        <location filename="../mainwindow.cpp" line="605"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n utwór</numerusform>
@@ -266,7 +250,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="616"/>
+        <location filename="../mainwindow.cpp" line="612"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n film</numerusform>
@@ -276,7 +260,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="632"/>
+        <location filename="../mainwindow.cpp" line="628"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n stacja</numerusform>
@@ -309,27 +293,27 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Wymieszaj wszystko</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="608"/>
+        <location filename="../mainwindow.cpp" line="604"/>
         <source>(no songs)</source>
         <translation>(brak utworów)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="615"/>
+        <location filename="../mainwindow.cpp" line="611"/>
         <source>(no videos)</source>
         <translation>(brak filmów)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="631"/>
+        <location filename="../mainwindow.cpp" line="627"/>
         <source>(no stations)</source>
         <translation>(brak stacji)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="748"/>
+        <location filename="../mainwindow.cpp" line="740"/>
         <source>Processed items:</source>
         <translation>Przetworzone obiekty</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="752"/>
+        <location filename="../mainwindow.cpp" line="744"/>
         <source>Remaining items:</source>
         <translation>Oczekujące obiekty</translation>
     </message>
@@ -572,12 +556,12 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="791"/>
+        <location filename="../nowplayingwindow.cpp" line="789"/>
         <source>Lyrics not found</source>
         <translation>Nie znaleziono tekstu</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="246"/>
+        <location filename="../nowplayingwindow.cpp" line="245"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n utwór</numerusform>
@@ -586,115 +570,125 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="256"/>
+        <location filename="../nowplayingwindow.cpp" line="255"/>
         <source>total</source>
         <translation>łącznie</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="723"/>
+        <location filename="../nowplayingwindow.cpp" line="722"/>
         <source>Loading lyrics...</source>
         <translation>Ładowanie tekstu...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="778"/>
+        <location filename="../nowplayingwindow.cpp" line="776"/>
         <source>Fetching lyrics...</source>
         <translation>Pobieranie tekstu...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="739"/>
+        <location filename="../nowplayingwindow.cpp" line="738"/>
         <source>There is no active Internet connection</source>
         <translation>Brak połączenia z Internetem</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1183"/>
+        <location filename="../nowplayingwindow.cpp" line="1181"/>
         <source>Information not available</source>
         <translation>Brak informacji</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1243"/>
+        <location filename="../nowplayingwindow.cpp" line="1241"/>
         <source>Clear all songs from now playing?</source>
         <translation>Wyczyścić listę odtwarzania?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1277"/>
+        <location filename="../nowplayingwindow.cpp" line="1275"/>
         <source>Set as ringing tone</source>
         <translation>Ustaw jako dzwonek</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1280"/>
+        <location filename="../nowplayingwindow.cpp" line="1278"/>
         <source>Delete from now playing</source>
         <translation>Usuń z listy odtwarzania</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1278"/>
+        <location filename="../nowplayingwindow.cpp" line="1276"/>
         <source>Share</source>
         <translation>Udostępnij</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1246"/>
-        <location filename="../nowplayingwindow.cpp" line="1295"/>
-        <location filename="../nowplayingwindow.cpp" line="1470"/>
-        <location filename="../nowplayingwindow.cpp" line="1605"/>
+        <location filename="../nowplayingwindow.cpp" line="1244"/>
+        <location filename="../nowplayingwindow.cpp" line="1293"/>
+        <location filename="../nowplayingwindow.cpp" line="1447"/>
+        <location filename="../nowplayingwindow.cpp" line="1580"/>
         <source>Yes</source>
         <translation>Tak</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1247"/>
-        <location filename="../nowplayingwindow.cpp" line="1296"/>
-        <location filename="../nowplayingwindow.cpp" line="1471"/>
-        <location filename="../nowplayingwindow.cpp" line="1606"/>
+        <location filename="../nowplayingwindow.cpp" line="1245"/>
+        <location filename="../nowplayingwindow.cpp" line="1294"/>
+        <location filename="../nowplayingwindow.cpp" line="1448"/>
+        <location filename="../nowplayingwindow.cpp" line="1581"/>
         <source>No</source>
         <translation>Nie</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1290"/>
+        <location filename="../nowplayingwindow.cpp" line="1288"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>Ustawić wybrany utwór jako dzwonek?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1430"/>
+        <location filename="../nowplayingwindow.cpp" line="1355"/>
+        <source>Entertainment View</source>
+        <translation>Widok pokazowy</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1360"/>
+        <source>Car View</source>
+        <translation>Widok samochodowy</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1407"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1436"/>
+        <location filename="../nowplayingwindow.cpp" line="1413"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1467"/>
+        <location filename="../nowplayingwindow.cpp" line="1444"/>
         <source>Playlist with the same name exists, overwrite?</source>
         <translation>Lista o takiej nazwie już istnieje. Nadpisać?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1478"/>
-        <location filename="../nowplayingwindow.cpp" line="1485"/>
+        <location filename="../nowplayingwindow.cpp" line="1455"/>
+        <location filename="../nowplayingwindow.cpp" line="1462"/>
         <source>Playlist saved</source>
         <translation>Lista zapisana</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1584"/>
-        <location filename="../nowplayingwindow.cpp" line="1591"/>
+        <location filename="../nowplayingwindow.cpp" line="1559"/>
+        <location filename="../nowplayingwindow.cpp" line="1566"/>
         <source>Select album art</source>
         <translation>Wybierz okładkę</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1585"/>
+        <location filename="../nowplayingwindow.cpp" line="1560"/>
         <source>Reset album art</source>
         <translation>Przywróć okładkę</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1602"/>
+        <location filename="../nowplayingwindow.cpp" line="1577"/>
         <source>Reset album art?</source>
         <translation>Przywrócić domyślną okładkę?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1638"/>
+        <location filename="../nowplayingwindow.cpp" line="1613"/>
         <source>Edit lyrics</source>
         <translation>Edytuj tekst</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1639"/>
+        <location filename="../nowplayingwindow.cpp" line="1614"/>
         <source>Reload lyrics</source>
         <translation>Odśwież tekst</translation>
     </message>
@@ -710,22 +704,22 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="578"/>
-        <location filename="../nowplayingwindow.cpp" line="1159"/>
+        <location filename="../nowplayingwindow.cpp" line="577"/>
+        <location filename="../nowplayingwindow.cpp" line="1157"/>
         <source>(unknown song)</source>
         <translation>(nieznany utwór)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="587"/>
-        <location filename="../nowplayingwindow.cpp" line="1162"/>
+        <location filename="../nowplayingwindow.cpp" line="586"/>
+        <location filename="../nowplayingwindow.cpp" line="1160"/>
         <source>(unknown artist)</source>
         <translation>(nieznany wykonawca)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="596"/>
-        <location filename="../nowplayingwindow.cpp" line="1165"/>
+        <location filename="../nowplayingwindow.cpp" line="595"/>
+        <location filename="../nowplayingwindow.cpp" line="1163"/>
         <source>(unknown album)</source>
         <translation>(nieznany album)</translation>
     </message>
@@ -741,14 +735,14 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="929"/>
-        <location filename="../nowplayingwindow.cpp" line="1281"/>
+        <location filename="../nowplayingwindow.cpp" line="1279"/>
         <source>Clear now playing</source>
         <translation>Wyczyść listę odtwarzania</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1274"/>
-        <location filename="../nowplayingwindow.cpp" line="1422"/>
+        <location filename="../nowplayingwindow.cpp" line="1272"/>
+        <location filename="../nowplayingwindow.cpp" line="1399"/>
         <source>Save playlist</source>
         <translation>Zapisz listę odtwarzania</translation>
     </message>
@@ -843,22 +837,28 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Otwieraj całe foldery</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="82"/>
+        <location filename="../settingsdialog.ui" line="80"/>
+        <source>Append opened songs</source>
+        <translation>Nie czyść listy odtwarzania
+przed otwieraniem pliku</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="89"/>
         <source>Size of automatic playlists</source>
         <translation>Rozmiar automatycznych list</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="98"/>
+        <location filename="../settingsdialog.ui" line="105"/>
         <source>Lazy sliders</source>
         <translation>Leniwe suwaki</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="105"/>
+        <location filename="../settingsdialog.ui" line="112"/>
         <source>Override FMTX checks in UI</source>
         <translation>Nie sprawdzaj FMTX</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="117"/>
+        <location filename="../settingsdialog.ui" line="124"/>
         <source>* Requires modified FMTXD</source>
         <translation>* Wymaga zmodyfikowanego FMTXD</translation>
     </message>
