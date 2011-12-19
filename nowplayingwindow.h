@@ -180,7 +180,7 @@ private slots:
     void onShareClicked();
     void showEntertainmentView();
     void showCarView();
-    void createQmlView(QUrl source);
+    void createQmlView(QUrl source, QString title);
     void updateQmlViewMetadata();
     void nullQmlView();
     void savePlaylist();

@@ -105,7 +105,7 @@ void SingleGenreView::onItemActivated(QListWidgetItem *item)
     this->setEnabled(false);
 
     int songCount = item->data(UserRoleAlbumCount).toInt();
-    if(songCount == 0 || songCount == 1) {
+    if (songCount == 0 || songCount == 1) {
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         if (songCount == 1)
             albumView->isSingleAlbum = true;
@@ -115,7 +115,7 @@ void SingleGenreView::onItemActivated(QListWidgetItem *item)
         albumView->show();
         connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
-    } else if(songCount > 1) {
+    } else if (songCount > 1) {
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->data(UserRoleTitle).toString());

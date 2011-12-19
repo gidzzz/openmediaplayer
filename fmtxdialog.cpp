@@ -86,7 +86,7 @@ void FMTXDialog::onSaveClicked()
     qDebug() << "Selected Frequency:" << QString::number(frequencyValue);
 #endif
     selector->setValue("frequency", ufreq);
-    if(ui->fmtxCheckbox->isChecked())
+    if (ui->fmtxCheckbox->isChecked())
         selector->setValue("state", "enabled");
     else
         selector->setValue("state", "disabled");
@@ -95,7 +95,7 @@ void FMTXDialog::onSaveClicked()
 
 void FMTXDialog::onStateChanged()
 {
-    if(fmtxState->value().toBool())
+    if (fmtxState->value().toBool())
         ui->fmtxCheckbox->setChecked(true);
     else
         ui->fmtxCheckbox->setChecked(false);
@@ -139,7 +139,7 @@ void FMTXDialog::onCheckboxClicked()
 
 void FMTXDialog::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key() == Qt::Key_Backspace)
+    if (e->key() == Qt::Key_Backspace)
         this->close();
 }
 

@@ -1352,18 +1352,19 @@ void NowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
 
 void NowPlayingWindow::showEntertainmentView()
 {
-    createQmlView(QUrl("file:///opt/openmediaplayer/qml/entertainmentview/entertainmentview.qml"));
+    createQmlView(QUrl("file:///opt/openmediaplayer/qml/entertainmentview/entertainmentview.qml"), tr("Entertainment View"));
 }
 
 void NowPlayingWindow::showCarView()
 {
-    createQmlView(QUrl("file:///opt/openmediaplayer/qml/carview/carview.qml"));
+    createQmlView(QUrl("file:///opt/openmediaplayer/qml/carview/carview.qml"), tr("Car View"));
 }
 
-void NowPlayingWindow::createQmlView(QUrl source)
+void NowPlayingWindow::createQmlView(QUrl source, QString title)
 {
     if (!qmlView) {
         qmlView = new QmlView(source, this, mafwFactory);
+        qmlView->setWindowTitle(title);
         for (int i = 0; i < ui->songPlaylist->count(); i++)
             qmlView->addItemToPlaylist(ui->songPlaylist->item(i), i);
         connect(qmlView, SIGNAL(destroyed()), this, SLOT(nullQmlView()));

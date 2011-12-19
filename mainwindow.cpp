@@ -456,8 +456,7 @@ void MainWindow::orientationChanged()
 #ifdef DEBUG
         qDebug() << "MainWindow: Orientation changed: Landscape.";
 #endif
-        if(!ui->menuList->isHidden()) {
-            ui->menuList->hide();
+        ui->menuList->hide();
         ui->songsButton->show();
         ui->songsButtonLabel->show();
         ui->videosButton->show();
@@ -469,7 +468,6 @@ void MainWindow::orientationChanged()
         ui->songCountL->show();
         ui->videoCountL->show();
         ui->stationCountL->show();
-        }
     } else {
         // Portrait mode
 #ifdef DEBUG
@@ -487,8 +485,7 @@ void MainWindow::orientationChanged()
         ui->videoCountL->hide();
         ui->stationCountL->hide();
         ui->menuList->setGeometry(QRect(0, 0, 480, 800));
-        if(ui->menuList->isHidden())
-            ui->menuList->show();
+        ui->menuList->show();
     }
     upnpControl->setGeometry(0, screenGeometry.height()-(70+55),
                              screenGeometry.width()-122, upnpControl->height());

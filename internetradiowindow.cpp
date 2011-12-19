@@ -42,7 +42,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
     this->connectSignals();
     this->orientationChanged();
 #ifdef MAFW
-    if(mafwRadioSource->isReady())
+    if (mafwRadioSource->isReady())
         this->listStations();
     else
         connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(listStations()));
