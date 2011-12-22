@@ -210,7 +210,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
     if (browseId != this->browsePlaylistId)
         return;
 
-    QListWidgetItem *item = new QListWidgetItem(ui->songList);
+    QListWidgetItem *item = new QListWidgetItem();
 
     if (metadata != NULL) {
         QString title;

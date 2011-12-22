@@ -304,13 +304,14 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
                                 MAFW_METADATA_KEY_URI);
         URI = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown)");
 
-        QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+        QListWidgetItem *item = new QListWidgetItem();
 
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleValueText, URI);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, Duration::Blank);
+
         ui->listWidget->addItem(item);
     }
 

@@ -33,7 +33,6 @@ public:
     ~SingleAlbumView();
 #ifdef MAFW
     void browseAlbumByObjectId(QString objectId);
-    bool isSingleAlbum;
 #endif
 
 private:

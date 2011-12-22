@@ -36,7 +36,6 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
 
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
-    this->isSingleAlbum = false;
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -146,7 +145,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TRACK);
         trackNumber = v ? g_value_get_int (v) : -1;
 
-        QListWidgetItem *item = new QListWidgetItem(ui->songList);
+        QListWidgetItem *item = new QListWidgetItem();
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);

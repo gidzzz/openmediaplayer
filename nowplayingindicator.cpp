@@ -105,7 +105,7 @@ void NowPlayingIndicator::onStateChanged(int state)
 #ifdef Q_WS_MAEMO_5
 void NowPlayingIndicator::onTkLockChanged(bool state)
 {
-    if(state) {
+    if (state) {
 #ifdef DEBUG
         qDebug() << "NowPlayingIndicator: Screen locked, stopping animation";
 #endif
@@ -114,13 +114,13 @@ void NowPlayingIndicator::onTkLockChanged(bool state)
 #ifdef DEBUG
         qDebug() << "NowPlayingIndicator: Screen unlocked, starting animation";
 #endif
-        if(!deviceEvents->isScreenLocked() && this->mafwState == Playing) {
+        if (!deviceEvents->isScreenLocked() && this->mafwState == Playing) {
             timer->start();
         } else {
 #ifdef DEBUG
             qDebug() << "NowPlayingIndicator: Screen locked, animation blocked.";
 #endif
-            if(timer->isActive())
+            if (timer->isActive())
                 timer->stop();
         }
     }
@@ -144,7 +144,7 @@ void NowPlayingIndicator::stopAnimation()
 #ifdef DEBUG
     qDebug() << "NowPlayingIndicator::stopAnimation()";
 #endif
-    if(timer->isActive())
+    if (timer->isActive())
         timer->stop();
     this->frame = 0;
     this->repaint();
@@ -240,9 +240,8 @@ void NowPlayingIndicator::hideEvent(QHideEvent *)
 void NowPlayingIndicator::triggerAnimation()
 {
 #ifdef Q_WS_MAEMO_5
-    if(this->mafwState == Playing)
-        if(!timer->isActive())
-            timer->start();
+    if (this->mafwState == Playing && !timer->isActive())
+        timer->start();
 #endif
 }
 

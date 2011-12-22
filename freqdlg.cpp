@@ -88,7 +88,7 @@ void FreqDlg::refreshFreqValues()
     ui->fractions->clear();
     for (int i = _minFreq; i <= _maxFreq; i++)
     {
-        QListWidgetItem *item = new QListWidgetItem(ui->integers);
+        QListWidgetItem *item = new QListWidgetItem();
         item->setText(QString::number(i));
         item->setTextAlignment(Qt::AlignCenter);
         ui->integers->addItem(item);
@@ -96,7 +96,7 @@ void FreqDlg::refreshFreqValues()
 
     for (int i = regionStepValue-1; i <= 9; i += regionStepValue)
     {
-        QListWidgetItem *item = new QListWidgetItem(ui->fractions);
+        QListWidgetItem *item = new QListWidgetItem();
         item->setText(QString::number(i));
         item->setTextAlignment(Qt::AlignCenter);
         ui->fractions->addItem(item);

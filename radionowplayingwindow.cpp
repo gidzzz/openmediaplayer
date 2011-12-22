@@ -342,7 +342,7 @@ void RadioNowPlayingWindow::onPreviousButtonClicked()
     }
 }
 
-void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString object_id, QString error)
+void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString, QString error)
 {
     if (metadata != NULL) {
         QString station;

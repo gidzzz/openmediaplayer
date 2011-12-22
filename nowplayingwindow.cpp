@@ -485,7 +485,7 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
                                                                   ui->songProgress->value()));
     }
 
-    else { // object == ui->songPlaylist
+    else if (object == ui->songPlaylist) {
         if (event->type() == QEvent::DragMove) {
             dragInProgress = true;
         }
@@ -1537,7 +1537,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
     int songCount = playlist->getSize();
     if (songCount) {
         for (int i = 0; i < songCount; i++) {
-            QListWidgetItem *item = new QListWidgetItem(ui->songPlaylist);
+            QListWidgetItem *item = new QListWidgetItem();
             item->setData(UserRoleValueText, " ");
             item->setData(UserRoleSongDuration, Duration::Blank);
             ui->songPlaylist->addItem(item);

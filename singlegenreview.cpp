@@ -107,8 +107,6 @@ void SingleGenreView::onItemActivated(QListWidgetItem *item)
     int songCount = item->data(UserRoleAlbumCount).toInt();
     if (songCount == 0 || songCount == 1) {
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
-        if (songCount == 1)
-            albumView->isSingleAlbum = true;
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 

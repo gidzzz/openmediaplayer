@@ -131,7 +131,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
             duration = Duration::Blank;
         }
 
-        QListWidgetItem *item = new QListWidgetItem(ui->objectList);
+        QListWidgetItem *item = new QListWidgetItem();
 
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);

@@ -33,7 +33,7 @@ void UpnpControl::onSourceAdded(QString uuid)
     if (uuid.startsWith("_uuid_") && !sources.contains(uuid)) {
         sources.append(uuid);
 
-        QListWidgetItem *item = new QListWidgetItem(ui->upnpList);
+        QListWidgetItem *item = new QListWidgetItem();
 
         item->setIcon(QIcon::fromTheme("mediaplayer_upnp_server"));
         item->setText(mafwUpnpSource->getNameByUUID(uuid));

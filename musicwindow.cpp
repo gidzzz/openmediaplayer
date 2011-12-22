@@ -511,17 +511,17 @@ void MusicWindow::saveViewState(QVariant view)
 
 void MusicWindow::loadViewState()
 {
-    if(QSettings().contains("music/view")) {
+    if (QSettings().contains("music/view")) {
         QString state = QSettings().value("music/view").toString();
-        if(state == "songs")
+        if (state == "songs")
             this->showSongsView();
-        else if(state == "albums")
+        else if (state == "albums")
             this->showAlbumView();
-        else if(state == "artists")
+        else if (state == "artists")
             this->showArtistView();
-        else if(state == "genres")
+        else if (state == "genres")
             this->showGenresView();
-        else if(state == "playlists")
+        else if (state == "playlists")
             this->showPlayListView();
     } else {
         this->showSongsView();
@@ -557,8 +557,6 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
     int songCount = item->data(UserRoleAlbumCount).toInt();
     if(songCount == 0 || songCount == 1) {
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
-        if (songCount == 1)
-            albumView->isSingleAlbum = true;
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setWindowTitle(item->data(UserRoleTitle).toString());
 
@@ -798,8 +796,6 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int, uint, QString obj
     } else if (browseId == this->browseImportedPlaylistsId) {
         QListWidgetItem *listItem = new QListWidgetItem();
 
-        listItem->setData(UserRoleObjectID, objectId);
-
         v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
         listItem->setText(g_value_get_string (v));
 
@@ -807,6 +803,7 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int, uint, QString obj
         listItem->setData(UserRoleValueText, tr("%n song(s)", "", g_value_get_int(v)));
 
         listItem->setData(UserRoleSongDuration, Duration::Blank);
+        listItem->setData(UserRoleObjectID, objectId);
 
         ui->playlistList->addItem(listItem);
     }
@@ -837,7 +834,7 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
-        QListWidgetItem *item = new QListWidgetItem(ui->songList);
+        QListWidgetItem *item = new QListWidgetItem();
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
@@ -867,18 +864,18 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
     QString title;
     int songCount = -1;
     int albumCount = -1;
-    QListWidgetItem *item = new QListWidgetItem(ui->artistList);
+
+    QListWidgetItem *item = new QListWidgetItem();
+
     if (metadata != NULL) {
         GValue *v;
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_CHILDCOUNT_1);
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
         albumCount = v ? g_value_get_int (v) : -1;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_CHILDCOUNT_2);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_2);
         songCount = v ? g_value_get_int (v) : -1;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI);
@@ -899,9 +896,10 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
     item->setData(UserRoleTitle, title);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
-
     item->setData(UserRoleObjectID, objectId);
+
     ui->artistList->addItem(item);
+
     if (!error.isEmpty())
         qDebug() << error;
 
@@ -977,27 +975,21 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     int artistCount;
     GValue *v;
 
-    v = mafw_metadata_first (metadata,
-                             MAFW_METADATA_KEY_TITLE);
+    v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
     title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown genre)");
 
-    v = mafw_metadata_first (metadata,
-                             MAFW_METADATA_KEY_CHILDCOUNT_1);
+    v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
     artistCount = v ? g_value_get_int (v) : -1;
 
-    v = mafw_metadata_first (metadata,
-                             MAFW_METADATA_KEY_CHILDCOUNT_2);
+    v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_2);
     albumCount = v ? g_value_get_int (v) : -1;
 
-    v = mafw_metadata_first (metadata,
-                             MAFW_METADATA_KEY_CHILDCOUNT_3);
+    v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_3);
     songCount = v ? g_value_get_int (v) : -1;
 
     QListWidgetItem *item = new QListWidgetItem();
-    if (!title.isEmpty())
-        item->setData(UserRoleSongTitle, title);
-    else
-        item->setData(UserRoleSongTitle, tr("(unknown genre)"));
+
+    item->setData(UserRoleSongTitle, title.isEmpty() ? tr("(unknown genre)") : title);
     item->setText(item->data(UserRoleSongTitle).toString());
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleArtistCount, artistCount);
@@ -1005,10 +997,8 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     item->setData(UserRoleObjectID, objectId);
     item->setData(UserRoleSongDuration, Duration::Blank);
 
-    QString valueText = tr("%n song(s)", "", songCount)
-                      + ", "
-                      + tr("%n album(s)", "", albumCount)
-                      + ", "
+    QString valueText = tr("%n song(s)", "", songCount) + ", "
+                      + tr("%n album(s)", "", albumCount) + ", "
                       + tr("%n artist(s)", "", artistCount);
     item->setData(UserRoleValueText, valueText);
 
@@ -1019,7 +1009,7 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                this, SLOT(browseAllGenres(uint, int, uint, QString, GHashTable*, QString)));
+                   this, SLOT(browseAllGenres(uint, int, uint, QString, GHashTable*, QString)));
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif

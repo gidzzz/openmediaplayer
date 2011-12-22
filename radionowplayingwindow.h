@@ -77,7 +77,7 @@ private slots:
     void onBufferingInfo(float);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
-    void onRendererMetadataRequested(GHashTable*, QString object_id, QString error);
+    void onRendererMetadataRequested(GHashTable*, QString, QString error);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
     void onRendererMetadataChanged(QString name, QVariant value);
 #endif
