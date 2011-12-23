@@ -235,7 +235,7 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="605"/>
+        <location filename="../mainwindow.cpp" line="606"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n dal</numerusform>
@@ -243,7 +243,7 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="612"/>
+        <location filename="../mainwindow.cpp" line="613"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n videó</numerusform>
@@ -251,7 +251,7 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="628"/>
+        <location filename="../mainwindow.cpp" line="629"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n állomás</numerusform>
@@ -282,27 +282,27 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
         <translation>Összes dal keverése</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="604"/>
+        <location filename="../mainwindow.cpp" line="605"/>
         <source>(no songs)</source>
         <translation>(nincsenek dalok)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="611"/>
+        <location filename="../mainwindow.cpp" line="612"/>
         <source>(no videos)</source>
         <translation>(nincsenek videók)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="627"/>
+        <location filename="../mainwindow.cpp" line="628"/>
         <source>(no stations)</source>
         <translation>(nincsenek állomások)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="740"/>
+        <location filename="../mainwindow.cpp" line="741"/>
         <source>Processed items:</source>
         <translation>Feldolgozott elemek:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="744"/>
+        <location filename="../mainwindow.cpp" line="745"/>
         <source>Remaining items:</source>
         <translation>Fennmaradó elemek: </translation>
     </message>
@@ -397,99 +397,99 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
         <translation>Dalok</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="691"/>
+        <location filename="../musicwindow.cpp" line="689"/>
         <source>Saved</source>
         <translation>Elmentve</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="709"/>
-        <location filename="../musicwindow.cpp" line="784"/>
-        <location filename="../musicwindow.cpp" line="788"/>
-        <location filename="../musicwindow.cpp" line="792"/>
-        <location filename="../musicwindow.cpp" line="796"/>
-        <location filename="../musicwindow.cpp" line="807"/>
-        <location filename="../musicwindow.cpp" line="1008"/>
+        <location filename="../musicwindow.cpp" line="707"/>
+        <location filename="../musicwindow.cpp" line="782"/>
+        <location filename="../musicwindow.cpp" line="786"/>
+        <location filename="../musicwindow.cpp" line="790"/>
+        <location filename="../musicwindow.cpp" line="794"/>
+        <location filename="../musicwindow.cpp" line="803"/>
+        <location filename="../musicwindow.cpp" line="997"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n dal</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="718"/>
+        <location filename="../musicwindow.cpp" line="716"/>
         <source>Imported playlists</source>
         <translation>Importált lejátszási listák</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="728"/>
+        <location filename="../musicwindow.cpp" line="726"/>
         <source>Automatic playlists</source>
         <translation>Automatikus lejátszási listák</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="735"/>
+        <location filename="../musicwindow.cpp" line="733"/>
         <source>Recently added</source>
         <translation>Utoljára hozzáadott dalok</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="735"/>
+        <location filename="../musicwindow.cpp" line="733"/>
         <source>Recently played</source>
         <translation>Utoljára játszott dalok</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="735"/>
+        <location filename="../musicwindow.cpp" line="733"/>
         <source>Most played</source>
         <translation>Legtöbbet játszott dalok</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="735"/>
+        <location filename="../musicwindow.cpp" line="733"/>
         <source>Never played</source>
         <translation>Sosem játszott dalok</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="829"/>
+        <location filename="../musicwindow.cpp" line="825"/>
         <source>(unknown song)</source>
         <translation>(ismeretlen dal)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="832"/>
-        <location filename="../musicwindow.cpp" line="875"/>
-        <location filename="../musicwindow.cpp" line="896"/>
-        <location filename="../musicwindow.cpp" line="934"/>
+        <location filename="../musicwindow.cpp" line="828"/>
+        <location filename="../musicwindow.cpp" line="871"/>
+        <location filename="../musicwindow.cpp" line="891"/>
+        <location filename="../musicwindow.cpp" line="929"/>
         <source>(unknown artist)</source>
         <translation>(ismeretlen előadó)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="835"/>
-        <location filename="../musicwindow.cpp" line="931"/>
+        <location filename="../musicwindow.cpp" line="831"/>
+        <location filename="../musicwindow.cpp" line="926"/>
         <source>(unknown album)</source>
         <translation>(ismeretlen album)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="950"/>
+        <location filename="../musicwindow.cpp" line="945"/>
         <source>Various artists</source>
         <translation>Számos előadó</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="982"/>
-        <location filename="../musicwindow.cpp" line="1000"/>
+        <location filename="../musicwindow.cpp" line="976"/>
+        <location filename="../musicwindow.cpp" line="989"/>
         <source>(unknown genre)</source>
         <translation>(ismeretlen stílus)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1010"/>
+        <location filename="../musicwindow.cpp" line="998"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n album</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1012"/>
+        <location filename="../musicwindow.cpp" line="999"/>
         <source>%n artist(s)</source>
         <translation>
             <numerusform>%n előadó</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1229"/>
+        <location filename="../musicwindow.cpp" line="1214"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n fájl hozzáadva a most játszotthoz</numerusform>
@@ -867,78 +867,78 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.cpp" line="83"/>
+        <location filename="../singlealbumview.cpp" line="82"/>
         <source>Shuffle songs</source>
         <translation>Dalok keverése</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="135"/>
+        <location filename="../singlealbumview.cpp" line="134"/>
         <source>(unknown song)</source>
         <translation>(ismeretlen dal)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="138"/>
+        <location filename="../singlealbumview.cpp" line="137"/>
         <source>(unknown artist)</source>
         <translation>(ismeretlen előadó)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="141"/>
+        <location filename="../singlealbumview.cpp" line="140"/>
         <source>(unknown album)</source>
         <translation>(ismeretlen album)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="93"/>
+        <location filename="../singlealbumview.cpp" line="92"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n dal</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="332"/>
+        <location filename="../singlealbumview.cpp" line="331"/>
         <source>Add to now playing</source>
         <translation>Hozzáad a most játszotthoz</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="334"/>
+        <location filename="../singlealbumview.cpp" line="333"/>
         <source>Set as ringing tone</source>
         <translation>Beállít csengőhangnak</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="335"/>
+        <location filename="../singlealbumview.cpp" line="334"/>
         <source>Share</source>
         <translation>Megosztás</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="359"/>
+        <location filename="../singlealbumview.cpp" line="358"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>Biztosan be akarod állítani ezt a dalt csengőhangnak?</translation>
+    </message>
+    <message>
+        <location filename="../singlealbumview.cpp" line="363"/>
+        <location filename="../singlealbumview.cpp" line="438"/>
+        <location filename="../singlealbumview.cpp" line="458"/>
+        <source>Yes</source>
+        <translation>Igen</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="364"/>
         <location filename="../singlealbumview.cpp" line="439"/>
         <location filename="../singlealbumview.cpp" line="459"/>
-        <source>Yes</source>
-        <translation>Igen</translation>
-    </message>
-    <message>
-        <location filename="../singlealbumview.cpp" line="365"/>
-        <location filename="../singlealbumview.cpp" line="440"/>
-        <location filename="../singlealbumview.cpp" line="460"/>
         <source>No</source>
         <translation>Nem</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="436"/>
+        <location filename="../singlealbumview.cpp" line="435"/>
         <source>Delete selected item from device?</source>
         <translation>Kiválasztott fájlok törlése az eszközről?</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="456"/>
+        <location filename="../singlealbumview.cpp" line="455"/>
         <source>Delete all items shown in view?</source>
         <translation>Minden mutatott elem törlése?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="472"/>
+        <location filename="../singlealbumview.cpp" line="471"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klip hozzáadva a most játszotthoz</numerusform>
@@ -956,7 +956,7 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
-        <location filename="../singlealbumview.cpp" line="333"/>
+        <location filename="../singlealbumview.cpp" line="332"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
@@ -1041,20 +1041,20 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
         <translation>Dalok keverése</translation>
     </message>
     <message>
-        <location filename="../singlegenreview.cpp" line="168"/>
-        <location filename="../singlegenreview.cpp" line="188"/>
+        <location filename="../singlegenreview.cpp" line="166"/>
+        <location filename="../singlegenreview.cpp" line="186"/>
         <source>(unknown artist)</source>
         <translation>(ismeretlen előadó)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlegenreview.cpp" line="210"/>
+        <location filename="../singlegenreview.cpp" line="208"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n dal</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlegenreview.cpp" line="389"/>
+        <location filename="../singlegenreview.cpp" line="387"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klip hozzáadva a most játszotthoz</numerusform>
@@ -1067,7 +1067,7 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="108"/>
-        <location filename="../singlegenreview.cpp" line="259"/>
+        <location filename="../singlegenreview.cpp" line="257"/>
         <source>Add to now playing</source>
         <translation>Hozzáadás a most játszotthoz</translation>
     </message>
@@ -1263,163 +1263,163 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
         <translation>Most játszott</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="186"/>
+        <location filename="../videonowplayingwindow.cpp" line="185"/>
         <source>Delete video?</source>
         <translation>Videó törlése?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="187"/>
+        <location filename="../videonowplayingwindow.cpp" line="186"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Biztosan törölni szeretnéd ezt a videót?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="190"/>
+        <location filename="../videonowplayingwindow.cpp" line="189"/>
         <source>Yes</source>
         <translation>Igen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="191"/>
+        <location filename="../videonowplayingwindow.cpp" line="190"/>
         <source>No</source>
         <translation>Nem</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="557"/>
-        <location filename="../videonowplayingwindow.cpp" line="650"/>
+        <location filename="../videonowplayingwindow.cpp" line="556"/>
+        <location filename="../videonowplayingwindow.cpp" line="649"/>
         <source>Unable to play media</source>
         <translation>Nem tudom lejátszani a médiát</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="561"/>
+        <location filename="../videonowplayingwindow.cpp" line="560"/>
         <source>Media not found</source>
         <translation>Nem találom a médiát</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="563"/>
+        <location filename="../videonowplayingwindow.cpp" line="562"/>
         <source>URI not available</source>
         <translation>URI nem elérhető</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="565"/>
+        <location filename="../videonowplayingwindow.cpp" line="564"/>
         <source>Invalid URI</source>
         <translation>Helytelen URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="567"/>
+        <location filename="../videonowplayingwindow.cpp" line="566"/>
         <source>Unable to open media</source>
         <translation>Nem tudom megnyitni a médiát</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="569"/>
+        <location filename="../videonowplayingwindow.cpp" line="568"/>
         <source>Playback stream no longer available</source>
         <translation>Az adás megszakadt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="571"/>
+        <location filename="../videonowplayingwindow.cpp" line="570"/>
         <source>Could not determine MIME-type</source>
         <translation>Nem tudom meghatározni a MIME-típust</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="573"/>
+        <location filename="../videonowplayingwindow.cpp" line="572"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Hiba történt, a lejátszás nem folytatható</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="575"/>
+        <location filename="../videonowplayingwindow.cpp" line="574"/>
         <source>General error occured</source>
         <translation>Hiba történt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="577"/>
+        <location filename="../videonowplayingwindow.cpp" line="576"/>
         <source>Unsupported media</source>
         <translation>Nem támogatott formátum</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="579"/>
+        <location filename="../videonowplayingwindow.cpp" line="578"/>
         <source>Unsupported resolution</source>
         <translation>Nem támogatott felbontás</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="581"/>
+        <location filename="../videonowplayingwindow.cpp" line="580"/>
         <source>Unsupported framerate</source>
         <translation>Nem támogatott framerate</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="583"/>
+        <location filename="../videonowplayingwindow.cpp" line="582"/>
         <source>Media is protected by DRM</source>
         <translation>Ez a média szerzői jogvédelem alatt áll</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="585"/>
+        <location filename="../videonowplayingwindow.cpp" line="584"/>
         <source>System sound device is unavailable</source>
         <translation>Rendszer hangeszköze nem elérhető</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="587"/>
+        <location filename="../videonowplayingwindow.cpp" line="586"/>
         <source>Media corrupted</source>
         <translation>Sérült fájl</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="589"/>
+        <location filename="../videonowplayingwindow.cpp" line="588"/>
         <source>Error while parsing playlist</source>
         <translation>Hiba a lejátszási lista olvasása közben</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="590"/>
+        <location filename="../videonowplayingwindow.cpp" line="589"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>A lejátszási lista sérült vagy üres</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="593"/>
+        <location filename="../videonowplayingwindow.cpp" line="592"/>
         <source>Codec not found:</source>
         <translation>Nem találom a codec-et</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="597"/>
+        <location filename="../videonowplayingwindow.cpp" line="596"/>
         <source>Video codec not found:</source>
         <translation>Nem találom a videó codec-et</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="601"/>
+        <location filename="../videonowplayingwindow.cpp" line="600"/>
         <source>Audio codec not found:</source>
         <translation>Nem találom a hang codec-et</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="605"/>
+        <location filename="../videonowplayingwindow.cpp" line="604"/>
         <source>No playlist assigned</source>
         <translation>Nincs lejátszási listához hozzárendelve</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="607"/>
+        <location filename="../videonowplayingwindow.cpp" line="606"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>A lejátszási lista elemei nincsenek összhangban a média-indexel</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="609"/>
+        <location filename="../videonowplayingwindow.cpp" line="608"/>
         <source>Unable to start playback</source>
         <translation>Nem indítható a lejátszás</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="611"/>
+        <location filename="../videonowplayingwindow.cpp" line="610"/>
         <source>Unable to stop playback</source>
         <translation>Nem állítható meg a lejátszás</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="613"/>
+        <location filename="../videonowplayingwindow.cpp" line="612"/>
         <source>Unable to pause playback</source>
         <translation>Nem szakítható meg a lejátszás</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="615"/>
+        <location filename="../videonowplayingwindow.cpp" line="614"/>
         <source>Unable to seek position in media</source>
         <translation>Nem tudok keresni a médiában</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="617"/>
+        <location filename="../videonowplayingwindow.cpp" line="616"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Nem tudom meghatározni a pozíciót</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="619"/>
+        <location filename="../videonowplayingwindow.cpp" line="618"/>
         <source>Unable to get current playback status</source>
         <translation>Nem tudom meghatározni a lejátszási állapotot</translation>
     </message>
