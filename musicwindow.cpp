@@ -39,15 +39,15 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     mafwPlaylistManager = new MafwPlaylistManagerAdapter(this);
 #endif
     ui->centralwidget->setLayout(ui->songsLayout);
-    SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
+    SongListItemDelegate *songDelegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ThumbnailItemDelegate *albumDelegate = new ThumbnailItemDelegate(ui->albumList);
 
-    ui->songList->setItemDelegate(delegate);
+    ui->songList->setItemDelegate(songDelegate);
     ui->artistList->setItemDelegate(artistDelegate);
     ui->albumList->setItemDelegate(albumDelegate);
-    ui->genresList->setItemDelegate(delegate);
-    ui->playlistList->setItemDelegate(delegate);
+    ui->genresList->setItemDelegate(songDelegate);
+    ui->playlistList->setItemDelegate(songDelegate);
 
     ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->albumList->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -328,7 +328,7 @@ void MusicWindow::onSearchHideButtonClicked()
 
 void MusicWindow::onSearchTextChanged(QString text)
 {
-    for (int i=0; i < this->currentList()->count(); i++) {
+    for (int i = 0; i < this->currentList()->count(); i++) {
         if (this->currentList() == ui->songList) {
              if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
                  ui->songList->item(i)->data(UserRoleSongArtist).toString().toLower().indexOf(text.toLower()) != -1 ||
@@ -627,10 +627,10 @@ void MusicWindow::listArtists()
 
     this->browseAllArtistsId = mafwTrackerSource->sourceBrowse("localtagfs::music/artists", false, NULL, NULL,
                                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                               MAFW_METADATA_KEY_DURATION,
-                                                               MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                               MAFW_METADATA_KEY_CHILDCOUNT_2,
-                                                               MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI),
+                                                                                MAFW_METADATA_KEY_DURATION,
+                                                                                MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                                                MAFW_METADATA_KEY_CHILDCOUNT_2,
+                                                                                MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI),
                                                                0, MAFW_SOURCE_BROWSE_ALL);
 }
 
@@ -812,8 +812,7 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int, uint, QString obj
 
 void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if(browseId != browseAllSongsId)
-      return;
+    if (browseId != browseAllSongsId) return;
 
     if (metadata != NULL) {
         QString title;
@@ -858,8 +857,7 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
 
 void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
-    if (browseId != browseAllArtistsId)
-        return;
+    if (browseId != browseAllArtistsId) return;
 
     QString title;
     int songCount = -1;
@@ -915,8 +913,7 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
 
 void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
-    if (browseId != browseAllAlbumsId)
-        return;
+    if (browseId != browseAllAlbumsId) return;
 
     QString albumTitle;
     QString artist;
@@ -1105,7 +1102,7 @@ void MusicWindow::onAddToNowPlaying()
                     this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)));
 
             this->addToNowPlayingId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
-                                                                     MAFW_SOURCE_NO_KEYS, 0, limit);
+                                                                      MAFW_SOURCE_NO_KEYS, 0, limit);
         }
         else if (item->data(UserRoleObjectID).isNull()) { // saved playlist case
             MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(item->text()));
@@ -1144,8 +1141,7 @@ void MusicWindow::onAddToNowPlaying()
 
 void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index, gpointer op)
 {
-    if ((uint)op != addToNowPlayingId)
-        return;
+    if ((uint)op != addToNowPlayingId) return;
 
     qDebug() << "MusicWindow::onGetItems | index: " << index;
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
@@ -1183,8 +1179,7 @@ void MusicWindow::onContainerChanged(QString objectId)
 
 void MusicWindow::onAddToNowPlayingCallback(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString)
 {
-    if (browseId != this->addToNowPlayingId)
-        return;
+    if (browseId != this->addToNowPlayingId) return;
 
     if (songAddBufferSize == 0) {
         songAddBufferSize = remainingCount+1;

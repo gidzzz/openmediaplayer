@@ -37,10 +37,9 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     QWidget::setBackgroundRole(QPalette::Window);
     QWidget::setAutoFillBackground(true);
     QPalette overlayPalette = QWidget::palette();
-    overlayPalette.setColor
-        (QPalette::Window,
-         colorKey());
+    overlayPalette.setColor(QPalette::Window, colorKey());
     QWidget::setPalette(overlayPalette);
+
     ui->setupUi(this);
     setAttribute(Qt::WA_OpaquePaintEvent);
     ui->widget->setAttribute(Qt::WA_NativeWindow);
@@ -255,7 +254,7 @@ void VideoNowPlayingWindow::toggleVolumeSlider()
     } else {
         ui->volumeSlider->hide();
         ui->buttonWidget->show();
-        if(volumeTimer->isActive())
+        if (volumeTimer->isActive())
             volumeTimer->stop();
     }
 }
@@ -281,7 +280,7 @@ void VideoNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 
 void VideoNowPlayingWindow::volumeWatcher()
 {
-    if(!ui->volumeSlider->isHidden())
+    if (!ui->volumeSlider->isHidden())
         volumeTimer->start();
 }
 
@@ -427,7 +426,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         ui->progressBar->setRange(0, videoLength);
     }
 
-    if(!error.isEmpty())
+    if (!error.isEmpty())
         qDebug() << error;
 }
 

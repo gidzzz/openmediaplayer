@@ -22,6 +22,7 @@ MafwPlaylistAdapter::MafwPlaylistAdapter(QObject *parent, MafwRendererAdapter *m
     QObject(parent),
     mafwrenderer(mra)
 {
+    mafw_playlist = NULL;
     mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
@@ -213,7 +214,7 @@ void MafwPlaylistAdapter::onGetStatus(MafwPlaylist* playlist, uint, MafwPlayStat
     qDebug() << "MafwPlaylistAdapter::onGetStatus";
 #endif
     this->mafw_playlist = playlist;
-    if (this->isPlaylistNull()) {
+    if (!mafw_playlist) {
         if (mafwrenderer->isRendererReady())
             this->assignAudioPlaylist();
         else

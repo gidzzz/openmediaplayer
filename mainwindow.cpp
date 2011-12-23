@@ -226,10 +226,11 @@ void MainWindow::connectSignals()
 
 void MainWindow::open_mp_now_playing()
 {
+    // maybe this check could be moved to NowPlayingWindow?
     if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && !playlist->isPlaylistNull()) {
         this->createNowPlayingWindow();
     } else {
-        QTimer::singleShot(2000, this, SLOT(createNowPlayingWindow()));
+        QTimer::singleShot(1000, this, SLOT(open_mp_now_playing()));
     }
 }
 
