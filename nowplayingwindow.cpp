@@ -485,7 +485,7 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
                                                                   ui->songProgress->value()));
     }
 
-    else if (object == ui->songPlaylist) {
+    else if (object == ui->songPlaylist->viewport()) {
         if (event->type() == QEvent::DragMove) {
             dragInProgress = true;
         }
