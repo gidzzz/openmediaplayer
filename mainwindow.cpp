@@ -802,12 +802,16 @@ void MainWindow::onContainerChanged(QString objectId)
 void MainWindow::onBluetoothButtonPressed(QDBusMessage msg)
 {
     if (msg.arguments()[0] == "ButtonPressed") {
-        if (msg.arguments()[1] == "play-cd" || msg.arguments()[1] == "pause-cd") {
+        if (msg.arguments()[1] == "play-cd" || msg.arguments()[1] == "pause-cd")
             this->pausePlay();
-        } else if (msg.arguments()[1] == "next-song")
+        else if (msg.arguments()[1] == "next-song")
             mafwrenderer->next();
         else if (msg.arguments()[1] == "previous-song")
             mafwrenderer->previous();
+        else if (msg.arguments()[1] == "fast-forward")
+            mafwrenderer->setPosition(SeekRelative, 3);
+        else if (msg.arguments()[1] == "rewind")
+            mafwrenderer->setPosition(SeekRelative, -3);
     }
 }
 
