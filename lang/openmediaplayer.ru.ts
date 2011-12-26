@@ -170,7 +170,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../internetradiowindow.cpp" line="157"/>
         <source>Edit radio bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактировать закладку этого радио</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="161"/>
@@ -824,7 +824,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="80"/>
         <source>Append opened songs</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавлять открытые/выбранные треки в плейлист</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="89"/>

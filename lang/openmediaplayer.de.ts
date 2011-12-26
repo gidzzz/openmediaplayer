@@ -828,7 +828,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="80"/>
         <source>Append opened songs</source>
-        <translation type="unfinished"></translation>
+        <translation>Geöffnete Lieder anhängen</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="89"/>

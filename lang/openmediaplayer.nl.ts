@@ -828,7 +828,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="80"/>
         <source>Append opened songs</source>
-        <translation type="unfinished"></translation>
+        <translation>Geopende nummers bijvoegen</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="89"/>
