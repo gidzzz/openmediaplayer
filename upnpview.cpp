@@ -205,15 +205,18 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
 
     } else if (mime.startsWith("video")) {
         this->setEnabled(false);
-        mafwFactory->getRenderer()->stop(); // prevents the audio playlist from starting after the video ends
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory, mafwSource);
         window->showFullScreen();
 
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
-        qDebug() << "attempting to play" << item->data(UserRoleObjectID).toString();
-        window->playObject(item->data(UserRoleObjectID).toString());
+        qDebug() << "attempting to play" << objectId;
+
+        playlist->assignVideoPlaylist();
+        playlist->clear();
+        playlist->appendItem(objectId);
+        QTimer::singleShot(500, window, SLOT(playVideo()));
 
     } else {
         ui->objectList->clearSelection();

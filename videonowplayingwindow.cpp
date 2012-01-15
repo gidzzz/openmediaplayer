@@ -197,11 +197,9 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
     }
 
     videoLength = Duration::Unknown;
-    if (mafwSource && !id.isEmpty()) {
-        qDebug() << "requesting metadata: " << id;
+    if (mafwSource && !id.isEmpty())
         mafwSource->getMetadata(id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
                                                               MAFW_METADATA_KEY_PAUSED_POSITION));
-        }
 
     this->objectIdToPlay = id;
 }
@@ -427,11 +425,6 @@ void VideoNowPlayingWindow::setDNDAtom(bool dnd)
     XChangeProperty(QX11Info::display(), winId(), winDNDAtom, XA_INTEGER, 32, PropModeReplace, (uchar*) &enable, 1);
 }
 #endif
-
-void VideoNowPlayingWindow::playObject(QString)
-{
-    // TODO
-}
 
 #ifdef MAFW
 void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)

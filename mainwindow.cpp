@@ -410,7 +410,10 @@ void MainWindow::mime_open(const QString &uriString)
         connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
         ui->indicator->inhibit();
 #ifdef MAFW
-        window->playObject(objectId);
+        playlist->assignVideoPlaylist();
+        playlist->clear();
+        playlist->appendItem(objectId);
+        QTimer::singleShot(500, window, SLOT(playVideo()));
 #endif
     }
 
@@ -425,7 +428,10 @@ void MainWindow::mime_open(const QString &uriString)
         connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
         ui->indicator->inhibit();
 #ifdef MAFW
-        window->playObject(objectId);
+        playlist->assignVideoPlaylist();
+        playlist->clear();
+        playlist->appendItem(objectId);
+        QTimer::singleShot(500, window, SLOT(playVideo()));
 #endif
     }
 }

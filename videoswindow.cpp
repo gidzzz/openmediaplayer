@@ -145,7 +145,6 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     this->setEnabled(false);
 
 #ifdef MAFW
-    mafwrenderer->stop(); // prevents the audio playlist from starting after the video ends
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory, mafwTrackerSource);
 #else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
@@ -174,7 +173,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     playlist->getSize(); // explained in musicwindow.cpp
     mafwrenderer->gotoIndex(ui->listWidget->currentRow());
 
-    QTimer::singleShot(1000, window, SLOT(playVideo()));
+    QTimer::singleShot(500, window, SLOT(playVideo()));
 }
 
 void VideosWindow::onSortingChanged(QAction *action)
