@@ -53,6 +53,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     //http://www.gossamer-threads.com/lists/maemo/developers/54239
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
+
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
 

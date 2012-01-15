@@ -1,6 +1,6 @@
 /**************************************************************************
     Open MediaPlayer
-    Copyright (C) 2010-2011 Mohammad Abu-Garbeyyeh
+    Copyright (C) 2010-2012 Mohammad Abu-Garbeyyeh
                             Grzegorz Gidel
                             Matias Perez
                             Nicolai Hess

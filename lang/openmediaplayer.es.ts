@@ -16,7 +16,7 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;An open source replacement for the stock Maemo 5 Media Player.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2010-2011 Mohammad Abu-Garbeyyeh&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Grzegorz Gidel&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011-2012 Grzegorz Gidel&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Matias Perez&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Licensed under GPLv3.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;
@@ -31,7 +31,7 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Sustitución en código abierto del reproductor multimedia Media Player, de serie en Maemo 5.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2010-2011 Mohammad Abu-Garbeyyeh&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Grzegorz Gidel&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011-2012 Grzegorz Gidel&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Copyright 2011 Matias Perez&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Bajo licencia GPLv3.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;&quot;&gt;&lt;/p&gt;
@@ -238,7 +238,7 @@ a favoritos</translation>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="606"/>
+        <location filename="../mainwindow.cpp" line="612"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n canción</numerusform>
@@ -247,7 +247,7 @@ a favoritos</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="613"/>
+        <location filename="../mainwindow.cpp" line="619"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n videoclip</numerusform>
@@ -256,7 +256,7 @@ a favoritos</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="629"/>
+        <location filename="../mainwindow.cpp" line="635"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n emisora</numerusform>
@@ -288,27 +288,27 @@ a favoritos</translation>
         <translation>Mezclar todas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="605"/>
+        <location filename="../mainwindow.cpp" line="611"/>
         <source>(no songs)</source>
         <translation>(no hay canciones)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="612"/>
+        <location filename="../mainwindow.cpp" line="618"/>
         <source>(no videos)</source>
         <translation>(no hay videos)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="628"/>
+        <location filename="../mainwindow.cpp" line="634"/>
         <source>(no stations)</source>
         <translation>(no hay emisoras)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="741"/>
+        <location filename="../mainwindow.cpp" line="747"/>
         <source>Processed items:</source>
         <translation>Elementos procesados:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="745"/>
+        <location filename="../mainwindow.cpp" line="751"/>
         <source>Remaining items:</source>
         <translation>Elementos restantes:</translation>
     </message>
@@ -1261,7 +1261,7 @@ a la lista en curso</translation>
         <translation>Añadir a la lista en curso</translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="265"/>
+        <location filename="../upnpview.cpp" line="268"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n clip añadido a la lista en curso</numerusform>
@@ -1288,163 +1288,163 @@ a la lista en curso</translation>
         <translation>Reproducción en curso</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="185"/>
+        <location filename="../videonowplayingwindow.cpp" line="231"/>
         <source>Delete video?</source>
         <translation>¿Suprimir video?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="186"/>
+        <location filename="../videonowplayingwindow.cpp" line="232"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>¿Está seguro de que desea suprimir este video?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="189"/>
+        <location filename="../videonowplayingwindow.cpp" line="235"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="190"/>
+        <location filename="../videonowplayingwindow.cpp" line="236"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="556"/>
-        <location filename="../videonowplayingwindow.cpp" line="649"/>
+        <location filename="../videonowplayingwindow.cpp" line="576"/>
+        <location filename="../videonowplayingwindow.cpp" line="669"/>
         <source>Unable to play media</source>
         <translation>Imposible reproducir archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="560"/>
+        <location filename="../videonowplayingwindow.cpp" line="580"/>
         <source>Media not found</source>
         <translation>Archivo no encontrado</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="562"/>
+        <location filename="../videonowplayingwindow.cpp" line="582"/>
         <source>URI not available</source>
         <translation>URI no disponible</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="564"/>
+        <location filename="../videonowplayingwindow.cpp" line="584"/>
         <source>Invalid URI</source>
         <translation>URI no válida</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="566"/>
+        <location filename="../videonowplayingwindow.cpp" line="586"/>
         <source>Unable to open media</source>
         <translation>Imposible abrir el archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="568"/>
+        <location filename="../videonowplayingwindow.cpp" line="588"/>
         <source>Playback stream no longer available</source>
         <translation>El flujo de reproducción ya no está disponible</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="570"/>
+        <location filename="../videonowplayingwindow.cpp" line="590"/>
         <source>Could not determine MIME-type</source>
         <translation>No se pudo determinar el tipo de archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="572"/>
+        <location filename="../videonowplayingwindow.cpp" line="592"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Error general, imposible continuar con la reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="574"/>
+        <location filename="../videonowplayingwindow.cpp" line="594"/>
         <source>General error occured</source>
         <translation>Error general</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="576"/>
+        <location filename="../videonowplayingwindow.cpp" line="596"/>
         <source>Unsupported media</source>
         <translation>Archivo no soportado</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="578"/>
+        <location filename="../videonowplayingwindow.cpp" line="598"/>
         <source>Unsupported resolution</source>
         <translation>Resolución no soportada</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="580"/>
+        <location filename="../videonowplayingwindow.cpp" line="600"/>
         <source>Unsupported framerate</source>
         <translation>Velocidad de fotogramas no soportada</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="582"/>
+        <location filename="../videonowplayingwindow.cpp" line="602"/>
         <source>Media is protected by DRM</source>
         <translation>Archivo protegido por DRM (derechos de autor)</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="584"/>
+        <location filename="../videonowplayingwindow.cpp" line="604"/>
         <source>System sound device is unavailable</source>
         <translation>Dispositivo de sonido de sistema no disponible</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="586"/>
+        <location filename="../videonowplayingwindow.cpp" line="606"/>
         <source>Media corrupted</source>
         <translation>Archivo corrupto</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="588"/>
+        <location filename="../videonowplayingwindow.cpp" line="608"/>
         <source>Error while parsing playlist</source>
         <translation>Error al analizar la lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="589"/>
+        <location filename="../videonowplayingwindow.cpp" line="609"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Lista de reproducción corrupta o vacía</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="592"/>
+        <location filename="../videonowplayingwindow.cpp" line="612"/>
         <source>Codec not found:</source>
         <translation>Códec no encontrado:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="596"/>
+        <location filename="../videonowplayingwindow.cpp" line="616"/>
         <source>Video codec not found:</source>
         <translation>Códec de video no encontrado:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="600"/>
+        <location filename="../videonowplayingwindow.cpp" line="620"/>
         <source>Audio codec not found:</source>
         <translation>Códec de audio no encontrado:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="604"/>
+        <location filename="../videonowplayingwindow.cpp" line="624"/>
         <source>No playlist assigned</source>
         <translation>No hay lista de reproducción asignada</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="606"/>
+        <location filename="../videonowplayingwindow.cpp" line="626"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>El índice de archivos no encaja con los elementos de la lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="608"/>
+        <location filename="../videonowplayingwindow.cpp" line="628"/>
         <source>Unable to start playback</source>
         <translation>Imposible iniciar la reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="610"/>
+        <location filename="../videonowplayingwindow.cpp" line="630"/>
         <source>Unable to stop playback</source>
         <translation>Imposible detener la reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="612"/>
+        <location filename="../videonowplayingwindow.cpp" line="632"/>
         <source>Unable to pause playback</source>
         <translation>Imposible pausar la reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="614"/>
+        <location filename="../videonowplayingwindow.cpp" line="634"/>
         <source>Unable to seek position in media</source>
         <translation>Imposible buscar la posición en el archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="616"/>
+        <location filename="../videonowplayingwindow.cpp" line="636"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Imposible obtener la posición actual en el archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="618"/>
+        <location filename="../videonowplayingwindow.cpp" line="638"/>
         <source>Unable to get current playback status</source>
         <translation>Imposible obtener el estado actual de la reproducción</translation>
     </message>
@@ -1492,27 +1492,27 @@ a la lista en curso</translation>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="164"/>
+        <location filename="../videoswindow.cpp" line="182"/>
         <source>Videos - latest</source>
         <translation>Videos: los más recientes</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="176"/>
+        <location filename="../videoswindow.cpp" line="194"/>
         <source>Videos - categories</source>
         <translation>Videos: categorías</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="249"/>
+        <location filename="../videoswindow.cpp" line="267"/>
         <source>(unknown clip)</source>
         <translation>(videoclip desconocido)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="307"/>
+        <location filename="../videoswindow.cpp" line="325"/>
         <source>Recorded by device camera</source>
         <translation>Grabado con la cámara del dispositivo</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="311"/>
+        <location filename="../videoswindow.cpp" line="329"/>
         <source>Films</source>
         <translation>Películas</translation>
     </message>
