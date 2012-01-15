@@ -130,6 +130,8 @@ void VideoNowPlayingWindow::setIcons()
 
 void VideoNowPlayingWindow::connectSignals()
 {
+    connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPrevButtonClicked()));
+    connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
@@ -138,6 +140,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 #ifdef MAFW
+    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->progressBar, SLOT(setEnabled(bool)));
@@ -166,6 +169,7 @@ void VideoNowPlayingWindow::connectSignals()
 #endif
 }
 
+#ifdef MAFW
 void VideoNowPlayingWindow::onMetadataChanged(QString metadata, QVariant value)
 {
     // duration sometimes is misreported for UPnP, so don't set it from here unnecessarily
@@ -174,6 +178,49 @@ void VideoNowPlayingWindow::onMetadataChanged(QString metadata, QVariant value)
         ui->videoLengthLabel->setText(time_mmss(videoLength));
         ui->progressBar->setRange(0, videoLength);
     }
+}
+#endif
+
+#ifdef MAFW
+void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
+{
+    QString id = QString::fromUtf8(objectId);
+
+    if (mafwSource && id.startsWith("localtagfs::videos")) { // local storage
+        ui->shareButton->show();
+        ui->deleteButton->show();
+        ui->toolbarLayout->setContentsMargins(0,0,0,0);
+    } else { // remote sources
+        ui->shareButton->hide();
+        ui->deleteButton->hide();
+        ui->toolbarLayout->setContentsMargins(20,0,0,0);
+    }
+
+    videoLength = Duration::Unknown;
+    if (mafwSource && !id.isEmpty()) {
+        qDebug() << "requesting metadata: " << id;
+        mafwSource->getMetadata(id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
+                                                              MAFW_METADATA_KEY_PAUSED_POSITION));
+        }
+
+    this->objectIdToPlay = id;
+}
+#endif
+
+void VideoNowPlayingWindow::onPrevButtonClicked()
+{
+    gotInitialState = false;
+#ifdef MAFW
+    mafwrenderer->previous();
+#endif
+}
+
+void VideoNowPlayingWindow::onNextButtonClicked()
+{
+    gotInitialState = false;
+#ifdef MAFW
+    mafwrenderer->next();
+#endif
 }
 
 void VideoNowPlayingWindow::onDeleteClicked()
@@ -287,11 +334,7 @@ void VideoNowPlayingWindow::volumeWatcher()
 #ifdef MAFW
 void VideoNowPlayingWindow::stateChanged(int state)
 {
-    // The renderer can send Stopped state a few times before starting the
-    // actual playback, so it is necessary to filter those signals out, avoiding
-    // premature destruction of the window.
-    if (!gotInitialState && state != 0) this->gotInitialState = true;
-
+    if (state != Stopped && state != Transitioning) this->gotInitialState = true;
     this->mafwState = state;
 
     if (state == Paused) {
@@ -330,12 +373,13 @@ void VideoNowPlayingWindow::stateChanged(int state)
 #endif
         if (positionTimer->isActive())
             positionTimer->stop();
-        if (this->gotInitialState && !this->errorOccured) {
+        if (gotInitialState && !errorOccured) {
             this->close();
             delete this; // why is it not deleted automatically, despite WA_DeleteOnClose?
         }
     }
     else if (state == Transitioning) {
+        if (gotInitialState) mafwrenderer->stop();
         ui->progressBar->setEnabled(false);
         ui->progressBar->setValue(0);
         ui->currentPositionLabel->setText("00:00");
@@ -384,27 +428,9 @@ void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 }
 #endif
 
-void VideoNowPlayingWindow::playObject(QString objectId)
+void VideoNowPlayingWindow::playObject(QString)
 {
-#ifdef MAFW
-    if (mafwSource && objectId.startsWith("localtagfs::videos")) { // local storage
-        ui->shareButton->show();
-        ui->deleteButton->show();
-        ui->toolbarLayout->setContentsMargins(0,0,0,0);
-    } else { // remote sources
-        ui->shareButton->hide();
-        ui->deleteButton->hide();
-        ui->toolbarLayout->setContentsMargins(20,0,0,0);
-    }
-
-    videoLength = Duration::Unknown;
-    if (mafwSource)
-        mafwSource->getMetadata(objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
-                                                                    MAFW_METADATA_KEY_PAUSED_POSITION));
-
-    this->objectIdToPlay = objectId;
-    QTimer::singleShot(200, this, SLOT(playVideo()));
-#endif
+    // TODO
 }
 
 #ifdef MAFW
@@ -436,7 +462,7 @@ void VideoNowPlayingWindow::playVideo()
     QApplication::syncX();
     mafwrenderer->setWindowXid(windowId);
 
-    mafwrenderer->playObject(this->objectIdToPlay.toUtf8());
+    mafwrenderer->play();
 
 }
 #endif

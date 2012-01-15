@@ -155,7 +155,26 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 
-    window->playObject(item->data(UserRoleObjectID).toString());
+    playlist->assignVideoPlaylist();
+    playlist->clear();
+
+    int songCount = ui->listWidget->count();
+    gchar** songAddBuffer = new gchar*[songCount+1];
+
+    for (int i = 0; i < songCount; i++)
+        songAddBuffer[i] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[songCount] = NULL;
+
+    playlist->appendItems((const gchar**)songAddBuffer);
+
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
+
+    playlist->getSize(); // explained in musicwindow.cpp
+    mafwrenderer->gotoIndex(ui->listWidget->currentRow());
+
+    QTimer::singleShot(1000, window, SLOT(playVideo()));
 }
 
 void VideosWindow::onSortingChanged(QAction *action)

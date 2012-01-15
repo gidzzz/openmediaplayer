@@ -84,7 +84,10 @@ private slots:
     void onDeleteClicked();
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();
+    void onPrevButtonClicked();
+    void onNextButtonClicked();
 #ifdef MAFW
+    void onMediaChanged(int, char *objectId);
     void onPropertyChanged(const QDBusMessage &msg);
     void onMetadataChanged(QString metadata, QVariant value);
     void stateChanged(int state);
