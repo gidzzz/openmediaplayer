@@ -605,6 +605,10 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
         keys[currentKey++] = MAFW_METADATA_KEY_DURATION;
     }
 
+    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_IS_SEEKABLE) ))
+        onMediaIsSeekable(g_value_get_boolean(v));
+    // if the renderer can't determine seekability, there's probably no point in querying the source
+
     keys[currentKey] = NULL;
     metadataSource->getMetadata(object_id.toUtf8(), keys);
     delete[] keys;
