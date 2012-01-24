@@ -797,7 +797,7 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int, uint, QString obj
         QListWidgetItem *listItem = new QListWidgetItem();
 
         v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
-        listItem->setText(g_value_get_string (v));
+        listItem->setText(QString::fromUtf8(g_value_get_string(v)));
 
         v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
         listItem->setData(UserRoleValueText, tr("%n song(s)", "", g_value_get_int(v)));
