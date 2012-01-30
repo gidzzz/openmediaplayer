@@ -47,7 +47,7 @@ MafwSource* MafwSourceAdapter::getSourceByUUID(QString uuid)
 
 QString MafwSourceAdapter::getNameByUUID(QString uuid)
 {
-    return mafw_extension_get_name(mafw_registry_get_extension_by_uuid(mafw_registry, uuid.toUtf8()));
+    return QString::fromUtf8(mafw_extension_get_name(mafw_registry_get_extension_by_uuid(mafw_registry, uuid.toUtf8())));
 }
 
 MafwSourceAdapter::~MafwSourceAdapter()
