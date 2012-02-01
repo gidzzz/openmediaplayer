@@ -37,7 +37,7 @@ private slots:
     void onItemActivated(QListWidgetItem *item);
     void onAddOneToNowPlaying();
     void addAllToNowPlaying();
-    int appendAllToPlaylist();
+    int appendAllToPlaylist(QString type);
     void onNowPlayingWindowHidden();
     void onChildClosed();
 

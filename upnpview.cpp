@@ -190,7 +190,7 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
         this->setEnabled(false);
         playlist->assignAudioPlaylist();
         playlist->clear();
-        appendAllToPlaylist();
+        appendAllToPlaylist("audio");
 
         int sameTypeIndex = 0;
         for (int i = 0; i < ui->objectList->row(item); i++)
@@ -204,23 +204,28 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
         window->show();
-
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         ui->indicator->inhibit();
 
     } else if (mime.startsWith("video")) {
         this->setEnabled(false);
+        playlist->assignVideoPlaylist();
+        playlist->clear();
+        appendAllToPlaylist("video");
+
+        int sameTypeIndex = 0;
+        for (int i = 0; i < ui->objectList->row(item); i++)
+            if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith("video"))
+               ++sameTypeIndex;
+
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory, mafwSource);
         window->showFullScreen();
-
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
-        qDebug() << "attempting to play" << objectId;
-
-        playlist->assignVideoPlaylist();
-        playlist->clear();
-        playlist->appendItem(objectId);
+        MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
+        playlist->getSize(); // explained in musicwindow.cpp
+        mafwrenderer->gotoIndex(sameTypeIndex);
         QTimer::singleShot(500, window, SLOT(playVideo()));
 
     } else {
@@ -243,28 +248,28 @@ void UpnpView::addAllToNowPlaying()
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    notifyOnAddedToNowPlaying(appendAllToPlaylist());
+    notifyOnAddedToNowPlaying(appendAllToPlaylist("audio"));
 }
 
-int UpnpView::appendAllToPlaylist()
+int UpnpView::appendAllToPlaylist(QString type)
 {
     int itemCount = ui->objectList->count();
     gchar** songAddBuffer = new gchar*[itemCount+1];
 
-    int songCount = 0;
+    int sameTypeCount = 0;
     for (int i = 0; i < itemCount; i++)
-        if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
-            songAddBuffer[songCount++] = qstrdup(ui->objectList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith(type))
+            songAddBuffer[sameTypeCount++] = qstrdup(ui->objectList->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
-    songAddBuffer[songCount] = NULL;
+    songAddBuffer[sameTypeCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
 
-    for (int i = 0; i < songCount; i++)
+    for (int i = 0; i < sameTypeCount; i++)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-    return songCount;
+    return sameTypeCount;
 }
 
 void UpnpView::notifyOnAddedToNowPlaying(int songCount)
