@@ -192,9 +192,14 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
         playlist->clear();
         appendAllToPlaylist();
 
+        int sameTypeIndex = 0;
+        for (int i = 0; i < ui->objectList->row(item); i++)
+            if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
+               ++sameTypeIndex;
+
         MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
         playlist->getSize(); // explained in musicwindow.cpp
-        mafwrenderer->gotoIndex(ui->objectList->row(item)); // selects a wrong song when the directory contains more than audio
+        mafwrenderer->gotoIndex(sameTypeIndex);
         mafwrenderer->play();
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
