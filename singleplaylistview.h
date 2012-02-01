@@ -37,6 +37,7 @@ signals:
     void itemDropped(QListWidgetItem *item, int from);
 
 protected:
+    void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
 #ifdef MAFW
     void closeEvent(QCloseEvent *e);

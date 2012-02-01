@@ -64,7 +64,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     clickTimer->setInterval(QApplication::doubleClickInterval());
     clickTimer->setSingleShot(true);
 
-    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(inItemActivated(QListWidgetItem*)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
@@ -336,10 +335,18 @@ void SinglePlaylistView::notifyOnAddedToNowPlaying(int songCount)
 }
 #endif
 
+void SinglePlaylistView::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
 void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
+    if (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
         return;
+    else if (e->key() == Qt::Key_Enter)
+        onItemActivated(ui->songList->currentItem());
     else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
         ui->songList->setFocus();
     else {

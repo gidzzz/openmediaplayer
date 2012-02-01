@@ -210,12 +210,6 @@ void SingleAlbumView::orientationChanged()
     ui->indicator->raise();
 }
 
-void SingleAlbumView::keyPressEvent(QKeyEvent *e)
-{
-    if (e->key() == Qt::Key_Backspace)
-        this->close();
-}
-
 void SingleAlbumView::onShuffleButtonClicked()
 {
     this->createPlaylist(true);
@@ -278,6 +272,12 @@ void SingleAlbumView::onSearchTextChanged(QString text)
         ui->searchWidget->hide();
         ui->indicator->restore();
     }
+}
+
+void SingleAlbumView::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
 }
 
 void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)

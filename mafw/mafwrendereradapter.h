@@ -78,7 +78,7 @@ class MafwRendererAdapter : public QObject
   void signalPrevious(QString error);
   void signalGotoIndex(QString error);
   void signalSetPosition(int position, QString error);
-  void signalGetPosition(int position,QString error);
+  void signalGetPosition(int position, QString error);
   void signalGetCurrentMetadata(GHashTable *metadata, QString object_id, QString error);
   void signalGetVolume(int volume);
 
