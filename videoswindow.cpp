@@ -157,18 +157,18 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     playlist->assignVideoPlaylist();
     playlist->clear();
 
-    int songCount = ui->listWidget->count();
-    gchar** songAddBuffer = new gchar*[songCount+1];
+    int videoCount = ui->listWidget->count();
+    gchar** videoAddBuffer = new gchar*[videoCount+1];
 
-    for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[songCount] = NULL;
+    for (int i = 0; i < videoCount; i++)
+        videoAddBuffer[i] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    videoAddBuffer[videoCount] = NULL;
 
-    playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**)videoAddBuffer);
 
-    for (int i = 0; i < songCount; i++)
-        delete[] songAddBuffer[i];
-    delete[] songAddBuffer;
+    for (int i = 0; i < videoCount; i++)
+        delete[] videoAddBuffer[i];
+    delete[] videoAddBuffer;
 
     playlist->getSize(); // explained in musicwindow.cpp
     mafwrenderer->gotoIndex(ui->listWidget->currentRow());
@@ -232,12 +232,12 @@ void VideosWindow::listVideos()
             this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
     this->browseId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : NULL,
-                                                     MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                      MAFW_METADATA_KEY_DURATION,
-                                                                      MAFW_METADATA_KEY_THUMBNAIL_URI,
-                                                                      MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
-                                                                      MAFW_METADATA_KEY_VIDEO_SOURCE),
-                                                     0, MAFW_SOURCE_BROWSE_ALL);
+                                                      MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                       MAFW_METADATA_KEY_DURATION,
+                                                                       MAFW_METADATA_KEY_THUMBNAIL_URI,
+                                                                       MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
+                                                                       MAFW_METADATA_KEY_VIDEO_SOURCE),
+                                                      0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)

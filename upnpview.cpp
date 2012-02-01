@@ -127,9 +127,8 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
         if (mime.startsWith("audio") || mime.startsWith("video")) {
             v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
             duration = v ? g_value_get_int(v) : Duration::Unknown;
-        } else {
+        } else
             duration = Duration::Blank;
-        }
 
         QListWidgetItem *item = new QListWidgetItem();
 
@@ -144,8 +143,8 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
             item->setIcon(QIcon::fromTheme("general_audio_file"));
         else if (mime.startsWith("video"))
             item->setIcon(QIcon::fromTheme("general_video_file"));
-        else if (mime.startsWith("image"))
-            item->setIcon(QIcon::fromTheme("general_image"));
+        /*else if (mime.startsWith("image"))
+            item->setIcon(QIcon::fromTheme("general_image"));*/
         else
             item->setIcon(QIcon::fromTheme("filemanager_unknown_file"));
 
@@ -223,9 +222,8 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
-        MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
         playlist->getSize(); // explained in musicwindow.cpp
-        mafwrenderer->gotoIndex(sameTypeIndex);
+        mafwFactory->getRenderer()->gotoIndex(sameTypeIndex);
         QTimer::singleShot(500, window, SLOT(playVideo()));
 
     } else {
@@ -254,20 +252,20 @@ void UpnpView::addAllToNowPlaying()
 int UpnpView::appendAllToPlaylist(QString type)
 {
     int itemCount = ui->objectList->count();
-    gchar** songAddBuffer = new gchar*[itemCount+1];
+    gchar** itemAddBuffer = new gchar*[itemCount+1];
 
     int sameTypeCount = 0;
     for (int i = 0; i < itemCount; i++)
         if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith(type))
-            songAddBuffer[sameTypeCount++] = qstrdup(ui->objectList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+            itemAddBuffer[sameTypeCount++] = qstrdup(ui->objectList->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
-    songAddBuffer[sameTypeCount] = NULL;
+    itemAddBuffer[sameTypeCount] = NULL;
 
-    playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**)itemAddBuffer);
 
     for (int i = 0; i < sameTypeCount; i++)
-        delete[] songAddBuffer[i];
-    delete[] songAddBuffer;
+        delete[] itemAddBuffer[i];
+    delete[] itemAddBuffer;
 
     return sameTypeCount;
 }
