@@ -72,27 +72,35 @@ MusicWindow::~MusicWindow()
     delete ui;
 }
 
-void MusicWindow::onSongSelected(QListWidgetItem *)
+void MusicWindow::onSongSelected(QListWidgetItem *item)
 {
     this->setEnabled(false);
 
 #ifdef MAFW
-    playlist->assignAudioPlaylist();
+    if (playlist->playlistName() != "FmpAudioPlaylist")
+        playlist->assignAudioPlaylist();
     playlist->clear();
+    playlist->setShuffled(false);
 
-    int selectedIndex = ui->songList->currentRow();
-    int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount+1];
+    gchar** songAddBuffer = new gchar*[ui->songList->count()];
 
-    for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[songCount] = NULL;
+    int visibleCount = 0;
+    for (int i = 0; i < ui->songList->count(); i++)
+        if (!ui->songList->item(i)->isHidden())
+            songAddBuffer[visibleCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[visibleCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
 
-    for (int i = 0; i < songCount; i++)
+    for (int i = 0; i < visibleCount; i++)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
+
+    int selectedIndex = ui->songList->row(item);
+    int visibleIndex = 0;
+    for (int i = 0; i < selectedIndex; i++)
+        if (!ui->songList->item(i)->isHidden())
+           ++visibleIndex;
 
     // Instant play() seems to work only for smaller libraries.
     // For bigger, something probably doesn't have enough time to ready up.
@@ -100,7 +108,7 @@ void MusicWindow::onSongSelected(QListWidgetItem *)
     // we know that play() can be successfully called. That's only a theory,
     // but it works for me. ;)
     playlist->getSize();
-    mafwrenderer->gotoIndex(selectedIndex);
+    mafwrenderer->gotoIndex(visibleIndex);
     mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);

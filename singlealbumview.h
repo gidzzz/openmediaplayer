@@ -66,7 +66,8 @@ private slots:
     void onShareUriReceived(QString objectId, QString uri);
     void onContainerChanged(QString objectId);
 #endif
-    void createPlaylist(bool);
+    int appendAllToPlaylist();
+    void playAll(int startIndex);
     void onShuffleButtonClicked();
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);

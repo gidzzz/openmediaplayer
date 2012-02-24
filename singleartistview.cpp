@@ -199,8 +199,8 @@ void SingleArtistView::onSearchHideButtonClicked()
 
 void SingleArtistView::onSearchTextChanged(QString text)
 {
-    for (int i=1; i < ui->albumList->count(); i++) {
-        if (ui->albumList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
+    for (int i = 1; i < ui->albumList->count(); i++) {
+        if (ui->albumList->item(i)->data(UserRoleTitle).toString().toLower().indexOf(text.toLower()) == -1)
             ui->albumList->item(i)->setHidden(true);
         else
             ui->albumList->item(i)->setHidden(false);

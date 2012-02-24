@@ -74,6 +74,8 @@ private slots:
     void onShareUriReceived(QString objectId, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
+    int appendAllToPlaylist();
+    void playAll(int startIndex);
     void onItemActivated(QListWidgetItem *item);
     void addAllToNowPlaying();
     void onSearchHideButtonClicked();

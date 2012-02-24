@@ -111,9 +111,7 @@ void SingleAlbumView::listSongs()
                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                               MAFW_METADATA_KEY_ALBUM,
                                                                               MAFW_METADATA_KEY_ARTIST,
-                                                                              MAFW_METADATA_KEY_ALBUM_ART_URI,
-                                                                              MAFW_METADATA_KEY_DURATION,
-                                                                              MAFW_METADATA_KEY_TRACK),
+                                                                              MAFW_METADATA_KEY_DURATION),
                                                              0, MAFW_SOURCE_BROWSE_ALL);
 }
 
@@ -127,7 +125,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         QString artist;
         QString album;
         int duration;
-        int trackNumber;
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
@@ -142,9 +139,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TRACK);
-        trackNumber = v ? g_value_get_int (v) : -1;
-
         QListWidgetItem *item = new QListWidgetItem();
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
@@ -152,15 +146,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
-        if (v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleAlbumArt, QString::fromUtf8(filename));
-            }
-        }
 
         ui->songList->addItem(item);
     }
@@ -184,18 +169,7 @@ void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 
 void SingleAlbumView::onItemActivated(QListWidgetItem *item)
 {
-    if (ui->songList->row(item) == 0) {
-        onShuffleButtonClicked();
-        return;
-    }
-
-    playlist->assignAudioPlaylist();
-
-    this->createPlaylist(false);
-
-    playlist->getSize(); // explained in musicwindow.cpp
-    mafwrenderer->gotoIndex(ui->songList->row(item)-1);
-    mafwrenderer->play();
+    this->playAll(ui->songList->row(item));
 }
 
 #endif
@@ -212,34 +186,33 @@ void SingleAlbumView::orientationChanged()
 
 void SingleAlbumView::onShuffleButtonClicked()
 {
-    this->createPlaylist(true);
+    this->playAll(0);
 }
 
-void SingleAlbumView::createPlaylist(bool shuffle)
+void SingleAlbumView::playAll(int startIndex)
 {
 #ifdef MAFW
     this->setEnabled(false);
 
+    if (playlist->playlistName() != "FmpAudioPlaylist")
+        playlist->assignAudioPlaylist();
     playlist->clear();
-    playlist->setShuffled(shuffle);
+    playlist->setShuffled(startIndex < 1);
 
-    int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount--];
+    appendAllToPlaylist();
 
-    for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[songCount] = NULL;
+    playlist->getSize(); // explained in musicwindow.cpp
 
-    playlist->appendItems((const gchar**)songAddBuffer);
+    if (startIndex > 0) {
+        int visibleIndex = 0;
+        for (int i = 1; i < startIndex; i++)
+            if (!ui->songList->item(i)->isHidden())
+               ++visibleIndex;
 
-    for (int i = 0; i < songCount; i++)
-        delete[] songAddBuffer[i];
-    delete[] songAddBuffer;
-
-    if (shuffle) {
-        playlist->getSize(); // explained in musicwindow.cpp
-        mafwrenderer->play();
+        mafwrenderer->gotoIndex(visibleIndex);
     }
+
+    mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
 
@@ -247,6 +220,27 @@ void SingleAlbumView::createPlaylist(bool shuffle)
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->inhibit();
+#endif
+}
+
+int SingleAlbumView::appendAllToPlaylist()
+{
+#ifdef MAFW
+    gchar** songAddBuffer = new gchar*[ui->songList->count()];
+
+    int visibleCount = 0;
+    for (int i = 1; i < ui->songList->count(); i++)
+        if (!ui->songList->item(i)->isHidden())
+            songAddBuffer[visibleCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[visibleCount] = NULL;
+
+    playlist->appendItems((const gchar**)songAddBuffer);
+
+    for (int i = 0; i < visibleCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
+
+    return visibleCount;
 #endif
 }
 
@@ -301,24 +295,11 @@ void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
 void SingleAlbumView::addAllToNowPlaying()
 {
 #ifdef MAFW
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount--];
-
-    for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[songCount] = NULL;
-
-    playlist->appendItems((const gchar**)songAddBuffer);
-
-    for (int i = 0; i < songCount; i++)
-        delete[] songAddBuffer[i];
-    delete[] songAddBuffer;
-
 #ifdef Q_WS_MAEMO_5
-    this->notifyOnAddedToNowPlaying(songCount);
+    this->notifyOnAddedToNowPlaying(appendAllToPlaylist());
 #endif
 
 #endif
@@ -338,7 +319,7 @@ void SingleAlbumView::onContextMenuRequested(const QPoint &point)
 void SingleAlbumView::onAddToNowPlaying()
 {
 #ifdef MAFW
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());

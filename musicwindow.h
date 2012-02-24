@@ -98,7 +98,7 @@ private:
 
 private slots:
     void onContextMenuRequested(QPoint);
-    void onSongSelected(QListWidgetItem *);
+    void onSongSelected(QListWidgetItem *item);
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();

@@ -252,46 +252,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
 void SinglePlaylistView::onItemActivated(QListWidgetItem *item)
 {
-    if (ui->songList->row(item) == 0) {
-        onShuffleButtonClicked();
-        return;
-    }
-
-    this->setEnabled(false);
-
-    QString playlistName = playlist->playlistName();
-    if (playlistName != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
-
-    playlist->clear();
-
-    int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount--];
-
-    for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[songCount] = NULL;
-
-    playlist->appendItems((const gchar**)songAddBuffer);
-
-    for (int i = 0; i < songCount; i++)
-        delete[] songAddBuffer[i];
-    delete[] songAddBuffer;
-
-#ifdef MAFW
-    playlist->getSize(); // explained in musicwindow.cpp
-    mafwrenderer->gotoIndex(ui->songList->row(item)-1);
-    mafwrenderer->play();
-    mafwrenderer->resume();
-#endif
-
-    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-
-    window->show();
-    window->updatePlaylistState();
-
-    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-    ui->indicator->inhibit();
+    this->playAll(ui->songList->row(item));
 }
 
 void SinglePlaylistView::orientationChanged()
@@ -305,26 +266,68 @@ void SinglePlaylistView::orientationChanged()
 void SinglePlaylistView::addAllToNowPlaying()
 {
 #ifdef MAFW
-    QString playlistName = playlist->playlistName();
-    if (playlistName != "FmpAudioPlaylist" && playlistName != "FmpVideoPlaylist" && playlistName != "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount--];
+#ifdef Q_WS_MAEMO_5
+    this->notifyOnAddedToNowPlaying(appendAllToPlaylist());
+#endif
 
-    for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[songCount] = NULL;
+#endif
+}
+
+void SinglePlaylistView::playAll(int startIndex)
+{
+#ifdef MAFW
+    this->setEnabled(false);
+
+    if (playlist->playlistName() != "FmpAudioPlaylist")
+        playlist->assignAudioPlaylist();
+    playlist->clear();
+    playlist->setShuffled(startIndex < 1);
+
+    appendAllToPlaylist();
+
+    playlist->getSize(); // explained in musicwindow.cpp
+
+    if (startIndex > 0) {
+        int visibleIndex = 0;
+        for (int i = 1; i < startIndex; i++)
+            if (!ui->songList->item(i)->isHidden())
+               ++visibleIndex;
+
+        mafwrenderer->gotoIndex(visibleIndex);
+    }
+
+    mafwrenderer->play();
+
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+
+    window->show();
+
+    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+    ui->indicator->inhibit();
+#endif
+}
+
+int SinglePlaylistView::appendAllToPlaylist()
+{
+#ifdef MAFW
+    gchar** songAddBuffer = new gchar*[ui->songList->count()];
+
+    int visibleCount = 0;
+    for (int i = 1; i < ui->songList->count(); i++)
+        if (!ui->songList->item(i)->isHidden())
+            songAddBuffer[visibleCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[visibleCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
 
-    for (int i = 0; i < songCount; i++)
+    for (int i = 0; i < visibleCount; i++)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-#ifdef Q_WS_MAEMO_5
-    this->notifyOnAddedToNowPlaying(songCount);
-#endif
+    return visibleCount;
 #endif
 }
 
@@ -389,42 +392,7 @@ void SinglePlaylistView::onSearchTextChanged(QString text)
 
 void SinglePlaylistView::onShuffleButtonClicked()
 {
-
-#ifdef MAFW
-    this->setEnabled(false);
-
-    QString playlistName = playlist->playlistName();
-    if (playlistName != "FmpAudioPlaylist" && playlistName != "FmpVideoPlaylist" && playlistName != "FmpRadioPlaylist")
-        playlist->assignAudioPlaylist();
-
-    playlist->clear();
-    playlist->setShuffled(true);
-
-    int songCount = ui->songList->count();
-    gchar** songAddBuffer = new gchar*[songCount--];
-
-    for (int i = 0; i < songCount; i++)
-        songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[songCount] = NULL;
-
-    playlist->appendItems((const gchar**)songAddBuffer);
-
-    for (int i = 0; i < songCount; i++)
-        delete[] songAddBuffer[i];
-    delete[] songAddBuffer;
-
-    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-
-    window->show();
-    window->updatePlaylistState();
-
-    connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-    ui->indicator->inhibit();
-
-    playlist->getSize(); // explained in musicwindow.cpp
-    mafwrenderer->play();
-#endif
-
+    this->playAll(0);
 }
 
 void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
