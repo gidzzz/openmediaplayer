@@ -1060,7 +1060,7 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
 void MusicWindow::onAddToNowPlaying()
 {
 #ifdef MAFW
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     if (this->currentList() == ui->songList) {

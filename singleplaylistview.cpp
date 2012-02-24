@@ -410,7 +410,7 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
 void SinglePlaylistView::onAddToNowPlaying()
 {
 #ifdef MAFW
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());

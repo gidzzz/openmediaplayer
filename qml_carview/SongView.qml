@@ -27,7 +27,7 @@ Rectangle { id: songView
     color: "#ffffff"
     text: "00:00/00:00"
 
-    font.pointSize: 13
+    font.pointSize: 18
     anchors.right: slider.right
     anchors.bottom: slider.top
   }

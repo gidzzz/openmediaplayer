@@ -265,7 +265,7 @@ void SingleGenreView::addItemToNowPlaying()
 #endif
 
 #ifdef MAFW
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     this->objectIdToBrowse = ui->artistList->currentItem()->data(UserRoleObjectID).toString();
@@ -350,7 +350,7 @@ void SingleGenreView::addAllToNowPlaying()
 #endif
 
 #ifdef MAFW
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     this->objectIdToBrowse = this->currentObjectId;
@@ -370,7 +370,7 @@ void SingleGenreView::onShuffleButtonClicked()
 {
 #ifdef MAFW
     this->setEnabled(false);
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->clear();

@@ -250,7 +250,7 @@ void SingleArtistView::addAllToNowPlaying()
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-        if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+        if (playlist->playlistName() != "FmpAudioPlaylist")
             playlist->assignAudioPlaylist();
 
         songAddBufferSize = 0;
@@ -321,7 +321,7 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint 
 void SingleArtistView::shuffleAllSongs()
 {
 #ifdef MAFW
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->clear();
@@ -387,7 +387,7 @@ void SingleArtistView::onAddAlbumToNowPlaying()
 #endif
 
 #ifdef MAFW
-    if (playlist->playlistName() == "FmpVideoPlaylist" || playlist->playlistName() == "FmpRadioPlaylist")
+    if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     QString objectIdToBrowse = ui->albumList->currentItem()->data(UserRoleObjectID).toString();

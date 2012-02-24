@@ -223,7 +223,7 @@ void InternetRadioWindow::onSaveClicked()
         QMessageBox::critical(this, tr("Error"), tr("Unable to add empty bookmark"));
 #endif
     } else {
-        if (addressBox->text().contains("http://") && addressBox->text().length() > 7) {
+        if (addressBox->text().indexOf("://") > 0 && !addressBox->text().endsWith("://")) {
             bookmarkDialog->close();
 
             GHashTable* metadata = mafw_metadata_new();
@@ -280,8 +280,7 @@ void InternetRadioWindow::listStations()
 
 void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if (browseId != browseAllStationsId)
-      return;
+    if (browseId != browseAllStationsId) return;
 
     if (metadata != NULL) {
         QString title;
@@ -289,19 +288,15 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         QString mime;
         GValue *v;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_MIME);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
         mime = QString::fromUtf8(g_value_get_string (v));
 
-        if (mime.contains("video"))
-            return;
+        if (mime.contains("video")) return;
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
 
-        v = mafw_metadata_first(metadata,
-                                MAFW_METADATA_KEY_URI);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         URI = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown)");
 
         QListWidgetItem *item = new QListWidgetItem();
