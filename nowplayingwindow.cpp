@@ -1273,14 +1273,12 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
 {
     contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
-    contextMenu->addAction(tr("Save playlist"), this, SLOT(savePlaylist()));
     //contextMenu->addAction(tr("Edit tags"), this, SLOT(editTags()));
+    contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
     if (!ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().startsWith("_uuid_")) {
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     }
-    contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
-    contextMenu->addAction(tr("Clear now playing"), this, SLOT(clearPlaylist()));
     contextMenu->exec(point);
 }
 
