@@ -242,8 +242,7 @@ void VideosWindow::listVideos()
 
 void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
 {
-    if (this->browseId != browseId)
-        return;
+    if (this->browseId != browseId) return;
 
     if (index == 0) {
         int delta = remainingCount - ui->listWidget->count() + (sortByDate->isChecked() ? 1 : 3); // one for the current item, additional 2 for the labels

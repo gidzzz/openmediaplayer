@@ -62,6 +62,9 @@ void InternetRadioWindow::connectSignals()
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+#ifdef MAFW
+    connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged()));
+#endif
 }
 
 void InternetRadioWindow::showFMTXDialog()
@@ -243,7 +246,6 @@ void InternetRadioWindow::onSaveClicked()
 #endif
 
 #ifdef MAFW
-            ui->listWidget->clear();
             this->listStations();
 #endif
         } else {
@@ -269,7 +271,7 @@ void InternetRadioWindow::listStations()
 
     qDebug() << "connecting InternetRadioWindow to signalSourceBrowseResult";
     connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
+            this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
     browseAllStationsId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
                                                         MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -278,9 +280,19 @@ void InternetRadioWindow::listStations()
                                                         0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
+void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
 {
     if (browseId != browseAllStationsId) return;
+
+    if (index == 0) {
+        int delta = remainingCount - ui->listWidget->count() + 1;
+        if (delta > 0)
+            for (int i = 0; i < delta; i++)
+                ui->listWidget->addItem(new QListWidgetItem());
+        else
+            for (int i = delta; i < 0; i++)
+                delete ui->listWidget->item(ui->listWidget->count()-1);
+    }
 
     if (metadata != NULL) {
         QString title;
@@ -299,15 +311,13 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         URI = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown)");
 
-        QListWidgetItem *item = new QListWidgetItem();
+        QListWidgetItem *item = ui->listWidget->item(index);
 
         item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleValueText, URI);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, Duration::Blank);
-
-        ui->listWidget->addItem(item);
     }
 
     if (remainingCount == 0) {
@@ -319,6 +329,11 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
                    this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
     }
 
+}
+
+void InternetRadioWindow::onContainerChanged()
+{
+    this->listStations();
 }
 #endif
 
