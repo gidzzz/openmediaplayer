@@ -1276,6 +1276,7 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
     //contextMenu->addAction(tr("Edit tags"), this, SLOT(editTags()));
     contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
     if (!ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().startsWith("_uuid_")) {
+        contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     }
@@ -1320,6 +1321,26 @@ void NowPlayingWindow::onRingingToneUriReceived(QString objectId, QString uri)
 #endif
 }
 #endif
+
+void NowPlayingWindow::onDeleteClicked()
+{
+#ifdef MAFW
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              tr("Delete song?"),
+                              tr("Are you sure you want to delete this song?")+ "\n\n"
+                              + ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString() + "\n"
+                              + ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
+                              QMessageBox::Yes | QMessageBox::No,
+                              this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
+    confirmDelete.exec();
+    if (confirmDelete.result() == QMessageBox::Yes) {
+        playlist->removeItem(ui->songPlaylist->currentRow());
+        mafwTrackerSource->destroyObject(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    }
+#endif
+}
 
 void NowPlayingWindow::onShareClicked()
 {

@@ -452,12 +452,9 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 
 void VideoNowPlayingWindow::playVideo()
 {
-    unsigned int windowId = ui->widget->winId();
     QApplication::syncX();
-    mafwrenderer->setWindowXid(windowId);
-
+    mafwrenderer->setWindowXid(ui->widget->winId());
     mafwrenderer->play();
-
 }
 #endif
 

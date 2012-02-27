@@ -113,8 +113,7 @@ void SinglePlaylistView::browsePlaylist(MafwPlaylist *mafwplaylist)
 
 void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guint index, gpointer op)
 {
-    if (op != browsePlaylistOp)
-        return;
+    if (op != browsePlaylistOp) return;
 
     qDebug() << "SinglePlaylistView::onGetItems |" << index;
     numberOfSongsToAdd--;

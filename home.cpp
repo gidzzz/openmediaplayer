@@ -37,8 +37,8 @@ void Home::openBrowser(QString directory)
     currentPath = directory;
     QDir dir ( directory );
     dir.setFilter ( QDir::Dirs | QDir::Hidden );
-    if ( !dir.isReadable() )
-          return;
+    if ( !dir.isReadable() ) return;
+
     ui->button->setText( QFileInfo(directory).fileName() );
     if ( directory == "/") ui->button->setText( "/" );
     ui->button->setValueText( directory );

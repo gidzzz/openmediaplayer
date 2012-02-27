@@ -48,7 +48,7 @@ void MediaArt::destructor(gpointer user_data)
     g_object_unref(payload->request);
     g_object_unref(payload->factory);
     delete payload;
-};
+}
 
 QString MediaArt::albumArtPath(QString album)
 {

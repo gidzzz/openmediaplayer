@@ -57,7 +57,7 @@ private:
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwRadioSource;
     MafwPlaylistAdapter* playlist;
-    unsigned int browseAllStationsId;
+    unsigned int browseId;
 #endif
 
 private slots:

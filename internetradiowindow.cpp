@@ -273,7 +273,7 @@ void InternetRadioWindow::listStations()
     connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
-    browseAllStationsId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
+    browseId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
                                                         MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                          MAFW_METADATA_KEY_URI,
                                                                          MAFW_METADATA_KEY_MIME),
@@ -282,7 +282,7 @@ void InternetRadioWindow::listStations()
 
 void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
 {
-    if (browseId != browseAllStationsId) return;
+    if (this->browseId != browseId) return;
 
     if (index == 0) {
         int delta = remainingCount - ui->listWidget->count() + 1;

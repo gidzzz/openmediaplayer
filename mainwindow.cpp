@@ -643,8 +643,7 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
 
 void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* , QString)
 {
-    if (browseId != browseSongsId)
-      return;
+    if (browseId != browseSongsId) return;
 
     if (songAddBufferSize == 0) {
         songAddBufferSize = remainingCount+1;
