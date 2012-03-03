@@ -38,6 +38,7 @@ public:
 private:
     Ui::SingleAlbumView *ui;
     QString albumObjectId;
+    int visibleSongs;
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
 #ifdef Q_WS_MAEMO_5

@@ -89,7 +89,7 @@ void SingleAlbumView::setupShuffleButton()
 void SingleAlbumView::updateSongCount()
 {
 #ifdef Q_WS_MAEMO_5
-    shuffleButton->setValueText(tr("%n song(s)", "", ui->songList->count()-1));
+    shuffleButton->setValueText(tr("%n song(s)", "", visibleSongs));
 #endif
 }
 
@@ -101,6 +101,7 @@ void SingleAlbumView::listSongs()
 #endif
 
     ui->songList->clear();
+    visibleSongs = 0;
     setupShuffleButton();
 
 #ifdef Q_WS_MAEMO_5
@@ -117,8 +118,7 @@ void SingleAlbumView::listSongs()
 
 void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if (browseId != browseAllSongsId)
-      return;
+    if (browseId != browseAllSongsId) return;
 
     if (metadata != NULL) {
         QString title;
@@ -147,12 +147,14 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
 
+        if (title.contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
+            ++visibleSongs; updateSongCount();
+        } else item->setHidden(true);
+
         ui->songList->addItem(item);
     }
 
 #ifdef Q_WS_MAEMO_5
-    updateSongCount();
-
     if (remainingCount == 0)
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -192,6 +194,8 @@ void SingleAlbumView::onShuffleButtonClicked()
 void SingleAlbumView::playAll(int startIndex)
 {
 #ifdef MAFW
+    if (visibleSongs == 0) return;
+
     this->setEnabled(false);
 
     if (playlist->playlistName() != "FmpAudioPlaylist")
@@ -255,12 +259,17 @@ void SingleAlbumView::onSearchHideButtonClicked()
 
 void SingleAlbumView::onSearchTextChanged(QString text)
 {
+    visibleSongs = 0;
     for (int i = 1; i < ui->songList->count(); i++) {
         if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
             ui->songList->item(i)->setHidden(true);
-        else
+        else {
             ui->songList->item(i)->setHidden(false);
+            ++visibleSongs;
+        }
     }
+
+    updateSongCount();
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
@@ -422,9 +431,9 @@ void SingleAlbumView::onDeleteClicked()
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         delete ui->songList->currentItem();
+        --visibleSongs; updateSongCount();
     }
 #endif
-    updateSongCount();
     ui->songList->clearSelection();
 }
 

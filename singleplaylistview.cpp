@@ -147,9 +147,19 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongIndex, index);
 
+        if (title.contains(ui->searchEdit->text(), Qt::CaseInsensitive)
+        || artist.contains(ui->searchEdit->text(), Qt::CaseInsensitive)
+        || album.contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
+            ++visibleSongs; updateSongCount();
+        } else item->setHidden(true);
+
     } else {
         item->setText(tr("Information not available"));
         item->setData(UserRoleSongDuration, Duration::Unknown);
+
+        if (item->text().contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
+            ++visibleSongs; updateSongCount();
+        } else item->setHidden(true);
     }
 
     int position;
@@ -157,8 +167,6 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         if (ui->songList->item(position)->data(UserRoleSongIndex).toUInt() > index)
             break;
     ui->songList->insertItem(position, item);
-
-    updateSongCount();
 
     if (numberOfSongsToAdd == 0) {
         qDebug() << "disconnecting SinglePlaylistView from onGetItems";
@@ -174,6 +182,7 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
 void SinglePlaylistView::browseObjectId(QString objectId)
 {
     ui->songList->clear();
+    visibleSongs = 0;
     setupShuffleButton();
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
@@ -189,6 +198,7 @@ void SinglePlaylistView::browseObjectId(QString objectId)
 void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting, int maxCount)
 {
     ui->songList->clear();
+    visibleSongs = 0;
     setupShuffleButton();
 
     ui->menuOptions->removeAction(ui->actionDelete_playlist);
@@ -219,10 +229,13 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
         artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
+
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
+
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
@@ -232,14 +245,23 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
+
+        if (title.contains(ui->searchEdit->text(), Qt::CaseInsensitive)
+        || artist.contains(ui->searchEdit->text(), Qt::CaseInsensitive)
+        || album.contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
+            ++visibleSongs; updateSongCount();
+        } else item->setHidden(true);
+
     } else {
         item->setText(tr("Information not available"));
         item->setData(UserRoleSongDuration, Duration::Unknown);
+
+        if (item->text().contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
+            ++visibleSongs; updateSongCount();
+        } else item->setHidden(true);
     }
 
     ui->songList->addItem(item);
-
-    updateSongCount();
 
     if (remainingCount == 0) {
         browsePlaylistId = NULL;
@@ -278,6 +300,8 @@ void SinglePlaylistView::addAllToNowPlaying()
 void SinglePlaylistView::playAll(int startIndex)
 {
 #ifdef MAFW
+    if (visibleSongs == 0) return;
+
     this->setEnabled(false);
 
     if (playlist->playlistName() != "FmpAudioPlaylist")
@@ -374,14 +398,19 @@ void SinglePlaylistView::onSearchHideButtonClicked()
 
 void SinglePlaylistView::onSearchTextChanged(QString text)
 {
+    visibleSongs = 0;
     for (int i = 1; i < ui->songList->count(); i++) {
         if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
             ui->songList->item(i)->data(UserRoleSongArtist).toString().toLower().indexOf(text.toLower()) != -1 ||
-            ui->songList->item(i)->data(UserRoleSongAlbum).toString().toLower().indexOf(text.toLower()) != -1)
+            ui->songList->item(i)->data(UserRoleSongAlbum).toString().toLower().indexOf(text.toLower()) != -1) {
             ui->songList->item(i)->setHidden(false);
+            ++visibleSongs;
+        }
         else
             ui->songList->item(i)->setHidden(true);
     }
+
+    updateSongCount();
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
@@ -508,16 +537,16 @@ void SinglePlaylistView::onDeleteClicked()
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         delete ui->songList->currentItem();
+        --visibleSongs; updateSongCount();
     }
 #endif
-    updateSongCount();
     ui->songList->clearSelection();
 }
 
 void SinglePlaylistView::updateSongCount()
 {
 #ifdef Q_WS_MAEMO_5
-    shuffleButton->setValueText(tr("%n song(s)", "", ui->songList->count()-1));
+    shuffleButton->setValueText(tr("%n song(s)", "", visibleSongs));
 #endif
 }
 
@@ -581,7 +610,7 @@ void SinglePlaylistView::saveCurrentPlaylist()
 void SinglePlaylistView::onDeleteFromPlaylist()
 {
     delete ui->songList->takeItem(ui->songList->currentRow());
-    updateSongCount();
+    --visibleSongs; updateSongCount();
 }
 
 void SinglePlaylistView::onNowPlayingWindowHidden()

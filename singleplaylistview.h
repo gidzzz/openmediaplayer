@@ -47,6 +47,7 @@ private:
     Ui::SinglePlaylistView *ui;
     QTimer *clickTimer;
     QListWidgetItem *clickedItem;
+    int visibleSongs;
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleButton;
     void notifyOnAddedToNowPlaying(int songCount);
