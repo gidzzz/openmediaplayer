@@ -429,7 +429,7 @@ void SinglePlaylistView::setRingingTone()
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
                               + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
@@ -500,7 +500,7 @@ void SinglePlaylistView::onDeleteClicked()
                               tr("Are you sure you want to delete this song?")+ "\n\n"
                               + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));

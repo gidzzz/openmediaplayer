@@ -1243,7 +1243,7 @@ void NowPlayingWindow::clearPlaylist()
     QMessageBox confirmClear(QMessageBox::NoIcon,
                              " ",
                              tr("Clear all songs from now playing?"),
-                             QMessageBox::Yes | QMessageBox::No,
+                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                              this);
     confirmClear.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmClear.button(QMessageBox::No)->setText(tr("No"));
@@ -1291,7 +1291,7 @@ void NowPlayingWindow::setRingingTone()
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
                               + ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString() + "\n"
                               + ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
@@ -1330,7 +1330,7 @@ void NowPlayingWindow::onDeleteClicked()
                               tr("Are you sure you want to delete this song?")+ "\n\n"
                               + ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString() + "\n"
                               + ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
@@ -1465,7 +1465,7 @@ void NowPlayingWindow::onSavePlaylistAccepted()
         QMessageBox confirm(QMessageBox::NoIcon,
                             " ",
                             tr("Playlist with the same name exists, overwrite?"),
-                            QMessageBox::Yes | QMessageBox::No,
+                            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                             savePlaylistDialog);
         confirm.button(QMessageBox::Yes)->setText(tr("Yes"));
         confirm.button(QMessageBox::No)->setText(tr("No"));
@@ -1598,7 +1598,7 @@ void NowPlayingWindow::resetAlbumArt()
     QMessageBox confirm(QMessageBox::NoIcon,
                              " ",
                              tr("Reset album art?"),
-                             QMessageBox::Yes | QMessageBox::No,
+                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                              this);
     confirm.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirm.button(QMessageBox::No)->setText(tr("No"));

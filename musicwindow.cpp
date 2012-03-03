@@ -124,8 +124,7 @@ void MusicWindow::onSongSelected(QListWidgetItem *item)
 
 void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
 {
-    if (item->data(Qt::UserRole).toBool())
-        return;
+    if (item->data(Qt::UserRole).toBool()) return;
 
     this->setEnabled(false);
 
@@ -225,7 +224,7 @@ void MusicWindow::onDeletePlaylistClicked()
         QMessageBox confirmDelete(QMessageBox::NoIcon,
                                   " ",
                                   tr("Delete selected item from device?"),
-                                  QMessageBox::Yes | QMessageBox::No,
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                                   this);
         confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
         confirmDelete.button(QMessageBox::No)->setText(tr("No"));
@@ -247,7 +246,7 @@ void MusicWindow::setRingingTone()
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
                               + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
@@ -311,7 +310,7 @@ void MusicWindow::onDeleteClicked()
     QMessageBox confirmDelete(QMessageBox::NoIcon,
                               " ",
                               tr("Delete selected item from device?"),
-                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));

@@ -96,7 +96,7 @@ void VideosWindow::onDeleteClicked()
     QMessageBox confirmDelete(QMessageBox::NoIcon,
                               " ",
                               tr("Delete selected item from device?"),
-                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
@@ -142,6 +142,8 @@ void VideosWindow::onShareUriReceived(QString objectId, QString uri)
 
 void VideosWindow::onVideoSelected(QListWidgetItem *item)
 {
+    if (ui->listWidget->currentItem()->data(UserRoleObjectID).toString().isEmpty()) return;
+
     this->setEnabled(false);
 
 #ifdef MAFW
