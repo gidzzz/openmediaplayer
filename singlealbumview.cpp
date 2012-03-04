@@ -146,17 +146,18 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
 
-        if (title.contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
-            ++visibleSongs; updateSongCount();
-        } else item->setHidden(true);
+        ++visibleSongs; updateSongCount();
 
         ui->songList->addItem(item);
     }
 
+    if (remainingCount == 0) {
+        if (!ui->searchEdit->text().isEmpty())
+            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
-    if (remainingCount == 0)
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+    }
 }
 
 void SingleAlbumView::browseAlbumByObjectId(QString objectId)
@@ -260,12 +261,11 @@ void SingleAlbumView::onSearchTextChanged(QString text)
 {
     visibleSongs = 0;
     for (int i = 1; i < ui->songList->count(); i++) {
-        if (ui->songList->item(i)->data(UserRoleSongTitle).toString().toLower().indexOf(text.toLower()) == -1)
-            ui->songList->item(i)->setHidden(true);
-        else {
+        if (ui->songList->item(i)->data(UserRoleSongTitle).toString().contains(text, Qt::CaseInsensitive)) {
             ui->songList->item(i)->setHidden(false);
             ++visibleSongs;
-        }
+        } else
+            ui->songList->item(i)->setHidden(true);
     }
 
     updateSongCount();

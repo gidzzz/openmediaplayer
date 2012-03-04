@@ -146,20 +146,12 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongIndex, index);
 
-        if (title.contains(ui->searchEdit->text(), Qt::CaseInsensitive)
-        || artist.contains(ui->searchEdit->text(), Qt::CaseInsensitive)
-        || album.contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
-            ++visibleSongs; updateSongCount();
-        } else item->setHidden(true);
-
     } else {
         item->setText(tr("Information not available"));
         item->setData(UserRoleSongDuration, Duration::Unknown);
-
-        if (item->text().contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
-            ++visibleSongs; updateSongCount();
-        } else item->setHidden(true);
     }
+
+    ++visibleSongs; updateSongCount();
 
     int position;
     for (position = 1; position < ui->songList->count(); position++)
@@ -172,6 +164,8 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
                    this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
         browsePlaylistOp = NULL;
+        if (!ui->searchEdit->text().isEmpty())
+            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -244,25 +238,19 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
 
-        if (title.contains(ui->searchEdit->text(), Qt::CaseInsensitive)
-        || artist.contains(ui->searchEdit->text(), Qt::CaseInsensitive)
-        || album.contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
-            ++visibleSongs; updateSongCount();
-        } else item->setHidden(true);
-
     } else {
         item->setText(tr("Information not available"));
         item->setData(UserRoleSongDuration, Duration::Unknown);
-
-        if (item->text().contains(ui->searchEdit->text(), Qt::CaseInsensitive)) {
-            ++visibleSongs; updateSongCount();
-        } else item->setHidden(true);
     }
+
+    ++visibleSongs; updateSongCount();
 
     ui->songList->addItem(item);
 
     if (remainingCount == 0) {
         browsePlaylistId = NULL;
+        if (!ui->searchEdit->text().isEmpty())
+            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -398,13 +386,12 @@ void SinglePlaylistView::onSearchTextChanged(QString text)
 {
     visibleSongs = 0;
     for (int i = 1; i < ui->songList->count(); i++) {
-        if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
-            ui->songList->item(i)->data(UserRoleSongArtist).toString().toLower().indexOf(text.toLower()) != -1 ||
-            ui->songList->item(i)->data(UserRoleSongAlbum).toString().toLower().indexOf(text.toLower()) != -1) {
+        if (ui->songList->item(i)->text().contains(text, Qt::CaseInsensitive)
+        || ui->songList->item(i)->data(UserRoleSongArtist).toString().contains(text, Qt::CaseInsensitive)
+        || ui->songList->item(i)->data(UserRoleSongAlbum).toString().contains(text, Qt::CaseInsensitive)) {
             ui->songList->item(i)->setHidden(false);
             ++visibleSongs;
-        }
-        else
+        } else
             ui->songList->item(i)->setHidden(true);
     }
 

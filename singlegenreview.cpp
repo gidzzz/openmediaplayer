@@ -97,10 +97,10 @@ void SingleGenreView::orientationChanged()
 
 void SingleGenreView::onItemActivated(QListWidgetItem *item)
 {
-    /*if (ui->artistList->row(item) == 0) {
+    if (ui->artistList->row(item) == 0) {
         onShuffleButtonClicked();
         return;
-    }*/
+    }
 
     int songCount = item->data(UserRoleAlbumCount).toInt();
 
@@ -159,14 +159,14 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
 {
     if (browseId != this->browseGenreId) return;
 
-    QString title;
-    int songCount = -1;
-    int albumCount = -1;
-
-    QListWidgetItem *item = new QListWidgetItem();
-
     if (metadata != NULL) {
+        QString title;
+        int songCount = -1;
+        int albumCount = -1;
         GValue *v;
+
+        QListWidgetItem *item = new QListWidgetItem();
+
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
@@ -184,31 +184,32 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
                 item->setData(UserRoleAlbumArt, filename);
             }
         }
+
+        if (title.isEmpty()) title = tr("(unknown artist)");
+
+        item->setText(title);
+        item->setData(UserRoleSongCount, songCount);
+        item->setData(UserRoleAlbumCount, albumCount);
+        item->setData(UserRoleObjectID, objectId);
+
+        ui->artistList->addItem(item);
     }
-
-    if (title.isEmpty())
-        title = tr("(unknown artist)");
-
-    item->setText(title);
-    item->setData(UserRoleSongCount, songCount);
-    item->setData(UserRoleAlbumCount, albumCount);
-    item->setData(UserRoleObjectID, objectId);
-
-    ui->artistList->addItem(item);
 
     if (!error.isEmpty())
         qDebug() << error;
 
+    if (remainingCount == 0) {
+        if (!ui->searchEdit->text().isEmpty())
+            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
-    if (remainingCount == 0)
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+    }
 }
 #endif
 
 void SingleGenreView::setSongCount(int count)
 {
-    this->songsInGenre = count;
 #ifdef Q_WS_MAEMO_5
     shuffleButton->setValueText(tr("%n song(s)", "", count));
 #endif
@@ -242,12 +243,16 @@ void SingleGenreView::onSearchHideButtonClicked()
 
 void SingleGenreView::onSearchTextChanged(QString text)
 {
+    int visibleSongs = 0;
     for (int i = 1; i < ui->artistList->count(); i++) {
-        if (ui->artistList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
-            ui->artistList->item(i)->setHidden(true);
-        else
+        if (ui->artistList->item(i)->text().contains(text, Qt::CaseInsensitive)) {
             ui->artistList->item(i)->setHidden(false);
+            visibleSongs += ui->artistList->item(i)->data(UserRoleSongCount).toInt();
+        } else
+            ui->artistList->item(i)->setHidden(true);
     }
+
+    setSongCount(visibleSongs);
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();

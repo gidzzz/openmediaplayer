@@ -33,7 +33,7 @@ public:
     explicit SingleGenreView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SingleGenreView();
     void browseGenre(QString objectId);
-    void setSongCount(int);
+    void setSongCount(int count);
 
 private:
     Ui::SingleGenreView *ui;
@@ -48,7 +48,6 @@ private:
     QString currentObjectId;
     gchar** songAddBuffer;
     int songAddBufferSize;
-    int songsInGenre;
     bool isShuffling;
 #endif
 #ifdef Q_WS_MAEMO_5

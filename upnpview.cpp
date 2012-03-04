@@ -95,10 +95,10 @@ void UpnpView::onSearchHideButtonClicked()
 void UpnpView::onSearchTextChanged(QString text)
 {
     for (int i = 0; i < ui->objectList->count(); i++) {
-        if (ui->objectList->item(i)->data(UserRoleTitle).toString().toLower().indexOf(text.toLower()) == -1)
-            ui->objectList->item(i)->setHidden(true);
-        else
+        if (ui->objectList->item(i)->data(UserRoleTitle).toString().contains(text, Qt::CaseInsensitive))
             ui->objectList->item(i)->setHidden(false);
+        else
+            ui->objectList->item(i)->setHidden(true);
     }
 
     if (text.isEmpty()) {
@@ -154,6 +154,8 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
     if (remainingCount == 0) {
         disconnect(mafwSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(onBrowseResult(uint, int, uint, QString, GHashTable*, QString)));
+        if (!ui->searchEdit->text().isEmpty())
+            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif

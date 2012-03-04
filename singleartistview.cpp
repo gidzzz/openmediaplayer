@@ -103,18 +103,16 @@ void SingleArtistView::listAlbums()
 
 void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
-    if (browseId != browseAllAlbumsId)
-        return;
-
-    QString albumTitle;
-    QString songCount;
-    int childcount = -1;
-    QString albumArt;
-
-    QListWidgetItem *item = new QListWidgetItem();
+    if (browseId != browseAllAlbumsId) return;
 
     if (metadata != NULL) {
+        QString albumTitle;
+        QString songCount;
+        int childcount = -1;
+        QString albumArt;
         GValue *v;
+
+        QListWidgetItem *item = new QListWidgetItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
@@ -135,21 +133,25 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         } else {
             item->setIcon(QIcon::fromTheme(defaultAlbumIcon));
         }
-    }
 
-    item->setData(UserRoleValueText, songCount);
-    item->setData(UserRoleSongCount, childcount);
-    item->setData(UserRoleObjectID, objectId);
-    item->setData(UserRoleTitle, albumTitle);
-    ui->albumList->addItem(item);
+        item->setData(UserRoleValueText, songCount);
+        item->setData(UserRoleSongCount, childcount);
+        item->setData(UserRoleObjectID, objectId);
+        item->setData(UserRoleTitle, albumTitle);
+
+        ui->albumList->addItem(item);
+    }
 
     if (!error.isEmpty())
         qDebug() << error;
 
+    if (remainingCount == 0) {
+        if (!ui->searchEdit->text().isEmpty())
+            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
-    if (remainingCount == 0)
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+    }
 }
 #endif
 
@@ -200,10 +202,10 @@ void SingleArtistView::onSearchHideButtonClicked()
 void SingleArtistView::onSearchTextChanged(QString text)
 {
     for (int i = 1; i < ui->albumList->count(); i++) {
-        if (ui->albumList->item(i)->data(UserRoleTitle).toString().toLower().indexOf(text.toLower()) == -1)
-            ui->albumList->item(i)->setHidden(true);
-        else
+        if (ui->albumList->item(i)->data(UserRoleTitle).toString().contains(text, Qt::CaseInsensitive))
             ui->albumList->item(i)->setHidden(false);
+        else
+            ui->albumList->item(i)->setHidden(true);
     }
 
     if (text.isEmpty()) {
