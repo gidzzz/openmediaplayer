@@ -241,17 +241,17 @@ void MusicWindow::onDeletePlaylistClicked()
 void MusicWindow::setRingingTone()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
+    QMessageBox confirmRingtone(QMessageBox::NoIcon,
                               " ",
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
-                              + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
+                              + ui->songList->currentItem()->text() + "\n"
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    confirmRingtone.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmRingtone.button(QMessageBox::No)->setText(tr("No"));
+    confirmRingtone.exec();
+    if (confirmRingtone.result() == QMessageBox::Yes) {
         mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }
@@ -336,20 +336,20 @@ void MusicWindow::onSearchHideButtonClicked()
 void MusicWindow::onSearchTextChanged(QString text)
 {
     for (int i = 0; i < this->currentList()->count(); i++) {
-        if (this->currentList() == ui->songList) {
+        if (this->currentList() == ui->songList) { // All songs
              if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) != -1 ||
                  ui->songList->item(i)->data(UserRoleSongArtist).toString().toLower().indexOf(text.toLower()) != -1 ||
                  ui->songList->item(i)->data(UserRoleSongAlbum).toString().toLower().indexOf(text.toLower()) != -1)
                  ui->songList->item(i)->setHidden(false);
              else
                  ui->songList->item(i)->setHidden(true);
-        } else if (this->currentList() == ui->albumList) {
+        } else if (this->currentList() == ui->albumList) { // All albums
              if (ui->albumList->item(i)->data(UserRoleTitle).toString().toLower().indexOf(text.toLower()) != -1 ||
                  ui->albumList->item(i)->data(UserRoleValueText).toString().toLower().indexOf(text.toLower()) != -1)
                  ui->albumList->item(i)->setHidden(false);
              else
                  ui->albumList->item(i)->setHidden(true);
-        } else {
+        } else { // Artists, Genres, Playlists
             if (this->currentList()->item(i)->text().toLower().indexOf(text.toLower()) == -1)
                 this->currentList()->item(i)->setHidden(true);
             else
@@ -559,21 +559,25 @@ void MusicWindow::onAlbumSelected(QListWidgetItem *item)
 
 void MusicWindow::onArtistSelected(QListWidgetItem *item)
 {
-    this->setEnabled(false);
-
     int songCount = item->data(UserRoleAlbumCount).toInt();
-    if(songCount == 0 || songCount == 1) {
+
+    if (songCount == 0 || songCount == 1) {
+        this->setEnabled(false);
+
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-        albumView->setWindowTitle(item->data(UserRoleTitle).toString());
+        albumView->setWindowTitle(item->text());
 
         albumView->show();
         connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
+
     } else if (songCount > 1) {
+        this->setEnabled(false);
+
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
-        artistView->setWindowTitle(item->data(UserRoleTitle).toString());
+        artistView->setWindowTitle(item->text());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
 
         artistView->show();
@@ -587,7 +591,7 @@ void MusicWindow::onGenreSelected(QListWidgetItem *item)
     this->setEnabled(false);
 
     SingleGenreView *genreView = new SingleGenreView(this, mafwFactory);
-    genreView->setWindowTitle(item->data(UserRoleSongTitle).toString());
+    genreView->setWindowTitle(item->text());
 
     genreView->show();
 
@@ -841,15 +845,12 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem();
-        item->setData(UserRoleSongTitle, title);
+        item->setText(title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, duration);
 
-        // Although we don't need this to show the song title, we need it to
-        // sort alphabatically.
-        item->setText(title);
         ui->songList->addItem(item);
     }
 
@@ -893,12 +894,10 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
         }
     }
 
-
     if (title.isEmpty())
         title = tr("(unknown artist)");
 
     item->setText(title);
-    item->setData(UserRoleTitle, title);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
     item->setData(UserRoleObjectID, objectId);
@@ -993,8 +992,7 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
 
     QListWidgetItem *item = new QListWidgetItem();
 
-    item->setData(UserRoleSongTitle, title.isEmpty() ? tr("(unknown genre)") : title);
-    item->setText(item->data(UserRoleSongTitle).toString());
+    item->setText(title.isEmpty() ? tr("(unknown genre)") : title);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleArtistCount, artistCount);
     item->setData(UserRoleAlbumCount, albumCount);

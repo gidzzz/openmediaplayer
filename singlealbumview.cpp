@@ -140,7 +140,6 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QListWidgetItem *item = new QListWidgetItem();
-        item->setText(title);
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
@@ -261,7 +260,7 @@ void SingleAlbumView::onSearchTextChanged(QString text)
 {
     visibleSongs = 0;
     for (int i = 1; i < ui->songList->count(); i++) {
-        if (ui->songList->item(i)->text().toLower().indexOf(text.toLower()) == -1)
+        if (ui->songList->item(i)->data(UserRoleSongTitle).toString().toLower().indexOf(text.toLower()) == -1)
             ui->songList->item(i)->setHidden(true);
         else {
             ui->songList->item(i)->setHidden(false);
@@ -343,17 +342,17 @@ void SingleAlbumView::onAddToNowPlaying()
 void SingleAlbumView::setRingingTone()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
+    QMessageBox confirmRingtone(QMessageBox::NoIcon,
                               " ",
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
                               + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    confirmRingtone.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmRingtone.button(QMessageBox::No)->setText(tr("No"));
+    confirmRingtone.exec();
+    if (confirmRingtone.result() == QMessageBox::Yes) {
         mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }

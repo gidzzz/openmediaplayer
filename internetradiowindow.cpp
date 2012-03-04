@@ -126,8 +126,7 @@ void InternetRadioWindow::onEditClicked()
 {
     QListWidgetItem *item = ui->listWidget->currentItem();
     bookmarkObjectId = item->data(UserRoleObjectID).toString();
-    showBookmarkDialog(item->data(UserRoleSongTitle).toString(),
-                       item->data(UserRoleValueText).toString());
+    showBookmarkDialog(item->text(), item->data(UserRoleValueText).toString());
 }
 
 void InternetRadioWindow::onDeleteClicked()
@@ -274,10 +273,10 @@ void InternetRadioWindow::listStations()
             this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
     browseId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
-                                                        MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                         MAFW_METADATA_KEY_URI,
-                                                                         MAFW_METADATA_KEY_MIME),
-                                                        0, MAFW_SOURCE_BROWSE_ALL);
+                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                              MAFW_METADATA_KEY_URI,
+                                                              MAFW_METADATA_KEY_MIME),
+                                             0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
@@ -314,7 +313,6 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         QListWidgetItem *item = ui->listWidget->item(index);
 
         item->setText(title);
-        item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleValueText, URI);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongDuration, Duration::Blank);

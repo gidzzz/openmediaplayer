@@ -140,7 +140,6 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         item->setText(title);
-        item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongDuration, duration);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleSongArtist, artist);
@@ -240,7 +239,6 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         item->setText(title);
-        item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleObjectID, objectId);
@@ -453,17 +451,17 @@ void SinglePlaylistView::onAddToNowPlaying()
 void SinglePlaylistView::setRingingTone()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
+    QMessageBox confirmRingtone(QMessageBox::NoIcon,
                               " ",
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
-                              + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
+                              + ui->songList->currentItem()->text() + "\n"
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    confirmRingtone.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmRingtone.button(QMessageBox::No)->setText(tr("No"));
+    confirmRingtone.exec();
+    if (confirmRingtone.result() == QMessageBox::Yes) {
         mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }
@@ -527,7 +525,7 @@ void SinglePlaylistView::onDeleteClicked()
     QMessageBox confirmDelete(QMessageBox::NoIcon,
                               tr("Delete song?"),
                               tr("Are you sure you want to delete this song?")+ "\n\n"
-                              + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
+                              + ui->songList->currentItem()->text() + "\n"
                               + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);

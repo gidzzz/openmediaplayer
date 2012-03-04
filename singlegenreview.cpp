@@ -97,26 +97,30 @@ void SingleGenreView::orientationChanged()
 
 void SingleGenreView::onItemActivated(QListWidgetItem *item)
 {
-    if (ui->artistList->row(item) == 0) {
+    /*if (ui->artistList->row(item) == 0) {
         onShuffleButtonClicked();
         return;
-    }
-
-    this->setEnabled(false);
+    }*/
 
     int songCount = item->data(UserRoleAlbumCount).toInt();
+
     if (songCount == 0 || songCount == 1) {
+        this->setEnabled(false);
+
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-        albumView->setWindowTitle(item->data(UserRoleTitle).toString());
+        albumView->setWindowTitle(item->text());
 
         albumView->show();
         connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
+
     } else if (songCount > 1) {
+        this->setEnabled(false);
+
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
-        artistView->setWindowTitle(item->data(UserRoleTitle).toString());
+        artistView->setWindowTitle(item->text());
         artistView->setSongCount(item->data(UserRoleSongCount).toInt());
 
         artistView->show();
@@ -153,13 +157,14 @@ void SingleGenreView::listGenres()
 
 void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
-    if (browseId != this->browseGenreId)
-      return;
+    if (browseId != this->browseGenreId) return;
 
     QString title;
     int songCount = -1;
     int albumCount = -1;
+
     QListWidgetItem *item = new QListWidgetItem();
+
     if (metadata != NULL) {
         GValue *v;
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
@@ -181,16 +186,16 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
         }
     }
 
-
     if (title.isEmpty())
         title = tr("(unknown artist)");
 
     item->setText(title);
-    item->setData(UserRoleTitle, title);
     item->setData(UserRoleSongCount, songCount);
     item->setData(UserRoleAlbumCount, albumCount);
     item->setData(UserRoleObjectID, objectId);
+
     ui->artistList->addItem(item);
+
     if (!error.isEmpty())
         qDebug() << error;
 
