@@ -82,7 +82,7 @@ void MusicWindow::onSongSelected(QListWidgetItem *item)
     playlist->clear();
     playlist->setShuffled(false);
 
-    gchar** songAddBuffer = new gchar*[ui->songList->count()];
+    gchar** songAddBuffer = new gchar*[ui->songList->count()+1];
 
     int visibleCount = 0;
     for (int i = 0; i < ui->songList->count(); i++)
