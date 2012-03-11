@@ -31,6 +31,31 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QWidget" name="searchWidget" native="true">
+       <property name="visible">
+        <bool>false</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="searchEdit"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="searchHideButton">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="NowPlayingIndicator" name="indicator" native="true">

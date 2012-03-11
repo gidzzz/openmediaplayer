@@ -41,6 +41,8 @@ public:
 private:
     Ui::InternetRadioWindow *ui;
     void connectSignals();
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
     QDialog *bookmarkDialog;
@@ -65,11 +67,13 @@ private slots:
     void showBookmarkDialog(QString name = "", QString address = "");
     void onEditClicked();
     void onSaveClicked();
-    void onStationSelected();
+    void onStationSelected(QListWidgetItem* item);
     void onContextMenuRequested(const QPoint &point);
     void onDeleteClicked();
     void orientationChanged();
     void onChildClosed();
+    void onSearchHideButtonClicked();
+    void onSearchTextChanged(QString text);
 #ifdef MAFW
     void listStations();
     void browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);

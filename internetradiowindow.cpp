@@ -31,6 +31,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
+    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
@@ -58,10 +59,12 @@ void InternetRadioWindow::connectSignals()
 {
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showBookmarkDialog()));
-    connect(ui->listWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(onStationSelected()));
+    connect(ui->listWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onStationSelected(QListWidgetItem*)));
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 #ifdef MAFW
     connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged()));
 #endif
@@ -75,7 +78,7 @@ void InternetRadioWindow::showFMTXDialog()
 #endif
 }
 
-void InternetRadioWindow::onStationSelected()
+void InternetRadioWindow::onStationSelected(QListWidgetItem* item)
 {
     this->setEnabled(false);
 
@@ -84,21 +87,21 @@ void InternetRadioWindow::onStationSelected()
 
     playlist->clear();
 
-    int songCount = ui->listWidget->count();
-    gchar** songAddBuffer = new gchar*[songCount+1];
+    int stationCount = ui->listWidget->count();
+    gchar** songAddBuffer = new gchar*[stationCount+1];
 
-    for (int i = 0; i < songCount; i++)
+    for (int i = 0; i < stationCount; i++)
         songAddBuffer[i] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[songCount] = NULL;
+    songAddBuffer[stationCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
 
-    for (int i = 0; i < songCount; i++)
+    for (int i = 0; i < stationCount; i++)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
     playlist->getSize(); // explained in musicwindow.cpp
-    mafwrenderer->gotoIndex(ui->listWidget->currentRow());
+    mafwrenderer->gotoIndex(ui->listWidget->row(item));
 
     window = new RadioNowPlayingWindow(this, mafwFactory);
 #else
@@ -319,14 +322,15 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
     }
 
     if (remainingCount == 0) {
-#ifdef Q_WS_MAEMO_5
-        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
         qDebug() << "disconnecting InternetRadioWindow from signalSourceBrowseResult";
         disconnect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
+        if (!ui->searchEdit->text().isEmpty())
+            this->onSearchTextChanged(ui->searchEdit->text());
+#ifdef Q_WS_MAEMO_5
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
     }
-
 }
 
 void InternetRadioWindow::onContainerChanged()
@@ -334,6 +338,55 @@ void InternetRadioWindow::onContainerChanged()
     this->listStations();
 }
 #endif
+
+void InternetRadioWindow::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
+void InternetRadioWindow::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
+        return;
+    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
+        ui->listWidget->setFocus();
+    else {
+        ui->listWidget->clearSelection();
+        if (ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
+            ui->searchWidget->show();
+        }
+        if (!ui->searchEdit->hasFocus())
+            ui->searchEdit->setText(ui->searchEdit->text() + e->text());
+        ui->searchEdit->setFocus();
+    }
+}
+
+void InternetRadioWindow::onSearchHideButtonClicked()
+{
+    if (ui->searchEdit->text().isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    } else
+        ui->searchEdit->clear();
+}
+
+void InternetRadioWindow::onSearchTextChanged(QString text)
+{
+    for (int i = 0; i < ui->listWidget->count(); i++) {
+        if (ui->listWidget->item(i)->text().contains(text, Qt::CaseInsensitive)
+        || ui->listWidget->item(i)->data(UserRoleValueText).toString().contains(text, Qt::CaseInsensitive))
+            ui->listWidget->item(i)->setHidden(false);
+        else
+            ui->listWidget->item(i)->setHidden(true);
+    }
+
+    if (text.isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    }
+}
 
 void InternetRadioWindow::orientationChanged()
 {
