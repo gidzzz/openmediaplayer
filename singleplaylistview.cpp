@@ -30,7 +30,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 {
     ui->setupUi(this);
     ui->centralwidget->setLayout(ui->verticalLayout);
-    setupShuffleButton();
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -103,6 +102,10 @@ void SinglePlaylistView::setupShuffleButton()
 
 void SinglePlaylistView::browsePlaylist(MafwPlaylist *mafwplaylist)
 {
+    ui->songList->clear();
+    visibleSongs = 0;
+    setupShuffleButton();
+
     qDebug() << "connecting SinglePlaylistView to onGetItems";
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
             this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
@@ -259,7 +262,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
 void SinglePlaylistView::onItemActivated(QListWidgetItem *item)
 {
-    this->playAll(ui->songList->row(item));
+    this->playAll(ui->songList->row(item), false);
 }
 
 void SinglePlaylistView::orientationChanged()
@@ -277,13 +280,13 @@ void SinglePlaylistView::addAllToNowPlaying()
         playlist->assignAudioPlaylist();
 
 #ifdef Q_WS_MAEMO_5
-    this->notifyOnAddedToNowPlaying(appendAllToPlaylist());
+    this->notifyOnAddedToNowPlaying(appendAllToPlaylist(true));
 #endif
 
 #endif
 }
 
-void SinglePlaylistView::playAll(int startIndex)
+void SinglePlaylistView::playAll(int startIndex, bool filter)
 {
 #ifdef MAFW
     if (visibleSongs == 0) return;
@@ -295,17 +298,21 @@ void SinglePlaylistView::playAll(int startIndex)
     playlist->clear();
     playlist->setShuffled(startIndex < 1);
 
-    appendAllToPlaylist();
+    appendAllToPlaylist(filter);
 
     playlist->getSize(); // explained in musicwindow.cpp
 
     if (startIndex > 0) {
-        int visibleIndex = 0;
-        for (int i = 1; i < startIndex; i++)
-            if (!ui->songList->item(i)->isHidden())
-               ++visibleIndex;
+        if (filter) {
+            int visibleIndex = 0;
+            for (int i = 1; i < startIndex; i++)
+                if (!ui->songList->item(i)->isHidden())
+                   ++visibleIndex;
 
-        mafwrenderer->gotoIndex(visibleIndex);
+            mafwrenderer->gotoIndex(visibleIndex);
+        } else {
+            mafwrenderer->gotoIndex(startIndex-1);
+        }
     }
 
     mafwrenderer->play();
@@ -319,15 +326,24 @@ void SinglePlaylistView::playAll(int startIndex)
 #endif
 }
 
-int SinglePlaylistView::appendAllToPlaylist()
+int SinglePlaylistView::appendAllToPlaylist(bool filter)
 {
 #ifdef MAFW
     gchar** songAddBuffer = new gchar*[ui->songList->count()];
 
-    int visibleCount = 0;
-    for (int i = 1; i < ui->songList->count(); i++)
-        if (!ui->songList->item(i)->isHidden())
-            songAddBuffer[visibleCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    int visibleCount;
+
+    if (filter) {
+        visibleCount = 0;
+        for (int i = 1; i < ui->songList->count(); i++)
+            if (!ui->songList->item(i)->isHidden())
+                songAddBuffer[visibleCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    } else {
+        visibleCount = ui->songList->count()-1;
+        for (int i = 0; i < visibleCount; i++)
+            songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
+    }
+
     songAddBuffer[visibleCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
@@ -405,7 +421,7 @@ void SinglePlaylistView::onSearchTextChanged(QString text)
 
 void SinglePlaylistView::onShuffleButtonClicked()
 {
-    this->playAll(0);
+    this->playAll(0, true);
 }
 
 void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
