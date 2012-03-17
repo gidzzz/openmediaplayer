@@ -55,7 +55,11 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->genresList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->playlistList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    ui->albumList->installEventFilter(this);
+    ui->songList->viewport()->installEventFilter(this);
+    ui->albumList->viewport()->installEventFilter(this);
+    ui->artistList->viewport()->installEventFilter(this);
+    ui->genresList->viewport()->installEventFilter(this);
+    ui->playlistList->viewport()->installEventFilter(this);
 
     this->loadViewState();
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
@@ -376,10 +380,17 @@ void MusicWindow::orientationChanged()
     ui->indicator->raise();
 }
 
-bool MusicWindow::eventFilter(QObject *, QEvent *event)
+bool MusicWindow::eventFilter(QObject *obj, QEvent *e)
 {
-    if (event->type() == QEvent::Resize)
+    if (obj == ui->albumList->viewport() && e->type() == QEvent::Resize)
         ui->albumList->setFlow(ui->albumList->flow());
+    else
+        if (e->type() == QEvent::MouseButtonPress
+        && ((QMouseEvent*)e)->y() > currentList()->viewport()->height() - 25
+        && ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
+            ui->searchWidget->show();
+        }
     return false;
 }
 

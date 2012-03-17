@@ -31,6 +31,7 @@ class SingleAlbumView : public QMainWindow
 public:
     explicit SingleAlbumView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SingleAlbumView();
+    bool eventFilter(QObject *, QEvent *e);
 #ifdef MAFW
     void browseAlbumByObjectId(QString objectId);
 #endif

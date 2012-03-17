@@ -61,6 +61,9 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllGenres(uint, int, uint, QString, GHashTable*, QString)));
 #endif
+
+    ui->artistList->viewport()->installEventFilter(this);
+
     this->orientationChanged();
 }
 
@@ -215,6 +218,12 @@ void SingleGenreView::setSongCount(int count)
 #endif
 }
 
+void SingleGenreView::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
 void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
@@ -230,6 +239,17 @@ void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
     }
+}
+
+bool SingleGenreView::eventFilter(QObject *, QEvent *e)
+{
+    if (e->type() == QEvent::MouseButtonPress
+    && static_cast<QMouseEvent*>(e)->y() > ui->artistList->viewport()->height() - 25
+    && ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
+    return false;
 }
 
 void SingleGenreView::onSearchHideButtonClicked()

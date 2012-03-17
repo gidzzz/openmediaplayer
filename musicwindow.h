@@ -42,7 +42,7 @@ class MusicWindow : public QMainWindow
 public:
     explicit MusicWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~MusicWindow();
-    bool eventFilter(QObject *, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *e);
 
 protected:
     void hideEvent(QHideEvent *);

@@ -31,6 +31,8 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(onOrientationChanged()));
 
+    ui->objectList->viewport()->installEventFilter(this);
+
     ui->indicator->setFactory(factory);
 
     this->onOrientationChanged();
@@ -81,6 +83,17 @@ void UpnpView::keyReleaseEvent(QKeyEvent *e)
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
     }
+}
+
+bool UpnpView::eventFilter(QObject *, QEvent *e)
+{
+    if (e->type() == QEvent::MouseButtonPress
+    && static_cast<QMouseEvent*>(e)->y() > ui->objectList->viewport()->height() - 25
+    && ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
+    return false;
 }
 
 void UpnpView::onSearchHideButtonClicked()

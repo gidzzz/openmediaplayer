@@ -26,14 +26,16 @@ class SingleGenreView : public QMainWindow
 {
     Q_OBJECT
 
-protected:
-    void keyReleaseEvent(QKeyEvent *);
-
 public:
     explicit SingleGenreView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SingleGenreView();
+    bool eventFilter(QObject *, QEvent *e);
     void browseGenre(QString objectId);
     void setSongCount(int count);
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
 
 private:
     Ui::SingleGenreView *ui;

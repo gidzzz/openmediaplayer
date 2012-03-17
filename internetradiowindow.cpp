@@ -41,6 +41,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
     ui->listWidget->setItemDelegate(delegate);
     ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connectSignals();
+    ui->listWidget->viewport()->installEventFilter(this);
     this->orientationChanged();
 #ifdef MAFW
     if (mafwRadioSource->isReady())
@@ -343,6 +344,17 @@ void InternetRadioWindow::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Backspace)
         this->close();
+}
+
+bool InternetRadioWindow::eventFilter(QObject *, QEvent *e)
+{
+    if (e->type() == QEvent::MouseButtonPress
+    && static_cast<QMouseEvent*>(e)->y() > ui->listWidget->viewport()->height() - 25
+    && ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
+    return false;
 }
 
 void InternetRadioWindow::keyReleaseEvent(QKeyEvent *e)

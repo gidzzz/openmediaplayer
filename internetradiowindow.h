@@ -37,6 +37,7 @@ class InternetRadioWindow : public QMainWindow
 public:
     explicit InternetRadioWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~InternetRadioWindow();
+    bool eventFilter(QObject *, QEvent *e);
 
 private:
     Ui::InternetRadioWindow *ui;

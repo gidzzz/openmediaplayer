@@ -60,6 +60,9 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
 #endif
+
+    ui->songList->viewport()->installEventFilter(this);
+
     this->orientationChanged();
 }
 
@@ -310,6 +313,17 @@ void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
             ui->searchEdit->setText(ui->searchEdit->text() + e->text());
         ui->searchEdit->setFocus();
     }
+}
+
+bool SingleAlbumView::eventFilter(QObject *, QEvent *e)
+{
+    if (e->type() == QEvent::MouseButtonPress
+    && static_cast<QMouseEvent*>(e)->y() > ui->songList->viewport()->height() - 25
+    && ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
+    return false;
 }
 
 void SingleAlbumView::addAllToNowPlaying()

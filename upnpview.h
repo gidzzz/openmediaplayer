@@ -24,6 +24,7 @@ class UpnpView : public QMainWindow
 public:
     explicit UpnpView(QWidget *parent = 0, MafwAdapterFactory *factory = 0, MafwSourceAdapter *source = 0);
     ~UpnpView();
+    bool eventFilter(QObject *, QEvent *e);
 
 public slots:
     void browseObjectId(QString objectId);

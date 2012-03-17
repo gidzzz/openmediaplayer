@@ -37,7 +37,6 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     ui->albumList->setItemDelegate(delegate);
 
     ui->albumList->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->albumList->installEventFilter(this);
 
 #ifdef MAFW
     shuffleRequested = false;
@@ -63,6 +62,9 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentArtist()));
     connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+
+    ui->albumList->viewport()->installEventFilter(this);
+
     this->orientationChanged();
 }
 
@@ -183,10 +185,17 @@ void SingleArtistView::orientationChanged()
     ui->indicator->raise();
 }
 
-bool SingleArtistView::eventFilter(QObject *, QEvent *event)
+bool SingleArtistView::eventFilter(QObject *, QEvent *e)
 {
-    if (event->type() == QEvent::Resize)
+    if (e->type() == QEvent::Resize)
         ui->albumList->setFlow(ui->albumList->flow());
+    else
+        if (e->type() == QEvent::MouseButtonPress
+        && static_cast<QMouseEvent*>(e)->y() > ui->albumList->viewport()->height() - 25
+        && ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
+            ui->searchWidget->show();
+        }
     return false;
 }
 

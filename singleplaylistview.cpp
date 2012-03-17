@@ -566,6 +566,11 @@ bool SinglePlaylistView::eventFilter(QObject *, QEvent *e)
     }
 
     else if (e->type() == QEvent::MouseButtonPress) {
+        if (static_cast<QMouseEvent*>(e)->y() > ui->songList->viewport()->height() - 25
+        && ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
+            ui->searchWidget->show();
+        }
         clickedItem = ui->songList->itemAt(0, static_cast<QMouseEvent*>(e)->y());
     }
 
