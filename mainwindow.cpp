@@ -102,6 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #ifdef Q_WS_MAEMO_5
     QTimer::singleShot(1000, this, SLOT(takeScreenshot()));
+    this->checkPhoneButton();
 #endif
 }
 
@@ -236,7 +237,7 @@ void MainWindow::connectSignals()
 #endif
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::systemBus().connect("", "", "org.freedesktop.Hal.Device", "Condition",
-                                         this, SLOT(onBluetoothButtonPressed(QDBusMessage)));
+                                         this, SLOT(onButtonPressed(QDBusMessage)));
 #endif
 }
 
@@ -664,9 +665,41 @@ void MainWindow::onStateChanged(int state)
     this->mafwState = state;
 }
 
-#endif
 #ifdef Q_WS_MAEMO_5
-void MainWindow::onBluetoothButtonPressed(QDBusMessage msg)
+void MainWindow::phoneButton()
+{
+    QString action = QSettings().value("main/headsetButtonAction").toString();
+    if (action.isEmpty() || action == "next") {
+        if (this->mafwState == Playing)
+            mafwrenderer->next();
+        else
+            this->pausePlay();
+    } else if (action == "previous")
+        mafwrenderer->previous();
+    else if (action == "play")
+        this->pausePlay();
+    else if (action == "stop")
+        mafwrenderer->stop();
+}
+
+void MainWindow::checkPhoneButton()
+{
+    QDBusInterface interface("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/platform_soc_audio_logicaldev_input", "org.freedesktop.Hal.Device", QDBusConnection::systemBus());
+    if (!interface.isValid())
+        return;
+
+    QStringList jackList = static_cast< QDBusReply <QStringList> >(interface.call("GetProperty", "input.jack.type"));
+
+    QStringList args;
+    args << "-c" << "0" << "sset" << "Jack Bias";
+
+    if (jackList.isEmpty())
+        QProcess::execute("amixer", args << "off");
+    else
+        QProcess::execute("amixer", args << "on");
+}
+
+void MainWindow::onButtonPressed(QDBusMessage msg)
 {
     if (msg.arguments()[0] == "ButtonPressed") {
         if (msg.arguments()[1] == "play-cd" || msg.arguments()[1] == "pause-cd")
@@ -677,6 +710,10 @@ void MainWindow::onBluetoothButtonPressed(QDBusMessage msg)
             mafwrenderer->next();
         else if (msg.arguments()[1] == "previous-song")
             mafwrenderer->previous();
+        else if (msg.arguments()[1] == "phone")
+            this->phoneButton();
+        else if (msg.arguments()[1] == "jack_insert")
+            this->checkPhoneButton();
     }
 }
 
@@ -706,6 +743,7 @@ void MainWindow::takeScreenshot()
     XFlush (xev.xclient.display);
     XSync (xev.xclient.display, False);
 }
+#endif
 #endif
 
 void MainWindow::onNowPlayingWindowHidden()

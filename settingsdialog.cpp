@@ -28,6 +28,17 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     if (QSettings().value("main/onApplicationExit").toString() == "stop-playback")
         ui->onExitBox->setCurrentIndex(1);
+    if (QSettings().value("main/headsetButtonAction").toString() == "next")
+        ui->headsetButtonAction->setCurrentIndex(0);
+    else if (QSettings().value("main/headsetButtonAction").toString() == "previous")
+        ui->headsetButtonAction->setCurrentIndex(1);
+    else if (QSettings().value("main/headsetButtonAction").toString() == "play")
+        ui->headsetButtonAction->setCurrentIndex(2);
+    else if (QSettings().value("main/headsetButtonAction").toString() == "stop")
+        ui->headsetButtonAction->setCurrentIndex(3);
+    else if (QSettings().value("main/headsetButtonAction").toString() == "none")
+        ui->headsetButtonAction->setCurrentIndex(4);
+    if (QSettings().contains("lyrics/enable"))
     if (QSettings().contains("lyrics/enable"))
         if (QSettings().value("lyrics/enable").toBool())
             ui->lyricsCheckBox->setChecked(true);
@@ -49,6 +60,17 @@ void SettingsDialog::accept()
         QSettings().setValue("main/onApplicationExit", "do-nothing");
     else if (ui->onExitBox->currentIndex() == 1)
         QSettings().setValue("main/onApplicationExit", "stop-playback");
+
+    if (ui->headsetButtonAction->currentIndex() == 0)
+        QSettings().setValue("main/headsetButtonAction", "next");
+    else if (ui->headsetButtonAction->currentIndex() == 1)
+        QSettings().setValue("main/headsetButtonAction", "previous");
+    else if (ui->headsetButtonAction->currentIndex() == 2)
+        QSettings().setValue("main/headsetButtonAction", "play");
+    else if (ui->headsetButtonAction->currentIndex() == 3)
+        QSettings().setValue("main/headsetButtonAction", "stop");
+    else if (ui->headsetButtonAction->currentIndex() == 4)
+        QSettings().setValue("main/headsetButtonAction", "none");
 
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     NowPlayingWindow::destroy();

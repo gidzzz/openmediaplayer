@@ -105,7 +105,9 @@ private slots:
     void onNowPlayingWindowHidden();
 #endif
 #ifdef Q_WS_MAEMO_5
-    void onBluetoothButtonPressed(QDBusMessage msg);
+    void onButtonPressed(QDBusMessage msg);
+    void phoneButton();
+    void checkPhoneButton();
     void takeScreenshot();
 #endif
 };
