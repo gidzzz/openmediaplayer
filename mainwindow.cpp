@@ -908,7 +908,6 @@ void MainWindow::takeScreenshot()
     XSync (xev.xclient.display, False);
 }
 #endif
-#endif
 
 void MainWindow::onChildOpened()
 {
