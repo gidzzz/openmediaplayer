@@ -119,8 +119,10 @@ private slots:
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();
-    void onBluetoothButtonPressed(QDBusMessage msg);
+    void onButtonPressed(QDBusMessage msg);
     void onCallStateChanged(QDBusMessage msg);
+    void phoneButton();
+    void checkPhoneButton();
     void takeScreenshot();
 #endif
 
