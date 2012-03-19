@@ -85,57 +85,28 @@
          </item>
         </layout>
        </item>
-       <item row="6" column="1">
-        <widget class="QLabel" name="headsetButtonLabel">
+       <item row="5" column="1">
+        <widget class="QMaemo5ValueButton" name="headsetButtonBox">
          <property name="text">
-          <string>Headset phone button action:</string>
+          <string>Headset phone button action</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
-        <widget class="QComboBox" name="headsetButtonAction">
-         <item>
-          <property name="text">
-           <string>Next song</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Previous song</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Play/Pause</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Stop playing</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>None action</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="8" column="1">
+       <item row="6" column="1">
         <widget class="QCheckBox" name="slidersCheckBox">
          <property name="text">
           <string>Lazy sliders</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
+       <item row="7" column="1">
         <widget class="QCheckBox" name="fmtxCheckBox">
          <property name="text">
           <string>Override FMTX checks in UI</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item row="8" column="1">
         <widget class="QLabel" name="fmtxdLabel">
          <property name="font">
           <font>

@@ -119,7 +119,7 @@ private slots:
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();
-    void onButtonPressed(QDBusMessage msg);
+    void onHeadsetButtonPressed(QDBusMessage msg);
     void onCallStateChanged(QDBusMessage msg);
     void phoneButton();
     void checkPhoneButton();

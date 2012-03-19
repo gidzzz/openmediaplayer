@@ -218,7 +218,7 @@ void MainWindow::connectSignals()
 #endif
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::systemBus().connect("", "", "org.freedesktop.Hal.Device", "Condition",
-                                         this, SLOT(onButtonPressed(QDBusMessage)));
+                                         this, SLOT(onHeadsetButtonPressed(QDBusMessage)));
 
     QDBusConnection::systemBus().connect("", "", "com.nokia.mce.signal", "sig_call_state_ind",
                                          this, SLOT(onCallStateChanged(QDBusMessage)));
@@ -807,15 +807,15 @@ void MainWindow::onContainerChanged(QString objectId)
 #ifdef Q_WS_MAEMO_5
 void MainWindow::phoneButton()
 {
-    QString action = QSettings().value("main/headsetButtonAction").toString();
-    if (action.isEmpty() || action == "next") {
+    QString action = QSettings().value("main/headsetButtonAction", "next").toString();
+    if (action == "next") {
         if (this->mafwState == Playing)
             mafwrenderer->next();
         else
             this->pausePlay();
     } else if (action == "previous")
         mafwrenderer->previous();
-    else if (action == "play")
+    else if (action == "playpause")
         this->pausePlay();
     else if (action == "stop")
         mafwrenderer->stop();
@@ -838,7 +838,7 @@ void MainWindow::checkPhoneButton()
         QProcess::execute("amixer", args << "on");
 }
 
-void MainWindow::onButtonPressed(QDBusMessage msg)
+void MainWindow::onHeadsetButtonPressed(QDBusMessage msg)
 {
     if (msg.arguments()[0] == "ButtonPressed") {
         if (msg.arguments()[1] == "play-cd" || msg.arguments()[1] == "pause-cd")

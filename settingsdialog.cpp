@@ -29,16 +29,20 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     this->setAttribute(Qt::WA_DeleteOnClose);
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 
-    if (QSettings().value("main/headsetButtonAction").toString() == "next")
-        ui->headsetButtonAction->setCurrentIndex(0);
-    else if (QSettings().value("main/headsetButtonAction").toString() == "previous")
-        ui->headsetButtonAction->setCurrentIndex(1);
-    else if (QSettings().value("main/headsetButtonAction").toString() == "play")
-        ui->headsetButtonAction->setCurrentIndex(2);
-    else if (QSettings().value("main/headsetButtonAction").toString() == "stop")
-        ui->headsetButtonAction->setCurrentIndex(3);
-    else if (QSettings().value("main/headsetButtonAction").toString() == "none")
-        ui->headsetButtonAction->setCurrentIndex(4);
+    QMaemo5ListPickSelector *headsetSelector = new QMaemo5ListPickSelector;
+    QStandardItemModel *headsetModel = new QStandardItemModel(0, 1, headsetSelector);
+    headsetModel->appendRow(new QStandardItem(tr("Next song")));
+    headsetModel->appendRow(new QStandardItem(tr("Previous song")));
+    headsetModel->appendRow(new QStandardItem(tr("Play / Pause")));
+    headsetModel->appendRow(new QStandardItem(tr("Stop playback")));
+    headsetModel->appendRow(new QStandardItem(tr("Do nothing")));
+    headsetSelector->setModel(headsetModel);
+    headsetSelector->setCurrentIndex(QSettings().value("main/headsetButtonAction").toString() == "next" ? 0 :
+                                     QSettings().value("main/headsetButtonAction").toString() == "previous" ? 1 :
+                                     QSettings().value("main/headsetButtonAction").toString() == "playpause" ? 2 :
+                                     QSettings().value("main/headsetButtonAction").toString() == "stop" ? 3 :
+                                     QSettings().value("main/headsetButtonAction").toString() == "none" ? 4 : 0);
+    ui->headsetButtonBox->setPickSelector(headsetSelector);
 
     ui->stopCheckBox->setChecked(QSettings().value("main/stopOnExit", true).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
@@ -60,16 +64,13 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::accept()
 {
-    if (ui->headsetButtonAction->currentIndex() == 0)
-        QSettings().setValue("main/headsetButtonAction", "next");
-    else if (ui->headsetButtonAction->currentIndex() == 1)
-        QSettings().setValue("main/headsetButtonAction", "previous");
-    else if (ui->headsetButtonAction->currentIndex() == 2)
-        QSettings().setValue("main/headsetButtonAction", "play");
-    else if (ui->headsetButtonAction->currentIndex() == 3)
-        QSettings().setValue("main/headsetButtonAction", "stop");
-    else if (ui->headsetButtonAction->currentIndex() == 4)
-        QSettings().setValue("main/headsetButtonAction", "none");
+    switch (static_cast<QMaemo5ListPickSelector*>(ui->headsetButtonBox->pickSelector())->currentIndex()) {
+        case 0: QSettings().setValue("main/headsetButtonAction", "next"); break;
+        case 1: QSettings().setValue("main/headsetButtonAction", "previous"); break;
+        case 2: QSettings().setValue("main/headsetButtonAction", "playpause"); break;
+        case 3: QSettings().setValue("main/headsetButtonAction", "stop"); break;
+        case 4: QSettings().setValue("main/headsetButtonAction", "none"); break;
+    }
 
     QSettings().setValue("main/stopOnExit", ui->stopCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
