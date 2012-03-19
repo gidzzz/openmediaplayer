@@ -731,7 +731,7 @@ void MainWindow::focusOutEvent(QFocusEvent *)
 void MainWindow::closeEvent(QCloseEvent *)
 {
 #ifdef MAFW
-    if (QSettings().value("main/onApplicationExit").toString() != "do-nothing")
+    if (QSettings().value("main/stopOnExit", true).toBool())
         mafwrenderer->stop();
 #endif
 }

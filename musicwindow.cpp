@@ -136,7 +136,7 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
         this->setEnabled(false);
         SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
         playlistView->setWindowTitle(item->text());
-        int limit = QSettings().value("music/playlistSize").toInt();
+        int limit = QSettings().value("music/playlistSize", 30).toInt();
         if (row == 1)
             playlistView->browseAutomaticPlaylist("", "-added", limit);
         else if (row == 2)
@@ -755,7 +755,7 @@ void MusicWindow::listAutoPlaylists()
     listItem->setData(UserRoleSongDuration, Duration::Blank);
     ui->playlistList->insertItem(0, listItem);
 
-    int limit = QSettings().value("music/playlistSize").toInt();
+    int limit = QSettings().value("music/playlistSize", 30).toInt();
     QStringList playlists;
     playlists << tr("Recently added") << tr("Recently played") << tr("Most played") << tr("Never played");
     foreach (QString string, playlists) {
@@ -1128,7 +1128,7 @@ void MusicWindow::onAddToNowPlaying()
             QString filter;
             QString sorting;
             songAddBufferSize = 0;
-            int limit = QSettings().value("music/playlistSize").toInt();
+            int limit = QSettings().value("music/playlistSize", 30).toInt();
             switch (row) {
                 case 1: filter = ""; sorting = "-added"; break;
                 case 2: filter = "(play-count>0)"; sorting = "-last-played"; break;

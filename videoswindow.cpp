@@ -393,9 +393,9 @@ void VideosWindow::orientationChanged()
     ui->indicator->raise();
 }
 
-bool VideosWindow::eventFilter(QObject *, QEvent *event)
+bool VideosWindow::eventFilter(QObject *, QEvent *e)
 {
-    if (event->type() == QEvent::Resize)
+    if (e->type() == QEvent::Resize)
         ui->listWidget->setFlow(ui->listWidget->flow());
     return false;
 }

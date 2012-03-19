@@ -29,9 +29,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     this->setAttribute(Qt::WA_DeleteOnClose);
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 
-    if (QSettings().value("main/onApplicationExit").toString() == "do-nothing")
-        ui->onExitBox->setCurrentIndex(1);
-
     if (QSettings().value("main/headsetButtonAction").toString() == "next")
         ui->headsetButtonAction->setCurrentIndex(0);
     else if (QSettings().value("main/headsetButtonAction").toString() == "previous")
@@ -43,23 +40,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     else if (QSettings().value("main/headsetButtonAction").toString() == "none")
         ui->headsetButtonAction->setCurrentIndex(4);
 
-    if (QSettings().contains("lyrics/enable"))
-        if (QSettings().value("lyrics/enable").toBool())
-            ui->lyricsCheckBox->setChecked(true);
-    if (QSettings().contains("main/openFolders"))
-        if (QSettings().value("main/openFolders").toBool())
-            ui->foldersCheckBox->setChecked(true);
-    if (QSettings().contains("main/appendSongs"))
-        if (QSettings().value("main/appendSongs").toBool())
-            ui->appendCheckBox->setChecked(true);
-    if (QSettings().contains("main/lazySliders"))
-        if (QSettings().value("main/lazySliders").toBool())
-            ui->slidersCheckBox->setChecked(true);
-    if (QSettings().contains("FMTX/overrideChecks"))
-        if (QSettings().value("FMTX/overrideChecks").toBool())
-            ui->fmtxCheckBox->setChecked(true);
+    ui->stopCheckBox->setChecked(QSettings().value("main/stopOnExit", true).toBool());
+    ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
+    ui->foldersCheckBox->setChecked(QSettings().value("main/openFolders", false).toBool());
+    ui->appendCheckBox->setChecked(QSettings().value("main/appendSongs", false).toBool());
+    ui->slidersCheckBox->setChecked(QSettings().value("main/lazySliders", false).toBool());
+    ui->fmtxCheckBox->setChecked(QSettings().value("FMTX/overrideChecks", false).toBool());
 
-    ui->playlistSizeBox->setText(QSettings().value("music/playlistSize").toString());
+    ui->playlistSizeBox->setText(QSettings().value("music/playlistSize", 30).toString());
     ui->playlistSizeBox->setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]{0,3}"), this));
 
     this->orientationChanged();
@@ -72,11 +60,6 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::accept()
 {
-    if (ui->onExitBox->currentIndex() == 0)
-        QSettings().setValue("main/onApplicationExit", "stop-playback");
-    else if (ui->onExitBox->currentIndex() == 1)
-        QSettings().setValue("main/onApplicationExit", "do-nothing");
-
     if (ui->headsetButtonAction->currentIndex() == 0)
         QSettings().setValue("main/headsetButtonAction", "next");
     else if (ui->headsetButtonAction->currentIndex() == 1)
@@ -88,16 +71,17 @@ void SettingsDialog::accept()
     else if (ui->headsetButtonAction->currentIndex() == 4)
         QSettings().setValue("main/headsetButtonAction", "none");
 
+    QSettings().setValue("main/stopOnExit", ui->stopCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());
     QSettings().setValue("main/appendSongs", ui->appendCheckBox->isChecked());
     QSettings().setValue("main/lazySliders", ui->slidersCheckBox->isChecked());
-    NowPlayingWindow::destroy();
+    QSettings().setValue("FMTX/overrideChecks", ui->fmtxCheckBox->isChecked());
 
     int playlistSize = ui->playlistSizeBox->text().toInt();
     QSettings().setValue("music/playlistSize", playlistSize ? playlistSize : 30);
 
-    QSettings().setValue("FMTX/overrideChecks", ui->fmtxCheckBox->isChecked());
+    NowPlayingWindow::destroy();
 
     this->close();
 }
