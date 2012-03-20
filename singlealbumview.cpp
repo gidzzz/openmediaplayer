@@ -173,7 +173,7 @@ void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 
 void SingleAlbumView::onItemActivated(QListWidgetItem *item)
 {
-    this->playAll(ui->songList->row(item), false);
+    this->playAll(ui->songList->row(item), QSettings().value("main/playlistFilter", false).toBool());
 }
 
 #endif

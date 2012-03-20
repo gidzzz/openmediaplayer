@@ -24,6 +24,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
+    ui->gridLayout_2->setContentsMargins(0,0,0,0);
     ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
 
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -46,6 +47,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->stopCheckBox->setChecked(QSettings().value("main/stopOnExit", true).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
+    ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
     ui->foldersCheckBox->setChecked(QSettings().value("main/openFolders", false).toBool());
     ui->appendCheckBox->setChecked(QSettings().value("main/appendSongs", false).toBool());
     ui->slidersCheckBox->setChecked(QSettings().value("main/lazySliders", false).toBool());
@@ -74,6 +76,7 @@ void SettingsDialog::accept()
 
     QSettings().setValue("main/stopOnExit", ui->stopCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
+    QSettings().setValue("main/playlistFilter", ui->filterCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());
     QSettings().setValue("main/appendSongs", ui->appendCheckBox->isChecked());
     QSettings().setValue("main/lazySliders", ui->slidersCheckBox->isChecked());

@@ -88,10 +88,21 @@ void MusicWindow::onSongSelected(QListWidgetItem *item)
 
     gchar** songAddBuffer = new gchar*[ui->songList->count()+1];
 
-    int visibleCount = 0;
-    for (int i = 0; i < ui->songList->count(); i++)
-        if (!ui->songList->item(i)->isHidden())
-            songAddBuffer[visibleCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    bool filter = QSettings().value("main/playlistFilter", false).toBool();
+
+    int visibleCount;
+
+    if (filter) {
+        visibleCount = 0;
+        for (int i = 0; i < ui->songList->count(); i++)
+            if (!ui->songList->item(i)->isHidden())
+                songAddBuffer[visibleCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    } else {
+        visibleCount = ui->songList->count();
+        for (int i = 0; i < visibleCount; i++)
+            songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    }
+
     songAddBuffer[visibleCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
@@ -100,19 +111,24 @@ void MusicWindow::onSongSelected(QListWidgetItem *item)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-    int selectedIndex = ui->songList->row(item);
-    int visibleIndex = 0;
-    for (int i = 0; i < selectedIndex; i++)
-        if (!ui->songList->item(i)->isHidden())
-           ++visibleIndex;
-
     // Instant play() seems to work only for smaller libraries.
     // For bigger, something probably doesn't have enough time to ready up.
     // Possible workaround is to call getSize() first, so when it returns,
     // we know that play() can be successfully called. That's only a theory,
     // but it works for me. ;)
     playlist->getSize();
-    mafwrenderer->gotoIndex(visibleIndex);
+
+    if (filter) {
+        int selectedIndex = ui->songList->row(item);
+        int visibleIndex = 0;
+        for (int i = 0; i < selectedIndex; i++)
+            if (!ui->songList->item(i)->isHidden())
+               ++visibleIndex;
+        mafwrenderer->gotoIndex(visibleIndex);
+    } else {
+        mafwrenderer->gotoIndex(ui->songList->row(item));
+    }
+
     mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
