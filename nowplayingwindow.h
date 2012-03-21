@@ -177,7 +177,7 @@ private slots:
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();
     void onContextMenuRequested(const QPoint &point);
-    void onDeleteClicked();
+    //void onDeleteClicked();
     void onShareClicked();
     void showEntertainmentView();
     void showCarView();
