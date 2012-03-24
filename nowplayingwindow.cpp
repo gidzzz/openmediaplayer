@@ -1511,9 +1511,14 @@ void NowPlayingWindow::selectItemByRow(int row)
 void NowPlayingWindow::focusItemByRow(int row)
 {
     if (!dragInProgress && ui->songPlaylist->item(row)) {
-        selectItemByRow(row);
+        // Prevent instant scrolling caused by setCurrentRow()
+        int pos = ui->songPlaylist->verticalScrollBar()->value();
         ui->songPlaylist->setCurrentRow(row);
-        ui->songPlaylist->scrollToItem(ui->songPlaylist->item(row), QAbstractItemView::PositionAtCenter);
+        ui->songPlaylist->verticalScrollBar()->setValue(pos);
+
+        // Scroll smoothly
+        ui->songPlaylist->property("kineticScroller").value<QAbstractKineticScroller*>()
+                        ->scrollTo(QPoint(0, qBound(0, row*70 + 35-ui->songPlaylist->height()/2, ui->songPlaylist->verticalScrollBar()->maximum())));
     }
 }
 
