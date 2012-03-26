@@ -593,7 +593,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <location filename="../nowplayingwindow.cpp" line="1248"/>
         <location filename="../nowplayingwindow.cpp" line="1296"/>
         <location filename="../nowplayingwindow.cpp" line="1470"/>
-        <location filename="../nowplayingwindow.cpp" line="1603"/>
+        <location filename="../nowplayingwindow.cpp" line="1608"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
@@ -601,7 +601,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <location filename="../nowplayingwindow.cpp" line="1249"/>
         <location filename="../nowplayingwindow.cpp" line="1297"/>
         <location filename="../nowplayingwindow.cpp" line="1471"/>
-        <location filename="../nowplayingwindow.cpp" line="1604"/>
+        <location filename="../nowplayingwindow.cpp" line="1609"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
@@ -642,28 +642,28 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>Liste de lecture enregistrée</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1582"/>
-        <location filename="../nowplayingwindow.cpp" line="1589"/>
+        <location filename="../nowplayingwindow.cpp" line="1587"/>
+        <location filename="../nowplayingwindow.cpp" line="1594"/>
         <source>Select album art</source>
         <translation>Sélectionner le visuel de l&apos;album</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1583"/>
+        <location filename="../nowplayingwindow.cpp" line="1588"/>
         <source>Reset album art</source>
         <translation>Réinitialiser le visuel de l&apos;album</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1600"/>
+        <location filename="../nowplayingwindow.cpp" line="1605"/>
         <source>Reset album art?</source>
         <translation>Réinitialiser le visuel de l&apos;album ?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1636"/>
+        <location filename="../nowplayingwindow.cpp" line="1641"/>
         <source>Edit lyrics</source>
         <translation>Éditer les paroles</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1637"/>
+        <location filename="../nowplayingwindow.cpp" line="1642"/>
         <source>Reload lyrics</source>
         <translation>Recharger les paroles</translation>
     </message>

@@ -607,7 +607,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <location filename="../nowplayingwindow.cpp" line="1248"/>
         <location filename="../nowplayingwindow.cpp" line="1296"/>
         <location filename="../nowplayingwindow.cpp" line="1470"/>
-        <location filename="../nowplayingwindow.cpp" line="1603"/>
+        <location filename="../nowplayingwindow.cpp" line="1608"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -615,7 +615,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <location filename="../nowplayingwindow.cpp" line="1249"/>
         <location filename="../nowplayingwindow.cpp" line="1297"/>
         <location filename="../nowplayingwindow.cpp" line="1471"/>
-        <location filename="../nowplayingwindow.cpp" line="1604"/>
+        <location filename="../nowplayingwindow.cpp" line="1609"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
@@ -656,28 +656,28 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <translation>Afspeellijst opgeslagen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1582"/>
-        <location filename="../nowplayingwindow.cpp" line="1589"/>
+        <location filename="../nowplayingwindow.cpp" line="1587"/>
+        <location filename="../nowplayingwindow.cpp" line="1594"/>
         <source>Select album art</source>
         <translation>Selecteer album art</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1583"/>
+        <location filename="../nowplayingwindow.cpp" line="1588"/>
         <source>Reset album art</source>
         <translation>Herstel album art</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1600"/>
+        <location filename="../nowplayingwindow.cpp" line="1605"/>
         <source>Reset album art?</source>
         <translation>Herstel album art?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1636"/>
+        <location filename="../nowplayingwindow.cpp" line="1641"/>
         <source>Edit lyrics</source>
         <translation>Bewerk songtekstsen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1637"/>
+        <location filename="../nowplayingwindow.cpp" line="1642"/>
         <source>Reload lyrics</source>
         <translation>Opnieuw laden songteksten</translation>
     </message>
@@ -801,17 +801,17 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../settingsdialog.cpp" line="35"/>
         <source>Next song</source>
-        <translation type="unfinished"></translation>
+        <translation>Volgend nummer</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="36"/>
         <source>Previous song</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorig nummer</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="37"/>
         <source>Play / Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Spelen/Pauze</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="39"/>
@@ -826,7 +826,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="48"/>
         <source>Stop playback on exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop afspelen na afsluiten</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="55"/>
@@ -836,7 +836,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="62"/>
         <source>Play only search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Speel alleen zoek resultaten</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="69"/>
@@ -856,7 +856,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="101"/>
         <source>Headset button action</source>
-        <translation type="unfinished"></translation>
+        <translation>Koptelefoon knop actie</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="108"/>

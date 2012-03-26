@@ -608,7 +608,7 @@ a favoritos</translation>
         <location filename="../nowplayingwindow.cpp" line="1248"/>
         <location filename="../nowplayingwindow.cpp" line="1296"/>
         <location filename="../nowplayingwindow.cpp" line="1470"/>
-        <location filename="../nowplayingwindow.cpp" line="1603"/>
+        <location filename="../nowplayingwindow.cpp" line="1608"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
@@ -616,7 +616,7 @@ a favoritos</translation>
         <location filename="../nowplayingwindow.cpp" line="1249"/>
         <location filename="../nowplayingwindow.cpp" line="1297"/>
         <location filename="../nowplayingwindow.cpp" line="1471"/>
-        <location filename="../nowplayingwindow.cpp" line="1604"/>
+        <location filename="../nowplayingwindow.cpp" line="1609"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -657,28 +657,28 @@ a favoritos</translation>
         <translation>Lista de reproducción guardada</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1582"/>
-        <location filename="../nowplayingwindow.cpp" line="1589"/>
+        <location filename="../nowplayingwindow.cpp" line="1587"/>
+        <location filename="../nowplayingwindow.cpp" line="1594"/>
         <source>Select album art</source>
         <translation>Cambiar carátula del álbum</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1583"/>
+        <location filename="../nowplayingwindow.cpp" line="1588"/>
         <source>Reset album art</source>
         <translation>Suprimir carátula del álbum</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1600"/>
+        <location filename="../nowplayingwindow.cpp" line="1605"/>
         <source>Reset album art?</source>
         <translation>¿Suprimir carátula del álbum?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1636"/>
+        <location filename="../nowplayingwindow.cpp" line="1641"/>
         <source>Edit lyrics</source>
         <translation>Editar letra de la canción</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1637"/>
+        <location filename="../nowplayingwindow.cpp" line="1642"/>
         <source>Reload lyrics</source>
         <translation>Recargar letra de la canción</translation>
     </message>

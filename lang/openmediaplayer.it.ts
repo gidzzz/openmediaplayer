@@ -607,7 +607,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../nowplayingwindow.cpp" line="1248"/>
         <location filename="../nowplayingwindow.cpp" line="1296"/>
         <location filename="../nowplayingwindow.cpp" line="1470"/>
-        <location filename="../nowplayingwindow.cpp" line="1603"/>
+        <location filename="../nowplayingwindow.cpp" line="1608"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
@@ -615,7 +615,7 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../nowplayingwindow.cpp" line="1249"/>
         <location filename="../nowplayingwindow.cpp" line="1297"/>
         <location filename="../nowplayingwindow.cpp" line="1471"/>
-        <location filename="../nowplayingwindow.cpp" line="1604"/>
+        <location filename="../nowplayingwindow.cpp" line="1609"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -656,28 +656,28 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Playlist salvata</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1582"/>
-        <location filename="../nowplayingwindow.cpp" line="1589"/>
+        <location filename="../nowplayingwindow.cpp" line="1587"/>
+        <location filename="../nowplayingwindow.cpp" line="1594"/>
         <source>Select album art</source>
         <translation>Seleziona la copertina dell&apos;album</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1583"/>
+        <location filename="../nowplayingwindow.cpp" line="1588"/>
         <source>Reset album art</source>
         <translation>Cancella la copertina dell&apos;album</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1600"/>
+        <location filename="../nowplayingwindow.cpp" line="1605"/>
         <source>Reset album art?</source>
         <translation>Cancellare la copertina dell&apos;album?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1636"/>
+        <location filename="../nowplayingwindow.cpp" line="1641"/>
         <source>Edit lyrics</source>
         <translation>Modifica testo</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1637"/>
+        <location filename="../nowplayingwindow.cpp" line="1642"/>
         <source>Reload lyrics</source>
         <translation>Ricarica testo</translation>
     </message>
@@ -801,17 +801,17 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.cpp" line="35"/>
         <source>Next song</source>
-        <translation type="unfinished"></translation>
+        <translation>Prossimo brano</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="36"/>
         <source>Previous song</source>
-        <translation type="unfinished"></translation>
+        <translation>Brano precedente</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="37"/>
         <source>Play / Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Riproduci / Pausa</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="39"/>
@@ -826,7 +826,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="48"/>
         <source>Stop playback on exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferma riproduzione all&apos;uscita</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="55"/>
@@ -836,7 +836,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="62"/>
         <source>Play only search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Riproduci solo i risultati della ricerca</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="69"/>
@@ -856,7 +856,7 @@ Unplug USB to continue using FM transmitter.</source>
     <message>
         <location filename="../settingsdialog.ui" line="101"/>
         <source>Headset button action</source>
-        <translation type="unfinished"></translation>
+        <translation>Azione del pulsante dell&apos;auricolare</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="108"/>

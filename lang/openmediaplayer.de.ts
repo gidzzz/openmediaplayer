@@ -607,7 +607,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../nowplayingwindow.cpp" line="1248"/>
         <location filename="../nowplayingwindow.cpp" line="1296"/>
         <location filename="../nowplayingwindow.cpp" line="1470"/>
-        <location filename="../nowplayingwindow.cpp" line="1603"/>
+        <location filename="../nowplayingwindow.cpp" line="1608"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -615,7 +615,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../nowplayingwindow.cpp" line="1249"/>
         <location filename="../nowplayingwindow.cpp" line="1297"/>
         <location filename="../nowplayingwindow.cpp" line="1471"/>
-        <location filename="../nowplayingwindow.cpp" line="1604"/>
+        <location filename="../nowplayingwindow.cpp" line="1609"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
@@ -656,28 +656,28 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <translation>Wiedergabeliste gespeichert</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1582"/>
-        <location filename="../nowplayingwindow.cpp" line="1589"/>
+        <location filename="../nowplayingwindow.cpp" line="1587"/>
+        <location filename="../nowplayingwindow.cpp" line="1594"/>
         <source>Select album art</source>
         <translation>Wähle Album Bild aus</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1583"/>
+        <location filename="../nowplayingwindow.cpp" line="1588"/>
         <source>Reset album art</source>
         <translation>Setze Album Bild zurück</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1600"/>
+        <location filename="../nowplayingwindow.cpp" line="1605"/>
         <source>Reset album art?</source>
         <translation>Album Bild zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1636"/>
+        <location filename="../nowplayingwindow.cpp" line="1641"/>
         <source>Edit lyrics</source>
         <translation>Liedtext bearbeiten</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1637"/>
+        <location filename="../nowplayingwindow.cpp" line="1642"/>
         <source>Reload lyrics</source>
         <translation>Liedtext neu laden</translation>
     </message>
@@ -801,17 +801,17 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../settingsdialog.cpp" line="35"/>
         <source>Next song</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächstes Lied</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="36"/>
         <source>Previous song</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorheriges Lied</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="37"/>
         <source>Play / Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Abspielen/Pause</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="39"/>
@@ -826,7 +826,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="48"/>
         <source>Stop playback on exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Abspielen beim Beenden stoppen</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="55"/>
@@ -836,7 +836,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="62"/>
         <source>Play only search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur Suchergebnisse abspielen</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="69"/>
@@ -856,7 +856,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="101"/>
         <source>Headset button action</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopfhörer Tastenfunktion</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="108"/>
