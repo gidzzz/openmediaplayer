@@ -84,8 +84,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->videoCountL->clear();
     ui->stationCountL->clear();
 
-    updatingIndex = 0;
-
     wasRinging = false;
     wasPlaying = false;
 #else
@@ -117,6 +115,23 @@ MainWindow::MainWindow(QWidget *parent) :
         registerDbusService();
     else
         connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(registerDbusService()));
+
+    updatingShow = true;
+    updatingProgressBar = new QProgressBar;
+    updatingLabel = new QLabel;
+    updatingLabel->setAlignment(Qt::AlignCenter);
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(updatingLabel);
+    layout->addWidget(updatingProgressBar);
+
+    QWidget *widget = new QWidget;
+    widget->setLayout(layout);
+
+    updatingIndex = new QMaemo5InformationBox(this);
+    updatingIndex->setTimeout(0);
+    updatingIndex->setMinimumHeight(140);
+    updatingIndex->setWidget(widget);
 
     QTimer::singleShot(1000, this, SLOT(takeScreenshot()));
     this->checkPhoneButton();
@@ -204,7 +219,7 @@ void MainWindow::connectSignals()
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
-    //connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
+    connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
     connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
     connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
@@ -739,38 +754,36 @@ void MainWindow::closeEvent(QCloseEvent *)
 #ifdef MAFW
 void MainWindow::onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time)
 {
-    if (remaining_time != -1 && remaining_time != 0) {
-        QTime t(0, 0);
-        t = t.addSecs(remaining_time);
-        QString text = QString("\nRetrieving information on the new media files.\nEstimated time remaining: %1\n").arg(t.toString("mm:ss"));
-        if (processed_items != -1)
-            text.append(tr("Processed items:") + " " + QString::number(processed_items).replace("\"",""));
-        if (processed_items != -1 && remaining_items != -1)
-            text.append("\n");
-        if (remaining_items != -1)
-            text.append(tr("Remaining items:") + " " + QString::number(remaining_items).replace("\"",""));
-#ifdef Q_WS_MAEMO_5
-        if (updatingIndex == 0) {
-            updatingIndex = new QMaemo5InformationBox(this);
-            QWidget *widget = new QWidget(updatingIndex);
-            updatingIndex->setTimeout(QMaemo5InformationBox::NoTimeout);
-            updatingIndex->setMinimumHeight(140);
-            updatingLabel = new QLabel(updatingIndex);
-            updatingLabel->setText(text);
-            updatingProgressBar = new QProgressBar(updatingIndex);
-            updatingProgressBar->setValue(progress);
-            updatingIndex->setWidget(widget);
+    if (remaining_time < 0)
+        remaining_time = 0;
 
-            QVBoxLayout *layout = new QVBoxLayout(widget);
-            layout->addWidget(updatingLabel);
-            layout->addWidget(updatingProgressBar);
-            updatingIndex->exec();
-        } else {
-            updatingLabel->setText(text);
-            updatingProgressBar->setValue(progress);
-        }
-#endif
+    if (processed_items < 0)
+        processed_items = 0;
+
+    if (remaining_items < 0)
+        remaining_items = 0;
+
+    QString text;
+    text.append("\n");
+    text.append(tr("Retrieving information on the new media files"));
+    text.append("\n");
+    text.append(tr("Estimated time remaining:") + " " + QTime(0, 0).addSecs(remaining_time).toString("mm:ss"));
+    text.append("\n");
+    text.append(tr("Processed items:") + " " + QString::number(processed_items).replace("\"",""));
+    text.append("\n");
+    text.append(tr("Remaining items:") + " " + QString::number(remaining_items).replace("\"",""));
+
+#ifdef Q_WS_MAEMO_5
+    updatingLabel->setText(text);
+    updatingProgressBar->setValue(progress);
+    if (progress == 0 || updatingShow) {
+        updatingIndex->show();
+        updatingShow = false;
+    } else if (progress == 100) {
+        updatingIndex->hide();
+        updatingShow = true;
     }
+#endif
 }
 
 void MainWindow::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)

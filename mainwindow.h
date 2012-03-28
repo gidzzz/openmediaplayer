@@ -65,6 +65,7 @@ private:
     QMaemo5InformationBox *updatingIndex;
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
+    bool updatingShow;
     bool wasPlaying;
     bool wasRinging;
 #endif
