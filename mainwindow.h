@@ -62,7 +62,7 @@ private:
     void setLabelText();
     QString uriToPlay;
 #ifdef Q_WS_MAEMO_5
-    QMaemo5InformationBox *updatingIndex;
+    QMaemo5InformationBox *updatingInfoBox;
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
     bool updatingShow;

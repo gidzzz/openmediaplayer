@@ -117,21 +117,25 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(registerDbusService()));
 
     updatingShow = true;
+
     updatingProgressBar = new QProgressBar;
+    updatingProgressBar->setTextVisible(false);
+
     updatingLabel = new QLabel;
     updatingLabel->setAlignment(Qt::AlignCenter);
+    updatingLabel->setWordWrap(true);
 
     QVBoxLayout *layout = new QVBoxLayout;
+    layout->setContentsMargins(0, 15, 0, 15);
     layout->addWidget(updatingLabel);
     layout->addWidget(updatingProgressBar);
 
     QWidget *widget = new QWidget;
     widget->setLayout(layout);
 
-    updatingIndex = new QMaemo5InformationBox(this);
-    updatingIndex->setTimeout(0);
-    updatingIndex->setMinimumHeight(140);
-    updatingIndex->setWidget(widget);
+    updatingInfoBox = new QMaemo5InformationBox(this);
+    updatingInfoBox->setTimeout(0);
+    updatingInfoBox->setWidget(widget);
 
     QTimer::singleShot(1000, this, SLOT(takeScreenshot()));
     this->checkPhoneButton();
@@ -754,33 +758,21 @@ void MainWindow::closeEvent(QCloseEvent *)
 #ifdef MAFW
 void MainWindow::onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time)
 {
-    if (remaining_time < 0)
-        remaining_time = 0;
-
-    if (processed_items < 0)
-        processed_items = 0;
-
-    if (remaining_items < 0)
-        remaining_items = 0;
-
     QString text;
-    text.append("\n");
     text.append(tr("Retrieving information on the new media files"));
     text.append("\n");
-    text.append(tr("Estimated time remaining:") + " " + QTime(0, 0).addSecs(remaining_time).toString("mm:ss"));
+    text.append(tr("Estimated time remaining:") + " " + (remaining_time < 0 ? "?" : time_mmss(remaining_time)));
     text.append("\n");
-    text.append(tr("Processed items:") + " " + QString::number(processed_items).replace("\"",""));
-    text.append("\n");
-    text.append(tr("Remaining items:") + " " + QString::number(remaining_items).replace("\"",""));
+    text.append(tr("Remaining items:") + " " + (remaining_items < 0 ? "?" : QString::number(remaining_items)));
 
 #ifdef Q_WS_MAEMO_5
     updatingLabel->setText(text);
     updatingProgressBar->setValue(progress);
     if (progress == 0 || updatingShow) {
-        updatingIndex->show();
+        updatingInfoBox->show();
         updatingShow = false;
     } else if (progress == 100) {
-        updatingIndex->hide();
+        updatingInfoBox->hide();
         updatingShow = true;
     }
 #endif
