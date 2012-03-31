@@ -35,7 +35,7 @@
         <x>0</x>
         <y>0</y>
         <width>696</width>
-        <height>224</height>
+        <height>346</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -50,34 +50,41 @@
         </widget>
        </item>
        <item row="1" column="1">
+        <widget class="QCheckBox" name="headsetCheckBox">
+         <property name="text">
+          <string>Play/Pause when headset connected/disconnected</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
         <widget class="QCheckBox" name="lyricsCheckBox">
          <property name="text">
           <string>Enable lyrics</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <widget class="QCheckBox" name="filterCheckBox">
          <property name="text">
           <string>Play only search results</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
         <widget class="QCheckBox" name="foldersCheckBox">
          <property name="text">
           <string>Open whole folders</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="5" column="1">
         <widget class="QCheckBox" name="appendCheckBox">
          <property name="text">
           <string>Append opened songs</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="6" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_1">
          <item row="0" column="0">
           <widget class="QLabel" name="playlistSizeLabel">
@@ -95,28 +102,28 @@
          </item>
         </layout>
        </item>
-       <item row="6" column="1">
+       <item row="7" column="1">
         <widget class="QMaemo5ValueButton" name="headsetButtonBox">
          <property name="text">
           <string>Headset button action</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="8" column="1">
         <widget class="QCheckBox" name="slidersCheckBox">
          <property name="text">
           <string>Lazy sliders</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
+       <item row="9" column="1">
         <widget class="QCheckBox" name="fmtxCheckBox">
          <property name="text">
           <string>Override FMTX checks in UI</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
+       <item row="10" column="1">
         <widget class="QLabel" name="fmtxdLabel">
          <property name="font">
           <font>

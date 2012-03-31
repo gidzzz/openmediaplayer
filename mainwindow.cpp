@@ -138,7 +138,7 @@ MainWindow::MainWindow(QWidget *parent) :
     updatingInfoBox->setWidget(widget);
 
     QTimer::singleShot(1000, this, SLOT(takeScreenshot()));
-    this->checkPhoneButton();
+    this->updateWiredHeadset();
 #endif
 }
 
@@ -838,14 +838,16 @@ void MainWindow::phoneButton()
         mafwrenderer->stop();
 }
 
-void MainWindow::checkPhoneButton()
+void MainWindow::updateWiredHeadset()
 {
     QDBusInterface interface("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/platform_soc_audio_logicaldev_input", "org.freedesktop.Hal.Device", QDBusConnection::systemBus());
     if (!interface.isValid())
         return;
 
+    // jackList is empty when wired headset is disconnected
     QStringList jackList = static_cast< QDBusReply <QStringList> >(interface.call("GetProperty", "input.jack.type"));
 
+    // "Jack Bias" is alsa switch, when is off wired headset button is disabled
     QStringList args;
     args << "-c" << "0" << "sset" << "Jack Bias";
 
@@ -853,6 +855,13 @@ void MainWindow::checkPhoneButton()
         QProcess::execute("amixer", args << "off");
     else
         QProcess::execute("amixer", args << "on");
+
+    if (QSettings().value("main/pauseHeadset", true).toBool()) {
+        if (jackList.isEmpty() && this->mafwState == Playing)
+            mafwrenderer->pause();
+        else if (!jackList.isEmpty() && this->mafwState == Paused)
+            mafwrenderer->resume();
+    }
 }
 
 void MainWindow::onHeadsetButtonPressed(QDBusMessage msg)
@@ -872,8 +881,8 @@ void MainWindow::onHeadsetButtonPressed(QDBusMessage msg)
             mafwrenderer->setPosition(SeekRelative, -3);
         else if (msg.arguments()[1] == "phone")
             this->phoneButton();
-        else if (msg.arguments()[1] == "jack_insert")
-            this->checkPhoneButton();
+        else if (msg.arguments()[1] == "jack_insert") // wired headset was connected or disconnected
+            this->updateWiredHeadset();
     }
 }
 

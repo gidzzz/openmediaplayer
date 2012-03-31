@@ -46,6 +46,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->headsetButtonBox->setPickSelector(headsetSelector);
 
     ui->stopCheckBox->setChecked(QSettings().value("main/stopOnExit", true).toBool());
+    ui->headsetCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
     ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
     ui->foldersCheckBox->setChecked(QSettings().value("main/openFolders", false).toBool());
@@ -75,6 +76,7 @@ void SettingsDialog::accept()
     }
 
     QSettings().setValue("main/stopOnExit", ui->stopCheckBox->isChecked());
+    QSettings().setValue("main/pauseHeadset", ui->headsetCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/playlistFilter", ui->filterCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());

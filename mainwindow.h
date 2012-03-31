@@ -123,7 +123,7 @@ private slots:
     void onHeadsetButtonPressed(QDBusMessage msg);
     void onCallStateChanged(QDBusMessage msg);
     void phoneButton();
-    void checkPhoneButton();
+    void updateWiredHeadset();
     void takeScreenshot();
 #endif
 
