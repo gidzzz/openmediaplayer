@@ -61,6 +61,38 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->genresList->viewport()->installEventFilter(this);
     ui->playlistList->viewport()->installEventFilter(this);
 
+    songModel = new QStandardItemModel(this);
+    songProxyModel = new QSortFilterProxyModel(this);
+    songProxyModel->setFilterRole(UserRoleFilterString);
+    songProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    songProxyModel->setSourceModel(songModel);
+    ui->songList->setModel(songProxyModel);
+
+    albumModel = new QStandardItemModel(this);
+    albumProxyModel = new QSortFilterProxyModel(this);
+    albumProxyModel->setFilterRole(UserRoleFilterString);
+    albumProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    albumProxyModel->setSourceModel(albumModel);
+    ui->albumList->setModel(albumProxyModel);
+
+    artistModel = new QStandardItemModel(this);
+    artistProxyModel = new QSortFilterProxyModel(this);
+    artistProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    artistProxyModel->setSourceModel(artistModel);
+    ui->artistList->setModel(artistProxyModel);
+
+    genresModel = new QStandardItemModel(this);
+    genresProxyModel = new QSortFilterProxyModel(this);
+    genresProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    genresProxyModel->setSourceModel(genresModel);
+    ui->genresList->setModel(genresProxyModel);
+
+    playlistModel = new QStandardItemModel(this);
+    playlistProxyModel = new QSortFilterProxyModel(this);
+    playlistProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    playlistProxyModel->setSourceModel(playlistModel);
+    ui->playlistList->setModel(playlistProxyModel);
+
     this->loadViewState();
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
@@ -68,6 +100,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
 #endif
+
     this->connectSignals();
 }
 
@@ -76,7 +109,7 @@ MusicWindow::~MusicWindow()
     delete ui;
 }
 
-void MusicWindow::onSongSelected(QListWidgetItem *item)
+void MusicWindow::onSongSelected(QModelIndex index)
 {
     this->setEnabled(false);
 
@@ -86,22 +119,19 @@ void MusicWindow::onSongSelected(QListWidgetItem *item)
     playlist->clear();
     playlist->setShuffled(false);
 
-    gchar** songAddBuffer = new gchar*[ui->songList->count()+1];
-
     bool filter = QSettings().value("main/playlistFilter", false).toBool();
 
-    int visibleCount;
+    int visibleCount = filter ? songProxyModel->rowCount() :
+                                songModel->rowCount();
 
-    if (filter) {
-        visibleCount = 0;
-        for (int i = 0; i < ui->songList->count(); i++)
-            if (!ui->songList->item(i)->isHidden())
-                songAddBuffer[visibleCount++] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
-    } else {
-        visibleCount = ui->songList->count();
+    gchar** songAddBuffer = new gchar*[visibleCount+1];
+
+    if (filter)
         for (int i = 0; i < visibleCount; i++)
-            songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
-    }
+            songAddBuffer[i] = qstrdup(songProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
+    else
+        for (int i = 0; i < visibleCount; i++)
+            songAddBuffer[i] = qstrdup(songModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
     songAddBuffer[visibleCount] = NULL;
 
@@ -118,17 +148,8 @@ void MusicWindow::onSongSelected(QListWidgetItem *item)
     // but it works for me. ;)
     playlist->getSize();
 
-    if (filter) {
-        int selectedIndex = ui->songList->row(item);
-        int visibleIndex = 0;
-        for (int i = 0; i < selectedIndex; i++)
-            if (!ui->songList->item(i)->isHidden())
-               ++visibleIndex;
-        mafwrenderer->gotoIndex(visibleIndex);
-    } else {
-        mafwrenderer->gotoIndex(ui->songList->row(item));
-    }
-
+    mafwrenderer->gotoIndex(filter ? index.row() :
+                                     songProxyModel->mapToSource(index).row());
     mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
@@ -142,16 +163,16 @@ void MusicWindow::onSongSelected(QListWidgetItem *item)
     ui->indicator->inhibit();
 }
 
-void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
+void MusicWindow::onPlaylistSelected(QModelIndex index)
 {
-    if (item->data(Qt::UserRole).toBool()) return;
+    if (index.data(Qt::UserRole).toBool()) return;
 
-    int row = ui->playlistList->row(item);
+    int row = playlistProxyModel->mapToSource(index).row();
 
     if (row >= 1 && row <= 4) {
         this->setEnabled(false);
         SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
-        playlistView->setWindowTitle(item->text());
+        playlistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
         int limit = QSettings().value("music/playlistSize", 30).toInt();
         if (row == 1)
             playlistView->browseAutomaticPlaylist("", "-added", limit);
@@ -165,39 +186,39 @@ void MusicWindow::onPlaylistSelected(QListWidgetItem *item)
         playlistView->show();
         connect(playlistView, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
         connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+        ui->indicator->inhibit();
 
     } else if (row >= 6) {
         this->setEnabled(false);
         SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
-        playlistView->setWindowTitle(item->text());
-        if (item->data(UserRoleObjectID).isNull()) // saved playlist case
-            playlistView->browsePlaylist(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(item->text())));
+        playlistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
+        if (index.data(UserRoleObjectID).isNull()) // saved playlist case
+            playlistView->browsePlaylist(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString())));
         else // imported playlist case
-            playlistView->browseObjectId(item->data(UserRoleObjectID).toString());
+            playlistView->browseObjectId(index.data(UserRoleObjectID).toString());
 
         playlistView->show();
         connect(playlistView, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
         connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+        ui->indicator->inhibit();
     }
 }
 
 void MusicWindow::connectSignals()
 {
-#ifdef Q_WS_MAEMO_5
-    connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onSongSelected(QListWidgetItem*)));
-#else
-    connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onSongSelected(QListWidgetItem*)));
-#endif
 #ifdef MAFW
+    connect(ui->songList, SIGNAL(activated(QModelIndex)), this, SLOT(onSongSelected(QModelIndex)));
+    connect(ui->albumList, SIGNAL(activated(QModelIndex)), this, SLOT(onAlbumSelected(QModelIndex)));
+    connect(ui->artistList, SIGNAL(activated(QModelIndex)), this, SLOT(onArtistSelected(QModelIndex)));
+    connect(ui->genresList, SIGNAL(activated(QModelIndex)), this, SLOT(onGenreSelected(QModelIndex)));
+    connect(ui->playlistList, SIGNAL(activated(QModelIndex)), this, SLOT(onPlaylistSelected(QModelIndex)));
+
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
     connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onArtistSelected(QListWidgetItem*)));
     connect(ui->artistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->genresList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onGenreSelected(QListWidgetItem*)));
     connect(ui->genresList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->playlistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onPlaylistSelected(QListWidgetItem*)));
     connect(ui->playlistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
+
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAutomaticPlaylists(uint,int,uint,QString,GHashTable*,QString)));
@@ -207,22 +228,31 @@ void MusicWindow::connectSignals()
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->genresList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->playlistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+
+    // TODO: keep only one connected
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), songProxyModel, SLOT(setFilterFixedString(QString)));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), albumProxyModel, SLOT(setFilterFixedString(QString)));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), artistProxyModel, SLOT(setFilterFixedString(QString)));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), genresProxyModel, SLOT(setFilterFixedString(QString)));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), playlistProxyModel, SLOT(setFilterFixedString(QString)));
+
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged()));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 }
 
 void MusicWindow::onContextMenuRequested(QPoint point)
 {
-    if (this->currentList() == ui->playlistList && ui->playlistList->currentItem()->data(Qt::UserRole).toBool())
+    if (this->currentList() == ui->playlistList && ui->playlistList->currentIndex().data(Qt::UserRole).toBool())
         return;
 
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
     if (this->currentList() == ui->playlistList) {
-        if (ui->playlistList->currentRow() > 4) {
-            if (ui->playlistList->currentItem()->data(UserRoleObjectID).isNull())
+        if (playlistProxyModel->mapToSource(ui->playlistList->currentIndex()).row() > 4) {
+            if (ui->playlistList->currentIndex().data(UserRoleObjectID).isNull())
                 contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeletePlaylistClicked())); // saved playlist
             else
                 contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeleteClicked())); // imported playlist
@@ -242,7 +272,7 @@ void MusicWindow::onContextMenuRequested(QPoint point)
 void MusicWindow::onDeletePlaylistClicked()
 {
 #ifdef MAFW
-    if (ui->playlistList->currentItem()->data(UserRoleObjectID).isNull()) {
+    if (ui->playlistList->currentIndex().data(UserRoleObjectID).isNull()) {
         QMessageBox confirmDelete(QMessageBox::NoIcon,
                                   " ",
                                   tr("Delete selected item from device?"),
@@ -252,8 +282,8 @@ void MusicWindow::onDeletePlaylistClicked()
         confirmDelete.button(QMessageBox::No)->setText(tr("No"));
         confirmDelete.exec();
         if (confirmDelete.result() == QMessageBox::Yes) {
-            mafwPlaylistManager->deletePlaylist(ui->playlistList->currentItem()->text());
-            delete ui->playlistList->currentItem();
+            mafwPlaylistManager->deletePlaylist(ui->playlistList->currentIndex().data(Qt::DisplayRole).toString());
+            delete songModel->itemFromIndex(ui->songList->currentIndex());
         }
     }
 #endif
@@ -266,15 +296,15 @@ void MusicWindow::setRingingTone()
     QMessageBox confirmRingtone(QMessageBox::NoIcon,
                               " ",
                               tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
-                              + ui->songList->currentItem()->text() + "\n"
-                              + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
+                              + ui->songList->currentIndex().data(Qt::DisplayRole).toString() + "\n"
+                              + ui->songList->currentIndex().data(UserRoleSongArtist).toString(),
                               QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmRingtone.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmRingtone.button(QMessageBox::No)->setText(tr("No"));
     confirmRingtone.exec();
     if (confirmRingtone.result() == QMessageBox::Yes) {
-        mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        mafwTrackerSource->getUri(ui->songList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }
 #endif
@@ -286,7 +316,7 @@ void MusicWindow::onRingingToneUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
 
-    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+    if (objectId != ui->songList->currentIndex().data(UserRoleObjectID).toString())
         return;
 #ifdef Q_WS_MAEMO_5
     QDBusInterface setRingtone("com.nokia.profiled",
@@ -302,7 +332,7 @@ void MusicWindow::onRingingToneUriReceived(QString objectId, QString uri)
 void MusicWindow::onShareClicked()
 {
 #ifdef MAFW
-    mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    mafwTrackerSource->getUri(ui->songList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
     connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 #endif
 }
@@ -312,7 +342,7 @@ void MusicWindow::onShareUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
-    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
+    if (objectId != ui->songList->currentIndex().data(UserRoleObjectID).toString())
         return;
 
     QStringList list;
@@ -338,8 +368,8 @@ void MusicWindow::onDeleteClicked()
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(currentList()->currentItem()->data(UserRoleObjectID).toString().toUtf8());
-        delete currentList()->currentItem();
+        mafwTrackerSource->destroyObject(currentList()->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+        // TODO: remove the item from the list view, so it disappears instantly
     }
 #endif
     currentList()->clearSelection();
@@ -355,34 +385,9 @@ void MusicWindow::onSearchHideButtonClicked()
         ui->searchEdit->clear();
 }
 
-void MusicWindow::onSearchTextChanged(QString text)
+void MusicWindow::onSearchTextChanged()
 {
-
-    if (this->currentList() == ui->songList) // All songs
-        for (int i = 0; i < ui->songList->count(); i++)
-             if (ui->songList->item(i)->text().contains(text, Qt::CaseInsensitive)
-             || ui->songList->item(i)->data(UserRoleSongArtist).toString().contains(text, Qt::CaseInsensitive)
-             || ui->songList->item(i)->data(UserRoleSongAlbum).toString().contains(text, Qt::CaseInsensitive))
-                 ui->songList->item(i)->setHidden(false);
-             else
-                 ui->songList->item(i)->setHidden(true);
-
-    else if (this->currentList() == ui->albumList) // All albums
-        for (int i = 0; i < ui->albumList->count(); i++)
-             if (ui->albumList->item(i)->data(UserRoleTitle).toString().contains(text, Qt::CaseInsensitive)
-             || ui->albumList->item(i)->data(UserRoleValueText).toString().contains(text, Qt::CaseInsensitive))
-                 ui->albumList->item(i)->setHidden(false);
-             else
-                 ui->albumList->item(i)->setHidden(true);
-
-    else // Artists, Genres, Playlists
-        for (int i = 0; i < this->currentList()->count(); i++)
-            if (this->currentList()->item(i)->text().contains(text, Qt::CaseInsensitive))
-                this->currentList()->item(i)->setHidden(false);
-            else
-                this->currentList()->item(i)->setHidden(true);
-
-    if (text.isEmpty()) {
+    if (ui->searchEdit->text().isEmpty()) {
         ui->searchWidget->hide();
         ui->indicator->restore();
     }
@@ -448,7 +453,7 @@ void MusicWindow::showAlbumView()
     QMainWindow::setWindowTitle(tr("Albums"));
     this->saveViewState("albums");
 #ifdef MAFW
-    if (ui->albumList->count() == 0) {
+    if (albumModel->rowCount() == 0) {
         if(mafwTrackerSource->isReady())
             this->listAlbums();
         else
@@ -466,7 +471,7 @@ void MusicWindow::showArtistView()
     QMainWindow::setWindowTitle(tr("Artists"));
     this->saveViewState("artists");
 #ifdef MAFW
-    if (ui->artistList->count() == 0) {
+    if (artistModel->rowCount() == 0) {
         if(mafwTrackerSource->isReady())
             this->listArtists();
         else
@@ -484,7 +489,7 @@ void MusicWindow::showGenresView()
     QMainWindow::setWindowTitle(tr("Genres"));
     this->saveViewState("genres");
 #ifdef MAFW
-    if (ui->genresList->count() == 0) {
+    if (genresModel->rowCount() == 0) {
         if (mafwTrackerSource->isReady())
             this->listGenres();
         else
@@ -502,7 +507,7 @@ void MusicWindow::showSongsView()
     QMainWindow::setWindowTitle(tr("Songs"));
     this->saveViewState("songs");
 #ifdef MAFW
-    if (ui->songList->count() == 0) {
+    if (songModel->rowCount() == 0) {
         if(mafwTrackerSource->isReady())
             this->listSongs();
         else
@@ -527,7 +532,7 @@ void MusicWindow::showPlayListView()
 #endif
 }
 
-QListWidget* MusicWindow::currentList()
+QListView* MusicWindow::currentList()
 {
     if (!ui->songList->isHidden())
         return ui->songList;
@@ -575,13 +580,13 @@ void MusicWindow::onChildClosed()
 }
 
 #ifdef MAFW
-void MusicWindow::onAlbumSelected(QListWidgetItem *item)
+void MusicWindow::onAlbumSelected(QModelIndex index)
 {
     this->setEnabled(false);
 
     SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
-    albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-    albumView->setWindowTitle(item->data(UserRoleTitle).toString());
+    albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
+    albumView->setWindowTitle(index.data(UserRoleTitle).toString());
 
     albumView->show();
 
@@ -589,16 +594,16 @@ void MusicWindow::onAlbumSelected(QListWidgetItem *item)
     ui->indicator->inhibit();
 }
 
-void MusicWindow::onArtistSelected(QListWidgetItem *item)
+void MusicWindow::onArtistSelected(QModelIndex index)
 {
-    int songCount = item->data(UserRoleAlbumCount).toInt();
+    int songCount = index.data(UserRoleAlbumCount).toInt();
 
     if (songCount == 0 || songCount == 1) {
         this->setEnabled(false);
 
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
-        albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-        albumView->setWindowTitle(item->text());
+        albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
+        albumView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
         albumView->show();
         connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -608,9 +613,9 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
         this->setEnabled(false);
 
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
-        artistView->browseAlbum(item->data(UserRoleObjectID).toString());
-        artistView->setWindowTitle(item->text());
-        artistView->setSongCount(item->data(UserRoleSongCount).toInt());
+        artistView->browseAlbum(index.data(UserRoleObjectID).toString());
+        artistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
+        artistView->setSongCount(index.data(UserRoleSongCount).toInt());
 
         artistView->show();
         connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -618,20 +623,20 @@ void MusicWindow::onArtistSelected(QListWidgetItem *item)
     }
 }
 
-void MusicWindow::onGenreSelected(QListWidgetItem *item)
+void MusicWindow::onGenreSelected(QModelIndex index)
 {
     this->setEnabled(false);
 
     SingleGenreView *genreView = new SingleGenreView(this, mafwFactory);
-    genreView->setWindowTitle(item->text());
+    genreView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
     genreView->show();
 
     connect(genreView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 
-    genreView->setSongCount(item->data(UserRoleSongCount).toInt());
-    genreView->browseGenre(item->data(UserRoleObjectID).toString());
+    genreView->setSongCount(index.data(UserRoleSongCount).toInt());
+    genreView->browseGenre(index.data(UserRoleObjectID).toString());
 }
 
 void MusicWindow::listSongs()
@@ -643,7 +648,7 @@ void MusicWindow::listSongs()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    ui->songList->clear();
+    songModel->clear();
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
 
@@ -664,7 +669,7 @@ void MusicWindow::listArtists()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    ui->artistList->clear();
+    artistModel->clear();
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllArtists(uint, int, uint, QString, GHashTable*, QString)));
 
@@ -683,7 +688,7 @@ void MusicWindow::listAlbums()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    ui->albumList->clear();
+    albumModel->clear();
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
 
@@ -701,7 +706,7 @@ void MusicWindow::listGenres()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    ui->genresList->clear();
+    genresModel->clear();
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllGenres(uint, int, uint, QString, GHashTable*, QString)));
 
@@ -715,7 +720,7 @@ void MusicWindow::listGenres()
 
 void MusicWindow::listPlaylists()
 {
-    ui->playlistList->clear();
+    playlistModel->clear();
 
     recentlyAddedCount = 0;
     recentlyPlayedCount = 0;
@@ -728,11 +733,11 @@ void MusicWindow::listPlaylists()
     QString playlistName;
 
     if (playlists->len != 0) {
-        QListWidgetItem *item = new QListWidgetItem();
+        QStandardItem *item = new QStandardItem();
         item->setText(tr("Saved"));
-        item->setData(Qt::UserRole, true);
-        item->setData(UserRoleSongDuration, Duration::Blank);
-        ui->playlistList->addItem(item);
+        item->setData(true, Qt::UserRole);
+        item->setData(Duration::Blank, UserRoleSongDuration);
+        playlistModel->appendRow(item);
     }
 
     for (uint i = 0; i < playlists->len; i++) {
@@ -741,44 +746,46 @@ void MusicWindow::listPlaylists()
         playlistName = QString::fromUtf8(item->name);
         int playlistCount = playlist->getSizeOf(MAFW_PLAYLIST (mafwPlaylistManager->getPlaylist(item->id)));
 
-        if (playlistName != "FmpAudioPlaylist" && playlistName != "FmpVideoPlaylist" && playlistName != "FmpRadioPlaylist"
-            && playlistCount != 0) {
-            QListWidgetItem *listItem = new QListWidgetItem();
-            listItem->setText(playlistName);
-            listItem->setData(UserRoleSongCount, playlistCount);
-            listItem->setData(UserRoleSongDuration, Duration::Blank);
-            listItem->setData(UserRoleValueText, tr("%n song(s)", "", playlistCount));
+        if (playlistName != "FmpAudioPlaylist"
+        && playlistName != "FmpVideoPlaylist"
+        && playlistName != "FmpRadioPlaylist"
+        && playlistCount != 0) {
+            QStandardItem *item = new QStandardItem();
+            item->setText(playlistName);
+            item->setData(playlistCount, UserRoleSongCount);
+            item->setData(Duration::Blank, UserRoleSongDuration);
+            item->setData(tr("%n song(s)", "", playlistCount),UserRoleValueText);
 
-            ui->playlistList->addItem(listItem);
+            playlistModel->appendRow(item);
         }
     }
     mafw_playlist_manager_free_list_of_playlists(playlists);
 
-    QListWidgetItem *item = new QListWidgetItem();
-    item->setData(Qt::UserRole, true);
+    QStandardItem *item = new QStandardItem();
     item->setText(tr("Imported playlists"));
-    item->setData(UserRoleSongDuration, Duration::Blank);
-    ui->playlistList->addItem(item);
+    item->setData(true, Qt::UserRole);
+    item->setData(Duration::Blank, UserRoleSongDuration);
+    playlistModel->appendRow(item);
 
     this->listImportedPlaylists();
 }
 
 void MusicWindow::listAutoPlaylists()
 {
-    QListWidgetItem *listItem = new QListWidgetItem();
-    listItem->setText(tr("Automatic playlists"));
-    listItem->setData(Qt::UserRole, true);
-    listItem->setData(UserRoleSongDuration, Duration::Blank);
-    ui->playlistList->insertItem(0, listItem);
+    QStandardItem *item = new QStandardItem();
+    item->setText(tr("Automatic playlists"));
+    item->setData(true, Qt::UserRole);
+    item->setData(Duration::Blank, UserRoleSongDuration);
+    playlistModel->appendRow(item);
 
     int limit = QSettings().value("music/playlistSize", 30).toInt();
     QStringList playlists;
     playlists << tr("Recently added") << tr("Recently played") << tr("Most played") << tr("Never played");
     foreach (QString string, playlists) {
-        QListWidgetItem *listItem = new QListWidgetItem();
-        listItem->setText(string);
-        listItem->setData(UserRoleSongDuration, Duration::Blank);
-        ui->playlistList->addItem(listItem);
+        QStandardItem *item = new QStandardItem();
+        item->setText(string);
+        item->setData(Duration::Blank, UserRoleSongDuration);
+        playlistModel->appendRow(item);
     }
 
     this->browseNeverPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
@@ -823,39 +830,35 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int remainingCount, ui
 
     if (browseId == this->browseRecentlyAddedId) {
         recentlyAddedCount++;
-        ui->playlistList->item(1)->setData(UserRoleValueText, tr("%n song(s)", "", recentlyAddedCount));
+        playlistModel->item(1)->setData(tr("%n song(s)", "", recentlyAddedCount), UserRoleValueText);
 
     } else if (browseId == this->browseRecentlyPlayedId) {
         recentlyPlayedCount++;
-        ui->playlistList->item(2)->setData(UserRoleValueText, tr("%n song(s)", "", recentlyPlayedCount));
+        playlistModel->item(2)->setData(tr("%n song(s)", "", recentlyPlayedCount), UserRoleValueText);
 
     } else if (browseId == this->browseMostPlayedId) {
         mostPlayedCount++;
-        ui->playlistList->item(3)->setData(UserRoleValueText, tr("%n song(s)", "", mostPlayedCount));
+        playlistModel->item(3)->setData(tr("%n song(s)", "", mostPlayedCount), UserRoleValueText);
 
     } else if (browseId == this->browseNeverPlayedId) {
         neverPlayedCount++;
-        ui->playlistList->item(4)->setData(UserRoleValueText, tr("%n song(s)", "", neverPlayedCount));
+        playlistModel->item(4)->setData(tr("%n song(s)", "", neverPlayedCount), UserRoleValueText);
 
     } else if (browseId == this->browseImportedPlaylistsId) {
-        QListWidgetItem *listItem = new QListWidgetItem();
+        QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
-        listItem->setText(QString::fromUtf8(g_value_get_string(v)));
+        item->setText(QString::fromUtf8(g_value_get_string(v)));
 
         v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
-        listItem->setData(UserRoleValueText, tr("%n song(s)", "", g_value_get_int(v)));
+        item->setData(tr("%n song(s)", "", g_value_get_int(v)), UserRoleValueText);
 
-        listItem->setData(UserRoleSongDuration, Duration::Blank);
-        listItem->setData(UserRoleObjectID, objectId);
+        item->setData(Duration::Blank, UserRoleSongDuration);
+        item->setData(objectId, UserRoleObjectID);
 
-        ui->playlistList->addItem(listItem);
+        playlistModel->appendRow(item);
     }
     ui->playlistList->scroll(0,0);
-
-    if (remainingCount == 0)
-        if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
 }
 
 void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
@@ -869,7 +872,7 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         int duration;
         GValue *v;
 
-        QListWidgetItem *item = new QListWidgetItem();
+        QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
@@ -884,19 +887,18 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         item->setText(title);
-        item->setData(UserRoleSongArtist, artist);
-        item->setData(UserRoleSongAlbum, album);
-        item->setData(UserRoleObjectID, objectId);
-        item->setData(UserRoleSongDuration, duration);
+        item->setData(artist, UserRoleSongArtist);
+        item->setData(album, UserRoleSongAlbum);
+        item->setData(objectId, UserRoleObjectID);
+        item->setData(duration, UserRoleSongDuration);
 
-        ui->songList->addItem(item);
+        item->setData(QString(title % QChar(31) % artist % QChar(31) % album), UserRoleFilterString);
+        songModel->appendRow(item);
     }
 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
-        if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -913,7 +915,7 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
         int albumCount;
         GValue *v;
 
-        QListWidgetItem *item = new QListWidgetItem();
+        QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
@@ -929,18 +931,18 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
             if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                item->setData(UserRoleAlbumArt, filename);
+                item->setData(filename, UserRoleAlbumArt);
             }
         }
 
         if (title.isEmpty()) title = tr("(unknown artist)");
 
         item->setText(title);
-        item->setData(UserRoleSongCount, songCount);
-        item->setData(UserRoleAlbumCount, albumCount);
-        item->setData(UserRoleObjectID, objectId);
+        item->setData(songCount, UserRoleSongCount);
+        item->setData(albumCount, UserRoleAlbumCount);
+        item->setData(objectId, UserRoleObjectID);
 
-        ui->artistList->addItem(item);
+        artistModel->appendRow(item);
     }
 
     if (!error.isEmpty())
@@ -949,14 +951,11 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(browseAllArtists(uint, int, uint, QString, GHashTable*, QString)));
-        if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
     }
 }
-
 
 void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
@@ -969,7 +968,7 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
         int songCount;
         GValue *v;
 
-        QListWidgetItem *item = new QListWidgetItem();
+        QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
         albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
@@ -992,12 +991,13 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
 
         if (artist == "__VV__") artist = tr("Various artists");
 
-        item->setData(UserRoleValueText, artist);
-        item->setData(UserRoleTitle, albumTitle);
-        item->setData(UserRoleObjectID, objectId);
-        item->setData(UserRoleSongCount, songCount);
+        item->setData(albumTitle, UserRoleTitle);
+        item->setData(artist, UserRoleValueText);
+        item->setData(objectId, UserRoleObjectID);
+        item->setData(songCount, UserRoleSongCount);
 
-        ui->albumList->addItem(item);
+        item->setData(QString(albumTitle % QChar(31) % artist), UserRoleFilterString);
+        albumModel->appendRow(item);
     }
 
     if (!error.isEmpty())
@@ -1006,8 +1006,7 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
-        if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
+
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -1024,7 +1023,7 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     int artistCount;
     GValue *v;
 
-    QListWidgetItem *item = new QListWidgetItem();
+    QStandardItem *item = new QStandardItem();
 
     v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
     title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown genre)");
@@ -1041,18 +1040,18 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     if (title.isEmpty()) title = tr("(unknown genre)");
 
     item->setText(title);
-    item->setData(UserRoleSongCount, songCount);
-    item->setData(UserRoleArtistCount, artistCount);
-    item->setData(UserRoleAlbumCount, albumCount);
-    item->setData(UserRoleObjectID, objectId);
-    item->setData(UserRoleSongDuration, Duration::Blank);
+    item->setData(songCount, UserRoleSongCount);
+    item->setData(artistCount, UserRoleArtistCount);
+    item->setData(albumCount, UserRoleAlbumCount);
+    item->setData(objectId, UserRoleObjectID);
+    item->setData(Duration::Blank, UserRoleSongDuration);
 
     QString valueText = tr("%n song(s)", "", songCount) + ", "
                       + tr("%n album(s)", "", albumCount) + ", "
                       + tr("%n artist(s)", "", artistCount);
-    item->setData(UserRoleValueText, valueText);
+    item->setData(valueText, UserRoleValueText);
 
-    ui->genresList->addItem(item);
+    genresModel->appendRow(item);
 
     if (!error.isEmpty())
         qDebug() << error;
@@ -1060,8 +1059,6 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(browseAllGenres(uint, int, uint, QString, GHashTable*, QString)));
-        if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -1111,7 +1108,7 @@ void MusicWindow::onAddToNowPlaying()
         playlist->assignAudioPlaylist();
 
     if (this->currentList() == ui->songList) {
-        playlist->appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());
+        playlist->appendItem(ui->songList->currentIndex().data(UserRoleObjectID).toString());
 #ifdef Q_WS_MAEMO_5
         this->notifyOnAddedToNowPlaying(1);
 #endif
@@ -1121,7 +1118,8 @@ void MusicWindow::onAddToNowPlaying()
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-        QString objectIdToBrowse = this->currentList()->currentItem()->data(UserRoleObjectID).toString();
+        QString objectIdToBrowse = this->currentList()->currentIndex().data(UserRoleObjectID).toString();
+
         songAddBufferSize = 0;
 
         qDebug() << "connecting MusicWindow to signalSourceBrowseResult";
@@ -1135,11 +1133,11 @@ void MusicWindow::onAddToNowPlaying()
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-        QListWidgetItem *item = this->currentList()->currentItem();
+        QModelIndex index = ui->playlistList->currentIndex();
+        int row = playlistProxyModel->mapToSource(index).row();
 
-        qDebug() << "item id: " << item->data(UserRoleObjectID).toString();
+        qDebug() << "item id: " << index.data(UserRoleObjectID).toString();
 
-        int row = this->currentList()->row(item);
         if (row < 5) { // automatic playlist case
             QString filter;
             QString sorting;
@@ -1159,8 +1157,8 @@ void MusicWindow::onAddToNowPlaying()
             this->addToNowPlayingId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
                                                                       MAFW_SOURCE_NO_KEYS, 0, limit);
         }
-        else if (item->data(UserRoleObjectID).isNull()) { // saved playlist case
-            MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(item->text()));
+        else if (index.data(UserRoleObjectID).isNull()) { // saved playlist case
+            MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString()));
             songAddBufferSize = numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
 
             if (numberOfSongsToAdd > 0) {
@@ -1175,7 +1173,7 @@ void MusicWindow::onAddToNowPlaying()
             }
         }
         else { // imported playlist case
-            QString objectId = item->data(UserRoleObjectID).toString();
+            QString objectId = index.data(UserRoleObjectID).toString();
             songAddBufferSize = 0;
 
             qDebug() << "connecting MusicWindow to signalSourceBrowseResult";

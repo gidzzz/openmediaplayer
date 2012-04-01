@@ -54,6 +54,18 @@ signals:
 
 private:
     Ui::MusicWindow *ui;
+
+    QStandardItemModel *songModel;
+    QStandardItemModel *albumModel;
+    QStandardItemModel *artistModel;
+    QStandardItemModel *genresModel;
+    QStandardItemModel *playlistModel;
+    QSortFilterProxyModel *songProxyModel;
+    QSortFilterProxyModel *albumProxyModel;
+    QSortFilterProxyModel *artistProxyModel;
+    QSortFilterProxyModel *genresProxyModel;
+    QSortFilterProxyModel *playlistProxyModel;
+
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
     void keyPressEvent(QKeyEvent *);
@@ -91,14 +103,14 @@ private:
     void hideLayoutContents();
     void saveViewState(QVariant);
     void loadViewState();
-    QListWidget* currentList();
+    QListView* currentList();
 #ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
 #endif
 
 private slots:
     void onContextMenuRequested(QPoint);
-    void onSongSelected(QListWidgetItem *item);
+    void onSongSelected(QModelIndex index);
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();
@@ -109,7 +121,7 @@ private slots:
     void showSongsView();
     void showGenresView();
     void onSearchHideButtonClicked();
-    void onSearchTextChanged(QString);
+    void onSearchTextChanged();
 #ifdef MAFW
     void browseAutomaticPlaylists(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString);
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
@@ -126,10 +138,10 @@ private slots:
     void listPlaylists();
     void listAutoPlaylists();
     void listImportedPlaylists();
-    void onAlbumSelected(QListWidgetItem*);
-    void onArtistSelected(QListWidgetItem*);
-    void onGenreSelected(QListWidgetItem*);
-    void onPlaylistSelected(QListWidgetItem*);
+    void onAlbumSelected(QModelIndex index);
+    void onArtistSelected(QModelIndex index);
+    void onGenreSelected(QModelIndex index);
+    void onPlaylistSelected(QModelIndex index);
     void onGetItems(QString objectId, GHashTable*, guint index, gpointer op);
     void onContainerChanged(QString objectId);
 #endif

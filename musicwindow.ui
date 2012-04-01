@@ -22,13 +22,7 @@
     </property>
     <layout class="QVBoxLayout" name="songsLayout">
      <item>
-      <widget class="QListWidget" name="songList">
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
+      <widget class="QListView" name="songList">
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -38,26 +32,14 @@
        <property name="uniformItemSizes">
         <bool>true</bool>
        </property>
-       <property name="sortingEnabled">
-        <bool>true</bool>
-       </property>
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="albumList">
+      <widget class="QListView" name="albumList">
        <property name="font">
         <font>
          <pointsize>13</pointsize>
         </font>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="dragDropMode">
-        <enum>QAbstractItemView::NoDragDrop</enum>
        </property>
        <property name="iconSize">
         <size>
@@ -92,24 +74,21 @@
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="artistList">
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
+      <widget class="QListView" name="artistList">
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="genresList">
+      <widget class="QListView" name="genresList">
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="playlistList">
+      <widget class="QListView" name="playlistList">
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
