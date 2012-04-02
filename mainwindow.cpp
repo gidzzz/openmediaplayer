@@ -248,6 +248,9 @@ void MainWindow::connectSignals()
     QDBusConnection::systemBus().connect("", "", "org.bluez.Headset", "Disconnected",
                                          this, SLOT(onHeadsetDisconnected()));
 
+    QDBusConnection::systemBus().connect("", "/org/freedesktop/Hal/devices/platform_headphone", "org.freedesktop.Hal.Device", "PropertyModified",
+                                         this, SLOT(updateWiredHeadset()));
+
     QDBusConnection::systemBus().connect("", "", "org.freedesktop.Hal.Device", "Condition",
                                          this, SLOT(onHeadsetButtonPressed(QDBusMessage)));
 
@@ -880,22 +883,29 @@ void MainWindow::onHeadsetDisconnected()
 
 void MainWindow::updateWiredHeadset()
 {
-    QDBusInterface interface("org.freedesktop.Hal", HAL_PATH_RX51_JACK, "org.freedesktop.Hal.Device", QDBusConnection::systemBus());
-    if (!interface.isValid())
+    QDBusInterface interface("org.freedesktop.Hal", HAL_PATH_RX51_JACK, "org.freedesktop.Hal.Device", QDBusConnection::systemBus(), this);
+    QDBusInterface interface2("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/platform_headphone", "org.freedesktop.Hal.Device", QDBusConnection::systemBus(), this);
+
+    if (!interface.isValid() || !interface2.isValid())
         return;
 
     // jackList contains "headphone" when headset is connected
     QStringList jackList = static_cast< QDBusReply <QStringList> >(interface.call("GetProperty", "input.jack.type"));
 
+    // state contains jack GPIO state - false when nothing is not connected to jack
+    bool state = static_cast< QDBusReply <bool> >(interface2.call("GetProperty", "button.state.value"));
+
     // "Jack Bias" is alsa switch, when is off wired headset button is disabled
     QStringList args;
     args << "-c" << "0" << "sset" << "Jack Bias";
 
-    if (jackList.contains("headphone") && !wiredHeadsetIsConnected) {
+    bool connected = ( state && jackList.contains("headphone") );
+
+    if (connected && !wiredHeadsetIsConnected) {
         onHeadsetConnected();
         QProcess::startDetached("amixer", args << "on");
         wiredHeadsetIsConnected = true;
-    } else if (!jackList.contains("headphone") && wiredHeadsetIsConnected) {
+    } else if (!connected && wiredHeadsetIsConnected) {
         onHeadsetDisconnected();
         QProcess::startDetached("amixer", args << "off");
         wiredHeadsetIsConnected = false;
