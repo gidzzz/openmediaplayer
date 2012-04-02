@@ -66,6 +66,7 @@ private:
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
     bool updatingShow;
+    bool wiredHeadsetIsConnected;
     bool headsetPaused;
     bool wasPlaying;
     bool wasRinging;

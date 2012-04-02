@@ -21,6 +21,7 @@
 #ifdef Q_WS_MAEMO_5
 #include <QtGui/QX11Info>
 #include <X11/Xlib.h>
+#define HAL_PATH_RX51_JACK "/org/freedesktop/Hal/devices/platform_soc_audio_logicaldev_input"
 #endif
 
 QSettings settings( "/etc/hildon/theme/index.theme", QSettings::IniFormat );
@@ -84,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->videoCountL->clear();
     ui->stationCountL->clear();
 
+    wiredHeadsetIsConnected = false;
     headsetPaused = false;
     wasRinging = false;
     wasPlaying = false;
@@ -878,27 +880,25 @@ void MainWindow::onHeadsetDisconnected()
 
 void MainWindow::updateWiredHeadset()
 {
-    QDBusInterface interface("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/platform_soc_audio_logicaldev_input", "org.freedesktop.Hal.Device", QDBusConnection::systemBus());
+    QDBusInterface interface("org.freedesktop.Hal", HAL_PATH_RX51_JACK, "org.freedesktop.Hal.Device", QDBusConnection::systemBus());
     if (!interface.isValid())
         return;
 
-    // jackList is empty when wired headset is disconnected
+    // jackList contains "headphone" when headset is connected
     QStringList jackList = static_cast< QDBusReply <QStringList> >(interface.call("GetProperty", "input.jack.type"));
 
     // "Jack Bias" is alsa switch, when is off wired headset button is disabled
     QStringList args;
     args << "-c" << "0" << "sset" << "Jack Bias";
 
-    if (jackList.isEmpty())
-        QProcess::execute("amixer", args << "off");
-    else
-        QProcess::execute("amixer", args << "on");
-
-    if (QSettings().value("main/pauseHeadset", true).toBool()) {
-        if (jackList.isEmpty() && this->mafwState == Playing)
-            mafwrenderer->pause();
-        else if (!jackList.isEmpty() && this->mafwState == Paused)
-            mafwrenderer->resume();
+    if (jackList.contains("headphone") && !wiredHeadsetIsConnected) {
+        onHeadsetConnected();
+        QProcess::startDetached("amixer", args << "on");
+        wiredHeadsetIsConnected = true;
+    } else if (!jackList.contains("headphone") && wiredHeadsetIsConnected) {
+        onHeadsetDisconnected();
+        QProcess::startDetached("amixer", args << "off");
+        wiredHeadsetIsConnected = false;
     }
 }
 
@@ -919,7 +919,7 @@ void MainWindow::onHeadsetButtonPressed(QDBusMessage msg)
             mafwrenderer->setPosition(SeekRelative, -3);
         else if (msg.arguments()[1] == "phone")
             this->phoneButton();
-        else if (msg.arguments()[1] == "jack_insert") // wired headset was connected or disconnected
+        else if (msg.arguments()[1] == "jack_insert" && msg.path() == HAL_PATH_RX51_JACK) // wired headset was connected or disconnected
             this->updateWiredHeadset();
     }
 }
