@@ -84,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->videoCountL->clear();
     ui->stationCountL->clear();
 
+    headsetPaused = false;
     wasRinging = false;
     wasPlaying = false;
 #else
@@ -236,6 +237,15 @@ void MainWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
 #endif
 #ifdef Q_WS_MAEMO_5
+    QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Connected",
+                                         this, SLOT(onHeadsetConnected()));
+    QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Disconnected",
+                                         this, SLOT(onHeadsetDisconnected()));
+    QDBusConnection::systemBus().connect("", "", "org.bluez.Headset", "Connected",
+                                         this, SLOT(onHeadsetConnected()));
+    QDBusConnection::systemBus().connect("", "", "org.bluez.Headset", "Disconnected",
+                                         this, SLOT(onHeadsetDisconnected()));
+
     QDBusConnection::systemBus().connect("", "", "org.freedesktop.Hal.Device", "Condition",
                                          this, SLOT(onHeadsetButtonPressed(QDBusMessage)));
 
@@ -836,6 +846,34 @@ void MainWindow::phoneButton()
         this->pausePlay();
     else if (action == "stop")
         mafwrenderer->stop();
+}
+
+void MainWindow::onHeadsetConnected()
+{
+    if (!QSettings().value("main/pauseHeadset", true).toBool())
+        return;
+
+    if (!headsetPaused)
+        return;
+
+    headsetPaused = false;
+
+    if (this->mafwState == Paused)
+            mafwrenderer->resume();
+}
+
+void MainWindow::onHeadsetDisconnected()
+{
+    if (!QSettings().value("main/pauseHeadset", true).toBool())
+        return;
+
+    headsetPaused = false;
+
+    if (this->mafwState != Playing)
+        return;
+
+    mafwrenderer->pause();
+    headsetPaused = true;
 }
 
 void MainWindow::updateWiredHeadset()

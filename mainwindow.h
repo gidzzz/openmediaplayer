@@ -66,6 +66,7 @@ private:
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
     bool updatingShow;
+    bool headsetPaused;
     bool wasPlaying;
     bool wasRinging;
 #endif
@@ -120,6 +121,8 @@ private slots:
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();
+    void onHeadsetConnected();
+    void onHeadsetDisconnected();
     void onHeadsetButtonPressed(QDBusMessage msg);
     void onCallStateChanged(QDBusMessage msg);
     void phoneButton();
