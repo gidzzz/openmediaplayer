@@ -276,7 +276,7 @@ void MusicWindow::onDeletePlaylistClicked()
         confirmDelete.exec();
         if (confirmDelete.result() == QMessageBox::Yes) {
             mafwPlaylistManager->deletePlaylist(ui->playlistList->currentIndex().data(Qt::DisplayRole).toString());
-            delete songModel->itemFromIndex(ui->songList->currentIndex());
+            playlistProxyModel->removeRow(ui->playlistList->currentIndex().row());
         }
     }
 #endif
