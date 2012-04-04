@@ -78,6 +78,9 @@
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
+       <property name="uniformItemSizes">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -85,11 +88,17 @@
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
+       <property name="uniformItemSizes">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QListView" name="playlistList">
        <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="uniformItemSizes">
         <bool>true</bool>
        </property>
       </widget>

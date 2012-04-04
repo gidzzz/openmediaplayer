@@ -758,6 +758,12 @@ void MainWindow::closeEvent(QCloseEvent *)
 #ifdef MAFW
 void MainWindow::onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time)
 {
+    qDebug() << "MainWindow::onSourceUpdating("
+             << "progress =" << progress
+             << ", processed_items =" << processed_items
+             << ", remaining_items =" << remaining_items
+             << ", remaining_time =" << remaining_time << ")";
+
     QString text;
     text.append(tr("Retrieving information on the new media files"));
     text.append("\n");
@@ -768,7 +774,13 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
 #ifdef Q_WS_MAEMO_5
     updatingLabel->setText(text);
     updatingProgressBar->setValue(progress);
-    if (progress == 0 || updatingShow) {
+
+    // Update signal is not only emitted during a general Tracker update, but also
+    // in other cases (after deleting and often after selecting a song to play,
+    // for example). Update notifications showing up for no apparent reason are
+    // rather annoying, so it's better to ignore signals leading to such situation.
+    // What they have in common seems to be remaining_items=0.
+    if (remaining_items != 0 && updatingShow) {
         updatingInfoBox->show();
         updatingShow = false;
     } else if (progress == 100) {

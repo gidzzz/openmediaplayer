@@ -231,13 +231,6 @@ void MusicWindow::connectSignals()
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 
-    // TODO: keep only one connected
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), songProxyModel, SLOT(setFilterFixedString(QString)));
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), albumProxyModel, SLOT(setFilterFixedString(QString)));
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), artistProxyModel, SLOT(setFilterFixedString(QString)));
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), genresProxyModel, SLOT(setFilterFixedString(QString)));
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), playlistProxyModel, SLOT(setFilterFixedString(QString)));
-
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged()));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 }
@@ -369,7 +362,7 @@ void MusicWindow::onDeleteClicked()
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(currentList()->currentIndex().data(UserRoleObjectID).toString().toUtf8());
-        // TODO: remove the item from the list view, so it disappears instantly
+        currentList()->model()->removeRow(currentList()->currentIndex().row());
     }
 #endif
     currentList()->clearSelection();
@@ -444,9 +437,21 @@ void MusicWindow::hideLayoutContents()
         ui->playlistList->hide();
 }
 
+void MusicWindow::disconnectSearch()
+{
+    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), songProxyModel, SLOT(setFilterFixedString(QString)));
+    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), albumProxyModel, SLOT(setFilterFixedString(QString)));
+    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), artistProxyModel, SLOT(setFilterFixedString(QString)));
+    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), genresProxyModel, SLOT(setFilterFixedString(QString)));
+    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), playlistProxyModel, SLOT(setFilterFixedString(QString)));
+}
+
 void MusicWindow::showAlbumView()
 {
     ui->searchEdit->clear();
+    disconnectSearch();
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), albumProxyModel, SLOT(setFilterFixedString(QString)));
+
     this->hideLayoutContents();
     ui->albumList->show();
     this->populateMenuBar();
@@ -465,6 +470,9 @@ void MusicWindow::showAlbumView()
 void MusicWindow::showArtistView()
 {
     ui->searchEdit->clear();
+    disconnectSearch();
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), artistProxyModel, SLOT(setFilterFixedString(QString)));
+
     this->hideLayoutContents();
     ui->artistList->show();
     this->populateMenuBar();
@@ -483,6 +491,9 @@ void MusicWindow::showArtistView()
 void MusicWindow::showGenresView()
 {
     ui->searchEdit->clear();
+    disconnectSearch();
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), genresProxyModel, SLOT(setFilterFixedString(QString)));
+
     this->hideLayoutContents();
     ui->genresList->show();
     this->populateMenuBar();
@@ -501,6 +512,9 @@ void MusicWindow::showGenresView()
 void MusicWindow::showSongsView()
 {
     ui->searchEdit->clear();
+    disconnectSearch();
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), songProxyModel, SLOT(setFilterFixedString(QString)));
+
     this->hideLayoutContents();
     ui->songList->show();
     this->populateMenuBar();
@@ -519,6 +533,9 @@ void MusicWindow::showSongsView()
 void MusicWindow::showPlayListView()
 {
     ui->searchEdit->clear();
+    disconnectSearch();
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), playlistProxyModel, SLOT(setFilterFixedString(QString)));
+
     this->hideLayoutContents();
     ui->playlistList->show();
     this->populateMenuBar();

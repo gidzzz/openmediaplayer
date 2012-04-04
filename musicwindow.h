@@ -99,6 +99,7 @@ private:
     int songAddBufferSize;
 #endif
     void connectSignals();
+    void disconnectSearch();
     void populateMenuBar();
     void hideLayoutContents();
     void saveViewState(QVariant);
