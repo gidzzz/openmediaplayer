@@ -378,51 +378,69 @@ void NowPlayingWindow::onStateChanged(int state)
 
 void NowPlayingWindow::connectSignals()
 {
-    connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(savePlaylist()));
+    connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentView()));
+    connect(ui->actionCar_view, SIGNAL(triggered()), this, SLOT(showCarView()));
+
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
+
+    connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
+
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
+
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
+
     connect(ui->view_large, SIGNAL(clicked()), this, SLOT(toggleList()));
     connect(ui->view_small, SIGNAL(clicked()), this, SLOT(toggleList()));
+
+    connect(ui->view_large, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
+    connect(ui->view_small, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
+    connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+
     connect(ui->repeatButton, SIGNAL(clicked(bool)), this, SLOT(onRepeatButtonToggled(bool)));
     connect(ui->shuffleButton, SIGNAL(clicked(bool)), this, SLOT(onShuffleButtonToggled(bool)));
+
     connect(ui->nextButton, SIGNAL(pressed()), this, SLOT(onNextButtonPressed()));
     connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
+
     connect(ui->songProgress, SIGNAL(sliderPressed()), this, SLOT(onPositionSliderPressed()));
     connect(ui->songProgress, SIGNAL(sliderReleased()), this, SLOT(onPositionSliderReleased()));
     connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
-    connect(ui->view_large, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
-    connect(ui->view_small, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
-    connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+
     connect(keyTimer, SIGNAL(timeout()), this, SLOT(onKeyTimeout()));
     connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
+
     connect(ui->songPlaylist, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
     connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
-    connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentView()));
-    connect(ui->actionCar_view, SIGNAL(triggered()), this, SLOT(showCarView()));
+
 #ifdef Q_WS_MAEMO_5
     connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 #endif
+
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(onMetadataChanged(QString, QVariant)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
+    connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), this, SLOT(onMediaIsSeekable(bool)));
+    connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
             this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
-    connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), this, SLOT(onMediaIsSeekable(bool)));
-    connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
+
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
+
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
+
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
     connect(lastPlayingSong, SIGNAL(valueChanged()), this, SLOT(onGconfValueChanged()));
@@ -477,7 +495,6 @@ void NowPlayingWindow::forgetClick()
 
 bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
 {
-
     if (object == ui->currentPositionLabel && event->type() == QEvent::MouseButtonPress) {
         reverseTime = !reverseTime;
         QSettings().setValue("main/reverseTime", reverseTime);
@@ -808,8 +825,6 @@ void NowPlayingWindow::editLyrics()
     EditLyrics* el = new EditLyrics(this, ui->lyricsText->whatsThis(),
                                     ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis() );
     el->show();
-    connect(el, SIGNAL(destroyed()), this, SLOT(onChildDestroyed()));
-    this->releaseKeyboard();
 }
 
 void NowPlayingWindow::orientationChanged()
@@ -876,6 +891,7 @@ void NowPlayingWindow::toggleList()
         ui->widget->hide();
         ui->lyrics->hide();
         ui->songPlaylist->show();
+        ui->songPlaylist->setFocus();
         ui->spacer1->hide();
 #ifdef MAFW
         positionTimer->stop();
@@ -1073,7 +1089,6 @@ void NowPlayingWindow::setPosition(int newPosition)
 
 void NowPlayingWindow::showEvent(QShowEvent *)
 {
-    this->grabKeyboard();
     mafwrenderer->getStatus();
     this->updatePlaylistState();
     if (positionTimer->isActive())
@@ -1108,27 +1123,11 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 #ifdef MAFW
     else if (e->key() == Qt::Key_Enter)
         onPlaylistItemActivated(ui->songPlaylist->currentItem());
-    else if (e->key() == Qt::Key_Space) {
-        if (this->mafwState == Playing)
-            mafwrenderer->pause();
-        else if (this->mafwState == Paused)
-            mafwrenderer->resume();
-        else if (this->mafwState == Stopped)
-            mafwrenderer->play();
-    }
     else if (e->key() == Qt::Key_Right)
         mafwrenderer->next();
     else if (e->key() == Qt::Key_Left)
         mafwrenderer->previous();
 #endif
-    else if (e->key() == Qt::Key_Down) {
-        if (ui->songPlaylist->currentRow() < ui->songPlaylist->count()-1)
-            ui->songPlaylist->setCurrentRow(ui->songPlaylist->currentRow()+1);
-    }
-    else if (e->key() == Qt::Key_Up) {
-        if (ui->songPlaylist->currentRow() > 0)
-            ui->songPlaylist->setCurrentRow(ui->songPlaylist->currentRow()-1);
-    }
     /*else if (e->key() == Qt::Key_Shift) {
         if (ui->menuNow_playing_menu->isHidden())
             ui->menuNow_playing_menu->show();
@@ -1141,6 +1140,18 @@ void NowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
         keyTimer->start();
+}
+
+void NowPlayingWindow::togglePlayback()
+{
+#ifdef MAFW
+    if (this->mafwState == Playing)
+        mafwrenderer->pause();
+    else if (this->mafwState == Paused)
+        mafwrenderer->resume();
+    else if (this->mafwState == Stopped)
+        mafwrenderer->play();
+#endif MAFW
 }
 
 #ifdef MAFW
@@ -1442,8 +1453,6 @@ void NowPlayingWindow::savePlaylist()
     layout->addWidget(buttonBox);
 
     savePlaylistDialog->show();
-    connect(savePlaylistDialog, SIGNAL(destroyed()), this, SLOT(onChildDestroyed()));
-    this->releaseKeyboard();
 }
 
 void NowPlayingWindow::onSavePlaylistAccepted()
@@ -1486,11 +1495,6 @@ void NowPlayingWindow::onSavePlaylistAccepted()
 #endif
     }
 #endif
-}
-
-void NowPlayingWindow::onChildDestroyed()
-{
-    this->grabKeyboard();
 }
 
 void NowPlayingWindow::onDeleteFromNowPlaying()
@@ -1660,7 +1664,6 @@ void NowPlayingWindow::editTags()
                                   ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
                                   ui->songPlaylist->currentItem()->data(UserRoleSongAlbum).toString());
 
-    this->releaseKeyboard();
     if ( tw->exec() == QDialog::Accepted ) {
         qDebug() << objectId << tw->title << tw->artist << tw->album;
         GHashTable *metadata = mafw_metadata_new();
@@ -1670,14 +1673,12 @@ void NowPlayingWindow::editTags()
         mafwTrackerSource->setMetadata(objectId.toUtf8(), metadata);
         mafw_metadata_release(metadata);
     }
-    this->grabKeyboard();
     delete tw;
 }
 
 void NowPlayingWindow::closeEvent(QCloseEvent *e)
 {
     this->hide();
-    this->releaseKeyboard();
     this->setParent(0);
     emit hidden();
     e->ignore();

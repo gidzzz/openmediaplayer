@@ -82,6 +82,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     mafwrenderer->getVolume();
     ui->toolbarOverlay->setStyleSheet(ui->controlOverlay->styleSheet());
 #endif
+
     this->grabKeyboard();
 }
 
@@ -133,11 +134,13 @@ void VideoNowPlayingWindow::connectSignals()
 {
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPrevButtonClicked()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
+
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
-    connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
+    connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
+
     connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 #ifdef MAFW
@@ -145,16 +148,18 @@ void VideoNowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->progressBar, SLOT(setEnabled(bool)));
-    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
-    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString,QVariant)),
             this, SLOT(onMetadataChanged(QString,QVariant)));
+    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
+
+    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->progressBar, SIGNAL(sliderPressed()), this, SLOT(onSliderPressed()));
     connect(ui->progressBar, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
     connect(ui->progressBar, SIGNAL(sliderMoved(int)), this, SLOT(onSliderMoved(int)));
+
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
                                           "com.nokia.mafw.extension",

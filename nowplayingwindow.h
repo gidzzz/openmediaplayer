@@ -164,6 +164,7 @@ private slots:
     void onRingingToneUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString objectId, QString uri);
 #endif
+    void togglePlayback();
     void editTags();
     void onMetadataChanged(QString name, QVariant value);
     void volumeWatcher();
@@ -186,7 +187,6 @@ private slots:
     void nullQmlView();
     void savePlaylist();
     void onSavePlaylistAccepted();
-    void onChildDestroyed();
     void onDeleteFromNowPlaying();
     void selectItemByRow(int row);
     void focusItemByRow(int row);
