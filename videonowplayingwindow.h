@@ -37,7 +37,7 @@ class VideoNowPlayingWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0, MafwSourceAdapter *mafwSource = 0);
+    explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~VideoNowPlayingWindow();
     bool eventFilter(QObject*, QEvent *event);
 
@@ -89,7 +89,8 @@ private slots:
     void onMediaChanged(int, char *objectId);
     void onPropertyChanged(const QDBusMessage &msg);
     void onMetadataChanged(QString metadata, QVariant value);
-    void stateChanged(int state);
+    void onStateChanged(int state);
+    void onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* object_id, QString error);
     void onPositionChanged(int position, QString);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
     void playVideo();

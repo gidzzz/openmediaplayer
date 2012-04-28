@@ -81,7 +81,7 @@ void VideosWindow::connectSignals()
 
 void VideosWindow::onContextMenuRequested(const QPoint &point)
 {
-    if (!ui->listWidget->currentItem()->data(UserRoleObjectID).toString().isEmpty()) {
+    if (!ui->listWidget->currentItem()->data(UserRoleObjectID).isNull()) {
         QMenu *contextMenu = new QMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
@@ -142,12 +142,12 @@ void VideosWindow::onShareUriReceived(QString objectId, QString uri)
 
 void VideosWindow::onVideoSelected(QListWidgetItem *item)
 {
-    if (ui->listWidget->currentItem()->data(UserRoleObjectID).toString().isEmpty()) return;
+    if (item->data(UserRoleObjectID).isNull()) return;
 
     this->setEnabled(false);
 
 #ifdef MAFW
-    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory, mafwTrackerSource);
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif
@@ -159,11 +159,15 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     playlist->assignVideoPlaylist();
     playlist->clear();
 
-    int videoCount = ui->listWidget->count();
-    gchar** videoAddBuffer = new gchar*[videoCount+1];
+    int indexOffset = 0;
+    int videoCount = 0;
+    gchar** videoAddBuffer = new gchar*[ui->listWidget->count()+1];
 
-    for (int i = 0; i < videoCount; i++)
-        videoAddBuffer[i] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    for (int i = 0; i < ui->listWidget->count(); i++)
+        if (!ui->listWidget->item(i)->data(UserRoleObjectID).isNull())
+            videoAddBuffer[videoCount++] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        else if (i < ui->listWidget->row(item))
+            ++indexOffset;
     videoAddBuffer[videoCount] = NULL;
 
     playlist->appendItems((const gchar**)videoAddBuffer);
@@ -173,7 +177,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     delete[] videoAddBuffer;
 
     playlist->getSize(); // explained in musicwindow.cpp
-    mafwrenderer->gotoIndex(ui->listWidget->row(item));
+    mafwrenderer->gotoIndex(ui->listWidget->row(item)-indexOffset);
 
     QTimer::singleShot(500, window, SLOT(playVideo()));
 }
@@ -324,10 +328,12 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
             item->setText("0_");
             item->setData(UserRoleSongDuration, Duration::Blank);
             item->setData(UserRoleTitle, tr("Recorded by device camera"));
+            item->setData(UserRoleObjectID, QVariant());
             item = new QListWidgetItem(&bufferList);
             item->setText("2_");
             item->setData(UserRoleSongDuration, Duration::Blank);
             item->setData(UserRoleTitle, tr("Films"));
+            item->setData(UserRoleObjectID, QVariant());
             bufferList.sortItems();
             for (int i = 0; i < ui->listWidget->count(); i++) {
                 ui->listWidget->item(i)->setData(UserRoleObjectID, bufferList.item(i)->data(UserRoleObjectID));

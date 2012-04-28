@@ -141,9 +141,6 @@ void NowPlayingIndicator::startAnimation()
 
 void NowPlayingIndicator::stopAnimation()
 {
-#ifdef DEBUG
-    qDebug() << "NowPlayingIndicator::stopAnimation()";
-#endif
     if (timer->isActive())
         timer->stop();
     this->frame = 0;
@@ -156,29 +153,28 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         emit clicked();
 #ifdef MAFW
         QString playlistName = playlist->playlistName();
-#ifdef DEBUG
-        qDebug() << "Current playlist is: " + playlistName;
-#endif
+        qDebug() << "Current playlist is" << playlistName;
 
-        if (playlistName == "FmpVideoPlaylist")
-            playlist->assignAudioPlaylist();
-
-        if (rendererObjectId.startsWith("localtagfs::videos"))
-            mafwrenderer->stop();
 
         if (playlistName == "FmpRadioPlaylist" && window == 0)  {
             window = new RadioNowPlayingWindow(this, mafwFactory);
             window->setAttribute(Qt::WA_DeleteOnClose);
             connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
+            window->show();
+        }
+        else if (playlistName == "FmpVideoPlaylist") {
+            VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this->parentWidget(), mafwFactory);
+            connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
+            QTimer::singleShot(500, window, SLOT(playVideo()));
+            window->showFullScreen();
         }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
         else { // playlistName == "FmpAudioPlaylist"
             window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
             connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+            window->show();
         }
-
-        window->show();
 #else
         NowPlayingWindow *window = NowPlayingWindow::acquire(this);
         window->show();

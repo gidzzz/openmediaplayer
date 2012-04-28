@@ -24,13 +24,13 @@
 #include <X11/Xutil.h>
 #endif
 
-VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapter *mafwSource) :
+VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
     ui(new Ui::VideoNowPlayingWindow)
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
-    mafwSource(mafwSource)
+    mafwSource(NULL)
 #endif
 {
     /* Make Qt do the work of keeping the overlay the magic color  */
@@ -145,14 +145,14 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->progressBar, SLOT(setEnabled(bool)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString,QVariant)),
             this, SLOT(onMetadataChanged(QString,QVariant)));
-    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
+    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
@@ -188,9 +188,24 @@ void VideoNowPlayingWindow::onMetadataChanged(QString metadata, QVariant value)
 #endif
 
 #ifdef MAFW
+void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* object_id, QString error)
+{
+    onMediaChanged(index, const_cast<char*>(object_id));
+
+    if (!error.isEmpty())
+        qDebug() << error;
+}
+#endif
+
+#ifdef MAFW
 void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
     QString id = QString::fromUtf8(objectId);
+
+    if (mafwSource) mafwSource->deleteLater();
+    mafwSource = new MafwSourceAdapter(mafwFactory->getTrackerSource()->getSourceByUUID(id.left(id.indexOf("::"))));
+    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
 
     if (mafwSource && id.startsWith("localtagfs::videos")) { // local storage
         ui->shareButton->show();
@@ -336,7 +351,7 @@ void VideoNowPlayingWindow::volumeWatcher()
 }
 
 #ifdef MAFW
-void VideoNowPlayingWindow::stateChanged(int state)
+void VideoNowPlayingWindow::onStateChanged(int state)
 {
     if (state != Stopped && state != Transitioning) this->gotInitialState = true;
     this->mafwState = state;
@@ -383,7 +398,10 @@ void VideoNowPlayingWindow::stateChanged(int state)
         }
     }
     else if (state == Transitioning) {
-        if (gotInitialState) mafwrenderer->stop();
+        if (gotInitialState) {
+            mafwrenderer->stop();
+            mafwrenderer->previous();
+        }
         ui->progressBar->setEnabled(false);
         ui->progressBar->setValue(0);
         ui->currentPositionLabel->setText("00:00");
@@ -449,6 +467,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 
         ui->videoLengthLabel->setText(time_mmss(videoLength));
         ui->progressBar->setRange(0, videoLength);
+
     }
 
     if (!error.isEmpty())
@@ -458,6 +477,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 void VideoNowPlayingWindow::playVideo()
 {
     QApplication::syncX();
+    mafwrenderer->getStatus();
     mafwrenderer->setWindowXid(ui->widget->winId());
     mafwrenderer->play();
 }

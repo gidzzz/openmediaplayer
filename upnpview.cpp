@@ -232,7 +232,7 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
             if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith("video"))
                ++sameTypeIndex;
 
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory, mafwSource);
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
         window->showFullScreen();
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
