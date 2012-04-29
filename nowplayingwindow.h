@@ -54,6 +54,7 @@ public:
     ~NowPlayingWindow();
     QString currentURI;
     QString currentMIME;
+    QString defaultWindowTitle;
     QNetworkAccessManager* data;
     bool eventFilter(QObject *object, QEvent *event);
 
@@ -87,6 +88,7 @@ private:
     PlaylistQueryManager *playlistQM;
     int mafwState;
     GConfItem *lastPlayingSong;
+    bool event(QEvent *event);
     void showEvent(QShowEvent *);
     gpointer browseId;
 #endif

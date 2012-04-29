@@ -73,6 +73,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
+    defaultWindowTitle = this->windowTitle();
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -182,6 +183,16 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 NowPlayingWindow::~NowPlayingWindow()
 {
     delete ui;
+}
+
+bool NowPlayingWindow::event(QEvent *event)
+{
+    if (event->type() == QEvent::WindowActivate)
+        this->setWindowTitle(defaultWindowTitle);
+    else if (event->type() == QEvent::WindowDeactivate)
+        this->setWindowTitle(ui->titleLabel->whatsThis());
+
+    return QMainWindow::event(event);
 }
 
 void NowPlayingWindow::setAlbumImage(QString image)
@@ -306,6 +317,8 @@ void NowPlayingWindow::onMetadataChanged(QString name, QVariant value)
     if (name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
         ui->titleLabel->setText(elided);
         ui->titleLabel->setWhatsThis(value.toString());
+        if (!this->isActiveWindow())
+            this->setWindowTitle(value.toString());
     }
 
     else if (name == "artist" /*MAFW_METADATA_KEY_ARTIST*/) {
@@ -634,6 +647,8 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     QFontMetrics fm(f);
 
     ui->titleLabel->setWhatsThis(title);
+    if (!this->isActiveWindow())
+        this->setWindowTitle(title);
     title = fm.elidedText(title, Qt::ElideRight, 420);
     ui->titleLabel->setText(title);
 
@@ -666,6 +681,8 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE) )) {
             QString title = QString::fromUtf8(g_value_get_string (v));
             ui->titleLabel->setWhatsThis(title);
+            if (!this->isActiveWindow())
+                this->setWindowTitle(title);
             title = fm.elidedText(title, Qt::ElideRight, 420);
             ui->titleLabel->setText(title);
             if (item && item->data(UserRoleSongTitle).toString().isEmpty())
@@ -1091,6 +1108,7 @@ void NowPlayingWindow::showEvent(QShowEvent *)
 {
     mafwrenderer->getStatus();
     this->updatePlaylistState();
+    this->setWindowTitle(defaultWindowTitle); // avoid showing a different title for a split second
     if (positionTimer->isActive())
         ui->songProgress->setEnabled(true);
 }
@@ -1210,6 +1228,8 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     QFontMetrics fm(f);
 
     ui->titleLabel->setWhatsThis(item->data(UserRoleSongTitle).toString());
+    if (!this->isActiveWindow())
+        this->setWindowTitle(item->data(UserRoleSongTitle).toString());
     QString elided = fm.elidedText(item->data(UserRoleSongTitle).toString(), Qt::ElideRight, 420);
     ui->titleLabel->setText(elided);
 
