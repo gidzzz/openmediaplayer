@@ -77,7 +77,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    setAttribute(Qt::WA_Maemo5AutoOrientation);
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
     positionTimer = new QTimer(this);
@@ -157,7 +156,9 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui->view_small->setFixedWidth(470);
     ui->lyrics->setFixedHeight(351);
 
-    this->orientationChanged();
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
 
 #ifdef MAFW
     playlistQM = new PlaylistQueryManager(this, playlist);
@@ -397,8 +398,6 @@ void NowPlayingWindow::connectSignals()
     connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(savePlaylist()));
     connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentView()));
     connect(ui->actionCar_view, SIGNAL(triggered()), this, SLOT(showCarView()));
-
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
@@ -844,14 +843,9 @@ void NowPlayingWindow::editLyrics()
     el->show();
 }
 
-void NowPlayingWindow::orientationChanged()
+void NowPlayingWindow::orientationChanged(int w, int h)
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    if (screenGeometry.width() > screenGeometry.height()) {
-        // Landscape mode
-#ifdef DEBUG
-        qDebug() << "NowPlayingWindow: Orientation changed: Landscape.";
-#endif
+    if (w > h) { // Landscape mode
         portrait = false;
         ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
         if (ui->volWidget->isHidden())
@@ -870,11 +864,7 @@ void NowPlayingWindow::orientationChanged()
         ui->view_small->hide();
         ui->view_large->show();
 
-    } else {
-        // Portrait mode
-#ifdef DEBUG
-        qDebug() << "NowPlayingWindow: Orientation changed: Portrait.";
-#endif
+    } else { // Portrait mode
         portrait = true;
         ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
         if (!ui->volumeButton->isHidden())
@@ -1169,7 +1159,7 @@ void NowPlayingWindow::togglePlayback()
         mafwrenderer->resume();
     else if (this->mafwState == Stopped)
         mafwrenderer->play();
-#endif MAFW
+#endif
 }
 
 #ifdef MAFW

@@ -30,7 +30,7 @@ public slots:
     void browseObjectId(QString objectId);
 
 private slots:
-    void onOrientationChanged();
+    void onOrientationChanged(int w, int h);
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);

@@ -7,7 +7,6 @@ EditLyrics::EditLyrics(QWidget *parent, QString lyricsFile, QString artist, QStr
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    setAttribute(Qt::WA_Maemo5AutoOrientation);
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
 

@@ -61,7 +61,7 @@ private:
     void setupShuffleButton();
 
 private slots:
-    void orientationChanged();
+    void orientationChanged(int w, int h);
     void onItemActivated(QListWidgetItem *item);
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);

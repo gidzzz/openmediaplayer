@@ -60,7 +60,8 @@ SOURCES += \
     playlistquerymanager.cpp \
     upnpcontrol.cpp \
     upnpview.cpp \
-    delegates/mediawithicondelegate.cpp
+    delegates/mediawithicondelegate.cpp \
+    rotator.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -97,7 +98,8 @@ HEADERS += \
     playlistquerymanager.h \
     upnpcontrol.h \
     upnpview.h \
-    delegates/mediawithicondelegate.h
+    delegates/mediawithicondelegate.h \
+    rotator.h
 
 FORMS += \
     mainwindow.ui \

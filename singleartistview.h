@@ -56,7 +56,7 @@ private slots:
     void onContainerChanged(QString objectId);
 #endif
     void onAlbumSelected(QListWidgetItem*);
-    void orientationChanged();
+    void orientationChanged(int w, int h);
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();

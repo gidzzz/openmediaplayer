@@ -71,7 +71,7 @@ private slots:
     void onStationSelected(QListWidgetItem* item);
     void onContextMenuRequested(const QPoint &point);
     void onDeleteClicked();
-    void orientationChanged();
+    void orientationChanged(int w, int h);
     void onChildClosed();
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);

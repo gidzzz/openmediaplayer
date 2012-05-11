@@ -28,22 +28,35 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
 
     this->setAttribute(Qt::WA_DeleteOnClose);
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 
-    QMaemo5ListPickSelector *headsetSelector = new QMaemo5ListPickSelector;
-    QStandardItemModel *headsetModel = new QStandardItemModel(0, 1, headsetSelector);
-    headsetModel->appendRow(new QStandardItem(tr("Next song")));
-    headsetModel->appendRow(new QStandardItem(tr("Previous song")));
-    headsetModel->appendRow(new QStandardItem(tr("Play / Pause")));
-    headsetModel->appendRow(new QStandardItem(tr("Stop playback")));
-    headsetModel->appendRow(new QStandardItem(tr("Do nothing")));
-    headsetSelector->setModel(headsetModel);
-    headsetSelector->setCurrentIndex(QSettings().value("main/headsetButtonAction").toString() == "next" ? 0 :
+    QMaemo5ListPickSelector *selector;
+    QStandardItemModel *model;
+
+    selector = new QMaemo5ListPickSelector;
+    model = new QStandardItemModel(0, 1, selector);
+    model->appendRow(new QStandardItem(tr("Next song")));
+    model->appendRow(new QStandardItem(tr("Previous song")));
+    model->appendRow(new QStandardItem(tr("Play / Pause")));
+    model->appendRow(new QStandardItem(tr("Stop playback")));
+    model->appendRow(new QStandardItem(tr("Do nothing")));
+    selector->setModel(model);
+    selector->setCurrentIndex(QSettings().value("main/headsetButtonAction").toString() == "next" ? 0 :
                                      QSettings().value("main/headsetButtonAction").toString() == "previous" ? 1 :
                                      QSettings().value("main/headsetButtonAction").toString() == "playpause" ? 2 :
                                      QSettings().value("main/headsetButtonAction").toString() == "stop" ? 3 :
                                      QSettings().value("main/headsetButtonAction").toString() == "none" ? 4 : 0);
-    ui->headsetButtonBox->setPickSelector(headsetSelector);
+    ui->headsetButtonBox->setPickSelector(selector);
+
+    selector = new QMaemo5ListPickSelector;
+    model = new QStandardItemModel(0, 1, selector);
+    model->appendRow(new QStandardItem(tr("Automatic")));
+    model->appendRow(new QStandardItem(tr("Landscape")));
+    model->appendRow(new QStandardItem(tr("Portrait")));
+    selector->setModel(model);
+    selector->setCurrentIndex(QSettings().value("main/orientation").toString() == "automatic" ? 0 :
+                                         QSettings().value("main/orientation").toString() == "landscape" ? 1 :
+                                         QSettings().value("main/orientation").toString() == "portrait" ? 2 : 0);
+    ui->orientationBox->setPickSelector(selector);
 
     ui->stopCheckBox->setChecked(QSettings().value("main/stopOnExit", true).toBool());
     ui->headsetCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
@@ -57,7 +70,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->playlistSizeBox->setText(QSettings().value("music/playlistSize", 30).toString());
     ui->playlistSizeBox->setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]{0,3}"), this));
 
-    this->orientationChanged();
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
 }
 
 SettingsDialog::~SettingsDialog()
@@ -75,6 +90,12 @@ void SettingsDialog::accept()
         case 4: QSettings().setValue("main/headsetButtonAction", "none"); break;
     }
 
+    switch (static_cast<QMaemo5ListPickSelector*>(ui->orientationBox->pickSelector())->currentIndex()) {
+        case 0: QSettings().setValue("main/orientation", "automatic"); break;
+        case 1: QSettings().setValue("main/orientation", "landscape"); break;
+        case 2: QSettings().setValue("main/orientation", "portrait"); break;
+    }
+
     QSettings().setValue("main/stopOnExit", ui->stopCheckBox->isChecked());
     QSettings().setValue("main/pauseHeadset", ui->headsetCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
@@ -87,21 +108,19 @@ void SettingsDialog::accept()
     int playlistSize = ui->playlistSizeBox->text().toInt();
     QSettings().setValue("music/playlistSize", playlistSize ? playlistSize : 30);
 
-    NowPlayingWindow::destroy();
-
     this->close();
 }
 
-void SettingsDialog::orientationChanged()
+void SettingsDialog::orientationChanged(int w, int h)
 {
     ui->gridLayout->removeWidget(ui->buttonBox);
-    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
+    if (w < h) { // Portrait
         this->setFixedHeight(600);
-        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount()); // portrait
+        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount());
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
-    } else {
+    } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout->addWidget(ui->buttonBox, 2, 1, 1, 1, Qt::AlignBottom); // landscape
+        ui->gridLayout->addWidget(ui->buttonBox, 2, 1, 1, 1, Qt::AlignBottom);
         this->setFixedHeight(360);
     }
 }

@@ -21,9 +21,6 @@ Home::Home(QWidget *parent, QString target, QString path, QString album) :
     if ( path == "/") ui->button->setValueText( "" );
 
     openBrowser( path );
-
-    setAttribute(Qt::WA_Maemo5AutoOrientation, true);
-
 }
 
 Home::~Home()

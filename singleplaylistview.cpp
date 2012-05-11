@@ -65,7 +65,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
@@ -75,7 +74,9 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
     connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(saveCurrentPlaylist()));
 
-    this->orientationChanged();
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
 }
 
 SinglePlaylistView::~SinglePlaylistView()
@@ -265,11 +266,10 @@ void SinglePlaylistView::onItemActivated(QListWidgetItem *item)
     this->playAll(ui->songList->row(item), QSettings().value("main/playlistFilter", false).toBool());
 }
 
-void SinglePlaylistView::orientationChanged()
+void SinglePlaylistView::orientationChanged(int w, int h)
 {
     ui->songList->scroll(1,1);
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
     ui->indicator->raise();
 }
 

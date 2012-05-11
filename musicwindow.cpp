@@ -94,9 +94,11 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->playlistList->setModel(playlistProxyModel);
 
     this->loadViewState();
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
-    ui->indicator->raise();
+
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
+
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
 #endif
@@ -228,8 +230,6 @@ void MusicWindow::connectSignals()
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->genresList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->playlistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged()));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
@@ -386,11 +386,9 @@ void MusicWindow::onSearchTextChanged()
     }
 }
 
-void MusicWindow::orientationChanged()
+void MusicWindow::orientationChanged(int w, int h)
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
-                               ui->indicator->width(),ui->indicator->height());
+    ui->indicator->setGeometry(w-122, h-(70+55), ui->indicator->width(), ui->indicator->height());
     ui->indicator->raise();
 }
 

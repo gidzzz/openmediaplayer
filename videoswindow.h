@@ -52,7 +52,7 @@ private slots:
     void onContextMenuRequested(const QPoint &point);
     void onVideoSelected(QListWidgetItem*);
     void onSortingChanged(QAction*);
-    void orientationChanged();
+    void orientationChanged(int w, int h);
     void onChildClosed();
     void selectView();
 #ifdef MAFW

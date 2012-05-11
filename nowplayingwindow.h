@@ -24,6 +24,7 @@
 #include "tagwindow.h"
 #include "mediaart.h"
 #include "playlistquerymanager.h"
+#include "rotator.h"
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
@@ -153,7 +154,7 @@ private slots:
     void onRendererMetadataRequested(GHashTable*, QString object_id, QString);
     void onSourceMetadataRequested(QString, GHashTable*, QString);
     void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
-    void setPosition(int);
+    void setPosition(int newPosition);
     void onPlaylistItemActivated(QListWidgetItem*);
     void clearPlaylist();
     void onPlaylistChanged();
@@ -170,8 +171,8 @@ private slots:
     void editTags();
     void onMetadataChanged(QString name, QVariant value);
     void volumeWatcher();
-    void onRepeatButtonToggled(bool);
-    void orientationChanged();
+    void onRepeatButtonToggled(bool checked);
+    void orientationChanged(int w, int h);
     void onNextButtonPressed();
     void onPrevButtonPressed();
     void onPositionSliderPressed();

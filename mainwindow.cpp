@@ -79,7 +79,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    setAttribute(Qt::WA_Maemo5AutoOrientation);
 
     ui->songCountL->clear();
     ui->videoCountL->clear();
@@ -103,11 +102,12 @@ MainWindow::MainWindow(QWidget *parent) :
     musicWindow = new MusicWindow(this);
 #endif
 
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
     this->connectSignals();
 
-    this->orientationChanged();
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    rotator->setSlave(this);
+    reloadSettings();
 
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
@@ -219,7 +219,6 @@ void MainWindow::connectSignals()
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->menuList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
@@ -490,14 +489,9 @@ void MainWindow::createNowPlayingWindow()
     ui->indicator->inhibit();
 }
 
-void MainWindow::orientationChanged()
+void MainWindow::orientationChanged(int w, int h)
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    if (screenGeometry.width() > screenGeometry.height()){
-        // Landscape mode
-#ifdef DEBUG
-        qDebug() << "MainWindow: Orientation changed: Landscape.";
-#endif
+    if (w > h) { // Landscape
         ui->menuList->hide();
         ui->songsButton->show();
         ui->songsButtonLabel->show();
@@ -510,11 +504,7 @@ void MainWindow::orientationChanged()
         ui->songCountL->show();
         ui->videoCountL->show();
         ui->stationCountL->show();
-    } else {
-        // Portrait mode
-#ifdef DEBUG
-        qDebug() << "MainWindow: Orientation changed: Portrait.";
-#endif
+    } else { // Portrait
         ui->songsButton->hide();
         ui->songsButtonLabel->hide();
         ui->videosButton->hide();
@@ -526,13 +516,13 @@ void MainWindow::orientationChanged()
         ui->songCountL->hide();
         ui->videoCountL->hide();
         ui->stationCountL->hide();
-        ui->menuList->setGeometry(QRect(0, 0, 480, 800));
+        ui->menuList->setGeometry(QRect(0, 0, w, h));
         ui->menuList->show();
     }
-    upnpControl->setGeometry(0, screenGeometry.height()-(70+55),
-                             screenGeometry.width()-122, upnpControl->height());
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
-                               ui->indicator->width(), ui->indicator->height());
+
+    upnpControl->setGeometry(0, h-(70+55), w-122, upnpControl->height());
+    ui->indicator->setGeometry(w-122, h-(70+55), ui->indicator->width(), ui->indicator->height());
+
     upnpControl->raise();
     ui->indicator->raise();
 }
@@ -559,7 +549,18 @@ void MainWindow::processListClicks(QListWidgetItem* item)
 void MainWindow::openSettings()
 {
     SettingsDialog *settings = new SettingsDialog(this);
+    connect(settings, SIGNAL(destroyed()), this, SLOT(reloadSettings()));
     settings->show();
+}
+
+void MainWindow::reloadSettings()
+{
+    NowPlayingWindow::destroy();
+
+    QString orientation = QSettings().value("main/orientation").toString();
+    Rotator::acquire()->setPolicy(orientation == "landscape" ? Rotator::Landscape :
+                                  orientation == "portrait"  ? Rotator::Portrait  :
+                                                               Rotator::Automatic);
 }
 
 void MainWindow::showMusicWindow()

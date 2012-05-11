@@ -20,6 +20,7 @@
     class MafwPlaylistAdapter;
 #endif
 #include "includes.h"
+#include "rotator.h"
 
 namespace Ui {
     class RadioNowPlayingWindow;
@@ -58,7 +59,7 @@ private slots:
     void toggleVolumeSlider();
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();
-    void orientationChanged();
+    void orientationChanged(int w, int h);
     void volumeWatcher();
 #ifdef Q_WS_MAEMO_5
     void showFMTXDialog();

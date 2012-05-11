@@ -12,7 +12,6 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
 
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5StackedWindow);
-    this->setAttribute(Qt::WA_Maemo5AutoOrientation);
 #endif
     this->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -29,13 +28,13 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(onOrientationChanged()));
-
     ui->objectList->viewport()->installEventFilter(this);
 
     ui->indicator->setFactory(factory);
 
-    this->onOrientationChanged();
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(onOrientationChanged(int,int)));
+    onOrientationChanged(rotator->width(), rotator->height());
 }
 
 UpnpView::~UpnpView()
@@ -292,10 +291,9 @@ void UpnpView::notifyOnAddedToNowPlaying(int songCount)
 #endif
 }
 
-void UpnpView::onOrientationChanged()
+void UpnpView::onOrientationChanged(int w, int h)
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
     ui->indicator->raise();
 }
 

@@ -48,8 +48,12 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     quint32 disable = {0};
     Atom winPortraitModeSupportAtom = XInternAtom(QX11Info::display(), "_HILDON_PORTRAIT_MODE_SUPPORT", false);
     XChangeProperty(QX11Info::display(), winId(), winPortraitModeSupportAtom, XA_CARDINAL, 32, PropModeReplace, (uchar*) &disable, 1);
-    this->orientationChanged();
-    this->onLandscapeMode();
+
+    Rotator *rotator = Rotator::acquire();
+    savedPolicy = rotator->policy();
+    rotator->setPolicy(Rotator::Landscape);
+    orientationChanged(rotator->width(), rotator->height());
+
     //http://www.gossamer-threads.com/lists/maemo/developers/54239
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
@@ -101,6 +105,9 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
         mafw_metadata_release(metadata);
     }
 #endif
+
+    Rotator::acquire()->setPolicy(savedPolicy);
+
     delete ui;
 }
 
@@ -409,35 +416,26 @@ void VideoNowPlayingWindow::onStateChanged(int state)
 }
 #endif
 
-void VideoNowPlayingWindow::orientationChanged()
+void VideoNowPlayingWindow::orientationChanged(int w, int h)
 {
-    //QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    QRect screenGeometry = QRect(0,0,800,480);
-    ui->controlOverlay->setGeometry((screenGeometry.width() / 2)-(ui->controlOverlay->width()/2),
-                                    (screenGeometry.height() / 2)-(ui->controlOverlay->height()/2),
+    ui->controlOverlay->setGeometry((w - ui->controlOverlay->width())/2, (h - ui->controlOverlay->height())/2,
                                     ui->controlOverlay->width(), ui->controlOverlay->height());
-    ui->toolbarOverlay->setGeometry(0, screenGeometry.height()-ui->toolbarOverlay->height(),
-                                    screenGeometry.width(), ui->toolbarOverlay->height());
-    ui->wmCloseButton->setGeometry(screenGeometry.width()-ui->wmCloseButton->width(), 0,
+    ui->toolbarOverlay->setGeometry(0, h-ui->toolbarOverlay->height(),
+                                    w, ui->toolbarOverlay->height());
+    ui->wmCloseButton->setGeometry(w-ui->wmCloseButton->width(), 0,
                                    ui->wmCloseButton->width(), ui->wmCloseButton->height());
-    ui->widget->setGeometry(0, 0, screenGeometry.width(), screenGeometry.height());
+    ui->widget->setGeometry(0, 0, w, h);
+
+    this->setIcons();
+    ui->wmCloseButton->setIconSize(QSize(112, 56));
+    ui->wmCloseButton->setGeometry(w-112, 0, 112, 56);
+    ui->controlLayout->setDirection(QBoxLayout::LeftToRight);
+    ui->controlOverlay->setGeometry(230, 170, 318, 114);
+    ui->volumeButton->show();
+    ui->toolbarOverlay->show();
 }
 
 #ifdef Q_WS_MAEMO_5
-void VideoNowPlayingWindow::onLandscapeMode()
-{
-    this->setIcons();
-    ui->volumeButton->show();
-    //QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    QRect screenGeometry = QRect(0,0,800,480);
-    ui->wmCloseButton->setIconSize(QSize(112, 56));
-    ui->wmCloseButton->setGeometry(screenGeometry.width()-112, 0, 112, 56);
-    ui->controlLayout->setDirection(QBoxLayout::LeftToRight);
-    ui->controlOverlay->setGeometry(230, 170, 318, 114);
-    if(ui->toolbarOverlay->isHidden())
-        ui->toolbarOverlay->show();
-}
-
 void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 {
     quint32 enable;

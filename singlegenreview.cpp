@@ -52,7 +52,6 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
     connect(ui->artistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
@@ -64,7 +63,9 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 
     ui->artistList->viewport()->installEventFilter(this);
 
-    this->orientationChanged();
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
 }
 
 SingleGenreView::~SingleGenreView()
@@ -89,12 +90,11 @@ void SingleGenreView::setupShuffleButton()
     ui->artistList->setItemWidget(ui->artistList->item(0), shuffleButton);
 }
 
-void SingleGenreView::orientationChanged()
+void SingleGenreView::orientationChanged(int w, int h)
 {
     ui->artistList->scroll(1,1);
 
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
     ui->indicator->raise();
 }
 

@@ -61,7 +61,11 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     ui->bufferBar->hide();
 
     this->connectSignals();
-    this->orientationChanged();
+
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
+
 #ifdef MAFW
     mafwrenderer->getStatus();
     mafwrenderer->getPosition();
@@ -82,7 +86,6 @@ void RadioNowPlayingWindow::connectSignals()
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 #ifdef Q_WS_MAEMO_5
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
 #endif
@@ -413,16 +416,15 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 }
 #endif
 
-void RadioNowPlayingWindow::orientationChanged()
+void RadioNowPlayingWindow::orientationChanged(int w, int h)
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    if (screenGeometry.width() > screenGeometry.height()) {
+    if (w > h) { // Landscape
         ui->mainLayout->setDirection(QBoxLayout::LeftToRight);
         ui->volumeWidget->show();
         ui->spacerWidget->show();
         ui->spacerWidget2->show();
         ui->metadataWidget->setFixedWidth(440);
-    } else {
+    } else { // Portrait
         ui->volumeWidget->hide();
         ui->mainLayout->setDirection(QBoxLayout::TopToBottom);
         ui->spacerWidget2->hide();

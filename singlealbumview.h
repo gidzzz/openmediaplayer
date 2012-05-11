@@ -59,7 +59,7 @@ private:
     void updateSongCount();
 
 private slots:
-    void orientationChanged();
+    void orientationChanged(int w, int h);
 #ifdef MAFW
     void listSongs();
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);

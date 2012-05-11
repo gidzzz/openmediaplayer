@@ -164,16 +164,16 @@ QWidget *FreqPickSelector::widget(QWidget *parent)
     // So I'm just making a new dialog on every call now.
     freqDialog = new QDialog(parent);
     freqDialog->setWindowTitle(dgettext("osso-fm-transmitter", "fmtx_ti_select_frequency"));
-    freqDialog->setMinimumHeight(370);
     QGridLayout *mainLayout = new QGridLayout(freqDialog);
     QDialogButtonBox *box = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Vertical, freqDialog);
     mainLayout->addWidget(integers, 0, 0, 1, 1);
     mainLayout->addWidget(fractions, 0, 1, 1, 1);
-    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
+    if (Rotator::acquire()->width() < Rotator::acquire()->height()) { // Portrait
         freqDialog->setMinimumHeight(680);
         mainLayout->addWidget(box, 2, 0, 1, mainLayout->columnCount(), Qt::AlignBottom);
         box->setSizePolicy(QSizePolicy::MinimumExpanding, box->sizePolicy().verticalPolicy());
-    } else {
+    } else { // Landscape
+        freqDialog->setMinimumHeight(370);
         mainLayout->addWidget(box, 0, 2, 2, 1, Qt::AlignBottom);
     }
     freqDialog->setLayout(mainLayout);

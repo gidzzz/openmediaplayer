@@ -1,6 +1,5 @@
 #include "freqdlg.h"
 #include "ui_freqdlg.h"
-#include "qmaemo5rotator.h"
 
 FreqDlg::FreqDlg(QWidget *parent) :
     QDialog(parent),
@@ -15,9 +14,9 @@ FreqDlg::FreqDlg(QWidget *parent) :
     frequency = new GConfItem("/system/fmtx/frequency");
     refreshFreqValues();
 
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
-    this->orientationChanged();
-
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
 }
 
 FreqDlg::~FreqDlg()
@@ -25,19 +24,19 @@ FreqDlg::~FreqDlg()
     delete ui;
 }
 
-void FreqDlg::orientationChanged()
+void FreqDlg::orientationChanged(int w, int h)
 {
     ui->gridLayout_2->removeWidget(ui->buttonBox);
-    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
+    if (w < h) { // Portrait
         this->setMinimumHeight(680);
         this->setMaximumHeight(680);
-        ui->gridLayout_2->addWidget(ui->buttonBox, 2, 0, 1, 2); // portrait
+        ui->gridLayout_2->addWidget(ui->buttonBox, 2, 0, 1, 2);
         ui->buttonBox->setSizePolicy(QSizePolicy::Minimum, ui->buttonBox->sizePolicy().verticalPolicy());
-    } else {
+    } else { // Landscape
         this->setMinimumHeight(350);
         this->setMaximumHeight(350);
         ui->buttonBox->setSizePolicy(QSizePolicy::Minimum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout_2->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom); // landscape
+        ui->gridLayout_2->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
     }
 }
 

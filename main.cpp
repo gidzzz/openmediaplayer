@@ -3,6 +3,7 @@
     Copyright (C) 2010-2012 Mohammad Abu-Garbeyyeh
                             Grzegorz Gidel
                             Matias Perez
+                            Pali Rohár
                             Nicolai Hess
                             Timur Kristof
 

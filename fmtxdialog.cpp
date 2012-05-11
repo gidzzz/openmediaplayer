@@ -40,7 +40,11 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
     if (!QSettings().contains("FMTX/overrideChecks"))
         QSettings().setValue("FMTX/overrideChecks", false);
     ui->gridLayout->addWidget(freqButton, 1, 0, 1, 1);
-    this->orientationChanged();
+
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
+
     fmtxState = new GConfItem("/system/fmtx/enabled");
     fmtxFrequency = new GConfItem("/system/fmtx/frequency");
     QString state = selector->getValue("state").toString();
@@ -56,7 +60,6 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
     connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
     connect(ui->fmtxCheckbox, SIGNAL(clicked()), this, SLOT(onCheckboxClicked()));
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     freqButton->setValueText(selector->currentValueText());
 }
 
@@ -101,16 +104,16 @@ void FMTXDialog::onStateChanged()
         ui->fmtxCheckbox->setChecked(false);
 }
 
-void FMTXDialog::orientationChanged()
+void FMTXDialog::orientationChanged(int w, int h)
 {
     ui->gridLayout->removeWidget(ui->buttonBox);
-    if (QApplication::desktop()->screenGeometry().width() < QApplication::desktop()->screenGeometry().height()) {
+    if (w < h) { // Portrait
         this->setFixedHeight(230);
-        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount()); // portrait
+        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount());
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
-    } else {
+    } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout->addWidget(ui->buttonBox, 1, 1, 1, 1, Qt::AlignBottom); // landscape
+        ui->gridLayout->addWidget(ui->buttonBox, 1, 1, 1, 1, Qt::AlignBottom);
         this->setFixedHeight(160);
     }
 }

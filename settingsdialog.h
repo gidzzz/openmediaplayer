@@ -6,6 +6,7 @@
 #include <QDesktopWidget>
 
 #include "nowplayingwindow.h"
+#include "rotator.h"
 
 namespace Ui {
     class SettingsDialog;
@@ -24,7 +25,7 @@ private:
 
 private slots:
     void accept();
-    void orientationChanged();
+    void orientationChanged(int h, int w);
 };
 
 #endif // SETTINGSDIALOG_H

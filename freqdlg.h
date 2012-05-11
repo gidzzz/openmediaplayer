@@ -1,6 +1,7 @@
 #ifndef FREQDLG_H
 #define FREQDLG_H
 
+#include <QtGui>
 #include <QDialog>
 #include <QListWidget>
 #include <QFile>
@@ -11,6 +12,7 @@
 #include "dbus/dbus-shared.h"
 #include <libintl.h>
 #include <gq/GConfItem>
+#include "rotator.h"
 
 /* /usr/include/gq is provided by libgq-gconf-dev and libgq-gconf0
    These packages need to be installed on top of your sysrootfs.
@@ -47,7 +49,7 @@ public:
 private slots:
     void on_buttonBox_accepted();
     void onFrequencyChanged();
-    void orientationChanged();
+    void orientationChanged(int w, int h);
 
 private:
     Ui::FreqDlg *ui;

@@ -55,7 +55,6 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
 #endif
 
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_songs_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
@@ -65,7 +64,9 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
 
     ui->albumList->viewport()->installEventFilter(this);
 
-    this->orientationChanged();
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
 }
 
 SingleArtistView::~SingleArtistView()
@@ -178,10 +179,9 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 #endif
 }
 
-void SingleArtistView::orientationChanged()
+void SingleArtistView::orientationChanged(int w, int h)
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
     ui->indicator->raise();
 }
 

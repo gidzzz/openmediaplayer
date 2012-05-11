@@ -15,6 +15,7 @@
 #include "includes.h"
 #include "settingsdialog.h"
 #include "aboutwindow.h"
+#include "rotator.h"
 
 #include "upnpcontrol.h"
 
@@ -93,10 +94,11 @@ private:
 #endif
 
 private slots:
-    void orientationChanged();
+    void orientationChanged(int w, int h);
     void showAbout();
     void processListClicks(QListWidgetItem*);
     void openSettings();
+    void reloadSettings();
     void showMusicWindow();
     void showVideosWindow();
     void showInternetRadioWindow();

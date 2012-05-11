@@ -42,7 +42,11 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
     ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connectSignals();
     ui->listWidget->viewport()->installEventFilter(this);
-    this->orientationChanged();
+
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
+
 #ifdef MAFW
     if (mafwRadioSource->isReady())
         this->listStations();
@@ -63,7 +67,6 @@ void InternetRadioWindow::connectSignals()
     connect(ui->listWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onStationSelected(QListWidgetItem*)));
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 #ifdef MAFW
@@ -174,9 +177,6 @@ void InternetRadioWindow::showBookmarkDialog(QString name, QString address)
     addressBox = new QLineEdit(bookmarkDialog);
     addressBox->setText(address.isEmpty() ? "http://" : address);
 
-    // Spacer above save button
-    QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
     // Save button
     saveButton = new QPushButton(bookmarkDialog);
     saveButton->setText(tr("Save"));
@@ -194,17 +194,16 @@ void InternetRadioWindow::showBookmarkDialog(QString name, QString address)
     boxLayout->addWidget(nameBox);
     boxLayout->addWidget(addressBox);
 
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-
     QHBoxLayout *dialogLayout = new QHBoxLayout();
-    if (screenGeometry.width() < screenGeometry.height()) {
+    QVBoxLayout *saveButtonLayout = new QVBoxLayout();
+
+    Rotator *rotator = Rotator::acquire();
+    if (rotator->width() < rotator->height()) { // Portrait
         dialogLayout->setDirection(QBoxLayout::TopToBottom);
+    } else { // Landscape
+        saveButtonLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     }
 
-    QVBoxLayout *saveButtonLayout = new QVBoxLayout();
-    if (screenGeometry.width() > screenGeometry.height()) {
-        saveButtonLayout->addItem(verticalSpacer);
-    }
     saveButtonLayout->addWidget(buttonBox);
 
     // Pack all layouts together
@@ -400,12 +399,10 @@ void InternetRadioWindow::onSearchTextChanged(QString text)
     }
 }
 
-void InternetRadioWindow::orientationChanged()
+void InternetRadioWindow::orientationChanged(int w, int h)
 {
     ui->listWidget->scroll(1, 1);
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55),
-                               ui->indicator->width(),ui->indicator->height());
+    ui->indicator->setGeometry(w-122, h-(70+55), ui->indicator->width(), ui->indicator->height());
     ui->indicator->raise();
 }
 

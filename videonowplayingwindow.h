@@ -12,6 +12,7 @@
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
+#include "rotator.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
@@ -54,6 +55,7 @@ private:
     QTimer *volumeTimer;
     QTimer *positionTimer;
     QString objectIdToPlay;
+    Rotator::Orientation savedPolicy;
     bool lazySliders;
     bool reverseTime;
     bool portrait;
@@ -78,7 +80,7 @@ private:
 private slots:
     void toggleVolumeSlider();
     void volumeWatcher();
-    void orientationChanged();
+    void orientationChanged(int w, int h);
     void onShareClicked();
     void onDeleteClicked();
     void onVolumeSliderPressed();
@@ -96,9 +98,6 @@ private slots:
     void playVideo();
     void onErrorOccured(const QDBusMessage &msg);
     void onShareUriReceived(QString objectId, QString uri);
-#endif
-#ifdef Q_WS_MAEMO_5
-    void onLandscapeMode();
 #endif
     void onSliderPressed();
     void onSliderReleased();

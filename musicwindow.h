@@ -115,7 +115,7 @@ private slots:
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();
-    void orientationChanged();
+    void orientationChanged(int w, int h);
     void showAlbumView();
     void showPlayListView();
     void showArtistView();

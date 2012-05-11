@@ -68,7 +68,7 @@ private:
     void updateSongCount();
 
 private slots:
-    void orientationChanged();
+    void orientationChanged(int w, int h);
 #ifdef MAFW
     void onGetItems(QString objectId, GHashTable* metadata, guint index, gpointer op);
     void onBrowseResult(uint browseId, int, uint, QString objectId, GHashTable *metadata, QString);

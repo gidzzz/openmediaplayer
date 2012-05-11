@@ -51,7 +51,11 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     sortByCategory->setCheckable(true);
     this->menuBar()->addActions(sortByActionGroup->actions());
     this->connectSignals();
-    this->orientationChanged();
+
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
+
 #ifdef MAFW
     if (mafwTrackerSource->isReady())
         this->selectView();
@@ -71,7 +75,6 @@ void VideosWindow::connectSignals()
     connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(orientationChanged()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)), this, SLOT(onSourceMetadataChanged(QString)));
@@ -392,10 +395,9 @@ void VideosWindow::onContainerChanged(QString objectId)
 }
 #endif
 
-void VideosWindow::orientationChanged()
+void VideosWindow::orientationChanged(int w, int h)
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    ui->indicator->setGeometry(screenGeometry.width()-122, screenGeometry.height()-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
     ui->indicator->raise();
 }
 

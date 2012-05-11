@@ -9,7 +9,6 @@
 
 #include "includes.h"
 #include "ui_home.h"
-#include "qmaemo5rotator.h"
 #include "mediaart.h"
 
 namespace Ui {
