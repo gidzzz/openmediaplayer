@@ -839,17 +839,17 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     <message>
         <location filename="../settingsdialog.cpp" line="52"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatyczna</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="53"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozioma</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="54"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Pionowa</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="40"/>
@@ -903,7 +903,7 @@ przed otwieraniem pliku</translation>
     <message>
         <location filename="../settingsdialog.ui" line="115"/>
         <source>Orientation</source>
-        <translation type="unfinished"></translation>
+        <translation>Orientacja</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="122"/>
