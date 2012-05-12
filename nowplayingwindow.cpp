@@ -374,17 +374,16 @@ void NowPlayingWindow::onStateChanged(int state)
             positionTimer->start();
     }
     else if (state == Stopped) {
-        ui->songProgress->setEnabled(false);
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
         if (positionTimer->isActive())
             positionTimer->stop();
     }
-    else if (state == Transitioning) {
+
+    if (state == Transitioning || state == Stopped) {
         ui->songProgress->setEnabled(false);
         ui->songProgress->setValue(0);
-        ui->songProgress->setRange(0, 99);
         ui->currentPositionLabel->setText("00:00");
     }
 }
@@ -449,6 +448,7 @@ void NowPlayingWindow::connectSignals()
 
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
 
+    connect(ui->playButton, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onPlayMenuRequested(QPoint)));
     connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
@@ -1024,6 +1024,14 @@ void NowPlayingWindow::onPositionSliderMoved(int position)
 }
 
 #ifdef MAFW
+void NowPlayingWindow::onPlayMenuRequested(QPoint pos)
+{
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Stop playback"), mafwrenderer, SLOT(stop()));
+    contextMenu->exec(pos);
+}
+
 void NowPlayingWindow::onNextButtonClicked()
 {
     if (ui->nextButton->isDown()) {
