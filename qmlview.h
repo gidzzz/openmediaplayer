@@ -10,6 +10,7 @@
 
 #include "ui_qmlview.h"
 #include "includes.h"
+#include "rotator.h"
 
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
@@ -51,6 +52,7 @@ private:
     QVariant duration;
     int songDuration;
     int currentPosition;
+    Rotator::Orientation savedPolicy;
     QTimer *positionTimer;
     QObject *rootObject;
 #ifdef Q_WS_MAEMO_5

@@ -124,12 +124,12 @@ private slots:
     void onSearchHideButtonClicked();
     void onSearchTextChanged();
 #ifdef MAFW
-    void browseAutomaticPlaylists(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString);
+    void browseAutomaticPlaylists(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error);
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllGenres(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void onAddToNowPlayingCallback(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString);
+    void onAddToNowPlayingCallback(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString error);
     void onShareUriReceived(QString, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
     void listSongs();

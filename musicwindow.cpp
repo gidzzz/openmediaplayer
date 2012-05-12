@@ -839,7 +839,7 @@ void MusicWindow::listImportedPlaylists()
                                                                 0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void MusicWindow::browseAutomaticPlaylists(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString) // not really, imported playlists too
+void MusicWindow::browseAutomaticPlaylists(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString error) // not really, imported playlists too
 {
     GValue *v;
 
@@ -874,6 +874,9 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int remainingCount, ui
         playlistModel->appendRow(item);
     }
     ui->playlistList->scroll(0,0);
+
+    if (!error.isEmpty())
+        qDebug() << error;
 }
 
 void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
@@ -1245,7 +1248,7 @@ void MusicWindow::onContainerChanged(QString objectId)
     }
 }
 
-void MusicWindow::onAddToNowPlayingCallback(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString)
+void MusicWindow::onAddToNowPlayingCallback(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString error)
 {
     if (browseId != this->addToNowPlayingId) return;
 
@@ -1274,6 +1277,9 @@ void MusicWindow::onAddToNowPlayingCallback(uint browseId, int remainingCount, u
 #endif
         songAddBufferSize = 0;
     }
+
+    if (!error.isEmpty())
+        qDebug() << error;
 }
 
 #ifdef Q_WS_MAEMO_5

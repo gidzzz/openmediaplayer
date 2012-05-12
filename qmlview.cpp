@@ -32,6 +32,10 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
+    Rotator *rotator = Rotator::acquire();
+    savedPolicy = rotator->policy();
+    rotator->setPolicy(Rotator::Landscape);
+
     rootObject = dynamic_cast<QObject*>(ui->declarativeView->rootObject());
     rootObject->setParent(this);
 
@@ -60,7 +64,6 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
 
     positionTimer->start();
 
-
 #ifdef Q_WS_MAEMO_5
     quint32 disable = {0};
     Atom winPortraitModeSupportAtom = XInternAtom(QX11Info::display(), "_HILDON_PORTRAIT_MODE_SUPPORT", false);
@@ -77,6 +80,8 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
 
 QmlView::~QmlView()
 {
+    Rotator::acquire()->setPolicy(savedPolicy);
+
     delete ui;
 }
 
