@@ -42,21 +42,21 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     ui->setupUi(this);
     setAttribute(Qt::WA_OpaquePaintEvent);
+    setAttribute(Qt::WA_DeleteOnClose);
     ui->widget->setAttribute(Qt::WA_NativeWindow);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    quint32 disable = {0};
+
+    /*quint32 disable = {0};
     Atom winPortraitModeSupportAtom = XInternAtom(QX11Info::display(), "_HILDON_PORTRAIT_MODE_SUPPORT", false);
-    XChangeProperty(QX11Info::display(), winId(), winPortraitModeSupportAtom, XA_CARDINAL, 32, PropModeReplace, (uchar*) &disable, 1);
+    XChangeProperty(QX11Info::display(), winId(), winPortraitModeSupportAtom, XA_CARDINAL, 32, PropModeReplace, (uchar*) &disable, 1);*/
+    //http://www.gossamer-threads.com/lists/maemo/developers/54239
 
     Rotator *rotator = Rotator::acquire();
     savedPolicy = rotator->policy();
     rotator->setPolicy(Rotator::Landscape);
     orientationChanged(rotator->width(), rotator->height());
-
-    //http://www.gossamer-threads.com/lists/maemo/developers/54239
 #endif
-    setAttribute(Qt::WA_DeleteOnClose);
 
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
@@ -438,11 +438,7 @@ void VideoNowPlayingWindow::orientationChanged(int w, int h)
 #ifdef Q_WS_MAEMO_5
 void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 {
-    quint32 enable;
-    if (dnd)
-        enable = 1;
-    else
-        enable = 0;
+    quint32 enable = dnd ? 1 : 0;
     Atom winDNDAtom = XInternAtom(QX11Info::display(), "_HILDON_DO_NOT_DISTURB", false);
     XChangeProperty(QX11Info::display(), winId(), winDNDAtom, XA_INTEGER, 32, PropModeReplace, (uchar*) &enable, 1);
 }

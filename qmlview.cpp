@@ -104,11 +104,7 @@ void QmlView::setMetadata(QString songName, QString albumName, QString artistNam
 #ifdef Q_WS_MAEMO_5
 void QmlView::setDNDAtom(bool dnd)
 {
-    quint32 enable;
-    if (dnd)
-        enable = 1;
-    else
-        enable = 0;
+    quint32 enable = dnd ? 1 : 0;
     Atom winDNDAtom = XInternAtom(QX11Info::display(), "_HILDON_DO_NOT_DISTURB", false);
     XChangeProperty(QX11Info::display(), winId(), winDNDAtom, XA_INTEGER, 32, PropModeReplace, (uchar*) &enable, 1);
 }

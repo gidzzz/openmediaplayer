@@ -59,6 +59,9 @@ public slots:
 
 private:
     void connectPlaylistSignals();
+    void disconnectPlaylistSignals();
+    gulong contents_changed_handler;
+    gulong item_moved_handler;
     MafwRendererAdapter *mafwrenderer;
     GError *error;
 

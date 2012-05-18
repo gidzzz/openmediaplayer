@@ -219,12 +219,11 @@ void MafwPlaylistAdapter::onGetStatus(MafwPlaylist* playlist, uint, MafwPlayStat
             this->assignAudioPlaylist();
         else
             connect(mafwrenderer, SIGNAL(rendererReady()), this, SLOT(assignAudioPlaylist()));
-    }
+    } else
+        connectPlaylistSignals();
 
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
-
-    connectPlaylistSignals();
 }
 
 void MafwPlaylistAdapter::onPlaylistChanged(GObject* playlist)
@@ -243,19 +242,25 @@ QString MafwPlaylistAdapter::playlistName()
 
 void MafwPlaylistAdapter::assignAudioPlaylist()
 {
+    disconnectPlaylistSignals();
     mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpAudioPlaylist"));
+    connectPlaylistSignals();
     mafwrenderer->assignPlaylist(mafw_playlist);
 }
 
 void MafwPlaylistAdapter::assignVideoPlaylist()
 {
+    disconnectPlaylistSignals();
     mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpVideoPlaylist"));
+    connectPlaylistSignals();
     mafwrenderer->assignPlaylist(mafw_playlist);
 }
 
 void MafwPlaylistAdapter::assignRadioPlaylist()
 {
+    disconnectPlaylistSignals();
     mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpRadioPlaylist"));
+    connectPlaylistSignals();
     mafwrenderer->assignPlaylist(mafw_playlist);
 }
 
@@ -274,14 +279,20 @@ bool MafwPlaylistAdapter::isPlaylistNull()
 
 void MafwPlaylistAdapter::connectPlaylistSignals()
 {
-    g_signal_connect(mafw_playlist,
-                     "contents-changed",
-                     G_CALLBACK(&onContentsChanged),
-                     static_cast<void*>(this));
-    g_signal_connect(mafw_playlist,
-                     "item-moved",
-                     G_CALLBACK(&onItemMoved),
-                     static_cast<void*>(this));
+    contents_changed_handler = g_signal_connect(mafw_playlist,
+                               "contents-changed",
+                               G_CALLBACK(&onContentsChanged),
+                               static_cast<void*>(this));
+    item_moved_handler = g_signal_connect(mafw_playlist,
+                         "item-moved",
+                         G_CALLBACK(&onItemMoved),
+                         static_cast<void*>(this));
+}
+
+void MafwPlaylistAdapter::disconnectPlaylistSignals()
+{
+    g_signal_handler_disconnect(mafw_playlist, contents_changed_handler);
+    g_signal_handler_disconnect(mafw_playlist, item_moved_handler);
 }
 
 void MafwPlaylistAdapter::onContentsChanged(MafwPlaylist*, guint from, guint nremove, guint nreplace, gpointer user_data)
