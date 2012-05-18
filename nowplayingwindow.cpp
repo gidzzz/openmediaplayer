@@ -88,8 +88,10 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     albumArtSceneLarge = new QGraphicsScene(ui->view_large);
     albumArtSceneSmall = new QGraphicsScene(ui->view_small);
     qmlView = 0;
+
     enableLyrics = QSettings().value("lyrics/enable").toBool();
     lazySliders = QSettings().value("main/lazySliders").toBool();
+    permanentDelete = QSettings().value("main/permanentDelete").toBool();
     reverseTime = QSettings().value("main/reverseTime").toBool();
 
     ui->songPlaylist->setDragDropMode(QAbstractItemView::InternalMove);
@@ -1305,7 +1307,7 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
     //contextMenu->addAction(tr("Edit tags"), this, SLOT(editTags()));
     contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
     if (!ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().startsWith("_uuid_")) {
-        //contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+        if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     }
@@ -1351,7 +1353,7 @@ void NowPlayingWindow::onRingingToneUriReceived(QString objectId, QString uri)
 }
 #endif
 
-/*void NowPlayingWindow::onDeleteClicked()
+void NowPlayingWindow::onDeleteClicked()
 {
 #ifdef MAFW
     QMessageBox confirmDelete(QMessageBox::NoIcon,
@@ -1369,7 +1371,7 @@ void NowPlayingWindow::onRingingToneUriReceived(QString objectId, QString uri)
         mafwTrackerSource->destroyObject(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     }
 #endif
-}*/
+}
 
 void NowPlayingWindow::onShareClicked()
 {

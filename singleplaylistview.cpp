@@ -45,10 +45,10 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
 
+    permanentDelete = QSettings().value("main/permanentDelete").toBool();
+
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
-
-    ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
 
     ui->songList->viewport()->installEventFilter(this);
 
@@ -431,7 +431,7 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
     contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
-    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     contextMenu->exec(point);
 }

@@ -914,6 +914,9 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         songModel->appendRow(item);
     }
 
+    if (!error.isEmpty())
+        qDebug() << error;
+
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
                    this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));

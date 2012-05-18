@@ -64,6 +64,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
     ui->foldersCheckBox->setChecked(QSettings().value("main/openFolders", false).toBool());
     ui->appendCheckBox->setChecked(QSettings().value("main/appendSongs", false).toBool());
+    ui->deleteCheckBox->setChecked(QSettings().value("main/permanentDelete", false).toBool());
     ui->slidersCheckBox->setChecked(QSettings().value("main/lazySliders", false).toBool());
     ui->fmtxCheckBox->setChecked(QSettings().value("FMTX/overrideChecks", false).toBool());
 
@@ -102,6 +103,7 @@ void SettingsDialog::accept()
     QSettings().setValue("main/playlistFilter", ui->filterCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());
     QSettings().setValue("main/appendSongs", ui->appendCheckBox->isChecked());
+    QSettings().setValue("main/permanentDelete", ui->deleteCheckBox->isChecked());
     QSettings().setValue("main/lazySliders", ui->slidersCheckBox->isChecked());
     QSettings().setValue("FMTX/overrideChecks", ui->fmtxCheckBox->isChecked());
 

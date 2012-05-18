@@ -108,9 +108,10 @@ private:
     bool buttonWasDown;
     bool enableLyrics;
     bool lazySliders;
+    bool permanentDelete;
+    bool reverseTime;
     bool dragInProgress;
     bool portrait;
-    bool reverseTime;
     QListWidgetItem *clickedItem;
     int songDuration;
     int currentSongPosition;
@@ -182,7 +183,7 @@ private slots:
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();
     void onContextMenuRequested(const QPoint &point);
-    //void onDeleteClicked();
+    void onDeleteClicked();
     void onShareClicked();
     void showEntertainmentView();
     void showCarView();

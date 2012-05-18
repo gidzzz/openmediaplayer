@@ -47,6 +47,7 @@ private:
     Ui::SinglePlaylistView *ui;
     QTimer *clickTimer;
     QListWidgetItem *clickedItem;
+    bool permanentDelete;
     int visibleSongs;
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleButton;
