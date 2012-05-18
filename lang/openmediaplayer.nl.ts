@@ -420,7 +420,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <location filename="../musicwindow.cpp" line="856"/>
         <location filename="../musicwindow.cpp" line="860"/>
         <location filename="../musicwindow.cpp" line="869"/>
-        <location filename="../musicwindow.cpp" line="1064"/>
+        <location filename="../musicwindow.cpp" line="1070"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n nummer</numerusform>
@@ -458,37 +458,37 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <translation>Nooit afgespeeld</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="893"/>
+        <location filename="../musicwindow.cpp" line="896"/>
         <source>(unknown song)</source>
         <translation>(onbekend nummer)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="896"/>
-        <location filename="../musicwindow.cpp" line="936"/>
-        <location filename="../musicwindow.cpp" line="953"/>
-        <location filename="../musicwindow.cpp" line="992"/>
+        <location filename="../musicwindow.cpp" line="899"/>
+        <location filename="../musicwindow.cpp" line="942"/>
+        <location filename="../musicwindow.cpp" line="959"/>
+        <location filename="../musicwindow.cpp" line="998"/>
         <source>(unknown artist)</source>
         <translation>(onbekende artiest)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="899"/>
-        <location filename="../musicwindow.cpp" line="989"/>
+        <location filename="../musicwindow.cpp" line="902"/>
+        <location filename="../musicwindow.cpp" line="995"/>
         <source>(unknown album)</source>
         <translation>(onbekend album)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="1007"/>
+        <location filename="../musicwindow.cpp" line="1013"/>
         <source>Various artists</source>
         <translation>Diverse artiesten</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="1044"/>
-        <location filename="../musicwindow.cpp" line="1055"/>
+        <location filename="../musicwindow.cpp" line="1050"/>
+        <location filename="../musicwindow.cpp" line="1061"/>
         <source>(unknown genre)</source>
         <translation>(onbekend genre)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1065"/>
+        <location filename="../musicwindow.cpp" line="1071"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n album</numerusform>
@@ -496,7 +496,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1066"/>
+        <location filename="../musicwindow.cpp" line="1072"/>
         <source>%n artist(s)</source>
         <translation>
             <numerusform>%n artiest</numerusform>
@@ -504,7 +504,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1282"/>
+        <location filename="../musicwindow.cpp" line="1291"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n clip toegevoegd aan nu spelen</numerusform>
@@ -553,12 +553,12 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="826"/>
+        <location filename="../nowplayingwindow.cpp" line="828"/>
         <source>Lyrics not found</source>
         <translation>Songteksten niet gevonden</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="257"/>
+        <location filename="../nowplayingwindow.cpp" line="259"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n nummer</numerusform>
@@ -566,125 +566,147 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="267"/>
+        <location filename="../nowplayingwindow.cpp" line="269"/>
         <source>total</source>
         <translation>totaal</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="759"/>
+        <location filename="../nowplayingwindow.cpp" line="761"/>
         <source>Loading lyrics...</source>
         <translation>Laden songteksten...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="813"/>
+        <location filename="../nowplayingwindow.cpp" line="815"/>
         <source>Fetching lyrics...</source>
         <translation>Ophalen songteksten...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="775"/>
+        <location filename="../nowplayingwindow.cpp" line="777"/>
         <source>There is no active Internet connection</source>
         <translation>Er is geen actieve Internet verbinding</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1204"/>
+        <location filename="../nowplayingwindow.cpp" line="1214"/>
         <source>Information not available</source>
         <translation>Informatie niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1266"/>
+        <location filename="../nowplayingwindow.cpp" line="1276"/>
         <source>Clear all songs from now playing?</source>
         <translation>Verwijder alle nummers uit nu spelen?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1301"/>
+        <location filename="../nowplayingwindow.cpp" line="1311"/>
         <source>Set as ringing tone</source>
         <translation>Stel in als ringtone</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1298"/>
+        <location filename="../nowplayingwindow.cpp" line="1308"/>
         <source>Delete from now playing</source>
         <translation>Verwijder uit nu spelen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1302"/>
+        <location filename="../nowplayingwindow.cpp" line="1312"/>
         <source>Share</source>
         <translation>Delen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1269"/>
-        <location filename="../nowplayingwindow.cpp" line="1317"/>
-        <location filename="../nowplayingwindow.cpp" line="1489"/>
-        <location filename="../nowplayingwindow.cpp" line="1622"/>
+        <location filename="../nowplayingwindow.cpp" line="1279"/>
+        <location filename="../nowplayingwindow.cpp" line="1327"/>
+        <location filename="../nowplayingwindow.cpp" line="1366"/>
+        <location filename="../nowplayingwindow.cpp" line="1499"/>
+        <location filename="../nowplayingwindow.cpp" line="1632"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1270"/>
-        <location filename="../nowplayingwindow.cpp" line="1318"/>
-        <location filename="../nowplayingwindow.cpp" line="1490"/>
-        <location filename="../nowplayingwindow.cpp" line="1623"/>
+        <location filename="../nowplayingwindow.cpp" line="1033"/>
+        <source>Stop playback</source>
+        <translation>Stop afspelen</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1280"/>
+        <location filename="../nowplayingwindow.cpp" line="1328"/>
+        <location filename="../nowplayingwindow.cpp" line="1367"/>
+        <location filename="../nowplayingwindow.cpp" line="1500"/>
+        <location filename="../nowplayingwindow.cpp" line="1633"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1312"/>
+        <location filename="../nowplayingwindow.cpp" line="1310"/>
+        <source>Delete</source>
+        <translation>Verwijder</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1322"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>Weet u zeker dat u dit nummer als ringtone wilt instellen?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1399"/>
+        <location filename="../nowplayingwindow.cpp" line="1360"/>
+        <source>Delete song?</source>
+        <translation>Verwijder nummer?</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1361"/>
+        <source>Are you sure you want to delete this song?</source>
+        <translation>Weet u zeker dat u dit nummer wilt verwijderen?</translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.cpp" line="1409"/>
         <source>Entertainment View</source>
         <translation>Amusement modus</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1404"/>
+        <location filename="../nowplayingwindow.cpp" line="1414"/>
         <source>Car View</source>
         <translation>Auto modus</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1451"/>
+        <location filename="../nowplayingwindow.cpp" line="1461"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1457"/>
+        <location filename="../nowplayingwindow.cpp" line="1467"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1486"/>
+        <location filename="../nowplayingwindow.cpp" line="1496"/>
         <source>Playlist with the same name exists, overwrite?</source>
         <translation>Afspeellijst met dezelfde naam bestaat al, overschrijven?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1497"/>
-        <location filename="../nowplayingwindow.cpp" line="1504"/>
+        <location filename="../nowplayingwindow.cpp" line="1507"/>
+        <location filename="../nowplayingwindow.cpp" line="1514"/>
         <source>Playlist saved</source>
         <translation>Afspeellijst opgeslagen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1601"/>
-        <location filename="../nowplayingwindow.cpp" line="1608"/>
+        <location filename="../nowplayingwindow.cpp" line="1611"/>
+        <location filename="../nowplayingwindow.cpp" line="1618"/>
         <source>Select album art</source>
         <translation>Selecteer album art</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1602"/>
+        <location filename="../nowplayingwindow.cpp" line="1612"/>
         <source>Reset album art</source>
         <translation>Herstel album art</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1619"/>
+        <location filename="../nowplayingwindow.cpp" line="1629"/>
         <source>Reset album art?</source>
         <translation>Herstel album art?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1655"/>
+        <location filename="../nowplayingwindow.cpp" line="1665"/>
         <source>Edit lyrics</source>
         <translation>Bewerk songtekstsen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1656"/>
+        <location filename="../nowplayingwindow.cpp" line="1666"/>
         <source>Reload lyrics</source>
         <translation>Opnieuw laden songteksten</translation>
     </message>
@@ -700,53 +722,53 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="237"/>
-        <location filename="../nowplayingwindow.cpp" line="606"/>
-        <location filename="../nowplayingwindow.cpp" line="1180"/>
+        <location filename="../nowplayingwindow.cpp" line="608"/>
+        <location filename="../nowplayingwindow.cpp" line="1190"/>
         <source>(unknown song)</source>
         <translation>(onbekend nummer)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="351"/>
-        <location filename="../nowplayingwindow.cpp" line="615"/>
-        <location filename="../nowplayingwindow.cpp" line="1183"/>
+        <location filename="../nowplayingwindow.cpp" line="617"/>
+        <location filename="../nowplayingwindow.cpp" line="1193"/>
         <source>(unknown artist)</source>
         <translation>(onbekende artiest)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="364"/>
-        <location filename="../nowplayingwindow.cpp" line="624"/>
-        <location filename="../nowplayingwindow.cpp" line="1186"/>
+        <location filename="../nowplayingwindow.cpp" line="626"/>
+        <location filename="../nowplayingwindow.cpp" line="1196"/>
         <source>(unknown album)</source>
         <translation>(onbekend album)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="912"/>
+        <location filename="../nowplayingwindow.ui" line="915"/>
         <source>Options</source>
         <translation>Opties</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="924"/>
+        <location filename="../nowplayingwindow.ui" line="927"/>
         <source>FM Transmitter</source>
         <translation>FM Zender</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="929"/>
+        <location filename="../nowplayingwindow.ui" line="932"/>
         <source>Clear now playing</source>
         <translation>Nu spelen wissen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="934"/>
-        <location filename="../nowplayingwindow.cpp" line="1443"/>
+        <location filename="../nowplayingwindow.ui" line="937"/>
+        <location filename="../nowplayingwindow.cpp" line="1453"/>
         <source>Save playlist</source>
         <translation>Afspeellijst opslaan</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="939"/>
+        <location filename="../nowplayingwindow.ui" line="942"/>
         <source>Entertainment view</source>
         <translation>Amusements modus</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="944"/>
+        <location filename="../nowplayingwindow.ui" line="947"/>
         <source>Car view</source>
         <translation>Auto modus</translation>
     </message>
@@ -828,17 +850,17 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../settingsdialog.cpp" line="52"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="53"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Landscape</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="54"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Portrait</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="40"/>
@@ -888,7 +910,7 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     <message>
         <location filename="../settingsdialog.ui" line="115"/>
         <source>Orientation</source>
-        <translation type="unfinished"></translation>
+        <translation>Oriëntatie</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="122"/>
@@ -897,11 +919,16 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="129"/>
+        <source>&quot;Delete&quot; for playlist items</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="136"/>
         <source>Override FMTX checks in UI</source>
         <translation>Negeer FMTX controles in UI</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="141"/>
+        <location filename="../settingsdialog.ui" line="148"/>
         <source>* Requires modified FMTXD</source>
         <translation>* Vereist aangepaste FMTXD</translation>
     </message>
@@ -1243,24 +1270,24 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="98"/>
+        <location filename="../singleplaylistview.ui" line="101"/>
         <source>Options</source>
         <translation>Opties</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="108"/>
+        <location filename="../singleplaylistview.ui" line="111"/>
         <source>Save playlist</source>
         <translation>Afspeellijst opslaan</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="113"/>
+        <location filename="../singleplaylistview.ui" line="116"/>
         <location filename="../singleplaylistview.cpp" line="431"/>
         <source>Add to now playing</source>
         <translation>Toevoegen aan nu spelen</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="118"/>
-        <location filename="../singleplaylistview.ui" line="123"/>
+        <location filename="../singleplaylistview.ui" line="121"/>
+        <location filename="../singleplaylistview.ui" line="126"/>
         <source>Delete playlist</source>
         <translation>Verwijder afspeellijst</translation>
     </message>
@@ -1357,143 +1384,143 @@ Verwijder de USB kabel om de FM zender te kunnnen gebruiken.</translation>
         <translation>Nee</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="596"/>
-        <location filename="../videonowplayingwindow.cpp" line="689"/>
+        <location filename="../videonowplayingwindow.cpp" line="592"/>
+        <location filename="../videonowplayingwindow.cpp" line="685"/>
         <source>Unable to play media</source>
         <translation>Kan media niet afspelen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="600"/>
+        <location filename="../videonowplayingwindow.cpp" line="596"/>
         <source>Media not found</source>
         <translation>Media niet gevonden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="602"/>
+        <location filename="../videonowplayingwindow.cpp" line="598"/>
         <source>URI not available</source>
         <translation>URI niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="604"/>
+        <location filename="../videonowplayingwindow.cpp" line="600"/>
         <source>Invalid URI</source>
         <translation>Foutieve URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="606"/>
+        <location filename="../videonowplayingwindow.cpp" line="602"/>
         <source>Unable to open media</source>
         <translation>Kan media niet openen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="608"/>
+        <location filename="../videonowplayingwindow.cpp" line="604"/>
         <source>Playback stream no longer available</source>
         <translation>Afspeel stream is niet meer beschikbaar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="610"/>
+        <location filename="../videonowplayingwindow.cpp" line="606"/>
         <source>Could not determine MIME-type</source>
         <translation>Kon MIME-type niet bepalen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="612"/>
+        <location filename="../videonowplayingwindow.cpp" line="608"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Algemene fout opgetreden, verder afspelen onmogelijk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="614"/>
+        <location filename="../videonowplayingwindow.cpp" line="610"/>
         <source>General error occured</source>
         <translation>Algemene fout opgetreden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="616"/>
+        <location filename="../videonowplayingwindow.cpp" line="612"/>
         <source>Unsupported media</source>
         <translation>Niet ondersteunde media</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="618"/>
+        <location filename="../videonowplayingwindow.cpp" line="614"/>
         <source>Unsupported resolution</source>
         <translation>Niet ondersteunde resolutie</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="620"/>
+        <location filename="../videonowplayingwindow.cpp" line="616"/>
         <source>Unsupported framerate</source>
         <translation>Niet ondersteunde framerate</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="622"/>
+        <location filename="../videonowplayingwindow.cpp" line="618"/>
         <source>Media is protected by DRM</source>
         <translation>Media is beveiligd met DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="624"/>
+        <location filename="../videonowplayingwindow.cpp" line="620"/>
         <source>System sound device is unavailable</source>
         <translation>Geluidsapparaat is niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="626"/>
+        <location filename="../videonowplayingwindow.cpp" line="622"/>
         <source>Media corrupted</source>
         <translation>Media beschadigd</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="628"/>
+        <location filename="../videonowplayingwindow.cpp" line="624"/>
         <source>Error while parsing playlist</source>
         <translation>Fout bij doorgeven afspeellijst</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="629"/>
+        <location filename="../videonowplayingwindow.cpp" line="625"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Afspeellijst mogelijk beschadigd of leeg</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="632"/>
+        <location filename="../videonowplayingwindow.cpp" line="628"/>
         <source>Codec not found:</source>
         <translation>Codec niet gevonden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="636"/>
+        <location filename="../videonowplayingwindow.cpp" line="632"/>
         <source>Video codec not found:</source>
         <translation>Video codec niet gevonden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="640"/>
+        <location filename="../videonowplayingwindow.cpp" line="636"/>
         <source>Audio codec not found:</source>
         <translation>Audio codec niet gevonden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="644"/>
+        <location filename="../videonowplayingwindow.cpp" line="640"/>
         <source>No playlist assigned</source>
         <translation>Geen afspeellijst toegewezen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="646"/>
+        <location filename="../videonowplayingwindow.cpp" line="642"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Media index niet in overeenstemming met afspeellijst items</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="648"/>
+        <location filename="../videonowplayingwindow.cpp" line="644"/>
         <source>Unable to start playback</source>
         <translation>Starten van afspelen niet mogelijk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="650"/>
+        <location filename="../videonowplayingwindow.cpp" line="646"/>
         <source>Unable to stop playback</source>
         <translation>Stoppen met afspelen niet mogelijk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="652"/>
+        <location filename="../videonowplayingwindow.cpp" line="648"/>
         <source>Unable to pause playback</source>
         <translation>Pauzeren van afspelen niet mogelijk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="654"/>
+        <location filename="../videonowplayingwindow.cpp" line="650"/>
         <source>Unable to seek position in media</source>
         <translation>Kan niet naar positie in media doorspoelen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="656"/>
+        <location filename="../videonowplayingwindow.cpp" line="652"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Kan huidige positie in media niet bepalen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="658"/>
+        <location filename="../videonowplayingwindow.cpp" line="654"/>
         <source>Unable to get current playback status</source>
         <translation>Kan huidige afspeel status niet bepalen</translation>
     </message>
