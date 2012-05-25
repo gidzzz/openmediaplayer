@@ -147,10 +147,31 @@ void NowPlayingIndicator::stopAnimation()
     this->repaint();
 }
 
-void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
+void NowPlayingIndicator::contextMenuEvent(QContextMenuEvent *e)
 {
-    if (event->button() == Qt::LeftButton && rect().contains(event->pos())) {
-        emit clicked();
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->addAction(tr("Music"), this, SLOT(onAudioPlaylistSelected()));
+    contextMenu->exec(e->globalPos());
+}
+
+void NowPlayingIndicator::onAudioPlaylistSelected()
+{
+#ifdef MAFW
+    if (playlist->playlistName() != "FmpAudioPlaylist")
+        playlist->assignAudioPlaylist();
+
+    if (playlist->getSizeOf(MAFW_PLAYLIST(playlist->mafw_playlist_manager->createPlaylist("FmpAudioPlaylist")))) {
+        window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+        window->show();
+        this->inhibit();
+    }
+#endif
+}
+
+void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton && rect().contains(e->pos())) {
 #ifdef MAFW
         QString playlistName = playlist->playlistName();
         qDebug() << "Current playlist is" << playlistName;
@@ -177,6 +198,7 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *event)
         }
 #else
         NowPlayingWindow *window = NowPlayingWindow::acquire(this);
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         window->show();
 #endif
         this->inhibit();

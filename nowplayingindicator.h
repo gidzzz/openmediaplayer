@@ -45,13 +45,11 @@ public slots:
     void restore();
     void poke();
 
-signals:
-    void clicked();
-
 private:
     Ui::NowPlayingIndicator *ui;
     void paintEvent(QPaintEvent*);
-    void mouseReleaseEvent(QMouseEvent *);
+    void contextMenuEvent(QContextMenuEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
     void showEvent(QShowEvent *);
     void hideEvent(QHideEvent *);
     void connectSignals();
@@ -89,6 +87,7 @@ private slots:
     void onWindowDestroyed();
     void onNowPlayingWindowHidden();
     void onPokeTimeout();
+    void onAudioPlaylistSelected();
 };
 
 #endif // NOWPLAYINGINDICATOR_H

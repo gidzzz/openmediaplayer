@@ -120,10 +120,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     PlayListDelegate *delegate = new PlayListDelegate(ui->songPlaylist);
     ui->songPlaylist->setItemDelegate(delegate);
 
-    ui->view_large->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->view_small->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->songPlaylist->setContextMenuPolicy(Qt::CustomContextMenu);
-
     this->setButtonIcons();
     //ui->buttonsWidget->setLayout(ui->buttonsLayout);
 
