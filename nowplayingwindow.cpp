@@ -392,7 +392,7 @@ void NowPlayingWindow::connectSignals()
     connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
 
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
-    connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(savePlaylist()));
+    connect(ui->actionAdd_to_playlist, SIGNAL(triggered()), this, SLOT(onAddAllToPlaylist()));
     connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentView()));
     connect(ui->actionCar_view, SIGNAL(triggered()), this, SLOT(showCarView()));
 
@@ -1315,7 +1315,6 @@ void NowPlayingWindow::onAddToPlaylist()
 {
     PlaylistPicker picker(this);
     picker.exec();
-    qDebug() << picker.playlist;
     if (picker.result() == QDialog::Accepted)
         playlist->appendItem(picker.playlist, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString());
 }
@@ -1453,74 +1452,24 @@ void NowPlayingWindow::nullQmlView()
 #endif
 }
 
-void NowPlayingWindow::savePlaylist()
+void NowPlayingWindow::onAddAllToPlaylist()
 {
-    savePlaylistDialog = new QDialog(this);
-    savePlaylistDialog->setWindowTitle(tr("Save playlist"));
-    savePlaylistDialog->setAttribute(Qt::WA_DeleteOnClose);
+    PlaylistPicker picker(this);
+    picker.exec();
+    if (picker.result() == QDialog::Accepted) {
+        gchar** songAddBuffer = new gchar*[ui->songPlaylist->count()+1];
 
-    QHBoxLayout *layout = new QHBoxLayout(savePlaylistDialog);
+        for (int i = 0; i < ui->songPlaylist->count(); i++)
+            songAddBuffer[i] = qstrdup(ui->songPlaylist->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
-    QLabel *nameLabel = new QLabel(savePlaylistDialog);
-    nameLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
-    nameLabel->setAlignment(Qt::AlignCenter);
-    nameLabel->setText(tr("Name"));
+        songAddBuffer[ui->songPlaylist->count()] = NULL;
 
-    playlistNameLineEdit = new QLineEdit(savePlaylistDialog);
-    playlistNameLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+        playlist->appendItems(picker.playlist, (const gchar**)songAddBuffer);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save, Qt::Horizontal, this);
-    buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
-    buttonBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(onSavePlaylistAccepted()));
-
-    layout->addWidget(nameLabel);
-    layout->addWidget(playlistNameLineEdit);
-    layout->addWidget(buttonBox);
-
-    savePlaylistDialog->show();
-}
-
-void NowPlayingWindow::onSavePlaylistAccepted()
-{
-#ifdef MAFW
-    bool playlistExists = false;
-    GArray* playlists = mafw_playlist_manager->listPlaylists();
-    QString playlistName;
-
-    for (uint i = 0; i < playlists->len; i++) {
-        MafwPlaylistManagerItem* item = &g_array_index(playlists, MafwPlaylistManagerItem, i);
-
-        playlistName = QString::fromUtf8(item->name);
-        if (playlistName == playlistNameLineEdit->text())
-            playlistExists = true;
+        for (int i = 0; i < ui->songPlaylist->count(); i++)
+            delete[] songAddBuffer[i];
+        delete[] songAddBuffer;
     }
-
-    if (playlistExists) {
-        QMessageBox confirm(QMessageBox::NoIcon,
-                            " ",
-                            tr("Playlist with the same name exists, overwrite?"),
-                            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                            savePlaylistDialog);
-        confirm.button(QMessageBox::Yes)->setText(tr("Yes"));
-        confirm.button(QMessageBox::No)->setText(tr("No"));
-        confirm.exec();
-        if (confirm.result() == QMessageBox::Yes) {
-            savePlaylistDialog->close();
-            mafw_playlist_manager->deletePlaylist(playlistNameLineEdit->text());
-            playlist->duplicatePlaylist(playlistNameLineEdit->text());
-#ifdef Q_WS_MAEMO_5
-            QMaemo5InformationBox::information(this, tr("Playlist saved"));
-#endif
-        }
-    } else {
-        savePlaylistDialog->close();
-        playlist->duplicatePlaylist(playlistNameLineEdit->text());
-#ifdef Q_WS_MAEMO_5
-        QMaemo5InformationBox::information(this, tr("Playlist saved"));
-#endif
-    }
-#endif
 }
 
 void NowPlayingWindow::onDeleteFromNowPlaying()

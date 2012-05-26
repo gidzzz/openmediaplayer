@@ -27,6 +27,7 @@ public:
     void appendItem(QString objectId);
     void appendItem(MafwPlaylist *playlist, QString objectId);
     void appendItems(const gchar** oid);
+    void appendItems(MafwPlaylist *playlist, const gchar** oid);
     void moveItem(int from, int to);
     void removeItem(int index);
     void duplicatePlaylist(QString newName);

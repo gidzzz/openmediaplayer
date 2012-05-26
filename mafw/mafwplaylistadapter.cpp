@@ -114,6 +114,12 @@ void MafwPlaylistAdapter::appendItems(const gchar** oid)
         mafw_playlist_append_items (this->mafw_playlist, oid, &error);
 }
 
+void MafwPlaylistAdapter::appendItems(MafwPlaylist *playlist, const gchar** oid)
+{
+    if(playlist)
+        mafw_playlist_append_items (playlist, oid, &error);
+}
+
 void MafwPlaylistAdapter::moveItem(int from, int to)
 {
     if(mafw_playlist)

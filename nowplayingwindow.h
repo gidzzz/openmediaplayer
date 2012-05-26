@@ -102,7 +102,6 @@ private:
     QTimer *clickTimer;
     QTimer *volumeTimer;
     QTimer *positionTimer;
-    QLineEdit *playlistNameLineEdit;
     bool playlistRequested;
     bool isDefaultArt;
     bool isMediaSeekable;
@@ -124,7 +123,6 @@ private:
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
     QMenu *contextMenu;
-    QDialog *savePlaylistDialog;
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;
 #endif
@@ -191,8 +189,7 @@ private slots:
     void createQmlView(QUrl source, QString title);
     void updateQmlViewMetadata();
     void nullQmlView();
-    void savePlaylist();
-    void onSavePlaylistAccepted();
+    void onAddAllToPlaylist();
     void onDeleteFromNowPlaying();
     void onAddToPlaylist();
     void selectItemByRow(int row);
