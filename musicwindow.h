@@ -66,6 +66,9 @@ private:
     QSortFilterProxyModel *genresProxyModel;
     QSortFilterProxyModel *playlistProxyModel;
 
+    QDialog *renamePlaylistDialog;
+    QLineEdit *playlistNameEdit;
+
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
     void keyPressEvent(QKeyEvent *);
@@ -147,6 +150,8 @@ private slots:
     void onContainerChanged(QString objectId);
 #endif
     void onAddToNowPlaying();
+    void onRenamePlaylist();
+    void onRenamePlaylistAccepted();
     void onDeletePlaylistClicked();
     void onNowPlayingWindowHidden();
     void onChildClosed();

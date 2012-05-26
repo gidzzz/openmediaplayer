@@ -38,7 +38,7 @@ private:
 #endif
 
 private slots:
-    void createPlaylist();
+    void onCreatePlaylist();
     void onCreatePlaylistAccepted();
     void onItemActivated(QListWidgetItem *item);
     void orientationChanged(int h, int w);

@@ -41,7 +41,7 @@ PlaylistPicker::~PlaylistPicker()
     delete ui;
 }
 
-void PlaylistPicker::createPlaylist()
+void PlaylistPicker::onCreatePlaylist()
 {
     createPlaylistDialog = new QDialog(this);
     createPlaylistDialog->setWindowTitle(tr("New playlist"));

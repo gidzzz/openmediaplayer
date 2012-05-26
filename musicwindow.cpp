@@ -249,10 +249,12 @@ void MusicWindow::onContextMenuRequested(QPoint point)
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
     if (this->currentList() == ui->playlistList) {
         if (playlistProxyModel->mapToSource(ui->playlistList->currentIndex()).row() > 4) {
-            if (ui->playlistList->currentIndex().data(UserRoleObjectID).isNull())
-                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeletePlaylistClicked())); // saved playlist
-            else
-                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeleteClicked())); // imported playlist
+            if (ui->playlistList->currentIndex().data(UserRoleObjectID).isNull()) { // Saved playlist
+                contextMenu->addAction(tr("Rename playlist"), this, SLOT(onRenamePlaylist()));
+                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeletePlaylistClicked()));
+            }
+            else // Imported playlist
+                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeleteClicked()));
         } else
             contextMenu->exec(point);
     }
@@ -264,6 +266,55 @@ void MusicWindow::onContextMenuRequested(QPoint point)
         }
     }
     contextMenu->exec(point);
+}
+
+void MusicWindow::onRenamePlaylist()
+{
+    renamePlaylistDialog = new QDialog(this);
+    renamePlaylistDialog->setWindowTitle(tr("Rename playlist"));
+
+    playlistNameEdit = new QLineEdit(ui->playlistList->currentIndex().data(Qt::DisplayRole).toString(), renamePlaylistDialog);
+    playlistNameEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save, Qt::Horizontal, this);
+    buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
+    buttonBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(onRenamePlaylistAccepted()));
+
+    QHBoxLayout *layout = new QHBoxLayout(renamePlaylistDialog);
+    layout->addWidget(playlistNameEdit);
+    layout->addWidget(buttonBox);
+
+    renamePlaylistDialog->show();
+}
+
+void MusicWindow::onRenamePlaylistAccepted()
+{
+    QString oldName = ui->playlistList->currentIndex().data(Qt::DisplayRole).toString();
+    QString newName = playlistNameEdit->text();
+
+    if (newName == oldName) {
+        renamePlaylistDialog->close();
+    } else {
+#ifdef MAFW
+        GArray* playlists = mafwPlaylistManager->listPlaylists();
+        for (uint i = 0; i < playlists->len; i++) {
+            if (QString::fromUtf8(g_array_index(playlists, MafwPlaylistManagerItem, i).name) == newName) {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(this, "Playlist with the same name exists");
+#endif
+                mafw_playlist_manager_free_list_of_playlists(playlists);
+                return;
+            }
+        }
+        mafw_playlist_manager_free_list_of_playlists(playlists);
+
+        renamePlaylistDialog->close();
+        mafwPlaylistManager->duplicatePlaylist(newName, mafwPlaylistManager->createPlaylist(oldName));
+        mafwPlaylistManager->deletePlaylist(oldName);
+        listPlaylists();
+    }
+#endif
 }
 
 void MusicWindow::onDeletePlaylistClicked()
