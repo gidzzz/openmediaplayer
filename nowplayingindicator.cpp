@@ -178,13 +178,12 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *e)
 
 
         if (playlistName == "FmpRadioPlaylist" && window == 0)  {
-            window = new RadioNowPlayingWindow(this, mafwFactory);
-            window->setAttribute(Qt::WA_DeleteOnClose);
+            window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
             connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
             window->show();
         }
-        else if (playlistName == "FmpVideoPlaylist") {
-            VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this->parentWidget(), mafwFactory);
+        else if (playlistName == "FmpVideoPlaylist" && window == 0) {
+            window = new VideoNowPlayingWindow(this->parentWidget(), mafwFactory);
             connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
             QTimer::singleShot(500, window, SLOT(playVideo()));
             window->showFullScreen();

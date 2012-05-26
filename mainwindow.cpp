@@ -262,10 +262,39 @@ void MainWindow::open_mp_now_playing()
 {
     // maybe this check could be moved to NowPlayingWindow?
     if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && !playlist->isPlaylistNull()) {
+#ifdef MAFW
+        if (playlist->playlistName() != "FmpAudioPlaylist")
+            playlist->assignAudioPlaylist();
+#endif
         this->createNowPlayingWindow();
     } else {
         QTimer::singleShot(1000, this, SLOT(open_mp_now_playing()));
     }
+}
+
+void MainWindow::open_mp_radio_playing()
+{
+    QList<QMainWindow*> windows = findChildren<QMainWindow*>();
+    for (int i = 0; i < windows.size(); i++)
+        windows.at(i)->close();
+
+    if (playlist->playlistName() != "FmpRadioPlaylist")
+        playlist->assignRadioPlaylist();
+
+    RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwFactory);
+    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+    window->show();
+    ui->indicator->inhibit();
+}
+
+void MainWindow::open_mp_now_playing_playback_on()
+{
+    this->activateWindow();
+}
+
+void MainWindow::open_mp_radio_playing_playback_on()
+{
+    this->activateWindow();
 }
 
 #ifdef MAFW
@@ -599,7 +628,6 @@ void MainWindow::showInternetRadioWindow()
 #else
     InternetRadioWindow *window = new InternetRadioWindow(this);
 #endif
-    window->setAttribute(Qt::WA_DeleteOnClose);
 
     window->show();
 

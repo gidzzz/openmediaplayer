@@ -45,6 +45,9 @@ public:
 
 public slots:
     Q_SCRIPTABLE void open_mp_now_playing();
+    Q_SCRIPTABLE void open_mp_now_playing_playback_on();
+    Q_SCRIPTABLE void open_mp_radio_playing();
+    Q_SCRIPTABLE void open_mp_radio_playing_playback_on();
     Q_SCRIPTABLE void mime_open(const QString &uri);
 
 private:
