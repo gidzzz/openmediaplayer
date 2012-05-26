@@ -24,6 +24,7 @@
 #include "tagwindow.h"
 #include "mediaart.h"
 #include "playlistquerymanager.h"
+#include "playlistpicker.h"
 #include "rotator.h"
 
 #ifdef Q_WS_MAEMO_5
@@ -193,6 +194,7 @@ private slots:
     void savePlaylist();
     void onSavePlaylistAccepted();
     void onDeleteFromNowPlaying();
+    void onAddToPlaylist();
     void selectItemByRow(int row);
     void focusItemByRow(int row);
 #ifdef Q_WS_MAEMO_5

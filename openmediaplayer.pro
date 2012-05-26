@@ -62,7 +62,8 @@ SOURCES += \
     upnpcontrol.cpp \
     upnpview.cpp \
     delegates/mediawithicondelegate.cpp \
-    rotator.cpp
+    rotator.cpp \
+    playlistpicker.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -100,7 +101,8 @@ HEADERS += \
     upnpcontrol.h \
     upnpview.h \
     delegates/mediawithicondelegate.h \
-    rotator.h
+    rotator.h \
+    playlistpicker.h
 
 FORMS += \
     mainwindow.ui \
@@ -125,7 +127,8 @@ FORMS += \
     editlyrics.ui \
     tagwindow.ui \
     upnpview.ui \
-    upnpcontrol.ui
+    upnpcontrol.ui \
+    playlistpicker.ui
 
 #generate translations
 isEmpty(QMAKE_LRELEASE) {

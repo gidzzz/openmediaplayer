@@ -763,8 +763,7 @@ void MusicWindow::listPlaylists()
 
         if (playlistName != "FmpAudioPlaylist"
         && playlistName != "FmpVideoPlaylist"
-        && playlistName != "FmpRadioPlaylist"
-        && playlistCount != 0) {
+        && playlistName != "FmpRadioPlaylist") {
             QStandardItem *item = new QStandardItem();
             item->setText(playlistName);
             item->setData(playlistCount, UserRoleSongCount);

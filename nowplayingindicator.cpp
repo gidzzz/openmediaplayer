@@ -160,7 +160,7 @@ void NowPlayingIndicator::onAudioPlaylistSelected()
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    if (playlist->getSizeOf(MAFW_PLAYLIST(playlist->mafw_playlist_manager->createPlaylist("FmpAudioPlaylist")))) {
+    if (playlist->getSize()) {
         window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         window->show();

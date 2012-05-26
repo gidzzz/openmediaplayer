@@ -1304,10 +1304,20 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
     contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
     if (!ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().startsWith("_uuid_")) {
         if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+        contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     }
     contextMenu->exec(point);
+}
+
+void NowPlayingWindow::onAddToPlaylist()
+{
+    PlaylistPicker picker(this);
+    picker.exec();
+    qDebug() << picker.playlist;
+    if (picker.result() == QDialog::Accepted)
+        playlist->appendItem(picker.playlist, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString());
 }
 
 void NowPlayingWindow::setRingingTone()
