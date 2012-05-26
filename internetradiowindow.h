@@ -5,7 +5,6 @@
 #include <QDialog>
 #include <QLabel>
 #include <QLayout>
-#include <QDesktopWidget>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QSpacerItem>

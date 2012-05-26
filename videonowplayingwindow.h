@@ -5,7 +5,6 @@
 #include <QIcon>
 #include <QTimer>
 #include <QtDBus>
-#include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QPainter>

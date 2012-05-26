@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QSettings>
-#include <QDesktopWidget>
 
 #include "nowplayingwindow.h"
 #include "rotator.h"

@@ -7,7 +7,6 @@
 #include <QList>
 #include <QTimer>
 #include <QtDBus>
-#include <QDesktopWidget>
 #include <QMouseEvent>
 #ifdef Q_WS_MAEMO_5
     #include "mafw/mafwadapterfactory.h"

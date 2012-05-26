@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include <QDesktopWidget>
 #include <QTime>
 #include <QNetworkConfigurationManager>
 #include <QNetworkSession>
