@@ -173,8 +173,10 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
 
     if (row >= 1 && row <= 4) {
         this->setEnabled(false);
+
         SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
         playlistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
+
         int limit = QSettings().value("music/playlistSize", 30).toInt();
         if (row == 1)
             playlistView->browseAutomaticPlaylist("", "-added", limit);
@@ -192,8 +194,10 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
 
     } else if (row >= 6) {
         this->setEnabled(false);
+
         SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
         playlistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
+
         if (index.data(UserRoleObjectID).isNull()) // saved playlist case
             playlistView->browsePlaylist(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString())));
         else // imported playlist case

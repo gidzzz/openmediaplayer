@@ -57,6 +57,7 @@ private:
 #endif
 
 #ifdef MAFW
+    QString objectId;
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
@@ -93,6 +94,7 @@ private slots:
     void onItemDoubleClicked();
     void onItemDropped(QListWidgetItem *item, int from);
     void saveCurrentPlaylist();
+    void deletePlaylist();
     void onNowPlayingWindowHidden();
 };
 

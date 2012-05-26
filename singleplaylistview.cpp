@@ -68,6 +68,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
+    connect(ui->actionDelete_playlist, SIGNAL(triggered()), this, SLOT(deletePlaylist()));
 
     connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
     connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
@@ -178,6 +179,7 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
 
 void SinglePlaylistView::browseObjectId(QString objectId)
 {
+    this->objectId = objectId;
     ui->songList->clear();
     visibleSongs = 0;
     setupShuffleButton();
@@ -613,6 +615,27 @@ void SinglePlaylistView::saveCurrentPlaylist()
 #endif
 }
 
+void SinglePlaylistView::deletePlaylist()
+{
+#ifdef MAFW
+    QMessageBox confirmDelete(QMessageBox::NoIcon,
+                              " ",
+                              tr("Delete playlist from device?"),
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                              this);
+    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
+    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
+    confirmDelete.exec();
+    if (confirmDelete.result() == QMessageBox::Yes) {
+        if (objectId.isNull()) // Saved playlist
+            playlist->mafw_playlist_manager->deletePlaylist(this->windowTitle());
+        else // Imported playlist
+            mafwTrackerSource->destroyObject(objectId.toUtf8());
+        this->close();
+    }
+#endif
+}
+
 void SinglePlaylistView::onDeleteFromPlaylist()
 {
     delete ui->songList->takeItem(ui->songList->currentRow());
@@ -633,6 +656,8 @@ void SinglePlaylistView::closeEvent(QCloseEvent *e)
     if (browsePlaylistId) {
         QString error;
         mafwTrackerSource->cancelBrowse(browsePlaylistId, error);
+        if (!error.isEmpty())
+            qDebug() << error;
     }
     if (browsePlaylistOp)
         mafw_playlist_cancel_get_items_md(browsePlaylistOp);
