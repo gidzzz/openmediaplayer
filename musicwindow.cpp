@@ -188,7 +188,6 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
             playlistView->browseAutomaticPlaylist("(play-count=)", "", MAFW_SOURCE_BROWSE_ALL);
 
         playlistView->show();
-        connect(playlistView, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
         connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
@@ -204,7 +203,6 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
             playlistView->browseObjectId(index.data(UserRoleObjectID).toString());
 
         playlistView->show();
-        connect(playlistView, SIGNAL(destroyed()), this, SLOT(listPlaylists()));
         connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
     }
@@ -451,13 +449,16 @@ bool MusicWindow::eventFilter(QObject *obj, QEvent *e)
 {
     if (obj == ui->albumList->viewport() && e->type() == QEvent::Resize)
         ui->albumList->setFlow(ui->albumList->flow());
-    else
-        if (e->type() == QEvent::MouseButtonPress
-        && ((QMouseEvent*)e)->y() > currentList()->viewport()->height() - 25
-        && ui->searchWidget->isHidden()) {
-            ui->indicator->inhibit();
-            ui->searchWidget->show();
-        }
+
+    else if (obj == ui->playlistList->viewport() && e->type() == QEvent::WindowActivate)
+        listPlaylists();
+
+    else if (e->type() == QEvent::MouseButtonPress
+         && ((QMouseEvent*)e)->y() > currentList()->viewport()->height() - 25
+         && ui->searchWidget->isHidden()) {
+             ui->indicator->inhibit();
+             ui->searchWidget->show();
+         }
     return false;
 }
 
@@ -595,10 +596,8 @@ void MusicWindow::showPlayListView()
     QMainWindow::setWindowTitle(tr("Playlists"));
     this->saveViewState("playlists");
 #ifdef MAFW
-    if (mafwTrackerSource->isReady())
-        this->listPlaylists();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listPlaylists()));
+    if (!mafwTrackerSource->isReady())
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listPlaylists()), Qt::UniqueConnection);
 #endif
 }
 
