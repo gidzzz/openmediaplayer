@@ -943,7 +943,7 @@ border: none;
   </action>
   <action name="actionAdd_to_playlist">
    <property name="text">
-    <string>Add all to a playlist</string>
+    <string>Add songs to a playlist</string>
    </property>
   </action>
   <action name="actionEntertainment_view">

@@ -1315,8 +1315,10 @@ void NowPlayingWindow::onAddToPlaylist()
 {
     PlaylistPicker picker(this);
     picker.exec();
-    if (picker.result() == QDialog::Accepted)
+    if (picker.result() == QDialog::Accepted) {
         playlist->appendItem(picker.playlist, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString());
+        QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
+    }
 }
 
 void NowPlayingWindow::setRingingTone()
@@ -1457,18 +1459,24 @@ void NowPlayingWindow::onAddAllToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        gchar** songAddBuffer = new gchar*[ui->songPlaylist->count()+1];
+        int songCount = ui->songPlaylist->count();
+        gchar** songAddBuffer = new gchar*[songCount+1];
 
-        for (int i = 0; i < ui->songPlaylist->count(); i++)
+        for (int i = 0; i < songCount; i++)
             songAddBuffer[i] = qstrdup(ui->songPlaylist->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
-        songAddBuffer[ui->songPlaylist->count()] = NULL;
+        songAddBuffer[songCount] = NULL;
 
         playlist->appendItems(picker.playlist, (const gchar**)songAddBuffer);
 
-        for (int i = 0; i < ui->songPlaylist->count(); i++)
+        for (int i = 0; i < songCount; i++)
             delete[] songAddBuffer[i];
         delete[] songAddBuffer;
+
+        if (picker.result() == QDialog::Accepted) {
+            playlist->appendItem(picker.playlist, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString());
+            QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", songCount));
+        }
     }
 }
 
