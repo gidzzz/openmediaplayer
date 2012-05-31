@@ -107,6 +107,7 @@ private slots:
     void showInternetRadioWindow();
     void onShuffleAllClicked();
     void createNowPlayingWindow();
+    void createVideoNowPlayingWindow();
     void onChildOpened();
     void onNowPlayingWindowHidden();
     void onChildClosed();

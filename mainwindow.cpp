@@ -401,9 +401,6 @@ void MainWindow::mime_open(const QString &uriString)
                                .prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
             qDebug() << objectId;
 
-            playlist->assignAudioPlaylist();
-            playlist->clear();
-
             songAddBufferSize = 0;
 
             qDebug() << "connecting MainWindow to signalSourceBrowseResult";
@@ -415,6 +412,7 @@ void MainWindow::mime_open(const QString &uriString)
                                                                   MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
                                                                            MAFW_METADATA_KEY_DURATION,
                                                                            MAFW_METADATA_KEY_ARTIST,
+                                                                           MAFW_METADATA_KEY_MIME,
                                                                            MAFW_METADATA_KEY_ALBUM),
                                                                   0, MAFW_SOURCE_BROWSE_ALL);
 #endif
@@ -464,38 +462,20 @@ void MainWindow::mime_open(const QString &uriString)
                            .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
         qDebug() << objectId;
 
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
-#else
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
-#endif
-        window->showFullScreen();
-
-        connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
-        ui->indicator->inhibit();
-#ifdef MAFW
         playlist->assignVideoPlaylist();
         playlist->clear();
         playlist->appendItem(objectId);
-        QTimer::singleShot(500, window, SLOT(playVideo()));
 #endif
+        createVideoNowPlayingWindow();
     }
 
     else if (qmimetype == "application/octet-stream") {
 #ifdef MAFW
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
-#else
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
-#endif
-        window->showFullScreen();
-
-        connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
-        ui->indicator->inhibit();
-#ifdef MAFW
         playlist->assignVideoPlaylist();
         playlist->clear();
         playlist->appendItem(objectId);
-        QTimer::singleShot(500, window, SLOT(playVideo()));
 #endif
+        createVideoNowPlayingWindow();
     }
 }
 
@@ -516,6 +496,27 @@ void MainWindow::createNowPlayingWindow()
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->inhibit();
+}
+
+void MainWindow::createVideoNowPlayingWindow()
+{
+    QList<QMainWindow*> windows = findChildren<QMainWindow*>();
+    for (int i = 0; i < windows.size(); i++)
+        windows.at(i)->close();
+
+#ifdef MAFW
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+#else
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
+#endif
+        window->showFullScreen();
+
+        connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+        ui->indicator->inhibit();
+
+#ifdef MAFW
+        QTimer::singleShot(500, window, SLOT(playVideo()));
+#endif
 }
 
 void MainWindow::orientationChanged(int w, int h)
@@ -705,7 +706,7 @@ void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
         qDebug() << error;
 }
 
-void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* , QString)
+void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata , QString)
 {
     if (browseId != browseSongsId) return;
 
@@ -713,6 +714,16 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
         songAddBufferSize = remainingCount+1;
         songAddBuffer = new gchar*[songAddBufferSize+1];
         songAddBuffer[songAddBufferSize] = NULL;
+
+        QString mime = QString::fromUtf8(g_value_get_string (mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));
+        qDebug() << "mime:" << mime;
+
+        if (mime.startsWith("video"))
+            playlist->assignVideoPlaylist();
+        else
+            playlist->assignAudioPlaylist();
+
+        playlist->clear();
     }
 
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
@@ -732,7 +743,11 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
         playlist->getSize(); // explained in musicwindow.cpp
         mafwrenderer->play();
 
-        createNowPlayingWindow();
+        // Assume that the playlist consists of items of one type
+        if ( QString::fromUtf8(g_value_get_string (mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME))).startsWith("video"))
+            createVideoNowPlayingWindow();
+        else
+            createNowPlayingWindow();
 
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
