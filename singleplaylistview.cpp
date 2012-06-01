@@ -647,7 +647,7 @@ void SinglePlaylistView::deletePlaylist()
 #ifdef MAFW
     QMessageBox confirmDelete(QMessageBox::NoIcon,
                               " ",
-                              tr("Delete playlist from device?"),
+                              tr("Delete playlist?"),
                               QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                               this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
