@@ -811,7 +811,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     <message>
         <location filename="../nowplayingwindow.ui" line="946"/>
         <source>Add songs to a playlist</source>
-        <translation></translation>
+        <translation>Dodaj utwory do listy</translation>
     </message>
     <message>
         <source>Save playlist</source>
