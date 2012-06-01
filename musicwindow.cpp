@@ -310,8 +310,7 @@ void MusicWindow::onRenamePlaylistAccepted()
         mafw_playlist_manager_free_list_of_playlists(playlists);
 
         renamePlaylistDialog->close();
-        mafwPlaylistManager->duplicatePlaylist(newName, mafwPlaylistManager->createPlaylist(oldName));
-        mafwPlaylistManager->deletePlaylist(oldName);
+        mafw_playlist_set_name(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(oldName)), newName.toUtf8());
         listPlaylists();
     }
 #endif
