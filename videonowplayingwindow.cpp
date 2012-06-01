@@ -235,10 +235,15 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
 
 void VideoNowPlayingWindow::onPrevButtonClicked()
 {
-    gotInitialState = false;
+    if (this->currentPosition > 3) {
+        mafwrenderer->setPosition(SeekAbsolute, 0);
+        mafwrenderer->getPosition();
+    } else {
+        gotInitialState = false;
 #ifdef MAFW
-    mafwrenderer->previous();
+        mafwrenderer->previous();
 #endif
+    }
 }
 
 void VideoNowPlayingWindow::onNextButtonClicked()
@@ -457,7 +462,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         pausedPosition = v ? g_value_get_int (v) : -1;
 
         if (pausedPosition != -1)
-            qDebug() << pausedPosition;
+            qDebug() << "paused position:" << pausedPosition;
 
         ui->videoLengthLabel->setText(time_mmss(videoLength));
         ui->progressBar->setRange(0, videoLength);
@@ -573,7 +578,7 @@ void VideoNowPlayingWindow::onPositionChanged(int position, QString)
 {
     this->currentPosition = position;
     if (this->mafwState == Paused)
-         this->pausedPosition = this->currentPosition;
+         this->pausedPosition = position;
     if (!ui->progressBar->isSliderDown() && ui->progressBar->isVisible()) {
         ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-videoLength : position));
         if (ui->progressBar->isEnabled())
