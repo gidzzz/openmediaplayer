@@ -245,6 +245,8 @@ void MusicWindow::onContextMenuRequested(QPoint point)
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
+    if (this->currentList() == ui->songList)
+        contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
     if (this->currentList() == ui->playlistList) {
         if (playlistProxyModel->mapToSource(ui->playlistList->currentIndex()).row() > 4) {
             if (ui->playlistList->currentIndex().data(UserRoleObjectID).isNull()) { // Saved playlist
@@ -1264,6 +1266,20 @@ void MusicWindow::onAddToNowPlaying()
         }
     }
 #endif
+}
+
+void MusicWindow::onAddToPlaylist()
+{
+    PlaylistPicker picker(this);
+    picker.exec();
+    if (picker.result() == QDialog::Accepted) {
+#ifdef MAFW
+        playlist->appendItem(picker.playlist, ui->songList->currentIndex().data(UserRoleObjectID).toString());
+#endif
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
+#endif
+    }
 }
 
 void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index, gpointer op)

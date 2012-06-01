@@ -150,6 +150,7 @@ private slots:
     void onContainerChanged(QString objectId);
 #endif
     void onAddToNowPlaying();
+    void onAddToPlaylist();
     void onRenamePlaylist();
     void onRenamePlaylistAccepted();
     void onDeletePlaylistClicked();

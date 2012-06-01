@@ -180,6 +180,7 @@ void UpnpView::onContextMenuRequested(const QPoint &point)
         QMenu *contextMenu = new QMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddOneToNowPlaying()));
+        contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddOneToPlaylist()));
         contextMenu->exec(point);
     }
 }
@@ -253,6 +254,18 @@ void UpnpView::onAddOneToNowPlaying()
     playlist->appendItem(ui->objectList->currentItem()->data(UserRoleObjectID).toString());
 
     notifyOnAddedToNowPlaying(1);
+}
+
+void UpnpView::onAddOneToPlaylist()
+{
+    PlaylistPicker picker(this);
+    picker.exec();
+    if (picker.result() == QDialog::Accepted) {
+        playlist->appendItem(picker.playlist, ui->objectList->currentItem()->data(UserRoleObjectID).toString());
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
+#endif
+    }
 }
 
 void UpnpView::addAllToNowPlaying()

@@ -11,7 +11,7 @@ PlaylistPicker::PlaylistPicker(QWidget *parent) :
     ui->playlistList->insertItem(0, new QListWidgetItem());
     ui->playlistList->setItemWidget(ui->playlistList->item(0), newButton);
 
-    connect(newButton, SIGNAL(clicked()), this, SLOT(createPlaylist()));
+    connect(newButton, SIGNAL(clicked()), this, SLOT(onCreatePlaylist()));
     connect(ui->playlistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
 
 #ifdef MAFW
@@ -91,12 +91,14 @@ void PlaylistPicker::onCreatePlaylistAccepted()
             mafwPlaylistManager->deletePlaylist(playlistName);
             mafwPlaylistManager->createPlaylist(playlistName);
             playlist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(playlistName));
+            this->playlistName = playlistName;
             this->accept();
         }
     } else {
         createPlaylistDialog->close();
         mafwPlaylistManager->createPlaylist(playlistName);
         playlist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(playlistName));
+        this->playlistName = playlistName;
         this->accept();
     }
 #endif
@@ -114,6 +116,7 @@ void PlaylistPicker::onItemActivated(QListWidgetItem *item)
 {
     if (ui->playlistList->row(item) > 0) {
         playlist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(item->text()));
+        this->playlistName = item->text();
         this->accept();
     }
 }

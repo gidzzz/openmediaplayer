@@ -431,6 +431,7 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
+    contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
     contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
     if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
@@ -451,6 +452,32 @@ void SinglePlaylistView::onAddToNowPlaying()
 #endif
 
 #endif
+}
+
+void SinglePlaylistView::onAddToPlaylist()
+{
+    PlaylistPicker picker(this);
+    picker.exec();
+    if (picker.result() == QDialog::Accepted) {
+        if (objectId.isNull() && picker.playlistName == windowTitle()) {
+            QListWidgetItem *item = new QListWidgetItem();
+            item->setText(ui->songList->currentItem()->text());
+            item->setData(UserRoleSongDuration, ui->songList->currentItem()->data(UserRoleSongDuration));
+            item->setData(UserRoleSongAlbum, ui->songList->currentItem()->data(UserRoleSongAlbum));
+            item->setData(UserRoleSongArtist, ui->songList->currentItem()->data(UserRoleSongArtist));
+            item->setData(UserRoleObjectID, ui->songList->currentItem()->data(UserRoleObjectID));
+            item->setData(UserRoleSongIndex, playlist->getSizeOf(picker.playlist));
+            ui->songList->addItem(item);
+            ++visibleSongs; updateSongCount();
+        }
+#ifdef MAFW
+        else
+            playlist->appendItem(picker.playlist, ui->songList->currentItem()->data(UserRoleObjectID).toString());
+#endif
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
+#endif
+    }
 }
 
 void SinglePlaylistView::setRingingTone()

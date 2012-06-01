@@ -86,6 +86,7 @@ private slots:
     void onShuffleButtonClicked();
     void onContextMenuRequested(const QPoint &point);
     void onAddToNowPlaying();
+    void onAddToPlaylist();
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();

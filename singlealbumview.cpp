@@ -344,6 +344,7 @@ void SingleAlbumView::onContextMenuRequested(const QPoint &point)
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
+    contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
@@ -363,6 +364,20 @@ void SingleAlbumView::onAddToNowPlaying()
 #endif
 
 #endif
+}
+
+void SingleAlbumView::onAddToPlaylist()
+{
+    PlaylistPicker picker(this);
+    picker.exec();
+    if (picker.result() == QDialog::Accepted) {
+#ifdef MAFW
+        playlist->appendItem(picker.playlist, ui->songList->currentItem()->data(UserRoleObjectID).toString());
+#endif
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
+#endif
+    }
 }
 
 void SingleAlbumView::setRingingTone()

@@ -37,6 +37,7 @@ private slots:
     void onContextMenuRequested(const QPoint &point);
     void onItemActivated(QListWidgetItem *item);
     void onAddOneToNowPlaying();
+    void onAddOneToPlaylist();
     void addAllToNowPlaying();
     int appendAllToPlaylist(QString type);
     void onNowPlayingWindowHidden();

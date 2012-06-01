@@ -80,6 +80,7 @@ private slots:
     void onShareClicked();
     void onDeleteClicked();
     void onAddToNowPlaying();
+    void onAddToPlaylist();
     void onNowPlayingWindowHidden();
 };
 
