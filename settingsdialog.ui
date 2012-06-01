@@ -43,9 +43,9 @@
         <number>0</number>
        </property>
        <item row="0" column="1">
-        <widget class="QCheckBox" name="stopCheckBox">
+        <widget class="QMaemo5ValueButton" name="exitBox">
          <property name="text">
-          <string>Stop playback on exit</string>
+          <string>On application exit</string>
          </property>
         </widget>
        </item>

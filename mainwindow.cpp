@@ -808,9 +808,12 @@ void MainWindow::focusOutEvent(QFocusEvent *)
 
 void MainWindow::closeEvent(QCloseEvent *)
 {
+    QString action = QSettings().value("main/onApplicationExit", "stop-playback").toString();
 #ifdef MAFW
-    if (QSettings().value("main/stopOnExit", true).toBool())
+    if (action == "stop-playback")
         mafwrenderer->stop();
+    else if (action == "pause-playback")
+        mafwrenderer->pause();
 #endif
 }
 

@@ -34,6 +34,17 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     selector = new QMaemo5ListPickSelector;
     model = new QStandardItemModel(0, 1, selector);
+    model->appendRow(new QStandardItem(tr("Stop playback")));
+    model->appendRow(new QStandardItem(tr("Pause playback")));
+    model->appendRow(new QStandardItem(tr("Do nothing")));
+    selector->setModel(model);
+    selector->setCurrentIndex(QSettings().value("main/onApplicationExit").toString() == "stop-playback" ? 0 :
+                                     QSettings().value("main/onApplicationExit").toString() == "pause-playback" ? 1 :
+                                     QSettings().value("main/onApplicationExit").toString() == "do-nothing" ? 2 : 0);
+    ui->exitBox->setPickSelector(selector);
+
+    selector = new QMaemo5ListPickSelector;
+    model = new QStandardItemModel(0, 1, selector);
     model->appendRow(new QStandardItem(tr("Next song")));
     model->appendRow(new QStandardItem(tr("Previous song")));
     model->appendRow(new QStandardItem(tr("Play / Pause")));
@@ -58,7 +69,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
                                          QSettings().value("main/orientation").toString() == "portrait" ? 2 : 0);
     ui->orientationBox->setPickSelector(selector);
 
-    ui->stopCheckBox->setChecked(QSettings().value("main/stopOnExit", true).toBool());
     ui->headsetCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
     ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
@@ -83,6 +93,12 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::accept()
 {
+    switch (static_cast<QMaemo5ListPickSelector*>(ui->exitBox->pickSelector())->currentIndex()) {
+        case 0: QSettings().setValue("main/onApplicationExit", "stop-playback"); break;
+        case 1: QSettings().setValue("main/onApplicationExit", "pause-playback"); break;
+        case 2: QSettings().setValue("main/onApplicationExit", "do-nothing"); break;
+    }
+
     switch (static_cast<QMaemo5ListPickSelector*>(ui->headsetButtonBox->pickSelector())->currentIndex()) {
         case 0: QSettings().setValue("main/headsetButtonAction", "next"); break;
         case 1: QSettings().setValue("main/headsetButtonAction", "previous"); break;
@@ -97,7 +113,6 @@ void SettingsDialog::accept()
         case 2: QSettings().setValue("main/orientation", "portrait"); break;
     }
 
-    QSettings().setValue("main/stopOnExit", ui->stopCheckBox->isChecked());
     QSettings().setValue("main/pauseHeadset", ui->headsetCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/playlistFilter", ui->filterCheckBox->isChecked());

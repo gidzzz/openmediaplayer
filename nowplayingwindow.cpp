@@ -1548,18 +1548,6 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         playlistQM->getItems(from, from+nreplace);
     }
 
-    /*ui->songPlaylist->clear();
-    int songCount = playlist->getSize();
-    if (songCount) {
-        for (int i = 0; i < songCount; i++) {
-            QListWidgetItem *item = new QListWidgetItem();
-            item->setData(UserRoleValueText, " ");
-            item->setData(UserRoleSongDuration, Duration::Blank);
-            ui->songPlaylist->addItem(item);
-        }
-        playlistQM->getItems(0, -1);
-    }*/
-
     if (synthetic)
         focusItemByRow(lastPlayingSong->value().toInt());
 
@@ -1578,11 +1566,10 @@ void NowPlayingWindow::onViewContextMenuRequested(QPoint pos)
 
 void NowPlayingWindow::selectAlbumArt()
 {
-    Home* hw = new Home(this, tr("Select album art"), "/home/user/MyDocs", ui->albumNameLabel->whatsThis());
-    hw->exec();
-    if ( hw->result() == QDialog::Accepted )
-        setAlbumImage(hw->newAlbumArt);
-    delete hw;
+    Home hw(this, tr("Select album art"), "/home/user/MyDocs", ui->albumNameLabel->whatsThis());
+    hw.exec();
+    if (hw.result() == QDialog::Accepted)
+        setAlbumImage(hw.newAlbumArt);
 }
 
 void NowPlayingWindow::resetAlbumArt()
