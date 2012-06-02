@@ -311,7 +311,7 @@ void MusicWindow::onRenamePlaylistAccepted()
 
         renamePlaylistDialog->close();
         mafw_playlist_set_name(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(oldName)), newName.toUtf8());
-        listPlaylists();
+        listSavedPlaylists();
     }
 #endif
 }
@@ -452,7 +452,7 @@ bool MusicWindow::eventFilter(QObject *obj, QEvent *e)
         ui->albumList->setFlow(ui->albumList->flow());
 
     else if (obj == ui->playlistList->viewport() && e->type() == QEvent::WindowActivate)
-        listPlaylists();
+        listSavedPlaylists();
 
     else if (e->type() == QEvent::MouseButtonPress
          && ((QMouseEvent*)e)->y() > currentList()->viewport()->height() - 25
@@ -597,8 +597,13 @@ void MusicWindow::showPlayListView()
     QMainWindow::setWindowTitle(tr("Playlists"));
     this->saveViewState("playlists");
 #ifdef MAFW
-    if (!mafwTrackerSource->isReady())
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listPlaylists()), Qt::UniqueConnection);
+    if (playlistModel->rowCount() == 0) {
+        savedPlaylistCount = 0;
+        if (mafwTrackerSource->isReady())
+            this->listPlaylists();
+        else
+            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listPlaylists()), Qt::UniqueConnection);
+    }
 #endif
 }
 
@@ -625,21 +630,18 @@ void MusicWindow::saveViewState(QVariant view)
 
 void MusicWindow::loadViewState()
 {
-    if (QSettings().contains("music/view")) {
-        QString state = QSettings().value("music/view").toString();
-        if (state == "songs")
-            this->showSongsView();
-        else if (state == "albums")
-            this->showAlbumView();
-        else if (state == "artists")
-            this->showArtistView();
-        else if (state == "genres")
-            this->showGenresView();
-        else if (state == "playlists")
-            this->showPlayListView();
-    } else {
+    QString state = QSettings().value("music/view", "songs").toString();
+
+    if (state == "albums")
+        this->showAlbumView();
+    else if (state == "artists")
+        this->showArtistView();
+    else if (state == "genres")
+        this->showGenresView();
+    else if (state == "playlists")
+        this->showPlayListView();
+    else // state == "songs"
         this->showSongsView();
-    }
 }
 
 void MusicWindow::onChildClosed()
@@ -711,6 +713,8 @@ void MusicWindow::onGenreSelected(QModelIndex index)
 
 void MusicWindow::listSongs()
 {
+    qDebug() << "Updating songs";
+
 #ifdef DEBUG
     qDebug() << "MusicWindow: Source ready";
 #endif
@@ -732,6 +736,8 @@ void MusicWindow::listSongs()
 
 void MusicWindow::listArtists()
 {
+    qDebug() << "Updating artists";
+
 #ifdef DEBUG
     qDebug("Source ready");
 #endif
@@ -754,6 +760,8 @@ void MusicWindow::listArtists()
 
 void MusicWindow::listAlbums()
 {
+    qDebug() << "Updating albums";
+
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
@@ -772,6 +780,8 @@ void MusicWindow::listAlbums()
 
 void MusicWindow::listGenres()
 {
+    qDebug() << "Updating genres";
+
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
@@ -791,56 +801,17 @@ void MusicWindow::listGenres()
 void MusicWindow::listPlaylists()
 {
     playlistModel->clear();
-
-    recentlyAddedCount = 0;
-    recentlyPlayedCount = 0;
-    mostPlayedCount = 0;
-    neverPlayedCount = 0;
+    savedPlaylistCount = 0;
 
     this->listAutoPlaylists();
-
-    GArray* playlists = mafwPlaylistManager->listPlaylists();
-    QString playlistName;
-
-    if (playlists->len != 0) {
-        QStandardItem *item = new QStandardItem();
-        item->setText(tr("Saved"));
-        item->setData(true, Qt::UserRole);
-        item->setData(Duration::Blank, UserRoleSongDuration);
-        playlistModel->appendRow(item);
-    }
-
-    for (uint i = 0; i < playlists->len; i++) {
-        MafwPlaylistManagerItem* item = &g_array_index(playlists, MafwPlaylistManagerItem, i);
-
-        playlistName = QString::fromUtf8(item->name);
-        int playlistCount = playlist->getSizeOf(MAFW_PLAYLIST (mafwPlaylistManager->getPlaylist(item->id)));
-
-        if (playlistName != "FmpAudioPlaylist"
-        && playlistName != "FmpVideoPlaylist"
-        && playlistName != "FmpRadioPlaylist") {
-            QStandardItem *item = new QStandardItem();
-            item->setText(playlistName);
-            item->setData(playlistCount, UserRoleSongCount);
-            item->setData(Duration::Blank, UserRoleSongDuration);
-            item->setData(tr("%n song(s)", "", playlistCount),UserRoleValueText);
-
-            playlistModel->appendRow(item);
-        }
-    }
-    mafw_playlist_manager_free_list_of_playlists(playlists);
-
-    QStandardItem *item = new QStandardItem();
-    item->setText(tr("Imported playlists"));
-    item->setData(true, Qt::UserRole);
-    item->setData(Duration::Blank, UserRoleSongDuration);
-    playlistModel->appendRow(item);
-
+    this->listSavedPlaylists();
     this->listImportedPlaylists();
 }
 
 void MusicWindow::listAutoPlaylists()
 {
+    qDebug() << "Updating automatic playlists";
+
     QStandardItem *item = new QStandardItem();
     item->setText(tr("Automatic playlists"));
     item->setData(true, Qt::UserRole);
@@ -860,32 +831,77 @@ void MusicWindow::listAutoPlaylists()
     this->browseNeverPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
                                                                 "(play-count=)",
                                                                 NULL,
-                                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                                 MAFW_METADATA_KEY_DURATION),
+                                                                MAFW_SOURCE_LIST(),
                                                                 0, MAFW_SOURCE_BROWSE_ALL);
 
     this->browseMostPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
                                                                "(play-count>0)",
                                                                "-play-count,+title",
-                                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                                MAFW_METADATA_KEY_DURATION),
+                                                               MAFW_SOURCE_LIST(),
                                                                0, limit);
 
     this->browseRecentlyPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
                                                                    "(play-count>0)",
                                                                    "-last-played",
-                                                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                                    MAFW_METADATA_KEY_DURATION),
+                                                                   MAFW_SOURCE_LIST(),
                                                                    0, limit);
 
     this->browseRecentlyAddedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, "-added",
-                                                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                                   MAFW_METADATA_KEY_DURATION),
+                                                                  MAFW_SOURCE_LIST(),
                                                                   0, limit);
+}
+
+void MusicWindow::listSavedPlaylists()
+{
+    qDebug() << "Updating saved playlists";
+
+    playlistModel->removeRows(5, savedPlaylistCount);
+
+    GArray* playlists = mafwPlaylistManager->listPlaylists();
+    savedPlaylistCount = 0;
+
+    if (playlists->len != 0) {
+        QStandardItem *item = new QStandardItem();
+        item->setText(tr("Saved"));
+        item->setData(true, Qt::UserRole);
+        item->setData(Duration::Blank, UserRoleSongDuration);
+        playlistModel->insertRow(5, item);
+        ++savedPlaylistCount;
+
+        for (int i = playlists->len-1; i >= 0; i--) {
+            MafwPlaylistManagerItem* plItem = &g_array_index(playlists, MafwPlaylistManagerItem, i);
+
+            QString playlistName = QString::fromUtf8(plItem->name);
+            int playlistSize = playlist->getSizeOf(MAFW_PLAYLIST (mafwPlaylistManager->getPlaylist(plItem->id)));
+
+            if (playlistName != "FmpAudioPlaylist"
+            && playlistName != "FmpVideoPlaylist"
+            && playlistName != "FmpRadioPlaylist") {
+                item = new QStandardItem();
+                item->setText(playlistName);
+                item->setData(playlistSize, UserRoleSongCount);
+                item->setData(Duration::Blank, UserRoleSongDuration);
+                item->setData(tr("%n song(s)", "", playlistSize),UserRoleValueText);
+
+                playlistModel->insertRow(6, item);
+                ++savedPlaylistCount;
+            }
+        }
+    }
+
+    mafw_playlist_manager_free_list_of_playlists(playlists);
 }
 
 void MusicWindow::listImportedPlaylists()
 {
+    qDebug() << "Updating imported playlists";
+
+    QStandardItem *item = new QStandardItem();
+    item->setText(tr("Imported playlists"));
+    item->setData(true, Qt::UserRole);
+    item->setData(Duration::Blank, UserRoleSongDuration);
+    playlistModel->appendRow(item);
+
     browseImportedPlaylistsId = mafwTrackerSource->sourceBrowse("localtagfs::music/playlists", false, NULL, NULL,
                                                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                                  MAFW_METADATA_KEY_CHILDCOUNT_1,
@@ -895,23 +911,28 @@ void MusicWindow::listImportedPlaylists()
 
 void MusicWindow::browseAutomaticPlaylists(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString error) // not really, imported playlists too
 {
+    if (!error.isEmpty()) {
+        qDebug() << error;
+        error = QString();
+    }
+
     GValue *v;
 
     if (browseId == this->browseRecentlyAddedId) {
-        recentlyAddedCount++;
-        playlistModel->item(1)->setData(tr("%n song(s)", "", recentlyAddedCount), UserRoleValueText);
+        mafwTrackerSource->cancelBrowse(browseId, error);
+        playlistModel->item(1)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseRecentlyPlayedId) {
-        recentlyPlayedCount++;
-        playlistModel->item(2)->setData(tr("%n song(s)", "", recentlyPlayedCount), UserRoleValueText);
+        mafwTrackerSource->cancelBrowse(browseId, error);
+        playlistModel->item(2)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseMostPlayedId) {
-        mostPlayedCount++;
-        playlistModel->item(3)->setData(tr("%n song(s)", "", mostPlayedCount), UserRoleValueText);
+        mafwTrackerSource->cancelBrowse(browseId, error);
+        playlistModel->item(3)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseNeverPlayedId) {
-        neverPlayedCount++;
-        playlistModel->item(4)->setData(tr("%n song(s)", "", neverPlayedCount), UserRoleValueText);
+        mafwTrackerSource->cancelBrowse(browseId, error);
+        playlistModel->item(4)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseImportedPlaylistsId) {
         QStandardItem *item = new QStandardItem();
@@ -927,7 +948,6 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int remainingCount, ui
 
         playlistModel->appendRow(item);
     }
-    ui->playlistList->scroll(0,0);
 
     if (!error.isEmpty())
         qDebug() << error;
@@ -1310,12 +1330,16 @@ void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index, gpointe
 
 void MusicWindow::onContainerChanged(QString objectId)
 {
-    if (objectId == "localtagfs::music") {
+    qDebug() << "Container changed:" << objectId;
+
+    if (objectId.startsWith("localtagfs::music")) {
+        if (!objectId.endsWith("/playlists")) {
+            this->listArtists();
+            this->listGenres();
+            this->listAlbums();
+            this->listSongs();
+        }
         this->listPlaylists();
-        this->listArtists();
-        this->listGenres();
-        this->listAlbums();
-        this->listSongs();
     }
 }
 

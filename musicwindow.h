@@ -91,15 +91,12 @@ private:
     unsigned int browseNeverPlayedId;
     // Imported playlists
     unsigned int browseImportedPlaylistsId;
-    int recentlyAddedCount;
-    int recentlyPlayedCount;
-    int mostPlayedCount;
-    int neverPlayedCount;
     void fetchUri(QString objectId);
     uint addToNowPlayingId;
     int numberOfSongsToAdd;
     gchar** songAddBuffer;
     int songAddBufferSize;
+    int savedPlaylistCount;
 #endif
     void connectSignals();
     void disconnectSearch();
@@ -141,6 +138,7 @@ private slots:
     void listGenres();
     void listPlaylists();
     void listAutoPlaylists();
+    void listSavedPlaylists();
     void listImportedPlaylists();
     void onAlbumSelected(QModelIndex index);
     void onArtistSelected(QModelIndex index);
