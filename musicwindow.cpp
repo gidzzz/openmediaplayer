@@ -225,7 +225,7 @@ void MusicWindow::connectSignals()
 
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAutomaticPlaylists(uint,int,uint,QString,GHashTable*,QString)));
+            this, SLOT(browseSourcePlaylists(uint,int,uint,QString,GHashTable*,QString)));
 #endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -909,7 +909,7 @@ void MusicWindow::listImportedPlaylists()
                                                                 0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void MusicWindow::browseAutomaticPlaylists(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString error) // not really, imported playlists too
+void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString error)
 {
     if (!error.isEmpty()) {
         qDebug() << error;
@@ -920,18 +920,22 @@ void MusicWindow::browseAutomaticPlaylists(uint browseId, int remainingCount, ui
 
     if (browseId == this->browseRecentlyAddedId) {
         mafwTrackerSource->cancelBrowse(browseId, error);
+        browseRecentlyAddedId = 0;
         playlistModel->item(1)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseRecentlyPlayedId) {
         mafwTrackerSource->cancelBrowse(browseId, error);
+        browseRecentlyPlayedId = 0;
         playlistModel->item(2)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseMostPlayedId) {
         mafwTrackerSource->cancelBrowse(browseId, error);
+        browseMostPlayedId = 0;
         playlistModel->item(3)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseNeverPlayedId) {
         mafwTrackerSource->cancelBrowse(browseId, error);
+        browseNeverPlayedId = 0;
         playlistModel->item(4)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseImportedPlaylistsId) {

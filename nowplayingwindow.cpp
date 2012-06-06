@@ -390,6 +390,8 @@ void NowPlayingWindow::onStateChanged(int state)
 void NowPlayingWindow::connectSignals()
 {
     connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Left), this), SIGNAL(activated()), mafwrenderer, SLOT(previous()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), mafwrenderer, SLOT(next()));
 
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_to_playlist, SIGNAL(triggered()), this, SLOT(onAddAllToPlaylist()));
@@ -1137,10 +1139,6 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 #ifdef MAFW
     else if (e->key() == Qt::Key_Enter)
         onPlaylistItemActivated(ui->songPlaylist->currentItem());
-    else if (e->key() == Qt::Key_Right)
-        mafwrenderer->next();
-    else if (e->key() == Qt::Key_Left)
-        mafwrenderer->previous();
 #endif
     /*else if (e->key() == Qt::Key_Shift) {
         if (ui->menuNow_playing_menu->isHidden())
