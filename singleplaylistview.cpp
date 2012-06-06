@@ -68,6 +68,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
+    connect(ui->actionAdd_to_playlist, SIGNAL(triggered()), this, SLOT(addAllToPlaylist()));
     connect(ui->actionDelete_playlist, SIGNAL(triggered()), this, SLOT(deletePlaylist()));
 
     connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
@@ -102,7 +103,7 @@ void SinglePlaylistView::setupShuffleButton()
     ui->songList->setItemWidget(ui->songList->item(0), shuffleButton);
 }
 
-void SinglePlaylistView::browsePlaylist(MafwPlaylist *mafwplaylist)
+void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
 {
     ui->songList->clear();
     visibleSongs = 0;
@@ -177,7 +178,7 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
     }
 }
 
-void SinglePlaylistView::browseObjectId(QString objectId)
+void SinglePlaylistView::browseImportedPlaylist(QString objectId)
 {
     this->objectId = objectId;
     ui->songList->clear();
@@ -202,6 +203,7 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
 
     ui->menuOptions->removeAction(ui->actionDelete_playlist);
     ui->menuOptions->removeAction(ui->actionSave_playlist);
+
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
     this->browsePlaylistId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
@@ -286,6 +288,33 @@ void SinglePlaylistView::addAllToNowPlaying()
 #endif
 
 #endif
+}
+
+void SinglePlaylistView::addAllToPlaylist()
+{
+    PlaylistPicker picker(this);
+    picker.exec();
+    if (picker.result() == QDialog::Accepted) {
+#ifdef MAFW
+        int songCount = ui->songList->count()-1;
+        gchar** songAddBuffer = new gchar*[songCount+1];
+
+        for (int i = 0; i < songCount; i++)
+            songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
+
+        songAddBuffer[songCount] = NULL;
+
+        playlist->appendItems(picker.playlist, (const gchar**) songAddBuffer);
+
+        for (int i = 0; i < songCount; i++)
+            delete[] songAddBuffer[i];
+        delete[] songAddBuffer;
+
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", songCount));
+#endif
+#endif
+    }
 }
 
 void SinglePlaylistView::playAll(int startIndex, bool filter)

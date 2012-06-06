@@ -101,6 +101,7 @@
      <string>Options</string>
     </property>
     <addaction name="actionAdd_to_now_playing"/>
+    <addaction name="actionAdd_to_playlist"/>
     <addaction name="actionSave_playlist"/>
     <addaction name="actionDelete_playlist"/>
    </widget>
@@ -114,6 +115,11 @@
   <action name="actionAdd_to_now_playing">
    <property name="text">
     <string>Add to now playing</string>
+   </property>
+  </action>
+  <action name="actionAdd_to_playlist">
+   <property name="text">
+    <string>Add songs to a playlist</string>
    </property>
   </action>
   <action name="actionDelete_playlist">

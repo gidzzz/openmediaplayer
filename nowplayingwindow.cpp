@@ -1469,16 +1469,15 @@ void NowPlayingWindow::onAddAllToPlaylist()
 
         songAddBuffer[songCount] = NULL;
 
-        playlist->appendItems(picker.playlist, (const gchar**)songAddBuffer);
+        playlist->appendItems(picker.playlist, (const gchar**) songAddBuffer);
 
         for (int i = 0; i < songCount; i++)
             delete[] songAddBuffer[i];
         delete[] songAddBuffer;
 
-        if (picker.result() == QDialog::Accepted) {
-            playlist->appendItem(picker.playlist, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString());
-            QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", songCount));
-        }
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", songCount));
+#endif
     }
 }
 

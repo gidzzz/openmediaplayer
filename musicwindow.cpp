@@ -197,10 +197,10 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
         SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
         playlistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
-        if (index.data(UserRoleObjectID).isNull()) // saved playlist case
-            playlistView->browsePlaylist(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString())));
-        else // imported playlist case
-            playlistView->browseObjectId(index.data(UserRoleObjectID).toString());
+        if (index.data(UserRoleObjectID).isNull())
+            playlistView->browseSavedPlaylist(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString())));
+        else
+            playlistView->browseImportedPlaylist(index.data(UserRoleObjectID).toString());
 
         playlistView->show();
         connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));

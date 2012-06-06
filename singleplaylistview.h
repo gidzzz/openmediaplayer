@@ -28,9 +28,9 @@ public:
     ~SinglePlaylistView();
     bool eventFilter(QObject *, QEvent *e);
 #ifdef MAFW
-    void browsePlaylist(MafwPlaylist *mafwplaylist);
-    void browseObjectId(QString objectId);
     void browseAutomaticPlaylist(QString filter, QString sorting, int maxCount);
+    void browseSavedPlaylist(MafwPlaylist *mafwplaylist);
+    void browseImportedPlaylist(QString objectId);
 #endif
 
 signals:
@@ -81,6 +81,7 @@ private slots:
     void playAll(int startIndex, bool filter);
     void onItemActivated(QListWidgetItem *item);
     void addAllToNowPlaying();
+    void addAllToPlaylist();
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void onShuffleButtonClicked();
