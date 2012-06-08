@@ -842,7 +842,7 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
     // for example). Update notifications showing up for no apparent reason are
     // rather annoying, so it's better to ignore signals leading to such situation.
     // What they have in common seems to be remaining_items=0.
-    if (remaining_items != 0 && updatingShow) {
+    if (remaining_items > 0 && updatingShow) {
         updatingInfoBox->show();
         updatingShow = false;
     } else if (progress == 100) {

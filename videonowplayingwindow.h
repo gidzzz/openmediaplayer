@@ -60,6 +60,7 @@ private:
     bool portrait;
     bool isOverlayVisible;
     bool gotInitialState;
+    bool buttonWasDown;
 #ifdef Q_WS_MAEMO_5
     void setDNDAtom(bool dnd);
 #endif

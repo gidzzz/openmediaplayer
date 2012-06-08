@@ -69,6 +69,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     this->isOverlayVisible = true;
     this->gotInitialState = false;
+    this->buttonWasDown = false;
 #ifdef MAFW
     this->errorOccured = false;
 #endif
@@ -235,22 +236,40 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
 
 void VideoNowPlayingWindow::onPrevButtonClicked()
 {
-    if (this->currentPosition > 3) {
-        mafwrenderer->setPosition(SeekAbsolute, 0);
+#ifdef MAFW
+    if (ui->prevButton->isDown()) {
+        buttonWasDown = true;
+        mafwrenderer->setPosition(SeekRelative, -10);
         mafwrenderer->getPosition();
     } else {
-        gotInitialState = false;
-#ifdef MAFW
-        mafwrenderer->previous();
-#endif
+        if (!buttonWasDown) {
+            if (this->currentPosition > 3) {
+                mafwrenderer->setPosition(SeekAbsolute, 0);
+                mafwrenderer->getPosition();
+            } else {
+                gotInitialState = false;
+                mafwrenderer->previous();
+            }
+        }
+        buttonWasDown = false;
     }
+#endif
 }
 
 void VideoNowPlayingWindow::onNextButtonClicked()
 {
-    gotInitialState = false;
 #ifdef MAFW
-    mafwrenderer->next();
+    if (ui->nextButton->isDown()) {
+        buttonWasDown = true;
+        mafwrenderer->setPosition(SeekRelative, 10);
+        mafwrenderer->getPosition();
+    } else {
+        if (!buttonWasDown) {
+            gotInitialState = false;
+            mafwrenderer->next();
+        }
+        buttonWasDown = false;
+    }
 #endif
 }
 

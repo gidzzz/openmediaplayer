@@ -274,6 +274,15 @@ border: none;
          <height>64</height>
         </size>
        </property>
+       <property name="autoRepeat">
+        <bool>true</bool>
+       </property>
+       <property name="autoRepeatDelay">
+        <number>1000</number>
+       </property>
+       <property name="autoRepeatInterval">
+        <number>250</number>
+       </property>
       </widget>
      </item>
      <item>
@@ -361,6 +370,15 @@ border: none;
          <width>64</width>
          <height>64</height>
         </size>
+       </property>
+       <property name="autoRepeat">
+        <bool>true</bool>
+       </property>
+       <property name="autoRepeatDelay">
+        <number>1000</number>
+       </property>
+       <property name="autoRepeatInterval">
+        <number>250</number>
        </property>
       </widget>
      </item>
