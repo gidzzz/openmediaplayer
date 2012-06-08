@@ -72,10 +72,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
     connect(ui->actionAdd_to_playlist, SIGNAL(triggered()), this, SLOT(addAllToPlaylist()));
     connect(ui->actionDelete_playlist, SIGNAL(triggered()), this, SLOT(deletePlaylist()));
-
     connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
-    connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
-    connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(saveCurrentPlaylist()));
 
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
@@ -109,6 +106,8 @@ void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
     ui->songList->clear();
     visibleSongs = 0;
     setupShuffleButton();
+
+    connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
 
     qDebug() << "connecting SinglePlaylistView to onGetItems";
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
@@ -204,7 +203,6 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
     setupShuffleButton();
 
     ui->menuOptions->removeAction(ui->actionDelete_playlist);
-    ui->menuOptions->removeAction(ui->actionSave_playlist);
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
@@ -484,7 +482,7 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
     contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
-    contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
+    if (objectId.isNull()) contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
     if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     contextMenu->exec(point);
