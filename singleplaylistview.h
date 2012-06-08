@@ -33,9 +33,6 @@ public:
     void browseImportedPlaylist(QString objectId);
 #endif
 
-signals:
-    void itemDropped(QListWidgetItem *item, int from);
-
 protected:
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
@@ -55,6 +52,7 @@ private:
 #else
     QPushButton *shuffleButton;
 #endif
+    QListWidgetItem* copyItem(QListWidgetItem *item, int index);
 
 #ifdef MAFW
     QString objectId;
@@ -94,7 +92,6 @@ private slots:
     void onDeleteFromPlaylist();
     void forgetClick();
     void onItemDoubleClicked();
-    void onItemDropped(QListWidgetItem *item, int from);
     void saveCurrentPlaylist();
     void deletePlaylist();
     void onNowPlayingWindowHidden();

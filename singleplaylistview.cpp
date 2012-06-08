@@ -73,7 +73,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 
     connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
     connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
-    connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
     connect(ui->actionSave_playlist, SIGNAL(triggered()), this, SLOT(saveCurrentPlaylist()));
 
     Rotator *rotator = Rotator::acquire();
@@ -290,29 +289,48 @@ void SinglePlaylistView::addAllToNowPlaying()
 #endif
 }
 
+QListWidgetItem* SinglePlaylistView::copyItem(QListWidgetItem *item, int index)
+{
+    QListWidgetItem *copy = new QListWidgetItem();
+    copy->setText(item->text());
+    copy->setData(UserRoleSongDuration, item->data(UserRoleSongDuration));
+    copy->setData(UserRoleSongAlbum, item->data(UserRoleSongAlbum));
+    copy->setData(UserRoleSongArtist, item->data(UserRoleSongArtist));
+    copy->setData(UserRoleObjectID, item->data(UserRoleObjectID));
+    copy->setData(UserRoleSongIndex, index);
+    return copy;
+}
+
 void SinglePlaylistView::addAllToPlaylist()
 {
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-#ifdef MAFW
         int songCount = ui->songList->count()-1;
-        gchar** songAddBuffer = new gchar*[songCount+1];
 
-        for (int i = 0; i < songCount; i++)
-            songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
+        if (objectId.isNull() && picker.playlistName == windowTitle()) {
+            for (int i = 0; i < songCount; i++)
+                ui->songList->addItem(copyItem(ui->songList->item(i+1), i+songCount));
+            visibleSongs += songCount; updateSongCount();
+        } else {
+#ifdef MAFW
+            gchar** songAddBuffer = new gchar*[songCount+1];
 
-        songAddBuffer[songCount] = NULL;
+            for (int i = 0; i < songCount; i++)
+                songAddBuffer[i] = qstrdup(ui->songList->item(i+1)->data(UserRoleObjectID).toString().toUtf8());
 
-        playlist->appendItems(picker.playlist, (const gchar**) songAddBuffer);
+            songAddBuffer[songCount] = NULL;
 
-        for (int i = 0; i < songCount; i++)
-            delete[] songAddBuffer[i];
-        delete[] songAddBuffer;
+            playlist->appendItems(picker.playlist, (const gchar**) songAddBuffer);
+
+            for (int i = 0; i < songCount; i++)
+                delete[] songAddBuffer[i];
+            delete[] songAddBuffer;
+#endif
+        }
 
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", songCount));
-#endif
 #endif
     }
 }
@@ -489,14 +507,7 @@ void SinglePlaylistView::onAddToPlaylist()
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
         if (objectId.isNull() && picker.playlistName == windowTitle()) {
-            QListWidgetItem *item = new QListWidgetItem();
-            item->setText(ui->songList->currentItem()->text());
-            item->setData(UserRoleSongDuration, ui->songList->currentItem()->data(UserRoleSongDuration));
-            item->setData(UserRoleSongAlbum, ui->songList->currentItem()->data(UserRoleSongAlbum));
-            item->setData(UserRoleSongArtist, ui->songList->currentItem()->data(UserRoleSongArtist));
-            item->setData(UserRoleObjectID, ui->songList->currentItem()->data(UserRoleObjectID));
-            item->setData(UserRoleSongIndex, playlist->getSizeOf(picker.playlist));
-            ui->songList->addItem(item);
+            ui->songList->addItem(copyItem(ui->songList->currentItem(), ui->songList->count()-1));
             ++visibleSongs; updateSongCount();
         }
 #ifdef MAFW
@@ -620,7 +631,6 @@ bool SinglePlaylistView::eventFilter(QObject *, QEvent *e)
 {
     if (e->type() == QEvent::Drop) {
         static_cast<QDropEvent*>(e)->setDropAction(Qt::MoveAction);
-        emit itemDropped(ui->songList->currentItem(), ui->songList->currentRow());
     }
 
     else if (e->type() == QEvent::MouseButtonPress) {
@@ -646,15 +656,6 @@ void SinglePlaylistView::onItemDoubleClicked()
     ui->songList->setDragEnabled(true);
     clickedItem = NULL;
     clickTimer->start();
-}
-
-void SinglePlaylistView::onItemDropped(QListWidgetItem *item, int from)
-{
-    int to = ui->songList->row(item);
-    if (to == 0) ui->songList->insertItem(++to, ui->songList->takeItem(0));
-#ifdef MAFW
-    playlist->moveItem(from-1, to-1);
-#endif
 }
 
 void SinglePlaylistView::saveCurrentPlaylist()
