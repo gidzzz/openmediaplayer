@@ -58,6 +58,8 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     QApplication::setStartDragDistance(20);
     ui->songList->setDragEnabled(false);
 
+    playlistModified = false;
+
     clickedItem = NULL;
     clickTimer = new QTimer(this);
     clickTimer->setInterval(QApplication::doubleClickInterval());
@@ -196,6 +198,7 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
 
 void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting, int maxCount)
 {
+    this->objectId = "";
     ui->songList->clear();
     visibleSongs = 0;
     setupShuffleButton();
@@ -312,6 +315,7 @@ void SinglePlaylistView::addAllToPlaylist()
             for (int i = 0; i < songCount; i++)
                 ui->songList->addItem(copyItem(ui->songList->item(i+1), i+songCount));
             visibleSongs += songCount; updateSongCount();
+            playlistModified = true;
         } else {
 #ifdef MAFW
             gchar** songAddBuffer = new gchar*[songCount+1];
@@ -509,6 +513,7 @@ void SinglePlaylistView::onAddToPlaylist()
         if (objectId.isNull() && picker.playlistName == windowTitle()) {
             ui->songList->addItem(copyItem(ui->songList->currentItem(), ui->songList->count()-1));
             ++visibleSongs; updateSongCount();
+            playlistModified = true;
         }
 #ifdef MAFW
         else
@@ -608,6 +613,7 @@ void SinglePlaylistView::onDeleteClicked()
         mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         delete ui->songList->currentItem();
         --visibleSongs; updateSongCount();
+        playlistModified = true;
     }
 #endif
     ui->songList->clearSelection();
@@ -631,6 +637,7 @@ bool SinglePlaylistView::eventFilter(QObject *, QEvent *e)
 {
     if (e->type() == QEvent::Drop) {
         static_cast<QDropEvent*>(e)->setDropAction(Qt::MoveAction);
+        playlistModified = true;
     }
 
     else if (e->type() == QEvent::MouseButtonPress) {
@@ -669,6 +676,8 @@ void SinglePlaylistView::saveCurrentPlaylist()
 
     for (int i = 1; i < songCount; i++)
         playlist->appendItem(targetPlaylist, ui->songList->item(i)->data(UserRoleObjectID).toString());
+
+    playlistModified = false;
 #endif
 }
 
@@ -697,6 +706,7 @@ void SinglePlaylistView::onDeleteFromPlaylist()
 {
     delete ui->songList->takeItem(ui->songList->currentRow());
     --visibleSongs; updateSongCount();
+    playlistModified = true;
 }
 
 void SinglePlaylistView::onNowPlayingWindowHidden()
@@ -718,6 +728,11 @@ void SinglePlaylistView::closeEvent(QCloseEvent *e)
     }
     if (browsePlaylistOp)
         mafw_playlist_cancel_get_items_md(browsePlaylistOp);
+
+    if (playlistModified && objectId.isNull()) {
+        qDebug() << "Playlist modified, saving";
+        saveCurrentPlaylist();
+    }
 
     e->accept();
 }

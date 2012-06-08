@@ -45,6 +45,7 @@ private:
     QTimer *clickTimer;
     QListWidgetItem *clickedItem;
     bool permanentDelete;
+    bool playlistModified;
     int visibleSongs;
 #ifdef Q_WS_MAEMO_5
     QMaemo5ValueButton *shuffleButton;
