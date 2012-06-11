@@ -306,7 +306,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../mainwindow.cpp" line="830"/>
         <source>Retrieving information on the new media files</source>
-        <translation>Informationen über neuen Dateien werden abgerufen</translation>
+        <translation>Informationen über neue Dateien werden abgerufen</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="832"/>
@@ -355,13 +355,13 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="249"/>
         <source>Add to a playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu einer Wiedergabeliste hinzufügen</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="253"/>
         <location filename="../musicwindow.cpp" line="274"/>
         <source>Rename playlist</source>
-        <translation type="unfinished"></translation>
+        <translation> umbenennen</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="254"/>
@@ -425,18 +425,18 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <translation>Lieder</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="807"/>
+        <location filename="../musicwindow.cpp" line="865"/>
         <source>Saved</source>
         <translation>Gespeichert</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="826"/>
-        <location filename="../musicwindow.cpp" line="902"/>
-        <location filename="../musicwindow.cpp" line="906"/>
-        <location filename="../musicwindow.cpp" line="910"/>
-        <location filename="../musicwindow.cpp" line="914"/>
-        <location filename="../musicwindow.cpp" line="923"/>
-        <location filename="../musicwindow.cpp" line="1124"/>
+        <location filename="../musicwindow.cpp" line="884"/>
+        <location filename="../musicwindow.cpp" line="924"/>
+        <location filename="../musicwindow.cpp" line="929"/>
+        <location filename="../musicwindow.cpp" line="934"/>
+        <location filename="../musicwindow.cpp" line="939"/>
+        <location filename="../musicwindow.cpp" line="948"/>
+        <location filename="../musicwindow.cpp" line="1148"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n Lied</numerusform>
@@ -444,67 +444,67 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="834"/>
+        <location filename="../musicwindow.cpp" line="900"/>
         <source>Imported playlists</source>
         <translation>Importierte Wiedergabeliste</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="845"/>
+        <location filename="../musicwindow.cpp" line="816"/>
         <source>Automatic playlists</source>
         <translation>Automatische Wiedergabeliste</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="852"/>
+        <location filename="../musicwindow.cpp" line="823"/>
         <source>Recently added</source>
         <translation>Zuletzt hinzugefügt</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="852"/>
+        <location filename="../musicwindow.cpp" line="823"/>
         <source>Recently played</source>
         <translation>Zuletzt wiedergegeben</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="852"/>
+        <location filename="../musicwindow.cpp" line="823"/>
         <source>Most played</source>
         <translation>Am häufigsten wiedergegeben</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="852"/>
+        <location filename="../musicwindow.cpp" line="823"/>
         <source>Never played</source>
         <translation>Nie wiedergegeben</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="950"/>
+        <location filename="../musicwindow.cpp" line="974"/>
         <source>(unknown song)</source>
         <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="953"/>
-        <location filename="../musicwindow.cpp" line="996"/>
-        <location filename="../musicwindow.cpp" line="1013"/>
-        <location filename="../musicwindow.cpp" line="1052"/>
+        <location filename="../musicwindow.cpp" line="977"/>
+        <location filename="../musicwindow.cpp" line="1020"/>
+        <location filename="../musicwindow.cpp" line="1037"/>
+        <location filename="../musicwindow.cpp" line="1076"/>
         <source>(unknown artist)</source>
         <translation>(Unbekannter Interpret)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="956"/>
-        <location filename="../musicwindow.cpp" line="1049"/>
+        <location filename="../musicwindow.cpp" line="980"/>
+        <location filename="../musicwindow.cpp" line="1073"/>
         <source>(unknown album)</source>
         <translation>(Unbekanntes Album)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="1067"/>
+        <location filename="../musicwindow.cpp" line="1091"/>
         <source>Various artists</source>
         <translation>Verschiedene Interpreten</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="1104"/>
-        <location filename="../musicwindow.cpp" line="1115"/>
+        <location filename="../musicwindow.cpp" line="1128"/>
+        <location filename="../musicwindow.cpp" line="1139"/>
         <source>(unknown genre)</source>
         <translation>(Unbekanntes Genre)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1125"/>
+        <location filename="../musicwindow.cpp" line="1149"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n Album</numerusform>
@@ -512,7 +512,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1126"/>
+        <location filename="../musicwindow.cpp" line="1150"/>
         <source>%n artist(s)</source>
         <translation>
             <numerusform>%n Interpret</numerusform>
@@ -520,15 +520,15 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1279"/>
+        <location filename="../musicwindow.cpp" line="1303"/>
         <source>%n clip(s) added to playlist</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1359"/>
+        <location filename="../musicwindow.cpp" line="1387"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n Clip zur Wiedergabeliste hinzugefügt</numerusform>
@@ -585,7 +585,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="824"/>
+        <location filename="../nowplayingwindow.cpp" line="826"/>
         <source>Lyrics not found</source>
         <translation>Liedtext nicht gefunden</translation>
     </message>
@@ -603,149 +603,133 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <translation>total</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="757"/>
+        <location filename="../nowplayingwindow.cpp" line="759"/>
         <source>Loading lyrics...</source>
         <translation>Lade Liedtext...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="811"/>
+        <location filename="../nowplayingwindow.cpp" line="813"/>
         <source>Fetching lyrics...</source>
         <translation>Hole Liedtext...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="773"/>
+        <location filename="../nowplayingwindow.cpp" line="775"/>
         <source>There is no active Internet connection</source>
         <translation>Keine Internetverbindung verfügbar</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1210"/>
+        <location filename="../nowplayingwindow.cpp" line="1208"/>
         <source>Information not available</source>
         <translation>Information nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1272"/>
+        <location filename="../nowplayingwindow.cpp" line="1270"/>
         <source>Clear all songs from now playing?</source>
         <translation>Alle Lieder aus aktueller Wiedergabeliste entfernen?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1308"/>
+        <location filename="../nowplayingwindow.cpp" line="1306"/>
         <source>Set as ringing tone</source>
         <translation>Als Klingelton einrichten</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1304"/>
+        <location filename="../nowplayingwindow.cpp" line="1302"/>
         <source>Delete from now playing</source>
         <translation>Von Wiedergabeliste löschen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1309"/>
+        <location filename="../nowplayingwindow.cpp" line="1307"/>
         <source>Share</source>
         <translation>Freigeben</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1275"/>
-        <location filename="../nowplayingwindow.cpp" line="1338"/>
-        <location filename="../nowplayingwindow.cpp" line="1377"/>
-        <location filename="../nowplayingwindow.cpp" line="1586"/>
+        <location filename="../nowplayingwindow.cpp" line="1273"/>
+        <location filename="../nowplayingwindow.cpp" line="1336"/>
+        <location filename="../nowplayingwindow.cpp" line="1375"/>
+        <location filename="../nowplayingwindow.cpp" line="1583"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1029"/>
+        <location filename="../nowplayingwindow.cpp" line="1031"/>
         <source>Stop playback</source>
         <translation>Wiedergabe stoppen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1276"/>
-        <location filename="../nowplayingwindow.cpp" line="1339"/>
-        <location filename="../nowplayingwindow.cpp" line="1378"/>
-        <location filename="../nowplayingwindow.cpp" line="1587"/>
+        <location filename="../nowplayingwindow.cpp" line="1274"/>
+        <location filename="../nowplayingwindow.cpp" line="1337"/>
+        <location filename="../nowplayingwindow.cpp" line="1376"/>
+        <location filename="../nowplayingwindow.cpp" line="1584"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1306"/>
+        <location filename="../nowplayingwindow.cpp" line="1304"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1307"/>
+        <location filename="../nowplayingwindow.cpp" line="1305"/>
         <source>Add to a playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu einer Wiedergabeliste hinzufügen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1323"/>
-        <location filename="../nowplayingwindow.cpp" line="1482"/>
+        <location filename="../nowplayingwindow.cpp" line="1321"/>
+        <location filename="../nowplayingwindow.cpp" line="1479"/>
         <source>%n clip(s) added to playlist</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1333"/>
+        <location filename="../nowplayingwindow.cpp" line="1331"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>Sind sie sicher?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1371"/>
+        <location filename="../nowplayingwindow.cpp" line="1369"/>
         <source>Delete song?</source>
         <translation>Lied löschen?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1372"/>
+        <location filename="../nowplayingwindow.cpp" line="1370"/>
         <source>Are you sure you want to delete this song?</source>
         <translation>Sind sie sicher?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1420"/>
+        <location filename="../nowplayingwindow.cpp" line="1418"/>
         <source>Entertainment View</source>
         <translation>Unterhaltungs Ansicht</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1425"/>
+        <location filename="../nowplayingwindow.cpp" line="1423"/>
         <source>Car View</source>
         <translation>KFZ Ansicht</translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="obsolete">Name</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Speichern</translation>
-    </message>
-    <message>
-        <source>Playlist with the same name exists, overwrite?</source>
-        <translation type="obsolete">Wiedergabeliste überschreiben?</translation>
-    </message>
-    <message>
-        <source>Playlist saved</source>
-        <translation type="obsolete">Wiedergabeliste gespeichert</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="1566"/>
-        <location filename="../nowplayingwindow.cpp" line="1573"/>
+        <location filename="../nowplayingwindow.cpp" line="1563"/>
+        <location filename="../nowplayingwindow.cpp" line="1570"/>
         <source>Select album art</source>
         <translation>Wähle Album Bild aus</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1567"/>
+        <location filename="../nowplayingwindow.cpp" line="1564"/>
         <source>Reset album art</source>
         <translation>Setze Album Bild zurück</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1583"/>
+        <location filename="../nowplayingwindow.cpp" line="1580"/>
         <source>Reset album art?</source>
         <translation>Album Bild zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1619"/>
+        <location filename="../nowplayingwindow.cpp" line="1616"/>
         <source>Edit lyrics</source>
         <translation>Liedtext bearbeiten</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1620"/>
+        <location filename="../nowplayingwindow.cpp" line="1617"/>
         <source>Reload lyrics</source>
         <translation>Liedtext neu laden</translation>
     </message>
@@ -761,22 +745,22 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="243"/>
-        <location filename="../nowplayingwindow.cpp" line="604"/>
-        <location filename="../nowplayingwindow.cpp" line="1186"/>
+        <location filename="../nowplayingwindow.cpp" line="606"/>
+        <location filename="../nowplayingwindow.cpp" line="1184"/>
         <source>(unknown song)</source>
         <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="357"/>
-        <location filename="../nowplayingwindow.cpp" line="613"/>
-        <location filename="../nowplayingwindow.cpp" line="1189"/>
+        <location filename="../nowplayingwindow.cpp" line="615"/>
+        <location filename="../nowplayingwindow.cpp" line="1187"/>
         <source>(unknown artist)</source>
         <translation>(Unbekannter Interpret)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="370"/>
-        <location filename="../nowplayingwindow.cpp" line="622"/>
-        <location filename="../nowplayingwindow.cpp" line="1192"/>
+        <location filename="../nowplayingwindow.cpp" line="624"/>
+        <location filename="../nowplayingwindow.cpp" line="1190"/>
         <source>(unknown album)</source>
         <translation>(Unbekanntes Album)</translation>
     </message>
@@ -798,11 +782,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../nowplayingwindow.ui" line="946"/>
         <source>Add songs to a playlist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save playlist</source>
-        <translation type="obsolete">Wiedergabeliste speichern</translation>
+        <translation>Lieder zur Wiedergabeliste zufügen</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="951"/>
@@ -820,13 +800,13 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../playlistpicker.ui" line="14"/>
         <source>Select a playlst</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiedergabeliste auswählen</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="10"/>
         <location filename="../playlistpicker.cpp" line="47"/>
         <source>New playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Wiedergabeliste</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="54"/>
@@ -927,7 +907,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../settingsdialog.cpp" line="38"/>
         <source>Pause playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiedergabe pausieren</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="63"/>
@@ -951,13 +931,9 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <translation>Wiedergabe stoppen</translation>
     </message>
     <message>
-        <source>Stop playback on exit</source>
-        <translation type="obsolete">Abspielen beim Beenden stoppen</translation>
-    </message>
-    <message>
         <location filename="../settingsdialog.ui" line="48"/>
         <source>On application exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Beenden</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="55"/>
@@ -1081,7 +1057,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="347"/>
         <source>Add to a playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu einer Wiedergabeliste hinzufügen</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="349"/>
@@ -1096,9 +1072,9 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="378"/>
         <source>%n clip(s) added to playlist</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
@@ -1280,36 +1256,36 @@ hinzufügen</translation>
 <context>
     <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.cpp" line="98"/>
+        <location filename="../singleplaylistview.cpp" line="97"/>
         <source>Shuffle songs</source>
         <translation>Lieder im Zufallsmodus abspielen</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="136"/>
-        <location filename="../singleplaylistview.cpp" line="230"/>
+        <location filename="../singleplaylistview.cpp" line="137"/>
+        <location filename="../singleplaylistview.cpp" line="232"/>
         <source>(unknown song)</source>
         <translation>(Unbekanntes Lied)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="139"/>
-        <location filename="../singleplaylistview.cpp" line="233"/>
+        <location filename="../singleplaylistview.cpp" line="140"/>
+        <location filename="../singleplaylistview.cpp" line="235"/>
         <source>(unknown artist)</source>
         <translation>(Unbekannter Interpret)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="142"/>
-        <location filename="../singleplaylistview.cpp" line="236"/>
+        <location filename="../singleplaylistview.cpp" line="143"/>
+        <location filename="../singleplaylistview.cpp" line="238"/>
         <source>(unknown album)</source>
         <translation>(Unbekanntes Album)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="155"/>
-        <location filename="../singleplaylistview.cpp" line="248"/>
+        <location filename="../singleplaylistview.cpp" line="156"/>
+        <location filename="../singleplaylistview.cpp" line="250"/>
         <source>Information not available</source>
         <translation>Information nicht verfügbar</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="364"/>
+        <location filename="../singleplaylistview.cpp" line="413"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n Clip zur Wiedergabeliste hinzugefügt</numerusform>
@@ -1317,74 +1293,76 @@ hinzufügen</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="434"/>
+        <location filename="../singleplaylistview.ui" line="116"/>
+        <location filename="../singleplaylistview.cpp" line="483"/>
         <source>Add to a playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu einer Wiedergabeliste hinzufügen</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="437"/>
+        <location filename="../singleplaylistview.cpp" line="486"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="650"/>
+        <location filename="../singleplaylistview.cpp" line="687"/>
         <source>Delete playlist?</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiedergabeliste löschen?</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="435"/>
+        <location filename="../singleplaylistview.cpp" line="484"/>
         <source>Set as ringing tone</source>
         <translation>Als Klingelton einrichten</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="438"/>
+        <location filename="../singleplaylistview.cpp" line="487"/>
         <source>Share</source>
         <translation>Freigeben</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="436"/>
+        <location filename="../singleplaylistview.cpp" line="485"/>
         <source>Delete from playlist</source>
         <translation>Von Wiedergabeliste löschen</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="478"/>
+        <location filename="../singleplaylistview.cpp" line="335"/>
+        <location filename="../singleplaylistview.cpp" line="521"/>
         <source>%n clip(s) added to playlist</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="488"/>
+        <location filename="../singleplaylistview.cpp" line="531"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>Sind sie sicher?</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="493"/>
-        <location filename="../singleplaylistview.cpp" line="564"/>
-        <location filename="../singleplaylistview.cpp" line="653"/>
+        <location filename="../singleplaylistview.cpp" line="536"/>
+        <location filename="../singleplaylistview.cpp" line="607"/>
+        <location filename="../singleplaylistview.cpp" line="690"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="494"/>
-        <location filename="../singleplaylistview.cpp" line="565"/>
-        <location filename="../singleplaylistview.cpp" line="654"/>
+        <location filename="../singleplaylistview.cpp" line="537"/>
+        <location filename="../singleplaylistview.cpp" line="608"/>
+        <location filename="../singleplaylistview.cpp" line="691"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="558"/>
+        <location filename="../singleplaylistview.cpp" line="601"/>
         <source>Delete song?</source>
         <translation>Lied löschen?</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="559"/>
+        <location filename="../singleplaylistview.cpp" line="602"/>
         <source>Are you sure you want to delete this song?</source>
         <translation>Sind sie sicher?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="579"/>
+        <location filename="../singleplaylistview.cpp" line="623"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n Lied</numerusform>
@@ -1398,12 +1376,7 @@ hinzufügen</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="111"/>
-        <source>Save playlist</source>
-        <translation>Wiedergabeliste speichern</translation>
-    </message>
-    <message>
-        <location filename="../singleplaylistview.ui" line="116"/>
-        <location filename="../singleplaylistview.cpp" line="433"/>
+        <location filename="../singleplaylistview.cpp" line="482"/>
         <source>Add to now playing</source>
         <translation>Zur aktuellen Wiedergabeliste hinzufügen</translation>
     </message>
@@ -1461,14 +1434,14 @@ hinzufügen</translation>
     <message>
         <location filename="../upnpview.cpp" line="183"/>
         <source>Add to a playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu einer Wiedergabeliste hinzufügen</translation>
     </message>
     <message numerus="yes">
         <location filename="../upnpview.cpp" line="266"/>
         <source>%n clip(s) added to playlist</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip(s) zur Wiedergabeliste hinzugefügt</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1498,163 +1471,163 @@ hinzufügen</translation>
         <translation>Aktueller Titel</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="263"/>
+        <location filename="../videonowplayingwindow.cpp" line="282"/>
         <source>Delete video?</source>
         <translation>Video löschen?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="264"/>
+        <location filename="../videonowplayingwindow.cpp" line="283"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Sind sie sicher?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="267"/>
+        <location filename="../videonowplayingwindow.cpp" line="286"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="268"/>
+        <location filename="../videonowplayingwindow.cpp" line="287"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="597"/>
-        <location filename="../videonowplayingwindow.cpp" line="690"/>
+        <location filename="../videonowplayingwindow.cpp" line="616"/>
+        <location filename="../videonowplayingwindow.cpp" line="709"/>
         <source>Unable to play media</source>
         <translation>Kann Medium nicht abspielen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="601"/>
+        <location filename="../videonowplayingwindow.cpp" line="620"/>
         <source>Media not found</source>
         <translation>Medium nicht gefunden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="603"/>
+        <location filename="../videonowplayingwindow.cpp" line="622"/>
         <source>URI not available</source>
         <translation>URI nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="605"/>
+        <location filename="../videonowplayingwindow.cpp" line="624"/>
         <source>Invalid URI</source>
         <translation>Ungültiger URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="607"/>
+        <location filename="../videonowplayingwindow.cpp" line="626"/>
         <source>Unable to open media</source>
         <translation>Kann Medium nicht öffnen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="609"/>
+        <location filename="../videonowplayingwindow.cpp" line="628"/>
         <source>Playback stream no longer available</source>
         <translation>Wiedergabe Stream nicht mehr verfügbar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="611"/>
+        <location filename="../videonowplayingwindow.cpp" line="630"/>
         <source>Could not determine MIME-type</source>
         <translation>Kann MIME-Typ nicht ermitteln</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="613"/>
+        <location filename="../videonowplayingwindow.cpp" line="632"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Allgemeiner Fehler, Wiedergabe nicht möglich</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="615"/>
+        <location filename="../videonowplayingwindow.cpp" line="634"/>
         <source>General error occured</source>
         <translation>Allgemeiner Fehler</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="617"/>
+        <location filename="../videonowplayingwindow.cpp" line="636"/>
         <source>Unsupported media</source>
         <translation>Nicht unterstütztes Medium</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="619"/>
+        <location filename="../videonowplayingwindow.cpp" line="638"/>
         <source>Unsupported resolution</source>
         <translation>Nicht unterstützte Auflösung</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="621"/>
+        <location filename="../videonowplayingwindow.cpp" line="640"/>
         <source>Unsupported framerate</source>
         <translation>Bildrate nicht unterstützt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="623"/>
+        <location filename="../videonowplayingwindow.cpp" line="642"/>
         <source>Media is protected by DRM</source>
         <translation>Medium ist DRM geschützt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="625"/>
+        <location filename="../videonowplayingwindow.cpp" line="644"/>
         <source>System sound device is unavailable</source>
         <translation>System Audio Gerät nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="627"/>
+        <location filename="../videonowplayingwindow.cpp" line="646"/>
         <source>Media corrupted</source>
         <translation>Medium beschädigt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="629"/>
+        <location filename="../videonowplayingwindow.cpp" line="648"/>
         <source>Error while parsing playlist</source>
         <translation>Fehler beim Analysieren der Wiedergabeliste</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="630"/>
+        <location filename="../videonowplayingwindow.cpp" line="649"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Wiedergabeliste beschädigt oder leer</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="633"/>
+        <location filename="../videonowplayingwindow.cpp" line="652"/>
         <source>Codec not found:</source>
         <translation>Codec nicht gefunden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="637"/>
+        <location filename="../videonowplayingwindow.cpp" line="656"/>
         <source>Video codec not found:</source>
         <translation>Video Codec nicht gefunden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="641"/>
+        <location filename="../videonowplayingwindow.cpp" line="660"/>
         <source>Audio codec not found:</source>
         <translation>Audio Codec nicht gefunden:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="645"/>
+        <location filename="../videonowplayingwindow.cpp" line="664"/>
         <source>No playlist assigned</source>
         <translation>Keine Wiedergabeliste zugeteilt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="647"/>
+        <location filename="../videonowplayingwindow.cpp" line="666"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Medium Index ist nicht mit der Wiedergabeliste verbunden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="649"/>
+        <location filename="../videonowplayingwindow.cpp" line="668"/>
         <source>Unable to start playback</source>
         <translation>Kann Wiedergabe nicht starten</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="651"/>
+        <location filename="../videonowplayingwindow.cpp" line="670"/>
         <source>Unable to stop playback</source>
         <translation>Kann Wiedergabe nicht stoppen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="653"/>
+        <location filename="../videonowplayingwindow.cpp" line="672"/>
         <source>Unable to pause playback</source>
         <translation>Pausieren der Wiedergabe nicht möglich</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="655"/>
+        <location filename="../videonowplayingwindow.cpp" line="674"/>
         <source>Unable to seek position in media</source>
         <translation>Kann Position im Medium nicht suchen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="657"/>
+        <location filename="../videonowplayingwindow.cpp" line="676"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Kann gegenwärtige Position im Medium nicht finden</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="659"/>
+        <location filename="../videonowplayingwindow.cpp" line="678"/>
         <source>Unable to get current playback status</source>
         <translation>Gegenwärtiger Wiedergabe Status nicht verfügbar</translation>
     </message>

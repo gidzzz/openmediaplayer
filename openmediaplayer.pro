@@ -18,6 +18,7 @@ TRANSLATIONS = lang/openmediaplayer.cs.ts \
                lang/openmediaplayer.it.ts \
                lang/openmediaplayer.nl.ts \
                lang/openmediaplayer.pl.ts \
+               lang/openmediaplayer.pt_PT.ts \
                lang/openmediaplayer.ro.ts \
                lang/openmediaplayer.ru.ts \
                lang/openmediaplayer.sv.ts \
@@ -231,6 +232,7 @@ OTHER_FILES += \
     lang/openmediaplayer.it.qm \
     lang/openmediaplayer.nl.qm \
     lang/openmediaplayer.pl.qm \
+    lang/openmediaplayer.pt_PT.qm \
     lang/openmediaplayer.ro.qm \
     lang/openmediaplayer.ru.qm \
     lang/openmediaplayer.sv.qm \
@@ -260,6 +262,7 @@ lang.files += lang/openmediaplayer.hu.qm
 lang.files += lang/openmediaplayer.it.qm
 lang.files += lang/openmediaplayer.nl.qm
 lang.files += lang/openmediaplayer.pl.qm
+lang.files += lang/openmediaplayer.pt_PT.qm
 lang.files += lang/openmediaplayer.ro.qm
 lang.files += lang/openmediaplayer.ru.qm
 lang.files += lang/openmediaplayer.sv.qm
