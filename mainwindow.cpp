@@ -492,7 +492,6 @@ void MainWindow::createNowPlayingWindow()
 #endif
 
     window->show();
-    //window->activateWindow();
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->inhibit();

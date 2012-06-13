@@ -68,6 +68,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     reverseTime = QSettings().value("main/reverseTime").toBool();
 
     this->isOverlayVisible = true;
+    this->saveStateOnClose = true;
     this->gotInitialState = false;
     this->buttonWasDown = false;
 #ifdef MAFW
@@ -94,16 +95,18 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 VideoNowPlayingWindow::~VideoNowPlayingWindow()
 {
 #ifdef MAFW
-    if (this->mafwState != Paused && this->mafwState != Stopped)
-        mafwrenderer->pause();
+    if (saveStateOnClose) {
+        if (this->mafwState != Paused && this->mafwState != Stopped)
+            mafwrenderer->pause();
 
-    if (mafwSource) {
-        GHashTable* metadata = mafw_metadata_new();
-        if (currentPosition == 0)
-            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
-        mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, currentPosition);
-        mafwSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
-        mafw_metadata_release(metadata);
+        if (mafwSource) {
+            GHashTable* metadata = mafw_metadata_new();
+            if (currentPosition == 0)
+                mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
+            mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, currentPosition);
+            mafwSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
+            mafw_metadata_release(metadata);
+        }
     }
 #endif
 
@@ -161,6 +164,8 @@ void VideoNowPlayingWindow::connectSignals()
             this, SLOT(onMetadataChanged(QString,QVariant)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
+            this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
 
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
@@ -184,14 +189,41 @@ void VideoNowPlayingWindow::connectSignals()
 }
 
 #ifdef MAFW
-void VideoNowPlayingWindow::onMetadataChanged(QString metadata, QVariant value)
+void VideoNowPlayingWindow::onMetadataChanged(QString name, QVariant value)
 {
+    qDebug() << "Metadata changed:" << name << "=" << value;
+
+    mafwrenderer->getCurrentMetadata();
+
     // duration sometimes is misreported for UPnP, so don't set it from here unnecessarily
-    if (videoLength == Duration::Unknown && metadata == "duration") {
+    if (videoLength == Duration::Unknown && name == "duration") {
         videoLength = value.toInt();
         ui->videoLengthLabel->setText(time_mmss(videoLength));
         ui->progressBar->setRange(0, videoLength);
     }
+}
+#endif
+
+#ifdef MAFW
+void VideoNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString objectId, QString error)
+{
+    if (metadata != NULL
+    && mafw_metadata_first(metadata, MAFW_METADATA_KEY_AUDIO_CODEC)
+    && !mafw_metadata_first(metadata, MAFW_METADATA_KEY_VIDEO_CODEC)) {
+        qDebug() << "Video codec info unavailable, switching to radio mode";
+
+        MafwPlaylistManagerAdapter *playlistManager = mafwFactory->getPlaylistAdapter()->mafw_playlist_manager;
+        playlistManager->deletePlaylist("FmpRadioPlaylist");
+        mafw_playlist_set_name(MAFW_PLAYLIST(playlistManager->createPlaylist("FmpVideoPlaylist")), "FmpRadioPlaylist");
+
+        RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
+        saveStateOnClose = false;
+        delete this;
+        window->show();
+    }
+
+    if (!error.isEmpty())
+        qDebug() << error;
 }
 #endif
 

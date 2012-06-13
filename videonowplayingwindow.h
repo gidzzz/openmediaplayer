@@ -12,6 +12,7 @@
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
 #include "rotator.h"
+#include "radionowplayingwindow.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
@@ -59,6 +60,7 @@ private:
     bool reverseTime;
     bool portrait;
     bool isOverlayVisible;
+    bool saveStateOnClose;
     bool gotInitialState;
     bool buttonWasDown;
 #ifdef Q_WS_MAEMO_5
@@ -90,10 +92,11 @@ private slots:
 #ifdef MAFW
     void onMediaChanged(int, char *objectId);
     void onPropertyChanged(const QDBusMessage &msg);
-    void onMetadataChanged(QString metadata, QVariant value);
+    void onMetadataChanged(QString name, QVariant value);
     void onStateChanged(int state);
     void onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* object_id, QString error);
     void onPositionChanged(int position, QString);
+    void onRendererMetadataRequested(GHashTable *metadata, QString objectId, QString error);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
     void playVideo();
     void onErrorOccured(const QDBusMessage &msg);

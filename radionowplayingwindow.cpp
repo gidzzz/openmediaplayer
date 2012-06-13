@@ -237,6 +237,8 @@ void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 
 void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant value)
 {
+    qDebug() << "Metadata changed:" << name << "=" << value;
+
     mafwrenderer->getCurrentMetadata();
 
     if (name == "is-seekable" /*MAFW_METADATA_KEY_IS_SEEKABLE*/) {
