@@ -81,35 +81,39 @@ RadioNowPlayingWindow::~RadioNowPlayingWindow()
 
 void RadioNowPlayingWindow::connectSignals()
 {
+#ifdef Q_WS_MAEMO_5
+    connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
+#endif
+
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
-#ifdef Q_WS_MAEMO_5
-    connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
-#endif
+
     connect(ui->nextButton, SIGNAL(pressed()), this, SLOT(onNextButtonPressed()));
     connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
 #ifdef MAFW
+    connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
+    connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
+
+    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
+    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
-    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
     connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
     connect(mafwrenderer, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onRendererMetadataChanged(QString,QVariant)));
     connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
             this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
+    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
-    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
-    connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
-    connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -275,7 +279,7 @@ void RadioNowPlayingWindow::updateSongLabel()
     else if (!artist.isEmpty())
         labelText.prepend(artist + " / ");
 
-    ui->songLabel->setText(labelText);
+    ui->songLabel->setText(QFontMetrics(ui->songLabel->font()).elidedText(labelText, Qt::ElideRight, 410));
 }
 
 void RadioNowPlayingWindow::onGetPosition(int position, QString)
@@ -386,7 +390,7 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
         this->updateSongLabel();
 
         if (!station.isEmpty())
-            ui->stationLabel->setText(station);
+            ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 410));
 
         if (duration != Duration::Unknown) {
             ui->streamLengthLabel->setText(time_mmss(duration));
@@ -410,7 +414,7 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         station = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
 
-        ui->stationLabel->setText(station);
+        ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 410));
     }
 
     if (!error.isEmpty())
@@ -426,12 +430,16 @@ void RadioNowPlayingWindow::orientationChanged(int w, int h)
         ui->spacerWidget->show();
         ui->spacerWidget2->show();
         ui->metadataWidget->setFixedWidth(440);
+        ui->stationLabel->setAlignment(Qt::AlignLeft);
+        ui->songLabel->setAlignment(Qt::AlignLeft);
     } else { // Portrait
         ui->volumeWidget->hide();
         ui->mainLayout->setDirection(QBoxLayout::TopToBottom);
         ui->spacerWidget2->hide();
         ui->spacerWidget->hide();
         ui->metadataWidget->setFixedWidth(470);
+        ui->stationLabel->setAlignment(Qt::AlignHCenter);
+        ui->songLabel->setAlignment(Qt::AlignHCenter);
     }
 }
 
