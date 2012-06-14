@@ -15,6 +15,10 @@
 #include "radionowplayingwindow.h"
 
 #ifdef Q_WS_MAEMO_5
+    #include <QtGui/QX11Info>
+    #include <X11/Xlib.h>
+    #include <X11/Xatom.h>
+    #include <X11/Xutil.h>
     #include <QMaemo5InformationBox>
     #include <QSpacerItem>
     #include "share.h"
@@ -96,7 +100,7 @@ private slots:
     void onStateChanged(int state);
     void onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* object_id, QString error);
     void onPositionChanged(int position, QString);
-    void onRendererMetadataRequested(GHashTable *metadata, QString objectId, QString error);
+    void onRendererMetadataRequested(GHashTable *metadata, QString, QString error);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
     void playVideo();
     void onErrorOccured(const QDBusMessage &msg);

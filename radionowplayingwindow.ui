@@ -196,7 +196,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSlider" name="songProgress">
+                 <widget class="QSlider" name="positionSlider">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>

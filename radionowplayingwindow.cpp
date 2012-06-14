@@ -211,9 +211,9 @@ void RadioNowPlayingWindow::onStateChanged(int state)
             positionTimer->stop();
     }
     else if (state == Transitioning) {
-        ui->songProgress->setEnabled(false);
-        ui->songProgress->setValue(0);
-        ui->songProgress->setRange(0, 99);
+        ui->positionSlider->setEnabled(false);
+        ui->positionSlider->setValue(0);
+        ui->positionSlider->setRange(0, 99);
         ui->currentPositionLabel->setText("00:00");
     }
 }
@@ -246,7 +246,7 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
     mafwrenderer->getCurrentMetadata();
 
     if (name == "is-seekable" /*MAFW_METADATA_KEY_IS_SEEKABLE*/) {
-        ui->songProgress->setEnabled(value.toBool());
+        ui->positionSlider->setEnabled(value.toBool());
         this->streamIsSeekable(value.toBool());
     }
     else if (name == "artist") {
@@ -286,10 +286,10 @@ void RadioNowPlayingWindow::onGetPosition(int position, QString)
 {
     ui->currentPositionLabel->setText(time_mmss(position));
     if (ui->streamLengthLabel->text() != "--:--")
-        ui->songProgress->setValue(position);
+        ui->positionSlider->setValue(position);
     else {
-        if (ui->songProgress->value() != 0)
-            ui->songProgress->setValue(0);
+        if (ui->positionSlider->value() != 0)
+            ui->positionSlider->setValue(0);
     }
 }
 
@@ -370,7 +370,7 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
         station = v ? QString::fromUtf8(g_value_get_string (v)) : "";
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : Duration::Unknown;
+        duration = v ? g_value_get_int64 (v) : Duration::Unknown;
         this->streamDuration = duration;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_IS_SEEKABLE);
@@ -394,7 +394,7 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
 
         if (duration != Duration::Unknown) {
             ui->streamLengthLabel->setText(time_mmss(duration));
-            ui->songProgress->setRange(0, duration);
+            ui->positionSlider->setRange(0, duration);
         } else
             ui->streamLengthLabel->setText("--:--");
 
@@ -494,6 +494,6 @@ void RadioNowPlayingWindow::streamIsSeekable(bool seekable)
                 positionTimer->start();
         }
     }
-    ui->songProgress->setEnabled(seekable);
+    ui->positionSlider->setEnabled(seekable);
 #endif
 }

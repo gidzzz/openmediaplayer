@@ -715,12 +715,12 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
         songAddBuffer[songAddBufferSize] = NULL;
 
         QString mime = QString::fromUtf8(g_value_get_string (mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));
-        qDebug() << "mime:" << mime;
+        qDebug() << "First item MIME:" << mime;
 
-        if (mime.startsWith("video"))
-            playlist->assignVideoPlaylist();
-        else
+        if (mime.startsWith("audio"))
             playlist->assignAudioPlaylist();
+        else
+            playlist->assignVideoPlaylist();
 
         playlist->clear();
     }
@@ -742,11 +742,14 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
         playlist->getSize(); // explained in musicwindow.cpp
         mafwrenderer->play();
 
+        QString mime = QString::fromUtf8(g_value_get_string (mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));
+        qDebug() << "Last item MIME:" << mime;
+
         // Assume that the playlist consists of items of one type
-        if ( QString::fromUtf8(g_value_get_string (mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME))).startsWith("video"))
-            createVideoNowPlayingWindow();
-        else
+        if (mime.startsWith("audio"))
             createNowPlayingWindow();
+        else
+            createVideoNowPlayingWindow();
 
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);

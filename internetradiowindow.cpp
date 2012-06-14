@@ -306,10 +306,9 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
         mime = QString::fromUtf8(g_value_get_string (v));
 
-        if (mime.contains("video")) return;
-
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
+        if (mime.contains("video")) title = "[VIDEO] " + title;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         URI = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown)");

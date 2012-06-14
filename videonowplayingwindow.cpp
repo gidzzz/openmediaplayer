@@ -17,12 +17,6 @@
 **************************************************************************/
 
 #include "videonowplayingwindow.h"
-#ifdef Q_WS_MAEMO_5
-#include <QtGui/QX11Info>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#endif
 
 VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
@@ -205,7 +199,7 @@ void VideoNowPlayingWindow::onMetadataChanged(QString name, QVariant value)
 #endif
 
 #ifdef MAFW
-void VideoNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString objectId, QString error)
+void VideoNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString, QString error)
 {
     if (metadata != NULL
     && mafw_metadata_first(metadata, MAFW_METADATA_KEY_AUDIO_CODEC)
