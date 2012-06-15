@@ -397,6 +397,7 @@ border: none;
      <string>Options</string>
     </property>
     <addaction name="actionSettings"/>
+    <addaction name="actionSleeper"/>
    </widget>
    <addaction name="menuOptions"/>
    <addaction name="menuHelp"/>
@@ -414,6 +415,11 @@ border: none;
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionSleeper">
+   <property name="text">
+    <string>Sleep timer</string>
    </property>
   </action>
  </widget>

@@ -39,8 +39,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     model->appendRow(new QStandardItem(tr("Do nothing")));
     selector->setModel(model);
     selector->setCurrentIndex(QSettings().value("main/onApplicationExit").toString() == "stop-playback" ? 0 :
-                                     QSettings().value("main/onApplicationExit").toString() == "pause-playback" ? 1 :
-                                     QSettings().value("main/onApplicationExit").toString() == "do-nothing" ? 2 : 0);
+                              QSettings().value("main/onApplicationExit").toString() == "pause-playback" ? 1 :
+                              QSettings().value("main/onApplicationExit").toString() == "do-nothing" ? 2 : 0);
     ui->exitBox->setPickSelector(selector);
 
     selector = new QMaemo5ListPickSelector;
@@ -52,10 +52,10 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     model->appendRow(new QStandardItem(tr("Do nothing")));
     selector->setModel(model);
     selector->setCurrentIndex(QSettings().value("main/headsetButtonAction").toString() == "next" ? 0 :
-                                     QSettings().value("main/headsetButtonAction").toString() == "previous" ? 1 :
-                                     QSettings().value("main/headsetButtonAction").toString() == "playpause" ? 2 :
-                                     QSettings().value("main/headsetButtonAction").toString() == "stop" ? 3 :
-                                     QSettings().value("main/headsetButtonAction").toString() == "none" ? 4 : 0);
+                              QSettings().value("main/headsetButtonAction").toString() == "previous" ? 1 :
+                              QSettings().value("main/headsetButtonAction").toString() == "playpause" ? 2 :
+                              QSettings().value("main/headsetButtonAction").toString() == "stop" ? 3 :
+                              QSettings().value("main/headsetButtonAction").toString() == "none" ? 4 : 0);
     ui->headsetButtonBox->setPickSelector(selector);
 
     selector = new QMaemo5ListPickSelector;
@@ -65,8 +65,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     model->appendRow(new QStandardItem(tr("Portrait")));
     selector->setModel(model);
     selector->setCurrentIndex(QSettings().value("main/orientation").toString() == "automatic" ? 0 :
-                                         QSettings().value("main/orientation").toString() == "landscape" ? 1 :
-                                         QSettings().value("main/orientation").toString() == "portrait" ? 2 : 0);
+                              QSettings().value("main/orientation").toString() == "landscape" ? 1 :
+                              QSettings().value("main/orientation").toString() == "portrait" ? 2 : 0);
     ui->orientationBox->setPickSelector(selector);
 
     ui->headsetCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());

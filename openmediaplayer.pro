@@ -64,7 +64,8 @@ SOURCES += \
     upnpview.cpp \
     delegates/mediawithicondelegate.cpp \
     rotator.cpp \
-    playlistpicker.cpp
+    playlistpicker.cpp \
+    sleeperdialog.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -103,7 +104,8 @@ HEADERS += \
     upnpview.h \
     delegates/mediawithicondelegate.h \
     rotator.h \
-    playlistpicker.h
+    playlistpicker.h \
+    sleeperdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -129,7 +131,8 @@ FORMS += \
     tagwindow.ui \
     upnpview.ui \
     upnpcontrol.ui \
-    playlistpicker.ui
+    playlistpicker.ui \
+    sleeperdialog.ui
 
 #generate translations
 isEmpty(QMAKE_LRELEASE) {

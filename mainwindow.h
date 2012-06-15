@@ -14,6 +14,7 @@
 #include "nowplayingindicator.h"
 #include "includes.h"
 #include "settingsdialog.h"
+#include "sleeperdialog.h"
 #include "aboutwindow.h"
 #include "rotator.h"
 
@@ -50,6 +51,9 @@ public slots:
     Q_SCRIPTABLE void open_mp_radio_playing_playback_on();
     Q_SCRIPTABLE void mime_open(const QString &uri);
 
+signals:
+    void sleeperSet(uint timestamp);
+
 private:
     Ui::MainWindow *ui;
     MusicWindow *musicWindow;
@@ -59,12 +63,13 @@ private:
     void focusOutEvent(QFocusEvent *);
     void changeEvent(QEvent *);
     void closeEvent(QCloseEvent *);
-
     void loadThemeIcons();
     void setButtonIcons();
     void connectSignals();
     void setLabelText();
     QString uriToPlay;
+    QTimer *sleeperTimer;
+    uint sleeperTimeoutStamp;
 #ifdef Q_WS_MAEMO_5
     QMaemo5InformationBox *updatingInfoBox;
     QProgressBar *updatingProgressBar;
@@ -101,6 +106,7 @@ private slots:
     void showAbout();
     void processListClicks(QListWidgetItem*);
     void openSettings();
+    void openSleeperDialog();
     void reloadSettings();
     void showMusicWindow();
     void showVideosWindow();
@@ -111,6 +117,8 @@ private slots:
     void onChildOpened();
     void onNowPlayingWindowHidden();
     void onChildClosed();
+    void setSleeperTimer(int seconds);
+    void onSleeperTimeout();
 #ifdef MAFW
     void trackerSourceReady();
     void radioSourceReady();

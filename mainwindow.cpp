@@ -102,6 +102,10 @@ MainWindow::MainWindow(QWidget *parent) :
     musicWindow = new MusicWindow(this);
 #endif
 
+    sleeperTimeoutStamp = 0;
+    sleeperTimer = new QTimer(this);
+    sleeperTimer->setSingleShot(true);
+
     this->connectSignals();
 
     Rotator *rotator = Rotator::acquire();
@@ -217,11 +221,13 @@ void MainWindow::connectSignals()
     connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
     connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
-    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->menuList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
+    connect(ui->actionSleeper, SIGNAL(triggered()), this, SLOT(openSleeperDialog()));
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
+    connect(sleeperTimer, SIGNAL(timeout()), this, SLOT(onSleeperTimeout()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
@@ -590,6 +596,53 @@ void MainWindow::reloadSettings()
     Rotator::acquire()->setPolicy(orientation == "landscape" ? Rotator::Landscape :
                                   orientation == "portrait"  ? Rotator::Portrait  :
                                                                Rotator::Automatic);
+}
+
+void MainWindow::openSleeperDialog()
+{
+    SleeperDialog *sleeperDialog = new SleeperDialog(this);
+    connect(sleeperDialog, SIGNAL(timerRequested(int)), this, SLOT(setSleeperTimer(int)));
+    connect(this, SIGNAL(sleeperSet(uint)), sleeperDialog, SLOT(setTimeoutStamp(uint)));
+    sleeperDialog->setTimeoutStamp(sleeperTimeoutStamp);
+    sleeperDialog->show();
+}
+
+void MainWindow::setSleeperTimer(int seconds)
+{
+    if (seconds >= 0) {
+        qDebug() << "Setting sleeper timer to" << seconds << "seconds";
+        sleeperTimer->stop();
+        sleeperTimer->setInterval(seconds * 1000);
+        sleeperTimer->start();
+        sleeperTimeoutStamp = QDateTime::currentDateTime().toTime_t() + seconds;
+    } else {
+        qDebug() << "Aborting sleeper";
+        sleeperTimer->stop();
+        sleeperTimeoutStamp = 0;
+    }
+
+    emit sleeperSet(sleeperTimeoutStamp);
+}
+
+void MainWindow::onSleeperTimeout()
+{
+#ifdef Q_WS_MAEMO_5
+    QMaemo5InformationBox::information(this, tr("Good night!"));
+#endif
+
+    emit sleeperSet(sleeperTimeoutStamp = 0);
+
+    QString action = QSettings().value("timer/action", "stop-playback").toString();
+    qDebug() << "Sleeper countdown finished with action" << action;
+
+#ifdef MAFW
+    if (action == "stop-playback")
+        mafwrenderer->stop();
+    else if (action == "pause-playback")
+        mafwrenderer->pause();
+    else if (action == "close-application")
+        this->close();
+#endif
 }
 
 void MainWindow::showMusicWindow()

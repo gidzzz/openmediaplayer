@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SleeperDialog</class>
+ <widget class="QDialog" name="SleeperDialog">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok|QDialogButtonBox::Reset|QDialogButtonBox::Cancel</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QWidget" name="widget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item row="0" column="1">
+       <widget class="QMaemo5ValueButton" name="actionBox">
+        <property name="text">
+         <string>Action</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QMaemo5ValueButton" name="volumeBox">
+        <property name="text">
+         <string>Volume reduction</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="minutesLabel">
+          <property name="text">
+           <string>Time (minutes)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="minutesBox">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>1440</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
