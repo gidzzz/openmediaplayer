@@ -141,12 +141,12 @@ void PlaylistQueryManager::queryPlaylist()
     requests.append(rangeInProgress);
 }
 
-void PlaylistQueryManager::onGetItems(QString object_id, GHashTable *metadata, guint index, gpointer op)
+void PlaylistQueryManager::onGetItems(QString objectId, GHashTable *metadata, guint index, gpointer op)
 {
     if (op != getItemsOp)
         return;
 
-    emit onGetItems(object_id, metadata, index);
+    emit onGetItems(objectId, metadata, index);
 }
 
 void PlaylistQueryManager::onRequestComplete(gpointer op)

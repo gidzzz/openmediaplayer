@@ -37,6 +37,8 @@ SleeperDialog::SleeperDialog(QWidget *parent) :
                               QSettings().value("timer/volumeReduction").toString() == "exponential" ? ExponentialReduction : NoReduction);
     ui->volumeBox->setPickSelector(selector);
 
+    ui->minutesBox->setValue(QSettings().value("timer/minutes", 30).toInt());
+
     refreshTimer = new QTimer(this);
     refreshTimer->setInterval(1000);
 
@@ -86,6 +88,8 @@ void SleeperDialog::onButtonClicked(QAbstractButton *button)
             case LinearReduction: QSettings().setValue("timer/volumeReduction", "linear"); break;
             case ExponentialReduction: QSettings().setValue("timer/volumeReduction", "exponential"); break;
         }
+
+        QSettings().setValue("timer/minutes", ui->minutesBox->value());
 
         emit timerRequested(ui->minutesBox->value()*60000, reduction);
     }

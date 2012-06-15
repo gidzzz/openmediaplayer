@@ -20,7 +20,7 @@ public:
     void itemsRemoved(int from, int amount);
 
 signals:
-    void onGetItems(QString object_id, GHashTable *metadata, guint index);
+    void onGetItems(QString objectId, GHashTable *metadata, guint index);
 
 public slots:
     void setPriority(int position);
@@ -37,7 +37,7 @@ private:
     int* rangeInProgress;
 
 private slots:
-    void onGetItems(QString object_id, GHashTable *metadata, guint index, gpointer op);
+    void onGetItems(QString objectId, GHashTable *metadata, guint index, gpointer op);
     void onRequestComplete(gpointer op);
 };
 
