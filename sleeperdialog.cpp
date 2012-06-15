@@ -30,9 +30,11 @@ SleeperDialog::SleeperDialog(QWidget *parent) :
     model = new QStandardItemModel(0, 1, selector);
     model->appendRow(new QStandardItem(tr("None")));
     model->appendRow(new QStandardItem(tr("Linear")));
+    model->appendRow(new QStandardItem(tr("Exponential")));
     selector->setModel(model);
     selector->setCurrentIndex(QSettings().value("timer/volumeReduction").toString() == "none" ? NoReduction :
-                              QSettings().value("timer/volumeReduction").toString() == "linear" ? LinearReduction : NoReduction);
+                              QSettings().value("timer/volumeReduction").toString() == "linear" ? LinearReduction :
+                              QSettings().value("timer/volumeReduction").toString() == "exponential" ? ExponentialReduction : NoReduction);
     ui->volumeBox->setPickSelector(selector);
 
     refreshTimer = new QTimer(this);
@@ -53,15 +55,14 @@ SleeperDialog::~SleeperDialog()
 
 void SleeperDialog::refreshTitle()
 {
-    this->setWindowTitle(tr("Sleep timer") + " " +
-                         time_mmss(timeoutStamp-QDateTime::currentDateTime().toTime_t()));
+    this->setWindowTitle(tr("Sleep timer") + " " + time_mmss( (timeoutStamp/1000 - QDateTime::currentMSecsSinceEpoch()/1000) ));
 }
 
-void SleeperDialog::setTimeoutStamp(uint timeoutStamp)
+void SleeperDialog::setTimeoutStamp(qint64 timeoutStamp)
 {
     this->timeoutStamp = timeoutStamp;
 
-    if (timeoutStamp == 0) {
+    if (timeoutStamp == -1) {
         refreshTimer->stop();
         this->setWindowTitle(tr("Sleep timer"));
     } else {
@@ -83,9 +84,10 @@ void SleeperDialog::onButtonClicked(QAbstractButton *button)
         switch (reduction) {
             case NoReduction: QSettings().setValue("timer/volumeReduction", "none"); break;
             case LinearReduction: QSettings().setValue("timer/volumeReduction", "linear"); break;
+            case ExponentialReduction: QSettings().setValue("timer/volumeReduction", "exponential"); break;
         }
 
-        emit timerRequested(ui->minutesBox->value()*60, reduction);
+        emit timerRequested(ui->minutesBox->value()*60000, reduction);
     }
 
     else if (button == ui->buttonBox->button(QDialogButtonBox::Reset)) {

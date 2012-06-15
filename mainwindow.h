@@ -52,7 +52,7 @@ public slots:
     Q_SCRIPTABLE void mime_open(const QString &uri);
 
 signals:
-    void sleeperSet(uint timestamp);
+    void sleeperSet(qint64 timestamp);
 
 private:
     Ui::MainWindow *ui;
@@ -70,7 +70,8 @@ private:
     QString uriToPlay;
     QTimer *sleeperTimer;
     QTimer *sleeperVolumeTimer;
-    uint sleeperTimeoutStamp;
+    qint64 sleeperStartStamp;
+    qint64 sleeperTimeoutStamp;
     int volume;
     int volumeReduction;
     void scheduleSleeperVolume();

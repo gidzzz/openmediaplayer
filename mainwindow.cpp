@@ -102,7 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
     musicWindow = new MusicWindow(this);
 #endif
 
-    sleeperTimeoutStamp = 0;
+    sleeperTimeoutStamp = -1;
     sleeperTimer = new QTimer(this);
     sleeperTimer->setSingleShot(true);
     sleeperVolumeTimer = new QTimer(this);
@@ -610,23 +610,24 @@ void MainWindow::openSleeperDialog()
 {
     SleeperDialog *sleeperDialog = new SleeperDialog(this);
     connect(sleeperDialog, SIGNAL(timerRequested(int,int)), this, SLOT(setSleeperTimer(int,int)));
-    connect(this, SIGNAL(sleeperSet(uint)), sleeperDialog, SLOT(setTimeoutStamp(uint)));
+    connect(this, SIGNAL(sleeperSet(qint64)), sleeperDialog, SLOT(setTimeoutStamp(qint64)));
     sleeperDialog->setTimeoutStamp(sleeperTimeoutStamp);
     sleeperDialog->show();
 }
 
-void MainWindow::setSleeperTimer(int seconds, int reduction)
+void MainWindow::setSleeperTimer(int interval, int reduction)
 {
     sleeperTimer->stop();
     sleeperVolumeTimer->stop();
     volumeReduction = reduction;
 
-    if (seconds >= 0) {
-        qDebug() << "Setting sleeper timer to" << seconds << "seconds";
+    if (interval >= 0) {
+        qDebug() << "Setting sleeper timer to" << interval << "ms";
 
-        sleeperTimer->setInterval(seconds * 1000);
+        sleeperTimer->setInterval(interval);
         sleeperTimer->start();
-        sleeperTimeoutStamp = QDateTime::currentDateTime().toTime_t() + seconds;
+        sleeperStartStamp = QDateTime::currentMSecsSinceEpoch();
+        sleeperTimeoutStamp = sleeperStartStamp + interval;
 
 #ifdef MAFW
         connect(mafwrenderer, SIGNAL(signalGetVolume(int)), this, SLOT(getInitialVolume(int)));
@@ -634,7 +635,7 @@ void MainWindow::setSleeperTimer(int seconds, int reduction)
 #endif
     } else {
         qDebug() << "Aborting sleeper";
-        sleeperTimeoutStamp = 0;
+        sleeperTimeoutStamp = -1;
     }
 
     emit sleeperSet(sleeperTimeoutStamp);
@@ -662,9 +663,39 @@ void MainWindow::onPropertyChanged(const QDBusMessage &msg)
 void MainWindow::scheduleSleeperVolume()
 {
     if (volumeReduction && volume > 0) {
-        int timespan = sleeperTimeoutStamp-QDateTime::currentDateTime().toTime_t();
+        int timespan = sleeperTimeoutStamp - QDateTime::currentMSecsSinceEpoch();
         if (timespan > 0) {
-            sleeperVolumeTimer->setInterval(timespan*1000 / volume);
+            switch (volumeReduction) {
+                case SleeperDialog::LinearReduction:
+                    sleeperVolumeTimer->setInterval(timespan / volume);
+                    break;
+                case SleeperDialog::ExponentialReduction:
+                    // The following algorithm is used to determine the timer interval:
+                    //     1. Calculate the reference volume for the current moment.
+                    //     2. Calculate the scale between the current volume and the reference volume from step 1.
+                    //     3. Calculate the reference volume for the current volume minus 1 using the scale from step 2.
+                    //     4. Calculate the moment for which the reference volume from step 1 would be equal to the reference volume from step 3.
+                    //     5. Calculate the interval as the difference between the moment from step 4 and the current moment.
+
+                    // Exponentially decreasing reference volume can be calculated using the follwing formula:
+                    //     v(t) = 100 - (exp(a*t)-1)
+                    // Parameter a is constant and adjusts the slope.
+                    // Parameter t is the moment for which the reference volume should be calculated.
+                    // MAFW accepts volume levels between 0 and 100, so t should be between 0 and ln(100 + 1) / a.
+
+                    const int a = 5;
+                    const double tMax = 0.92302410336825;
+
+                    qint64 currentStamp = QDateTime::currentMSecsSinceEpoch();
+                    double t = tMax * (currentStamp-sleeperStartStamp) / (sleeperTimeoutStamp-sleeperStartStamp);
+                    double referenceVolume = 101 - qExp(a*t);
+                    double scale = referenceVolume / volume;
+                    double nextReferenceVolume = (volume-1) * scale;
+                    double tNext = qLn(101-nextReferenceVolume) / a;
+                    int interval = sleeperStartStamp + (sleeperTimeoutStamp-sleeperStartStamp)*(tNext/tMax) - currentStamp;
+                    sleeperVolumeTimer->setInterval(qMax(0, interval));
+                    break;
+            }
             sleeperVolumeTimer->start();
             qDebug() << "Current volume level is" << volume << "and next step is in" << sleeperVolumeTimer->interval() << "ms";
         }
@@ -685,7 +716,7 @@ void MainWindow::onSleeperTimeout()
     QMaemo5InformationBox::information(this, tr("Good night!"));
 #endif
 
-    emit sleeperSet(sleeperTimeoutStamp = 0);
+    emit sleeperSet(sleeperTimeoutStamp = -1);
 
     QString action = QSettings().value("timer/action", "stop-playback").toString();
     qDebug() << "Sleeper countdown finished with action" << action;

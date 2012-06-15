@@ -23,22 +23,23 @@ class SleeperDialog : public QDialog
 public:
     enum VolumeReduction {
         NoReduction = 0,
-        LinearReduction
+        LinearReduction,
+        ExponentialReduction
     };
 
     explicit SleeperDialog(QWidget *parent = 0);
     ~SleeperDialog();
 
 public slots:
-    void setTimeoutStamp(uint timeoutStamp);
+    void setTimeoutStamp(qint64 timeoutStamp);
 
 signals:
-    void timerRequested(int seconds, int reduction);
+    void timerRequested(int interval, int reduction);
 
 private:
     Ui::SleeperDialog *ui;
     QTimer *refreshTimer;
-    uint timeoutStamp;
+    qint64 timeoutStamp;
 
 private slots:
     void refreshTitle();
