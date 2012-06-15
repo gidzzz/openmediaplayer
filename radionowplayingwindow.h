@@ -42,6 +42,7 @@ private:
     void setIcons();
     QTimer *volumeTimer;
     QTimer *positionTimer;
+    bool lazySliders;
     bool buttonWasDown;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -77,6 +78,9 @@ private slots:
     void onBufferingInfo(float);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
+    void onPositionSliderPressed();
+    void onPositionSliderReleased();
+    void onPositionSliderMoved(int position);
     void onRendererMetadataRequested(GHashTable*, QString, QString error);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
     void onRendererMetadataChanged(QString name, QVariant value);

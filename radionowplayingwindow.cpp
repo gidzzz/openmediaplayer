@@ -32,8 +32,9 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     ui->setupUi(this);
 
     setAttribute(Qt::WA_DeleteOnClose);
-
 #ifdef Q_WS_MAEMO_5
+    setAttribute(Qt::WA_Maemo5StackedWindow);
+
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
     QColor secondaryColor(156, 154, 156);
@@ -42,13 +43,12 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
                                  .arg(secondaryColor.red())
                                  .arg(secondaryColor.green())
                                  .arg(secondaryColor.blue()));
-    this->updateSongLabel();
+
+    lazySliders = QSettings().value("main/lazySliders").toBool();
 
     ui->volumeSlider->hide();
-#ifdef Q_WS_MAEMO_5
-    this->setAttribute(Qt::WA_Maemo5StackedWindow);
-#endif
-    this->setIcons();
+    ui->bufferBar->hide();
+
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
 
@@ -58,8 +58,8 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     ui->bufferBar->setRange(0, 2);
     ui->bufferBar->setValue(1);
 
-    ui->bufferBar->hide();
-
+    this->updateSongLabel();
+    this->setIcons();
     this->connectSignals();
 
     Rotator *rotator = Rotator::acquire();
@@ -100,6 +100,9 @@ void RadioNowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
 
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
+    connect(ui->positionSlider, SIGNAL(sliderPressed()), this, SLOT(onPositionSliderPressed()));
+    connect(ui->positionSlider, SIGNAL(sliderReleased()), this, SLOT(onPositionSliderReleased()));
+    connect(ui->positionSlider, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
 
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
@@ -285,9 +288,10 @@ void RadioNowPlayingWindow::updateSongLabel()
 void RadioNowPlayingWindow::onGetPosition(int position, QString)
 {
     ui->currentPositionLabel->setText(time_mmss(position));
-    if (ui->streamLengthLabel->text() != "--:--")
-        ui->positionSlider->setValue(position);
-    else {
+    if (ui->streamLengthLabel->text() != "--:--") {
+        if (!ui->positionSlider->isSliderDown())
+            ui->positionSlider->setValue(position);
+    } else {
         if (ui->positionSlider->value() != 0)
             ui->positionSlider->setValue(0);
     }
@@ -349,6 +353,24 @@ void RadioNowPlayingWindow::onPreviousButtonClicked()
             mafwrenderer->previous();
         buttonWasDown = false;
     }
+}
+
+void RadioNowPlayingWindow::onPositionSliderPressed()
+{
+    onPositionSliderMoved(ui->positionSlider->value());
+}
+
+void RadioNowPlayingWindow::onPositionSliderReleased()
+{
+    ui->currentPositionLabel->setText(time_mmss(ui->positionSlider->value()));
+    mafwrenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
+}
+
+void RadioNowPlayingWindow::onPositionSliderMoved(int position)
+{
+    ui->currentPositionLabel->setText(time_mmss(position));
+    if (!lazySliders)
+        mafwrenderer->setPosition(SeekAbsolute, position);
 }
 
 void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString, QString error)

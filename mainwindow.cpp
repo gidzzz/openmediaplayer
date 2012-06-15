@@ -663,7 +663,7 @@ void MainWindow::onPropertyChanged(const QDBusMessage &msg)
 void MainWindow::scheduleSleeperVolume()
 {
     if (volumeReduction && volume > 0) {
-        int timespan = sleeperTimeoutStamp - QDateTime::currentMSecsSinceEpoch();
+        qint64 timespan = sleeperTimeoutStamp - QDateTime::currentMSecsSinceEpoch();
         if (timespan > 0) {
             switch (volumeReduction) {
                 case SleeperDialog::LinearReduction:

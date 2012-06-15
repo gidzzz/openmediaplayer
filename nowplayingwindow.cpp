@@ -1002,7 +1002,7 @@ void NowPlayingWindow::onVolumeSliderReleased()
 
 void NowPlayingWindow::onPositionSliderPressed()
 {
-    this->onPositionSliderMoved(ui->songProgress->value());
+    onPositionSliderMoved(ui->songProgress->value());
 }
 
 void NowPlayingWindow::onPositionSliderReleased()
