@@ -105,6 +105,8 @@ MainWindow::MainWindow(QWidget *parent) :
     sleeperTimeoutStamp = 0;
     sleeperTimer = new QTimer(this);
     sleeperTimer->setSingleShot(true);
+    sleeperVolumeTimer = new QTimer(this);
+    sleeperVolumeTimer->setSingleShot(true);
 
     this->connectSignals();
 
@@ -228,6 +230,7 @@ void MainWindow::connectSignals()
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
     connect(sleeperTimer, SIGNAL(timeout()), this, SLOT(onSleeperTimeout()));
+    connect(sleeperVolumeTimer, SIGNAL(timeout()), this, SLOT(stepSleeperVolume()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
@@ -239,9 +242,14 @@ void MainWindow::connectSignals()
     connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countRadioResult(QString, GHashTable*, QString)));
     connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
+                                          "/com/nokia/mafw/renderer/gstrenderer",
+                                          "com.nokia.mafw.extension",
+                                          "property_changed",
+                                          this, SLOT(onPropertyChanged(const QDBusMessage &)));
 #endif
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Connected",
@@ -601,27 +609,74 @@ void MainWindow::reloadSettings()
 void MainWindow::openSleeperDialog()
 {
     SleeperDialog *sleeperDialog = new SleeperDialog(this);
-    connect(sleeperDialog, SIGNAL(timerRequested(int)), this, SLOT(setSleeperTimer(int)));
+    connect(sleeperDialog, SIGNAL(timerRequested(int,int)), this, SLOT(setSleeperTimer(int,int)));
     connect(this, SIGNAL(sleeperSet(uint)), sleeperDialog, SLOT(setTimeoutStamp(uint)));
     sleeperDialog->setTimeoutStamp(sleeperTimeoutStamp);
     sleeperDialog->show();
 }
 
-void MainWindow::setSleeperTimer(int seconds)
+void MainWindow::setSleeperTimer(int seconds, int reduction)
 {
+    sleeperTimer->stop();
+    sleeperVolumeTimer->stop();
+    volumeReduction = reduction;
+
     if (seconds >= 0) {
         qDebug() << "Setting sleeper timer to" << seconds << "seconds";
-        sleeperTimer->stop();
+
         sleeperTimer->setInterval(seconds * 1000);
         sleeperTimer->start();
         sleeperTimeoutStamp = QDateTime::currentDateTime().toTime_t() + seconds;
+
+#ifdef MAFW
+        connect(mafwrenderer, SIGNAL(signalGetVolume(int)), this, SLOT(getInitialVolume(int)));
+        mafwrenderer->getVolume();
+#endif
     } else {
         qDebug() << "Aborting sleeper";
-        sleeperTimer->stop();
         sleeperTimeoutStamp = 0;
     }
 
     emit sleeperSet(sleeperTimeoutStamp);
+}
+
+#ifdef MAFW
+void MainWindow::getInitialVolume(int volume)
+{
+    disconnect(mafwrenderer, SIGNAL(signalGetVolume(int)), this, SLOT(getInitialVolume(int)));
+    this->volume = volume;
+    scheduleSleeperVolume();
+}
+#endif
+
+#ifdef MAFW
+void MainWindow::onPropertyChanged(const QDBusMessage &msg)
+{
+    if (msg.arguments()[0].toString() == "volume") {
+        volume = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
+        scheduleSleeperVolume();
+    }
+}
+#endif
+
+void MainWindow::scheduleSleeperVolume()
+{
+    if (volumeReduction && volume > 0) {
+        int timespan = sleeperTimeoutStamp-QDateTime::currentDateTime().toTime_t();
+        if (timespan > 0) {
+            sleeperVolumeTimer->setInterval(timespan*1000 / volume);
+            sleeperVolumeTimer->start();
+            qDebug() << "Current volume level is" << volume << "and next step is in" << sleeperVolumeTimer->interval() << "ms";
+        }
+    }
+}
+
+void MainWindow::stepSleeperVolume()
+{
+#ifdef MAFW
+    volume = qMax(0, volume-1);
+    mafwrenderer->setVolume(volume);
+#endif
 }
 
 void MainWindow::onSleeperTimeout()

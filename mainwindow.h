@@ -69,7 +69,11 @@ private:
     void setLabelText();
     QString uriToPlay;
     QTimer *sleeperTimer;
+    QTimer *sleeperVolumeTimer;
     uint sleeperTimeoutStamp;
+    int volume;
+    int volumeReduction;
+    void scheduleSleeperVolume();
 #ifdef Q_WS_MAEMO_5
     QMaemo5InformationBox *updatingInfoBox;
     QProgressBar *updatingProgressBar;
@@ -117,9 +121,12 @@ private slots:
     void onChildOpened();
     void onNowPlayingWindowHidden();
     void onChildClosed();
-    void setSleeperTimer(int seconds);
+    void setSleeperTimer(int seconds, int reduction);
+    void stepSleeperVolume();
     void onSleeperTimeout();
 #ifdef MAFW
+    void onPropertyChanged(const QDBusMessage &msg);
+    void getInitialVolume(int volume);
     void trackerSourceReady();
     void radioSourceReady();
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);

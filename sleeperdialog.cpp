@@ -29,8 +29,10 @@ SleeperDialog::SleeperDialog(QWidget *parent) :
     selector = new QMaemo5ListPickSelector;
     model = new QStandardItemModel(0, 1, selector);
     model->appendRow(new QStandardItem(tr("None")));
+    model->appendRow(new QStandardItem(tr("Linear")));
     selector->setModel(model);
-    selector->setCurrentIndex(QSettings().value("timer/volumeReduction").toString() == "none" ? 0 : 0);
+    selector->setCurrentIndex(QSettings().value("timer/volumeReduction").toString() == "none" ? NoReduction :
+                              QSettings().value("timer/volumeReduction").toString() == "linear" ? LinearReduction : NoReduction);
     ui->volumeBox->setPickSelector(selector);
 
     refreshTimer = new QTimer(this);
@@ -77,15 +79,17 @@ void SleeperDialog::onButtonClicked(QAbstractButton *button)
             case 2: QSettings().setValue("timer/action", "close-application"); break;
         }
 
-        switch (static_cast<QMaemo5ListPickSelector*>(ui->volumeBox->pickSelector())->currentIndex()) {
-            case 0: QSettings().setValue("timer/volumeReduction", "none"); break;
+        int reduction = static_cast<QMaemo5ListPickSelector*>(ui->volumeBox->pickSelector())->currentIndex();
+        switch (reduction) {
+            case NoReduction: QSettings().setValue("timer/volumeReduction", "none"); break;
+            case LinearReduction: QSettings().setValue("timer/volumeReduction", "linear"); break;
         }
 
-        emit timerRequested(ui->minutesBox->value()*60);
+        emit timerRequested(ui->minutesBox->value()*60, reduction);
     }
 
     else if (button == ui->buttonBox->button(QDialogButtonBox::Reset)) {
-        emit timerRequested(-1);
+        emit timerRequested(-1, NoReduction);
     }
 }
 

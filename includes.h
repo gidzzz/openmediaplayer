@@ -59,7 +59,7 @@ enum UserRoles { UserRoleName=Qt::UserRole,
                };
 
 namespace Duration {
-    enum e {
+    enum {
         Unknown = -1,
         Blank = -2
     };
