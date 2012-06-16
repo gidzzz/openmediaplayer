@@ -63,7 +63,8 @@ private:
     bool lazySliders;
     bool reverseTime;
     bool portrait;
-    bool isOverlayVisible;
+    bool overlayVisible;
+    bool overlayRequestedByUser;
     bool saveStateOnClose;
     bool gotInitialState;
     bool buttonWasDown;
@@ -99,6 +100,7 @@ private slots:
     void onMetadataChanged(QString name, QVariant value);
     void onStateChanged(int state);
     void onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* object_id, QString error);
+    void onBufferingInfo(float status);
     void onPositionChanged(int position, QString);
     void onRendererMetadataRequested(GHashTable *metadata, QString, QString error);
     void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);

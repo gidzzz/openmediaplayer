@@ -314,7 +314,6 @@ void RadioNowPlayingWindow::onBufferingInfo(float buffer)
         }
     } else { // buffer == 0.0
         ui->bufferBar->setRange(0, 0);
-        ui->bufferBar->setValue(-1);
 
         // Qt doesn't want to display the label in the bouncing mode
         /*ui->bufferBar->setFormat(tr("Connecting"));*/

@@ -61,8 +61,9 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     lazySliders = QSettings().value("main/lazySliders").toBool();
     reverseTime = QSettings().value("main/reverseTime").toBool();
 
-    this->isOverlayVisible = true;
     this->saveStateOnClose = true;
+    this->overlayVisible = true;
+    this->overlayRequestedByUser = false;
     this->gotInitialState = false;
     this->buttonWasDown = false;
 #ifdef MAFW
@@ -76,6 +77,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     ui->currentPositionLabel->installEventFilter(this);
 
     this->showOverlay(false);
+    ui->bufferBar->setAlignment(Qt::AlignCenter);
 
 #ifdef MAFW
     mafwrenderer->setColorKey(199939);
@@ -149,6 +151,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 #ifdef MAFW
+    connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
@@ -539,7 +542,8 @@ void VideoNowPlayingWindow::paintEvent(QPaintEvent *)
 
 void VideoNowPlayingWindow::mouseReleaseEvent(QMouseEvent *)
 {
-    this->showOverlay(!this->isOverlayVisible);
+    overlayRequestedByUser = !overlayVisible;
+    showOverlay(overlayRequestedByUser);
 }
 
 void VideoNowPlayingWindow::keyPressEvent(QKeyEvent *event)
@@ -582,7 +586,7 @@ void VideoNowPlayingWindow::showOverlay(bool show)
     ui->toolbarOverlay->setHidden(!show);
     ui->wmCloseButton->setHidden(!show);
 
-    this->isOverlayVisible = show;
+    overlayVisible = show;
 
 #ifdef MAFW
     if (!show && this->positionTimer->isActive())
@@ -618,7 +622,33 @@ void VideoNowPlayingWindow::onSliderMoved(int position)
 }
 
 #ifdef MAFW
+void VideoNowPlayingWindow::onBufferingInfo(float status)
+{
+    if (status != 0.0) {
+        int percentage = (int)(status*100);
+        ui->bufferBar->setRange(0, 100);
+        ui->bufferBar->setValue(percentage);
 
+        ui->bufferBar->setFormat(tr("Buffering") + " %p%");
+
+        if (status == 1.0) {
+            showOverlay(overlayRequestedByUser);
+            ui->bufferBar->hide();
+            ui->positionWidget->show();
+        }
+    } else { // status == 0.0
+        ui->bufferBar->setRange(0, 0);
+    }
+
+    if (status != 1.0 && !ui->bufferBar->isVisible()) {
+        showOverlay(true);
+        ui->positionWidget->hide();
+        ui->bufferBar->show();
+    }
+}
+#endif
+
+#ifdef MAFW
 void VideoNowPlayingWindow::onPositionChanged(int position, QString)
 {
     this->currentPosition = position;

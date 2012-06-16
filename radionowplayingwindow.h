@@ -75,7 +75,7 @@ private slots:
     void onPropertyChanged(const QDBusMessage &msg);
     void onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString);
     void onGetPosition(int position, QString);
-    void onBufferingInfo(float);
+    void onBufferingInfo(float buffer);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
     void onPositionSliderPressed();
