@@ -728,7 +728,7 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../nowplayingwindow.ui" line="14"/>
         <source>Now playing</source>
-        <translation>Tocando agora</translation>
+        <translation>Em reprodução</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="191"/>
@@ -769,7 +769,8 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../nowplayingwindow.ui" line="941"/>
         <source>Clear now playing</source>
-        <translation>Limpar Lista de Reprodução Atual</translation>
+        <translation>Limpar Lista
+de Reprodução Atual</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="946"/>
@@ -826,7 +827,7 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../radionowplayingwindow.ui" line="14"/>
         <source>Now playing</source>
-        <translation>Tocando agora</translation>
+        <translation>Em reprodução</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="157"/>
@@ -1114,7 +1115,8 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Adicionar músicas a lista de reprodução atual</translation>
+        <translation>Adicionar músicas a lista
+de reprodução atual</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
@@ -1514,7 +1516,8 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>Adicionar músicas à lista de reprodução actual</translation>
+        <translation>Adicionar músicas à lista
+de reprodução actual</translation>
     </message>
 </context>
 <context>
