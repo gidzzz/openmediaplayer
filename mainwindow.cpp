@@ -712,10 +712,6 @@ void MainWindow::stepSleeperVolume()
 
 void MainWindow::onSleeperTimeout()
 {
-#ifdef Q_WS_MAEMO_5
-    QMaemo5InformationBox::information(this, tr("Good night!"));
-#endif
-
     emit sleeperSet(sleeperTimeoutStamp = -1);
 
     QString action = QSettings().value("timer/action", "stop-playback").toString();

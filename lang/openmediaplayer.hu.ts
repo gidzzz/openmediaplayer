@@ -223,12 +223,12 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
         <translation>Helytelen URL</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="312"/>
+        <location filename="../internetradiowindow.cpp" line="310"/>
         <source>(unknown station)</source>
         <translation>(ismeretlen állomás)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="315"/>
+        <location filename="../internetradiowindow.cpp" line="314"/>
         <source>(unknown)</source>
         <translation>(ismeretlen)</translation>
     </message>
@@ -237,7 +237,7 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="677"/>
+        <location filename="../mainwindow.cpp" line="811"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n dal</numerusform>
@@ -245,7 +245,7 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="684"/>
+        <location filename="../mainwindow.cpp" line="818"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n videó</numerusform>
@@ -253,63 +253,63 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="700"/>
+        <location filename="../mainwindow.cpp" line="834"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n állomás</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="204"/>
-        <location filename="../mainwindow.cpp" line="209"/>
+        <location filename="../mainwindow.cpp" line="210"/>
+        <location filename="../mainwindow.cpp" line="215"/>
         <source>Music</source>
         <translation>Zenék</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="205"/>
-        <location filename="../mainwindow.cpp" line="210"/>
+        <location filename="../mainwindow.cpp" line="211"/>
+        <location filename="../mainwindow.cpp" line="216"/>
         <source>Videos</source>
         <translation>Videók</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="206"/>
-        <location filename="../mainwindow.cpp" line="211"/>
+        <location filename="../mainwindow.cpp" line="212"/>
+        <location filename="../mainwindow.cpp" line="217"/>
         <source>Internet Radio</source>
         <translation>Internet rádió</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="207"/>
-        <location filename="../mainwindow.cpp" line="212"/>
+        <location filename="../mainwindow.cpp" line="213"/>
+        <location filename="../mainwindow.cpp" line="218"/>
         <source>Shuffle all songs</source>
         <translation>Összes dal keverése</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="676"/>
+        <location filename="../mainwindow.cpp" line="810"/>
         <source>(no songs)</source>
         <translation>(nincsenek dalok)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="683"/>
+        <location filename="../mainwindow.cpp" line="817"/>
         <source>(no videos)</source>
         <translation>(nincsenek videók)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="699"/>
+        <location filename="../mainwindow.cpp" line="833"/>
         <source>(no stations)</source>
         <translation>(nincsenek állomások)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="830"/>
+        <location filename="../mainwindow.cpp" line="967"/>
         <source>Retrieving information on the new media files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="832"/>
+        <location filename="../mainwindow.cpp" line="969"/>
         <source>Estimated time remaining:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="834"/>
+        <location filename="../mainwindow.cpp" line="971"/>
         <source>Remaining items:</source>
         <translation>Fennmaradó elemek: </translation>
     </message>
@@ -325,19 +325,24 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
         <translation>Opciók</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="406"/>
+        <location filename="../mainwindow.ui" line="407"/>
         <source>About</source>
         <translation>Névjegy</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="411"/>
+        <location filename="../mainwindow.ui" line="412"/>
         <source>About Qt</source>
         <translation>Qt névjegy</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="416"/>
+        <location filename="../mainwindow.ui" line="417"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="422"/>
+        <source>Sleep timer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -825,41 +830,41 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
         <translation>Most játszott</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="163"/>
-        <location filename="../radionowplayingwindow.cpp" line="235"/>
-        <location filename="../radionowplayingwindow.cpp" line="409"/>
+        <location filename="../radionowplayingwindow.ui" line="157"/>
+        <location filename="../radionowplayingwindow.cpp" line="242"/>
+        <location filename="../radionowplayingwindow.cpp" line="436"/>
         <source>(unknown station)</source>
         <translation>(ismeretlen állomás)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="516"/>
+        <location filename="../radionowplayingwindow.ui" line="510"/>
         <source>Options</source>
         <translation>Opciók</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="525"/>
+        <location filename="../radionowplayingwindow.ui" line="519"/>
         <source>FM transmitter</source>
         <translation>FM transmitter</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="530"/>
+        <location filename="../radionowplayingwindow.ui" line="524"/>
         <source>Add radio bookmark</source>
         <translation>Rádió adó mentése</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="230"/>
-        <location filename="../radionowplayingwindow.cpp" line="272"/>
+        <location filename="../radionowplayingwindow.cpp" line="237"/>
+        <location filename="../radionowplayingwindow.cpp" line="281"/>
         <source>(unknown artist)</source>
         <translation>(ismeretlen előadó)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="230"/>
-        <location filename="../radionowplayingwindow.cpp" line="272"/>
+        <location filename="../radionowplayingwindow.cpp" line="237"/>
+        <location filename="../radionowplayingwindow.cpp" line="281"/>
         <source>(unknown song)</source>
         <translation>(ismeretlen dal)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="297"/>
+        <location filename="../radionowplayingwindow.cpp" line="307"/>
         <source>Buffering</source>
         <translation>Betöltés</translation>
     </message>
@@ -1363,6 +1368,70 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     </message>
 </context>
 <context>
+    <name>SleeperDialog</name>
+    <message>
+        <location filename="../sleeperdialog.ui" line="31"/>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.ui" line="38"/>
+        <source>Volume reduction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.ui" line="47"/>
+        <source>Time (minutes)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="10"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="11"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="20"/>
+        <source>Stop playback</source>
+        <translation>Lejátszás megállítása</translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="21"/>
+        <source>Pause playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="22"/>
+        <source>Close application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="31"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="32"/>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="33"/>
+        <source>Exponential</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="60"/>
+        <location filename="../sleeperdialog.cpp" line="69"/>
+        <source>Sleep timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TagWindow</name>
     <message>
         <location filename="../tagwindow.ui" line="14"/>
@@ -1445,163 +1514,168 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
         <translation>Most játszott</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="282"/>
+        <location filename="../videonowplayingwindow.cpp" line="311"/>
         <source>Delete video?</source>
         <translation>Videó törlése?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="283"/>
+        <location filename="../videonowplayingwindow.cpp" line="312"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Biztosan törölni szeretnéd ezt a videót?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="286"/>
+        <location filename="../videonowplayingwindow.cpp" line="315"/>
         <source>Yes</source>
         <translation>Igen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="287"/>
+        <location filename="../videonowplayingwindow.cpp" line="316"/>
         <source>No</source>
         <translation>Nem</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="616"/>
-        <location filename="../videonowplayingwindow.cpp" line="709"/>
+        <location filename="../videonowplayingwindow.cpp" line="632"/>
+        <source>Buffering</source>
+        <translation>Betöltés</translation>
+    </message>
+    <message>
+        <location filename="../videonowplayingwindow.cpp" line="672"/>
+        <location filename="../videonowplayingwindow.cpp" line="765"/>
         <source>Unable to play media</source>
         <translation>Nem tudom lejátszani a médiát</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="620"/>
+        <location filename="../videonowplayingwindow.cpp" line="676"/>
         <source>Media not found</source>
         <translation>Nem találom a médiát</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="622"/>
+        <location filename="../videonowplayingwindow.cpp" line="678"/>
         <source>URI not available</source>
         <translation>URI nem elérhető</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="624"/>
+        <location filename="../videonowplayingwindow.cpp" line="680"/>
         <source>Invalid URI</source>
         <translation>Helytelen URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="626"/>
+        <location filename="../videonowplayingwindow.cpp" line="682"/>
         <source>Unable to open media</source>
         <translation>Nem tudom megnyitni a médiát</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="628"/>
+        <location filename="../videonowplayingwindow.cpp" line="684"/>
         <source>Playback stream no longer available</source>
         <translation>Az adás megszakadt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="630"/>
+        <location filename="../videonowplayingwindow.cpp" line="686"/>
         <source>Could not determine MIME-type</source>
         <translation>Nem tudom meghatározni a MIME-típust</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="632"/>
+        <location filename="../videonowplayingwindow.cpp" line="688"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Hiba történt, a lejátszás nem folytatható</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="634"/>
+        <location filename="../videonowplayingwindow.cpp" line="690"/>
         <source>General error occured</source>
         <translation>Hiba történt</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="636"/>
+        <location filename="../videonowplayingwindow.cpp" line="692"/>
         <source>Unsupported media</source>
         <translation>Nem támogatott formátum</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="638"/>
+        <location filename="../videonowplayingwindow.cpp" line="694"/>
         <source>Unsupported resolution</source>
         <translation>Nem támogatott felbontás</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="640"/>
+        <location filename="../videonowplayingwindow.cpp" line="696"/>
         <source>Unsupported framerate</source>
         <translation>Nem támogatott framerate</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="642"/>
+        <location filename="../videonowplayingwindow.cpp" line="698"/>
         <source>Media is protected by DRM</source>
         <translation>Ez a média szerzői jogvédelem alatt áll</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="644"/>
+        <location filename="../videonowplayingwindow.cpp" line="700"/>
         <source>System sound device is unavailable</source>
         <translation>Rendszer hangeszköze nem elérhető</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="646"/>
+        <location filename="../videonowplayingwindow.cpp" line="702"/>
         <source>Media corrupted</source>
         <translation>Sérült fájl</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="648"/>
+        <location filename="../videonowplayingwindow.cpp" line="704"/>
         <source>Error while parsing playlist</source>
         <translation>Hiba a lejátszási lista olvasása közben</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="649"/>
+        <location filename="../videonowplayingwindow.cpp" line="705"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>A lejátszási lista sérült vagy üres</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="652"/>
+        <location filename="../videonowplayingwindow.cpp" line="708"/>
         <source>Codec not found:</source>
         <translation>Nem találom a codec-et</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="656"/>
+        <location filename="../videonowplayingwindow.cpp" line="712"/>
         <source>Video codec not found:</source>
         <translation>Nem találom a videó codec-et</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="660"/>
+        <location filename="../videonowplayingwindow.cpp" line="716"/>
         <source>Audio codec not found:</source>
         <translation>Nem találom a hang codec-et</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="664"/>
+        <location filename="../videonowplayingwindow.cpp" line="720"/>
         <source>No playlist assigned</source>
         <translation>Nincs lejátszási listához hozzárendelve</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="666"/>
+        <location filename="../videonowplayingwindow.cpp" line="722"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>A lejátszási lista elemei nincsenek összhangban a média-indexel</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="668"/>
+        <location filename="../videonowplayingwindow.cpp" line="724"/>
         <source>Unable to start playback</source>
         <translation>Nem indítható a lejátszás</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="670"/>
+        <location filename="../videonowplayingwindow.cpp" line="726"/>
         <source>Unable to stop playback</source>
         <translation>Nem állítható meg a lejátszás</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="672"/>
+        <location filename="../videonowplayingwindow.cpp" line="728"/>
         <source>Unable to pause playback</source>
         <translation>Nem szakítható meg a lejátszás</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="674"/>
+        <location filename="../videonowplayingwindow.cpp" line="730"/>
         <source>Unable to seek position in media</source>
         <translation>Nem tudok keresni a médiában</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="676"/>
+        <location filename="../videonowplayingwindow.cpp" line="732"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Nem tudom meghatározni a pozíciót</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="678"/>
+        <location filename="../videonowplayingwindow.cpp" line="734"/>
         <source>Unable to get current playback status</source>
         <translation>Nem tudom meghatározni a lejátszási állapotot</translation>
     </message>

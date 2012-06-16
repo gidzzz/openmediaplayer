@@ -225,12 +225,12 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Недійсний URL</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="312"/>
+        <location filename="../internetradiowindow.cpp" line="310"/>
         <source>(unknown station)</source>
         <translation>(невідома станція)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="315"/>
+        <location filename="../internetradiowindow.cpp" line="314"/>
         <source>(unknown)</source>
         <translation>(невідомо)</translation>
     </message>
@@ -239,7 +239,7 @@ Unplug USB to continue using FM transmitter.</source>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="677"/>
+        <location filename="../mainwindow.cpp" line="811"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n запис</numerusform>
@@ -249,7 +249,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="684"/>
+        <location filename="../mainwindow.cpp" line="818"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n відеозапис</numerusform>
@@ -259,7 +259,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="700"/>
+        <location filename="../mainwindow.cpp" line="834"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n станція</numerusform>
@@ -268,56 +268,56 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="204"/>
-        <location filename="../mainwindow.cpp" line="209"/>
+        <location filename="../mainwindow.cpp" line="210"/>
+        <location filename="../mainwindow.cpp" line="215"/>
         <source>Music</source>
         <translation>Музика</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="205"/>
-        <location filename="../mainwindow.cpp" line="210"/>
+        <location filename="../mainwindow.cpp" line="211"/>
+        <location filename="../mainwindow.cpp" line="216"/>
         <source>Videos</source>
         <translation>Відео</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="206"/>
-        <location filename="../mainwindow.cpp" line="211"/>
+        <location filename="../mainwindow.cpp" line="212"/>
+        <location filename="../mainwindow.cpp" line="217"/>
         <source>Internet Radio</source>
         <translation>Інтернет-радіо</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="207"/>
-        <location filename="../mainwindow.cpp" line="212"/>
+        <location filename="../mainwindow.cpp" line="213"/>
+        <location filename="../mainwindow.cpp" line="218"/>
         <source>Shuffle all songs</source>
         <translation>Перемішати усі записи</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="676"/>
+        <location filename="../mainwindow.cpp" line="810"/>
         <source>(no songs)</source>
         <translation>(немає записів)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="683"/>
+        <location filename="../mainwindow.cpp" line="817"/>
         <source>(no videos)</source>
         <translation>(немає відео)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="699"/>
+        <location filename="../mainwindow.cpp" line="833"/>
         <source>(no stations)</source>
         <translation>(немає станцій)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="830"/>
+        <location filename="../mainwindow.cpp" line="967"/>
         <source>Retrieving information on the new media files</source>
         <translation>Отримання інформації про новий вміст</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="832"/>
+        <location filename="../mainwindow.cpp" line="969"/>
         <source>Estimated time remaining:</source>
         <translation>Орієнтовний час до завершення:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="834"/>
+        <location filename="../mainwindow.cpp" line="971"/>
         <source>Remaining items:</source>
         <translation>Залишилось:</translation>
     </message>
@@ -333,19 +333,24 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Опції</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="406"/>
+        <location filename="../mainwindow.ui" line="407"/>
         <source>About</source>
         <translation>Про програму</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="411"/>
+        <location filename="../mainwindow.ui" line="412"/>
         <source>About Qt</source>
         <translation>Про Qt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="416"/>
+        <location filename="../mainwindow.ui" line="417"/>
         <source>Settings</source>
         <translation>Налаштування</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="422"/>
+        <source>Sleep timer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -847,41 +852,41 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Список відтворення</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="163"/>
-        <location filename="../radionowplayingwindow.cpp" line="235"/>
-        <location filename="../radionowplayingwindow.cpp" line="409"/>
+        <location filename="../radionowplayingwindow.ui" line="157"/>
+        <location filename="../radionowplayingwindow.cpp" line="242"/>
+        <location filename="../radionowplayingwindow.cpp" line="436"/>
         <source>(unknown station)</source>
         <translation>(невідома станція)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="516"/>
+        <location filename="../radionowplayingwindow.ui" line="510"/>
         <source>Options</source>
         <translation>Опції</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="525"/>
+        <location filename="../radionowplayingwindow.ui" line="519"/>
         <source>FM transmitter</source>
         <translation>FM-передавач</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="530"/>
+        <location filename="../radionowplayingwindow.ui" line="524"/>
         <source>Add radio bookmark</source>
         <translation>Додати закладку</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="230"/>
-        <location filename="../radionowplayingwindow.cpp" line="272"/>
+        <location filename="../radionowplayingwindow.cpp" line="237"/>
+        <location filename="../radionowplayingwindow.cpp" line="281"/>
         <source>(unknown artist)</source>
         <translation>(невідомий виконавець)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="230"/>
-        <location filename="../radionowplayingwindow.cpp" line="272"/>
+        <location filename="../radionowplayingwindow.cpp" line="237"/>
+        <location filename="../radionowplayingwindow.cpp" line="281"/>
         <source>(unknown song)</source>
         <translation>(невідомий запис)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="297"/>
+        <location filename="../radionowplayingwindow.cpp" line="307"/>
         <source>Buffering</source>
         <translation>Буферизація</translation>
     </message>
@@ -1405,6 +1410,70 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
 </context>
 <context>
+    <name>SleeperDialog</name>
+    <message>
+        <location filename="../sleeperdialog.ui" line="31"/>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.ui" line="38"/>
+        <source>Volume reduction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.ui" line="47"/>
+        <source>Time (minutes)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="10"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="11"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="20"/>
+        <source>Stop playback</source>
+        <translation>Зупинити відтворення</translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="21"/>
+        <source>Pause playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="22"/>
+        <source>Close application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="31"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="32"/>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="33"/>
+        <source>Exponential</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sleeperdialog.cpp" line="60"/>
+        <location filename="../sleeperdialog.cpp" line="69"/>
+        <source>Sleep timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TagWindow</name>
     <message>
         <location filename="../tagwindow.ui" line="14"/>
@@ -1491,163 +1560,168 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Список відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="282"/>
+        <location filename="../videonowplayingwindow.cpp" line="311"/>
         <source>Delete video?</source>
         <translation>Видалити відео?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="283"/>
+        <location filename="../videonowplayingwindow.cpp" line="312"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>Ви впевнені, що хочете видалити це відео?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="286"/>
+        <location filename="../videonowplayingwindow.cpp" line="315"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="287"/>
+        <location filename="../videonowplayingwindow.cpp" line="316"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="616"/>
-        <location filename="../videonowplayingwindow.cpp" line="709"/>
+        <location filename="../videonowplayingwindow.cpp" line="632"/>
+        <source>Buffering</source>
+        <translation>Буферизація</translation>
+    </message>
+    <message>
+        <location filename="../videonowplayingwindow.cpp" line="672"/>
+        <location filename="../videonowplayingwindow.cpp" line="765"/>
         <source>Unable to play media</source>
         <translation>Неможливо відтворити вміст</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="620"/>
+        <location filename="../videonowplayingwindow.cpp" line="676"/>
         <source>Media not found</source>
         <translation>Вміст не знайдено</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="622"/>
+        <location filename="../videonowplayingwindow.cpp" line="678"/>
         <source>URI not available</source>
         <translation>URI недоступний</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="624"/>
+        <location filename="../videonowplayingwindow.cpp" line="680"/>
         <source>Invalid URI</source>
         <translation>Некоректний URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="626"/>
+        <location filename="../videonowplayingwindow.cpp" line="682"/>
         <source>Unable to open media</source>
         <translation>Неможливо відкрити вміст</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="628"/>
+        <location filename="../videonowplayingwindow.cpp" line="684"/>
         <source>Playback stream no longer available</source>
         <translation>Потік став недоступним</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="630"/>
+        <location filename="../videonowplayingwindow.cpp" line="686"/>
         <source>Could not determine MIME-type</source>
         <translation>Не вдалось визначити MIME-тип</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="632"/>
+        <location filename="../videonowplayingwindow.cpp" line="688"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Виникла помилка, неможливо продовжувати відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="634"/>
+        <location filename="../videonowplayingwindow.cpp" line="690"/>
         <source>General error occured</source>
         <translation>Виникла помилка</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="636"/>
+        <location filename="../videonowplayingwindow.cpp" line="692"/>
         <source>Unsupported media</source>
         <translation>Непідтримуваний тип даних</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="638"/>
+        <location filename="../videonowplayingwindow.cpp" line="694"/>
         <source>Unsupported resolution</source>
         <translation>Непідтримуваний розмір кадру</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="640"/>
+        <location filename="../videonowplayingwindow.cpp" line="696"/>
         <source>Unsupported framerate</source>
         <translation>Непідтримувана частота кадрів</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="642"/>
+        <location filename="../videonowplayingwindow.cpp" line="698"/>
         <source>Media is protected by DRM</source>
         <translation>Вміст захищений DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="644"/>
+        <location filename="../videonowplayingwindow.cpp" line="700"/>
         <source>System sound device is unavailable</source>
         <translation>Вивід звуку недоступний</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="646"/>
+        <location filename="../videonowplayingwindow.cpp" line="702"/>
         <source>Media corrupted</source>
         <translation>Пошкоджений вміст</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="648"/>
+        <location filename="../videonowplayingwindow.cpp" line="704"/>
         <source>Error while parsing playlist</source>
         <translation>Помилка розбору списку</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="649"/>
+        <location filename="../videonowplayingwindow.cpp" line="705"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Список може бути пошкодженим чи пустим</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="652"/>
+        <location filename="../videonowplayingwindow.cpp" line="708"/>
         <source>Codec not found:</source>
         <translation>Кодек не знайдено:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="656"/>
+        <location filename="../videonowplayingwindow.cpp" line="712"/>
         <source>Video codec not found:</source>
         <translation>Відеокодек не знайдено:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="660"/>
+        <location filename="../videonowplayingwindow.cpp" line="716"/>
         <source>Audio codec not found:</source>
         <translation>Аудіокодек не знайдено:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="664"/>
+        <location filename="../videonowplayingwindow.cpp" line="720"/>
         <source>No playlist assigned</source>
         <translation>Не визначено жодного списку</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="666"/>
+        <location filename="../videonowplayingwindow.cpp" line="722"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Індекс не синхронізований з елементами списку</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="668"/>
+        <location filename="../videonowplayingwindow.cpp" line="724"/>
         <source>Unable to start playback</source>
         <translation>Не вдалось почати відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="670"/>
+        <location filename="../videonowplayingwindow.cpp" line="726"/>
         <source>Unable to stop playback</source>
         <translation>Не вдалось зупинити відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="672"/>
+        <location filename="../videonowplayingwindow.cpp" line="728"/>
         <source>Unable to pause playback</source>
         <translation>Не вдалось призупинити відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="674"/>
+        <location filename="../videonowplayingwindow.cpp" line="730"/>
         <source>Unable to seek position in media</source>
         <translation>Не вдалось здійснити пошук позиції у вмісті</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="676"/>
+        <location filename="../videonowplayingwindow.cpp" line="732"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Не вдалось отримати поточну позицію відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="678"/>
+        <location filename="../videonowplayingwindow.cpp" line="734"/>
         <source>Unable to get current playback status</source>
         <translation>Не вдалось отримати поточний статус відтворення</translation>
     </message>
