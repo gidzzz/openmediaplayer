@@ -423,11 +423,7 @@ void MainWindow::mime_open(const QString &uriString)
 
             // for some reason, if metadata fetching is disabled here, IDs for filesystem instead of localtagfs are returned
             this->browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                                  MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                                           MAFW_METADATA_KEY_DURATION,
-                                                                           MAFW_METADATA_KEY_ARTIST,
-                                                                           MAFW_METADATA_KEY_MIME,
-                                                                           MAFW_METADATA_KEY_ALBUM),
+                                                                  MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
                                                                   0, MAFW_SOURCE_BROWSE_ALL);
 #endif
         }
@@ -914,7 +910,8 @@ void MainWindow::onShuffleAllClicked()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseSongs(uint, int, uint, QString, GHashTable*, QString)));
 
-    this->browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL, 0,
+    this->browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
+                                                          MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
                                                           0, MAFW_SOURCE_BROWSE_ALL);
 #endif
 }
