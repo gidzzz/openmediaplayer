@@ -80,10 +80,10 @@ private:
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
     bool updatingShow;
-    bool wiredHeadsetIsConnected;
-    bool headsetPaused;
     bool wasPlaying;
     bool wasRinging;
+    bool wiredHeadsetIsConnected;
+    qint64 headsetPauseStamp;
 #endif
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;

@@ -1036,30 +1036,23 @@ void MainWindow::phoneButton()
 
 void MainWindow::onHeadsetConnected()
 {
-    if (!QSettings().value("main/pauseHeadset", true).toBool())
-        return;
+    qint64 headsetResumeTime = QSettings().value("main/headsetResumeSeconds", -1).toInt();
 
-    if (!headsetPaused)
-        return;
+    if (headsetPauseStamp != -1
+    && this->mafwState == Paused
+    && (headsetResumeTime == -1 || headsetPauseStamp + headsetResumeTime*1000 > QDateTime::currentMSecsSinceEpoch()))
+        mafwrenderer->resume();
 
-    headsetPaused = false;
-
-    if (this->mafwState == Paused)
-            mafwrenderer->resume();
+    headsetPauseStamp = -1;
 }
 
 void MainWindow::onHeadsetDisconnected()
 {
-    if (!QSettings().value("main/pauseHeadset", true).toBool())
-        return;
-
-    headsetPaused = false;
-
-    if (this->mafwState != Playing)
-        return;
-
-    mafwrenderer->pause();
-    headsetPaused = true;
+    if (QSettings().value("main/pauseHeadset", true).toBool()
+    && this->mafwState == Playing) {
+        mafwrenderer->pause();
+        headsetPauseStamp = QDateTime::currentMSecsSinceEpoch();
+    }
 }
 
 void MainWindow::updateWiredHeadset()

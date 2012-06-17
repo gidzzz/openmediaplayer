@@ -50,6 +50,23 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     selector = new QMaemo5ListPickSelector;
     model = new QStandardItemModel(0, 1, selector);
+    model->appendRow(new QStandardItem(tr("Never")));
+    model->appendRow(new QStandardItem(tr("%n second(s)", "", 10)));
+    model->appendRow(new QStandardItem(tr("%n minute(s)", "", 1)));
+    model->appendRow(new QStandardItem(tr("%n minute(s)", "", 10)));
+    model->appendRow(new QStandardItem(tr("%n hour(s)", "", 1)));
+    model->appendRow(new QStandardItem(tr("Always")));
+    selector->setModel(model);
+    selector->setCurrentIndex(QSettings().value("main/headsetResumeSeconds", -1).toInt() == 0 ? 0 :
+                              QSettings().value("main/headsetResumeSeconds").toInt() == 10 ? 1 :
+                              QSettings().value("main/headsetResumeSeconds").toInt() == 60 ? 2 :
+                              QSettings().value("main/headsetResumeSeconds").toInt() == 600 ? 3 :
+                              QSettings().value("main/headsetResumeSeconds").toInt() == 3600 ? 4 :
+                              QSettings().value("main/headsetResumeSeconds").toInt() == -1 ? 5 : 5);
+    ui->headsetResumeBox->setPickSelector(selector);
+
+    selector = new QMaemo5ListPickSelector;
+    model = new QStandardItemModel(0, 1, selector);
     model->appendRow(new QStandardItem(tr("Next song")));
     model->appendRow(new QStandardItem(tr("Previous song")));
     model->appendRow(new QStandardItem(tr("Play / Pause")));
@@ -74,7 +91,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
                               QSettings().value("main/orientation").toString() == "portrait" ? 2 : 0);
     ui->orientationBox->setPickSelector(selector);
 
-    ui->headsetCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
+    ui->headsetPauseCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
     ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
     ui->foldersCheckBox->setChecked(QSettings().value("main/openFolders", false).toBool());
@@ -105,6 +122,15 @@ void SettingsDialog::accept()
         case 2: QSettings().setValue("main/onApplicationExit", "do-nothing"); break;
     }
 
+    switch (static_cast<QMaemo5ListPickSelector*>(ui->headsetResumeBox->pickSelector())->currentIndex()) {
+        case 0: QSettings().setValue("main/headsetResumeSeconds", 0); break;
+        case 1: QSettings().setValue("main/headsetResumeSeconds", 10); break;
+        case 2: QSettings().setValue("main/headsetResumeSeconds", 60); break;
+        case 3: QSettings().setValue("main/headsetResumeSeconds", 600); break;
+        case 4: QSettings().setValue("main/headsetResumeSeconds", 3600); break;
+        case 5: QSettings().setValue("main/headsetResumeSeconds", -1); break;
+    }
+
     switch (static_cast<QMaemo5ListPickSelector*>(ui->headsetButtonBox->pickSelector())->currentIndex()) {
         case 0: QSettings().setValue("main/headsetButtonAction", "next"); break;
         case 1: QSettings().setValue("main/headsetButtonAction", "previous"); break;
@@ -119,7 +145,7 @@ void SettingsDialog::accept()
         case 2: QSettings().setValue("main/orientation", "portrait"); break;
     }
 
-    QSettings().setValue("main/pauseHeadset", ui->headsetCheckBox->isChecked());
+    QSettings().setValue("main/pauseHeadset", ui->headsetPauseCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/playlistFilter", ui->filterCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());
