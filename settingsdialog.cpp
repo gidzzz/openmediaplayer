@@ -27,6 +27,11 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->gridLayout_2->setContentsMargins(0,0,0,0);
     ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
 
+    ui->fmtxCheckBox->setText(ui->fmtxCheckBox->text() + " *");
+    ui->fmtxdNote->setText("* " + ui->fmtxdNote->text());
+    ui->languageCodeLabel->setText(ui->languageCodeLabel->text() + " **");
+    ui->restartNote->setText("** " + ui->restartNote->text());
+
     this->setAttribute(Qt::WA_DeleteOnClose);
 
     QMaemo5ListPickSelector *selector;
@@ -80,6 +85,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->playlistSizeBox->setText(QSettings().value("music/playlistSize", 30).toString());
     ui->playlistSizeBox->setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]{0,3}"), this));
+    ui->languageCodeBox->setText(QSettings().value("main/language").toString());
 
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
@@ -124,6 +130,7 @@ void SettingsDialog::accept()
 
     int playlistSize = ui->playlistSizeBox->text().toInt();
     QSettings().setValue("music/playlistSize", playlistSize ? playlistSize : 30);
+    QSettings().setValue("main/language", ui->languageCodeBox->text());
 
     this->close();
 }
