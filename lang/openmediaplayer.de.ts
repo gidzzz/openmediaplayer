@@ -239,7 +239,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="811"/>
+        <location filename="../mainwindow.cpp" line="807"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n Lied</numerusform>
@@ -248,7 +248,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="818"/>
+        <location filename="../mainwindow.cpp" line="814"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n Clip</numerusform>
@@ -257,7 +257,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="834"/>
+        <location filename="../mainwindow.cpp" line="830"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n Sender</numerusform>
@@ -289,32 +289,32 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <translation>Zufallswiedergabe</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="810"/>
+        <location filename="../mainwindow.cpp" line="806"/>
         <source>(no songs)</source>
         <translation>(Keine Lieder)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="817"/>
+        <location filename="../mainwindow.cpp" line="813"/>
         <source>(no videos)</source>
         <translation>(Keine Videos)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="833"/>
+        <location filename="../mainwindow.cpp" line="829"/>
         <source>(no stations)</source>
         <translation>(Keine Sender)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="967"/>
+        <location filename="../mainwindow.cpp" line="964"/>
         <source>Retrieving information on the new media files</source>
         <translation>Informationen über neue Dateien werden abgerufen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="966"/>
         <source>Estimated time remaining:</source>
         <translation> Ungefähr verbleibende Zeit</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="971"/>
+        <location filename="../mainwindow.cpp" line="968"/>
         <source>Remaining items:</source>
         <translation>Übrige Einträge:</translation>
     </message>
@@ -347,7 +347,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../mainwindow.ui" line="422"/>
         <source>Sleep timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Einschlaffunktion</translation>
     </message>
 </context>
 <context>
@@ -355,7 +355,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="247"/>
         <source>Add to now playing</source>
-        <translation>Zur aktuellen Wiedergabeliste hinzufügen</translation>
+        <translation>Zur aktuellen Wiedergabe hinzufügen</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="249"/>
@@ -536,8 +536,8 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../musicwindow.cpp" line="1387"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n Clip zur Wiedergabeliste hinzugefügt</numerusform>
-            <numerusform>%n Clips zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip zur aktuellen Wiedergabe hinzugefügt</numerusform>
+            <numerusform>%n Clips zur aktuellen Wiedergabe hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
@@ -630,7 +630,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1270"/>
         <source>Clear all songs from now playing?</source>
-        <translation>Alle Lieder aus aktueller Wiedergabeliste entfernen?</translation>
+        <translation>Alle Lieder aus aktueller Wiedergabe entfernen?</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1306"/>
@@ -640,7 +640,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1302"/>
         <source>Delete from now playing</source>
-        <translation>Von Wiedergabeliste löschen</translation>
+        <translation>Von aktueller Wiedergabe löschen</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1307"/>
@@ -782,7 +782,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../nowplayingwindow.ui" line="941"/>
         <source>Clear now playing</source>
-        <translation>Wiedergabeliste löschen</translation>
+        <translation>Aktuelle Wiedergabe löschen</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="946"/>
@@ -889,49 +889,84 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <translation>Media Player-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="48"/>
+        <location filename="../settingsdialog.cpp" line="70"/>
         <source>Next song</source>
         <translation>Nächstes Lied</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="49"/>
+        <location filename="../settingsdialog.cpp" line="71"/>
         <source>Previous song</source>
         <translation>Vorheriges Lied</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="50"/>
+        <location filename="../settingsdialog.cpp" line="72"/>
         <source>Play / Pause</source>
         <translation>Abspielen/Pause</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="39"/>
-        <location filename="../settingsdialog.cpp" line="52"/>
+        <location filename="../settingsdialog.cpp" line="44"/>
+        <location filename="../settingsdialog.cpp" line="74"/>
         <source>Do nothing</source>
         <translation>Nichts machen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="38"/>
+        <location filename="../settingsdialog.cpp" line="43"/>
         <source>Pause playback</source>
         <translation>Wiedergabe pausieren</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="63"/>
+        <location filename="../settingsdialog.cpp" line="53"/>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="54"/>
+        <source>%n second(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="55"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
+        <source>%n minute(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="57"/>
+        <source>%n hour(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="58"/>
+        <source>Always</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="85"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="64"/>
+        <location filename="../settingsdialog.cpp" line="86"/>
         <source>Landscape</source>
         <translation>Waagerecht</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="65"/>
+        <location filename="../settingsdialog.cpp" line="87"/>
         <source>Portrait</source>
         <translation>Senkrecht</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="37"/>
-        <location filename="../settingsdialog.cpp" line="51"/>
+        <location filename="../settingsdialog.cpp" line="42"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Stop playback</source>
         <translation>Wiedergabe stoppen</translation>
     </message>
@@ -947,58 +982,73 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="62"/>
+        <source>Reconnect headset to resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="69"/>
         <source>Enable lyrics</source>
         <translation>Liedtext aktivieren</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="69"/>
+        <location filename="../settingsdialog.ui" line="76"/>
         <source>Play only search results</source>
         <translation>Nur Suchergebnisse abspielen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="76"/>
+        <location filename="../settingsdialog.ui" line="83"/>
         <source>Open whole folders</source>
         <translation>Ganze Ordner öffnen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="83"/>
+        <location filename="../settingsdialog.ui" line="90"/>
         <source>Append opened songs</source>
         <translation>Geöffnete Lieder anhängen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="92"/>
+        <location filename="../settingsdialog.ui" line="99"/>
         <source>Size of automatic playlists</source>
-        <translation>Größe der automatischen Wiedergabelisten</translation>
+        <translation>Größe der automatischen Wiedergabe</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="108"/>
+        <location filename="../settingsdialog.ui" line="121"/>
         <source>Headset button action</source>
         <translation>Kopfhörer Tastenfunktion</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="115"/>
+        <location filename="../settingsdialog.ui" line="128"/>
         <source>Orientation</source>
         <translation>Ausrichtung</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="122"/>
+        <location filename="../settingsdialog.ui" line="135"/>
         <source>Lazy sliders</source>
         <translation>Träge Schieberegler</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="129"/>
+        <location filename="../settingsdialog.ui" line="142"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>&quot;Löschen&quot; für Wiedergabelisten Einträge</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="136"/>
+        <location filename="../settingsdialog.ui" line="149"/>
         <source>Override FMTX checks in UI</source>
         <translation>FMTX Überprüfung außer Kraft setzen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="148"/>
-        <source>* Requires modified FMTXD</source>
-        <translation>* Benötigt modifizierte FMTXD</translation>
+        <location filename="../settingsdialog.ui" line="158"/>
+        <source>Force language code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="185"/>
+        <source>Requires modified FMTXD</source>
+        <translation>Benötigt modifizierte FMTXD</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="197"/>
+        <source>Requires application restart</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="28"/>
@@ -1057,7 +1107,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="346"/>
         <source>Add to now playing</source>
-        <translation>Zur aktuellen Wiedergabeliste hinzufügen</translation>
+        <translation>Zur aktuellen Wiedergabe hinzufügen</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="347"/>
@@ -1115,8 +1165,8 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
         <location filename="../singlealbumview.cpp" line="501"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n Clip zur Wiedergabeliste hinzugefügt</numerusform>
-            <numerusform>%n Clips zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip zur aktuellen Wiedergabe hinzugefügt</numerusform>
+            <numerusform>%n Clips zur aktuellen Wiedergabe hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
@@ -1127,7 +1177,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Lieder zur Wiedergabeliste
+        <translation>Lieder zur aktuellen Wiedergabe
 hinzufügen</translation>
     </message>
     <message>
@@ -1156,7 +1206,7 @@ hinzufügen</translation>
     <message>
         <location filename="../singleartistview.cpp" line="351"/>
         <source>Add to now playing</source>
-        <translation>Zur Wiedergabeliste hinzufügen</translation>
+        <translation>Zur aktuellen Wiedergabe hinzufügen</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="362"/>
@@ -1184,8 +1234,8 @@ hinzufügen</translation>
         <location filename="../singleartistview.cpp" line="462"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n Clip zur Wiedergabeliste hinzugefügt</numerusform>
-            <numerusform>%n Clips zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip zur aktuellen Wiedergabe hinzugefügt</numerusform>
+            <numerusform>%n Clips zur aktuellen Wiedergabe hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
@@ -1202,7 +1252,7 @@ hinzufügen</translation>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>Lieder zur Wiedergabeliste
+        <translation>Lieder zur aktuellen Wiedergabe
 hinzufügen</translation>
     </message>
     <message>
@@ -1237,8 +1287,8 @@ hinzufügen</translation>
         <location filename="../singlegenreview.cpp" line="417"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n Clip zur Wiedergabeliste hinzugefügt</numerusform>
-            <numerusform>%n Clips zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip zur aktuellen Wiedergabe hinzugefügt</numerusform>
+            <numerusform>%n Clips zur aktuellen Wiedergabe hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
@@ -1250,7 +1300,7 @@ hinzufügen</translation>
         <location filename="../singlegenreview.ui" line="108"/>
         <location filename="../singlegenreview.cpp" line="287"/>
         <source>Add to now playing</source>
-        <translation>Zur aktuellen Wiedergabeliste hinzufügen</translation>
+        <translation>Zur aktuellen Wiedergabe hinzufügen</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="113"/>
@@ -1293,8 +1343,8 @@ hinzufügen</translation>
         <location filename="../singleplaylistview.cpp" line="413"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n Clip zur Wiedergabeliste hinzugefügt</numerusform>
-            <numerusform>%n Clips zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Clip zur aktuellen Wiedergabe hinzugefügt</numerusform>
+            <numerusform>%n Clips zur aktuellen Wiedergabe hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
@@ -1383,12 +1433,12 @@ hinzufügen</translation>
         <location filename="../singleplaylistview.ui" line="111"/>
         <location filename="../singleplaylistview.cpp" line="482"/>
         <source>Add to now playing</source>
-        <translation>Zur aktuellen Wiedergabeliste hinzufügen</translation>
+        <translation>Zur aktuellen Wiedergabe hinzufügen</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="121"/>
         <source>Delete playlist</source>
-        <translation>Wiedergabelistel löschen</translation>
+        <translation>Wiedergabeliste löschen</translation>
     </message>
 </context>
 <context>
@@ -1396,27 +1446,27 @@ hinzufügen</translation>
     <message>
         <location filename="../sleeperdialog.ui" line="31"/>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktion</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.ui" line="38"/>
         <source>Volume reduction</source>
-        <translation type="unfinished"></translation>
+        <translation>Lautstärkeverringerung</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.ui" line="47"/>
         <source>Time (minutes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit (Minuten)</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="10"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Start</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="11"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="20"/>
@@ -1431,28 +1481,28 @@ hinzufügen</translation>
     <message>
         <location filename="../sleeperdialog.cpp" line="22"/>
         <source>Close application</source>
-        <translation type="unfinished"></translation>
+        <translation>Programm schließen</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="31"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="32"/>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>Linear</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="33"/>
         <source>Exponential</source>
-        <translation type="unfinished"></translation>
+        <translation>Exponentiell</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="60"/>
         <location filename="../sleeperdialog.cpp" line="69"/>
         <source>Sleep timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Einschlaffunktion</translation>
     </message>
 </context>
 <context>
@@ -1498,7 +1548,7 @@ hinzufügen</translation>
     <message>
         <location filename="../upnpview.cpp" line="182"/>
         <source>Add to now playing</source>
-        <translation>Zur aktuellen Wiedergabeliste hinzufügen</translation>
+        <translation>Zur aktuellen Wiedergabe hinzufügen</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="183"/>
@@ -1517,8 +1567,8 @@ hinzufügen</translation>
         <location filename="../upnpview.cpp" line="303"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n Objekt zur Wiedergabeliste hinzugefügt</numerusform>
-            <numerusform>%n Objekt zur Wiedergabeliste hinzugefügt</numerusform>
+            <numerusform>%n Objekt zur aktuellen Wiedergabe hinzugefügt</numerusform>
+            <numerusform>%n Objekt zur aktuellen Wiedergabe hinzugefügt</numerusform>
         </translation>
     </message>
     <message>
@@ -1529,7 +1579,7 @@ hinzufügen</translation>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>Zur aktuellen Wiedergabeliste hinzufügen</translation>
+        <translation>Lieder zur aktuellen Wiedergabe hinzufügen</translation>
     </message>
 </context>
 <context>

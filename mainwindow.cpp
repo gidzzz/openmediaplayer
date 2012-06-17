@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stationCountL->clear();
 
     wiredHeadsetIsConnected = false;
-    headsetPaused = false;
+    headsetPauseStamp = -1;
     wasRinging = false;
     wasPlaying = false;
 #else

@@ -222,7 +222,7 @@ Unplug USB to continue using FM transmitter.</source>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="811"/>
+        <location filename="../mainwindow.cpp" line="807"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n song</numerusform>
@@ -231,7 +231,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="818"/>
+        <location filename="../mainwindow.cpp" line="814"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n clip</numerusform>
@@ -240,7 +240,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="834"/>
+        <location filename="../mainwindow.cpp" line="830"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n station</numerusform>
@@ -272,32 +272,32 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="810"/>
+        <location filename="../mainwindow.cpp" line="806"/>
         <source>(no songs)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="817"/>
+        <location filename="../mainwindow.cpp" line="813"/>
         <source>(no videos)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="833"/>
+        <location filename="../mainwindow.cpp" line="829"/>
         <source>(no stations)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="967"/>
+        <location filename="../mainwindow.cpp" line="964"/>
         <source>Retrieving information on the new media files</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="966"/>
         <source>Estimated time remaining:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="971"/>
+        <location filename="../mainwindow.cpp" line="968"/>
         <source>Remaining items:</source>
         <translation></translation>
     </message>
@@ -511,8 +511,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../musicwindow.cpp" line="1303"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n clip added to playlist</numerusform>
+            <numerusform>%n clips added to playlist</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -666,8 +666,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../nowplayingwindow.cpp" line="1479"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n clip added to playlist</numerusform>
+            <numerusform>%n clips added to playlist</numerusform>
         </translation>
     </message>
     <message>
@@ -872,49 +872,84 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="48"/>
+        <location filename="../settingsdialog.cpp" line="70"/>
         <source>Next song</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="49"/>
+        <location filename="../settingsdialog.cpp" line="71"/>
         <source>Previous song</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="50"/>
+        <location filename="../settingsdialog.cpp" line="72"/>
         <source>Play / Pause</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="39"/>
-        <location filename="../settingsdialog.cpp" line="52"/>
+        <location filename="../settingsdialog.cpp" line="44"/>
+        <location filename="../settingsdialog.cpp" line="74"/>
         <source>Do nothing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="38"/>
+        <location filename="../settingsdialog.cpp" line="43"/>
         <source>Pause playback</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="63"/>
+        <location filename="../settingsdialog.cpp" line="53"/>
+        <source>Never</source>
+        <translation></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="54"/>
+        <source>%n second(s)</source>
+        <translation>
+            <numerusform>%n second</numerusform>
+            <numerusform>%n seconds</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="55"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
+        <source>%n minute(s)</source>
+        <translation>
+            <numerusform>%n minute</numerusform>
+            <numerusform>%n minutes</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="57"/>
+        <source>%n hour(s)</source>
+        <translation>
+            <numerusform>%n hour</numerusform>
+            <numerusform>%n hours</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="58"/>
+        <source>Always</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="85"/>
         <source>Automatic</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="64"/>
+        <location filename="../settingsdialog.cpp" line="86"/>
         <source>Landscape</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="65"/>
+        <location filename="../settingsdialog.cpp" line="87"/>
         <source>Portrait</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="37"/>
-        <location filename="../settingsdialog.cpp" line="51"/>
+        <location filename="../settingsdialog.cpp" line="42"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Stop playback</source>
         <translation></translation>
     </message>
@@ -930,57 +965,72 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="62"/>
-        <source>Enable lyrics</source>
+        <source>Reconnect headset to resume</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="69"/>
-        <source>Play only search results</source>
+        <source>Enable lyrics</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="76"/>
-        <source>Open whole folders</source>
+        <source>Play only search results</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="83"/>
+        <source>Open whole folders</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="90"/>
         <source>Append opened songs</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="92"/>
+        <location filename="../settingsdialog.ui" line="99"/>
         <source>Size of automatic playlists</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="108"/>
+        <location filename="../settingsdialog.ui" line="121"/>
         <source>Headset button action</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="115"/>
+        <location filename="../settingsdialog.ui" line="128"/>
         <source>Orientation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="122"/>
+        <location filename="../settingsdialog.ui" line="135"/>
         <source>Lazy sliders</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="129"/>
+        <location filename="../settingsdialog.ui" line="142"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="136"/>
+        <location filename="../settingsdialog.ui" line="149"/>
         <source>Override FMTX checks in UI</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="148"/>
-        <source>* Requires modified FMTXD</source>
+        <location filename="../settingsdialog.ui" line="158"/>
+        <source>Force language code</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="185"/>
+        <source>Requires modified FMTXD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="197"/>
+        <source>Requires application restart</source>
         <translation></translation>
     </message>
     <message>
@@ -1061,8 +1111,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singlealbumview.cpp" line="378"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n clip added to playlist</numerusform>
+            <numerusform>%n clips added to playlist</numerusform>
         </translation>
     </message>
     <message>
@@ -1314,8 +1364,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../singleplaylistview.cpp" line="521"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n clip added to playlist</numerusform>
+            <numerusform>%n clips added to playlist</numerusform>
         </translation>
     </message>
     <message>
@@ -1490,8 +1540,8 @@ Unplug USB to continue using FM transmitter.</source>
         <location filename="../upnpview.cpp" line="266"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%n clip added to playlist</numerusform>
+            <numerusform>%n clips added to playlist</numerusform>
         </translation>
     </message>
     <message numerus="yes">

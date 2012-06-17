@@ -242,7 +242,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="811"/>
+        <location filename="../mainwindow.cpp" line="807"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n utwór</numerusform>
@@ -252,7 +252,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="818"/>
+        <location filename="../mainwindow.cpp" line="814"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n film</numerusform>
@@ -262,7 +262,7 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="834"/>
+        <location filename="../mainwindow.cpp" line="830"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n stacja</numerusform>
@@ -295,32 +295,32 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Wymieszaj wszystko</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="810"/>
+        <location filename="../mainwindow.cpp" line="806"/>
         <source>(no songs)</source>
         <translation>(brak utworów)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="817"/>
+        <location filename="../mainwindow.cpp" line="813"/>
         <source>(no videos)</source>
         <translation>(brak filmów)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="833"/>
+        <location filename="../mainwindow.cpp" line="829"/>
         <source>(no stations)</source>
         <translation>(brak stacji)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="967"/>
+        <location filename="../mainwindow.cpp" line="964"/>
         <source>Retrieving information on the new media files</source>
         <translation>Odświeżanie widoku biblioteki</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="966"/>
         <source>Estimated time remaining:</source>
         <translation>Szacowany czas do zakończenia:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="971"/>
+        <location filename="../mainwindow.cpp" line="968"/>
         <source>Remaining items:</source>
         <translation>Oczekujące obiekty</translation>
     </message>
@@ -902,49 +902,87 @@ Aby korzystać z nadajnika, odłącz kabel.</translation>
         <translation>Odtwarzacz - Ustawienia</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="48"/>
+        <location filename="../settingsdialog.cpp" line="70"/>
         <source>Next song</source>
         <translation>Następny utwór</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="49"/>
+        <location filename="../settingsdialog.cpp" line="71"/>
         <source>Previous song</source>
         <translation>Poprzedni utwór</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="50"/>
+        <location filename="../settingsdialog.cpp" line="72"/>
         <source>Play / Pause</source>
         <translation>Odtwarzanie / Pauza</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="39"/>
-        <location filename="../settingsdialog.cpp" line="52"/>
+        <location filename="../settingsdialog.cpp" line="44"/>
+        <location filename="../settingsdialog.cpp" line="74"/>
         <source>Do nothing</source>
         <translation>Nie rób nic</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="38"/>
+        <location filename="../settingsdialog.cpp" line="43"/>
         <source>Pause playback</source>
         <translation>Spauzuj odtwarzanie</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="63"/>
+        <location filename="../settingsdialog.cpp" line="53"/>
+        <source>Never</source>
+        <translation>Nigdy</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="54"/>
+        <source>%n second(s)</source>
+        <translation>
+            <numerusform>%n sekunda</numerusform>
+            <numerusform>%n sekundy</numerusform>
+            <numerusform>%n sekund</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="55"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
+        <source>%n minute(s)</source>
+        <translation>
+            <numerusform>%n minuta</numerusform>
+            <numerusform>%n minuty</numerusform>
+            <numerusform>%n minut</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../settingsdialog.cpp" line="57"/>
+        <source>%n hour(s)</source>
+        <translation>
+            <numerusform>%n godzina</numerusform>
+            <numerusform>%n godziny</numerusform>
+            <numerusform>%n godzin</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="58"/>
+        <source>Always</source>
+        <translation>Zawsze</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="85"/>
         <source>Automatic</source>
         <translation>Automatyczna</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="64"/>
+        <location filename="../settingsdialog.cpp" line="86"/>
         <source>Landscape</source>
         <translation>Pozioma</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="65"/>
+        <location filename="../settingsdialog.cpp" line="87"/>
         <source>Portrait</source>
         <translation>Pionowa</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="37"/>
-        <location filename="../settingsdialog.cpp" line="51"/>
+        <location filename="../settingsdialog.cpp" line="42"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Stop playback</source>
         <translation>Zatrzymaj odtwarzanie</translation>
     </message>
@@ -961,60 +999,75 @@ po odłączeniu słuchawek</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="62"/>
+        <source>Reconnect headset to resume</source>
+        <translation>Wznów po ponownym połączeniu</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="69"/>
         <source>Enable lyrics</source>
         <translation>Teksty piosenek</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="69"/>
+        <location filename="../settingsdialog.ui" line="76"/>
         <source>Play only search results</source>
         <translation>Odtwarzaj tylko
 wyniki wyszkukiwania</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="76"/>
+        <location filename="../settingsdialog.ui" line="83"/>
         <source>Open whole folders</source>
         <translation>Otwieraj całe foldery</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="83"/>
+        <location filename="../settingsdialog.ui" line="90"/>
         <source>Append opened songs</source>
         <translation>Nie czyść listy odtwarzania
 przed otwieraniem pliku</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="92"/>
+        <location filename="../settingsdialog.ui" line="99"/>
         <source>Size of automatic playlists</source>
         <translation>Rozmiar automatycznych list</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="108"/>
+        <location filename="../settingsdialog.ui" line="121"/>
         <source>Headset button action</source>
         <translation>Przycisk zestawu słuchawkowego</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="115"/>
+        <location filename="../settingsdialog.ui" line="128"/>
         <source>Orientation</source>
         <translation>Orientacja</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="122"/>
+        <location filename="../settingsdialog.ui" line="135"/>
         <source>Lazy sliders</source>
         <translation>Leniwe suwaki</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="129"/>
+        <location filename="../settingsdialog.ui" line="142"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>&quot;Usuń&quot; w listach odtwarzania</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="136"/>
+        <location filename="../settingsdialog.ui" line="149"/>
         <source>Override FMTX checks in UI</source>
         <translation>Nie sprawdzaj FMTX</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="148"/>
-        <source>* Requires modified FMTXD</source>
-        <translation>* Wymaga zmodyfikowanego FMTXD</translation>
+        <location filename="../settingsdialog.ui" line="158"/>
+        <source>Force language code</source>
+        <translation>Wymuś kod języka</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="185"/>
+        <source>Requires modified FMTXD</source>
+        <translation>Wymaga zmodyfikowanego FMTXD</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="197"/>
+        <source>Requires application restart</source>
+        <translation>Wymaga ponownego uruchomienia programu</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="28"/>
