@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QListWidget>
 
+#include "ui_playlistpicker.h"
 #include "includes.h"
 #include "rotator.h"
 

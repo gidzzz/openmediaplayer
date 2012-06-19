@@ -17,7 +17,6 @@
 **************************************************************************/
 
 #include "radionowplayingwindow.h"
-#include "ui_radionowplayingwindow.h"
 
 RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
@@ -84,6 +83,7 @@ void RadioNowPlayingWindow::connectSignals()
 #ifdef Q_WS_MAEMO_5
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
 #endif
+    connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showBookmarkDialog()));
 
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
@@ -237,7 +237,8 @@ void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
     ui->songLabel->setText(tr("(unknown artist)") + " / " + tr("(unknown song)"));
 
     if (objectId)
-        mafwRadioSource->getMetadata(objectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE));
+        mafwRadioSource->getMetadata(objectId, MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
+                                                                 MAFW_METADATA_KEY_URI));
     else
         ui->stationLabel->setText(tr("(unknown station)"));
 }
@@ -268,7 +269,7 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
     }
 }
 
-void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
+void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *objectId, QString)
 {
     this->onStateChanged(state);
 }
@@ -435,6 +436,9 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         station = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
 
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
+        uri = v ? QString::fromUtf8(g_value_get_string(v)) : "";
+
         ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 410));
     }
 
@@ -471,6 +475,13 @@ void RadioNowPlayingWindow::showFMTXDialog()
     fmtxDialog->show();
 }
 #endif
+
+void RadioNowPlayingWindow::showBookmarkDialog()
+{
+#ifdef MAFW
+    BookmarkDialog(this, mafwFactory, ui->stationLabel->text(), uri).exec();
+#endif
+}
 
 void RadioNowPlayingWindow::onNextButtonPressed()
 {

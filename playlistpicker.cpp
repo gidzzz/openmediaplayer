@@ -1,5 +1,4 @@
 #include "playlistpicker.h"
-#include "ui_playlistpicker.h"
 
 PlaylistPicker::PlaylistPicker(QWidget *parent) :
     QDialog(parent),

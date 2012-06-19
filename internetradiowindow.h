@@ -17,9 +17,10 @@
 #endif
 
 #include "ui_internetradiowindow.h"
-#include "radionowplayingwindow.h"
-#include "delegates/songlistitemdelegate.h"
 #include "includes.h"
+#include "radionowplayingwindow.h"
+#include "bookmarkdialog.h"
+#include "delegates/songlistitemdelegate.h"
 
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
@@ -45,14 +46,6 @@ private:
     void keyReleaseEvent(QKeyEvent *e);
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
-    QDialog *bookmarkDialog;
-    QString bookmarkObjectId;
-    QLabel *nameLabel;
-    QLabel *addressLabel;
-    QPushButton *saveButton;
-    QLineEdit *addressBox;
-    QLineEdit *nameBox;
-    QDialogButtonBox *buttonBox;
     RadioNowPlayingWindow *window;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -64,12 +57,11 @@ private:
 
 private slots:
     void showFMTXDialog();
-    void showBookmarkDialog(QString name = "", QString address = "");
+    void onAddClicked();
     void onEditClicked();
-    void onSaveClicked();
+    void onDeleteClicked();
     void onStationSelected(QListWidgetItem* item);
     void onContextMenuRequested(const QPoint &point);
-    void onDeleteClicked();
     void orientationChanged(int w, int h);
     void onChildClosed();
     void onSearchHideButtonClicked();

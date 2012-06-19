@@ -105,10 +105,9 @@ void SleeperDialog::orientationChanged(int w, int h)
     if (w < h) { // Portrait
         ui->gridLayout->addWidget(ui->buttonBox, 1, 0, 1, 1);
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
-        this->adjustSize();
     } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
         ui->gridLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
-        this->adjustSize();
     }
+    this->adjustSize();
 }

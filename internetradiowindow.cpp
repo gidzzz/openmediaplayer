@@ -35,13 +35,15 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
+    ui->listWidget->setItemDelegate(new SongListItemDelegate(ui->listWidget));
+    ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
 #endif
-    SongListItemDelegate *delegate = new SongListItemDelegate(ui->listWidget);
-    ui->listWidget->setItemDelegate(delegate);
-    ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
     this->connectSignals();
+
     ui->listWidget->viewport()->installEventFilter(this);
 
     Rotator *rotator = Rotator::acquire();
@@ -64,7 +66,7 @@ InternetRadioWindow::~InternetRadioWindow()
 void InternetRadioWindow::connectSignals()
 {
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
-    connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showBookmarkDialog()));
+    connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(onAddClicked()));
     connect(ui->listWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onStationSelected(QListWidgetItem*)));
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -132,9 +134,16 @@ void InternetRadioWindow::onContextMenuRequested(const QPoint &point)
 
 void InternetRadioWindow::onEditClicked()
 {
+#ifdef MAFW
     QListWidgetItem *item = ui->listWidget->currentItem();
-    bookmarkObjectId = item->data(UserRoleObjectID).toString();
-    showBookmarkDialog(item->text(), item->data(UserRoleValueText).toString());
+
+    if (BookmarkDialog(this, mafwFactory,
+                       item->text(),
+                       item->data(UserRoleValueText).toString(),
+                       item->data(UserRoleObjectID).toString())
+        .exec() == QDialog::Accepted)
+        listStations();
+#endif
 }
 
 void InternetRadioWindow::onDeleteClicked()
@@ -156,109 +165,11 @@ void InternetRadioWindow::onDeleteClicked()
     ui->listWidget->clearSelection();
 }
 
-void InternetRadioWindow::showBookmarkDialog(QString name, QString address)
+void InternetRadioWindow::onAddClicked()
 {
-    bookmarkDialog = new QDialog(this);
-
-    if (name.isEmpty()) {
-        bookmarkObjectId = "";
-        bookmarkDialog->setWindowTitle(tr("Add radio bookmark"));
-    } else
-        bookmarkDialog->setWindowTitle(tr("Edit radio bookmark"));
-
-    // Labels
-    nameLabel = new QLabel(bookmarkDialog);
-    nameLabel->setText(tr("Name"));
-    addressLabel = new QLabel(bookmarkDialog);
-    addressLabel->setText(tr("Web address"));
-
-    // Input boxes
-    nameBox = new QLineEdit(bookmarkDialog);
-    nameBox->setText(name);
-    addressBox = new QLineEdit(bookmarkDialog);
-    addressBox->setText(address.isEmpty() ? "http://" : address);
-
-    // Save button
-    saveButton = new QPushButton(bookmarkDialog);
-    saveButton->setText(tr("Save"));
-    saveButton->setDefault(true);
-    connect(saveButton, SIGNAL(clicked()), this, SLOT(onSaveClicked()));
-    buttonBox = new QDialogButtonBox(Qt::Vertical);
-    buttonBox->addButton(saveButton, QDialogButtonBox::ActionRole);
-
-    // Layouts
-    QVBoxLayout *labelLayout = new QVBoxLayout();
-    labelLayout->addWidget(nameLabel);
-    labelLayout->addWidget(addressLabel);
-
-    QVBoxLayout *boxLayout = new QVBoxLayout();
-    boxLayout->addWidget(nameBox);
-    boxLayout->addWidget(addressBox);
-
-    QHBoxLayout *dialogLayout = new QHBoxLayout();
-    QVBoxLayout *saveButtonLayout = new QVBoxLayout();
-
-    Rotator *rotator = Rotator::acquire();
-    if (rotator->width() < rotator->height()) { // Portrait
-        dialogLayout->setDirection(QBoxLayout::TopToBottom);
-    } else { // Landscape
-        saveButtonLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    }
-
-    saveButtonLayout->addWidget(buttonBox);
-
-    // Pack all layouts together
-    QHBoxLayout *horizontalLayout = new QHBoxLayout();
-    horizontalLayout->addItem(labelLayout);
-    horizontalLayout->addItem(boxLayout);
-
-    dialogLayout->addItem(horizontalLayout);
-    dialogLayout->addItem(saveButtonLayout);
-
-    bookmarkDialog->setLayout(dialogLayout);
-    bookmarkDialog->setAttribute(Qt::WA_DeleteOnClose);
-    bookmarkDialog->show();
-}
-
-void InternetRadioWindow::onSaveClicked()
-{
-    if (nameBox->text().isEmpty()) {
-#ifdef Q_WS_MAEMO_5
-        QMaemo5InformationBox::information(this, tr("Unable to add empty bookmark"));
-#else
-        QMessageBox::critical(this, tr("Error"), tr("Unable to add empty bookmark"));
-#endif
-    } else {
-        if (addressBox->text().indexOf("://") > 0 && !addressBox->text().endsWith("://")) {
-            bookmarkDialog->close();
-
-            GHashTable* metadata = mafw_metadata_new();
-            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_TITLE, nameBox->text().toUtf8().data());
-            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_URI, addressBox->text().toUtf8().data());
-            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_MIME, "audio/unknown");
-
-            if (bookmarkObjectId.isEmpty())
-                mafwRadioSource->createObject("iradiosource::", metadata);
-            else
-                mafwRadioSource->setMetadata(bookmarkObjectId.toUtf8(), metadata);
-
-            mafw_metadata_release(metadata);
-
-#ifdef Q_WS_MAEMO_5
-            QMaemo5InformationBox::information(this, tr("Media bookmark saved"));
-#endif
-
 #ifdef MAFW
-            this->listStations();
+    BookmarkDialog(this, mafwFactory).exec();
 #endif
-        } else {
-#ifdef Q_WS_MAEMO_5
-            QMaemo5InformationBox::information(this, tr("Invalid URL"));
-#else
-            QMessageBox::critical(this, tr("Error"), tr("Invalid URL"));
-#endif
-        }
-    }
 }
 
 #ifdef MAFW
@@ -273,8 +184,8 @@ void InternetRadioWindow::listStations()
 #endif
 
     qDebug() << "connecting InternetRadioWindow to signalSourceBrowseResult";
-    connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
+    connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+            this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
     browseId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -323,8 +234,8 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
 
     if (remainingCount == 0) {
         qDebug() << "disconnecting InternetRadioWindow from signalSourceBrowseResult";
-        disconnect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                   this, SLOT(browseAllStations(uint, int, uint, QString, GHashTable*, QString)));
+        disconnect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)));
         if (!ui->searchEdit->text().isEmpty())
             this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5

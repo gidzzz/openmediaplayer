@@ -11,6 +11,11 @@
     #include "fmtxdialog.h"
 #endif
 
+#include "ui_radionowplayingwindow.h"
+#include "includes.h"
+#include "rotator.h"
+#include "bookmarkdialog.h"
+
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
 #else
@@ -18,8 +23,6 @@
     class MafwSourceAdapter;
     class MafwPlaylistAdapter;
 #endif
-#include "includes.h"
-#include "rotator.h"
 
 namespace Ui {
     class RadioNowPlayingWindow;
@@ -54,6 +57,7 @@ private:
     QString artist;
     QString title;
 #endif
+    QString uri;
 
 private slots:
     void toggleVolumeSlider();
@@ -64,6 +68,7 @@ private slots:
 #ifdef Q_WS_MAEMO_5
     void showFMTXDialog();
 #endif
+    void showBookmarkDialog();
     void onNextButtonPressed();
     void onPrevButtonPressed();
     void onStopButtonPressed();

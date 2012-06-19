@@ -13,6 +13,7 @@
 #include "includes.h"
 #include "rotator.h"
 #include "radionowplayingwindow.h"
+#include "bookmarkdialog.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QtGui/QX11Info>
@@ -88,6 +89,7 @@ private slots:
     void toggleVolumeSlider();
     void volumeWatcher();
     void orientationChanged(int w, int h);
+    void onBookmarkClicked();
     void onShareClicked();
     void onDeleteClicked();
     void onVolumeSliderPressed();

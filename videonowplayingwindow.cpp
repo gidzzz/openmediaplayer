@@ -132,6 +132,7 @@ void VideoNowPlayingWindow::setIcons()
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
+    ui->bookmarkButton->setIcon(QIcon::fromTheme(bookmarkButtonIcon));
     ui->deleteButton->setIcon(QIcon::fromTheme(deleteButtonIcon));
     ui->shareButton->setIcon(QIcon::fromTheme(shareButtonIcon));
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
@@ -148,6 +149,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
 
+    connect(ui->bookmarkButton, SIGNAL(clicked()), this, SLOT(onBookmarkClicked()));
     connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 #ifdef MAFW
@@ -245,12 +247,14 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
             this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
 
     if (mafwSource && id.startsWith("localtagfs::videos")) { // local storage
+        ui->bookmarkButton->hide();
         ui->shareButton->show();
         ui->deleteButton->show();
         ui->toolbarLayout->setContentsMargins(0,0,0,0);
     } else { // remote sources
         ui->shareButton->hide();
         ui->deleteButton->hide();
+        ui->bookmarkButton->show();
         ui->toolbarLayout->setContentsMargins(20,0,0,0);
     }
 
@@ -302,16 +306,26 @@ void VideoNowPlayingWindow::onNextButtonClicked()
 #endif
 }
 
+void VideoNowPlayingWindow::onBookmarkClicked()
+{
+#ifdef MAFW
+    mafwrenderer->pause();
+    // Beware, BookmarkDialog doesn't support video bookmarks yet.
+    BookmarkDialog bookmarkDialog(this, mafwFactory);
+    bookmarkDialog.exec();
+#endif
+}
+
 void VideoNowPlayingWindow::onDeleteClicked()
 {
 #ifdef MAFW
     mafwrenderer->pause();
 
     QMessageBox confirmDelete(QMessageBox::NoIcon,
-                                  tr("Delete video?"),
-                                  tr("Are you sure you want to delete this video?"),
-                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                                  this);
+                              tr("Delete video?"),
+                              tr("Are you sure you want to delete this video?"),
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                              this);
     confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();

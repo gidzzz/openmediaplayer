@@ -17,6 +17,7 @@ extern QString albumImage, radioImage;
 #define defaultAlbumIcon "mediaplayer_default_album"
 #define defaultShuffleIcon "mediaplayer_default_shuffle"
 #define defaultVideoIcon "general_video"
+#define bookmarkButtonIcon "general_add"
 #define shareButtonIcon "general_share"
 #define deleteButtonIcon "general_delete"
 
