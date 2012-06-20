@@ -269,9 +269,10 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
     }
 }
 
-void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *objectId, QString)
+void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *objectId, QString)
 {
-    this->onStateChanged(state);
+    onStateChanged(state);
+    onMediaChanged(index, const_cast<char*>(objectId));
 }
 
 void RadioNowPlayingWindow::updateSongLabel()

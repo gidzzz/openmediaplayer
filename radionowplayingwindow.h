@@ -56,8 +56,8 @@ private:
     int streamDuration;
     QString artist;
     QString title;
-#endif
     QString uri;
+#endif
 
 private slots:
     void toggleVolumeSlider();
@@ -78,7 +78,7 @@ private slots:
     void onStateChanged(int state);
     void onMediaChanged(int, char* objectId);
     void onPropertyChanged(const QDBusMessage &msg);
-    void onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString);
+    void onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *, QString);
     void onGetPosition(int position, QString);
     void onBufferingInfo(float buffer);
     void onNextButtonClicked();
