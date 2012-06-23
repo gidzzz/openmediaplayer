@@ -945,9 +945,9 @@ void MainWindow::closeEvent(QCloseEvent *)
     QString action = QSettings().value("main/onApplicationExit", "stop-playback").toString();
 #ifdef MAFW
     if (action == "stop-playback")
-        mafwrenderer->stop();
+        mafwrenderer->forceStop();
     else if (action == "pause-playback")
-        mafwrenderer->pause();
+        mafwrenderer->forcePause();
 #endif
 }
 

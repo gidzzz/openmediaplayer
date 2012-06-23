@@ -8,6 +8,7 @@
 
 #include <libmafw/mafw.h>
 #include <libmafw-shared/mafw-shared.h>
+#include <libplayback/playback.h>
 #include <glib.h>
 
 #include "mafwrenderersignalhelper.h"
@@ -33,6 +34,9 @@ class MafwRendererAdapter : public QObject
   static void onPlaylistChanged(MafwRenderer* mafw_renderer, GObject* playlist, gpointer user_data);
   static void onStateChanged(MafwRenderer* mafw_renderer, gint state, gpointer user_data);
 
+  static void playback_state_req_handler(pb_playback_t *pb, pb_state_e req_state, pb_req_t *ext_req, void *data);
+  static void playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data);
+
   bool isRendererReady();
 
   public slots:
@@ -40,7 +44,9 @@ class MafwRendererAdapter : public QObject
   void playObject(const char* object_id);
   void playURI(const char* uri);
   void stop();
+  void forceStop();
   void pause();
+  void forcePause();
   void resume();
   void getStatus();
   void next();
@@ -83,12 +89,29 @@ class MafwRendererAdapter : public QObject
   void signalGetVolume(int volume);
 
  private:
+  enum Action
+  {
+    Play,
+    Pause,
+    Resume,
+    Stop,
+    Dummy
+  };
+
+  struct req_state_cb_payload
+  {
+    MafwRendererAdapter* adapter;
+    Action action;
+  };
+
   void findRenderer();
+  void initializePlayback();
   void connectRegistrySignals();
   void connectRendererSignals();
   void disconnectRendererSignals();
   MafwRegistry* mafw_registry;
   MafwRenderer* mafw_renderer;
+  pb_playback_t* playback;
   GValue GVolume;
 };
 #endif

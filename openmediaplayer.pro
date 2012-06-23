@@ -195,7 +195,7 @@ unix:!symbian {
 contains(DEFINES, MAFW) {
 
     CONFIG += link_pkgconfig
-    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0
+    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0 libplayback-1
 
     SOURCES += \
         mafw/mafwrenderersignalhelper.cpp \

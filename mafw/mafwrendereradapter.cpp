@@ -27,6 +27,7 @@ MafwRendererAdapter::MafwRendererAdapter()
     mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
     mafw_shared_init(mafw_registry, NULL);
     findRenderer();
+    initializePlayback();
     connectRegistrySignals();
 }
 
@@ -60,6 +61,47 @@ void MafwRendererAdapter::findRenderer()
     {
         g_warning("no rgistry\n");
     }
+}
+
+void MafwRendererAdapter::initializePlayback()
+{
+    playback = pb_playback_new_2(dbus_g_connection_get_connection(dbus_g_bus_get(DBUS_BUS_SESSION, NULL)),
+                                 PB_CLASS_MEDIA, PB_FLAG_AUDIO, PB_STATE_STOP,
+                                 playback_state_req_handler, NULL);
+
+    pb_playback_set_stream(playback, "Playback Stream");
+}
+
+void MafwRendererAdapter::playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data)
+{
+    MafwRendererAdapter *adapter = static_cast<req_state_cb_payload*>(data)->adapter;
+
+    if (adapter->mafw_renderer) {
+        if (granted_state == PB_STATE_STOP) {
+            switch (static_cast<req_state_cb_payload*>(data)->action) {
+                case Pause: mafw_renderer_pause(adapter->mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, adapter); break;
+                case Stop: mafw_renderer_stop(adapter->mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, adapter); break;
+            }
+        }
+        else if (granted_state == PB_STATE_PLAY) {
+            switch (static_cast<req_state_cb_payload*>(data)->action) {
+                case Play: mafw_renderer_play(adapter->mafw_renderer, MafwRendererSignalHelper::play_playback_cb, adapter); break;
+                case Resume: mafw_renderer_resume(adapter->mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, adapter); break;
+            }
+        }
+        else { // granted_state == PB_STATE_NONE
+            qDebug() << "State request denied:" << reason;
+        }
+    }
+
+    pb_playback_req_completed(pb, req);
+    delete static_cast<req_state_cb_payload*>(data);
+}
+
+void MafwRendererAdapter::playback_state_req_handler(pb_playback_t *pb, pb_state_e req_state, pb_req_t *ext_req, void *data)
+{
+    // This could be used to handle incoming calls.
+    // Currently that is accomplished using MCE in MainWindow.
 }
 
 void MafwRendererAdapter::connectRegistrySignals()
@@ -225,16 +267,23 @@ void MafwRendererAdapter::onStateChanged(MafwRenderer*,
 
 void MafwRendererAdapter::play()
 {
-    if(mafw_renderer)
-    {
-        mafw_renderer_play(mafw_renderer, MafwRendererSignalHelper::play_playback_cb, this);
-    }
+    req_state_cb_payload *pl = new req_state_cb_payload;
+    pl->adapter = this;
+    pl->action = Play;
+    pb_playback_req_state(playback, PB_STATE_PLAY,
+                          playback_state_req_callback, pl);
 }
 
 void MafwRendererAdapter::playObject(const gchar* object_id)
 {
     if(mafw_renderer)
     {
+        req_state_cb_payload *pl = new req_state_cb_payload;
+        pl->adapter = this;
+        pl->action = Dummy;
+        pb_playback_req_state(playback, PB_STATE_PLAY,
+                              playback_state_req_callback, pl);
+
         mafw_renderer_play_object(mafw_renderer, object_id, MafwRendererSignalHelper::play_object_playback_cb, this);
     }
 }
@@ -243,33 +292,69 @@ void MafwRendererAdapter::playURI(const gchar* uri)
 {
     if(mafw_renderer)
     {
+        req_state_cb_payload *pl = new req_state_cb_payload;
+        pl->adapter = this;
+        pl->action = Dummy;
+        pb_playback_req_state(playback, PB_STATE_PLAY,
+                              playback_state_req_callback, pl);
+
         mafw_renderer_play_uri(mafw_renderer, uri, MafwRendererSignalHelper::play_uri_playback_cb, this);
     }
 }
 
 void MafwRendererAdapter::stop()
 {
+    req_state_cb_payload *pl = new req_state_cb_payload;
+    pl->adapter = this;
+    pl->action = Stop;
+    pb_playback_req_state(playback, PB_STATE_STOP,
+                          playback_state_req_callback, pl);
+}
+
+void MafwRendererAdapter::forceStop()
+{
     if(mafw_renderer)
     {
+        req_state_cb_payload *pl = new req_state_cb_payload;
+        pl->adapter = this;
+        pl->action = Dummy;
+        pb_playback_req_state(playback, PB_STATE_STOP,
+                              playback_state_req_callback, pl);
+
         mafw_renderer_stop(mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, this);
     }
 }
 
-
 void MafwRendererAdapter::pause()
+{
+    req_state_cb_payload *pl = new req_state_cb_payload;
+    pl->adapter = this;
+    pl->action = Pause;
+    pb_playback_req_state(playback, PB_STATE_STOP,
+                          playback_state_req_callback, pl);
+}
+
+void MafwRendererAdapter::forcePause()
 {
     if(mafw_renderer)
     {
+        req_state_cb_payload *pl = new req_state_cb_payload;
+        pl->adapter = this;
+        pl->action = Dummy;
+        pb_playback_req_state(playback, PB_STATE_STOP,
+                              playback_state_req_callback, pl);
+
         mafw_renderer_pause(mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, this);
     }
 }
 
 void MafwRendererAdapter::resume()
 {
-    if(mafw_renderer)
-    {
-        mafw_renderer_resume(mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, this);
-    }
+    req_state_cb_payload *pl = new req_state_cb_payload;
+    pl->adapter = this;
+    pl->action = Resume;
+    pb_playback_req_state(playback, PB_STATE_PLAY,
+                          playback_state_req_callback, pl);
 }
 
 void MafwRendererAdapter::getStatus()
