@@ -76,6 +76,7 @@ private:
     int volumeReduction;
     void scheduleSleeperVolume();
 #ifdef Q_WS_MAEMO_5
+    Maemo5DeviceEvents *deviceEvents;
     QMaemo5InformationBox *updatingInfoBox;
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
@@ -126,8 +127,8 @@ private slots:
     void stepSleeperVolume();
     void onSleeperTimeout();
 #ifdef MAFW
-    void onRendererReady();
     void onPropertyChanged(const QDBusMessage &msg);
+    void setupPlayback();
     void getInitialVolume(int volume);
     void trackerSourceReady();
     void radioSourceReady();
@@ -149,6 +150,7 @@ private slots:
     void onHeadsetDisconnected();
     void onHeadsetButtonPressed(QDBusMessage msg);
     void onCallStateChanged(QDBusMessage msg);
+    void onScreenLocked(bool locked);
     void phoneButton();
     void updateWiredHeadset();
     void takeScreenshot();

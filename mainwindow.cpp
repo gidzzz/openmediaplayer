@@ -72,9 +72,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwRadioSource = mafwFactory->getRadioSource();
     playlist = mafwFactory->getPlaylistAdapter();
     if (mafwrenderer->isRendererReady())
-        onRendererReady();
+        mafwrenderer->getStatus();
     else
-        connect(mafwrenderer, SIGNAL(rendererReady()), this, SLOT(onRendererReady()));
+        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -83,6 +83,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->songCountL->clear();
     ui->videoCountL->clear();
     ui->stationCountL->clear();
+
+    deviceEvents = new Maemo5DeviceEvents(this);
 
     wiredHeadsetIsConnected = false;
     headsetPauseStamp = -1;
@@ -601,7 +603,12 @@ void MainWindow::reloadSettings()
                                   orientation == "portrait"  ? Rotator::Portrait  :
                                                                Rotator::Automatic);
 
-    mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback", true).toBool());
+#ifdef MAFW
+    if (mafwrenderer->isRendererReady())
+        setupPlayback();
+    else
+        connect(mafwrenderer, SIGNAL(rendererReady()), this, SLOT(setupPlayback()));
+#endif
 }
 
 void MainWindow::openSleeperDialog()
@@ -989,11 +996,34 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
 #endif
 }
 
-void MainWindow::onRendererReady()
+#ifdef Q_WS_MAEMO_5
+void MainWindow::onScreenLocked(bool locked)
 {
-    mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback", true).toBool());
-    mafwrenderer->getStatus();
+#ifdef MAFW
+    if (locked)
+        mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "locked");
+    else
+        mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "unlocked");
+#endif
 }
+#endif
+
+#ifdef MAFW
+void MainWindow::setupPlayback()
+{
+    disconnect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
+
+    QString playback = QSettings().value("main/managedPlayback", "always").toString();
+    if (playback == "always")
+        mafwrenderer->enablePlayback(true);
+    else if (playback == "never")
+        mafwrenderer->enablePlayback(false);
+    else if (playback == "locked" || playback == "unlocked") {
+        connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
+        onScreenLocked(deviceEvents->isScreenLocked());
+    }
+}
+#endif
 
 void MainWindow::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)
 {

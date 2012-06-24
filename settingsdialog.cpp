@@ -91,6 +91,19 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
                               QSettings().value("main/orientation").toString() == "portrait" ? 2 : 0);
     ui->orientationBox->setPickSelector(selector);
 
+    selector = new QMaemo5ListPickSelector;
+    model = new QStandardItemModel(0, 1, selector);
+    model->appendRow(new QStandardItem(tr("Always")));
+    model->appendRow(new QStandardItem(tr("Never")));
+    model->appendRow(new QStandardItem(tr("With screen locked")));
+    model->appendRow(new QStandardItem(tr("With screen unlocked")));
+    selector->setModel(model);
+    selector->setCurrentIndex(QSettings().value("main/managedPlayback").toString() == "always" ? 0 :
+                              QSettings().value("main/managedPlayback").toString() == "never" ? 1 :
+                              QSettings().value("main/managedPlayback").toString() == "locked" ? 2 :
+                              QSettings().value("main/managedPlayback").toString() == "unlocked" ? 3 : 0);
+    ui->playbackBox->setPickSelector(selector);
+
     ui->headsetPauseCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
     ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
@@ -143,6 +156,13 @@ void SettingsDialog::accept()
         case 0: QSettings().setValue("main/orientation", "automatic"); break;
         case 1: QSettings().setValue("main/orientation", "landscape"); break;
         case 2: QSettings().setValue("main/orientation", "portrait"); break;
+    }
+
+    switch (static_cast<QMaemo5ListPickSelector*>(ui->playbackBox->pickSelector())->currentIndex()) {
+        case 0: QSettings().setValue("main/managedPlayback", "always"); break;
+        case 1: QSettings().setValue("main/managedPlayback", "never"); break;
+        case 2: QSettings().setValue("main/managedPlayback", "locked"); break;
+        case 3: QSettings().setValue("main/managedPlayback", "unlocked"); break;
     }
 
     QSettings().setValue("main/pauseHeadset", ui->headsetPauseCheckBox->isChecked());
