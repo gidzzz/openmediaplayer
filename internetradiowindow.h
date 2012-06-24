@@ -48,7 +48,6 @@ private:
     void focusOutEvent(QFocusEvent *);
     QList<QListWidgetItem*> audioBufferList;
     QList<QListWidgetItem*> videoBufferList;
-    RadioNowPlayingWindow *window;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;

@@ -92,36 +92,54 @@ void InternetRadioWindow::onStationSelected(QListWidgetItem* item)
     this->setEnabled(false);
 
 #ifdef MAFW
-    playlist->assignRadioPlaylist();
+    QString type = item->data(UserRoleMIME).toString().startsWith("audio") ? "audio" : "video";
+
+    if (type == "audio")
+        playlist->assignRadioPlaylist();
+    else // type == "video"
+        playlist->assignVideoPlaylist();
 
     playlist->clear();
 
     int stationCount = ui->listWidget->count();
     gchar** songAddBuffer = new gchar*[stationCount+1];
 
+    int sameTypeIndex = 0;
+    int sameTypeCount = 0;
+    for (int i = 0; i < ui->listWidget->row(item); i++)
+        if (ui->listWidget->item(i)->data(UserRoleMIME).toString().startsWith(type))
+            ++sameTypeIndex;
     for (int i = 0; i < stationCount; i++)
-        songAddBuffer[i] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
-    songAddBuffer[stationCount] = NULL;
+        if (ui->listWidget->item(i)->data(UserRoleMIME).toString().startsWith(type))
+            songAddBuffer[sameTypeCount++] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[sameTypeCount] = NULL;
 
     playlist->appendItems((const gchar**)songAddBuffer);
 
-    for (int i = 0; i < stationCount; i++)
+    for (int i = 0; i < sameTypeCount; i++)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
     playlist->getSize(); // explained in musicwindow.cpp
-    mafwrenderer->gotoIndex(ui->listWidget->row(item));
+    mafwrenderer->gotoIndex(sameTypeIndex);
 
-    window = new RadioNowPlayingWindow(this, mafwFactory);
+    if (type == "audio") {
+        RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwFactory);
+        window->show();
+        window->play();
+        connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+    } else { // type == "video"
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+        window->showFullScreen();
+        QTimer::singleShot(500, window, SLOT(playVideo()));
+        connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+    }
 #else
     window = new RadioNowPlayingWindow(this);
-#endif
     window->show();
-#ifdef MAFW
-    window->play();
+    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
 #endif
 
-    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 }
 
@@ -251,6 +269,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         if (!audioBufferList.isEmpty()) {
             if (drawHeaders) {
                 ui->listWidget->item(i)->setText("Audio bookmarks");
+                ui->listWidget->item(i)->setData(UserRoleMIME, QVariant());
                 ui->listWidget->item(i)->setData(Qt::UserRole, true);
                 ++i;
             }
@@ -270,6 +289,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         if (!videoBufferList.isEmpty()) {
             if (drawHeaders) {
                 ui->listWidget->item(i)->setText("Video bookmarks");
+                ui->listWidget->item(i)->setData(UserRoleMIME, QVariant());
                 ui->listWidget->item(i)->setData(Qt::UserRole, true);
                 ++i;
             }
