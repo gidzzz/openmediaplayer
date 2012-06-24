@@ -126,6 +126,7 @@ private slots:
     void stepSleeperVolume();
     void onSleeperTimeout();
 #ifdef MAFW
+    void onRendererReady();
     void onPropertyChanged(const QDBusMessage &msg);
     void getInitialVolume(int volume);
     void trackerSourceReady();

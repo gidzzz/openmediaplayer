@@ -37,16 +37,15 @@ class MafwRendererAdapter : public QObject
   static void playback_state_req_handler(pb_playback_t *pb, pb_state_e req_state, pb_req_t *ext_req, void *data);
   static void playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data);
 
+  void enablePlayback(bool enable);
   bool isRendererReady();
 
-  public slots:
+ public slots:
   void play();
   void playObject(const char* object_id);
   void playURI(const char* uri);
   void stop();
-  void forceStop();
   void pause();
-  void forcePause();
   void resume();
   void getStatus();
   void next();
@@ -88,6 +87,9 @@ class MafwRendererAdapter : public QObject
   void signalGetCurrentMetadata(GHashTable *metadata, QString object_id, QString error);
   void signalGetVolume(int volume);
 
+ private slots:
+  void initializePlayback(MafwPlaylist*, uint, MafwPlayState state, const char*, QString);
+
  private:
   enum Action
   {
@@ -105,7 +107,6 @@ class MafwRendererAdapter : public QObject
   };
 
   void findRenderer();
-  void initializePlayback();
   void connectRegistrySignals();
   void connectRendererSignals();
   void disconnectRendererSignals();

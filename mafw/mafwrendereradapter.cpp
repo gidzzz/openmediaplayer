@@ -21,13 +21,13 @@
 MafwRendererAdapter::MafwRendererAdapter()
 {
     this->mafw_renderer = NULL;
+    this->playback = NULL;
     memset(&GVolume, 0, sizeof(GVolume));
     g_value_init (&GVolume, G_TYPE_UINT);
     g_warning("start\n");
     mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
     mafw_shared_init(mafw_registry, NULL);
     findRenderer();
-    initializePlayback();
     connectRegistrySignals();
 }
 
@@ -63,13 +63,30 @@ void MafwRendererAdapter::findRenderer()
     }
 }
 
-void MafwRendererAdapter::initializePlayback()
+void MafwRendererAdapter::enablePlayback(bool enable)
 {
-    playback = pb_playback_new_2(dbus_g_connection_get_connection(dbus_g_bus_get(DBUS_BUS_SESSION, NULL)),
-                                 PB_CLASS_MEDIA, PB_FLAG_AUDIO, PB_STATE_STOP,
-                                 playback_state_req_handler, NULL);
+    if (enable) {
+        if (!playback) {
+            connect(this, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+                    this, SLOT(initializePlayback(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+            getStatus();
+        }
+    } else {
+        if (playback) {
+            pb_playback_destroy(playback);
+            playback = NULL;
+        }
+    }
+}
 
-    pb_playback_set_stream(playback, "Playback Stream");
+void MafwRendererAdapter::initializePlayback(MafwPlaylist*, uint, MafwPlayState state, const char*, QString)
+{
+    disconnect(this, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+               this, SLOT(initializePlayback(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+
+    playback = pb_playback_new(dbus_g_connection_get_connection(dbus_g_bus_get(DBUS_BUS_SESSION, NULL)),
+                                 PB_CLASS_MEDIA, (state == Playing ? PB_STATE_PLAY : PB_STATE_STOP),
+                                 playback_state_req_handler, NULL);
 }
 
 void MafwRendererAdapter::playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data)
@@ -267,11 +284,15 @@ void MafwRendererAdapter::onStateChanged(MafwRenderer*,
 
 void MafwRendererAdapter::play()
 {
-    req_state_cb_payload *pl = new req_state_cb_payload;
-    pl->adapter = this;
-    pl->action = Play;
-    pb_playback_req_state(playback, PB_STATE_PLAY,
-                          playback_state_req_callback, pl);
+    if (playback) {
+        req_state_cb_payload *pl = new req_state_cb_payload;
+        pl->adapter = this;
+        pl->action = Play;
+        pb_playback_req_state(playback, PB_STATE_PLAY,
+                              playback_state_req_callback, pl);
+    } else if (mafw_renderer) {
+        mafw_renderer_play(mafw_renderer, MafwRendererSignalHelper::play_playback_cb, this);
+    }
 }
 
 void MafwRendererAdapter::playObject(const gchar* object_id)
@@ -304,57 +325,41 @@ void MafwRendererAdapter::playURI(const gchar* uri)
 
 void MafwRendererAdapter::stop()
 {
-    req_state_cb_payload *pl = new req_state_cb_payload;
-    pl->adapter = this;
-    pl->action = Stop;
-    pb_playback_req_state(playback, PB_STATE_STOP,
-                          playback_state_req_callback, pl);
-}
-
-void MafwRendererAdapter::forceStop()
-{
-    if(mafw_renderer)
-    {
+    if (playback) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
-        pl->action = Dummy;
+        pl->action = Stop;
         pb_playback_req_state(playback, PB_STATE_STOP,
                               playback_state_req_callback, pl);
-
+    } else if (mafw_renderer) {
         mafw_renderer_stop(mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, this);
     }
 }
 
 void MafwRendererAdapter::pause()
 {
-    req_state_cb_payload *pl = new req_state_cb_payload;
-    pl->adapter = this;
-    pl->action = Pause;
-    pb_playback_req_state(playback, PB_STATE_STOP,
-                          playback_state_req_callback, pl);
-}
-
-void MafwRendererAdapter::forcePause()
-{
-    if(mafw_renderer)
-    {
+    if (playback) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
-        pl->action = Dummy;
+        pl->action = Pause;
         pb_playback_req_state(playback, PB_STATE_STOP,
                               playback_state_req_callback, pl);
-
+    } else if (mafw_renderer) {
         mafw_renderer_pause(mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, this);
     }
 }
 
 void MafwRendererAdapter::resume()
 {
-    req_state_cb_payload *pl = new req_state_cb_payload;
-    pl->adapter = this;
-    pl->action = Resume;
-    pb_playback_req_state(playback, PB_STATE_PLAY,
-                          playback_state_req_callback, pl);
+    if (playback) {
+        req_state_cb_payload *pl = new req_state_cb_payload;
+        pl->adapter = this;
+        pl->action = Resume;
+        pb_playback_req_state(playback, PB_STATE_PLAY,
+                              playback_state_req_callback, pl);
+    } else if (mafw_renderer) {
+        mafw_renderer_resume(mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, this);
+    }
 }
 
 void MafwRendererAdapter::getStatus()

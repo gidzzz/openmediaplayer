@@ -72,9 +72,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwRadioSource = mafwFactory->getRadioSource();
     playlist = mafwFactory->getPlaylistAdapter();
     if (mafwrenderer->isRendererReady())
-        mafwrenderer->getStatus();
+        onRendererReady();
     else
-        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
+        connect(mafwrenderer, SIGNAL(rendererReady()), this, SLOT(onRendererReady()));
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -600,6 +600,8 @@ void MainWindow::reloadSettings()
     Rotator::acquire()->setPolicy(orientation == "landscape" ? Rotator::Landscape :
                                   orientation == "portrait"  ? Rotator::Portrait  :
                                                                Rotator::Automatic);
+
+    mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback", true).toBool());
 }
 
 void MainWindow::openSleeperDialog()
@@ -944,10 +946,11 @@ void MainWindow::closeEvent(QCloseEvent *)
 {
     QString action = QSettings().value("main/onApplicationExit", "stop-playback").toString();
 #ifdef MAFW
+    mafwrenderer->enablePlayback(false);
     if (action == "stop-playback")
-        mafwrenderer->forceStop();
+        mafwrenderer->stop();
     else if (action == "pause-playback")
-        mafwrenderer->forcePause();
+        mafwrenderer->pause();
 #endif
 }
 
@@ -984,6 +987,12 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
         updatingShow = true;
     }
 #endif
+}
+
+void MainWindow::onRendererReady()
+{
+    mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback", true).toBool());
+    mafwrenderer->getStatus();
 }
 
 void MainWindow::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)
