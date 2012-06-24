@@ -87,6 +87,8 @@ void InternetRadioWindow::showFMTXDialog()
 
 void InternetRadioWindow::onStationSelected(QListWidgetItem* item)
 {
+    if (item->data(Qt::UserRole).toBool()) return;
+
     this->setEnabled(false);
 
 #ifdef MAFW
@@ -125,6 +127,8 @@ void InternetRadioWindow::onStationSelected(QListWidgetItem* item)
 
 void InternetRadioWindow::onContextMenuRequested(const QPoint &point)
 {
+    if (ui->listWidget->currentItem()->data(Qt::UserRole).toBool()) return;
+
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Edit"), this, SLOT(onEditClicked()));
@@ -199,43 +203,90 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
     if (this->browseId != browseId) return;
 
     if (index == 0) {
-        int delta = remainingCount - ui->listWidget->count() + 1;
-        if (delta > 0)
-            for (int i = 0; i < delta; i++)
-                ui->listWidget->addItem(new QListWidgetItem());
-        else
-            for (int i = delta; i < 0; i++)
-                delete ui->listWidget->item(ui->listWidget->count()-1);
+        audioBufferList.clear();
+        videoBufferList.clear();
     }
 
     if (metadata != NULL) {
         QString title;
-        QString URI;
         QString mime;
+        QString URI;
         GValue *v;
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
+        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
         mime = QString::fromUtf8(g_value_get_string (v));
 
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
-        if (mime.contains("video")) title = "[VIDEO] " + title;
-
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         URI = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown)");
 
-        QListWidgetItem *item = ui->listWidget->item(index);
-
+        QListWidgetItem *item = new QListWidgetItem();
         item->setText(title);
+        item->setData(UserRoleMIME, mime);
         item->setData(UserRoleValueText, URI);
         item->setData(UserRoleObjectID, objectId);
-        item->setData(UserRoleSongDuration, Duration::Blank);
+
+        (mime.startsWith("audio") ? audioBufferList : videoBufferList).append(item);
     }
 
     if (remainingCount == 0) {
         qDebug() << "disconnecting InternetRadioWindow from signalSourceBrowseResult";
         disconnect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)));
+
+        bool drawHeaders = !audioBufferList.isEmpty() && !videoBufferList.isEmpty();
+        int delta = audioBufferList.size() + videoBufferList.size() - ui->listWidget->count();
+        if (drawHeaders) delta += 2;
+        if (delta > 0)
+            for (int i = 0; i < delta; i++)
+                ui->listWidget->addItem(new QListWidgetItem());
+        else
+            for (int i = delta; i < 0; i++)
+                delete ui->listWidget->item(ui->listWidget->count()-1);
+
+        int i = 0;
+
+        if (!audioBufferList.isEmpty()) {
+            if (drawHeaders) {
+                ui->listWidget->item(i)->setText("Audio bookmarks");
+                ui->listWidget->item(i)->setData(Qt::UserRole, true);
+                ++i;
+            }
+
+            while (!audioBufferList.isEmpty()) {
+                ui->listWidget->item(i)->setText(audioBufferList.first()->text());
+                ui->listWidget->item(i)->setData(UserRoleValueText, audioBufferList.first()->data(UserRoleValueText));
+                ui->listWidget->item(i)->setData(UserRoleObjectID, audioBufferList.first()->data(UserRoleObjectID));
+                ui->listWidget->item(i)->setData(UserRoleMIME, audioBufferList.first()->data(UserRoleMIME));
+                ui->listWidget->item(i)->setData(UserRoleSongDuration, Duration::Blank);
+                ui->listWidget->item(i)->setData(Qt::UserRole, false);
+                delete audioBufferList.takeFirst();
+                ++i;
+            }
+        }
+
+        if (!videoBufferList.isEmpty()) {
+            if (drawHeaders) {
+                ui->listWidget->item(i)->setText("Video bookmarks");
+                ui->listWidget->item(i)->setData(Qt::UserRole, true);
+                ++i;
+            }
+
+            while (!videoBufferList.isEmpty()) {
+                ui->listWidget->item(i)->setText(videoBufferList.first()->text());
+                ui->listWidget->item(i)->setData(UserRoleValueText, videoBufferList.first()->data(UserRoleValueText));
+                ui->listWidget->item(i)->setData(UserRoleObjectID, videoBufferList.first()->data(UserRoleObjectID));
+                ui->listWidget->item(i)->setData(UserRoleMIME, videoBufferList.first()->data(UserRoleMIME));
+                ui->listWidget->item(i)->setData(UserRoleSongDuration, Duration::Blank);
+                ui->listWidget->item(i)->setData(Qt::UserRole, false);
+                delete videoBufferList.takeFirst();
+                ++i;
+            }
+        }
+
+
         if (!ui->searchEdit->text().isEmpty())
             this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5

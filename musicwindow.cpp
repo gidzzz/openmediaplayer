@@ -815,7 +815,6 @@ void MusicWindow::listAutoPlaylists()
     QStandardItem *item = new QStandardItem();
     item->setText(tr("Automatic playlists"));
     item->setData(true, Qt::UserRole);
-    item->setData(Duration::Blank, UserRoleSongDuration);
     playlistModel->appendRow(item);
 
     int limit = QSettings().value("music/playlistSize", 30).toInt();
@@ -864,7 +863,6 @@ void MusicWindow::listSavedPlaylists()
         QStandardItem *item = new QStandardItem();
         item->setText(tr("Saved"));
         item->setData(true, Qt::UserRole);
-        item->setData(Duration::Blank, UserRoleSongDuration);
         playlistModel->insertRow(5, item);
         ++savedPlaylistCount;
 
@@ -899,7 +897,6 @@ void MusicWindow::listImportedPlaylists()
     QStandardItem *item = new QStandardItem();
     item->setText(tr("Imported playlists"));
     item->setData(true, Qt::UserRole);
-    item->setData(Duration::Blank, UserRoleSongDuration);
     playlistModel->appendRow(item);
 
     browseImportedPlaylistsId = mafwTrackerSource->sourceBrowse("localtagfs::music/playlists", false, NULL, NULL,
