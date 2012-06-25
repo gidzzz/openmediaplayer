@@ -1357,7 +1357,7 @@ void NowPlayingWindow::onRingingToneUriReceived(QString objectId, QString uri)
                                "com.nokia.profiled",
                                QDBusConnection::sessionBus(), this);
     setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
-    QMaemo5InformationBox::information(this, "Selected song set as ringing tone");
+    QMaemo5InformationBox::information(this, tr("Selected song set as ringing tone"));
 #endif
 }
 #endif

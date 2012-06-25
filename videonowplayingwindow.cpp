@@ -472,7 +472,7 @@ void VideoNowPlayingWindow::onStateChanged(int state)
         }
     }
     else if (state == Transitioning) {
-        if (gotInitialState) {
+        if (gotInitialState && !QSettings().value("Videos/continuousPlayback", false).toBool()) {
             mafwrenderer->stop();
             mafwrenderer->previous();
         }
