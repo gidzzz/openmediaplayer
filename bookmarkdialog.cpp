@@ -1,6 +1,6 @@
 #include "bookmarkdialog.h"
 
-BookmarkDialog::BookmarkDialog(QWidget *parent, MafwAdapterFactory *factory, QString name, QString address, QString objectId) :
+BookmarkDialog::BookmarkDialog(QWidget *parent, MafwAdapterFactory *factory, MediaType type, QString address, QString name, QString objectId) :
     QDialog(parent),
     ui(new Ui::BookmarkDialog)
 {
@@ -15,6 +15,7 @@ BookmarkDialog::BookmarkDialog(QWidget *parent, MafwAdapterFactory *factory, QSt
 
     ui->nameBox->setText(name);
     ui->addressBox->setText(address.isEmpty() ? "http://" : address);
+    ui->videoBox->setChecked(type == Video);
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 
@@ -41,7 +42,7 @@ void BookmarkDialog::accept()
             GHashTable* metadata = mafw_metadata_new();
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_TITLE, ui->nameBox->text().toUtf8().data());
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_URI, ui->addressBox->text().toUtf8().data());
-            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_MIME, "audio/unknown");
+            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_MIME, ui->videoBox->isChecked() ? "video/unknown" : "audio/unknown");
 
             if (objectId.isEmpty())
                 mafwRadioSource->createObject("iradiosource::", metadata);
@@ -65,13 +66,16 @@ void BookmarkDialog::accept()
 
 void BookmarkDialog::orientationChanged(int w, int h)
 {
+    ui->gridLayout->removeWidget(ui->videoBox);
     ui->gridLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
-        ui->gridLayout->addWidget(ui->buttonBox, 1, 0, 1, 1);
+        ui->gridLayout->addWidget(ui->videoBox, 2, 0, 1, 2);
+        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, 2);
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
+        ui->gridLayout->addWidget(ui->videoBox, 0, 2, 1, 1);
+        ui->gridLayout->addWidget(ui->buttonBox, 1, 2, 1, 1, Qt::AlignBottom);
     }
     this->adjustSize();
 }

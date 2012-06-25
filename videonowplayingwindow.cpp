@@ -260,7 +260,8 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
 
     videoLength = Duration::Unknown;
     if (mafwSource && !id.isEmpty())
-        mafwSource->getMetadata(id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_DURATION,
+        mafwSource->getMetadata(id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI,
+                                                              MAFW_METADATA_KEY_DURATION,
                                                               MAFW_METADATA_KEY_PAUSED_POSITION));
 
     this->objectIdToPlay = id;
@@ -310,8 +311,7 @@ void VideoNowPlayingWindow::onBookmarkClicked()
 {
 #ifdef MAFW
     mafwrenderer->pause();
-    // Beware, BookmarkDialog doesn't support video bookmarks yet.
-    BookmarkDialog bookmarkDialog(this, mafwFactory);
+    BookmarkDialog bookmarkDialog(this, mafwFactory, BookmarkDialog::Video, uri);
     bookmarkDialog.exec();
 #endif
 }
@@ -516,6 +516,9 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 {
     if (metadata != NULL) {
         GValue *v;
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
+        uri = v ? g_value_get_string (v) : QString();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         if (v) videoLength = g_value_get_int (v);

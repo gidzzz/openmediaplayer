@@ -60,6 +60,7 @@ private:
     QTimer *volumeTimer;
     QTimer *positionTimer;
     QString objectIdToPlay;
+    QString uri;
     Rotator::Orientation savedPolicy;
     bool lazySliders;
     bool reverseTime;
