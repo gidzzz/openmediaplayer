@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pt_PT" sourcelanguage="en">
+<TS version="2.0" language="ar_SA" sourcelanguage="en">
 <context>
     <name>AboutWindow</name>
     <message>
         <location filename="../aboutwindow.ui" line="14"/>
         <source>About</source>
-        <translation>Sobre</translation>
+        <translation>حول</translation>
     </message>
     <message utf8="true">
         <location filename="../aboutwindow.ui" line="82"/>
@@ -35,16 +35,24 @@ p, li { white-space: pre-wrap; }
         <location filename="../delegates/artistlistitemdelegate.cpp" line="26"/>
         <source>%n album(s)</source>
         <translation>
-            <numerusform>Um: %n album</numerusform>
-            <numerusform>outro: %n albums</numerusform>
+            <numerusform>%n ألبوم</numerusform>
+            <numerusform>%n ألبومات</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../delegates/artistlistitemdelegate.cpp" line="28"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>Um: %n song</numerusform>
-            <numerusform>outro: %n songs</numerusform>
+            <numerusform>%n أغنية</numerusform>
+            <numerusform>%n أغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -53,12 +61,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../bookmarkdialog.ui" line="9"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>مشاركة</translation>
     </message>
     <message>
         <location filename="../bookmarkdialog.ui" line="23"/>
         <source>Web address</source>
-        <translation>Endereço Web</translation>
+        <translation>عنوان الويب</translation>
     </message>
     <message>
         <location filename="../bookmarkdialog.ui" line="37"/>
@@ -68,27 +76,27 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../bookmarkdialog.cpp" line="13"/>
         <source>Add radio bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>إضافة علامة راديو</translation>
     </message>
     <message>
         <location filename="../bookmarkdialog.cpp" line="13"/>
         <source>Edit radio bookmark</source>
-        <translation>Editar marcadores de rádio</translation>
+        <translation>تعديل علامة راديو</translation>
     </message>
     <message>
         <location filename="../bookmarkdialog.cpp" line="36"/>
         <source>Unable to add empty bookmark</source>
-        <translation>Incapaz de adicionar um favorito vazio</translation>
+        <translation>غير قادر على إضافة علامة فارغة</translation>
     </message>
     <message>
         <location filename="../bookmarkdialog.cpp" line="56"/>
         <source>Media bookmark saved</source>
-        <translation>Favorito salvo.</translation>
+        <translation>تم حفظ علامة الوسائط</translation>
     </message>
     <message>
         <location filename="../bookmarkdialog.cpp" line="61"/>
         <source>Invalid URL</source>
-        <translation>URL Inválida.</translation>
+        <translation>رابط URL غير صالح</translation>
     </message>
 </context>
 <context>
@@ -96,12 +104,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../editlyrics.ui" line="14"/>
         <source>Lyrics editor</source>
-        <translation>Editor de Letras</translation>
+        <translation>محرر كلمات الأغنية</translation>
     </message>
     <message>
         <location filename="../editlyrics.ui" line="25"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation>حفظ</translation>
     </message>
 </context>
 <context>
@@ -110,42 +118,42 @@ p, li { white-space: pre-wrap; }
         <location filename="../fmtxdialog.ui" line="14"/>
         <location filename="../fmtxdialog.cpp" line="36"/>
         <source>FM transmitter</source>
-        <translation>Transmissor FM</translation>
+        <translation>مرسل الـ FM</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.ui" line="45"/>
         <location filename="../fmtxdialog.cpp" line="35"/>
         <source>FM transmitter on</source>
-        <translation>Transmissor FM Ligado</translation>
+        <translation>تشغيل مرسل الـ FM</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="27"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation>حفظ</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="32"/>
         <source>Frequency</source>
-        <translation>Frequência</translation>
+        <translation>التردد</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="56"/>
         <source>FM transmitter disabled</source>
-        <translation>Transmissor FM Desligado</translation>
+        <translation>تم تعطيل مرسل الـ FM</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="132"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
-        <translation>Incapaz de usar o Transmissor FM enquanto o auricular esta conectado.
-Retire o cabo para continuar a usar o Transmissor FM.</translation>
+        <translation>غير قادر على استخدام مرسل الـ FM أثناء توصيل سماعة الأذن أو سلك مخرج التلفاز.
+افصل السلك للإستمرار في استخدام مرسل الـ FM.</translation>
     </message>
     <message>
         <location filename="../fmtxdialog.cpp" line="136"/>
         <source>Unable to use FM transmitter while USB is connected.
 Unplug USB to continue using FM transmitter.</source>
-        <translation>Incapaz de usar o Transmissor FM enquanto o cabo USB esta conectado.
-Retire o cabo para continuar a usar o Transmissor FM</translation>
+        <translation>غير قادر على استخدام مرسل الـ FM أثناء اتصال الـ USB.
+افصل الـ USB للإستمرار في استخدام مرسل الـ FM.</translation>
     </message>
 </context>
 <context>
@@ -153,12 +161,12 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../freqdlg.cpp" line="9"/>
         <source>Done</source>
-        <translation>Concluído</translation>
+        <translation>تم</translation>
     </message>
     <message>
         <location filename="../freqdlg.cpp" line="13"/>
         <source>Select frequency</source>
-        <translation>Selecione a Frequência</translation>
+        <translation>اختر التردد</translation>
     </message>
 </context>
 <context>
@@ -166,57 +174,57 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../internetradiowindow.ui" line="14"/>
         <source>Internet radio stations</source>
-        <translation>Estações de Radio Online</translation>
+        <translation>محطات إذاعة الانترنت</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="83"/>
         <source>Internet Radio</source>
-        <translation>Radio Online</translation>
+        <translation>إذاعة الانترنت</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="92"/>
         <source>Add radio bookmark</source>
-        <translation>Adicionar Radio aos Favoritos</translation>
+        <translation>إضافة علامة راديو</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.ui" line="97"/>
         <source>FM transmitter</source>
-        <translation>Transmissor FM</translation>
+        <translation>مرسل الـ FM</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="152"/>
         <source>Edit</source>
-        <translation>Editar</translation>
+        <translation>تعديل</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="153"/>
         <source>Delete</source>
-        <translation>Apagar</translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="176"/>
         <source>Delete selected item from device?</source>
-        <translation>Eliminar ficheiro seleccionado do dispositivo?</translation>
+        <translation>حذف العناصر المحددة من الجهاز؟</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="179"/>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="180"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="235"/>
         <source>(unknown station)</source>
-        <translation>(Estação Desconhecida)</translation>
+        <translation>(محطة غير معروفة)</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="241"/>
         <source>(unknown)</source>
-        <translation>(Desconhecido)</translation>
+        <translation>(غير معروف)</translation>
     </message>
 </context>
 <context>
@@ -226,9 +234,12 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         <location filename="../mainwindow.cpp" line="816"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>um: %n song
-</numerusform>
-            <numerusform>outro: %n songs</numerusform>
+            <numerusform>%n أغنية</numerusform>
+            <numerusform>%n أغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -236,9 +247,12 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         <location filename="../mainwindow.cpp" line="823"/>
         <source>%n clip(s)</source>
         <translation>
-            <numerusform>um: %n clip
-</numerusform>
-            <numerusform>outro: %n clips</numerusform>
+            <numerusform>%n مقطع</numerusform>
+            <numerusform>%n مقاطع</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -246,94 +260,98 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         <location filename="../mainwindow.cpp" line="839"/>
         <source>%n station(s)</source>
         <translation>
-            <numerusform>um: %n clip</numerusform>
-            <numerusform>outro: %n clips</numerusform>
+            <numerusform>%n محطة</numerusform>
+            <numerusform>%n محطات</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="212"/>
         <location filename="../mainwindow.cpp" line="217"/>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation>موسيقى</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="213"/>
         <location filename="../mainwindow.cpp" line="218"/>
         <source>Videos</source>
-        <translation>Vídeos</translation>
+        <translation>فيديوهات</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="214"/>
         <location filename="../mainwindow.cpp" line="219"/>
         <source>Internet Radio</source>
-        <translation>Radios Online</translation>
+        <translation>إذاعة الانترنت</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="215"/>
         <location filename="../mainwindow.cpp" line="220"/>
         <source>Shuffle all songs</source>
-        <translation>Misturar  todas as Música</translation>
+        <translation>تشغيل جميع الأغاني عشوائيا</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="815"/>
         <source>(no songs)</source>
-        <translation>(sem músicas)</translation>
+        <translation>(لا يوجد أغاني)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="822"/>
         <source>(no videos)</source>
-        <translation>(sem vídeos)</translation>
+        <translation>(لا يوجد فيديوهات)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="838"/>
         <source>(no stations)</source>
-        <translation>(sem estações)</translation>
+        <translation>(لا يوجد محطات)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="974"/>
         <source>Retrieving information on the new media files</source>
-        <translation>Actualizando informação dos ficheiros de média</translation>
+        <translation>إسترجاع المعلومات في ملفات الميديا الجديدة</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="976"/>
         <source>Estimated time remaining:</source>
-        <translation>Tempo restante estimado:</translation>
+        <translation>الوقت المتبقي المقدر:</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="978"/>
         <source>Remaining items:</source>
-        <translation>Arquivos restantes:</translation>
+        <translation>العناصر المتبقية:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>Media player</source>
-        <translation>Leitor Média</translation>
+        <translation>مشغل الوسائط</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="390"/>
         <location filename="../mainwindow.ui" line="397"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="407"/>
         <source>About</source>
-        <translation>Sobre</translation>
+        <translation>حول البرنامج</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="412"/>
         <source>About Qt</source>
-        <translation>Sobre Qt</translation>
+        <translation>حول الـ Qt</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="417"/>
         <source>Settings</source>
-        <translation>Definições</translation>
+        <translation>الإعدادات</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="422"/>
         <source>Sleep timer</source>
-        <translation type="unfinished"></translation>
+        <translation>مؤقت النوم</translation>
     </message>
 </context>
 <context>
@@ -341,69 +359,69 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../musicwindow.cpp" line="247"/>
         <source>Add to now playing</source>
-        <translation>Adicionar a Lista de Reprodução atual</translation>
+        <translation>إضافة إلى قائمة تشغيل الآن</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="249"/>
         <source>Add to a playlist</source>
-        <translation>Adicionar a lista de reprodução</translation>
+        <translation>إضافة لقائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="253"/>
         <location filename="../musicwindow.cpp" line="274"/>
         <source>Rename playlist</source>
-        <translation>Mudar nome da lista</translation>
+        <translation>إعادة تسمية قائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="254"/>
         <location filename="../musicwindow.cpp" line="257"/>
         <source>Delete playlist</source>
-        <translation>Apagar lista de Reprodução</translation>
+        <translation>حذف قائمة الشتغيل</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="262"/>
         <source>Delete</source>
-        <translation>Apagar</translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="264"/>
         <source>Set as ringing tone</source>
-        <translation>Definir como toque</translation>
+        <translation>اختيار كنغمة رنين</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="265"/>
         <source>Share</source>
-        <translation>Partilhar</translation>
+        <translation>مشاركة</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="280"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation>حفظ</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="325"/>
         <location filename="../musicwindow.cpp" line="411"/>
         <source>Delete selected item from device?</source>
-        <translation>Apagar arquivo selecionado do dispositivo?</translation>
+        <translation>حذف العناصر المحددة من الجهاز؟</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="328"/>
         <location filename="../musicwindow.cpp" line="350"/>
         <location filename="../musicwindow.cpp" line="414"/>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="329"/>
         <location filename="../musicwindow.cpp" line="351"/>
         <location filename="../musicwindow.cpp" line="415"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="345"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Tem certeza que quer colocar a música como toqul?</translation>
+        <translation>هل أنت متأكد من أنك تريد اختيار هذه الأغنية كنغمة رنين؟</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="374"/>
@@ -413,17 +431,17 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../musicwindow.cpp" line="513"/>
         <source>Albums</source>
-        <translation>Álbuns</translation>
+        <translation>الألبومات</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="576"/>
         <source>Songs</source>
-        <translation>Músicas</translation>
+        <translation>الأغاني</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="864"/>
         <source>Saved</source>
-        <translation>Guardado</translation>
+        <translation>تم حفظها</translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="882"/>
@@ -435,44 +453,48 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         <location filename="../musicwindow.cpp" line="1145"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>um: %n song</numerusform>
-            <numerusform>outro: %n songs</numerusform>
+            <numerusform>%n أغنية</numerusform>
+            <numerusform>%n أغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="898"/>
         <source>Imported playlists</source>
-        <translation>Listas de Reprodução Importadas</translation>
+        <translation>قوائم الأغاني المستوردة</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="816"/>
         <source>Automatic playlists</source>
-        <translation>Listas de Reprodução Automáticas</translation>
+        <translation>قوائم الأغاني التلقائية</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="822"/>
         <source>Recently added</source>
-        <translation>Adicionados recentemente</translation>
+        <translation>مضاف حديثا</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="822"/>
         <source>Recently played</source>
-        <translation>Reproduzidos recentemente</translation>
+        <translation>تم تشغيله حديثا</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="822"/>
         <source>Most played</source>
-        <translation>Mais reproduzidas </translation>
+        <translation>الأكثر تشغيلا</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="822"/>
         <source>Never played</source>
-        <translation>Nunca reproduzidas</translation>
+        <translation>لم يتم تشغيله مطلقا</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="971"/>
         <source>(unknown song)</source>
-        <translation>(música desconhecida)</translation>
+        <translation>(أغنية غير معروفة)</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="974"/>
@@ -480,94 +502,110 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         <location filename="../musicwindow.cpp" line="1034"/>
         <location filename="../musicwindow.cpp" line="1073"/>
         <source>(unknown artist)</source>
-        <translation>(artista desconhecido)</translation>
+        <translation>(فنان غير معروف)</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="977"/>
         <location filename="../musicwindow.cpp" line="1070"/>
         <source>(unknown album)</source>
-        <translation>(álbum desconhecido)</translation>
+        <translation>(ألبوم غير معروف)</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="1088"/>
         <source>Various artists</source>
-        <translation>Vários Artistas</translation>
+        <translation>عدة فنانين</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="1125"/>
         <location filename="../musicwindow.cpp" line="1136"/>
         <source>(unknown genre)</source>
-        <translation>(genêro desconhecido)</translation>
+        <translation>(نوع غير معروف)</translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="1146"/>
         <source>%n album(s)</source>
         <translation>
-            <numerusform>Um: %n album</numerusform>
-            <numerusform>Outro: %n albums</numerusform>
+            <numerusform>%n ألبوم</numerusform>
+            <numerusform>%n ألبومات</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="1147"/>
         <source>%n artist(s)</source>
         <translation>
-            <numerusform>Um: %n artist</numerusform>
-            <numerusform>Outro: %n artists</numerusform>
+            <numerusform>%n فنان</numerusform>
+            <numerusform>%n فنانين</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="1300"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform>Um: %n album(s)</numerusform>
-            <numerusform>Outro: %n album(s)</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../musicwindow.cpp" line="1384"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>Um: %n clip added to now playing</numerusform>
-            <numerusform>Outro: %n clipes added to now playing</numerusform>
+            <numerusform>%n مقطع مضاف إلى التشغيل الآن</numerusform>
+            <numerusform>%n مقاطع مضافة إلى التشغيل الآن</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="155"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="162"/>
         <location filename="../musicwindow.cpp" line="470"/>
         <source>All albums</source>
-        <translation>Todos os álbuns</translation>
+        <translation>جميع الألبومات</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="167"/>
         <location filename="../musicwindow.cpp" line="472"/>
         <location filename="../musicwindow.cpp" line="534"/>
         <source>Artists</source>
-        <translation>Artistas</translation>
+        <translation>الفنانين</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="172"/>
         <location filename="../musicwindow.cpp" line="476"/>
         <location filename="../musicwindow.cpp" line="555"/>
         <source>Genres</source>
-        <translation>Genêros</translation>
+        <translation>الأنواع</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="177"/>
         <location filename="../musicwindow.cpp" line="478"/>
         <location filename="../musicwindow.cpp" line="597"/>
         <source>Playlists</source>
-        <translation>Listas de Reprodução</translation>
+        <translation>قوائم الأغاني</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="182"/>
         <location filename="../musicwindow.cpp" line="474"/>
         <source>All songs</source>
-        <translation>Todas as Músicas</translation>
+        <translation>جميع الأغاني</translation>
     </message>
 </context>
 <context>
@@ -575,7 +613,7 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../nowplayingindicator.cpp" line="153"/>
         <source>Music</source>
-        <translation>Música</translation>
+        <translation>الموسيقى</translation>
     </message>
 </context>
 <context>
@@ -583,60 +621,64 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="826"/>
         <source>Lyrics not found</source>
-        <translation>Letras não encontradas</translation>
+        <translation>لم يتم العثور على كلمات الأغنية</translation>
     </message>
     <message numerus="yes">
         <location filename="../nowplayingwindow.cpp" line="255"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>um: %n songs</numerusform>
-            <numerusform>outro: %n songs</numerusform>
+            <numerusform>%n أغنية</numerusform>
+            <numerusform>%n أغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="265"/>
         <source>total</source>
-        <translation>Total</translation>
+        <translation>المجموع</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="759"/>
         <source>Loading lyrics...</source>
-        <translation>Carregando Letra</translation>
+        <translation>جاري تحميل كلمات الأغنية...</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="813"/>
         <source>Fetching lyrics...</source>
-        <translation>Corrigindo Letra</translation>
+        <translation>جاري جلب كلمات الأغنية...</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="775"/>
         <source>There is no active Internet connection</source>
-        <translation>Não está ligado a internet</translation>
+        <translation>لا يوجد أي اتصال إنترنت نشط</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1208"/>
         <source>Information not available</source>
-        <translation>Informação não disponivel</translation>
+        <translation>المعلومات غير متوفرة</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1270"/>
         <source>Clear all songs from now playing?</source>
-        <translation>Limpar músicas da lista de reprodução atual?</translation>
+        <translation>إزالة جميع الأغاني من التشغيل الآن؟</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1306"/>
         <source>Set as ringing tone</source>
-        <translation>Colocar como toque musica</translation>
+        <translation>اختيار كنغمة رنين</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1302"/>
         <source>Delete from now playing</source>
-        <translation>Apagar da lista de reprodução atual</translation>
+        <translation>حذف من التشغيل الآن</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1307"/>
         <source>Share</source>
-        <translation>Compartilhar</translation>
+        <translation>مشاركة</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1273"/>
@@ -644,12 +686,12 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         <location filename="../nowplayingwindow.cpp" line="1375"/>
         <location filename="../nowplayingwindow.cpp" line="1583"/>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1031"/>
         <source>Stop playback</source>
-        <translation>Parar reprodução</translation>
+        <translation>إيقاف التشغيل</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1274"/>
@@ -657,31 +699,35 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         <location filename="../nowplayingwindow.cpp" line="1376"/>
         <location filename="../nowplayingwindow.cpp" line="1584"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1304"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1305"/>
         <source>Add to a playlist</source>
-        <translation>Adicionar à lista de reprodução</translation>
+        <translation>إضافة لقائمة الأغاني</translation>
     </message>
     <message numerus="yes">
         <location filename="../nowplayingwindow.cpp" line="1321"/>
         <location filename="../nowplayingwindow.cpp" line="1479"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform>Um: %n album(s)</numerusform>
-            <numerusform>Outro: %n album(s)</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1331"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Tem certeza que quer colocar essa música como toque musical?</translation>
+        <translation>هل أنت متأكد من أنك تريد اختيار هذه الأغنية كنغمة رنين؟</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1360"/>
@@ -691,110 +737,109 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1369"/>
         <source>Delete song?</source>
-        <translation>Eliminar música?</translation>
+        <translation>حذف الأغنية؟</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1370"/>
         <source>Are you sure you want to delete this song?</source>
-        <translation>Tem a certeza que deseja eliminar esta música?</translation>
+        <translation>هل أنت متأكد من أنك تريد حذف هذه الأغنية؟</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1418"/>
         <source>Entertainment View</source>
-        <translation>Vista de entretenimento</translation>
+        <translation>وضع الترفيه</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1423"/>
         <source>Car View</source>
-        <translation>Vista de automóvel</translation>
+        <translation>وضع السيارة</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1563"/>
         <location filename="../nowplayingwindow.cpp" line="1570"/>
         <source>Select album art</source>
-        <translation>Selecionar capa do álbum</translation>
+        <translation>اختيار صورة الألبوم</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1564"/>
         <source>Reset album art</source>
-        <translation>Apagar capa do álbum</translation>
+        <translation>إعادة ضبط صورة الألبوم</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1580"/>
         <source>Reset album art?</source>
-        <translation>Apagar capa do álbum?</translation>
+        <translation>إعادة ضبط صورة الألبوم؟</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1616"/>
         <source>Edit lyrics</source>
-        <translation>Editar Letra</translation>
+        <translation>تعديل كلمات الأغنية</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1617"/>
         <source>Reload lyrics</source>
-        <translation>Recarregar Letra</translation>
+        <translation>إعادة تحميل كلمات الأغنية</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="14"/>
         <source>Now playing</source>
-        <translation>Em reprodução</translation>
+        <translation>التشغيل الآن</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="191"/>
         <source>--/-- songs</source>
-        <translation>--/-- Músicas</translation>
+        <translation>--\-- أغنية</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="243"/>
         <location filename="../nowplayingwindow.cpp" line="606"/>
         <location filename="../nowplayingwindow.cpp" line="1184"/>
         <source>(unknown song)</source>
-        <translation>(Música desconhecida)</translation>
+        <translation>(أغنية غير معروفة)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="357"/>
         <location filename="../nowplayingwindow.cpp" line="615"/>
         <location filename="../nowplayingwindow.cpp" line="1187"/>
         <source>(unknown artist)</source>
-        <translation>(Artista desconhecido)</translation>
+        <translation>(فنان غير معروف)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="370"/>
         <location filename="../nowplayingwindow.cpp" line="624"/>
         <location filename="../nowplayingwindow.cpp" line="1190"/>
         <source>(unknown album)</source>
-        <translation>(Álbum desconhecido)</translation>
+        <translation>(ألبوم غير معروف)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="924"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="936"/>
         <source>FM Transmitter</source>
-        <translation>Transmissor FM</translation>
+        <translation>مرسل الـ FM</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="941"/>
         <source>Clear now playing</source>
-        <translation>Limpar Lista
-de Reprodução Atual</translation>
+        <translation>إزالة التشغيل الآن</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="946"/>
         <source>Add songs to a playlist</source>
-        <translation>Adicionar música à lista</translation>
+        <translation>إضافة الأغاني لقائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="951"/>
         <source>Entertainment view</source>
-        <translation>Modo Entretenimento</translation>
+        <translation>وضع الترفيه</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="956"/>
         <source>Car view</source>
-        <translation>Modo Carro</translation>
+        <translation>وضع السيارة</translation>
     </message>
 </context>
 <context>
@@ -802,33 +847,33 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../playlistpicker.ui" line="14"/>
         <source>Select a playlst</source>
-        <translation>Seleccionar uma lista de reprodução</translation>
+        <translation>اختر قائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="9"/>
         <location filename="../playlistpicker.cpp" line="46"/>
         <source>New playlist</source>
-        <translation>Nova lista de reprodução</translation>
+        <translation>قائمة أغاني جديدة</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="53"/>
         <source>Save</source>
-        <translation>_u</translation>
+        <translation>حفظ</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="82"/>
         <source>Playlist with the same name exists, overwrite?</source>
-        <translation>Lista de reprodução com o mesmo nome, substituir?</translation>
+        <translation>يوجد قائمة أغاني بنفس الاسم, استبدال؟</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="85"/>
         <source>Yes</source>
-        <translation>SIm</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="86"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
 </context>
 <context>
@@ -836,46 +881,46 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../radionowplayingwindow.ui" line="14"/>
         <source>Now playing</source>
-        <translation>Em reprodução</translation>
+        <translation>التشغيل الآن</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="157"/>
         <location filename="../radionowplayingwindow.cpp" line="243"/>
         <location filename="../radionowplayingwindow.cpp" line="438"/>
         <source>(unknown station)</source>
-        <translation>(Estação desconhecida)</translation>
+        <translation>(محطة غير معروفة)</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="510"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="519"/>
         <source>FM transmitter</source>
-        <translation>Transmissor FM</translation>
+        <translation>مرسل الـ FM</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="524"/>
         <source>Add radio bookmark</source>
-        <translation>Adicionar Rádio aos Favoritos</translation>
+        <translation>إضافة علامة راديو</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="237"/>
         <location filename="../radionowplayingwindow.cpp" line="283"/>
         <source>(unknown artist)</source>
-        <translation>(Artista desconhecido)</translation>
+        <translation>(فنان غير معروف)</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="237"/>
         <location filename="../radionowplayingwindow.cpp" line="283"/>
         <source>(unknown song)</source>
-        <translation>(Música desconhecida</translation>
+        <translation>(أغنية غير معروفة)</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="309"/>
         <source>Buffering</source>
-        <translation>Carregando..</translation>
+        <translation>التخزين المؤقت</translation>
     </message>
 </context>
 <context>
@@ -883,44 +928,48 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../settingsdialog.ui" line="14"/>
         <source>Media player - Settings</source>
-        <translation>Media Player - Configurações</translation>
+        <translation>مشغل الوسائط - الإعدادات</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="70"/>
         <source>Next song</source>
-        <translation>Música seguinte</translation>
+        <translation>الأغنية القادمة</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="71"/>
         <source>Previous song</source>
-        <translation>Música anterior</translation>
+        <translation>الأغنية السابقة</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="72"/>
         <source>Play / Pause</source>
-        <translation>Play / Pausa</translation>
+        <translation>تشغيل \ إيقاف مؤقت</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="44"/>
         <location filename="../settingsdialog.cpp" line="74"/>
         <source>Do nothing</source>
-        <translation>Fazer Nada</translation>
+        <translation>لا تفعل شيء</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="43"/>
         <source>Pause playback</source>
-        <translation>Pausar reprodução</translation>
+        <translation>إيقاف التشغيل مؤقتا</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="53"/>
         <location filename="../settingsdialog.cpp" line="97"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>إطلاقا</translation>
     </message>
     <message numerus="yes">
         <location filename="../settingsdialog.cpp" line="54"/>
         <source>%n second(s)</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>%n ثانية</numerusform>
+            <numerusform>%n ثواني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -929,7 +978,11 @@ de Reprodução Atual</translation>
         <location filename="../settingsdialog.cpp" line="55"/>
         <location filename="../settingsdialog.cpp" line="56"/>
         <source>%n minute(s)</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>%n دقيقة</numerusform>
+            <numerusform>%n دقائق</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -937,7 +990,11 @@ de Reprodução Atual</translation>
     <message numerus="yes">
         <location filename="../settingsdialog.cpp" line="57"/>
         <source>%n hour(s)</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>%n ساعة</numerusform>
+            <numerusform>%n ساعات</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -946,22 +1003,22 @@ de Reprodução Atual</translation>
         <location filename="../settingsdialog.cpp" line="58"/>
         <location filename="../settingsdialog.cpp" line="96"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>دائما</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="85"/>
         <source>Automatic</source>
-        <translation>Automático</translation>
+        <translation>تلقائي</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="86"/>
         <source>Landscape</source>
-        <translation>Paisagem</translation>
+        <translation>أفقي</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="87"/>
         <source>Portrait</source>
-        <translation>Retrato</translation>
+        <translation>عامودي</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="98"/>
@@ -977,22 +1034,22 @@ de Reprodução Atual</translation>
         <location filename="../settingsdialog.cpp" line="42"/>
         <location filename="../settingsdialog.cpp" line="73"/>
         <source>Stop playback</source>
-        <translation>Parar a reprodução</translation>
+        <translation>إيقاف التشغيل</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="48"/>
         <source>On application exit</source>
-        <translation>Na saída da aplicação</translation>
+        <translation>عند الخروج من البرنامج</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="55"/>
         <source>Disconnect headset to pause</source>
-        <translation>Desligar auricular para pausar</translation>
+        <translation>الإيقاف المؤقت بعد فصل سماعة الأذن</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="62"/>
         <source>Reconnect headset to resume</source>
-        <translation type="unfinished"></translation>
+        <translation>إعادة وصل سماعة الأذن لإستئناف التشغيل</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="69"/>
@@ -1002,37 +1059,37 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../settingsdialog.ui" line="76"/>
         <source>Enable lyrics</source>
-        <translation>Exibir letra</translation>
+        <translation>تفعيل كلمات الأغنية</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="83"/>
         <source>Play only search results</source>
-        <translation>Reproduzir resultados da pesquisa</translation>
+        <translation>تشغيل نتائج البحث فقط</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="90"/>
         <source>Open whole folders</source>
-        <translation>Abrir a pasta inteira</translation>
+        <translation>فتح جميع المجلدات</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="97"/>
         <source>Append opened songs</source>
-        <translation>Adicionar músicas abertas</translation>
+        <translation>إلحاق الأغاني المفتوحة</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="106"/>
         <source>Size of automatic playlists</source>
-        <translation>Tamanho da lista de reprodução automática</translation>
+        <translation>حجم قائمة الأغاني التلقائية</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="128"/>
         <source>Headset button action</source>
-        <translation>Acção do botão do auricular</translation>
+        <translation>عمل زر سماعة الاذن</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="135"/>
         <source>Orientation</source>
-        <translation>Orientação</translation>
+        <translation>الإتجاه</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="142"/>
@@ -1042,17 +1099,17 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../settingsdialog.ui" line="149"/>
         <source>Lazy sliders</source>
-        <translation>Deslizamento lento</translation>
+        <translation>أشرطة تمرير كسولة</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="156"/>
         <source>&quot;Delete&quot; for playlist items</source>
-        <translation>Remover</translation>
+        <translation>&quot;الحذف&quot; لعناصر قائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="163"/>
         <source>Override FMTX checks in UI</source>
-        <translation>Carregar FMTX na UI</translation>
+        <translation>تخطي فحص الـ FMTX في واجهة المستخدم</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="172"/>
@@ -1062,17 +1119,17 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../settingsdialog.ui" line="199"/>
         <source>Requires modified FMTXD</source>
-        <translation>Requer um FMTXD Modificado</translation>
+        <translation>تتطلب FMTXD معدل</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="211"/>
         <source>Requires application restart</source>
-        <translation type="unfinished"></translation>
+        <translation>تتطلب إعادة تشغيل البرنامج</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="28"/>
         <source>Save</source>
-        <translation>Salvar</translation>
+        <translation>حفظ</translation>
     </message>
 </context>
 <context>
@@ -1080,17 +1137,17 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../share.ui" line="14"/>
         <source>Share</source>
-        <translation>Compartilhar</translation>
+        <translation>مشاركة</translation>
     </message>
     <message>
         <location filename="../share.ui" line="20"/>
         <source>Send via bluetooth</source>
-        <translation>Enviar via Bluetooth</translation>
+        <translation>إرسال بواسطة البلوتوث</translation>
     </message>
     <message>
         <location filename="../share.ui" line="27"/>
         <source>Send via e-mail</source>
-        <translation>Enviar via E-mail</translation>
+        <translation>إرسال بواسطة البريد الإلكتروني</translation>
     </message>
 </context>
 <context>
@@ -1098,77 +1155,85 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="85"/>
         <source>Shuffle songs</source>
-        <translation>Misturar Músicas</translation>
+        <translation>تشغيل الأغاني عشوائيا</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="134"/>
         <source>(unknown song)</source>
-        <translation>(Música desconhecida)</translation>
+        <translation>(أغنية غير معروفة)</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="137"/>
         <source>(unknown artist)</source>
-        <translation>(Artista desconhecido)</translation>
+        <translation>(فنان غير معروف)</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="140"/>
         <source>(unknown album)</source>
-        <translation>(Álbum desconhecido)</translation>
+        <translation>(ألبوم غير معروف)</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="95"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>Um: %n songs</numerusform>
-            <numerusform>Outro: %n songs</numerusform>
+            <numerusform>%n أغنية</numerusform>
+            <numerusform>%n أغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="346"/>
         <source>Add to now playing</source>
-        <translation>Adicionar à Lista de Reprodução atual</translation>
+        <translation>إضافة إلى التشغيل الآن</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="347"/>
         <source>Add to a playlist</source>
-        <translation>Adicionar a lista de reprodução</translation>
+        <translation>إضافة لقائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="349"/>
         <source>Set as ringing tone</source>
-        <translation>Definir como toque musical</translation>
+        <translation>اختيار كنغمة رنين</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="350"/>
         <source>Share</source>
-        <translation>Compartilhar</translation>
+        <translation>مشاركة</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="378"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform>Um: %n album(s)</numerusform>
-            <numerusform>Outro: %n album(s)</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="388"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Você tem certeza de que colocar essa música como toque musical?</translation>
+        <translation>هل أنت متأكد من أنك تريد اختيار هذه الأغنية كنغمة رنين؟</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="393"/>
         <location filename="../singlealbumview.cpp" line="468"/>
         <location filename="../singlealbumview.cpp" line="488"/>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="394"/>
         <location filename="../singlealbumview.cpp" line="469"/>
         <location filename="../singlealbumview.cpp" line="489"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="418"/>
@@ -1178,37 +1243,40 @@ de Reprodução Atual</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="465"/>
         <source>Delete selected item from device?</source>
-        <translation>Apagar Item do Dispositivo?</translation>
+        <translation>حذف العناصر المحددة من الجهاز؟</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="485"/>
         <source>Delete all items shown in view?</source>
-        <translation>Apagar todos os itens na vista?</translation>
+        <translation>حذف جميع العناصر المعروضة؟</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="501"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>Um: %n clips added to now playing</numerusform>
-            <numerusform>Outro: %n clips added to now playing</numerusform>
+            <numerusform>%n مقطع مضاف إلى التشغيل الآن</numerusform>
+            <numerusform>%n مقاطع مضافة إلى التشغيل الآن</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="98"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="107"/>
         <source>Add songs to now playing</source>
-        <translation>Adicionar músicas a lista
-de reprodução atual</translation>
+        <translation>إضافة الأغاني للتشغيل الآن</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
         <location filename="../singlealbumview.cpp" line="348"/>
         <source>Delete</source>
-        <translation>Apagar</translation>
+        <translation>حذف</translation>
     </message>
 </context>
 <context>
@@ -1216,73 +1284,81 @@ de reprodução atual</translation>
     <message>
         <location filename="../singleartistview.cpp" line="121"/>
         <source>(unknown album)</source>
-        <translation>(Álbum desconhecido)</translation>
+        <translation>(ألبوم غير معروف)</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="127"/>
         <location filename="../singleartistview.cpp" line="250"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>Um: %n songs</numerusform>
-            <numerusform>Outro: %n songs</numerusform>
+            <numerusform>%n أغنية</numerusform>
+            <numerusform>%n أغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="351"/>
         <source>Add to now playing</source>
-        <translation>Adicionar à lista de reprodução atual</translation>
+        <translation>إضافة للتشغيل الآن</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="362"/>
         <source>Delete selected item from device?</source>
-        <translation>Apagar Item selecionado do dispositivo?</translation>
+        <translation>حذف العناصر المحدد من الجهاز؟</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="365"/>
         <location filename="../singleartistview.cpp" line="384"/>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="366"/>
         <location filename="../singleartistview.cpp" line="385"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="381"/>
         <source>Delete all items shown in view?</source>
-        <translation>Apagar todos os itens da vista?</translation>
+        <translation>حذف جميع العناصر المعروضة؟</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="462"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n foi adicionado na lista de reprodução atual</numerusform>
-            <numerusform>%n foram adicionados na lista de reprodução atual</numerusform>
+            <numerusform>%n مقطع مضاف إلى التشغيل الآن</numerusform>
+            <numerusform>%n مقاطع مضافة إلى التشغيل الآن</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="72"/>
         <location filename="../singleartistview.cpp" line="97"/>
         <source>Shuffle songs</source>
-        <translation>Misturar músicas</translation>
+        <translation>تشغيل الأغاني عشوائيا</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="126"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="135"/>
         <source>Add songs to now playing</source>
-        <translation>Adicionar música na lista de reprodução atual</translation>
+        <translation>إضافة الأغاني للتشغيل الآن</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
         <location filename="../singleartistview.cpp" line="352"/>
         <source>Delete</source>
-        <translation>Apagar</translation>
+        <translation>حذف</translation>
     </message>
 </context>
 <context>
@@ -1290,45 +1366,53 @@ de reprodução atual</translation>
     <message>
         <location filename="../singlegenreview.cpp" line="86"/>
         <source>Shuffle songs</source>
-        <translation>Misturar Músicas</translation>
+        <translation>تشغيل الأغاني عشوائيا</translation>
     </message>
     <message>
         <location filename="../singlegenreview.cpp" line="174"/>
         <location filename="../singlegenreview.cpp" line="191"/>
         <source>(unknown artist)</source>
-        <translation>(artista desconhecido)</translation>
+        <translation>(فنان غير معروف)</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="217"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n música</numerusform>
-            <numerusform>%n músicas</numerusform>
+            <numerusform>%n أغنية</numerusform>
+            <numerusform>%n أغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="417"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n foi adicionado na lista de reprodução atual</numerusform>
-            <numerusform>%n foram adicionados na lista de reprodução atual</numerusform>
+            <numerusform>%n مقطع مضاف إلى التشغيل الآن</numerusform>
+            <numerusform>%n مقاطع مضافة إلى التشغيل الآن</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="100"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="108"/>
         <location filename="../singlegenreview.cpp" line="287"/>
         <source>Add to now playing</source>
-        <translation>Adicionado a lista de Reprodução atual</translation>
+        <translation>إضافة للتشغيل الآن</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="113"/>
         <source>Delete</source>
-        <translation>Apagar</translation>
+        <translation>حذف</translation>
     </message>
 </context>
 <context>
@@ -1336,98 +1420,106 @@ de reprodução atual</translation>
     <message>
         <location filename="../singleplaylistview.cpp" line="97"/>
         <source>Shuffle songs</source>
-        <translation>Misturar músicas</translation>
+        <translation>تشغيل الأغاني عشوائيا</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="137"/>
         <location filename="../singleplaylistview.cpp" line="232"/>
         <source>(unknown song)</source>
-        <translation>(música desconhecida)</translation>
+        <translation>(أغنية غير معروفة)</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="140"/>
         <location filename="../singleplaylistview.cpp" line="235"/>
         <source>(unknown artist)</source>
-        <translation>(artista desconhecido)</translation>
+        <translation>(فنان غير معروف)</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="143"/>
         <location filename="../singleplaylistview.cpp" line="238"/>
         <source>(unknown album)</source>
-        <translation>(álbum desconhecido)</translation>
+        <translation>(ألبوم غير معروف)</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="156"/>
         <location filename="../singleplaylistview.cpp" line="250"/>
         <source>Information not available</source>
-        <translation>Informação não disponivel</translation>
+        <translation>المعلومات غير متوفرة</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="413"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n foi adicionado na lista de reprodução atual</numerusform>
-            <numerusform>%n foram adicionados na lista de reprodução atual</numerusform>
+            <numerusform>%n مقطع مضاف إلى التشغيل الآن</numerusform>
+            <numerusform>%n مقاطع مضافة إلى التشغيل الآن</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="116"/>
         <location filename="../singleplaylistview.cpp" line="483"/>
         <source>Add to a playlist</source>
-        <translation>Adicionar a lista de reprodução</translation>
+        <translation>إضافة لقائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="486"/>
         <source>Delete</source>
-        <translation>Apagar</translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="687"/>
         <source>Delete playlist?</source>
-        <translation>Apagar lista de reprodução?</translation>
+        <translation>حذف قائمة الأغاني؟</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="484"/>
         <source>Set as ringing tone</source>
-        <translation>Definir como Toque</translation>
+        <translation>اختيار كنغمة رنين</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="487"/>
         <source>Share</source>
-        <translation>Partilhar</translation>
+        <translation>مشاركة</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="485"/>
         <source>Delete from playlist</source>
-        <translation>Apagar da lista de reprodução</translation>
+        <translation>حذف من قائمة الاغاني</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="335"/>
         <location filename="../singleplaylistview.cpp" line="521"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform>Um: %n album(s)</numerusform>
-            <numerusform>Outro: %n album(s)</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="531"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
-        <translation>Tem certeza que quer definir essa música como toque?</translation>
+        <translation>هل أنت متأكد من أنك تريد اختيار هذه الأغنية كنغمة رنين؟</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="536"/>
         <location filename="../singleplaylistview.cpp" line="607"/>
         <location filename="../singleplaylistview.cpp" line="690"/>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="537"/>
         <location filename="../singleplaylistview.cpp" line="608"/>
         <location filename="../singleplaylistview.cpp" line="691"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="561"/>
@@ -1437,36 +1529,40 @@ de reprodução atual</translation>
     <message>
         <location filename="../singleplaylistview.cpp" line="601"/>
         <source>Delete song?</source>
-        <translation>Apagar música?</translation>
+        <translation>حذف الأغنية؟</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="602"/>
         <source>Are you sure you want to delete this song?</source>
-        <translation>Tem certeza que quer apagar essa música?</translation>
+        <translation>هل أنت متأكد من أنك تريد حذف هذه هذه الأغنية؟</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="623"/>
         <source>%n song(s)</source>
         <translation>
-            <numerusform>%n Música</numerusform>
-            <numerusform>%n Músicas</numerusform>
+            <numerusform>%n أغنية</numerusform>
+            <numerusform>%n أغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="101"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="111"/>
         <location filename="../singleplaylistview.cpp" line="482"/>
         <source>Add to now playing</source>
-        <translation>Adicionar à lista de reprodução actual</translation>
+        <translation>إضافة للتشغيل الآن</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="121"/>
         <source>Delete playlist</source>
-        <translation>Apagar lista de reprodução</translation>
+        <translation>حذف قائمة الأغاني</translation>
     </message>
 </context>
 <context>
@@ -1474,63 +1570,63 @@ de reprodução atual</translation>
     <message>
         <location filename="../sleeperdialog.ui" line="31"/>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>العمل</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.ui" line="38"/>
         <source>Volume reduction</source>
-        <translation type="unfinished"></translation>
+        <translation>تخفيض حجم الصوت</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.ui" line="47"/>
         <source>Time (minutes)</source>
-        <translation type="unfinished"></translation>
+        <translation>الوقت (دقائق)</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="10"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>بدء</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="11"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>إيقاف</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="20"/>
         <source>Stop playback</source>
-        <translation type="unfinished"></translation>
+        <translation>إيقاف التشغيل</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="21"/>
         <source>Pause playback</source>
-        <translation>Pausar reprodução</translation>
+        <translation>إيقاف التشغيل مؤقتا</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="22"/>
         <source>Close application</source>
-        <translation type="unfinished"></translation>
+        <translation>إغلاق البرنامج</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="31"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>لا شيء</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="32"/>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>خطي (سريع)</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="33"/>
         <source>Exponential</source>
-        <translation type="unfinished"></translation>
+        <translation>أسّي (بطيء)</translation>
     </message>
     <message>
         <location filename="../sleeperdialog.cpp" line="60"/>
         <location filename="../sleeperdialog.cpp" line="69"/>
         <source>Sleep timer</source>
-        <translation type="unfinished"></translation>
+        <translation>مؤقت النوم</translation>
     </message>
 </context>
 <context>
@@ -1538,27 +1634,27 @@ de reprodução atual</translation>
     <message>
         <location filename="../tagwindow.ui" line="14"/>
         <source>Tags editor</source>
-        <translation>Editor de Tag</translation>
+        <translation>محرر الإشارات</translation>
     </message>
     <message>
         <location filename="../tagwindow.ui" line="30"/>
         <source>Artist</source>
-        <translation>Artista</translation>
+        <translation>الفنان</translation>
     </message>
     <message>
         <location filename="../tagwindow.ui" line="40"/>
         <source>Album</source>
-        <translation>Álbum</translation>
+        <translation>الالبوم</translation>
     </message>
     <message>
         <location filename="../tagwindow.ui" line="20"/>
         <source>Title</source>
-        <translation>Título</translation>
+        <translation>العنوان</translation>
     </message>
     <message>
         <location filename="../tagwindow.ui" line="50"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation>حفظ</translation>
     </message>
 </context>
 <context>
@@ -1566,49 +1662,56 @@ de reprodução atual</translation>
     <message>
         <location filename="../upnpview.cpp" line="134"/>
         <source>(unknown song)</source>
-        <translation>(música desconhecida)</translation>
+        <translation>(اغنية غير معروفة)</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="137"/>
         <source>(unknown type)</source>
-        <translation>(tipo desconhecido)</translation>
+        <translation>(نوع غير معروف)</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="182"/>
         <source>Add to now playing</source>
-        <translation>Adicionar à lista de reprodução actual</translation>
+        <translation>إضافة للتشغيل الآن</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="183"/>
         <source>Add to a playlist</source>
-        <translation>Adicionar a lista de reprodução</translation>
+        <translation>إضافة لقائمة الأغاني؟</translation>
     </message>
     <message numerus="yes">
         <location filename="../upnpview.cpp" line="266"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
-            <numerusform>Um: %n album(s)</numerusform>
-            <numerusform>Outro: %n album(s)</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform>%n مقطع (مقاطع) مضاف(ـة) لقائمة الأغاني</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../upnpview.cpp" line="303"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
-            <numerusform>%n video adicionado à lista de reprodução atual</numerusform>
-            <numerusform>%n videos adicionados à lista de reprodução atual</numerusform>
+            <numerusform>%n مقطع مضاف إلى التشغيل الآن</numerusform>
+            <numerusform>%n مقاطع مضافة إلى التشغيل الآن</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../upnpview.ui" line="104"/>
         <source>Options</source>
-        <translation>Opções</translation>
+        <translation>خيارات</translation>
     </message>
     <message>
         <location filename="../upnpview.ui" line="112"/>
         <source>Add songs to now playing</source>
-        <translation>Adicionar músicas à lista
-de reprodução actual</translation>
+        <translation>إضافة الأغاني للتشغيل الآن</translation>
     </message>
 </context>
 <context>
@@ -1616,173 +1719,173 @@ de reprodução actual</translation>
     <message>
         <location filename="../videonowplayingwindow.ui" line="14"/>
         <source>Now Playing</source>
-        <translation>Lista de reprodução actual</translation>
+        <translation>التشغيل الآن</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="325"/>
         <source>Delete video?</source>
-        <translation>Eliminar vídeo?</translation>
+        <translation>حذف الفيديو؟</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="326"/>
         <source>Are you sure you want to delete this video?</source>
-        <translation>Tem a certeza que quer eliminar o vídeo?</translation>
+        <translation>هل أنت متأكد من أنك تريد حذف هذا الفيديو؟</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="329"/>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="330"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="649"/>
         <source>Buffering</source>
-        <translation>Carregando..</translation>
+        <translation>التحميل مؤقتا</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="689"/>
         <location filename="../videonowplayingwindow.cpp" line="782"/>
         <source>Unable to play media</source>
-        <translation>Impossível reproduzir ficheiro</translation>
+        <translation>غير قادر على تشغيل الميديا</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="693"/>
         <source>Media not found</source>
-        <translation>Ficheiro não encontrado</translation>
+        <translation>الميديا غير موجودة</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="695"/>
         <source>URI not available</source>
-        <translation>URL não disponível</translation>
+        <translation>رابط الـ URI غير متوفر</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="697"/>
         <source>Invalid URI</source>
-        <translation>URL inválido</translation>
+        <translation>رابط URI غير صالح</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="699"/>
         <source>Unable to open media</source>
-        <translation>Impossível abrir ficheiro</translation>
+        <translation>غير قادر على فتح الميديا</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="701"/>
         <source>Playback stream no longer available</source>
-        <translation>Strem indisponível</translation>
+        <translation>دفق التشغيل لم يعد متوفرا</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="703"/>
         <source>Could not determine MIME-type</source>
-        <translation>Impossível determinar o MIME-type</translation>
+        <translation>لا يمكن تحديد نوع الـ MIME</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="705"/>
         <source>General error occured, unable to continue playback</source>
-        <translation>Erro geral, impossível reproduzir</translation>
+        <translation>خطأ عام قد حصل, غير قادر على إستكمال التشغيل</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="707"/>
         <source>General error occured</source>
-        <translation>Erro geral</translation>
+        <translation>خطأ عام قد حصل</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="709"/>
         <source>Unsupported media</source>
-        <translation>Formato não suportado</translation>
+        <translation>ميديا غير مدعومة</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="711"/>
         <source>Unsupported resolution</source>
-        <translation>Resolução não suportada</translation>
+        <translation>دقة غير مدعومة</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="713"/>
         <source>Unsupported framerate</source>
-        <translation>Framerate não suportado</translation>
+        <translation>معدل الإطار غير مدعوم</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="715"/>
         <source>Media is protected by DRM</source>
-        <translation>Ficheiro protegido por DRM</translation>
+        <translation>الميديا محمية بواسطة DRM</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="717"/>
         <source>System sound device is unavailable</source>
-        <translation>Saída de áudio não disponível</translation>
+        <translation>نظام جهاز الصوت غير متوفر</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="719"/>
         <source>Media corrupted</source>
-        <translation>Ficheiro corruído</translation>
+        <translation>الميديا تالفة</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="721"/>
         <source>Error while parsing playlist</source>
-        <translation>Erro na lista de reprodução</translation>
+        <translation>خطأ أثناء تحليل قائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="722"/>
         <source>Playlist may be corrupt or empty</source>
-        <translation>Lista de reprodução vazia ou corruida</translation>
+        <translation>قائمة الأغاني قد تكون تالفة أو فارغة</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="725"/>
         <source>Codec not found:</source>
-        <translation>Codec não encontrado</translation>
+        <translation>لم يتم العثور على الترميز:</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="729"/>
         <source>Video codec not found:</source>
-        <translation>Codec de video não encontrado</translation>
+        <translation>لم يتم العثور على ترميز الفيديو:</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="733"/>
         <source>Audio codec not found:</source>
-        <translation>Codec de áudio não encontrado</translation>
+        <translation>لم يتم العثور على ترميز الصوت:</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="737"/>
         <source>No playlist assigned</source>
-        <translation>Nenhuma lista de reprdução escolhida</translation>
+        <translation>لا توجد قائمة أغاني مخصصة</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="739"/>
         <source>Media index is not in bound with playlist items</source>
-        <translation>Index de ficheiros não corresponde à lista de reprodução</translation>
+        <translation>مؤشر الميديا ليس مرتبط مع عناصر قائمة الأغاني</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="741"/>
         <source>Unable to start playback</source>
-        <translation>Impossível começar a reprodução</translation>
+        <translation>غير قادر على بدء التشغيل</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="743"/>
         <source>Unable to stop playback</source>
-        <translation>Impossível parar a reprodução</translation>
+        <translation>غير قادر على إيقاف التشغيل</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="745"/>
         <source>Unable to pause playback</source>
-        <translation>Impossível pausar a reprodução</translation>
+        <translation>غير قادر على إيقاف التشغيل مؤقتا</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="747"/>
         <source>Unable to seek position in media</source>
-        <translation>Impossível encontrar posição</translation>
+        <translation>غير قادر على طلب الموضع في الميديا</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="749"/>
         <source>Unable to retrieve current position in media</source>
-        <translation>Impossivel retomar posição</translation>
+        <translation>غير قادر على جلب الموضع الحالي في الميديا</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="751"/>
         <source>Unable to get current playback status</source>
-        <translation>Impossivel determinar o estado da reprodução</translation>
+        <translation>تعذر الحصول على الحالة الحالية للتشغيل</translation>
     </message>
 </context>
 <context>
@@ -1790,67 +1893,67 @@ de reprodução actual</translation>
     <message>
         <location filename="../videoswindow.ui" line="14"/>
         <source>Videos</source>
-        <translation>Vídeos</translation>
+        <translation>الفيديوهات</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="48"/>
         <source>Date</source>
-        <translation>Data</translation>
+        <translation>التاريخ</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="50"/>
         <source>Category</source>
-        <translation>Categoria</translation>
+        <translation>الفئة</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="90"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="91"/>
         <source>Share</source>
-        <translation>Partilhar</translation>
+        <translation>مشاركة</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="101"/>
         <source>Delete selected item from device?</source>
-        <translation>Eliminar ficheiro seleccionado do dispositivo?</translation>
+        <translation>حذف العناصر المحددة من الجهاز؟</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="104"/>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="105"/>
         <source>No</source>
-        <translation>Não</translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="191"/>
         <source>Videos - latest</source>
-        <translation>Videos - mais recentes</translation>
+        <translation>فيديوهات - الأحدث</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="203"/>
         <source>Videos - categories</source>
-        <translation>Videos - categorias</translation>
+        <translation>فيديوهات - الفئات</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="275"/>
         <source>(unknown clip)</source>
-        <translation>(clip desconhecido)</translation>
+        <translation>(مقطع غبر معروف)</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="333"/>
         <source>Recorded by device camera</source>
-        <translation>Gravados pela camera do dispositivo</translation>
+        <translation>مسجل بواسطة كاميرا الجهاز</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="338"/>
         <source>Films</source>
-        <translation>Filmes</translation>
+        <translation>أفلام</translation>
     </message>
 </context>
 </TS>
