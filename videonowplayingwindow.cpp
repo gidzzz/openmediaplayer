@@ -84,8 +84,6 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     mafwrenderer->getVolume();
     ui->toolbarOverlay->setStyleSheet(ui->controlOverlay->styleSheet());
 #endif
-
-    this->grabKeyboard();
 }
 
 VideoNowPlayingWindow::~VideoNowPlayingWindow()
@@ -152,7 +150,14 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->bookmarkButton, SIGNAL(clicked()), this, SLOT(onBookmarkClicked()));
     connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
+
 #ifdef MAFW
+    connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Left), this), SIGNAL(activated()), this, SLOT(slowRev()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), this, SLOT(slowFwd()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Up), this), SIGNAL(activated()), this, SLOT(fastFwd()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Down), this), SIGNAL(activated()), this, SLOT(fastRev()));
+
     connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
@@ -545,6 +550,34 @@ void VideoNowPlayingWindow::playVideo()
     mafwrenderer->setWindowXid(ui->widget->winId());
     mafwrenderer->play();
 }
+
+void VideoNowPlayingWindow::slowFwd()
+{
+    mafwrenderer->setPosition(SeekRelative, 10);
+    if (mafwState == Paused)
+        mafwrenderer->getPosition();
+}
+
+void VideoNowPlayingWindow::slowRev()
+{
+    mafwrenderer->setPosition(SeekRelative, -10);
+    if (mafwState == Paused)
+        mafwrenderer->getPosition();
+}
+
+void VideoNowPlayingWindow::fastFwd()
+{
+    mafwrenderer->setPosition(SeekRelative, 60);
+    if (mafwState == Paused)
+        mafwrenderer->getPosition();
+}
+
+void VideoNowPlayingWindow::fastRev()
+{
+    mafwrenderer->setPosition(SeekRelative, -60);
+    if (mafwState == Paused)
+        mafwrenderer->getPosition();
+}
 #endif
 
 void VideoNowPlayingWindow::paintEvent(QPaintEvent *)
@@ -563,38 +596,20 @@ void VideoNowPlayingWindow::mouseReleaseEvent(QMouseEvent *)
     showOverlay(overlayRequestedByUser);
 }
 
+void VideoNowPlayingWindow::togglePlayback()
+{
+    if (this->mafwState == Playing)
+        mafwrenderer->pause();
+    else if (this->mafwState == Paused)
+        mafwrenderer->resume();
+    else if (this->mafwState == Stopped)
+        mafwrenderer->play();
+}
+
 void VideoNowPlayingWindow::keyPressEvent(QKeyEvent *event)
 {
-#ifdef MAFW
-    if (event->key() == Qt::Key_Space) {
-        if (this->mafwState == Playing)
-            mafwrenderer->pause();
-        else if (this->mafwState == Paused)
-            mafwrenderer->resume();
-        else if (this->mafwState == Stopped)
-            mafwrenderer->play();
-    }
-    else if (event->key() == Qt::Key_Left) {
-        mafwrenderer->setPosition(SeekRelative, -10);
-        if (mafwState == Paused)
-            mafwrenderer->getPosition();
-    }
-    else if (event->key() == Qt::Key_Right) {
-        mafwrenderer->setPosition(SeekRelative, 10);
-        if (mafwState == Paused)
-            mafwrenderer->getPosition();
-    }
-    else if (event->key() == Qt::Key_Up) {
-        mafwrenderer->setPosition(SeekRelative, 60);
-        if (mafwState == Paused)
-            mafwrenderer->getPosition();
-    }
-    else if (event->key() == Qt::Key_Down) {
-        mafwrenderer->setPosition(SeekRelative, -60);
-        if (mafwState == Paused)
-            mafwrenderer->getPosition();
-    }
-#endif
+    if (event->key() == Qt::Key_Backspace)
+        this->close();
 }
 
 void VideoNowPlayingWindow::showOverlay(bool show)

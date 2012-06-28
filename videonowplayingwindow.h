@@ -98,6 +98,11 @@ private slots:
     void onPrevButtonClicked();
     void onNextButtonClicked();
 #ifdef MAFW
+    void togglePlayback();
+    void slowFwd();
+    void slowRev();
+    void fastFwd();
+    void fastRev();
     void onMediaChanged(int, char *objectId);
     void onPropertyChanged(const QDBusMessage &msg);
     void onMetadataChanged(QString name, QVariant value);
