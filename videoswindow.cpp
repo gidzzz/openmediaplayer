@@ -31,6 +31,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
+    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
@@ -75,6 +76,8 @@ void VideosWindow::connectSignals()
     connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)), this, SLOT(onSourceMetadataChanged(QString)));
@@ -227,6 +230,55 @@ void VideosWindow::selectView()
     }
 }
 
+void VideosWindow::onSearchHideButtonClicked()
+{
+    if (ui->searchEdit->text().isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    } else
+        ui->searchEdit->clear();
+}
+
+void VideosWindow::onSearchTextChanged(QString text)
+{
+    for (int i = 0; i < ui->listWidget->count(); i++) {
+        if (!ui->listWidget->item(i)->data(UserRoleObjectID).toBool()
+        || ui->listWidget->item(i)->data(UserRoleTitle).toString().contains(text, Qt::CaseInsensitive))
+            ui->listWidget->item(i)->setHidden(false);
+        else
+            ui->listWidget->item(i)->setHidden(true);
+    }
+
+    if (text.isEmpty()) {
+        ui->searchWidget->hide();
+        ui->indicator->restore();
+    }
+}
+
+void VideosWindow::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
+void VideosWindow::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
+        return;
+    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
+        ui->listWidget->setFocus();
+    else {
+        ui->listWidget->clearSelection();
+        if (ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
+            ui->searchWidget->show();
+        }
+        if (!ui->searchEdit->hasFocus())
+            ui->searchEdit->setText(ui->searchEdit->text() + e->text());
+        ui->searchEdit->setFocus();
+    }
+}
+
 #ifdef MAFW
 void VideosWindow::listVideos()
 {
@@ -348,6 +400,8 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
             bufferList.clear();
         }
 
+        if (!ui->searchEdit->text().isEmpty())
+            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif

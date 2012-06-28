@@ -32,6 +32,8 @@ public:
 private:
     Ui::VideosWindow *ui;
     QListWidget bufferList;
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
     QActionGroup *sortByActionGroup;
@@ -52,6 +54,8 @@ private slots:
     void onContextMenuRequested(const QPoint &point);
     void onVideoSelected(QListWidgetItem*);
     void onSortingChanged(QAction*);
+    void onSearchHideButtonClicked();
+    void onSearchTextChanged(QString);
     void orientationChanged(int w, int h);
     void onChildClosed();
     void selectView();

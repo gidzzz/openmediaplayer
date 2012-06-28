@@ -368,7 +368,8 @@ void InternetRadioWindow::onSearchHideButtonClicked()
 void InternetRadioWindow::onSearchTextChanged(QString text)
 {
     for (int i = 0; i < ui->listWidget->count(); i++) {
-        if (ui->listWidget->item(i)->text().contains(text, Qt::CaseInsensitive)
+        if (ui->listWidget->item(i)->data(Qt::UserRole).toBool()
+        || ui->listWidget->item(i)->text().contains(text, Qt::CaseInsensitive)
         || ui->listWidget->item(i)->data(UserRoleValueText).toString().contains(text, Qt::CaseInsensitive))
             ui->listWidget->item(i)->setHidden(false);
         else
