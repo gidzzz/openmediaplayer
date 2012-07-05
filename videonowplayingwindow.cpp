@@ -101,6 +101,8 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
             mafwSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
             mafw_metadata_release(metadata);
         }
+
+        mafwrenderer->stop();
     }
 #endif
 

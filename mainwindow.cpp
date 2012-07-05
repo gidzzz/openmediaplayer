@@ -526,6 +526,7 @@ void MainWindow::createVideoNowPlayingWindow()
         ui->indicator->inhibit();
 
 #ifdef MAFW
+        playlist->getSize();
         QTimer::singleShot(500, window, SLOT(playVideo()));
 #endif
 }
@@ -879,17 +880,17 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
         delete[] songAddBuffer;
         this->browseSongsId = 0;
 
-        playlist->getSize(); // explained in musicwindow.cpp
-        mafwrenderer->play();
-
-        QString mime = QString::fromUtf8(g_value_get_string (mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));
+        QString mime = QString::fromUtf8(g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));
         qDebug() << "Last item MIME:" << mime;
 
         // Assume that the playlist consists of items of one type
-        if (mime.startsWith("audio"))
+        if (mime.startsWith("audio")) {
+            playlist->getSize(); // explained in musicwindow.cpp
+            mafwrenderer->play();
             createNowPlayingWindow();
-        else
+        } else {
             createVideoNowPlayingWindow();
+        }
 
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
