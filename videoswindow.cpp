@@ -43,6 +43,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
 
     ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listWidget->installEventFilter(this);
+    ui->listWidget->viewport()->installEventFilter(this);
 
     sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
@@ -455,10 +456,18 @@ void VideosWindow::orientationChanged(int w, int h)
     ui->indicator->raise();
 }
 
-bool VideosWindow::eventFilter(QObject *, QEvent *e)
+bool VideosWindow::eventFilter(QObject *obj, QEvent *e)
 {
-    if (e->type() == QEvent::Resize)
+    if (e->type() == QEvent::Resize && obj == ui->listWidget)
         ui->listWidget->setFlow(ui->listWidget->flow());
+
+    else if (e->type() == QEvent::MouseButtonPress && obj == ui->listWidget->viewport()
+    && static_cast<QMouseEvent*>(e)->y() > ui->listWidget->viewport()->height() - 25
+    && ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
+
     return false;
 }
 

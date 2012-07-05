@@ -27,7 +27,7 @@ class VideosWindow : public QMainWindow
 public:
     explicit VideosWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~VideosWindow();
-    bool eventFilter(QObject *, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *e);
 
 private:
     Ui::VideosWindow *ui;

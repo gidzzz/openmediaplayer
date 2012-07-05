@@ -29,7 +29,8 @@ public:
 
 private:
     Ui::SingleArtistView *ui;
-    void keyReleaseEvent(QKeyEvent *);
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
