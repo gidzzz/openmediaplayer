@@ -72,6 +72,8 @@ public slots:
 #ifdef MAFW
     void updatePlaylistState();
 #endif
+    void showCarView();
+    void showEntertainmentView();
 
 private:
     static NowPlayingWindow *instance;
@@ -184,8 +186,6 @@ private slots:
     void onContextMenuRequested(const QPoint &point);
     void onDeleteClicked();
     void onShareClicked();
-    void showEntertainmentView();
-    void showCarView();
     void createQmlView(QUrl source, QString title);
     void updateQmlViewMetadata();
     void nullQmlView();

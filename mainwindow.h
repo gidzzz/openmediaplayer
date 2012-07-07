@@ -45,10 +45,12 @@ public:
     ~MainWindow();
 
 public slots:
+    Q_SCRIPTABLE void open_mp_main_view();
     Q_SCRIPTABLE void open_mp_now_playing();
     Q_SCRIPTABLE void open_mp_now_playing_playback_on();
     Q_SCRIPTABLE void open_mp_radio_playing();
     Q_SCRIPTABLE void open_mp_radio_playing_playback_on();
+    Q_SCRIPTABLE void open_mp_car_view();
     Q_SCRIPTABLE void mime_open(const QString &uri);
 
 signals:
@@ -66,6 +68,7 @@ private:
     void loadThemeIcons();
     void setButtonIcons();
     void connectSignals();
+    void closeChildren();
     void setLabelText();
     QString uriToPlay;
     QTimer *sleeperTimer;
@@ -118,7 +121,7 @@ private slots:
     void showVideosWindow();
     void showInternetRadioWindow();
     void onShuffleAllClicked();
-    void createNowPlayingWindow();
+    NowPlayingWindow* createNowPlayingWindow();
     void createVideoNowPlayingWindow();
     void onChildOpened();
     void onNowPlayingWindowHidden();

@@ -70,7 +70,7 @@ private slots:
 #ifdef MAFW
     void onPositionChanged(int position, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
-    void stateChanged(int state);
+    void onStateChanged(int state);
     void onPlayClicked();
     void onSliderValueChanged(int position);
     void onPlaylistItemChanged(int);

@@ -274,15 +274,22 @@ void MainWindow::connectSignals()
 #endif
 }
 
+void MainWindow::open_mp_main_view()
+{
+    closeChildren();
+}
+
 void MainWindow::open_mp_now_playing()
 {
+    closeChildren();
+
     // maybe this check could be moved to NowPlayingWindow?
     if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && !playlist->isPlaylistNull()) {
 #ifdef MAFW
         if (playlist->playlistName() != "FmpAudioPlaylist")
             playlist->assignAudioPlaylist();
 #endif
-        this->createNowPlayingWindow();
+        createNowPlayingWindow();
     } else {
         QTimer::singleShot(1000, this, SLOT(open_mp_now_playing()));
     }
@@ -290,9 +297,7 @@ void MainWindow::open_mp_now_playing()
 
 void MainWindow::open_mp_radio_playing()
 {
-    QList<QMainWindow*> windows = findChildren<QMainWindow*>();
-    for (int i = 0; i < windows.size(); i++)
-        windows.at(i)->close();
+    closeChildren();
 
     if (playlist->playlistName() != "FmpRadioPlaylist")
         playlist->assignRadioPlaylist();
@@ -311,6 +316,16 @@ void MainWindow::open_mp_now_playing_playback_on()
 void MainWindow::open_mp_radio_playing_playback_on()
 {
     this->activateWindow();
+}
+
+void MainWindow::open_mp_car_view()
+{
+    closeChildren();
+
+    createNowPlayingWindow()->showCarView();
+
+    // NowPlayingWindow doesn't update the playlist in QML views, so opening
+    // Car View so soon will result in missing items
 }
 
 #ifdef MAFW
@@ -491,11 +506,9 @@ void MainWindow::mime_open(const QString &uriString)
     }
 }
 
-void MainWindow::createNowPlayingWindow()
+NowPlayingWindow* MainWindow::createNowPlayingWindow()
 {
-    QList<QMainWindow*> windows = findChildren<QMainWindow*>();
-    for (int i = 0; i < windows.size(); i++)
-        windows.at(i)->close();
+    closeChildren();
 
 #ifdef MAFW
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
@@ -507,13 +520,13 @@ void MainWindow::createNowPlayingWindow()
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->inhibit();
+
+    return window;
 }
 
 void MainWindow::createVideoNowPlayingWindow()
 {
-    QList<QMainWindow*> windows = findChildren<QMainWindow*>();
-    for (int i = 0; i < windows.size(); i++)
-        windows.at(i)->close();
+    closeChildren();
 
 #ifdef MAFW
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
@@ -1196,6 +1209,13 @@ void MainWindow::takeScreenshot()
     XSync (xev.xclient.display, False);
 }
 #endif
+
+void MainWindow::closeChildren()
+{
+    QList<QMainWindow*> windows = findChildren<QMainWindow*>();
+    for (int i = 0; i < windows.size(); i++)
+        windows.at(i)->close();
+}
 
 void MainWindow::onChildOpened()
 {

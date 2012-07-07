@@ -56,7 +56,7 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
     connect(this, SIGNAL(addToPlaylist(QVariant,QVariant,QVariant,QVariant)),
             rootObject, SLOT(addPlaylistItem(QVariant,QVariant,QVariant,QVariant)));
     connect(this, SIGNAL(rowChanged(QVariant)), rootObject, SLOT(onRowChanged(QVariant)));
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
@@ -98,7 +98,7 @@ void QmlView::setMetadata(QString songName, QString albumName, QString artistNam
     emit albumChanged(this->album);
     emit artistChanged(this->artist);
     emit albumArtChanged(this->albumArt);
-    emit durationChanged(this->songDuration);
+    emit durationChanged(this->duration);
 }
 
 #ifdef Q_WS_MAEMO_5
@@ -118,7 +118,7 @@ void QmlView::onPositionChanged(int position, QString)
     emit positionChanged(position);
 }
 
-void QmlView::stateChanged(int state)
+void QmlView::onStateChanged(int state)
 {
     this->mafwState = state;
     QString playButtonIconString;
@@ -160,7 +160,7 @@ void QmlView::stateChanged(int state)
 
 void QmlView::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)
 {
-    this->stateChanged(state);
+    onStateChanged(state);
 }
 
 void QmlView::onPlayClicked()

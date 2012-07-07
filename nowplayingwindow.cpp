@@ -347,6 +347,8 @@ void NowPlayingWindow::onMetadataChanged(QString name, QVariant value)
         this->setAlbumImage(value.toString());
 
     // else if (name == "lyrics");
+
+    updateQmlViewMetadata();
 }
 
 #ifdef MAFW
@@ -662,6 +664,8 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     ui->trackLengthLabel->setText(time_mmss(songDuration));
     ui->songProgress->setRange(0, songDuration);
 
+    updateQmlViewMetadata();
+
     if (!error.isEmpty())
         qDebug() << error;
 }
@@ -777,7 +781,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
             }
         }
 
-        this->updateQmlViewMetadata();
+        updateQmlViewMetadata();
 
         if (!error.isEmpty())
             qDebug() << error;
