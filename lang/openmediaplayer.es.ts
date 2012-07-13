@@ -238,7 +238,7 @@ Por favor, desconecte el cable USB</translation>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="816"/>
+        <location filename="../mainwindow.cpp" line="830"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n canción</numerusform>
@@ -247,7 +247,7 @@ Por favor, desconecte el cable USB</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="823"/>
+        <location filename="../mainwindow.cpp" line="837"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n videoclip</numerusform>
@@ -256,7 +256,7 @@ Por favor, desconecte el cable USB</translation>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="839"/>
+        <location filename="../mainwindow.cpp" line="853"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n emisora</numerusform>
@@ -288,32 +288,32 @@ Por favor, desconecte el cable USB</translation>
         <translation>Mezclar todas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="815"/>
+        <location filename="../mainwindow.cpp" line="829"/>
         <source>(no songs)</source>
         <translation>(no hay canciones)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="822"/>
+        <location filename="../mainwindow.cpp" line="836"/>
         <source>(no videos)</source>
         <translation>(no hay videos)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="838"/>
+        <location filename="../mainwindow.cpp" line="852"/>
         <source>(no stations)</source>
         <translation>(no hay emisoras)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="974"/>
+        <location filename="../mainwindow.cpp" line="988"/>
         <source>Retrieving information on the new media files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="976"/>
+        <location filename="../mainwindow.cpp" line="990"/>
         <source>Estimated time remaining:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="978"/>
+        <location filename="../mainwindow.cpp" line="992"/>
         <source>Remaining items:</source>
         <translation>Elementos restantes:</translation>
     </message>
@@ -594,7 +594,7 @@ Por favor, desconecte el cable USB</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="826"/>
+        <location filename="../nowplayingwindow.cpp" line="830"/>
         <source>Lyrics not found</source>
         <translation>No se encontró la letra de la canción</translation>
     </message>
@@ -612,79 +612,79 @@ Por favor, desconecte el cable USB</translation>
         <translation>total</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="759"/>
+        <location filename="../nowplayingwindow.cpp" line="763"/>
         <source>Loading lyrics...</source>
         <translation>Cargando letra de la canción...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="813"/>
+        <location filename="../nowplayingwindow.cpp" line="817"/>
         <source>Fetching lyrics...</source>
         <translation>Descargando letra de la canción...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="775"/>
+        <location filename="../nowplayingwindow.cpp" line="779"/>
         <source>There is no active Internet connection</source>
         <translation> No hay conexión activa a Internet </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1208"/>
+        <location filename="../nowplayingwindow.cpp" line="1212"/>
         <source>Information not available</source>
         <translation>Información no disponible</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1270"/>
+        <location filename="../nowplayingwindow.cpp" line="1274"/>
         <source>Clear all songs from now playing?</source>
         <translation>¿Suprimir todas las canciones de la lista en curso?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1306"/>
+        <location filename="../nowplayingwindow.cpp" line="1310"/>
         <source>Set as ringing tone</source>
         <translation>Establecer como tono de llamada</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1302"/>
+        <location filename="../nowplayingwindow.cpp" line="1306"/>
         <source>Delete from now playing</source>
         <translation>Suprimir de la lista en curso</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1307"/>
+        <location filename="../nowplayingwindow.cpp" line="1311"/>
         <source>Share</source>
         <translation>Compartir</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1273"/>
-        <location filename="../nowplayingwindow.cpp" line="1336"/>
-        <location filename="../nowplayingwindow.cpp" line="1375"/>
-        <location filename="../nowplayingwindow.cpp" line="1583"/>
+        <location filename="../nowplayingwindow.cpp" line="1277"/>
+        <location filename="../nowplayingwindow.cpp" line="1340"/>
+        <location filename="../nowplayingwindow.cpp" line="1379"/>
+        <location filename="../nowplayingwindow.cpp" line="1587"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1031"/>
+        <location filename="../nowplayingwindow.cpp" line="1035"/>
         <source>Stop playback</source>
         <translation>Detener reproducción</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1274"/>
-        <location filename="../nowplayingwindow.cpp" line="1337"/>
-        <location filename="../nowplayingwindow.cpp" line="1376"/>
-        <location filename="../nowplayingwindow.cpp" line="1584"/>
+        <location filename="../nowplayingwindow.cpp" line="1278"/>
+        <location filename="../nowplayingwindow.cpp" line="1341"/>
+        <location filename="../nowplayingwindow.cpp" line="1380"/>
+        <location filename="../nowplayingwindow.cpp" line="1588"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1304"/>
+        <location filename="../nowplayingwindow.cpp" line="1308"/>
         <source>Delete</source>
         <translation>Suprimir</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1305"/>
+        <location filename="../nowplayingwindow.cpp" line="1309"/>
         <source>Add to a playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1321"/>
-        <location filename="../nowplayingwindow.cpp" line="1479"/>
+        <location filename="../nowplayingwindow.cpp" line="1325"/>
+        <location filename="../nowplayingwindow.cpp" line="1483"/>
         <source>%n clip(s) added to playlist</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -692,58 +692,58 @@ Por favor, desconecte el cable USB</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1331"/>
+        <location filename="../nowplayingwindow.cpp" line="1335"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>¿Está seguro de que desea establecer esta canción como tono de llamada?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1360"/>
+        <location filename="../nowplayingwindow.cpp" line="1364"/>
         <source>Selected song set as ringing tone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1369"/>
+        <location filename="../nowplayingwindow.cpp" line="1373"/>
         <source>Delete song?</source>
         <translation>¿Suprimir canción?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1370"/>
+        <location filename="../nowplayingwindow.cpp" line="1374"/>
         <source>Are you sure you want to delete this song?</source>
         <translation>¿Está seguro que desea suprimir esta canción?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1418"/>
+        <location filename="../nowplayingwindow.cpp" line="1422"/>
         <source>Entertainment View</source>
         <translation>Vista Entretenimiento</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1423"/>
+        <location filename="../nowplayingwindow.cpp" line="1427"/>
         <source>Car View</source>
         <translation>Vista Coche</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1563"/>
-        <location filename="../nowplayingwindow.cpp" line="1570"/>
+        <location filename="../nowplayingwindow.cpp" line="1567"/>
+        <location filename="../nowplayingwindow.cpp" line="1574"/>
         <source>Select album art</source>
         <translation>Cambiar carátula del álbum</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1564"/>
+        <location filename="../nowplayingwindow.cpp" line="1568"/>
         <source>Reset album art</source>
         <translation>Suprimir carátula del álbum</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1580"/>
+        <location filename="../nowplayingwindow.cpp" line="1584"/>
         <source>Reset album art?</source>
         <translation>¿Suprimir carátula del álbum?</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1616"/>
+        <location filename="../nowplayingwindow.cpp" line="1620"/>
         <source>Edit lyrics</source>
         <translation>Editar letra de la canción</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1617"/>
+        <location filename="../nowplayingwindow.cpp" line="1621"/>
         <source>Reload lyrics</source>
         <translation>Recargar letra de la canción</translation>
     </message>
@@ -759,22 +759,22 @@ Por favor, desconecte el cable USB</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="243"/>
-        <location filename="../nowplayingwindow.cpp" line="606"/>
-        <location filename="../nowplayingwindow.cpp" line="1184"/>
+        <location filename="../nowplayingwindow.cpp" line="608"/>
+        <location filename="../nowplayingwindow.cpp" line="1188"/>
         <source>(unknown song)</source>
         <translation>(canción desconocida)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="357"/>
-        <location filename="../nowplayingwindow.cpp" line="615"/>
-        <location filename="../nowplayingwindow.cpp" line="1187"/>
+        <location filename="../nowplayingwindow.cpp" line="617"/>
+        <location filename="../nowplayingwindow.cpp" line="1191"/>
         <source>(unknown artist)</source>
         <translation>(artista desconocido)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="370"/>
-        <location filename="../nowplayingwindow.cpp" line="624"/>
-        <location filename="../nowplayingwindow.cpp" line="1190"/>
+        <location filename="../nowplayingwindow.cpp" line="626"/>
+        <location filename="../nowplayingwindow.cpp" line="1194"/>
         <source>(unknown album)</source>
         <translation>(álbum desconocido)</translation>
     </message>
@@ -1233,7 +1233,7 @@ a la reproducción en curso</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="127"/>
-        <location filename="../singleartistview.cpp" line="250"/>
+        <location filename="../singleartistview.cpp" line="256"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n canción</numerusform>
@@ -1241,34 +1241,34 @@ a la reproducción en curso</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="351"/>
+        <location filename="../singleartistview.cpp" line="357"/>
         <source>Add to now playing</source>
         <translation>Añadir a la lista en curso</translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="362"/>
+        <location filename="../singleartistview.cpp" line="368"/>
         <source>Delete selected item from device?</source>
         <translation>¿Suprimir elemento seleccionado del dispositivo?</translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="365"/>
-        <location filename="../singleartistview.cpp" line="384"/>
+        <location filename="../singleartistview.cpp" line="371"/>
+        <location filename="../singleartistview.cpp" line="390"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="366"/>
-        <location filename="../singleartistview.cpp" line="385"/>
+        <location filename="../singleartistview.cpp" line="372"/>
+        <location filename="../singleartistview.cpp" line="391"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="381"/>
+        <location filename="../singleartistview.cpp" line="387"/>
         <source>Delete all items shown in view?</source>
         <translation>¿Suprimir todos los elementos de la vista?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="462"/>
+        <location filename="../singleartistview.cpp" line="468"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n clip añadido a la lista en curso</numerusform>
@@ -1294,7 +1294,7 @@ a la lista en curso</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="140"/>
-        <location filename="../singleartistview.cpp" line="352"/>
+        <location filename="../singleartistview.cpp" line="358"/>
         <source>Delete</source>
         <translation>Suprimir</translation>
     </message>
@@ -1633,168 +1633,168 @@ a la lista en curso</translation>
         <translation>Reproducción en curso</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="325"/>
+        <location filename="../videonowplayingwindow.cpp" line="332"/>
         <source>Delete video?</source>
         <translation>¿Suprimir video?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="326"/>
+        <location filename="../videonowplayingwindow.cpp" line="333"/>
         <source>Are you sure you want to delete this video?</source>
         <translation>¿Está seguro de que desea suprimir este video?</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="329"/>
+        <location filename="../videonowplayingwindow.cpp" line="336"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="330"/>
+        <location filename="../videonowplayingwindow.cpp" line="337"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="649"/>
+        <location filename="../videonowplayingwindow.cpp" line="666"/>
         <source>Buffering</source>
         <translation>Cargado búfer.</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="689"/>
-        <location filename="../videonowplayingwindow.cpp" line="782"/>
+        <location filename="../videonowplayingwindow.cpp" line="706"/>
+        <location filename="../videonowplayingwindow.cpp" line="799"/>
         <source>Unable to play media</source>
         <translation>Imposible reproducir archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="693"/>
+        <location filename="../videonowplayingwindow.cpp" line="710"/>
         <source>Media not found</source>
         <translation>Archivo no encontrado</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="695"/>
+        <location filename="../videonowplayingwindow.cpp" line="712"/>
         <source>URI not available</source>
         <translation>URI no disponible</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="697"/>
+        <location filename="../videonowplayingwindow.cpp" line="714"/>
         <source>Invalid URI</source>
         <translation>URI no válida</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="699"/>
+        <location filename="../videonowplayingwindow.cpp" line="716"/>
         <source>Unable to open media</source>
         <translation>Imposible abrir el archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="701"/>
+        <location filename="../videonowplayingwindow.cpp" line="718"/>
         <source>Playback stream no longer available</source>
         <translation>El flujo de reproducción ya no está disponible</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="703"/>
+        <location filename="../videonowplayingwindow.cpp" line="720"/>
         <source>Could not determine MIME-type</source>
         <translation>No se pudo determinar el tipo de archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="705"/>
+        <location filename="../videonowplayingwindow.cpp" line="722"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Error general, imposible continuar con la reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="707"/>
+        <location filename="../videonowplayingwindow.cpp" line="724"/>
         <source>General error occured</source>
         <translation>Error general</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="709"/>
+        <location filename="../videonowplayingwindow.cpp" line="726"/>
         <source>Unsupported media</source>
         <translation>Archivo no soportado</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="711"/>
+        <location filename="../videonowplayingwindow.cpp" line="728"/>
         <source>Unsupported resolution</source>
         <translation>Resolución no soportada</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="713"/>
+        <location filename="../videonowplayingwindow.cpp" line="730"/>
         <source>Unsupported framerate</source>
         <translation>Velocidad de fotogramas no soportada</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="715"/>
+        <location filename="../videonowplayingwindow.cpp" line="732"/>
         <source>Media is protected by DRM</source>
         <translation>Archivo protegido por DRM (derechos de autor)</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="717"/>
+        <location filename="../videonowplayingwindow.cpp" line="734"/>
         <source>System sound device is unavailable</source>
         <translation>Dispositivo de sonido de sistema no disponible</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="719"/>
+        <location filename="../videonowplayingwindow.cpp" line="736"/>
         <source>Media corrupted</source>
         <translation>Archivo corrupto</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="721"/>
+        <location filename="../videonowplayingwindow.cpp" line="738"/>
         <source>Error while parsing playlist</source>
         <translation>Error al analizar la lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="722"/>
+        <location filename="../videonowplayingwindow.cpp" line="739"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Lista de reproducción corrupta o vacía</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="725"/>
+        <location filename="../videonowplayingwindow.cpp" line="742"/>
         <source>Codec not found:</source>
         <translation>Códec no encontrado:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="729"/>
+        <location filename="../videonowplayingwindow.cpp" line="746"/>
         <source>Video codec not found:</source>
         <translation>Códec de video no encontrado:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="733"/>
+        <location filename="../videonowplayingwindow.cpp" line="750"/>
         <source>Audio codec not found:</source>
         <translation>Códec de audio no encontrado:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="737"/>
+        <location filename="../videonowplayingwindow.cpp" line="754"/>
         <source>No playlist assigned</source>
         <translation>No hay lista de reproducción asignada</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="739"/>
+        <location filename="../videonowplayingwindow.cpp" line="756"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>El índice de archivos no encaja con los elementos de la lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="741"/>
+        <location filename="../videonowplayingwindow.cpp" line="758"/>
         <source>Unable to start playback</source>
         <translation>Imposible iniciar la reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="743"/>
+        <location filename="../videonowplayingwindow.cpp" line="760"/>
         <source>Unable to stop playback</source>
         <translation>Imposible detener la reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="745"/>
+        <location filename="../videonowplayingwindow.cpp" line="762"/>
         <source>Unable to pause playback</source>
         <translation>Imposible pausar la reproducción</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="747"/>
+        <location filename="../videonowplayingwindow.cpp" line="764"/>
         <source>Unable to seek position in media</source>
         <translation>Imposible buscar la posición en el archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="749"/>
+        <location filename="../videonowplayingwindow.cpp" line="766"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Imposible obtener la posición actual en el archivo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="751"/>
+        <location filename="../videonowplayingwindow.cpp" line="768"/>
         <source>Unable to get current playback status</source>
         <translation>Imposible obtener el estado actual de la reproducción</translation>
     </message>
@@ -1807,62 +1807,62 @@ a la lista en curso</translation>
         <translation>Videos</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="48"/>
+        <location filename="../videoswindow.cpp" line="50"/>
         <source>Date</source>
         <translation>Fecha</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="50"/>
+        <location filename="../videoswindow.cpp" line="52"/>
         <source>Category</source>
         <translation>Categoría</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="90"/>
+        <location filename="../videoswindow.cpp" line="94"/>
         <source>Delete</source>
         <translation>Suprimir</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="91"/>
+        <location filename="../videoswindow.cpp" line="95"/>
         <source>Share</source>
         <translation>Compartir</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="101"/>
+        <location filename="../videoswindow.cpp" line="105"/>
         <source>Delete selected item from device?</source>
         <translation>¿Suprimir elemento seleccionado del dispositivo?</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="104"/>
+        <location filename="../videoswindow.cpp" line="108"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="105"/>
+        <location filename="../videoswindow.cpp" line="109"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="191"/>
+        <location filename="../videoswindow.cpp" line="195"/>
         <source>Videos - latest</source>
         <translation>Videos: los más recientes</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="203"/>
+        <location filename="../videoswindow.cpp" line="207"/>
         <source>Videos - categories</source>
         <translation>Videos: categorías</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="275"/>
+        <location filename="../videoswindow.cpp" line="328"/>
         <source>(unknown clip)</source>
         <translation>(videoclip desconocido)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="333"/>
+        <location filename="../videoswindow.cpp" line="386"/>
         <source>Recorded by device camera</source>
         <translation>Grabado con la cámara del dispositivo</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="338"/>
+        <location filename="../videoswindow.cpp" line="391"/>
         <source>Films</source>
         <translation>Películas</translation>
     </message>
