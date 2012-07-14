@@ -50,10 +50,9 @@ private:
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter *mafwRadioSource;
+    MafwSourceAdapter *mafwSource;
     MafwPlaylistAdapter* playlist;
     int mafwState;
-    int streamDuration;
     QString artist;
     QString title;
     QString uri;

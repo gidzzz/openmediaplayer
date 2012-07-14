@@ -253,7 +253,7 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
     connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
 
-    if (mafwSource && id.startsWith("localtagfs::videos")) { // local storage
+    if (id.startsWith("localtagfs::")) { // local storage
         ui->bookmarkButton->hide();
         ui->shareButton->show();
         ui->deleteButton->show();
@@ -266,7 +266,7 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
     }
 
     videoLength = Duration::Unknown;
-    if (mafwSource && !id.isEmpty())
+    if (!id.isEmpty())
         mafwSource->getMetadata(id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI,
                                                               MAFW_METADATA_KEY_DURATION,
                                                               MAFW_METADATA_KEY_PAUSED_POSITION));

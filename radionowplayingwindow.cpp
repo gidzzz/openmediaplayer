@@ -24,7 +24,7 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
-    mafwRadioSource(factory->getRadioSource()),
+    mafwSource(NULL),
     playlist(factory->getPlaylistAdapter())
 #endif
 {
@@ -69,7 +69,6 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     mafwrenderer->getStatus();
     mafwrenderer->getPosition();
     mafwrenderer->getVolume();
-    mafwrenderer->getCurrentMetadata();
 #endif
 }
 
@@ -115,8 +114,6 @@ void RadioNowPlayingWindow::connectSignals()
             this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -234,13 +231,19 @@ void RadioNowPlayingWindow::play()
 
 void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
-    ui->songLabel->setText(tr("(unknown artist)") + " / " + tr("(unknown song)"));
+    ui->stationLabel->setText(tr("(unknown station)"));
 
-    if (objectId)
-        mafwRadioSource->getMetadata(objectId, MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                                 MAFW_METADATA_KEY_URI));
-    else
-        ui->stationLabel->setText(tr("(unknown station)"));
+
+    if (mafwSource) mafwSource->deleteLater();
+    QString id = QString::fromUtf8(objectId);
+    mafwSource = new MafwSourceAdapter(mafwFactory->getRadioSource()->getSourceByUUID(id.left(id.indexOf("::"))));
+    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
+
+    mafwrenderer->getCurrentMetadata();
+
+    mafwSource->getMetadata(objectId, MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
+                                                        MAFW_METADATA_KEY_URI));
 }
 
 void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant value)
@@ -384,17 +387,13 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        this->title = v ? QString::fromUtf8(g_value_get_string (v)) : "";
+        title = v ? QString::fromUtf8(g_value_get_string(v)) : QString();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
-        this->artist = v ? QString::fromUtf8(g_value_get_string (v)) : "";
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ORGANIZATION);
-        station = v ? QString::fromUtf8(g_value_get_string (v)) : "";
+        artist = v ? QString::fromUtf8(g_value_get_string(v)) : QString();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int64 (v) : Duration::Unknown;
-        this->streamDuration = duration;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_IS_SEEKABLE);
         isSeekable = v ? g_value_get_boolean (v) : false;
@@ -410,18 +409,16 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
             ui->albumArt->setPixmap(QPixmap(radioImage));
         }
 
-        this->updateSongLabel();
+        updateSongLabel();
 
-        if (!station.isEmpty())
-            ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 410));
+        streamIsSeekable(isSeekable);
 
         if (duration != Duration::Unknown) {
             ui->streamLengthLabel->setText(time_mmss(duration));
             ui->positionSlider->setRange(0, duration);
-        } else
+        } else {
             ui->streamLengthLabel->setText("--:--");
-
-        this->streamIsSeekable(isSeekable);
+        }
     }
 
     if (!error.isEmpty())
@@ -435,12 +432,11 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        station = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
+        station = QString::fromUtf8(g_value_get_string (v));
+        ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 410));
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         uri = v ? QString::fromUtf8(g_value_get_string(v)) : "";
-
-        ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 410));
     }
 
     if (!error.isEmpty())
