@@ -310,11 +310,9 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint 
         this->browseAllAlbumsId = 0;
 
         if (shuffleRequested) {
-            playlist->getSize(); // explained in musicwindow.cpp
             mafwrenderer->play();
 
             NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-
             window->onShuffleButtonToggled(true);
             window->show();
 

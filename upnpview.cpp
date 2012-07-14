@@ -212,12 +212,12 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
                ++sameTypeIndex;
 
         MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
-        playlist->getSize(); // explained in musicwindow.cpp
         mafwrenderer->gotoIndex(sameTypeIndex);
         mafwrenderer->play();
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
         window->show();
+
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         ui->indicator->inhibit();
 
@@ -234,10 +234,10 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
 
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
         window->showFullScreen();
+
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
-        playlist->getSize(); // explained in musicwindow.cpp
         mafwFactory->getRenderer()->gotoIndex(sameTypeIndex);
         QTimer::singleShot(500, window, SLOT(playVideo()));
 

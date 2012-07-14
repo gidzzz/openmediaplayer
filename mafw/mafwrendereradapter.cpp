@@ -284,6 +284,15 @@ void MafwRendererAdapter::onStateChanged(MafwRenderer*,
 
 void MafwRendererAdapter::play()
 {
+#ifdef MAFW_WORKAROUNDS
+    // Early play() or gotoIndex() seems be reliable only for smaller libraries.
+    // For bigger ones something probably doesn't have enough time to ready up.
+    // Possible workaround is to call getSize() first, so when it returns,
+    // we know that play() can be successfully called. That's only a theory,
+    // but it works. ;)
+    playlist->getSize();
+#endif
+
     if (playback) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
@@ -388,6 +397,11 @@ void MafwRendererAdapter::previous()
 
 void MafwRendererAdapter::gotoIndex(uint index)
 {
+#ifdef MAFW_WORKAROUNDS
+    // Explained in play()
+    playlist->getSize();
+#endif
+
     if(mafw_renderer)
     {
         mafw_renderer_goto_index(mafw_renderer, index, MafwRendererSignalHelper::goto_index_playback_cb, this);

@@ -386,7 +386,6 @@ void MainWindow::openDirectoryProxy(QString objectId, GHashTable *metadata, QStr
         if (!QSettings().value("main/appendSongs").toBool()) {
             for (int i = 0; i < songAddBufferPos; i++) {
                 if (songAddBuffer[i] == objectIdToPlay) {
-                    playlist->getSize(); // explained in musicwindow.cpp (but it seems like it's not enough here?)
                     mafwrenderer->gotoIndex(i);
                     mafwrenderer->play();
                     break;
@@ -407,20 +406,25 @@ void MainWindow::openDirectoryProxy(QString objectId, GHashTable *metadata, QStr
 
 void MainWindow::mime_open(const QString &uriString)
 {
-    //this->activateWindow();
+#ifdef MAFW
     this->uriToPlay = uriString;
-    if (uriToPlay.startsWith("/"))
-        uriToPlay.prepend("file://");
+
+    // Create an object ID from the provided URI
+    if (uriToPlay.startsWith("/")) uriToPlay.prepend("file://");
     QString objectId = mafwTrackerSource->createObjectId(uriToPlay);
-    qDebug() << objectId;
+    qDebug() << "ID to open:" << objectId;
+
+    // Determine the MIME from the name
     const gchar* text_uri = uriToPlay.toUtf8();
     const char* mimetype = gnome_vfs_get_mime_type_for_name(text_uri);
     QString qmimetype = mimetype;
+    qDebug() << "MIME:" << mimetype;
 
+    // Audio or a playlist
     if (qmimetype.startsWith("audio")) {
 
+        // M3U playlist, browse contents
         if (qmimetype.endsWith("mpegurl")) {
-#ifdef MAFW
 #ifdef Q_WS_MAEMO_5
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
@@ -430,7 +434,7 @@ void MainWindow::mime_open(const QString &uriString)
             objectId = objectId.remove("urisource::file://")
                                .replace("/", "%2F")
                                .prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
-            qDebug() << objectId;
+            qDebug() << "Converted ID:" << objectId;
 
             songAddBufferSize = 0;
 
@@ -442,68 +446,65 @@ void MainWindow::mime_open(const QString &uriString)
             this->browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
                                                                   MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
                                                                   0, MAFW_SOURCE_BROWSE_ALL);
-#endif
         }
 
+        // Audio, a whole directory has to be added
         else if (QSettings().value("main/openFolders").toBool()) {
-#ifdef MAFW
 #ifdef Q_WS_MAEMO_5
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
             objectIdToPlay = objectId.remove("urisource::file://")
                                      .replace("/", "%2F")
                                      .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
+            qDebug() << "Converted ID:" << objectId;
+
             openDirectory(uriString);
-#endif
         }
 
+        // Audio, just one file
         else {
-#ifdef MAFW
             objectId = objectId.remove("urisource::file://")
                                .replace("/", "%2F")
                                .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
-            qDebug() << objectId;
+            qDebug() << "Converted ID:" << objectId;
 
             if (playlist->playlistName() != "FmpAudioPlaylist")
                 playlist->assignAudioPlaylist();
             if (!QSettings().value("main/appendSongs").toBool())
                 playlist->clear();
             playlist->appendItem(objectId);
-#endif
 
             if (!QSettings().value("main/appendSongs").toBool()) {
-#ifdef MAFW
-                if (mafwrenderer->isRendererReady()) mafwrenderer->play();
-                else connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
-#endif
+                if (mafwrenderer->isRendererReady())
+                    mafwrenderer->play();
+                else
+                    connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
             }
 
             createNowPlayingWindow();
-
         }
 
+    // Video only
     } else if (qmimetype.startsWith("video")) {
-#ifdef MAFW
         objectId = objectId.remove("urisource::file://")
                            .replace("/", "%2F")
                            .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
-        qDebug() << objectId;
+        qDebug() << "Converted ID:" << objectId;
 
         playlist->assignVideoPlaylist();
         playlist->clear();
         playlist->appendItem(objectId);
-#endif
         createVideoNowPlayingWindow();
     }
 
+    // Unknown, use the video window for detection
     else if (qmimetype == "application/octet-stream") {
-#ifdef MAFW
         playlist->assignVideoPlaylist();
         playlist->clear();
         playlist->appendItem(objectId);
-#endif
         createVideoNowPlayingWindow();
     }
+#endif
 }
 
 NowPlayingWindow* MainWindow::createNowPlayingWindow()
@@ -529,18 +530,17 @@ void MainWindow::createVideoNowPlayingWindow()
     closeChildren();
 
 #ifdef MAFW
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
 #else
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif
-        window->showFullScreen();
+    window->showFullScreen();
 
-        connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
-        ui->indicator->inhibit();
+    connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
+    ui->indicator->inhibit();
 
 #ifdef MAFW
-        playlist->getSize();
-        QTimer::singleShot(500, window, SLOT(playVideo()));
+    QTimer::singleShot(500, window, SLOT(playVideo()));
 #endif
 }
 
@@ -898,7 +898,6 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
 
         // Assume that the playlist consists of items of one type
         if (mime.startsWith("audio")) {
-            playlist->getSize(); // explained in musicwindow.cpp
             mafwrenderer->play();
             createNowPlayingWindow();
         } else {

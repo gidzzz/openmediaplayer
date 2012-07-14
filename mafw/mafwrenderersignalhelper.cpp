@@ -30,6 +30,21 @@ void MafwRendererSignalHelper::play_playback_cb(MafwRenderer*,
     if (!qerror.isNull() && !qerror.isEmpty())
         qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalPlay(qerror);
+
+#ifdef MAFW_WORKAROUNDS
+    // MAFW behaves inconsistently when it comes to assigning items to
+    // a renderer. It can end up without any media to play despite the playlist
+    // not being empty. gotoIndex() can fix the issue, but next() is probably
+    // better due to being shuffle-friendly.
+    if (error && error->code == MAFW_RENDERER_ERROR_NO_MEDIA) {
+        MafwRendererAdapter* mafwrenderer = static_cast<MafwRendererAdapter*>(user_data);
+        if (mafwrenderer->playlist->getSize()) {
+            qDebug() << "Trying to recover from MAFW_RENDERER_ERROR_NO_MEDIA";
+            mafwrenderer->next();
+            mafwrenderer->play();
+        }
+    }
+#endif
 }
 
 void MafwRendererSignalHelper::play_uri_playback_cb(MafwRenderer*,

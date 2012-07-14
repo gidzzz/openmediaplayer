@@ -8,6 +8,10 @@ MafwAdapterFactory::MafwAdapterFactory(QObject *parent) :
     mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
     mafwUpnpSource = new MafwSourceAdapter("MAFW-UPnP-Control-Source");
     playlist = new MafwPlaylistAdapter(this, mafwrenderer);
+
+#ifdef MAFW_WORKAROUNDS
+    mafwrenderer->playlist = playlist;
+#endif
 }
 
 MafwRendererAdapter* MafwAdapterFactory::getRenderer()

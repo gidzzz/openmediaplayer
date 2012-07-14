@@ -13,6 +13,12 @@
 
 #include "mafwrenderersignalhelper.h"
 
+#ifdef MAFW_WORKAROUNDS
+    class MafwRendererAdapter;
+    class MafwPlaylistAdapter;
+    #include "mafwplaylistadapter.h"
+#endif
+
 #define MEDIAPLAYER_RENDERER "Mafw-Gst-Renderer"
 #define MEDIAPLAYER_SOURCE "Mafw-Tracker-Source"
 
@@ -114,5 +120,10 @@ class MafwRendererAdapter : public QObject
   MafwRenderer* mafw_renderer;
   pb_playback_t* playback;
   GValue GVolume;
+
+#ifdef MAFW_WORKAROUNDS
+  MafwPlaylistAdapter* playlist;
+  friend class MafwAdapterFactory;
+#endif
 };
 #endif

@@ -113,7 +113,7 @@ void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
             this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
 
-    this->numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
+    numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
     browsePlaylistOp = playlist->getItemsOf(mafwplaylist);
 }
 
@@ -350,8 +350,6 @@ void SinglePlaylistView::playAll(int startIndex, bool filter)
     playlist->setShuffled(startIndex < 1);
 
     appendAllToPlaylist(filter);
-
-    playlist->getSize(); // explained in musicwindow.cpp
 
     if (startIndex > 0) {
         if (filter) {

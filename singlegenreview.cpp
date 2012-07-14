@@ -341,11 +341,9 @@ void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount
         this->addToNowPlayingId = 0;
 
         if (this->isShuffling) {
-            playlist->getSize(); // explained in musicwindow.cpp
             mafwrenderer->play();
 
             NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-
             window->show();
 
             connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));

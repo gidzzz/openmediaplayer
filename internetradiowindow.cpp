@@ -120,7 +120,6 @@ void InternetRadioWindow::onStationSelected(QListWidgetItem* item)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-    playlist->getSize(); // explained in musicwindow.cpp
     mafwrenderer->gotoIndex(sameTypeIndex);
 
     if (type == "audio") {

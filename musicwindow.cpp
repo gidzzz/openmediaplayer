@@ -143,15 +143,7 @@ void MusicWindow::onSongSelected(QModelIndex index)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-    // Instant play() seems to work only for smaller libraries.
-    // For bigger, something probably doesn't have enough time to ready up.
-    // Possible workaround is to call getSize() first, so when it returns,
-    // we know that play() can be successfully called. That's only a theory,
-    // but it works for me. ;)
-    playlist->getSize();
-
-    mafwrenderer->gotoIndex(filter ? index.row() :
-                                     songProxyModel->mapToSource(index).row());
+    mafwrenderer->gotoIndex(filter ? index.row() : songProxyModel->mapToSource(index).row());
     mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);

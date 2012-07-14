@@ -183,9 +183,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
         delete[] videoAddBuffer[i];
     delete[] videoAddBuffer;
 
-    playlist->getSize(); // explained in musicwindow.cpp
     mafwrenderer->gotoIndex(ui->listWidget->row(item)-indexOffset);
-
     QTimer::singleShot(500, window, SLOT(playVideo()));
 }
 

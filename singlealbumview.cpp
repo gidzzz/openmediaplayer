@@ -207,8 +207,6 @@ void SingleAlbumView::playAll(int startIndex, bool filter)
 
     appendAllToPlaylist(filter);
 
-    playlist->getSize(); // explained in musicwindow.cpp
-
     if (startIndex > 0) {
         if (filter) {
             int visibleIndex = 0;
@@ -225,7 +223,6 @@ void SingleAlbumView::playAll(int startIndex, bool filter)
     mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-
     window->show();
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
