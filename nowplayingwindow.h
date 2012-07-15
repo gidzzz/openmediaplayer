@@ -120,8 +120,6 @@ private:
     QGraphicsScene *albumArtSceneLarge;
     QGraphicsScene *albumArtSceneSmall;
     QString albumArtUri;
-    mirror *ml;
-    mirror *ms;
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
     QMenu *contextMenu;

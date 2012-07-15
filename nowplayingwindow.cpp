@@ -224,26 +224,27 @@ void NowPlayingWindow::setAlbumImage(QString image)
     else
         this->isDefaultArt = false;
 
-    QGraphicsPixmapItem* item;
+    mirror *m;
+    QGraphicsPixmapItem *item;
     QPixmap albumArt(image);
 
     ui->view_large->setScene(albumArtSceneLarge);
     albumArtSceneLarge->setBackgroundBrush(QBrush(Qt::transparent));
-    ml = new mirror();
-    albumArtSceneLarge->addItem(ml);
+    m = new mirror();
+    albumArtSceneLarge->addItem(m);
     albumArt = albumArt.scaled(QSize(295, 295), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     item = new QGraphicsPixmapItem(albumArt);
     albumArtSceneLarge->addItem(item);
-    ml->setItem(item);
+    m->setItem(item);
 
     ui->view_small->setScene(albumArtSceneSmall);
     albumArtSceneSmall->setBackgroundBrush(QBrush(Qt::transparent));
-    ms = new mirror();
-    albumArtSceneSmall->addItem(ms);
+    m = new mirror();
+    albumArtSceneSmall->addItem(m);
     albumArt = albumArt.scaled(QSize(245, 245), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     item = new QGraphicsPixmapItem(albumArt);
     albumArtSceneSmall->addItem(item);
-    ms->setItem(item);
+    m->setItem(item);
 
     /*QTransform t;
     t = t.rotate(-10, Qt::YAxis);
@@ -735,19 +736,17 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
         if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
-            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                this->setAlbumImage(QString::fromUtf8(filename));
-            }
+            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
+                setAlbumImage(QString::fromUtf8(filename));
         } else {
-            v = mafw_metadata_first(metadata,
-                                    MAFW_METADATA_KEY_RENDERER_ART_URI);
+            v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_RENDERER_ART_URI);
             if (v != NULL) {
                 const gchar* file_uri = g_value_get_string(v);
                 gchar* filename = NULL;
                 if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
-                    this->setAlbumImage(QString::fromUtf8(filename));
+                    setAlbumImage(QString::fromUtf8(filename));
             } else
-                this->setAlbumImage(albumImage);
+                setAlbumImage(albumImage);
         }
 
         if (enableLyrics) {

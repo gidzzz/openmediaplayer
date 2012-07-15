@@ -43,6 +43,9 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
                                  .arg(secondaryColor.green())
                                  .arg(secondaryColor.blue()));
 
+    albumArtScene = new QGraphicsScene(ui->albumArtView);
+    setAlbumImage(radioImage);
+
     lazySliders = QSettings().value("main/lazySliders").toBool();
 
     ui->volumeSlider->hide();
@@ -233,7 +236,6 @@ void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
     ui->stationLabel->setText(tr("(unknown station)"));
 
-
     if (mafwSource) mafwSource->deleteLater();
     QString id = QString::fromUtf8(objectId);
     mafwSource = new MafwSourceAdapter(mafwFactory->getRadioSource()->getSourceByUUID(id.left(id.indexOf("::"))));
@@ -249,8 +251,6 @@ void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant value)
 {
     qDebug() << "Metadata changed:" << name << "=" << value;
-
-    mafwrenderer->getCurrentMetadata();
 
     if (name == "is-seekable" /*MAFW_METADATA_KEY_IS_SEEKABLE*/) {
         ui->positionSlider->setEnabled(value.toBool());
@@ -268,7 +268,7 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
         ui->streamLengthLabel->setText(time_mmss(value.toInt()));
     }
     else if (name == "renderer-art-uri") {
-        ui->albumArt->setPixmap(QPixmap(value.toString()));
+        setAlbumImage(value.toString());
     }
 }
 
@@ -398,16 +398,8 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_IS_SEEKABLE);
         isSeekable = v ? g_value_get_boolean (v) : false;
 
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
-        if (v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
-                ui->albumArt->setPixmap(QPixmap(QString::fromUtf8(filename)));
-            }
-        } else {
-            ui->albumArt->setPixmap(QPixmap(radioImage));
-        }
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_RENDERER_ART_URI); // it's really a path, not a URI
+        setAlbumImage(v ? QString::fromUtf8(g_value_get_string(v)) : radioImage);
 
         updateSongLabel();
 
@@ -444,9 +436,28 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 }
 #endif
 
+void RadioNowPlayingWindow::setAlbumImage(QString image)
+{
+    qDeleteAll(albumArtScene->items());
+
+    ui->albumArtView->setScene(albumArtScene);
+    albumArtScene->setBackgroundBrush(QBrush(Qt::transparent));
+
+    mirror *m = new mirror();
+    albumArtScene->addItem(m);
+
+    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(image).scaled(QSize(295, 295),
+                                                        Qt::IgnoreAspectRatio,
+                                                        Qt::SmoothTransformation));
+
+    albumArtScene->addItem(item);
+    m->setItem(item);
+}
+
 void RadioNowPlayingWindow::orientationChanged(int w, int h)
 {
     if (w > h) { // Landscape
+        ui->verticalLayout->setContentsMargins(-1, 5, -1, -1);
         ui->mainLayout->setDirection(QBoxLayout::LeftToRight);
         ui->volumeWidget->show();
         ui->spacerWidget->show();
@@ -457,6 +468,7 @@ void RadioNowPlayingWindow::orientationChanged(int w, int h)
     } else { // Portrait
         ui->volumeWidget->hide();
         ui->mainLayout->setDirection(QBoxLayout::TopToBottom);
+        ui->verticalLayout->setContentsMargins(-1, 80, -1, -1);
         ui->spacerWidget2->hide();
         ui->spacerWidget->hide();
         ui->metadataWidget->setFixedWidth(470);

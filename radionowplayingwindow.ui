@@ -15,17 +15,8 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
-    <property name="leftMargin">
+    <property name="margin">
      <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>9</number>
     </property>
     <item>
      <layout class="QHBoxLayout" name="mainLayout">
@@ -50,50 +41,21 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <widget class="QGraphicsView" name="albumArtView">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <spacer name="verticalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="albumArt">
             <property name="minimumSize">
              <size>
-              <width>295</width>
-              <height>295</height>
+              <width>360</width>
+              <height>360</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>295</width>
-              <height>295</height>
+              <width>360</width>
+              <height>360</height>
              </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap>../../../../../../../usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_stream.png</pixmap>
             </property>
            </widget>
           </item>

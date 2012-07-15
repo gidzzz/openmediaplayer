@@ -6,6 +6,7 @@
 #include <QTime>
 #include <QNetworkConfigurationManager>
 #include <QNetworkSession>
+#include <QGraphicsView>
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
@@ -15,6 +16,7 @@
 #include "includes.h"
 #include "rotator.h"
 #include "bookmarkdialog.h"
+#include "mirror.h"
 
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
@@ -43,6 +45,8 @@ private:
     Ui::RadioNowPlayingWindow *ui;
     void connectSignals();
     void setIcons();
+    void setAlbumImage(QString image);
+    QGraphicsScene *albumArtScene;
     QTimer *volumeTimer;
     QTimer *positionTimer;
     bool lazySliders;
