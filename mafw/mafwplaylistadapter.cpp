@@ -32,8 +32,15 @@ MafwPlaylistAdapter::MafwPlaylistAdapter(QObject *parent, MafwRendererAdapter *m
 
 void MafwPlaylistAdapter::clear()
 {
-    if(mafw_playlist)
+    if (mafw_playlist) {
+        // Calling play() after clearing the current playlist in the paused
+        // state will cause the renderer to enter the stopped state, but calling
+        // play() afterwards will not start the playback. To get out of this,
+        // play() followed by resume() is necessary. The situation can be
+        // prevented by calling stop() before clearing the playlist.
+        mafwrenderer->stop();
         mafw_playlist_clear (this->mafw_playlist, &error);
+    }
 }
 
 void MafwPlaylistAdapter::clear(MafwPlaylist *playlist)
@@ -44,13 +51,7 @@ void MafwPlaylistAdapter::clear(MafwPlaylist *playlist)
 
 bool MafwPlaylistAdapter::isRepeat()
 {
-    if(mafw_playlist) {
-        if (mafw_playlist_get_repeat (this->mafw_playlist))
-            return true;
-        else
-            return false;
-    } else
-        return false;
+    return mafw_playlist && mafw_playlist_get_repeat(mafw_playlist);
 }
 
 void MafwPlaylistAdapter::setRepeat(bool repeat)
