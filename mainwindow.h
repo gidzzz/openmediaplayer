@@ -70,7 +70,6 @@ private:
     void connectSignals();
     void closeChildren();
     void setLabelText();
-    QString uriToPlay;
     QTimer *sleeperTimer;
     QTimer *sleeperVolumeTimer;
     qint64 sleeperStartStamp;
@@ -105,7 +104,6 @@ private:
     int mafwState;
     int rendererStatusNotifications;
     int songAddBufferSize;
-    int songAddBufferPos;
     gchar** songAddBuffer;
     QString objectIdToPlay;
 #endif
@@ -144,8 +142,7 @@ private slots:
     void pausePlay();
     void onStateChanged(int state);
     void onContainerChanged(QString objectId);
-    void openDirectory(QString directory);
-    void openDirectoryProxy(QString objectId, GHashTable *metadata, QString);
+    void openDirectory(QString uri);
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();
