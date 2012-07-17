@@ -88,8 +88,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     wiredHeadsetIsConnected = false;
     headsetPauseStamp = -1;
+    pausedByCall = false;
     wasRinging = false;
-    wasPlaying = false;
 #else
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
@@ -1031,6 +1031,11 @@ void MainWindow::pausePlay()
 void MainWindow::onStateChanged(int state)
 {
     this->mafwState = state;
+
+    if (state == Playing) {
+        headsetPauseStamp = -1;
+        pausedByCall = false;
+    }
 }
 
 void MainWindow::onContainerChanged(QString objectId)
@@ -1066,7 +1071,8 @@ void MainWindow::onHeadsetConnected()
     qint64 headsetResumeTime = QSettings().value("main/headsetResumeSeconds", -1).toInt();
 
     if (headsetPauseStamp != -1
-    && this->mafwState == Paused
+    && mafwState == Paused
+    && !pausedByCall
     && (headsetResumeTime == -1 || headsetPauseStamp + headsetResumeTime*1000 > QDateTime::currentMSecsSinceEpoch()))
         mafwrenderer->resume();
 
@@ -1075,10 +1081,13 @@ void MainWindow::onHeadsetConnected()
 
 void MainWindow::onHeadsetDisconnected()
 {
-    if (QSettings().value("main/pauseHeadset", true).toBool()
-    && this->mafwState == Playing) {
-        mafwrenderer->pause();
-        headsetPauseStamp = QDateTime::currentMSecsSinceEpoch();
+    if (QSettings().value("main/pauseHeadset", true).toBool()) {
+        if (mafwState == Playing) {
+            mafwrenderer->pause();
+            headsetPauseStamp = QDateTime::currentMSecsSinceEpoch();
+        } else if (pausedByCall) {
+            headsetPauseStamp = QDateTime::currentMSecsSinceEpoch();
+        }
     }
 }
 
@@ -1141,18 +1150,20 @@ void MainWindow::onCallStateChanged(QDBusMessage msg)
 
     if (state == "ringing") {
         wasRinging = true;
-        wasPlaying = mafwState == Playing;
-        if (wasPlaying) mafwrenderer->pause();
+        pausedByCall = mafwState == Playing;
+        if (pausedByCall) mafwrenderer->pause();
     }
 
     else if (!wasRinging && state == "active") {
-        wasPlaying = mafwState == Playing;
-        if (wasPlaying) mafwrenderer->pause();
+        pausedByCall = mafwState == Playing;
+        if (pausedByCall) mafwrenderer->pause();
     }
 
     else if (state == "none") {
+        if (pausedByCall && headsetPauseStamp == -1)
+            mafwrenderer->resume();
+        pausedByCall = false;
         wasRinging = false;
-        if (wasPlaying) mafwrenderer->resume();
     }
 }
 

@@ -83,7 +83,7 @@ private:
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
     bool updatingShow;
-    bool wasPlaying;
+    bool pausedByCall;
     bool wasRinging;
     bool wiredHeadsetIsConnected;
     qint64 headsetPauseStamp;
