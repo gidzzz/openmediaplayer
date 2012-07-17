@@ -28,7 +28,11 @@ public:
     explicit QmlView(QUrl source, QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~QmlView();
     void setMetadata(QString songName, QString albumName, QString artistName, QString albumArtUri, int duration);
-    void addItemToPlaylist(QListWidgetItem *item, int index);
+    void appendPlaylistItem(QListWidgetItem *item);
+    void insertPlaylistItem(int index, QListWidgetItem *item);
+    void setPlaylistItem(int index, QListWidgetItem *item);
+    void removePlaylistItem(int index);
+    void clearPlaylist();
     void setCurrentRow(int);
 
 signals:
@@ -40,8 +44,13 @@ signals:
     void durationChanged(QVariant);
     void durationTextChanged(QVariant);
     void stateIconChanged(QVariant);
-    void addToPlaylist(QVariant, QVariant, QVariant, QVariant);
     void rowChanged(QVariant);
+
+    void playlistItemAppended(QVariant, QVariant, QVariant);
+    void playlistItemInserted(QVariant, QVariant, QVariant, QVariant);
+    void playlistItemSet(QVariant, QVariant, QVariant, QVariant);
+    void playlistItemRemoved(QVariant);
+    void playlistCleared();
 
 private:
     Ui::QmlView *ui;

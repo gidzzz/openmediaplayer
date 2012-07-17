@@ -45,6 +45,7 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
     connect(rootObject, SIGNAL(nextButtonClicked()), mafwrenderer, SLOT(next()));
     connect(rootObject, SIGNAL(sliderValueChanged(int)), this, SLOT(onSliderValueChanged(int)));
     connect(rootObject, SIGNAL(playlistItemSelected(int)), this, SLOT(onPlaylistItemChanged(int)));
+
     connect(this, SIGNAL(titleChanged(QVariant)), rootObject, SLOT(setSongTitle(QVariant)));
     connect(this, SIGNAL(albumChanged(QVariant)), rootObject, SLOT(setSongAlbum(QVariant)));
     connect(this, SIGNAL(artistChanged(QVariant)), rootObject, SLOT(setSongArtist(QVariant)));
@@ -53,9 +54,19 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
     connect(this, SIGNAL(positionChanged(QVariant)), rootObject, SLOT(setSliderValue(QVariant)));
     connect(this, SIGNAL(durationChanged(QVariant)), rootObject, SLOT(setSliderMaximum(QVariant)));
     connect(this, SIGNAL(stateIconChanged(QVariant)), rootObject, SLOT(setPlayButtonIcon(QVariant)));
-    connect(this, SIGNAL(addToPlaylist(QVariant,QVariant,QVariant,QVariant)),
-            rootObject, SLOT(addPlaylistItem(QVariant,QVariant,QVariant,QVariant)));
     connect(this, SIGNAL(rowChanged(QVariant)), rootObject, SLOT(onRowChanged(QVariant)));
+
+    connect(this, SIGNAL(playlistItemAppended(QVariant,QVariant,QVariant)),
+            rootObject, SLOT(appendPlaylistItem(QVariant,QVariant,QVariant)));
+    connect(this, SIGNAL(playlistItemInserted(QVariant,QVariant,QVariant,QVariant)),
+            rootObject, SLOT(insertPlaylistItem(QVariant,QVariant,QVariant,QVariant)));
+    connect(this, SIGNAL(playlistItemSet(QVariant,QVariant,QVariant,QVariant)),
+            rootObject, SLOT(setPlaylistItem(QVariant,QVariant,QVariant,QVariant)));
+    connect(this, SIGNAL(playlistItemRemoved(QVariant)),
+            rootObject, SLOT(removePlaylistItem(QVariant)));
+    connect(this, SIGNAL(playlistCleared()),
+            rootObject, SLOT(clearPlaylist()));
+
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
@@ -178,13 +189,37 @@ void QmlView::onSliderValueChanged(int position)
     mafwrenderer->setPosition(SeekAbsolute, position);
 }
 
-void QmlView::addItemToPlaylist(QListWidgetItem *item, int index)
+void QmlView::appendPlaylistItem(QListWidgetItem *item)
 {
-    int duration = item->data(UserRoleSongDuration).toInt();
-    emit addToPlaylist(item->data(UserRoleSongTitle).toString(),
-                       QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
-                       time_mmss(duration),
-                       index);
+    emit playlistItemAppended(item->data(UserRoleSongTitle).toString(),
+                              QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
+                              time_mmss(item->data(UserRoleSongDuration).toInt()));
+}
+
+void QmlView::insertPlaylistItem(int index, QListWidgetItem *item)
+{
+    emit playlistItemInserted(index,
+                              item->data(UserRoleSongTitle).toString(),
+                              QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
+                              time_mmss(item->data(UserRoleSongDuration).toInt()));
+}
+
+void QmlView::setPlaylistItem(int index, QListWidgetItem *item)
+{
+    emit playlistItemSet(index,
+                              item->data(UserRoleSongTitle).toString(),
+                              QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
+                              time_mmss(item->data(UserRoleSongDuration).toInt()));
+}
+
+void QmlView::removePlaylistItem(int index)
+{
+    emit playlistItemRemoved(index);
+}
+
+void QmlView::clearPlaylist()
+{
+    emit playlistCleared();
 }
 
 void QmlView::onPlaylistItemChanged(int index)

@@ -1173,8 +1173,8 @@ void NowPlayingWindow::togglePlayback()
 void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index)
 {
     QListWidgetItem *item =  ui->songPlaylist->item(index);
-    if (!item) // in case of query manager's outdated request
-        return;
+
+    if (!item) return; // in case of query manager's outdated request
 
     if (metadata != NULL) {
         QString title;
@@ -1211,6 +1211,8 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         item->setData(UserRoleSongTitle, tr("Information not available"));
         item->setData(UserRoleSongDuration, Duration::Blank);
     }
+
+    if (qmlView) qmlView->setPlaylistItem(index, item);
 }
 
 void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
@@ -1432,9 +1434,9 @@ void NowPlayingWindow::createQmlView(QUrl source, QString title)
         qmlView = new QmlView(source, this, mafwFactory);
         qmlView->setWindowTitle(title);
         for (int i = 0; i < ui->songPlaylist->count(); i++)
-            qmlView->addItemToPlaylist(ui->songPlaylist->item(i), i);
+            qmlView->appendPlaylistItem(ui->songPlaylist->item(i));
         connect(qmlView, SIGNAL(destroyed()), this, SLOT(nullQmlView()));
-        this->updateQmlViewMetadata();
+        updateQmlViewMetadata();
     }
     qmlView->showFullScreen();
 }
@@ -1528,6 +1530,8 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         playlistTime = 0;
         ui->songPlaylist->clear();
         nreplace = playlist->getSize();
+
+        if (qmlView) qmlView->clearPlaylist();
     }
 
     if (nremove > 0) {
@@ -1536,7 +1540,9 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
             if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
                 playlistTime -= item->data(UserRoleSongDuration).toInt();
             delete item;
-            }
+
+            if (qmlView) qmlView->removePlaylistItem(from);
+        }
         this->updatePlaylistTimeLabel();
         playlistQM->itemsRemoved(from, nremove);
     }
@@ -1546,6 +1552,8 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
             item->setData(UserRoleValueText, " ");
             item->setData(UserRoleSongDuration, Duration::Blank);
             ui->songPlaylist->insertItem(from, item);
+
+            if (qmlView) qmlView->insertPlaylistItem(from, item);
         }
 
         if (!synthetic) playlistQM->itemsInserted(from, nreplace);

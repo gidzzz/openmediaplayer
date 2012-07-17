@@ -323,9 +323,6 @@ void MainWindow::open_mp_car_view()
     closeChildren();
 
     createNowPlayingWindow()->showCarView();
-
-    // NowPlayingWindow doesn't update the playlist in QML views, so opening
-    // Car View so soon will result in missing items
 }
 
 #ifdef MAFW

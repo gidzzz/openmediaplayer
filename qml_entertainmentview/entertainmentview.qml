@@ -498,13 +498,30 @@ Rectangle {
         playButton.source = text
     }
 
-    function addPlaylistItem(song, valueText, duration, index) {
-        playlistModel.append ({
-                              "name": song,
-                              "duration": duration,
-                              "albumArtist": valueText,
-                              "index": index
-                          })
+    function appendPlaylistItem(song, valueText, duration) {
+        playlistModel.append ({ "name": song,
+                                "duration": duration,
+                                "albumArtist": valueText })
+    }
+
+    function insertPlaylistItem(index, song, valueText, duration) {
+        playlistModel.insert (index, { "name": song,
+                                       "duration": duration,
+                                       "albumArtist": valueText })
+    }
+
+    function setPlaylistItem(index, song, valueText, duration) {
+        playlistModel.set (index, { "name": song,
+                                    "duration": duration,
+                                    "albumArtist": valueText })
+    }
+
+    function removePlaylistItem(index) {
+        playlistModel.remove (index)
+    }
+
+    function clearPlaylist() {
+        playlistModel.clear()
     }
 
     function onRowChanged(row) {

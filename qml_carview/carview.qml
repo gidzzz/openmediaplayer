@@ -180,19 +180,37 @@ Rectangle {
     if (text) playButton.source = text
   }
 
+  function appendPlaylistItem(song, valueText, duration) {
+      //console.log(song, valueText, duration, index)
+      playlist.model.append ({ label: song + "<br>" +
+                                      "<font color='#9c9a9c' size=1>" + valueText + "</font>"/*,
+                               "name": song,
+                               "duration": duration,
+                               "albumArtist": valueText*/ })
+  }
 
-  function addPlaylistItem(song, valueText, duration, index) {
-    //console.log(song, valueText, duration, index)
-    playlist.model.append (
-          {
-            label: song + "<br>" +
-                   "<font color='#9c9a9c' size=1>" +
-                   valueText + "</font>",
-            "name": song,
-            "duration": duration,
-            "albumArtist": valueText,
-            "index": index
-          })
+  function insertPlaylistItem(index, song, valueText, duration) {
+      playlist.model.insert (index, { label: song + "<br>" +
+                                             "<font color='#9c9a9c' size=1>" + valueText + "</font>"/*,
+                                      "name": song,
+                                      "duration": duration,
+                                      "albumArtist": valueText*/ })
+  }
+
+  function setPlaylistItem(index, song, valueText, duration) {
+      playlist.model.set (index, { label: song + "<br>" +
+                                          "<font color='#9c9a9c' size=1>" + valueText + "</font>"/*,
+                                   "name": song,
+                                   "duration": duration,
+                                   "albumArtist": valueText*/ })
+  }
+
+  function removePlaylistItem(index) {
+      playlist.model.remove (index)
+  }
+
+  function clearPlaylist() {
+      playlist.model.clear()
   }
 
   function onRowChanged(row) {
