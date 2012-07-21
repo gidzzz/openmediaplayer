@@ -16,29 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-#include "share.h"
+#include "sharedialog.h"
 
-Share::Share(QWidget *parent, QStringList selected) :
+ShareDialog::ShareDialog(QWidget *parent, QStringList files) :
     QDialog(parent),
-    ui(new Ui::Share)
+    ui(new Ui::ShareDialog)
 {
     ui->setupUi(this);
-    files = selected;
-
+    this->files = files;
 }
 
-Share::~Share()
+ShareDialog::~ShareDialog()
 {
     delete ui;
 }
 
-
-void Share::on_share_bt_released()
+void ShareDialog::on_share_bt_released()
 {
-    //qDebug() << "BluetoothTransfer::sendFile()" << file1;
-    //QString sendCmd = "/opt/filebox/bt \"" + file1 + "\"";
+    QString params;
 
-    QString params = "";
     for (int i = 0; i < files.count(); ++i)
     {
         if ( QFileInfo(files.at(i)).isFile() )
@@ -60,21 +56,14 @@ void Share::on_share_bt_released()
         QString sendCmd = "dbus-send --system --print-reply --dest='com.nokia.icd_ui' /com/nokia/bt_ui com.nokia.bt_ui.show_send_file_dlg array:string:" + params + " > /dev/null";
         system(sendCmd.toLatin1());
     }
-    this->close();
 
+    this->close();
 }
 
-void Share::on_share_mail_released()
+void ShareDialog::on_share_mail_released()
 {
-    /*QMessage msg;
-    QStringList fileList;
-    fileList.append(file1);
-    msg.appendAttachments(fileList);
-    QMessageService service;
-    service.send(msg);*/
-    //QString sendCmd = "/opt/filebox/email \"" + file1 + "\"";
+    QString params;
 
-    QString params = "";
     for (int i = 0; i < files.count(); ++i)
     {
         if ( QFileInfo(files.at(i)).isFile() )
@@ -96,6 +85,6 @@ void Share::on_share_mail_released()
         QString sendCmd = "dbus-send --type=method_call --dest=com.nokia.modest /com/nokia/modest com.nokia.modest.ComposeMail string:\"\" string:\"\" string:\"\" string:\"\" string:\"\" string:" + params;
         system(sendCmd.toLatin1());
     }
-    this->close();
 
+    this->close();
 }

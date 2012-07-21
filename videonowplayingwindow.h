@@ -22,7 +22,7 @@
     #include <X11/Xutil.h>
     #include <QMaemo5InformationBox>
     #include <QSpacerItem>
-    #include "share.h"
+    #include "sharedialog.h"
 #endif
 
 #ifdef MAFW

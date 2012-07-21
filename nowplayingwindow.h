@@ -29,7 +29,7 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
-    #include "share.h"
+    #include "sharedialog.h"
     #include "maemo5deviceevents.h"
 #endif
 

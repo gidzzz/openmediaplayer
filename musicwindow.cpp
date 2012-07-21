@@ -385,14 +385,11 @@ void MusicWindow::onShareUriReceived(QString objectId, QString uri)
     if (objectId != ui->songList->currentIndex().data(UserRoleObjectID).toString())
         return;
 
-    QStringList list;
-    QString clip;
-    clip = uri;
-
-    list.append(clip);
-    Share *share = new Share(this, list);
-    share->setAttribute(Qt::WA_DeleteOnClose);
-    share->show();
+    QStringList files;
+    files.append(uri);
+#ifdef Q_WS_MAEMO_5
+    ShareDialog(this, files).exec();
+#endif
 }
 #endif
 

@@ -12,7 +12,7 @@
 #endif
 
 #include "nowplayingwindow.h"
-#include "share.h"
+#include "sharedialog.h"
 #include "ui_musicwindow.h"
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/artistlistitemdelegate.h"

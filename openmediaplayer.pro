@@ -38,7 +38,7 @@ SOURCES += \
     nowplayingwindow.cpp \
     videoswindow.cpp \
     internetradiowindow.cpp \
-    share.cpp \
+    sharedialog.cpp \
     videonowplayingwindow.cpp \
     cqgraphicsview.cpp \
     nowplayingindicator.cpp \
@@ -76,7 +76,7 @@ HEADERS += \
     nowplayingwindow.h \
     videoswindow.h \
     internetradiowindow.h \
-    share.h \
+    sharedialog.h \
     videonowplayingwindow.h \
     mirror.h \
     cqgraphicsview.h \
@@ -117,7 +117,7 @@ FORMS += \
     nowplayingwindow.ui \
     videoswindow.ui \
     internetradiowindow.ui \
-    share.ui \
+    sharedialog.ui \
     fmtxdialog.ui \
     videonowplayingwindow.ui \
     nowplayingindicator.ui \
