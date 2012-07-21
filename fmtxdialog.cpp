@@ -37,8 +37,6 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
 #else
     freqButton = new QPushButton("Frequency", this);
 #endif
-    if (!QSettings().contains("FMTX/overrideChecks"))
-        QSettings().setValue("FMTX/overrideChecks", false);
     ui->gridLayout->addWidget(freqButton, 1, 0, 1, 1);
 
     Rotator *rotator = Rotator::acquire();
@@ -121,7 +119,7 @@ void FMTXDialog::orientationChanged(int w, int h)
 void FMTXDialog::onCheckboxClicked()
 {
 #ifdef Q_WS_MAEMO_5
-    if (!QSettings().value("FMTX/overrideChecks").toBool()) {
+    if (!QSettings().value("FMTX/overrideChecks", false).toBool()) {
         QString startable = selector->getValue("startable").toString();
         if (startable != "true")
             ui->fmtxCheckbox->setChecked(false);
