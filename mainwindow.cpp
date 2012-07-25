@@ -413,14 +413,13 @@ void MainWindow::mime_open(const QString &uriString)
 
             songAddBufferSize = 0;
 
-            qDebug() << "connecting MainWindow to signalSourceBrowseResult";
             connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                    this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)));
+                    this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
             // for some reason, if metadata fetching is disabled here, IDs for filesystem instead of localtagfs are returned
-            this->browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                                  MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
-                                                                  0, MAFW_SOURCE_BROWSE_ALL);
+            browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
+                                                            MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
+                                                            0, MAFW_SOURCE_BROWSE_ALL);
         }
 
         // Audio, a whole directory has to be added
@@ -857,16 +856,14 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
 
     if (remainingCount == 0) {
-        qDebug() << "disconnecting MainWindow from signalSourceBrowseResult";
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                   this, SLOT(browseSongs(uint, int, uint, QString, GHashTable*, QString)));
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)));
 
         playlist->appendItems((const gchar**)songAddBuffer);
 
         for (int i = 0; i < songAddBufferSize; i++)
             delete[] songAddBuffer[i];
         delete[] songAddBuffer;
-        this->browseSongsId = 0;
 
         QString mime = QString::fromUtf8(g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));
         qDebug() << "Last item MIME:" << mime;
@@ -903,13 +900,12 @@ void MainWindow::onShuffleAllClicked()
 
     songAddBufferSize = 0;
 
-    qDebug() << "connecting MainWindow to signalSourceBrowseResult";
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseSongs(uint, int, uint, QString, GHashTable*, QString)));
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+            this, SLOT(browseSongs(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
-    this->browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
-                                                          MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
-                                                          0, MAFW_SOURCE_BROWSE_ALL);
+    browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
+                                                    MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
+                                                    0, MAFW_SOURCE_BROWSE_ALL);
 #endif
 }
 

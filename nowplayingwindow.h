@@ -94,7 +94,6 @@ private:
     GConfItem *lastPlayingSong;
     bool event(QEvent *event);
     void showEvent(QShowEvent *);
-    gpointer browseId;
 #endif
     void setButtonIcons();
     void setSongNumber(int currentSong, int numberOfSongs);

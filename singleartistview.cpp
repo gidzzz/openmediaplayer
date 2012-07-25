@@ -17,7 +17,6 @@
 **************************************************************************/
 
 #include "singleartistview.h"
-#include "ui_singleartistview.h"
 
 SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory) :
     QMainWindow(parent),
@@ -50,8 +49,6 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllAlbums(uint, int, uint, QString, GHashTable*, QString)));
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
 #endif
 
@@ -97,11 +94,14 @@ void SingleArtistView::listAlbums()
     shuffleButton->setData(UserRoleTitle, tr("Shuffle songs"));
     shuffleButton->setData(Qt::UserRole, "shuffle");
 
-    this->browseAllAlbumsId = mafwTrackerSource->sourceBrowse(this->artistObjectId.toUtf8(), false, NULL, NULL,
-                                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
-                                                                               MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                               MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
-                                                              0, MAFW_SOURCE_BROWSE_ALL);
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+            this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+
+    browseAllAlbumsId = mafwTrackerSource->sourceBrowse(artistObjectId.toUtf8(), false, NULL, NULL,
+                                                        MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
+                                                                         MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                                         MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
+                                                        0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
@@ -149,8 +149,10 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         qDebug() << error;
 
     if (remainingCount == 0) {
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)));
         if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
+            onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -272,12 +274,11 @@ void SingleArtistView::addAllToNowPlaying()
 
         songAddBufferSize = 0;
 
-        qDebug() << "connecting SingleArtistView to signalSourceBrowseResult";
-        connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                this, SLOT(onBrowseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+        connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                this, SLOT(onBrowseAllSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-        this->browseAllAlbumsId = mafwTrackerSource->sourceBrowse(this->artistObjectId.toUtf8(), true, NULL, NULL, 0,
-                                                                  0, MAFW_SOURCE_BROWSE_ALL);
+        browseAllAlbumsId = mafwTrackerSource->sourceBrowse(artistObjectId.toUtf8(), true, NULL, NULL, 0,
+                                                            0, MAFW_SOURCE_BROWSE_ALL);
 #endif
     }
 }
@@ -285,8 +286,7 @@ void SingleArtistView::addAllToNowPlaying()
 #ifdef MAFW
 void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString)
 {
-    if (this->browseAllAlbumsId != browseId)
-        return;
+    if (this->browseAllAlbumsId != browseId) return;
 
     if (songAddBufferSize == 0) {
         songAddBufferSize = remainingCount+1;
@@ -294,20 +294,17 @@ void SingleArtistView::onBrowseAllSongs(uint browseId, int remainingCount, uint 
         songAddBuffer[songAddBufferSize] = NULL;
     }
 
-    qDebug() << "SingleArtistView::onBrowseAllSongs | index: " << index;
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
 
     if (remainingCount == 0) {
-        playlist->appendItems((const gchar**)songAddBuffer);
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(onBrowseAllSongs(uint,int,uint,QString,GHashTable*,QString)));
 
-        qDebug() << "disconnecting SingleArtistView from signalSourceBrowseResult";
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                   this, SLOT(onBrowseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
+        playlist->appendItems((const gchar**)songAddBuffer);
 
         for (int i = 0; i < songAddBufferSize; i++)
             delete[] songAddBuffer[i];
         delete[] songAddBuffer;
-        this->browseAllAlbumsId = 0;
 
         if (shuffleRequested) {
             mafwrenderer->play();
@@ -408,20 +405,18 @@ void SingleArtistView::onAddAlbumToNowPlaying()
     QString objectIdToBrowse = ui->albumList->currentItem()->data(UserRoleObjectID).toString();
     songAddBufferSize = 0;
 
-    qDebug() << "connecting SingleArtistView to signalSourceBrowseResult";
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onAddAlbumBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+            this, SLOT(onAddAlbumBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    this->addToNowPlayingId = mafwTrackerSource->sourceBrowse(objectIdToBrowse.toUtf8(), true, NULL, NULL, 0,
-                                                              0, MAFW_SOURCE_BROWSE_ALL);
+    addToNowPlayingId = mafwTrackerSource->sourceBrowse(objectIdToBrowse.toUtf8(), true, NULL, NULL, 0,
+                                                        0, MAFW_SOURCE_BROWSE_ALL);
 #endif
 }
 
 #ifdef MAFW
 void SingleArtistView::onAddAlbumBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString)
 {
-    if (this->addToNowPlayingId != browseId)
-        return;
+    if (browseId != this->addToNowPlayingId) return;
 
     if (songAddBufferSize == 0) {
         songAddBufferSize = remainingCount+1;
@@ -429,23 +424,21 @@ void SingleArtistView::onAddAlbumBrowseResult(uint browseId, int remainingCount,
         songAddBuffer[songAddBufferSize] = NULL;
     }
 
-    qDebug() << "SingleArtistView::onAddAlbumBrowseResult | index: " << index;
     songAddBuffer[index] = qstrdup(objectId.toUtf8());
 
     if (remainingCount == 0) {
-        playlist->appendItems((const gchar**)songAddBuffer);
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(onAddAlbumBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 
-        qDebug() << "disconnecting SingleArtistView from signalSourceBrowseResult";
-        connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                this, SLOT(onAddAlbumBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+        playlist->appendItems((const gchar**)songAddBuffer);
 
         for (int i = 0; i < songAddBufferSize; i++)
             delete[] songAddBuffer[i];
         delete[] songAddBuffer;
-        this->addToNowPlayingId = 0;
+
 #ifdef Q_WS_MAEMO_5
-       this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-       this->notifyOnAddedToNowPlaying(songAddBufferSize);
+        this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+        this->notifyOnAddedToNowPlaying(songAddBufferSize);
 #endif
         songAddBufferSize = 0;
    }

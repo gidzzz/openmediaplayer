@@ -84,7 +84,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
     playlistTime = 0;
     clickedItem = NULL;
-    browseId = NULL;
     albumArtSceneLarge = new QGraphicsScene(ui->view_large);
     albumArtSceneSmall = new QGraphicsScene(ui->view_small);
     qmlView = 0;

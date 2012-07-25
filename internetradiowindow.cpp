@@ -204,7 +204,8 @@ void InternetRadioWindow::listStations()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    qDebug() << "connecting InternetRadioWindow to signalSourceBrowseResult";
+    ui->listWidget->clear();
+
     connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
@@ -249,7 +250,6 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
     }
 
     if (remainingCount == 0) {
-        qDebug() << "disconnecting InternetRadioWindow from signalSourceBrowseResult";
         disconnect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)));
 

@@ -36,7 +36,6 @@ private:
     void keyReleaseEvent(QKeyEvent *e);
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
-    QActionGroup *sortByActionGroup;
     QAction *sortByDate;
     QAction *sortByCategory;
     void connectSignals();

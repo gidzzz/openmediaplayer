@@ -50,14 +50,14 @@ void UpnpView::browseObjectId(QString objectId)
 
     ui->objectList->clear();
 
-    connect(mafwSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(onBrowseResult(uint, int, uint, QString, GHashTable*, QString)));
+    connect(mafwSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    this->browseId = mafwSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                               MAFW_METADATA_KEY_DURATION,
-                                                               MAFW_METADATA_KEY_MIME),
-                                              0, MAFW_SOURCE_BROWSE_ALL);
+    browseId = mafwSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
+                                        MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                         MAFW_METADATA_KEY_DURATION,
+                                                         MAFW_METADATA_KEY_MIME),
+                                        0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void UpnpView::keyPressEvent(QKeyEvent *e)
@@ -121,8 +121,7 @@ void UpnpView::onSearchTextChanged(QString text)
 
 void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if (browseId != this->browseId)
-        return;
+    if (browseId != this->browseId) return;
 
     if (metadata != NULL) {
         QString title;
@@ -155,8 +154,6 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
             item->setIcon(QIcon::fromTheme("general_audio_file"));
         else if (mime.startsWith("video"))
             item->setIcon(QIcon::fromTheme("general_video_file"));
-        /*else if (mime.startsWith("image"))
-            item->setIcon(QIcon::fromTheme("general_image"));*/
         else
             item->setIcon(QIcon::fromTheme("filemanager_unknown_file"));
 
@@ -164,10 +161,10 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
     }
 
     if (remainingCount == 0) {
-        disconnect(mafwSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                   this, SLOT(onBrowseResult(uint, int, uint, QString, GHashTable*, QString)));
+        disconnect(mafwSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
         if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
+            onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif

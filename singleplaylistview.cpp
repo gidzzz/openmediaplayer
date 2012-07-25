@@ -35,7 +35,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 
 #ifdef MAFW
     ui->indicator->setFactory(factory);
-    browsePlaylistId = NULL;
+    browsePlaylistId = MAFW_SOURCE_INVALID_BROWSE_ID;
     browsePlaylistOp = NULL;
 #endif
 
@@ -171,7 +171,7 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
                    this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
         browsePlaylistOp = NULL;
         if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
+            onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -186,18 +186,18 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
     setupShuffleButton();
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
-    this->browsePlaylistId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                             MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                                               MAFW_METADATA_KEY_DURATION,
-                                                                               MAFW_METADATA_KEY_ARTIST,
-                                                                               MAFW_METADATA_KEY_ALBUM),
-                                                             0, MAFW_SOURCE_BROWSE_ALL);
+            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+    browsePlaylistId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
+                                                       MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
+                                                                         MAFW_METADATA_KEY_DURATION,
+                                                                         MAFW_METADATA_KEY_ARTIST,
+                                                                         MAFW_METADATA_KEY_ALBUM),
+                                                       0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting, int maxCount)
 {
-    this->objectId = "";
+    this->objectId = QString();
     ui->songList->clear();
     visibleSongs = 0;
     setupShuffleButton();
@@ -205,19 +205,18 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
     ui->menuOptions->removeAction(ui->actionDelete_playlist);
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
-    this->browsePlaylistId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
-                                                             MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                                               MAFW_METADATA_KEY_DURATION,
-                                                                               MAFW_METADATA_KEY_ARTIST,
-                                                                               MAFW_METADATA_KEY_ALBUM),
-                                                             0, maxCount);
+            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+    browsePlaylistId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
+                                                       MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
+                                                                         MAFW_METADATA_KEY_DURATION,
+                                                                         MAFW_METADATA_KEY_ARTIST,
+                                                                         MAFW_METADATA_KEY_ALBUM),
+                                                       0, maxCount);
 }
 
 void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString)
 {
-    if (browseId != this->browsePlaylistId)
-        return;
+    if (browseId != this->browsePlaylistId) return;
 
     QListWidgetItem *item = new QListWidgetItem();
 
@@ -256,9 +255,11 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
     ui->songList->addItem(item);
 
     if (remainingCount == 0) {
-        browsePlaylistId = NULL;
+        connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+        browsePlaylistId = MAFW_SOURCE_INVALID_BROWSE_ID;
         if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
+            onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -712,7 +713,7 @@ void SinglePlaylistView::onNowPlayingWindowHidden()
 #ifdef MAFW
 void SinglePlaylistView::closeEvent(QCloseEvent *e)
 {
-    if (browsePlaylistId) {
+    if (browsePlaylistId != MAFW_SOURCE_INVALID_BROWSE_ID) {
         QString error;
         mafwTrackerSource->cancelBrowse(browsePlaylistId, error);
         if (!error.isEmpty())

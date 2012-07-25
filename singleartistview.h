@@ -8,6 +8,7 @@
     #include "mafw/mafwadapterfactory.h"
 #endif
 
+#include "ui_singleartistview.h"
 #include "singlealbumview.h"
 #include "delegates/thumbnailitemdelegate.h"
 #include "includes.h"

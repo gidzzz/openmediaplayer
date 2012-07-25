@@ -45,14 +45,15 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->listWidget->installEventFilter(this);
     ui->listWidget->viewport()->installEventFilter(this);
 
-    sortByActionGroup = new QActionGroup(this);
+    QActionGroup *sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
     sortByDate = new QAction(tr("Date"), sortByActionGroup);
     sortByDate->setCheckable(true);
     sortByCategory = new QAction(tr("Category"), sortByActionGroup);
     sortByCategory->setCheckable(true);
     this->menuBar()->addActions(sortByActionGroup->actions());
-    this->connectSignals();
+
+    connectSignals();
 
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
@@ -284,16 +285,17 @@ void VideosWindow::listVideos()
 #ifdef DEBUG
     qDebug("Source ready");
 #endif
+
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
-    this->browseId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : NULL,
-                                                      MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                       MAFW_METADATA_KEY_DURATION,
-                                                                       MAFW_METADATA_KEY_THUMBNAIL_URI,
-                                                                       MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
-                                                                       MAFW_METADATA_KEY_VIDEO_SOURCE),
-                                                      0, MAFW_SOURCE_BROWSE_ALL);
+    browseId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : NULL,
+                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                MAFW_METADATA_KEY_DURATION,
+                                                                MAFW_METADATA_KEY_THUMBNAIL_URI,
+                                                                MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
+                                                                MAFW_METADATA_KEY_VIDEO_SOURCE),
+                                               0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
@@ -369,8 +371,8 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
     }
 
     if (remainingCount == 0) {
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-                   this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)));
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(browseAllVideos(uint,int,uint,QString,GHashTable*,QString)));
 
         if (sortByCategory->isChecked()) {
             QListWidgetItem *item;

@@ -56,8 +56,6 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentAlbum()));
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllSongs(uint, int, uint, QString, GHashTable*, QString)));
 #endif
 
     ui->songList->viewport()->installEventFilter(this);
@@ -111,12 +109,15 @@ void SingleAlbumView::listSongs()
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
 #endif
 
-    this->browseAllSongsId = mafwTrackerSource->sourceBrowse(this->albumObjectId.toUtf8(), true, NULL, "+track,+title",
-                                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                              MAFW_METADATA_KEY_ALBUM,
-                                                                              MAFW_METADATA_KEY_ARTIST,
-                                                                              MAFW_METADATA_KEY_DURATION),
-                                                             0, MAFW_SOURCE_BROWSE_ALL);
+    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+            this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+
+    browseAllSongsId = mafwTrackerSource->sourceBrowse(albumObjectId.toUtf8(), true, NULL, "+track,+title",
+                                                       MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                        MAFW_METADATA_KEY_ALBUM,
+                                                                        MAFW_METADATA_KEY_ARTIST,
+                                                                        MAFW_METADATA_KEY_DURATION),
+                                                       0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
@@ -155,8 +156,10 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     }
 
     if (remainingCount == 0) {
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)));
         if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
+            onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif

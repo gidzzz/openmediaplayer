@@ -83,13 +83,10 @@ private:
     unsigned int browseAllArtistsId;
     unsigned int browseAllAlbumsId;
     unsigned int browseAllGenresId;
-    unsigned int browseAllPlaylistsId;
-    // Automatic playlists
     unsigned int browseRecentlyAddedId;
     unsigned int browseRecentlyPlayedId;
     unsigned int browseMostPlayedId;
     unsigned int browseNeverPlayedId;
-    // Imported playlists
     unsigned int browseImportedPlaylistsId;
     void fetchUri(QString objectId);
     uint addToNowPlayingId;

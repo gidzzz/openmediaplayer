@@ -46,7 +46,6 @@ private:
     MafwPlaylistAdapter* playlist;
     uint browseGenreId;
     uint addToNowPlayingId;
-    QString objectIdToBrowse;
     QString currentObjectId;
     gchar** songAddBuffer;
     int songAddBufferSize;
@@ -68,7 +67,7 @@ private slots:
     void addAllToNowPlaying();
     void onShuffleButtonClicked();
     void onContextMenuRequested(QPoint point);
-    void addItemToNowPlaying();
+    void addArtistToNowPlaying();
     void onNowPlayingWindowHidden();
     void onChildClosed();
 #ifdef MAFW
