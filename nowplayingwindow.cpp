@@ -821,20 +821,24 @@ void NowPlayingWindow::onLyricsDownloaded(QNetworkReply *reply)
     QString lyricsFile = reply->url().toString();
     lyricsFile.remove("http://lyrics.mirkforce.net/").replace("/", "-");
 
-    if ( lyricsFile != ui->lyricsText->whatsThis() )
-        return;
+    if (lyricsFile != ui->lyricsText->whatsThis()) return;
 
     if (reply->error() != QNetworkReply::NoError) {
         ui->lyricsText->setText(tr("Lyrics not found"));
     } else {
         QString lyrics = QString::fromUtf8(reply->readAll());
-        ui->lyricsText->setText(lyrics);
 
-        QFile file("/home/user/.lyrics/" + lyricsFile);
-        file.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite );
-        QTextStream out(&file);
-        out << lyrics;
-        file.close();
+        if (lyrics.contains("_mysql_exceptions")) {
+            ui->lyricsText->setText("Server error");
+        } else {
+            ui->lyricsText->setText(lyrics);
+
+            QFile file("/home/user/.lyrics/" + lyricsFile);
+            file.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite );
+            QTextStream out(&file);
+            out << lyrics;
+            file.close();
+        }
     }
 }
 
