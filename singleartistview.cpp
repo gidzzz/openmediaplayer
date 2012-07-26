@@ -89,6 +89,8 @@ void SingleArtistView::listAlbums()
 #endif
 
     ui->albumList->clear();
+    visibleSongs = 0;
+
     QListWidgetItem *shuffleButton = new QListWidgetItem(ui->albumList);
     shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     shuffleButton->setData(UserRoleTitle, tr("Shuffle songs"));
@@ -110,8 +112,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
 
     if (metadata != NULL) {
         QString albumTitle;
-        QString songCount;
-        int childcount = -1;
+        int childcount;
         QString albumArt;
         GValue *v;
 
@@ -121,10 +122,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
-        childcount = v ? g_value_get_int(v) : -1;
-
-        if (childcount != -1)
-            songCount = tr("%n song(s)", "", childcount);
+        childcount = v ? g_value_get_int(v) : 0;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI);
         if (v != NULL) {
@@ -137,10 +135,12 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
             item->setIcon(QIcon::fromTheme(defaultAlbumIcon));
         }
 
-        item->setData(UserRoleValueText, songCount);
+        item->setData(UserRoleValueText, tr("%n song(s)", "", childcount));
         item->setData(UserRoleSongCount, childcount);
         item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleTitle, albumTitle);
+
+        visibleSongs += childcount; updateSongCount();
 
         ui->albumList->addItem(item);
     }
@@ -249,15 +249,9 @@ void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
     }
 }
 
-void SingleArtistView::setSongCount(int songCount)
+void SingleArtistView::updateSongCount()
 {
-#ifdef MAFW
-    this->numberOfSongs = songCount;
-#endif
-    if (songCount != -1) {
-        ui->albumList->item(0)->setData(UserRoleValueText, tr("%n song(s)", "", songCount));
-        ui->albumList->scroll(1, 1);
-    }
+    ui->albumList->item(0)->setData(UserRoleValueText, tr("%n song(s)", "", visibleSongs));
 }
 
 void SingleArtistView::addAllToNowPlaying()
@@ -367,8 +361,10 @@ void SingleArtistView::onDeleteClicked()
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(ui->albumList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
-        delete ui->albumList->currentItem();
+        QListWidgetItem *item = ui->albumList->currentItem();
+        mafwTrackerSource->destroyObject(item->data(UserRoleObjectID).toString().toUtf8());
+        visibleSongs -= item->data(UserRoleSongCount).toInt(); updateSongCount();
+        delete item;
     }
 #endif
     ui->albumList->clearSelection();

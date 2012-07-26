@@ -683,7 +683,6 @@ void MusicWindow::onArtistSelected(QModelIndex index)
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(index.data(UserRoleObjectID).toString());
         artistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
-        artistView->setSongCount(index.data(UserRoleSongCount).toInt());
 
         artistView->show();
         connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -703,7 +702,6 @@ void MusicWindow::onGenreSelected(QModelIndex index)
     connect(genreView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     ui->indicator->inhibit();
 
-    genreView->setSongCount(index.data(UserRoleSongCount).toInt());
     genreView->browseGenre(index.data(UserRoleObjectID).toString());
 }
 

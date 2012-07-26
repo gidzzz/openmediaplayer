@@ -30,7 +30,6 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 {
     ui->setupUi(this);
     ui->centralwidget->setLayout(ui->verticalLayout);
-    setupShuffleButton();
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -122,7 +121,6 @@ void SingleGenreView::onItemActivated(QListWidgetItem *item)
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
         artistView->browseAlbum(item->data(UserRoleObjectID).toString());
         artistView->setWindowTitle(item->text());
-        artistView->setSongCount(item->data(UserRoleSongCount).toInt());
 
         artistView->show();
         connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -136,18 +134,20 @@ void SingleGenreView::browseGenre(QString objectId)
 {
     currentObjectId = objectId;
     if (mafwTrackerSource->isReady())
-        this->listGenres();
+        listArtists();
     else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listGenres()));
+        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listArtists()));
 }
 
-void SingleGenreView::listGenres()
+void SingleGenreView::listArtists()
 {
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
     ui->artistList->clear();
+    visibleSongs = 0;
+    setupShuffleButton();
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -197,6 +197,8 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
         item->setData(UserRoleAlbumCount, albumCount);
         item->setData(UserRoleObjectID, objectId);
 
+        visibleSongs += songCount; updateSongCount();
+
         ui->artistList->addItem(item);
     }
 
@@ -215,10 +217,10 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
 }
 #endif
 
-void SingleGenreView::setSongCount(int count)
+void SingleGenreView::updateSongCount()
 {
 #ifdef Q_WS_MAEMO_5
-    shuffleButton->setValueText(tr("%n song(s)", "", count));
+    shuffleButton->setValueText(tr("%n song(s)", "", visibleSongs));
 #endif
 }
 
@@ -267,7 +269,7 @@ void SingleGenreView::onSearchHideButtonClicked()
 
 void SingleGenreView::onSearchTextChanged(QString text)
 {
-    int visibleSongs = 0;
+    visibleSongs = 0;
     for (int i = 1; i < ui->artistList->count(); i++) {
         if (ui->artistList->item(i)->text().contains(text, Qt::CaseInsensitive)) {
             ui->artistList->item(i)->setHidden(false);
@@ -276,7 +278,7 @@ void SingleGenreView::onSearchTextChanged(QString text)
             ui->artistList->item(i)->setHidden(true);
     }
 
-    setSongCount(visibleSongs);
+    updateSongCount();
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
@@ -367,7 +369,7 @@ void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount
 void SingleGenreView::onContainerChanged(QString objectId)
 {
     if (objectId == "localtagfs::music")
-        this->listGenres();
+        listArtists();
 }
 #endif
 

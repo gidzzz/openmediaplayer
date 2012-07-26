@@ -31,7 +31,6 @@ public:
     ~SingleGenreView();
     bool eventFilter(QObject *, QEvent *e);
     void browseGenre(QString objectId);
-    void setSongCount(int count);
 
 protected:
     void keyPressEvent(QKeyEvent *e);
@@ -49,6 +48,7 @@ private:
     QString currentObjectId;
     gchar** songAddBuffer;
     int songAddBufferSize;
+    int visibleSongs;
     bool isShuffling;
 #endif
 #ifdef Q_WS_MAEMO_5
@@ -58,6 +58,7 @@ private:
     QPushButton *shuffleButton;
 #endif
     void setupShuffleButton();
+    void updateSongCount();
 
 private slots:
     void orientationChanged(int w, int h);
@@ -71,7 +72,7 @@ private slots:
     void onNowPlayingWindowHidden();
     void onChildClosed();
 #ifdef MAFW
-    void listGenres();
+    void listArtists();
     void browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
     void onNowPlayingBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable*,QString);
     void onContainerChanged(QString objectId);

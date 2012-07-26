@@ -26,7 +26,6 @@ public:
     ~SingleArtistView();
     bool eventFilter(QObject *, QEvent *e);
     void browseAlbum(QString artistId);
-    void setSongCount(int songCount);
 
 private:
     Ui::SingleArtistView *ui;
@@ -40,15 +39,16 @@ private:
     uint browseAllAlbumsId;
     uint addToNowPlayingId;
     QString artistObjectId;
-    void listAlbums();
-    int numberOfSongs;
     gchar** songAddBuffer;
     int songAddBufferSize;
+    int visibleSongs;
     bool shuffleRequested;
+    void listAlbums();
 #endif
 #ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
 #endif
+    void updateSongCount();
 
 private slots:
 #ifdef MAFW
