@@ -829,7 +829,7 @@ void NowPlayingWindow::onLyricsDownloaded(QNetworkReply *reply)
         QString lyrics = QString::fromUtf8(reply->readAll());
 
         if (lyrics.contains("_mysql_exceptions")) {
-            ui->lyricsText->setText("Server error");
+            ui->lyricsText->setText(tr("Server error"));
         } else {
             ui->lyricsText->setText(lyrics);
 
