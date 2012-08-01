@@ -68,7 +68,9 @@ SOURCES += \
     rotator.cpp \
     playlistpicker.cpp \
     sleeperdialog.cpp \
-    bookmarkdialog.cpp
+    bookmarkdialog.cpp \
+    lyricsmanager.cpp \
+    lyricsprovidersdialog.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -109,7 +111,10 @@ HEADERS += \
     rotator.h \
     playlistpicker.h \
     sleeperdialog.h \
-    bookmarkdialog.h
+    bookmarkdialog.h \
+    lyrics/abstractlyricsprovider.h \
+    lyricsmanager.h \
+    lyricsprovidersdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -137,7 +142,8 @@ FORMS += \
     upnpcontrol.ui \
     playlistpicker.ui \
     sleeperdialog.ui \
-    bookmarkdialog.ui
+    bookmarkdialog.ui \
+    lyricsprovidersdialog.ui
 
 #generate translations
 isEmpty(QMAKE_LRELEASE) {

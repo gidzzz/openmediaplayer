@@ -20,9 +20,9 @@ class EditLyrics : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditLyrics(QWidget *parent = 0, QString lyricsFile = "",
-                        QString artist = "", QString title = "");
+    explicit EditLyrics(QString lyricsFile, QString artist, QString title, QWidget *parent = 0);
     ~EditLyrics();
+
     QString file;
     QString lyrics;
 

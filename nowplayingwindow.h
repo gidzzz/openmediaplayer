@@ -25,6 +25,7 @@
 #include "mediaart.h"
 #include "playlistquerymanager.h"
 #include "playlistpicker.h"
+#include "lyricsmanager.h"
 #include "rotator.h"
 
 #ifdef Q_WS_MAEMO_5
@@ -57,7 +58,6 @@ public:
     QString currentURI;
     QString currentMIME;
     QString defaultWindowTitle;
-    QNetworkAccessManager* data;
     bool eventFilter(QObject *object, QEvent *event);
 
 signals:
@@ -65,7 +65,7 @@ signals:
     void itemDropped(QListWidgetItem *item, int from);
 
 public slots:
-    void reloadLyricsFromFile();
+    void reloadLyrics();
     void setAlbumImage(QString);
     void onShuffleButtonToggled(bool);
     void closeEvent(QCloseEvent *e);
@@ -90,6 +90,7 @@ private:
     MafwPlaylist *mafwPlaylist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
     PlaylistQueryManager *playlistQM;
+    LyricsManager *lyricsManager;
     int mafwState;
     GConfItem *lastPlayingSong;
     bool event(QEvent *event);
@@ -121,22 +122,16 @@ private:
     QString albumArtUri;
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
-    QMenu *contextMenu;
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;
 #endif
 
 private slots:
-    QString cleanItem(QString data = "");
-    void onPlayMenuRequested(QPoint pos);
-    void on_lyricsText_customContextMenuRequested(QPoint pos);
-    void onLyricsDownloaded(QNetworkReply *reply);
-    void onViewContextMenuRequested(QPoint pos);
     void selectAlbumArt();
     void resetAlbumArt();
     void refreshAlbumArt();
     void editLyrics();
-    void reloadLyrics();
+    void reloadLyricsOverridingCache();
     void toggleVolumeSlider();
     void showFMTXDialog();
     void toggleList();
@@ -180,7 +175,12 @@ private slots:
     void onPositionSliderMoved(int position);
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();
-    void onContextMenuRequested(const QPoint &point);
+
+    void onPlayMenuRequested(const QPoint &pos);
+    void onLyricsContextMenuRequested(const QPoint &pos);
+    void onViewContextMenuRequested(const QPoint &pos);
+    void onContextMenuRequested(const QPoint &pos);
+
     void onDeleteClicked();
     void onShareClicked();
     void createQmlView(QUrl source, QString title);

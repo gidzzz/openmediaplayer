@@ -3,8 +3,11 @@
 
 #include <QDialog>
 #include <QSettings>
+#include <QMaemo5ListPickSelector>
+#include <QStandardItemModel>
 
-#include "nowplayingwindow.h"
+#include "ui_settingsdialog.h"
+#include "lyricsprovidersdialog.h"
 #include "rotator.h"
 
 namespace Ui {
@@ -22,7 +25,11 @@ public:
 private:
     Ui::SettingsDialog *ui;
 
+    QString lyricsProviders;
+    void setLyricsProviders(QString lyricsProviders);
+
 private slots:
+    void configureLyricsProviders();
     void accept();
     void orientationChanged(int h, int w);
 };

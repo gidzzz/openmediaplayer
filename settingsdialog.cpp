@@ -17,7 +17,6 @@
 **************************************************************************/
 
 #include "settingsdialog.h"
-#include "ui_settingsdialog.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
@@ -118,6 +117,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->playlistSizeBox->setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]{0,3}"), this));
     ui->languageCodeBox->setText(QSettings().value("main/language").toString());
 
+    setLyricsProviders(QSettings().value("lyrics/providers").toString());
+    connect(ui->lyricsProvidersBox, SIGNAL(clicked()), this, SLOT(configureLyricsProviders()));
+
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
     orientationChanged(rotator->width(), rotator->height());
@@ -126,6 +128,25 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 SettingsDialog::~SettingsDialog()
 {
     delete ui;
+}
+
+void SettingsDialog::setLyricsProviders(QString lyricsProviders)
+{
+    this->lyricsProviders = lyricsProviders;
+
+    QString label = lyricsProviders.split(',', QString::SkipEmptyParts)
+                                   .filter("+")
+                                   .replaceInStrings("+", "")
+                                   .join(", ");
+
+    ui->lyricsProvidersBox->setValueText(label.isEmpty() ? tr("Only local cache") : label);
+}
+
+void SettingsDialog::configureLyricsProviders()
+{
+    LyricsProvidersDialog lpd(lyricsProviders, this);
+    lpd.exec();
+    setLyricsProviders(lpd.state());
 }
 
 void SettingsDialog::accept()
@@ -179,6 +200,7 @@ void SettingsDialog::accept()
     int playlistSize = ui->playlistSizeBox->text().toInt();
     QSettings().setValue("music/playlistSize", playlistSize ? playlistSize : 30);
     QSettings().setValue("main/language", ui->languageCodeBox->text());
+    QSettings().setValue("lyrics/providers", lyricsProviders);
 
     this->close();
 }

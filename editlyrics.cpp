@@ -1,6 +1,6 @@
 #include "editlyrics.h"
 
-EditLyrics::EditLyrics(QWidget *parent, QString lyricsFile, QString artist, QString title) :
+EditLyrics::EditLyrics(QString file, QString artist, QString title, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::EditLyrics)
 {
@@ -13,7 +13,7 @@ EditLyrics::EditLyrics(QWidget *parent, QString lyricsFile, QString artist, QStr
     new TextEditAutoResizer(ui->content);
 
     ui->label->setText(artist + " - " + title);
-    file = "/home/user/.lyrics/" + lyricsFile;
+    this->file = file;
 
     if ( QFileInfo(file).exists() )
     {
@@ -46,7 +46,7 @@ void EditLyrics::on_pushButton_pressed()
     out << ui->content->toPlainText();
     f.close();
 
-    qobject_cast<NowPlayingWindow*>(this->parentWidget())->reloadLyricsFromFile();
+    qobject_cast<NowPlayingWindow*>(this->parentWidget())->reloadLyrics();
 
     this->close();
 }

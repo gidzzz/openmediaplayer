@@ -157,6 +157,12 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
     orientationChanged(rotator->width(), rotator->height());
 
+    if (enableLyrics) {
+        lyricsManager = new LyricsManager(this);
+        connect(lyricsManager, SIGNAL(lyricsFetched(QString)), ui->lyricsText, SLOT(setText(QString)));
+        connect(lyricsManager, SIGNAL(lyricsError(QString)), ui->lyricsText, SLOT(setText(QString)));
+    }
+
 #ifdef MAFW
     playlistQM = new PlaylistQueryManager(this, playlist);
     connect(playlistQM, SIGNAL(onGetItems(QString, GHashTable*, guint)), this, SLOT(onGetPlaylistItems(QString, GHashTable*, guint)));
@@ -172,9 +178,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
         connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
         connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getVolume()));
     }
-
-    data = new QNetworkAccessManager(this);
-    connect(data, SIGNAL(finished(QNetworkReply*)), this, SLOT(onLyricsDownloaded(QNetworkReply*)));
 #endif
 }
 
@@ -413,6 +416,7 @@ void NowPlayingWindow::connectSignals()
 
     connect(ui->view_large, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
     connect(ui->view_small, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
+    connect(ui->lyricsText,SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onLyricsContextMenuRequested(QPoint)));
     connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
     connect(ui->repeatButton, SIGNAL(clicked(bool)), this, SLOT(onRepeatButtonToggled(bool)));
@@ -748,36 +752,8 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
                 setAlbumImage(albumImage);
         }
 
-        if (enableLyrics) {
-            QString cleanArtist = cleanItem(ui->artistLabel->whatsThis());
-            QString cleanTitle = cleanItem(ui->titleLabel->whatsThis());
-            QString lyricsFile = (cleanArtist.isEmpty() ? QString("_") : cleanArtist) + "-"
-                               + (cleanTitle.isEmpty() ? QString("_") : cleanTitle) + ".txt";
-
-            if (ui->lyricsText->whatsThis() != lyricsFile) {
-                /*v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_LYRICS);
-                QString lyrics = v ? QString::fromUtf8(g_value_get_string(v)) : "NOLYRICS";*/
-
-                ui->lyricsText->setText(tr("Loading lyrics..."));
-                ui->lyricsText->setWhatsThis(lyricsFile);
-                QApplication::processEvents();
-
-                QString lyricsPath = "/home/user/.lyrics/";
-                QDir d; d.mkdir(lyricsPath);
-
-                if (QFileInfo(lyricsPath + lyricsFile).exists())
-                    reloadLyricsFromFile();
-                else {
-                    QNetworkConfigurationManager mgr;
-                    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
-
-                    if (activeConfigs.count() > 0)
-                        reloadLyrics();
-                    else
-                        ui->lyricsText->setText(tr("There is no active Internet connection"));
-                }
-            }
-        }
+        if (enableLyrics)
+            reloadLyrics();
 
         updateQmlViewMetadata();
 
@@ -788,64 +764,22 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
 #endif
 
-void NowPlayingWindow::reloadLyricsFromFile()
-{
-    if ( !ui->lyricsText->whatsThis().isEmpty() )
-    {
-        QString lines;
-        QString file = "/home/user/.lyrics/" + ui->lyricsText->whatsThis();
-        QFile data(file);
-        if (data.open(QFile::ReadOnly))
-        {
-            QTextStream out(&data);
-            while ( !out.atEnd() )
-                lines += out.readLine()+"\n";
-        }
-        data.close();
-        QApplication::processEvents();
-        ui->lyricsText->setText(lines);
-    }
-}
-
 void NowPlayingWindow::reloadLyrics()
 {
-    if ( !ui->lyricsText->whatsThis().isEmpty() )
-    {
-        data->get( QNetworkRequest( QUrl( "http://lyrics.mirkforce.net/" + ui->lyricsText->whatsThis().replace("-", "/") ) ) );
-        ui->lyricsText->setText(tr("Fetching lyrics..."));
-    }
+    ui->lyricsText->setText("Fetching lyrics...");
+    lyricsManager->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis());
 }
 
-void NowPlayingWindow::onLyricsDownloaded(QNetworkReply *reply)
+void NowPlayingWindow::reloadLyricsOverridingCache()
 {
-    QString lyricsFile = reply->url().toString();
-    lyricsFile.remove("http://lyrics.mirkforce.net/").replace("/", "-");
-
-    if (lyricsFile != ui->lyricsText->whatsThis()) return;
-
-    if (reply->error() != QNetworkReply::NoError) {
-        ui->lyricsText->setText(tr("Lyrics not found"));
-    } else {
-        QString lyrics = QString::fromUtf8(reply->readAll());
-
-        if (lyrics.contains("_mysql_exceptions")) {
-            ui->lyricsText->setText(tr("Server error"));
-        } else {
-            ui->lyricsText->setText(lyrics);
-
-            QFile file("/home/user/.lyrics/" + lyricsFile);
-            file.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite );
-            QTextStream out(&file);
-            out << lyrics;
-            file.close();
-        }
-    }
+    ui->lyricsText->setText("Fetching lyrics...");
+    lyricsManager->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), false);
 }
 
 void NowPlayingWindow::editLyrics()
 {
-    EditLyrics* el = new EditLyrics(this, ui->lyricsText->whatsThis(),
-                                    ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis() );
+    EditLyrics* el = new EditLyrics(LyricsManager::cachePath(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis()),
+                                    ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), this);
     el->show();
 }
 
@@ -1030,12 +964,12 @@ void NowPlayingWindow::onPositionSliderMoved(int position)
 }
 
 #ifdef MAFW
-void NowPlayingWindow::onPlayMenuRequested(QPoint pos)
+void NowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Stop playback"), mafwrenderer, SLOT(stop()));
-    contextMenu->exec(pos);
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void NowPlayingWindow::onNextButtonClicked()
@@ -1302,19 +1236,19 @@ void NowPlayingWindow::onPlaylistChanged()
 }
 #endif
 
-void NowPlayingWindow::onContextMenuRequested(const QPoint &point)
+void NowPlayingWindow::onContextMenuRequested(const QPoint &pos)
 {
-    contextMenu = new QMenu(this);
+    QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
-    //contextMenu->addAction(tr("Edit tags"), this, SLOT(editTags()));
     contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
     if (!ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().startsWith("_uuid_")) {
         if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
         contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+        //contextMenu->addAction(tr("Edit tags"), this, SLOT(editTags()));
     }
-    contextMenu->exec(point);
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void NowPlayingWindow::onAddToPlaylist()
@@ -1567,9 +1501,10 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
     this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
 }
 
-void NowPlayingWindow::onViewContextMenuRequested(QPoint pos)
+void NowPlayingWindow::onViewContextMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Select album art"), this, SLOT(selectAlbumArt()));
     contextMenu->addAction(tr("Reset album art"), this, SLOT(resetAlbumArt()));
     contextMenu->exec(mapToGlobal(pos));
@@ -1620,21 +1555,13 @@ void NowPlayingWindow::refreshAlbumArt()
         this->setAlbumImage(image);
 }
 
-void NowPlayingWindow::on_lyricsText_customContextMenuRequested(QPoint pos)
+void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Edit lyrics"), this, SLOT(editLyrics()));
-    contextMenu->addAction(tr("Reload lyrics"), this, SLOT(reloadLyrics()));
-    contextMenu->exec(mapToGlobal(pos));
-
-}
-
-QString NowPlayingWindow::cleanItem(QString data)
-{
-    data = data.toLower().replace("&","and");
-    data = data.remove(QRegExp("\\([^)]*\\)")); // what about nested parentheses, {}, []?
-    data = data.remove(QRegExp("[\\W_]"));
-    return data;
+    contextMenu->addAction(tr("Reload lyrics"), this, SLOT(reloadLyricsOverridingCache()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void NowPlayingWindow::editTags()
