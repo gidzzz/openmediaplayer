@@ -26,10 +26,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->gridLayout_2->setContentsMargins(0,0,0,0);
     ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
 
-    ui->fmtxCheckBox->setText(ui->fmtxCheckBox->text() + " *");
-    ui->fmtxdNote->setText("* " + ui->fmtxdNote->text());
-    ui->languageCodeLabel->setText(ui->languageCodeLabel->text() + " **");
-    ui->restartNote->setText("** " + ui->restartNote->text());
+    ui->headsetNote->setText("* " + ui->headsetNote->text().arg(ui->playbackBox->text()));
+    ui->headsetButtonBox->setText(ui->headsetButtonBox->text() + " *");
+
+    ui->fmtxdNote->setText("** " + ui->fmtxdNote->text());
+    ui->fmtxCheckBox->setText(ui->fmtxCheckBox->text() + " **");
+
+    ui->restartNote->setText("*** " + ui->restartNote->text());
+    ui->languageCodeLabel->setText(ui->languageCodeLabel->text() + " ***");
 
     this->setAttribute(Qt::WA_DeleteOnClose);
 
