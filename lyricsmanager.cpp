@@ -94,14 +94,21 @@ QStringList LyricsManager::listProviders()
     return plugins;
 }
 
-QString LyricsManager::cachePath(QString artist, QString title)
+QString LyricsManager::cacheFilePath(QString artist, QString title)
 {
-    return QString(LYRICS_DIR) + artist.remove('/') + '-' + title.remove('/') + ".txt";
+    return cacheDirPath(artist, title) + title.remove('/') + ".txt";
+}
+
+QString LyricsManager::cacheDirPath(QString artist, QString title)
+{
+    Q_UNUSED(title);
+
+    return QString(LYRICS_DIR) + artist.remove('/') + '/';
 }
 
 QString LyricsManager::loadLyrics(QString artist, QString title)
 {
-    QFile file(cachePath(artist, title));
+    QFile file(cacheFilePath(artist, title));
 
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QString lyrics = QTextStream(&file).readAll();
@@ -112,8 +119,8 @@ QString LyricsManager::loadLyrics(QString artist, QString title)
 
 void LyricsManager::storeLyrics(QString artist, QString title, QString lyrics)
 {
-    QDir().mkpath(LYRICS_DIR);
-    QFile file(cachePath(artist, title));
+    QDir().mkpath(cacheDirPath(artist, title));
+    QFile file(cacheFilePath(artist, title));
 
     file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
     QTextStream(&file) << lyrics;
@@ -122,7 +129,8 @@ void LyricsManager::storeLyrics(QString artist, QString title, QString lyrics)
 
 void LyricsManager::deleteLyrics(QString artist, QString title)
 {
-    QFile(cachePath(artist, title)).remove();
+    QFile(cacheFilePath(artist, title)).remove();
+    QDir().rmdir(cacheDirPath(artist, title));
 }
 
 void LyricsManager::fetchLyrics(QString artist, QString title, bool cached)
@@ -138,7 +146,7 @@ void LyricsManager::fetchLyrics(QString artist, QString title, bool cached)
         this->title = title;
 
         // Fetch lyrics from cache or start querying providers
-        if (cached && QFile(cachePath(artist, title)).exists()) {
+        if (cached && QFile(cacheFilePath(artist, title)).exists()) {
             emit lyricsFetched(loadLyrics(artist, title));
         } else if (QNetworkConfigurationManager().isOnline()) {
             queryNextProvider();

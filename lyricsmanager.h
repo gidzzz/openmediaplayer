@@ -30,7 +30,8 @@ public:
 
     static QStringList listProviders();
 
-    static QString cachePath(QString artist, QString title);
+    static QString cacheFilePath(QString artist, QString title);
+    static QString cacheDirPath(QString artist, QString title);
     static QString loadLyrics(QString artist, QString title);
     static void storeLyrics(QString artist, QString title, QString lyrics);
     static void deleteLyrics(QString artist, QString title);
