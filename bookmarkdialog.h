@@ -24,12 +24,7 @@ class BookmarkDialog : public QDialog
     Q_OBJECT
 
 public:
-    enum MediaType {
-        Audio,
-        Video
-    };
-
-    explicit BookmarkDialog(QWidget *parent = 0, MafwAdapterFactory *factory = 0, MediaType type = Audio, QString address = "", QString name = "", QString objectId = "");
+    explicit BookmarkDialog(QWidget *parent = 0, MafwAdapterFactory *factory = 0, Media::Type type = Media::Audio, QString address = "", QString name = "", QString objectId = "");
     ~BookmarkDialog();
 
 private:

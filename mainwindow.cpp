@@ -326,9 +326,19 @@ void MainWindow::open_mp_car_view()
 }
 
 #ifdef MAFW
-void MainWindow::openDirectory(QString uri)
+void MainWindow::openDirectory(QString uri, Media::Type type)
 {
     QString path = QString::fromUtf8(g_filename_from_uri(uri.left(uri.lastIndexOf('/')+1).toUtf8(), NULL, NULL));
+
+    QString root;
+    QString filter;
+    if (type == Media::Audio) {
+        root = "localtagfs::music/songs/";
+        filter = "audio";
+    } else { // type == Media::Video
+        root = "localtagfs::videos/";
+        filter = "video";
+    }
 
     QDir dir(path);
     dir.setFilter(QDir::Files);
@@ -343,39 +353,56 @@ void MainWindow::openDirectory(QString uri)
         QString mime = gnome_vfs_get_mime_type_for_name(file.toUtf8());
 
         // maybe there's a better way to ignore playlists
-        if (mime.startsWith("audio") && !mime.endsWith("mpegurl"))
+        if (mime.startsWith(filter) && !mime.endsWith("mpegurl"))
             songAddBuffer[songAddBufferPos++] = qstrdup(file.prepend(path)
                                                             .replace(" ", "%20")
                                                             .replace("/", "%2F")
-                                                            .prepend("localtagfs::music/songs/")
+                                                            .prepend(root)
                                                             .toUtf8());
     }
 
     songAddBuffer[songAddBufferPos] = NULL;
 
-    if (playlist->playlistName() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
-
-    if (!QSettings().value("main/appendSongs").toBool())
+    if (type == Media::Audio) {
+        if (playlist->playlistName() != "FmpAudioPlaylist")
+            playlist->assignAudioPlaylist();
+        if (!QSettings().value("main/appendSongs").toBool())
+            playlist->clear();
+    } else { // type == Media::Video
+        playlist->assignVideoPlaylist();
         playlist->clear();
+    }
 
     playlist->appendItems((const gchar**)songAddBuffer);
 
-    if (!QSettings().value("main/appendSongs").toBool()) {
+    if (type == Media::Audio) {
+        if (!QSettings().value("main/appendSongs").toBool()) {
+            for (int i = 0; i < songAddBufferPos; i++) {
+                if (QString::fromUtf8(songAddBuffer[i]) == objectIdToPlay) {
+                    mafwrenderer->gotoIndex(i);
+                    mafwrenderer->play();
+                    break;
+                }
+            }
+        }
+        createNowPlayingWindow();
+    } else { // type == Media::Video
         for (int i = 0; i < songAddBufferPos; i++) {
             if (QString::fromUtf8(songAddBuffer[i]) == objectIdToPlay) {
                 mafwrenderer->gotoIndex(i);
-                mafwrenderer->play();
                 break;
             }
         }
+        createVideoNowPlayingWindow();
     }
 
     for (int i = 0; i < songAddBufferPos; i++)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-    createNowPlayingWindow();
+#ifdef Q_WS_MAEMO_5
+    setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
 }
 #endif
 
@@ -430,9 +457,9 @@ void MainWindow::mime_open(const QString &uriString)
             objectIdToPlay = objectId.remove("urisource::file://")
                                      .replace("/", "%2F")
                                      .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
-            qDebug() << "Converted ID:" << objectId;
+            qDebug() << "Converted ID:" << objectIdToPlay;
 
-            openDirectory(uriToPlay);
+            openDirectory(uriToPlay, Media::Audio);
         }
 
         // Audio, just one file
@@ -460,15 +487,32 @@ void MainWindow::mime_open(const QString &uriString)
 
     // Video only
     } else if (qmimetype.startsWith("video")) {
-        objectId = objectId.remove("urisource::file://")
-                           .replace("/", "%2F")
-                           .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
-        qDebug() << "Converted ID:" << objectId;
 
-        playlist->assignVideoPlaylist();
-        playlist->clear();
-        playlist->appendItem(objectId);
-        createVideoNowPlayingWindow();
+        // A whole directory has to be added
+        if (QSettings().value("main/openFolders").toBool()) {
+#ifdef Q_WS_MAEMO_5
+            setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+            objectIdToPlay = objectId.remove("urisource::file://")
+                                     .replace("/", "%2F")
+                                     .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
+            qDebug() << "Converted ID:" << objectIdToPlay;
+
+            openDirectory(uriToPlay, Media::Video);
+        }
+
+        // Just one file
+        else {
+            objectId = objectId.remove("urisource::file://")
+                               .replace("/", "%2F")
+                               .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
+            qDebug() << "Converted ID:" << objectId;
+
+            playlist->assignVideoPlaylist();
+            playlist->clear();
+            playlist->appendItem(objectId);
+            createVideoNowPlayingWindow();
+        }
     }
 
     // Unknown, use the video window for detection

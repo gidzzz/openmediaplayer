@@ -488,7 +488,7 @@ void RadioNowPlayingWindow::showFMTXDialog()
 void RadioNowPlayingWindow::showBookmarkDialog()
 {
 #ifdef MAFW
-    BookmarkDialog(this, mafwFactory, BookmarkDialog::Audio, uri, ui->stationLabel->text()).exec();
+    BookmarkDialog(this, mafwFactory, Media::Audio, uri, ui->stationLabel->text()).exec();
 #endif
 }
 

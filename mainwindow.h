@@ -142,7 +142,7 @@ private slots:
     void pausePlay();
     void onStateChanged(int state);
     void onContainerChanged(QString objectId);
-    void openDirectory(QString uri);
+    void openDirectory(QString uri, Media::Type type);
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();

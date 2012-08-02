@@ -318,7 +318,7 @@ void VideoNowPlayingWindow::onBookmarkClicked()
 {
 #ifdef MAFW
     mafwrenderer->pause();
-    BookmarkDialog bookmarkDialog(this, mafwFactory, BookmarkDialog::Video, uri);
+    BookmarkDialog bookmarkDialog(this, mafwFactory, Media::Video, uri);
     bookmarkDialog.exec();
 #endif
 }

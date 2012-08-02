@@ -66,6 +66,13 @@ namespace Duration {
     };
 }
 
+namespace Media {
+    enum Type {
+        Audio,
+        Video
+    };
+}
+
 // handy function to generate "mm:ss" time string
 inline QString time_mmss(int seconds)
 {

@@ -1,6 +1,6 @@
 #include "bookmarkdialog.h"
 
-BookmarkDialog::BookmarkDialog(QWidget *parent, MafwAdapterFactory *factory, MediaType type, QString address, QString name, QString objectId) :
+BookmarkDialog::BookmarkDialog(QWidget *parent, MafwAdapterFactory *factory, Media::Type type, QString address, QString name, QString objectId) :
     QDialog(parent),
     ui(new Ui::BookmarkDialog)
 {
@@ -15,7 +15,7 @@ BookmarkDialog::BookmarkDialog(QWidget *parent, MafwAdapterFactory *factory, Med
 
     ui->nameBox->setText(name);
     ui->addressBox->setText(address.isEmpty() ? "http://" : address);
-    ui->videoBox->setChecked(type == Video);
+    ui->videoBox->setChecked(type == Media::Video);
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 

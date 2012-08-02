@@ -159,7 +159,7 @@ void InternetRadioWindow::onEditClicked()
     QListWidgetItem *item = ui->listWidget->currentItem();
 
     if (BookmarkDialog(this, mafwFactory,
-                       item->data(UserRoleMIME).toString().startsWith("audio") ? BookmarkDialog::Audio : BookmarkDialog::Video,
+                       item->data(UserRoleMIME).toString().startsWith("audio") ? Media::Audio : Media::Video,
                        item->data(UserRoleValueText).toString(), item->text(),
                        item->data(UserRoleObjectID).toString())
         .exec() == QDialog::Accepted)
