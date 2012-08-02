@@ -159,8 +159,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
     if (enableLyrics) {
         lyricsManager = new LyricsManager(this);
-        connect(lyricsManager, SIGNAL(lyricsFetched(QString)), ui->lyricsText, SLOT(setText(QString)));
-        connect(lyricsManager, SIGNAL(lyricsError(QString)), ui->lyricsText, SLOT(setText(QString)));
+        connect(lyricsManager, SIGNAL(lyricsFetched(QString)), this, SLOT(setLyrics(QString)));
+        connect(lyricsManager, SIGNAL(lyricsError(QString)), this, SLOT(setLyrics(QString)));
     }
 
 #ifdef MAFW
@@ -764,6 +764,11 @@ void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, 
 
 #endif
 
+void NowPlayingWindow::setLyrics(QString lyrics)
+{
+    ui->lyricsText->setText(lyrics);
+}
+
 void NowPlayingWindow::reloadLyrics()
 {
     ui->lyricsText->setText("Fetching lyrics...");
@@ -778,9 +783,7 @@ void NowPlayingWindow::reloadLyricsOverridingCache()
 
 void NowPlayingWindow::editLyrics()
 {
-    EditLyrics* el = new EditLyrics(LyricsManager::cachePath(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis()),
-                                    ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), this);
-    el->show();
+    (new EditLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), this))->show();
 }
 
 void NowPlayingWindow::orientationChanged(int w, int h)

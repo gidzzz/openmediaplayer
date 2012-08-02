@@ -1,36 +1,27 @@
 #include "editlyrics.h"
 
-EditLyrics::EditLyrics(QString file, QString artist, QString title, QWidget *parent) :
+EditLyrics::EditLyrics(QString artist, QString title, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::EditLyrics)
 {
     ui->setupUi(this);
+
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
 
+    this->artist = artist;
+    this->title = title;
+
+    this->setWindowTitle(artist + " - " + title);
+
     new TextEditAutoResizer(ui->content);
-
-    ui->label->setText(artist + " - " + title);
-    this->file = file;
-
-    if ( QFileInfo(file).exists() )
-    {
-        QString lines;
-        QFile data(file);
-        if (data.open(QFile::ReadOnly | QFile::Truncate))
-        {
-            QTextStream out(&data);
-            while ( !out.atEnd() )
-                lines += out.readLine()+"\n";
-        }
-        data.close();
-        QApplication::processEvents();
-        ui->content->setPlainText(lines);
-    }
-
+    ui->content->setPlainText(LyricsManager::loadLyrics(artist, title));
     ui->content->setFocus();
+
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this), SIGNAL(activated()), this, SLOT(save()));
+    connect(ui->saveButton, SIGNAL(pressed()), this, SLOT(save()));
 }
 
 EditLyrics::~EditLyrics()
@@ -38,15 +29,18 @@ EditLyrics::~EditLyrics()
     delete ui;
 }
 
-void EditLyrics::on_pushButton_pressed()
+void EditLyrics::save()
 {
-    QFile f(file);
-    f.open( QIODevice::Truncate | QIODevice::Text | QIODevice::ReadWrite);
-    QTextStream out(&f);
-    out << ui->content->toPlainText();
-    f.close();
+    QString lyrics = ui->content->toPlainText();
+    NowPlayingWindow *parent = qobject_cast<NowPlayingWindow*>(this->parentWidget());
 
-    qobject_cast<NowPlayingWindow*>(this->parentWidget())->reloadLyrics();
+    if (lyrics.isEmpty()) {
+        LyricsManager::deleteLyrics(artist, title);
+        if (parent) parent->setLyrics(tr("Lyrics not found"));
+    } else {
+        LyricsManager::storeLyrics(artist, title, lyrics);
+        if (parent) parent->reloadLyrics();
+    }
 
     this->close();
 }

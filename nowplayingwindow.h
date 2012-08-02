@@ -65,6 +65,7 @@ signals:
     void itemDropped(QListWidgetItem *item, int from);
 
 public slots:
+    void setLyrics(QString lyrics);
     void reloadLyrics();
     void setAlbumImage(QString);
     void onShuffleButtonToggled(bool);

@@ -120,6 +120,11 @@ void LyricsManager::storeLyrics(QString artist, QString title, QString lyrics)
     file.close();
 }
 
+void LyricsManager::deleteLyrics(QString artist, QString title)
+{
+    QFile(cachePath(artist, title)).remove();
+}
+
 void LyricsManager::fetchLyrics(QString artist, QString title, bool cached)
 {
         // Abort a possible pending operation

@@ -2,10 +2,6 @@
 #define EDITLYRICS_H
 
 #include <QMainWindow>
-#include <QFile>
-#include <QFileInfo>
-#include <QTextStream>
-#include <QDebug>
 
 #include "ui_editlyrics.h"
 #include "nowplayingwindow.h"
@@ -20,17 +16,17 @@ class EditLyrics : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditLyrics(QString lyricsFile, QString artist, QString title, QWidget *parent = 0);
+    explicit EditLyrics(QString artist, QString title, QWidget *parent = 0);
     ~EditLyrics();
-
-    QString file;
-    QString lyrics;
 
 private:
     Ui::EditLyrics *ui;
 
+    QString artist;
+    QString title;
+
 private slots:
-    void on_pushButton_pressed();
+    void save();
 };
 
 #endif // EDITLYRICS_H
