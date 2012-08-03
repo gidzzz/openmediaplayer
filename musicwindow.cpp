@@ -93,11 +93,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     playlistProxyModel->setSourceModel(playlistModel);
     ui->playlistList->setModel(playlistProxyModel);
 
-    this->loadViewState();
-
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    loadViewState();
 
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
@@ -110,6 +106,10 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
 #endif
 
     connectSignals();
+
+    Rotator *rotator = Rotator::acquire();
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    orientationChanged(rotator->width(), rotator->height());
 }
 
 MusicWindow::~MusicWindow()

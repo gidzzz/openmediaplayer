@@ -39,6 +39,7 @@ void BookmarkDialog::accept()
         if (ui->addressBox->text().indexOf("://") > 0 && !ui->addressBox->text().endsWith("://")) {
 
 #ifdef MAFW
+            for (int i = 0; i < 100; i++) {
             GHashTable* metadata = mafw_metadata_new();
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_TITLE, ui->nameBox->text().toUtf8().data());
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_URI, ui->addressBox->text().toUtf8().data());
@@ -49,7 +50,7 @@ void BookmarkDialog::accept()
             else
                 mafwRadioSource->setMetadata(objectId.toUtf8(), metadata);
 
-            mafw_metadata_release(metadata);
+            mafw_metadata_release(metadata);}
 #endif
 
 #ifdef Q_WS_MAEMO_5

@@ -114,7 +114,8 @@ HEADERS += \
     bookmarkdialog.h \
     lyrics/abstractlyricsprovider.h \
     lyricsmanager.h \
-    lyricsprovidersdialog.h
+    lyricsprovidersdialog.h \
+    headerawareproxymodel.h
 
 FORMS += \
     mainwindow.ui \

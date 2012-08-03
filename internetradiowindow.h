@@ -18,6 +18,7 @@
 
 #include "ui_internetradiowindow.h"
 #include "includes.h"
+#include "headerawareproxymodel.h"
 #include "radionowplayingwindow.h"
 #include "bookmarkdialog.h"
 #include "delegates/songlistitemdelegate.h"
@@ -46,8 +47,11 @@ private:
     void keyReleaseEvent(QKeyEvent *e);
     void focusInEvent(QFocusEvent *);
     void focusOutEvent(QFocusEvent *);
-    QList<QListWidgetItem*> audioBufferList;
-    QList<QListWidgetItem*> videoBufferList;
+
+    QStandardItemModel *stationModel;
+    QSortFilterProxyModel *stationProxyModel;
+    QList<QStandardItem*> audioBufferList;
+    QList<QStandardItem*> videoBufferList;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -61,7 +65,7 @@ private slots:
     void onAddClicked();
     void onEditClicked();
     void onDeleteClicked();
-    void onStationSelected(QListWidgetItem* item);
+    void onStationSelected(QModelIndex index);
     void onContextMenuRequested(const QPoint &point);
     void orientationChanged(int w, int h);
     void onChildClosed();
