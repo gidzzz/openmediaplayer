@@ -112,9 +112,14 @@ p, li { white-space: pre-wrap; }
         <translation>歌词编辑</translation>
     </message>
     <message>
-        <location filename="../editlyrics.ui" line="25"/>
+        <location filename="../editlyrics.ui" line="28"/>
         <source>Save</source>
         <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="../editlyrics.cpp" line="39"/>
+        <source>Lyrics not found</source>
+        <translation>未找到歌词</translation>
     </message>
 </context>
 <context>
@@ -232,10 +237,31 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
 </context>
 <context>
+    <name>LyricsManager</name>
+    <message>
+        <location filename="../lyricsmanager.cpp" line="163"/>
+        <source>There is no active Internet connection</source>
+        <translation>没有网络连接</translation>
+    </message>
+    <message>
+        <location filename="../lyricsmanager.cpp" line="176"/>
+        <source>Lyrics not found</source>
+        <translation>未找到歌词</translation>
+    </message>
+</context>
+<context>
+    <name>LyricsProvidersDialog</name>
+    <message>
+        <location filename="../lyricsprovidersdialog.ui" line="14"/>
+        <source>Lyrics providers</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="804"/>
+        <location filename="../mainwindow.cpp" line="848"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n首歌曲</numerusform>
@@ -243,7 +269,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="811"/>
+        <location filename="../mainwindow.cpp" line="855"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n个剪辑</numerusform>
@@ -251,7 +277,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="827"/>
+        <location filename="../mainwindow.cpp" line="871"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n个电台</numerusform>
@@ -282,32 +308,32 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>随机播放所有歌曲</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="803"/>
+        <location filename="../mainwindow.cpp" line="847"/>
         <source>(no songs)</source>
         <translation>(没有歌曲)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="810"/>
+        <location filename="../mainwindow.cpp" line="854"/>
         <source>(no videos)</source>
         <translation>(没有视频)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="826"/>
+        <location filename="../mainwindow.cpp" line="870"/>
         <source>(no stations)</source>
         <translation>(没有电台)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="958"/>
+        <location filename="../mainwindow.cpp" line="1002"/>
         <source>Retrieving information on the new media files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="960"/>
+        <location filename="../mainwindow.cpp" line="1004"/>
         <source>Estimated time remaining:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="962"/>
+        <location filename="../mainwindow.cpp" line="1006"/>
         <source>Remaining items:</source>
         <translation>未处理项目：</translation>
     </message>
@@ -582,160 +608,141 @@ Unplug USB to continue using FM transmitter.</source>
 </context>
 <context>
     <name>NowPlayingWindow</name>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="827"/>
-        <source>Lyrics not found</source>
-        <translation>未找到歌词</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="255"/>
+        <location filename="../nowplayingwindow.cpp" line="258"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n首歌曲</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="265"/>
+        <location filename="../nowplayingwindow.cpp" line="268"/>
         <source>total</source>
         <translation> </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="761"/>
-        <source>Loading lyrics...</source>
-        <translation>加载歌词……</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="815"/>
+        <location filename="../nowplayingwindow.cpp" line="774"/>
+        <location filename="../nowplayingwindow.cpp" line="780"/>
         <source>Fetching lyrics...</source>
         <translation>搜索歌词……</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="777"/>
-        <source>There is no active Internet connection</source>
-        <translation>没有网络连接</translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="1214"/>
+        <location filename="../nowplayingwindow.cpp" line="1151"/>
         <source>Information not available</source>
         <translation>信息不可用</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1278"/>
+        <location filename="../nowplayingwindow.cpp" line="1215"/>
         <source>Clear all songs from now playing?</source>
         <translation>从&apos;正在播放&apos;清除所有歌曲？</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1314"/>
+        <location filename="../nowplayingwindow.cpp" line="1250"/>
         <source>Set as ringing tone</source>
         <translation>设为来电铃声</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1310"/>
+        <location filename="../nowplayingwindow.cpp" line="1246"/>
         <source>Delete from now playing</source>
         <translation>从&apos;正在播放&apos;删除</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1315"/>
+        <location filename="../nowplayingwindow.cpp" line="1251"/>
         <source>Share</source>
         <translation>分享</translation>
     </message>
     <message>
+        <location filename="../nowplayingwindow.cpp" line="1218"/>
         <location filename="../nowplayingwindow.cpp" line="1281"/>
-        <location filename="../nowplayingwindow.cpp" line="1344"/>
-        <location filename="../nowplayingwindow.cpp" line="1383"/>
-        <location filename="../nowplayingwindow.cpp" line="1593"/>
+        <location filename="../nowplayingwindow.cpp" line="1320"/>
+        <location filename="../nowplayingwindow.cpp" line="1531"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="832"/>
-        <source>Server error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../nowplayingwindow.cpp" line="1037"/>
+        <location filename="../nowplayingwindow.cpp" line="974"/>
         <source>Stop playback</source>
         <translation>停止播放</translation>
     </message>
     <message>
+        <location filename="../nowplayingwindow.cpp" line="1219"/>
         <location filename="../nowplayingwindow.cpp" line="1282"/>
-        <location filename="../nowplayingwindow.cpp" line="1345"/>
-        <location filename="../nowplayingwindow.cpp" line="1384"/>
-        <location filename="../nowplayingwindow.cpp" line="1594"/>
+        <location filename="../nowplayingwindow.cpp" line="1321"/>
+        <location filename="../nowplayingwindow.cpp" line="1532"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1312"/>
+        <location filename="../nowplayingwindow.cpp" line="1248"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1313"/>
+        <location filename="../nowplayingwindow.cpp" line="1249"/>
         <source>Add to a playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1329"/>
-        <location filename="../nowplayingwindow.cpp" line="1483"/>
+        <location filename="../nowplayingwindow.cpp" line="1266"/>
+        <location filename="../nowplayingwindow.cpp" line="1420"/>
         <source>%n clip(s) added to playlist</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1339"/>
+        <location filename="../nowplayingwindow.cpp" line="1276"/>
         <source>Are you sure you want to set this song as ringing tone?</source>
         <translation>确定将这首歌曲设为来电铃声？</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1368"/>
+        <location filename="../nowplayingwindow.cpp" line="1305"/>
         <source>Selected song set as ringing tone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1377"/>
+        <location filename="../nowplayingwindow.cpp" line="1314"/>
         <source>Delete song?</source>
         <translation>删除歌曲？</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1378"/>
+        <location filename="../nowplayingwindow.cpp" line="1315"/>
         <source>Are you sure you want to delete this song?</source>
         <translation>确定删除这首歌曲？</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1422"/>
+        <location filename="../nowplayingwindow.cpp" line="1359"/>
         <source>Entertainment View</source>
         <translation>娱乐模式</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1427"/>
+        <location filename="../nowplayingwindow.cpp" line="1364"/>
         <source>Car View</source>
         <translation>车载模式</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1573"/>
-        <location filename="../nowplayingwindow.cpp" line="1580"/>
+        <location filename="../nowplayingwindow.cpp" line="1511"/>
+        <location filename="../nowplayingwindow.cpp" line="1518"/>
         <source>Select album art</source>
         <translation>选择专辑封面</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1574"/>
+        <location filename="../nowplayingwindow.cpp" line="1512"/>
         <source>Reset album art</source>
         <translation>重设专辑封面</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1590"/>
+        <location filename="../nowplayingwindow.cpp" line="1528"/>
         <source>Reset album art?</source>
         <translation>重设专辑封面？</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1626"/>
+        <location filename="../nowplayingwindow.cpp" line="1565"/>
         <source>Edit lyrics</source>
         <translation>编辑歌词</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1627"/>
+        <location filename="../nowplayingwindow.cpp" line="1566"/>
         <source>Reload lyrics</source>
         <translation>重新加载歌词</translation>
     </message>
@@ -751,22 +758,22 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="243"/>
-        <location filename="../nowplayingwindow.cpp" line="608"/>
-        <location filename="../nowplayingwindow.cpp" line="1190"/>
+        <location filename="../nowplayingwindow.cpp" line="612"/>
+        <location filename="../nowplayingwindow.cpp" line="1127"/>
         <source>(unknown song)</source>
         <translation>(未知歌曲)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="357"/>
-        <location filename="../nowplayingwindow.cpp" line="617"/>
-        <location filename="../nowplayingwindow.cpp" line="1193"/>
+        <location filename="../nowplayingwindow.cpp" line="621"/>
+        <location filename="../nowplayingwindow.cpp" line="1130"/>
         <source>(unknown artist)</source>
         <translation>(未知艺术家)</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="370"/>
-        <location filename="../nowplayingwindow.cpp" line="626"/>
-        <location filename="../nowplayingwindow.cpp" line="1196"/>
+        <location filename="../nowplayingwindow.cpp" line="630"/>
+        <location filename="../nowplayingwindow.cpp" line="1133"/>
         <source>(unknown album)</source>
         <translation>(未知专辑)</translation>
     </message>
@@ -887,93 +894,98 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>播放器-设置</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="70"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Next song</source>
         <translation>下一首歌</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="71"/>
+        <location filename="../settingsdialog.cpp" line="74"/>
         <source>Previous song</source>
         <translation>上一首歌</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="72"/>
+        <location filename="../settingsdialog.cpp" line="75"/>
         <source>Play / Pause</source>
         <translation>播放/暂停</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="44"/>
-        <location filename="../settingsdialog.cpp" line="74"/>
+        <location filename="../settingsdialog.cpp" line="47"/>
+        <location filename="../settingsdialog.cpp" line="77"/>
         <source>Do nothing</source>
         <translation>后台播放</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="43"/>
+        <location filename="../settingsdialog.cpp" line="46"/>
         <source>Pause playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="53"/>
-        <location filename="../settingsdialog.cpp" line="97"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
+        <location filename="../settingsdialog.cpp" line="100"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="54"/>
+        <location filename="../settingsdialog.cpp" line="57"/>
         <source>%n second(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="55"/>
-        <location filename="../settingsdialog.cpp" line="56"/>
+        <location filename="../settingsdialog.cpp" line="58"/>
+        <location filename="../settingsdialog.cpp" line="59"/>
         <source>%n minute(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="57"/>
+        <location filename="../settingsdialog.cpp" line="60"/>
         <source>%n hour(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="58"/>
-        <location filename="../settingsdialog.cpp" line="96"/>
+        <location filename="../settingsdialog.cpp" line="61"/>
+        <location filename="../settingsdialog.cpp" line="99"/>
         <source>Always</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="85"/>
+        <location filename="../settingsdialog.cpp" line="88"/>
         <source>Automatic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="86"/>
+        <location filename="../settingsdialog.cpp" line="89"/>
         <source>Landscape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="87"/>
+        <location filename="../settingsdialog.cpp" line="90"/>
         <source>Portrait</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="98"/>
+        <location filename="../settingsdialog.cpp" line="101"/>
         <source>With screen locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="99"/>
+        <location filename="../settingsdialog.cpp" line="102"/>
         <source>With screen unlocked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="42"/>
-        <location filename="../settingsdialog.cpp" line="73"/>
+        <location filename="../settingsdialog.cpp" line="150"/>
+        <source>Only local cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="45"/>
+        <location filename="../settingsdialog.cpp" line="76"/>
         <source>Stop playback</source>
         <translation>停止播放</translation>
     </message>
@@ -1004,71 +1016,81 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="83"/>
+        <source>Lyrics providers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="90"/>
         <source>Play only search results</source>
         <translation>只播放搜索结果</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="90"/>
+        <location filename="../settingsdialog.ui" line="97"/>
         <source>Open whole folders</source>
         <translation>打开文件夹</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="97"/>
+        <location filename="../settingsdialog.ui" line="104"/>
         <source>Append opened songs</source>
         <translation>附加打开的歌曲</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="106"/>
+        <location filename="../settingsdialog.ui" line="113"/>
         <source>Size of automatic playlists</source>
         <translation>自动分类播放列表的歌曲数</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="128"/>
+        <location filename="../settingsdialog.ui" line="135"/>
         <source>Headset button action</source>
         <translation>耳机按键动作</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="135"/>
+        <location filename="../settingsdialog.ui" line="142"/>
         <source>Orientation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="142"/>
+        <location filename="../settingsdialog.ui" line="149"/>
         <source>Prevent playback interruptions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="149"/>
+        <location filename="../settingsdialog.ui" line="156"/>
         <source>Lazy sliders</source>
         <translation>开启延迟拖动(放开滑块时调整播放进度)</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="156"/>
+        <location filename="../settingsdialog.ui" line="163"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="163"/>
+        <location filename="../settingsdialog.ui" line="170"/>
         <source>Override FMTX checks in UI</source>
         <translation>覆盖FMTX界面</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="172"/>
+        <location filename="../settingsdialog.ui" line="179"/>
         <source>Force language code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="199"/>
+        <location filename="../settingsdialog.ui" line="206"/>
+        <source>Requires &quot;%1&quot; disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="218"/>
         <source>Requires modified FMTXD</source>
         <translation>需要修改版FMTXD</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="211"/>
+        <location filename="../settingsdialog.ui" line="230"/>
         <source>Requires application restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="28"/>
+        <location filename="../settingsdialog.cpp" line="27"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>

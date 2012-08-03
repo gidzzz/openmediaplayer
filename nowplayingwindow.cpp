@@ -771,13 +771,13 @@ void NowPlayingWindow::setLyrics(QString lyrics)
 
 void NowPlayingWindow::reloadLyrics()
 {
-    ui->lyricsText->setText("Fetching lyrics...");
+    ui->lyricsText->setText(tr("Fetching lyrics..."));
     lyricsManager->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis());
 }
 
 void NowPlayingWindow::reloadLyricsOverridingCache()
 {
-    ui->lyricsText->setText("Fetching lyrics...");
+    ui->lyricsText->setText(tr("Fetching lyrics..."));
     lyricsManager->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), false);
 }
 
