@@ -146,10 +146,9 @@ border: none;
           </property>
          </widget>
         </item>
-
         <item>
          <widget class="QWidget" name="positionWidget">
-          <layout class="QHBoxLayout" name="toolbarLayout">
+          <layout class="QHBoxLayout" name="progressLayout">
            <item>
             <widget class="QLabel" name="currentPositionLabel">
              <property name="sizePolicy">
@@ -189,7 +188,6 @@ border: none;
           </layout>
          </widget>
         </item>
-
         <item>
          <widget class="QProgressBar" name="bufferBar">
           <property name="visible">
@@ -200,8 +198,6 @@ border: none;
           </property>
          </widget>
         </item>
-
-
        </layout>
       </widget>
      </item>

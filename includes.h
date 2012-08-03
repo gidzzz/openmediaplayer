@@ -60,10 +60,8 @@ enum UserRoles { UserRoleName=Qt::UserRole,
                };
 
 namespace Duration {
-    enum {
-        Unknown = -1,
-        Blank = -2
-    };
+    const int Unknown = -1;
+    const int Blank = -2;
 }
 
 namespace Media {

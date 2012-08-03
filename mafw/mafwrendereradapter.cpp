@@ -98,12 +98,14 @@ void MafwRendererAdapter::playback_state_req_callback(pb_playback_t *pb, pb_stat
             switch (static_cast<req_state_cb_payload*>(data)->action) {
                 case Pause: mafw_renderer_pause(adapter->mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, adapter); break;
                 case Stop: mafw_renderer_stop(adapter->mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, adapter); break;
+                default: break;
             }
         }
         else if (granted_state == PB_STATE_PLAY) {
             switch (static_cast<req_state_cb_payload*>(data)->action) {
                 case Play: mafw_renderer_play(adapter->mafw_renderer, MafwRendererSignalHelper::play_playback_cb, adapter); break;
                 case Resume: mafw_renderer_resume(adapter->mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, adapter); break;
+                default: break;
             }
         }
         else { // granted_state == PB_STATE_NONE
@@ -119,6 +121,10 @@ void MafwRendererAdapter::playback_state_req_handler(pb_playback_t *pb, pb_state
 {
     // This could be used to handle incoming calls.
     // Currently that is accomplished using MCE in MainWindow.
+    Q_UNUSED(pb);
+    Q_UNUSED(req_state);
+    Q_UNUSED(ext_req);
+    Q_UNUSED(data);
 }
 
 void MafwRendererAdapter::connectRegistrySignals()
