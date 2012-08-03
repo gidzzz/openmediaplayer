@@ -3,6 +3,7 @@
 
 #include "abstractlyricsprovider.h"
 #include <QtPlugin>
+#include <QTextDocument>
 #include <QRegExp>
 
 class AZLyricsPlugin : public AbstractLyricsProvider

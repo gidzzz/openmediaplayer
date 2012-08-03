@@ -1,11 +1,11 @@
 #include "chartlyricsplugin.h"
 
-ChartLyrics::ChartLyrics()
+ChartLyricsPlugin::ChartLyricsPlugin()
 {
     nam = new QNetworkAccessManager(this);
 }
 
-void ChartLyrics::fetch(QString artist, QString title)
+void ChartLyricsPlugin::fetch(QString artist, QString title)
 {
     QUrl url("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect");
     url.addQueryItem("artist", artist);
@@ -15,13 +15,13 @@ void ChartLyrics::fetch(QString artist, QString title)
     connect(reply, SIGNAL(finished()), this, SLOT(onReplyReceived()));
 }
 
-void ChartLyrics::abort()
+void ChartLyricsPlugin::abort()
 {
     reply->abort();
     reply->deleteLater();
 }
 
-void ChartLyrics::onReplyReceived()
+void ChartLyricsPlugin::onReplyReceived()
 {
     QString lyrics;
 
@@ -38,4 +38,4 @@ void ChartLyrics::onReplyReceived()
         emit fetched(lyrics);
 }
 
-Q_EXPORT_PLUGIN2(chartlyricsplugin, ChartLyrics)
+Q_EXPORT_PLUGIN2(chartlyricsplugin, ChartLyricsPlugin)

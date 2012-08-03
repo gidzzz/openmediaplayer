@@ -35,13 +35,12 @@ void AZLyricsPlugin::onReplyReceived()
 
     if (data.contains("<!-- start of lyrics -->\r\n")) {
         data.remove(0, data.indexOf("<!-- start of lyrics -->\r\n") + 26);
+        data.remove(data.indexOf("\r\n<!-- end of lyrics -->"), data.length());
 
-        int position = data.indexOf("\r\n<!-- end of lyrics -->");
-        data.remove(position, data.length()-position);
+        QTextDocument lyrics;
+        lyrics.setHtml(data);
 
-        data.replace("<br />", "");
-
-        emit fetched(data);
+        emit fetched(lyrics.toPlainText());
     } else {
         emit error("The lyrics for this song are missing on AZLyrics.");
     }

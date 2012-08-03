@@ -5,13 +5,13 @@
 #include <QtPlugin>
 #include <QXmlStreamReader>
 
-class ChartLyrics : public AbstractLyricsProvider
+class ChartLyricsPlugin : public AbstractLyricsProvider
 {
     Q_OBJECT
     Q_INTERFACES(AbstractLyricsProvider)
 
 public:
-    ChartLyrics();
+    ChartLyricsPlugin();
 
     QString name() { return "ChartLyrics"; }
 
