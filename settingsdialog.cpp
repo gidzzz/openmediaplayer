@@ -123,6 +123,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     setLyricsProviders(QSettings().value("lyrics/providers").toString());
     connect(ui->lyricsProvidersBox, SIGNAL(clicked()), this, SLOT(configureLyricsProviders()));
+    ui->lyricsProvidersBox->installEventFilter(this);
 
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
@@ -142,6 +143,9 @@ void SettingsDialog::setLyricsProviders(QString lyricsProviders)
                                    .filter("+")
                                    .replaceInStrings("+", "")
                                    .join(", ");
+
+    QFont f = ui->lyricsProvidersBox->font(); f.setPointSize(13);
+    label = QFontMetrics(f).elidedText(label, Qt::ElideRight, ui->lyricsProvidersBox->width()-30);
 
     ui->lyricsProvidersBox->setValueText(label.isEmpty() ? tr("Only local cache") : label);
 }
@@ -221,4 +225,12 @@ void SettingsDialog::orientationChanged(int w, int h)
         ui->gridLayout->addWidget(ui->buttonBox, 2, 1, 1, 1, Qt::AlignBottom);
         this->setFixedHeight(360);
     }
+}
+
+bool SettingsDialog::eventFilter(QObject*, QEvent *e)
+{
+    if (e->type() == QEvent::Resize)
+        setLyricsProviders(lyricsProviders);
+
+    return false;
 }

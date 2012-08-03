@@ -22,6 +22,8 @@ public:
     explicit SettingsDialog(QWidget *parent = 0);
     ~SettingsDialog();
 
+    bool eventFilter(QObject*, QEvent *e);
+
 private:
     Ui::SettingsDialog *ui;
 
