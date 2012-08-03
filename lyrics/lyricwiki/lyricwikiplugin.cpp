@@ -37,8 +37,6 @@ void LyricWikiPlugin::onReplyReceived()
         emit error("The lyrics for this song are missing on LyricWiki.");
     else
         emit fetched(lyrics.toPlainText());
-
-
 }
 
 Q_EXPORT_PLUGIN2(lyricwikiplugin, LyricWikiPlugin)

@@ -151,6 +151,15 @@ void LyricsManager::fetchLyrics(QString artist, QString title, bool cached)
         } else if (QNetworkConfigurationManager().isOnline()) {
             queryNextProvider();
         } else {
+            // A little hack waiting for a proper implemention of offline providers.
+            foreach(AbstractLyricsProvider *provider, providersList) {
+                if (provider->name().startsWith("OMP")) {
+                    retry = providersList.size();
+                    provider->fetch(artist, title);
+                    return;
+                }
+            }
+
             emit lyricsError(tr("There is no active Internet connection"));
         }
 }

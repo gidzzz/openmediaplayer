@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 SUBDIRS = azlyrics \
           chartlyrics \
           lyricsdb \
-          lyricwiki
+          lyricwiki \
+          omplegacy

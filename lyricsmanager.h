@@ -5,13 +5,7 @@
 #include <QSettings>
 #include <QList>
 #include <QStringList>
-
 #include <QNetworkConfigurationManager>
-
-// TODO: slim this down
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QUrl>
 #include <QPluginLoader>
 #include <QDir>
 #include <QDebug>
