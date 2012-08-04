@@ -24,19 +24,23 @@ void LyricWikiPlugin::onReplyReceived()
     QByteArray data = reply->readAll();
     reply->deleteLater();
 
-    data.remove(0, data.indexOf("<div class='lyricbox'>")+22);
-    data.remove(data.indexOf("<!--")+4, data.length());
+    if (data.contains("<div class='lyricbox'>")) {
+        data.remove(0, data.indexOf("<div class='lyricbox'>")+22);
+        data.remove(data.indexOf("<!--")+4, data.length());
 
-    data.remove(0, data.indexOf("</div>")+6);
-    data.remove(data.indexOf("<!--"), 4);
+        data.remove(0, data.indexOf("</div>")+6);
+        data.remove(data.indexOf("<!--"), 4);
 
-    QTextDocument lyrics;
-    lyrics.setHtml(data);
+        QTextDocument lyrics; lyrics.setHtml(data);
+        QString plainLyrics = lyrics.toPlainText();
 
-    if (lyrics.isEmpty())
+        if (plainLyrics.contains("we are not licensed to display the full lyrics for this song"))
+            emit error("The lyrics for this song are incomplete on LyricWiki.");
+        else
+            emit fetched(plainLyrics);
+    } else {
         emit error("The lyrics for this song are missing on LyricWiki.");
-    else
-        emit fetched(lyrics.toPlainText());
+    }
 }
 
 Q_EXPORT_PLUGIN2(lyricwikiplugin, LyricWikiPlugin)
