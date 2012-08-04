@@ -17,6 +17,7 @@ void ChartLyricsPlugin::fetch(QString artist, QString title)
 
 void ChartLyricsPlugin::abort()
 {
+    disconnect(reply, SIGNAL(finished()), this, SLOT(onReplyReceived()));
     reply->abort();
     reply->deleteLater();
 }

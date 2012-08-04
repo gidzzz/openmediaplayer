@@ -18,6 +18,7 @@ void LyricsDBPlugin::fetch(QString artist, QString title)
 
 void LyricsDBPlugin::abort()
 {
+    disconnect(reply, SIGNAL(finished()), this, SLOT(onReplyReceived()));
     reply->abort();
     reply->deleteLater();
 }

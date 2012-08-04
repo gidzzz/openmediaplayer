@@ -18,6 +18,7 @@ void AZLyricsPlugin::fetch(QString artist, QString title)
 
 void AZLyricsPlugin::abort()
 {
+    disconnect(reply, SIGNAL(finished()), this, SLOT(onReplyReceived()));
     reply->abort();
     reply->deleteLater();
 }

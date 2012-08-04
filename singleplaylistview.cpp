@@ -268,7 +268,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
 void SinglePlaylistView::onItemActivated(QListWidgetItem *item)
 {
-    this->playAll(ui->songList->row(item), QSettings().value("main/playlistFilter", false).toBool());
+    playAll(ui->songList->row(item), QSettings().value("main/playlistFilter", false).toBool());
 }
 
 void SinglePlaylistView::orientationChanged(int w, int h)
@@ -368,7 +368,6 @@ void SinglePlaylistView::playAll(int startIndex, bool filter)
     mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-
     window->show();
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));

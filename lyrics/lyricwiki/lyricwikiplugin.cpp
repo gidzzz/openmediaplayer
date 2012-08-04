@@ -15,6 +15,7 @@ void LyricWikiPlugin::fetch(QString artist, QString title)
 
 void LyricWikiPlugin::abort()
 {
+    disconnect(reply, SIGNAL(finished()), this, SLOT(onReplyReceived()));
     reply->abort();
     reply->deleteLater();
 }
