@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>425</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,13 +19,13 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>801</width>
-      <height>401</height>
+      <width>800</width>
+      <height>400</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QListWidget" name="listWidget">
+      <widget class="QListView" name="videoList">
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>

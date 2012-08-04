@@ -271,25 +271,25 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
                 stationModel->appendRow(new QStandardItem());
         else
             for (int i = delta; i < 0; i++)
-                delete stationModel->item(stationModel->rowCount()-1);
+                stationModel->removeRow(stationModel->rowCount()-1);
 
         int i = 0;
 
         if (!audioBufferList.isEmpty()) {
             if (drawHeaders) {
+                stationModel->item(i)->setData(true, Qt::UserRole);
                 stationModel->item(i)->setText("Audio bookmarks");
                 stationModel->item(i)->setData(QVariant(), UserRoleMIME);
-                stationModel->item(i)->setData(true, Qt::UserRole);
                 ++i;
             }
 
             while (!audioBufferList.isEmpty()) {
+                stationModel->item(i)->setData(false, Qt::UserRole);
                 stationModel->item(i)->setText(audioBufferList.first()->text());
                 stationModel->item(i)->setData(audioBufferList.first()->data(UserRoleValueText), UserRoleValueText);
                 stationModel->item(i)->setData(audioBufferList.first()->data(UserRoleObjectID), UserRoleObjectID);
                 stationModel->item(i)->setData(audioBufferList.first()->data(UserRoleMIME), UserRoleMIME);
                 stationModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
-                stationModel->item(i)->setData(false, Qt::UserRole);
                 stationModel->item(i)->setData(QString(audioBufferList.first()->text() % QChar(31) %
                                                        audioBufferList.first()->data(UserRoleValueText).toString()),
                                                UserRoleFilterString);
@@ -300,19 +300,19 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
 
         if (!videoBufferList.isEmpty()) {
             if (drawHeaders) {
+                stationModel->item(i)->setData(true, Qt::UserRole);
                 stationModel->item(i)->setText("Video bookmarks");
                 stationModel->item(i)->setData(QVariant(), UserRoleMIME);
-                stationModel->item(i)->setData(true, Qt::UserRole);
                 ++i;
             }
 
             while (!videoBufferList.isEmpty()) {
+                stationModel->item(i)->setData(false, Qt::UserRole);
                 stationModel->item(i)->setText(videoBufferList.first()->text());
                 stationModel->item(i)->setData(videoBufferList.first()->data(UserRoleValueText), UserRoleValueText);
                 stationModel->item(i)->setData(videoBufferList.first()->data(UserRoleObjectID), UserRoleObjectID);
                 stationModel->item(i)->setData(videoBufferList.first()->data(UserRoleMIME), UserRoleMIME);
                 stationModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
-                stationModel->item(i)->setData(false, Qt::UserRole);
                 stationModel->item(i)->setData(QString(videoBufferList.first()->text() % QChar(31) %
                                                        videoBufferList.first()->data(UserRoleValueText).toString()),
                                                UserRoleFilterString);

@@ -7,6 +7,7 @@
 #include <QSettings>
 
 #include "ui_videoswindow.h"
+#include "headerawareproxymodel.h"
 #include "videonowplayingwindow.h"
 #include "delegates/thumbnailitemdelegate.h"
 #include "delegates/mediawithicondelegate.h"
@@ -31,7 +32,12 @@ public:
 
 private:
     Ui::VideosWindow *ui;
-    QListWidget bufferList;
+
+    QStandardItemModel *videoModel;
+    QSortFilterProxyModel *videoProxyModel;
+    QList<QStandardItem*> recordingsBufferList;
+    QList<QStandardItem*> filmsBufferList;
+
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
     void focusInEvent(QFocusEvent *);
@@ -51,8 +57,8 @@ private slots:
     void onShareClicked();
     void onDeleteClicked();
     void onContextMenuRequested(const QPoint &point);
-    void onVideoSelected(QListWidgetItem*);
-    void onSortingChanged(QAction*);
+    void onVideoSelected(QModelIndex index);
+    void onSortingChanged(QAction *action);
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);
     void orientationChanged(int w, int h);

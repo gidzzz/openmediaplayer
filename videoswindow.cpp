@@ -38,12 +38,19 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->indicator->setFactory(mafwFactory);
 #endif
 
-    ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->listWidget);
-    ui->listWidget->setItemDelegate(delegate);
+    ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->videoList);
+    ui->videoList->setItemDelegate(delegate);
 
-    ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->listWidget->installEventFilter(this);
-    ui->listWidget->viewport()->installEventFilter(this);
+    ui->videoList->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->videoList->installEventFilter(this);
+    ui->videoList->viewport()->installEventFilter(this);
+
+    videoModel = new QStandardItemModel(this);
+    videoProxyModel = new HeaderAwareProxyModel(this);
+    videoProxyModel->setFilterRole(UserRoleTitle);
+    videoProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    videoProxyModel->setSourceModel(videoModel);
+    ui->videoList->setModel(videoProxyModel);
 
     QActionGroup *sortByActionGroup = new QActionGroup(this);
     sortByActionGroup->setExclusive(true);
@@ -61,7 +68,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
 
 #ifdef MAFW
     if (mafwTrackerSource->isReady())
-        this->selectView();
+        selectView();
     else
         connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(selectView()));
 #endif
@@ -74,12 +81,16 @@ VideosWindow::~VideosWindow()
 
 void VideosWindow::connectSignals()
 {
-    connect(ui->listWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onVideoSelected(QListWidgetItem*)));
-    connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(ui->listWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
+    connect(ui->videoList, SIGNAL(activated(QModelIndex)), this, SLOT(onVideoSelected(QModelIndex)));
+    connect(ui->videoList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(ui->videoList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
+
     connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
+
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), videoProxyModel, SLOT(setFilterFixedString(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
+
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)), this, SLOT(onSourceMetadataChanged(QString)));
@@ -89,7 +100,7 @@ void VideosWindow::connectSignals()
 
 void VideosWindow::onContextMenuRequested(const QPoint &point)
 {
-    if (!ui->listWidget->currentItem()->data(UserRoleObjectID).isNull()) {
+    if (!ui->videoList->currentIndex().data(Qt::UserRole).toBool()) {
         QMenu *contextMenu = new QMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
@@ -110,17 +121,17 @@ void VideosWindow::onDeleteClicked()
     confirmDelete.button(QMessageBox::No)->setText(tr("No"));
     confirmDelete.exec();
     if (confirmDelete.result() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());
-        delete ui->listWidget->currentItem();
+        mafwTrackerSource->destroyObject(ui->videoList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+        videoProxyModel->removeRow(ui->videoList->currentIndex().row());
     }
 #endif
-    ui->listWidget->clearSelection();
+    ui->videoList->clearSelection();
 }
 
 void VideosWindow::onShareClicked()
 {
 #ifdef MAFW
-    mafwTrackerSource->getUri(ui->listWidget->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    mafwTrackerSource->getUri(ui->videoList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
     connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 #endif
 }
@@ -130,8 +141,7 @@ void VideosWindow::onShareUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
-    if (objectId != ui->listWidget->currentItem()->data(UserRoleObjectID).toString())
-        return;
+    if (objectId != ui->videoList->currentIndex().data(UserRoleObjectID).toString()) return;
 
     QStringList files;
 #ifdef DEBUG
@@ -144,9 +154,9 @@ void VideosWindow::onShareUriReceived(QString objectId, QString uri)
 }
 #endif
 
-void VideosWindow::onVideoSelected(QListWidgetItem *item)
+void VideosWindow::onVideoSelected(QModelIndex index)
 {
-    if (item->data(UserRoleObjectID).isNull()) return;
+    if (index.data(Qt::UserRole).toBool()) return;
 
     this->setEnabled(false);
 
@@ -163,14 +173,15 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
     playlist->assignVideoPlaylist();
     playlist->clear();
 
+    int selectedRow = videoProxyModel->mapToSource(index).row();
     int indexOffset = 0;
     int videoCount = 0;
-    gchar** videoAddBuffer = new gchar*[ui->listWidget->count()+1];
+    gchar** videoAddBuffer = new gchar*[videoModel->rowCount()+1];
 
-    for (int i = 0; i < ui->listWidget->count(); i++)
-        if (!ui->listWidget->item(i)->data(UserRoleObjectID).isNull())
-            videoAddBuffer[videoCount++] = qstrdup(ui->listWidget->item(i)->data(UserRoleObjectID).toString().toUtf8());
-        else if (i < ui->listWidget->row(item))
+    for (int i = 0; i < videoModel->rowCount(); i++)
+        if (!videoModel->item(i)->data(Qt::UserRole).toBool())
+            videoAddBuffer[videoCount++] = qstrdup(videoModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        else if (i < selectedRow)
             ++indexOffset;
     videoAddBuffer[videoCount] = NULL;
 
@@ -180,7 +191,7 @@ void VideosWindow::onVideoSelected(QListWidgetItem *item)
         delete[] videoAddBuffer[i];
     delete[] videoAddBuffer;
 
-    mafwrenderer->gotoIndex(ui->listWidget->row(item)-indexOffset);
+    mafwrenderer->gotoIndex(selectedRow-indexOffset);
     QTimer::singleShot(500, window, SLOT(playVideo()));
 }
 
@@ -190,29 +201,29 @@ void VideosWindow::onSortingChanged(QAction *action)
         QMainWindow::setWindowTitle(tr("Videos - latest"));
         QSettings().setValue("Videos/Sortby", "date");
 
-        QFont font; font.setPointSize(13); ui->listWidget->setFont(font);
-        ui->listWidget->setAlternatingRowColors(false);
-        ui->listWidget->setViewMode(QListView::IconMode);
-        ui->listWidget->setItemDelegate(new ThumbnailItemDelegate(ui->listWidget));
-        ui->listWidget->setWrapping(true);
-        ui->listWidget->setGridSize(QSize(155,215));
-        ui->listWidget->setFlow(QListView::LeftToRight);
+        QFont font; font.setPointSize(13); ui->videoList->setFont(font);
+        ui->videoList->setAlternatingRowColors(false);
+        ui->videoList->setViewMode(QListView::IconMode);
+        ui->videoList->setItemDelegate(new ThumbnailItemDelegate(ui->videoList));
+        ui->videoList->setWrapping(true);
+        ui->videoList->setGridSize(QSize(155,215));
+        ui->videoList->setFlow(QListView::LeftToRight);
 
     } else if (action == sortByCategory) {
         QMainWindow::setWindowTitle(tr("Videos - categories"));
         QSettings().setValue("Videos/Sortby", "category");
 
-        QFont font; font.setPointSize(18); ui->listWidget->setFont(font);
-        ui->listWidget->setAlternatingRowColors(true);
-        ui->listWidget->setViewMode(QListView::ListMode);
-        ui->listWidget->setItemDelegate(new MediaWithIconDelegate(ui->listWidget));
-        ui->listWidget->setWrapping(false);
-        ui->listWidget->setGridSize(QSize());
-        ui->listWidget->setFlow(QListView::TopToBottom);
+        QFont font; font.setPointSize(18); ui->videoList->setFont(font);
+        ui->videoList->setAlternatingRowColors(true);
+        ui->videoList->setViewMode(QListView::ListMode);
+        ui->videoList->setItemDelegate(new MediaWithIconDelegate(ui->videoList));
+        ui->videoList->setWrapping(false);
+        ui->videoList->setGridSize(QSize());
+        ui->videoList->setFlow(QListView::TopToBottom);
     }
 
-    ui->listWidget->clear();
-    this->listVideos();
+    videoModel->clear();
+    listVideos();
 }
 
 void VideosWindow::selectView()
@@ -237,14 +248,6 @@ void VideosWindow::onSearchHideButtonClicked()
 
 void VideosWindow::onSearchTextChanged(QString text)
 {
-    for (int i = 0; i < ui->listWidget->count(); i++) {
-        if (!ui->listWidget->item(i)->data(UserRoleObjectID).toBool()
-        || ui->listWidget->item(i)->data(UserRoleTitle).toString().contains(text, Qt::CaseInsensitive))
-            ui->listWidget->item(i)->setHidden(false);
-        else
-            ui->listWidget->item(i)->setHidden(true);
-    }
-
     if (text.isEmpty()) {
         ui->searchWidget->hide();
         ui->indicator->restore();
@@ -262,9 +265,9 @@ void VideosWindow::keyReleaseEvent(QKeyEvent *e)
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
         return;
     else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
-        ui->listWidget->setFocus();
+        ui->videoList->setFocus();
     else {
-        ui->listWidget->clearSelection();
+        ui->videoList->clearSelection();
         if (ui->searchWidget->isHidden()) {
             ui->indicator->inhibit();
             ui->searchWidget->show();
@@ -289,7 +292,7 @@ void VideosWindow::listVideos()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
-    browseId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : NULL,
+    browseId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : "+title",
                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                 MAFW_METADATA_KEY_DURATION,
                                                                 MAFW_METADATA_KEY_THUMBNAIL_URI,
@@ -303,15 +306,18 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
     if (this->browseId != browseId) return;
 
     if (index == 0) {
-        int delta = remainingCount - ui->listWidget->count() + (sortByDate->isChecked() ? 1 : 3); // one for the current item, additional 2 for the labels
-        if (delta > 0)
-            for (int i = 0; i < delta; i++)
-                ui->listWidget->addItem(new QListWidgetItem());
-        else
-            for (int i = delta; i < 0; i++)
-                delete ui->listWidget->item(ui->listWidget->count()-1);
+        recordingsBufferList.clear();
+        filmsBufferList.clear();
 
-        if (sortByCategory->isChecked()) bufferList.clear();
+        if (sortByDate->isChecked()) {
+            int delta = remainingCount+1 - videoModel->rowCount();
+            if (delta > 0)
+                for (int i = 0; i < delta; i++)
+                    videoModel->appendRow(new QStandardItem());
+            else
+                for (int i = delta; i < 0; i++)
+                    videoModel->removeRow(videoModel->rowCount()-1);
+        }
     }
 
     if (metadata != NULL) {
@@ -329,8 +335,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
-        QListWidgetItem *item = sortByCategory->isChecked() ? new QListWidgetItem(&bufferList) :
-                                                              ui->listWidget->item(index);
+        QStandardItem *item = sortByCategory->isChecked() ? new QStandardItem() : videoModel->item(index);
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI);
         if (v != NULL) {
@@ -353,20 +358,20 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
             }
         }
 
-        item->setData(UserRoleObjectID, objectId);
-        item->setData(UserRoleTitle, title);
+        item->setData(objectId, UserRoleObjectID);
+        item->setData(title, UserRoleTitle);
 
         if (sortByCategory->isChecked()) {
-            item->setText((source.startsWith("noki://") ? "1_" : "3_") + title);
-            item->setData(UserRoleSongDuration, duration);
+            item->setData(duration, UserRoleSongDuration);
+            (source.startsWith("noki://") ? recordingsBufferList : filmsBufferList).append(item);
         }
         else { // sortByDate->isChecked()
             if (duration != Duration::Unknown) {
                 QTime t(0, 0);
                 t = t.addSecs(duration);
-                item->setData(UserRoleValueText, t.toString("h:mm:ss"));
+                item->setData(t.toString("h:mm:ss"), UserRoleValueText);
             } else
-                item->setData(UserRoleValueText, "-:--:--");
+                item->setData("-:--:--", UserRoleValueText);
         }
     }
 
@@ -375,30 +380,65 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
                    this, SLOT(browseAllVideos(uint,int,uint,QString,GHashTable*,QString)));
 
         if (sortByCategory->isChecked()) {
-            QListWidgetItem *item;
-            item = new QListWidgetItem(&bufferList);
-            item->setText("0_");
-            item->setData(UserRoleSongDuration, Duration::Blank);
-            item->setData(UserRoleTitle, tr("Recorded by device camera"));
-            item->setData(UserRoleObjectID, QVariant());
-            item = new QListWidgetItem(&bufferList);
-            item->setText("2_");
-            item->setData(UserRoleSongDuration, Duration::Blank);
-            item->setData(UserRoleTitle, tr("Films"));
-            item->setData(UserRoleObjectID, QVariant());
-            bufferList.sortItems();
-            for (int i = 0; i < ui->listWidget->count(); i++) {
-                ui->listWidget->item(i)->setData(UserRoleObjectID, bufferList.item(i)->data(UserRoleObjectID));
-                ui->listWidget->item(i)->setData(UserRoleTitle, bufferList.item(i)->data(UserRoleTitle));
-                ui->listWidget->item(i)->setData(UserRoleValueText, bufferList.item(i)->data(UserRoleValueText));
-                ui->listWidget->item(i)->setData(UserRoleSongDuration, bufferList.item(i)->data(UserRoleSongDuration));
-                ui->listWidget->item(i)->setIcon(bufferList.item(i)->icon());
+            bool drawHeaders = !recordingsBufferList.isEmpty() && !filmsBufferList.isEmpty();
+            int delta = recordingsBufferList.size() + filmsBufferList.size() - videoModel->rowCount();
+            if (drawHeaders) delta += 2;
+
+            qDebug() << "Recordings:" << recordingsBufferList.size();
+            qDebug() << "Films:" << filmsBufferList.size();
+            qDebug() << "Available slots:" << videoModel->rowCount();
+            qDebug() << "Delta:" << delta;
+
+            if (delta > 0)
+                for (int i = 0; i < delta; i++)
+                    videoModel->appendRow(new QStandardItem());
+            else
+                for (int i = delta; i < 0; i++)
+                    videoModel->removeRow(videoModel->rowCount()-1);
+
+            qDebug() << "Available slots after update:" << videoModel->rowCount();
+
+            int i = 0;
+
+            if (!recordingsBufferList.isEmpty()) {
+                if (drawHeaders) {
+                    videoModel->item(i)->setData(true, Qt::UserRole);
+                    videoModel->item(i)->setData("Recorded by device camera", UserRoleTitle);
+                    videoModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
+                    ++i;
+                }
+
+                while (!recordingsBufferList.isEmpty()) {
+                    videoModel->item(i)->setData(false, Qt::UserRole);
+                    videoModel->item(i)->setData(recordingsBufferList.first()->data(UserRoleTitle), UserRoleTitle);
+                    videoModel->item(i)->setData(recordingsBufferList.first()->data(UserRoleObjectID), UserRoleObjectID);
+                    videoModel->item(i)->setData(recordingsBufferList.first()->data(UserRoleSongDuration), UserRoleSongDuration);
+                    videoModel->item(i)->setIcon(recordingsBufferList.first()->icon());
+                    delete recordingsBufferList.takeFirst();
+                    ++i;
+                }
             }
-            bufferList.clear();
+
+            if (!filmsBufferList.isEmpty()) {
+                if (drawHeaders) {
+                    videoModel->item(i)->setData(true, Qt::UserRole);
+                    videoModel->item(i)->setData("Films", UserRoleTitle);
+                    videoModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
+                    ++i;
+                }
+
+                while (!filmsBufferList.isEmpty()) {
+                    videoModel->item(i)->setData(false, Qt::UserRole);
+                    videoModel->item(i)->setData(filmsBufferList.first()->data(UserRoleTitle), UserRoleTitle);
+                    videoModel->item(i)->setData(filmsBufferList.first()->data(UserRoleObjectID), UserRoleObjectID);
+                    videoModel->item(i)->setData(filmsBufferList.first()->data(UserRoleSongDuration), UserRoleSongDuration);
+                    videoModel->item(i)->setIcon(filmsBufferList.first()->icon());
+                    delete filmsBufferList.takeFirst();
+                    ++i;
+                }
+            }
         }
 
-        if (!ui->searchEdit->text().isEmpty())
-            this->onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -454,11 +494,11 @@ void VideosWindow::orientationChanged(int w, int h)
 
 bool VideosWindow::eventFilter(QObject *obj, QEvent *e)
 {
-    if (e->type() == QEvent::Resize && obj == ui->listWidget)
-        ui->listWidget->setFlow(ui->listWidget->flow());
+    if (e->type() == QEvent::Resize && obj == ui->videoList)
+        ui->videoList->setFlow(ui->videoList->flow());
 
-    else if (e->type() == QEvent::MouseButtonPress && obj == ui->listWidget->viewport()
-    && static_cast<QMouseEvent*>(e)->y() > ui->listWidget->viewport()->height() - 25
+    else if (e->type() == QEvent::MouseButtonPress && obj == ui->videoList->viewport()
+    && static_cast<QMouseEvent*>(e)->y() > ui->videoList->viewport()->height() - 25
     && ui->searchWidget->isHidden()) {
         ui->indicator->inhibit();
         ui->searchWidget->show();
@@ -470,7 +510,7 @@ bool VideosWindow::eventFilter(QObject *obj, QEvent *e)
 void VideosWindow::onChildClosed()
 {
     ui->indicator->restore();
-    ui->listWidget->clearSelection();
+    ui->videoList->clearSelection();
     this->setEnabled(true);
 }
 
