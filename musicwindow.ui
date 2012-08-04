@@ -23,6 +23,9 @@
     <layout class="QVBoxLayout" name="songsLayout">
      <item>
       <widget class="QListView" name="songList">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -46,6 +49,9 @@
          <width>124</width>
          <height>124</height>
         </size>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
        </property>
        <property name="movement">
         <enum>QListView::Static</enum>
@@ -75,6 +81,9 @@
      </item>
      <item>
       <widget class="QListView" name="artistList">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -85,6 +94,9 @@
      </item>
      <item>
       <widget class="QListView" name="genresList">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -95,6 +107,9 @@
      </item>
      <item>
       <widget class="QListView" name="playlistList">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>

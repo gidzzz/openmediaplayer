@@ -49,12 +49,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->genresList->setItemDelegate(songDelegate);
     ui->playlistList->setItemDelegate(songDelegate);
 
-    ui->songList->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->albumList->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->artistList->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->genresList->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->playlistList->setContextMenuPolicy(Qt::CustomContextMenu);
-
     ui->songList->viewport()->installEventFilter(this);
     ui->albumList->viewport()->installEventFilter(this);
     ui->artistList->viewport()->installEventFilter(this);

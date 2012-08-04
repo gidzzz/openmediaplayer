@@ -35,8 +35,6 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->albumList);
     ui->albumList->setItemDelegate(delegate);
 
-    ui->albumList->setContextMenuPolicy(Qt::CustomContextMenu);
-
 #ifdef MAFW
     shuffleRequested = false;
 #endif

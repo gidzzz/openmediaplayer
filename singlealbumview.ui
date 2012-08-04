@@ -36,6 +36,9 @@
      </property>
      <item>
       <widget class="QListWidget" name="songList">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
@@ -50,9 +53,6 @@
        </property>
        <property name="uniformItemSizes">
         <bool>true</bool>
-       </property>
-       <property name="sortingEnabled">
-        <bool>false</bool>
        </property>
       </widget>
      </item>

@@ -41,7 +41,6 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->videoList);
     ui->videoList->setItemDelegate(delegate);
 
-    ui->videoList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->videoList->installEventFilter(this);
     ui->videoList->viewport()->installEventFilter(this);
 

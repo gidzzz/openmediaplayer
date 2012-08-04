@@ -404,9 +404,6 @@
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
-              <property name="sortingEnabled">
-               <bool>false</bool>
-              </property>
              </widget>
             </item>
             <item row="11" column="1">

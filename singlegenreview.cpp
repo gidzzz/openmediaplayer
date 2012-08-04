@@ -44,9 +44,7 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     ArtistListItemDelegate *delegate = new ArtistListItemDelegate(ui->artistList);
     ui->artistList->setItemDelegate(delegate);
 
-    ui->artistList->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    this->isShuffling = false;
+    isShuffling = false;
 
     connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
     connect(ui->artistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));

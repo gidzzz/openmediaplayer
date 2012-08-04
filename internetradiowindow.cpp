@@ -36,7 +36,6 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);
     ui->stationList->setItemDelegate(new SongListItemDelegate(ui->stationList));
-    ui->stationList->setContextMenuPolicy(Qt::CustomContextMenu);
 
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);

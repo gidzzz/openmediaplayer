@@ -26,6 +26,9 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QListView" name="videoList">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>

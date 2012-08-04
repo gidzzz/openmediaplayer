@@ -9,6 +9,7 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
 {
     ui->setupUi(this);
     ui->centralwidget->setLayout(ui->verticalLayout);
+    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -16,17 +17,15 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     this->setAttribute(Qt::WA_DeleteOnClose);
 
     ui->objectList->setItemDelegate(new MediaWithIconDelegate(ui->objectList));
-    ui->objectList->setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(ui->objectList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
     connect(ui->objectList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-    connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
-
-    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
+
+    connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
 
     ui->objectList->viewport()->installEventFilter(this);
 
