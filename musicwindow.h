@@ -11,9 +11,10 @@
     #include <QMaemo5ValueButton>
 #endif
 
+#include "ui_musicwindow.h"
+#include "headerawareproxymodel.h"
 #include "nowplayingwindow.h"
 #include "sharedialog.h"
-#include "ui_musicwindow.h"
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/artistlistitemdelegate.h"
 #include "delegates/thumbnailitemdelegate.h"
@@ -121,7 +122,7 @@ private slots:
     void onSearchHideButtonClicked();
     void onSearchTextChanged();
 #ifdef MAFW
-    void browseSourcePlaylists(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error);
+    void browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString, GHashTable* metadata, QString error);
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);

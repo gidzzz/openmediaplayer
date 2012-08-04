@@ -82,7 +82,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->genresList->setModel(genresProxyModel);
 
     playlistModel = new QStandardItemModel(this);
-    playlistProxyModel = new QSortFilterProxyModel(this);
+    playlistProxyModel = new HeaderAwareProxyModel(this);
     playlistProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     playlistProxyModel->setSourceModel(playlistModel);
     ui->playlistList->setModel(playlistProxyModel);
@@ -882,11 +882,6 @@ void MusicWindow::listImportedPlaylists()
 {
     qDebug() << "Updating imported playlists";
 
-    QStandardItem *item = new QStandardItem();
-    item->setText(tr("Imported playlists"));
-    item->setData(true, Qt::UserRole);
-    playlistModel->appendRow(item);
-
     browseImportedPlaylistsId = mafwTrackerSource->sourceBrowse("localtagfs::music/playlists", false, NULL, NULL,
                                                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                                  MAFW_METADATA_KEY_CHILDCOUNT_1,
@@ -894,7 +889,7 @@ void MusicWindow::listImportedPlaylists()
                                                                 0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString error)
+void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString error)
 {
     if (!error.isEmpty()) {
         qDebug() << error;
@@ -924,6 +919,15 @@ void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint,
         playlistModel->item(4)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
 
     } else if (browseId == this->browseImportedPlaylistsId) {
+        if (index == 0) {
+            if (remainingCount == 0 && objectId.isNull()) return;
+
+            QStandardItem *item = new QStandardItem();
+            item->setText(tr("Imported playlists"));
+            item->setData(true, Qt::UserRole);
+            playlistModel->appendRow(item);
+        }
+
         QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
