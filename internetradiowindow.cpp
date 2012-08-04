@@ -277,7 +277,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         if (!audioBufferList.isEmpty()) {
             if (drawHeaders) {
                 stationModel->item(i)->setData(true, Qt::UserRole);
-                stationModel->item(i)->setText("Audio bookmarks");
+                stationModel->item(i)->setText(tr("Audio bookmarks"));
                 stationModel->item(i)->setData(QVariant(), UserRoleMIME);
                 ++i;
             }
@@ -300,7 +300,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         if (!videoBufferList.isEmpty()) {
             if (drawHeaders) {
                 stationModel->item(i)->setData(true, Qt::UserRole);
-                stationModel->item(i)->setText("Video bookmarks");
+                stationModel->item(i)->setText(tr("Video bookmarks"));
                 stationModel->item(i)->setData(QVariant(), UserRoleMIME);
                 ++i;
             }
