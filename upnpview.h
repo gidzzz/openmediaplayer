@@ -35,7 +35,7 @@ private slots:
     void onSearchTextChanged(QString text);
     void onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
     void onContextMenuRequested(const QPoint &point);
-    void onItemActivated(QListWidgetItem *item);
+    void onItemActivated(QModelIndex index);
     void onAddOneToNowPlaying();
     void onAddOneToPlaylist();
     void addAllToNowPlaying();
@@ -44,10 +44,14 @@ private slots:
     void onChildClosed();
 
 private:
+    Ui::UpnpView *ui;
+
+    QStandardItemModel *objectModel;
+    QSortFilterProxyModel *objectProxyModel;
+
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
     void notifyOnAddedToNowPlaying(int songCount);
-    Ui::UpnpView *ui;
     uint browseId;
     MafwAdapterFactory *mafwFactory;
     MafwSourceAdapter *mafwSource;

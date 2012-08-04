@@ -18,11 +18,19 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
 
     ui->objectList->setItemDelegate(new MediaWithIconDelegate(ui->objectList));
 
-    connect(ui->objectList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
+    objectModel = new QStandardItemModel(this);
+    objectProxyModel = new QSortFilterProxyModel(this);
+    objectProxyModel->setFilterRole(UserRoleTitle);
+    objectProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    objectProxyModel->setSourceModel(objectModel);
+    ui->objectList->setModel(objectProxyModel);
+
+    connect(ui->objectList, SIGNAL(activated(QModelIndex)), this, SLOT(onItemActivated(QModelIndex)));
     connect(ui->objectList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), objectProxyModel, SLOT(setFilterFixedString(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 
     connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
@@ -47,7 +55,7 @@ void UpnpView::browseObjectId(QString objectId)
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    ui->objectList->clear();
+    objectModel->clear();
 
     connect(mafwSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -105,13 +113,6 @@ void UpnpView::onSearchHideButtonClicked()
 
 void UpnpView::onSearchTextChanged(QString text)
 {
-    for (int i = 0; i < ui->objectList->count(); i++) {
-        if (ui->objectList->item(i)->data(UserRoleTitle).toString().contains(text, Qt::CaseInsensitive))
-            ui->objectList->item(i)->setHidden(false);
-        else
-            ui->objectList->item(i)->setHidden(true);
-    }
-
     if (text.isEmpty()) {
         ui->searchWidget->hide();
         ui->indicator->restore();
@@ -140,12 +141,12 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
         } else
             duration = Duration::Blank;
 
-        QListWidgetItem *item = new QListWidgetItem();
+        QStandardItem *item = new QStandardItem();
 
-        item->setData(UserRoleObjectID, objectId);
-        item->setData(UserRoleSongDuration, duration);
-        item->setData(UserRoleMIME, mime);
-        item->setData(UserRoleTitle, title);
+        item->setData(objectId, UserRoleObjectID);
+        item->setData(duration, UserRoleSongDuration);
+        item->setData(mime, UserRoleMIME);
+        item->setData(title, UserRoleTitle);
 
         if (mime == "x-mafw/container")
             item->setIcon(QIcon::fromTheme("general_folder"));
@@ -156,14 +157,12 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
         else
             item->setIcon(QIcon::fromTheme("filemanager_unknown_file"));
 
-        ui->objectList->addItem(item);
+        objectModel->appendRow(item);
     }
 
     if (remainingCount == 0) {
         disconnect(mafwSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
-        if (!ui->searchEdit->text().isEmpty())
-            onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
@@ -172,7 +171,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
 
 void UpnpView::onContextMenuRequested(const QPoint &point)
 {
-    if (ui->objectList->currentItem()->data(UserRoleMIME).toString().startsWith("audio")) {
+    if (ui->objectList->currentIndex().data(UserRoleMIME).toString().startsWith("audio")) {
         QMenu *contextMenu = new QMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddOneToNowPlaying()));
@@ -181,16 +180,16 @@ void UpnpView::onContextMenuRequested(const QPoint &point)
     }
 }
 
-void UpnpView::onItemActivated(QListWidgetItem *item)
+void UpnpView::onItemActivated(QModelIndex index)
 {
-    QString objectId = item->data(UserRoleObjectID).toString();
-    QString mime = item->data(UserRoleMIME).toString();
+    QString objectId = index.data(UserRoleObjectID).toString();
+    QString mime = index.data(UserRoleMIME).toString();
 
     if (mime == "x-mafw/container") {
         this->setEnabled(false);
         UpnpView *window = new UpnpView(this, mafwFactory, mafwSource);
         window->browseObjectId(objectId);
-        window->setWindowTitle(item->data(UserRoleTitle).toString());
+        window->setWindowTitle(index.data(UserRoleTitle).toString());
         window->show();
 
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -202,9 +201,10 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
         playlist->clear();
         appendAllToPlaylist("audio");
 
+        int selectedRow = objectProxyModel->mapToSource(index).row();
         int sameTypeIndex = 0;
-        for (int i = 0; i < ui->objectList->row(item); i++)
-            if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
+        for (int i = 0; i < selectedRow; i++)
+            if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
                ++sameTypeIndex;
 
         MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
@@ -223,9 +223,10 @@ void UpnpView::onItemActivated(QListWidgetItem *item)
         playlist->clear();
         appendAllToPlaylist("video");
 
+        int selectedRow = objectProxyModel->mapToSource(index).row();
         int sameTypeIndex = 0;
-        for (int i = 0; i < ui->objectList->row(item); i++)
-            if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith("video"))
+        for (int i = 0; i < selectedRow; i++)
+            if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith("video"))
                ++sameTypeIndex;
 
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
@@ -247,7 +248,7 @@ void UpnpView::onAddOneToNowPlaying()
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    playlist->appendItem(ui->objectList->currentItem()->data(UserRoleObjectID).toString());
+    playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 
     notifyOnAddedToNowPlaying(1);
 }
@@ -257,7 +258,7 @@ void UpnpView::onAddOneToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        playlist->appendItem(picker.playlist, ui->objectList->currentItem()->data(UserRoleObjectID).toString());
+        playlist->appendItem(picker.playlist, ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
 #endif
@@ -274,13 +275,13 @@ void UpnpView::addAllToNowPlaying()
 
 int UpnpView::appendAllToPlaylist(QString type)
 {
-    int itemCount = ui->objectList->count();
+    int itemCount = objectModel->rowCount();
     gchar** itemAddBuffer = new gchar*[itemCount+1];
 
     int sameTypeCount = 0;
     for (int i = 0; i < itemCount; i++)
-        if (ui->objectList->item(i)->data(UserRoleMIME).toString().startsWith(type))
-            itemAddBuffer[sameTypeCount++] = qstrdup(ui->objectList->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith(type))
+            itemAddBuffer[sameTypeCount++] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
     itemAddBuffer[sameTypeCount] = NULL;
 
