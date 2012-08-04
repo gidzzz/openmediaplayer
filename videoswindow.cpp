@@ -402,7 +402,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
             if (!recordingsBufferList.isEmpty()) {
                 if (drawHeaders) {
                     videoModel->item(i)->setData(true, Qt::UserRole);
-                    videoModel->item(i)->setData(tr("Recorded by device camera", UserRoleTitle));
+                    videoModel->item(i)->setData(tr("Recorded by device camera"), UserRoleTitle);
                     videoModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
                     ++i;
                 }
