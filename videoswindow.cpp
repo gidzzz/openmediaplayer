@@ -512,13 +512,3 @@ void VideosWindow::onChildClosed()
     ui->videoList->clearSelection();
     this->setEnabled(true);
 }
-
-void VideosWindow::focusInEvent(QFocusEvent *)
-{
-    ui->indicator->triggerAnimation();
-}
-
-void VideosWindow::focusOutEvent(QFocusEvent *)
-{
-    ui->indicator->stopAnimation();
-}

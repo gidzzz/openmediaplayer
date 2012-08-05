@@ -4,14 +4,18 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPixmap>
-#include <QList>
+#include <QVector>
 #include <QTimer>
-#include <QtDBus>
 #include <QMouseEvent>
-#ifdef Q_WS_MAEMO_5
+
+#ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
+#endif
+
+#ifdef Q_WS_MAEMO_5
     #include "maemo5deviceevents.h"
 #endif
+
 #include "ui_nowplayingindicator.h"
 #include "includes.h"
 #include "nowplayingwindow.h"
@@ -31,14 +35,13 @@ class NowPlayingIndicator : public QWidget
 public:
     explicit NowPlayingIndicator(QWidget *parent = 0);
     ~NowPlayingIndicator();
-    void triggerAnimation();
+
 #ifdef MAFW
-    QString currentObjectId();
     void setFactory(MafwAdapterFactory *mafwFactory = 0);
+    QString currentObjectId();
 #endif
 
 public slots:
-    void stopAnimation();
     void autoSetVisibility();
     void inhibit();
     void restore();
@@ -46,31 +49,36 @@ public slots:
 
 private:
     Ui::NowPlayingIndicator *ui;
+
     void paintEvent(QPaintEvent*);
     void contextMenuEvent(QContextMenuEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void showEvent(QShowEvent *);
     void hideEvent(QHideEvent *);
+
     void connectSignals();
-    QList<QPixmap> images;
-    QTimer *timer;
+    void stopAnimation();
+    void triggerAnimation();
+
+    QMainWindow *window;
+    QVector<QPixmap> images;
+    QTimer *animationTimer;
     QTimer *pokeTimer;
-    int mafwState;
-    QString indicatorImage;
+    bool ready;
+    bool poked;
+    int inhibited;
+    int frame;
+
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter *mafwrenderer;
     MafwPlaylistAdapter *playlist;
-    QMainWindow *window;
     QString rendererObjectId;
-    bool ready;
-    bool poked;
-    int inhibited;
+    int mafwState;
 #endif
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;
 #endif
-    int frame;
 
 private slots:
 #ifdef Q_WS_MAEMO_5
@@ -82,7 +90,7 @@ private slots:
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onPlaylistReady(MafwPlaylist*,uint,MafwPlayState, const char* objectId, QString);
 #endif
-    void startAnimation();
+    void nextFrame();
     void onWindowDestroyed();
     void onNowPlayingWindowHidden();
     void onPokeTimeout();

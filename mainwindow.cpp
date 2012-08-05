@@ -84,8 +84,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->videoCountL->clear();
     ui->stationCountL->clear();
 
-    deviceEvents = new Maemo5DeviceEvents(this);
-
     wiredHeadsetIsConnected = false;
     headsetPauseStamp = -1;
     pausedByCall = false;
@@ -953,30 +951,6 @@ void MainWindow::onShuffleAllClicked()
 #endif
 }
 
-void MainWindow::focusInEvent(QFocusEvent *)
-{
-    qDebug() << "MainWindow: focused.";
-    ui->indicator->triggerAnimation();
-}
-
-void MainWindow::changeEvent(QEvent *event)
-{
-    if (event->type() == QEvent::WindowActivate) {
-        qDebug() << "Window activated";
-        ui->indicator->triggerAnimation();
-    }
-    else if (event->type() == QEvent::WindowDeactivate) {
-        qDebug() << "Window deactivated";
-        ui->indicator->stopAnimation();
-    }
-}
-
-void MainWindow::focusOutEvent(QFocusEvent *)
-{
-    qDebug() << "MainWindow: focus lost";
-    ui->indicator->stopAnimation();
-}
-
 void MainWindow::closeEvent(QCloseEvent *)
 {
     QString action = QSettings().value("main/onApplicationExit", "stop-playback").toString();
@@ -1039,7 +1013,7 @@ void MainWindow::onScreenLocked(bool locked)
 #ifdef MAFW
 void MainWindow::setupPlayback()
 {
-    disconnect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
+    disconnect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
     QString playback = QSettings().value("main/managedPlayback", "always").toString();
     if (playback == "always")
@@ -1047,8 +1021,8 @@ void MainWindow::setupPlayback()
     else if (playback == "never")
         mafwrenderer->enablePlayback(false);
     else if (playback == "locked" || playback == "unlocked") {
-        connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
-        onScreenLocked(deviceEvents->isScreenLocked());
+        connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
+        onScreenLocked(Maemo5DeviceEvents::acquire()->isScreenLocked());
     }
 }
 #endif

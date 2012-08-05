@@ -18,8 +18,14 @@
 
 #include "maemo5deviceevents.h"
 
-Maemo5DeviceEvents::Maemo5DeviceEvents(QObject *parent) :
-    QObject(parent)
+Maemo5DeviceEvents* Maemo5DeviceEvents::instance = NULL;
+
+Maemo5DeviceEvents* Maemo5DeviceEvents::acquire()
+{
+    return instance ? instance : instance = new Maemo5DeviceEvents();
+}
+
+Maemo5DeviceEvents::Maemo5DeviceEvents()
 {
     this->connectSignals();
 }

@@ -70,8 +70,6 @@ private:
     QDialog *renamePlaylistDialog;
     QLineEdit *playlistNameEdit;
 
-    void focusInEvent(QFocusEvent *);
-    void focusOutEvent(QFocusEvent *);
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
 #ifdef MAFW

@@ -40,8 +40,6 @@ private:
 
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
-    void focusInEvent(QFocusEvent *);
-    void focusOutEvent(QFocusEvent *);
     QAction *sortByDate;
     QAction *sortByCategory;
     void connectSignals();

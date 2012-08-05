@@ -61,9 +61,6 @@ private:
     MusicWindow *musicWindow;
     UpnpControl *upnpControl;
     void paintEvent(QPaintEvent*);
-    void focusInEvent(QFocusEvent *);
-    void focusOutEvent(QFocusEvent *);
-    void changeEvent(QEvent *);
     void closeEvent(QCloseEvent *);
     void loadThemeIcons();
     void setButtonIcons();
@@ -78,7 +75,6 @@ private:
     int volumeReduction;
     void scheduleSleeperVolume();
 #ifdef Q_WS_MAEMO_5
-    Maemo5DeviceEvents *deviceEvents;
     QMaemo5InformationBox *updatingInfoBox;
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;

@@ -131,8 +131,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
 #ifdef Q_WS_MAEMO_5
     lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
-
-    deviceEvents = new Maemo5DeviceEvents(this);
 #endif
 
     this->onStateChanged(mafwFactory->mafwState());
@@ -438,7 +436,7 @@ void NowPlayingWindow::connectSignals()
     connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
 
 #ifdef Q_WS_MAEMO_5
-    connect(deviceEvents, SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
+    connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 #endif
 
 #ifdef MAFW

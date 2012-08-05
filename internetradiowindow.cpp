@@ -396,13 +396,3 @@ void InternetRadioWindow::onChildClosed()
     ui->stationList->clearSelection();
     this->setEnabled(true);
 }
-
-void InternetRadioWindow::focusInEvent(QFocusEvent *)
-{
-    ui->indicator->triggerAnimation();
-}
-
-void InternetRadioWindow::focusOutEvent(QFocusEvent *)
-{
-    ui->indicator->stopAnimation();
-}

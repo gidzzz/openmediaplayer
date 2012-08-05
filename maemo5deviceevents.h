@@ -11,16 +11,17 @@
 class Maemo5DeviceEvents : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit Maemo5DeviceEvents(QObject *parent = 0);
+    static Maemo5DeviceEvents* acquire();
     bool isScreenLocked();
 
 signals:
     void screenLocked(bool);
 
-public slots:
-
 private:
+    static Maemo5DeviceEvents *instance;
+    Maemo5DeviceEvents();
     void connectSignals();
     QString screenState;
 

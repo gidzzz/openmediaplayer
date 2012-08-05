@@ -45,8 +45,6 @@ private:
     void connectSignals();
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
-    void focusInEvent(QFocusEvent *);
-    void focusOutEvent(QFocusEvent *);
 
     QStandardItemModel *stationModel;
     QSortFilterProxyModel *stationProxyModel;

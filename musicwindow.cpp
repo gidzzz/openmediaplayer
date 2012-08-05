@@ -1154,18 +1154,6 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
 }
 #endif
 
-
-
-void MusicWindow::focusInEvent(QFocusEvent *)
-{
-    ui->indicator->triggerAnimation();
-}
-
-void MusicWindow::focusOutEvent(QFocusEvent *)
-{
-    ui->indicator->stopAnimation();
-}
-
 void MusicWindow::keyPressEvent(QKeyEvent *)
 {
 
