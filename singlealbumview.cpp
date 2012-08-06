@@ -318,12 +318,15 @@ void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
 
 bool SingleAlbumView::eventFilter(QObject *, QEvent *e)
 {
-    if (e->type() == QEvent::MouseButtonPress
-    && static_cast<QMouseEvent*>(e)->y() > ui->songList->viewport()->height() - 25
-    && ui->searchWidget->isHidden()) {
-        ui->indicator->inhibit();
-        ui->searchWidget->show();
-    }
+    if (e->type() == QEvent::Resize)
+        ui->songList->setFlow(ui->songList->flow());
+    else
+        if (e->type() == QEvent::MouseButtonPress
+        && static_cast<QMouseEvent*>(e)->y() > ui->songList->viewport()->height() - 25
+        && ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
+            ui->searchWidget->show();
+        }
     return false;
 }
 

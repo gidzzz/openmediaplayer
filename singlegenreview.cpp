@@ -247,12 +247,15 @@ void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
 
 bool SingleGenreView::eventFilter(QObject *, QEvent *e)
 {
-    if (e->type() == QEvent::MouseButtonPress
-    && static_cast<QMouseEvent*>(e)->y() > ui->artistList->viewport()->height() - 25
-    && ui->searchWidget->isHidden()) {
-        ui->indicator->inhibit();
-        ui->searchWidget->show();
-    }
+    if (e->type() == QEvent::Resize)
+        ui->artistList->setFlow(ui->artistList->flow());
+    else
+        if (e->type() == QEvent::MouseButtonPress
+        && static_cast<QMouseEvent*>(e)->y() > ui->artistList->viewport()->height() - 25
+        && ui->searchWidget->isHidden()) {
+            ui->indicator->inhibit();
+            ui->searchWidget->show();
+        }
     return false;
 }
 

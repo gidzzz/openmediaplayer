@@ -629,7 +629,11 @@ void SinglePlaylistView::forgetClick()
 
 bool SinglePlaylistView::eventFilter(QObject *, QEvent *e)
 {
-    if (e->type() == QEvent::Drop) {
+    if (e->type() == QEvent::Resize) {
+        ui->songList->setFlow(ui->songList->flow());
+    }
+
+    else if (e->type() == QEvent::Drop) {
         static_cast<QDropEvent*>(e)->setDropAction(Qt::MoveAction);
         playlistModified = true;
     }
