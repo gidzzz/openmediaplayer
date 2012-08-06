@@ -1075,30 +1075,42 @@ void NowPlayingWindow::onMediaIsSeekable(bool seekable)
 
 void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Backspace)
-        this->close();
-#ifdef MAFW
-    else if (e->key() == Qt::Key_Enter)
-        onPlaylistItemActivated(ui->songPlaylist->currentItem());
-#endif
-    else if (e->key() == Qt::Key_Shift)
-        onContextMenuRequested(QPoint(35,35));
+    switch (e->key()) {
+        case Qt::Key_Backspace:
+            this->close();
+            break;
+
+        case Qt::Key_Shift:
+            if (ui->songPlaylist->isVisible())
+                onContextMenuRequested(QPoint(35,35));
+            else if (ui->lyrics->isVisible())
+                onLyricsContextMenuRequested(QPoint(35,35));
+            break;
+    }
 }
 
 void NowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
-        keyTimer->start();
+    switch (e->key()) {
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            keyTimer->start();
+            break;
+
+        case Qt::Key_Enter:
+            onPlaylistItemActivated(ui->songPlaylist->currentItem());
+            break;
+    }
 }
 
 void NowPlayingWindow::togglePlayback()
 {
 #ifdef MAFW
-    if (this->mafwState == Playing)
+    if (mafwState == Playing)
         mafwrenderer->pause();
-    else if (this->mafwState == Paused)
+    else if (mafwState == Paused)
         mafwrenderer->resume();
-    else if (this->mafwState == Stopped)
+    else if (mafwState == Stopped)
         mafwrenderer->play();
 #endif
 }
@@ -1559,6 +1571,7 @@ void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Edit lyrics"), this, SLOT(editLyrics()));
     contextMenu->addAction(tr("Reload lyrics"), this, SLOT(reloadLyricsOverridingCache()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 

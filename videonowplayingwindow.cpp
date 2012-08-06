@@ -604,9 +604,9 @@ void VideoNowPlayingWindow::togglePlayback()
         mafwrenderer->play();
 }
 
-void VideoNowPlayingWindow::keyPressEvent(QKeyEvent *event)
+void VideoNowPlayingWindow::keyPressEvent(QKeyEvent *e)
 {
-    if (event->key() == Qt::Key_Backspace)
+    if (e->key() == Qt::Key_Backspace)
         this->close();
 }
 

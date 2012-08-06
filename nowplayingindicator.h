@@ -42,6 +42,7 @@ public:
 #endif
 
 public slots:
+    void togglePlayback();
     void autoSetVisibility();
     void inhibit();
     void restore();

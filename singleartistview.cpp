@@ -29,7 +29,12 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
 #endif
 {
     ui->setupUi(this);
+    ui->centralwidget->setLayout(ui->verticalLayout);
+    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
+#ifdef Q_WS_MAEMO_5
+    setAttribute(Qt::WA_Maemo5StackedWindow);
+#endif
     setAttribute(Qt::WA_DeleteOnClose);
 
     ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->albumList);
@@ -37,25 +42,21 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
 
 #ifdef MAFW
     shuffleRequested = false;
+
+    ui->indicator->setFactory(mafwFactory);
+
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
 #endif
 
-#ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
-    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
-#endif
-    ui->centralwidget->setLayout(ui->verticalLayout);
-#ifdef MAFW
-    ui->indicator->setFactory(mafwFactory);
-    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(ui->albumList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
-#endif
+    connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
+    connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
+
     connect(ui->actionAdd_songs_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
     connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentArtist()));
-    connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
     ui->albumList->viewport()->installEventFilter(this);
 
@@ -222,27 +223,43 @@ void SingleArtistView::onSearchTextChanged(QString text)
 
 void SingleArtistView::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Backspace)
-        this->close();
-    else if (e->key() == Qt::Key_Shift)
-        onContextMenuRequested(QPoint(35,35));
+    switch (e->key()) {
+        case Qt::Key_Backspace:
+            this->close();
+            break;
+
+        case Qt::Key_Shift:
+            onContextMenuRequested(QPoint(35,35));
+            break;
+    }
 }
 
 void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Backspace)
-        return;
-    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right)
-        ui->albumList->setFocus();
-    else {
-        ui->albumList->clearSelection();
-        if (ui->searchWidget->isHidden()) {
-            ui->indicator->inhibit();
-            ui->searchWidget->show();
-        }
-        if (!ui->searchEdit->hasFocus())
-            ui->searchEdit->setText(ui->searchEdit->text() + e->text());
-        ui->searchEdit->setFocus();
+    switch (e->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Backspace:
+        case Qt::Key_Space:
+            return;
+
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+        case Qt::Key_Left:
+        case Qt::Key_Right:
+            ui->albumList->setFocus();
+            break;
+
+        default:
+            ui->albumList->clearSelection();
+            if (ui->searchWidget->isHidden()) {
+                ui->indicator->inhibit();
+                ui->searchWidget->show();
+            }
+            if (!ui->searchEdit->hasFocus()) {
+                ui->searchEdit->setText(ui->searchEdit->text() + e->text());
+                ui->searchEdit->setFocus();
+            }
+            break;
     }
 }
 

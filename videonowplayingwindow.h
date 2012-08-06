@@ -50,7 +50,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *);
     void mouseReleaseEvent(QMouseEvent *);
-    void keyPressEvent(QKeyEvent *);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     Ui::VideoNowPlayingWindow *ui;

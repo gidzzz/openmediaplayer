@@ -65,6 +65,8 @@ void NowPlayingIndicator::paintEvent(QPaintEvent *)
 
 void NowPlayingIndicator::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+
     connect(animationTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
     connect(pokeTimer, SIGNAL(timeout()), this, SLOT(onPokeTimeout()));
 #ifdef Q_WS_MAEMO_5
@@ -315,4 +317,18 @@ void NowPlayingIndicator::onPokeTimeout()
     restore();
     pokeTimer->stop();
     poked = false;
+}
+
+void NowPlayingIndicator::togglePlayback()
+{
+#ifdef MAFW
+    if (playlist->playlistName() == "FmpVideoPlaylist") return;
+
+    if (mafwState == Playing)
+        mafwrenderer->pause();
+    else if (mafwState == Paused)
+        mafwrenderer->resume();
+    else if (mafwState == Stopped)
+        mafwrenderer->play();
+#endif
 }

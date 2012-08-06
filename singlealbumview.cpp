@@ -292,27 +292,43 @@ void SingleAlbumView::onSearchTextChanged(QString text)
 
 void SingleAlbumView::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Backspace)
-        this->close();
-    else if (e->key() == Qt::Key_Shift)
-        onContextMenuRequested(QPoint(35,35));
+    switch (e->key()) {
+        case Qt::Key_Backspace:
+            this->close();
+            break;
+
+        case Qt::Key_Shift:
+            onContextMenuRequested(QPoint(35,35));
+            break;
+    }
 }
 
 void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right || e->key() == Qt::Key_Backspace)
-        return;
-    else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
-        ui->songList->setFocus();
-    else {
-        ui->songList->clearSelection();
-        if (ui->searchWidget->isHidden()) {
-            ui->indicator->inhibit();
-            ui->searchWidget->show();
-        }
-        if (!ui->searchEdit->hasFocus())
-            ui->searchEdit->setText(ui->searchEdit->text() + e->text());
-        ui->searchEdit->setFocus();
+    switch (e->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Left:
+        case Qt::Key_Right:
+        case Qt::Key_Backspace:
+        case Qt::Key_Space:
+            return;
+
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            ui->songList->setFocus();
+            break;
+
+        default:
+            ui->songList->clearSelection();
+            if (ui->searchWidget->isHidden()) {
+                ui->indicator->inhibit();
+                ui->searchWidget->show();
+            }
+            if (!ui->searchEdit->hasFocus()) {
+                ui->searchEdit->setText(ui->searchEdit->text() + e->text());
+                ui->searchEdit->setFocus();
+            }
+            break;
     }
 }
 
