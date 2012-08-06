@@ -223,25 +223,37 @@ void MainWindow::connectSignals()
     connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
     connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
+    connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
+
+    connect(new QShortcut(QKeySequence(Qt::Key_Q), this), SIGNAL(activated()), this, SLOT(showMusicWindow()));
+    connect(new QShortcut(QKeySequence(Qt::Key_W), this), SIGNAL(activated()), this, SLOT(showVideosWindow()));
+    connect(new QShortcut(QKeySequence(Qt::Key_E), this), SIGNAL(activated()), this, SLOT(showInternetRadioWindow()));
+    connect(new QShortcut(QKeySequence(Qt::Key_R), this), SIGNAL(activated()), this, SLOT(onShuffleAllClicked()));
+
     connect(ui->menuList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
+
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
     connect(ui->actionSleeper, SIGNAL(triggered()), this, SLOT(openSleeperDialog()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
+
     connect(sleeperTimer, SIGNAL(timeout()), this, SLOT(onSleeperTimeout()));
     connect(sleeperVolumeTimer, SIGNAL(timeout()), this, SLOT(stepSleeperVolume()));
+
 #ifdef MAFW
+    connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
+    connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
+    connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
+            this, SLOT(countRadioResult(QString, GHashTable*, QString)));
+
     connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
-    connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
-    connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
-    connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
-            this, SLOT(countRadioResult(QString, GHashTable*, QString)));
-    connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
+
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
@@ -591,8 +603,8 @@ void MainWindow::orientationChanged(int w, int h)
         ui->menuList->show();
     }
 
-    upnpControl->setGeometry(0, h-(70+55), w-122, upnpControl->height());
-    ui->indicator->setGeometry(w-122, h-(70+55), ui->indicator->width(), ui->indicator->height());
+    upnpControl->setGeometry(0, h-(70+56), w-(112+8), upnpControl->height());
+    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
 
     upnpControl->raise();
     ui->indicator->raise();

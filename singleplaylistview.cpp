@@ -273,8 +273,7 @@ void SinglePlaylistView::onItemActivated(QListWidgetItem *item)
 
 void SinglePlaylistView::orientationChanged(int w, int h)
 {
-    ui->songList->scroll(1,1);
-    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
 }
 

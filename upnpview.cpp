@@ -199,6 +199,8 @@ void UpnpView::onItemActivated(QModelIndex index)
         this->setEnabled(false);
         playlist->assignAudioPlaylist();
         playlist->clear();
+        playlist->setShuffled(false);
+
         appendAllToPlaylist("audio");
 
         int selectedRow = objectProxyModel->mapToSource(index).row();
@@ -303,7 +305,7 @@ void UpnpView::notifyOnAddedToNowPlaying(int songCount)
 
 void UpnpView::onOrientationChanged(int w, int h)
 {
-    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
 }
 

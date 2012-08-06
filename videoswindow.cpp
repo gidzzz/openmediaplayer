@@ -383,19 +383,12 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
             int delta = recordingsBufferList.size() + filmsBufferList.size() - videoModel->rowCount();
             if (drawHeaders) delta += 2;
 
-            qDebug() << "Recordings:" << recordingsBufferList.size();
-            qDebug() << "Films:" << filmsBufferList.size();
-            qDebug() << "Available slots:" << videoModel->rowCount();
-            qDebug() << "Delta:" << delta;
-
             if (delta > 0)
                 for (int i = 0; i < delta; i++)
                     videoModel->appendRow(new QStandardItem());
             else
                 for (int i = delta; i < 0; i++)
                     videoModel->removeRow(videoModel->rowCount()-1);
-
-            qDebug() << "Available slots after update:" << videoModel->rowCount();
 
             int i = 0;
 
@@ -487,7 +480,7 @@ void VideosWindow::onContainerChanged(QString objectId)
 
 void VideosWindow::orientationChanged(int w, int h)
 {
-    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
 }
 

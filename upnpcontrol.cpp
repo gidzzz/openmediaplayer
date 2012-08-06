@@ -7,6 +7,8 @@ UpnpControl::UpnpControl(QWidget *parent, MafwAdapterFactory *factory) :
 {
     ui->setupUi(this);
 
+    this->setFocusProxy(ui->upnpList);
+
     QColor c = QMaemo5Style::standardColor("ActiveTextColor");
 
     ui->upnpList->setStyleSheet(QString("QListWidget {background-color: transparent;}"

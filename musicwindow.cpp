@@ -432,7 +432,7 @@ void MusicWindow::onSearchTextChanged()
 
 void MusicWindow::orientationChanged(int w, int h)
 {
-    ui->indicator->setGeometry(w-122, h-(70+55), ui->indicator->width(), ui->indicator->height());
+    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
 }
 
@@ -1154,9 +1154,10 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
 }
 #endif
 
-void MusicWindow::keyPressEvent(QKeyEvent *)
+void MusicWindow::keyPressEvent(QKeyEvent *e)
 {
-
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
 }
 
 void MusicWindow::keyReleaseEvent(QKeyEvent *e)

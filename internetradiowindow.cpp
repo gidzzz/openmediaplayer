@@ -386,7 +386,7 @@ void InternetRadioWindow::onSearchTextChanged(QString text)
 
 void InternetRadioWindow::orientationChanged(int w, int h)
 {
-    ui->indicator->setGeometry(w-122, h-(70+55), ui->indicator->width(), ui->indicator->height());
+    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
 }
 

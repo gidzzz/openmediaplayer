@@ -181,7 +181,7 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 
 void SingleArtistView::orientationChanged(int w, int h)
 {
-    ui->indicator->setGeometry(w-122, h-(70+55), 112, 70);
+    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
 }
 
