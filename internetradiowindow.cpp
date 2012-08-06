@@ -153,7 +153,7 @@ void InternetRadioWindow::onStationSelected(QModelIndex index)
     ui->indicator->inhibit();
 }
 
-void InternetRadioWindow::onContextMenuRequested(const QPoint &point)
+void InternetRadioWindow::onContextMenuRequested(const QPoint &pos)
 {
     if (ui->stationList->currentIndex().data(Qt::UserRole).toBool()) return;
 
@@ -161,7 +161,8 @@ void InternetRadioWindow::onContextMenuRequested(const QPoint &point)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Edit"), this, SLOT(onEditClicked()));
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-    contextMenu->exec(point);
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void InternetRadioWindow::onEditClicked()
@@ -336,6 +337,8 @@ void InternetRadioWindow::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Backspace)
         this->close();
+    else if (e->key() == Qt::Key_Shift)
+        onContextMenuRequested(QPoint(35,35));
 }
 
 bool InternetRadioWindow::eventFilter(QObject *, QEvent *e)

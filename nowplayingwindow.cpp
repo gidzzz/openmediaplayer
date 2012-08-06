@@ -1081,12 +1081,8 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
     else if (e->key() == Qt::Key_Enter)
         onPlaylistItemActivated(ui->songPlaylist->currentItem());
 #endif
-    /*else if (e->key() == Qt::Key_Shift) {
-        if (ui->menuNow_playing_menu->isHidden())
-            ui->menuNow_playing_menu->show();
-        else
-            ui->menuNow_playing_menu->hide();
-    }*/
+    else if (e->key() == Qt::Key_Shift)
+        onContextMenuRequested(QPoint(35,35));
 }
 
 void NowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
@@ -1249,6 +1245,7 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &pos)
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
         //contextMenu->addAction(tr("Edit tags"), this, SLOT(editTags()));
     }
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -1508,7 +1505,7 @@ void NowPlayingWindow::onViewContextMenuRequested(const QPoint &pos)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Select album art"), this, SLOT(selectAlbumArt()));
     contextMenu->addAction(tr("Reset album art"), this, SLOT(resetAlbumArt()));
-    contextMenu->exec(mapToGlobal(pos));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void NowPlayingWindow::selectAlbumArt()

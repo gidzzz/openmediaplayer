@@ -97,14 +97,15 @@ void VideosWindow::connectSignals()
 #endif
 }
 
-void VideosWindow::onContextMenuRequested(const QPoint &point)
+void VideosWindow::onContextMenuRequested(const QPoint &pos)
 {
     if (!ui->videoList->currentIndex().data(Qt::UserRole).toBool()) {
         QMenu *contextMenu = new QMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-        contextMenu->exec(point);
+        connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+        contextMenu->exec(this->mapToGlobal(pos));
     }
 }
 
@@ -257,6 +258,8 @@ void VideosWindow::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Backspace)
         this->close();
+    else if (e->key() == Qt::Key_Shift)
+        onContextMenuRequested(QPoint(35,35));
 }
 
 void VideosWindow::keyReleaseEvent(QKeyEvent *e)

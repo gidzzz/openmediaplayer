@@ -229,35 +229,47 @@ void MusicWindow::connectSignals()
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 }
 
-void MusicWindow::onContextMenuRequested(QPoint point)
+void MusicWindow::onContextMenuRequested(const QPoint &pos)
 {
-    if (this->currentList() == ui->playlistList && ui->playlistList->currentIndex().data(Qt::UserRole).toBool())
-        return;
+    if (currentList() == ui->playlistList && ui->playlistList->currentIndex().data(Qt::UserRole).toBool()) return;
 
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+
+    // All views
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
-    if (this->currentList() == ui->songList)
-        contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
-    if (this->currentList() == ui->playlistList) {
-        if (playlistProxyModel->mapToSource(ui->playlistList->currentIndex()).row() > 4) {
-            if (ui->playlistList->currentIndex().data(UserRoleObjectID).isNull()) { // Saved playlist
-                contextMenu->addAction(tr("Rename playlist"), this, SLOT(onRenamePlaylist()));
-                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeletePlaylistClicked()));
-            }
-            else // Imported playlist
-                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeleteClicked()));
-        } else
-            contextMenu->exec(point);
-    }
-    else if (this->currentList() == ui->artistList || this->currentList() == ui->albumList || this->currentList() == ui->songList) {
+
+    // Artist, album or song view
+    if (currentList() == ui->artistList || currentList() == ui->albumList || currentList() == ui->songList) {
+        // Song view
+        if (currentList() == ui->songList)
+            contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
+        // Everything
         contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-        if (this->currentList() == ui->songList) {
+        // Song view
+        if (currentList() == ui->songList) {
             contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
             contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
         }
     }
-    contextMenu->exec(point);
+
+    // Playlist view
+    else if (currentList() == ui->playlistList) {
+        // Non-automatic playlist
+        if (playlistProxyModel->mapToSource(ui->playlistList->currentIndex()).row() > 4) {
+            // Saved playlist
+            if (ui->playlistList->currentIndex().data(UserRoleObjectID).isNull()) {
+                contextMenu->addAction(tr("Rename playlist"), this, SLOT(onRenamePlaylist()));
+                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeletePlaylistClicked()));
+            // Imported playlist
+            } else {
+                contextMenu->addAction(tr("Delete playlist"), this, SLOT(onDeleteClicked()));
+            }
+        }
+    }
+
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void MusicWindow::onRenamePlaylist()
@@ -1158,6 +1170,8 @@ void MusicWindow::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Backspace)
         this->close();
+    else if (e->key() == Qt::Key_Shift)
+        onContextMenuRequested(QPoint(35,35));
 }
 
 void MusicWindow::keyReleaseEvent(QKeyEvent *e)

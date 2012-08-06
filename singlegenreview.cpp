@@ -224,6 +224,8 @@ void SingleGenreView::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Backspace)
         this->close();
+    else if (e->key() == Qt::Key_Shift)
+        onContextMenuRequested(QPoint(35,35));
 }
 
 void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
@@ -282,12 +284,13 @@ void SingleGenreView::onSearchTextChanged(QString text)
     }
 }
 
-void SingleGenreView::onContextMenuRequested(QPoint point)
+void SingleGenreView::onContextMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(addArtistToNowPlaying()));
-    contextMenu->exec(point);
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void SingleGenreView::addArtistToNowPlaying()

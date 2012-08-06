@@ -294,6 +294,8 @@ void SingleAlbumView::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Backspace)
         this->close();
+    else if (e->key() == Qt::Key_Shift)
+        onContextMenuRequested(QPoint(35,35));
 }
 
 void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
@@ -338,7 +340,7 @@ void SingleAlbumView::addAllToNowPlaying()
 #endif
 }
 
-void SingleAlbumView::onContextMenuRequested(const QPoint &point)
+void SingleAlbumView::onContextMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -347,7 +349,8 @@ void SingleAlbumView::onContextMenuRequested(const QPoint &point)
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-    contextMenu->exec(point);
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void SingleAlbumView::onAddToNowPlaying()
@@ -447,7 +450,7 @@ void SingleAlbumView::onShareUriReceived(QString objectId, QString uri)
 void SingleAlbumView::onContainerChanged(QString objectId)
 {
     if (objectId == "localtagfs::music")
-        this->listSongs();
+        listSongs();
 }
 #endif
 

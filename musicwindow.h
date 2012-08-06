@@ -106,7 +106,7 @@ private:
 #endif
 
 private slots:
-    void onContextMenuRequested(QPoint);
+    void onContextMenuRequested(const QPoint &pos);
     void onSongSelected(QModelIndex index);
     void setRingingTone();
     void onShareClicked();

@@ -160,6 +160,7 @@ void NowPlayingIndicator::contextMenuEvent(QContextMenuEvent *e)
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Music"), this, SLOT(onAudioPlaylistSelected()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(e->globalPos());
 }
 

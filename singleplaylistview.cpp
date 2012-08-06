@@ -415,6 +415,8 @@ void SinglePlaylistView::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Backspace)
         this->close();
+    else if (e->key() == Qt::Key_Shift)
+        onContextMenuRequested(QPoint(35,35));
 }
 
 void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
@@ -472,7 +474,7 @@ void SinglePlaylistView::onShuffleButtonClicked()
     this->playAll(0, true);
 }
 
-void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
+void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -482,7 +484,8 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &point)
     if (objectId.isNull()) contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
     if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-    contextMenu->exec(point);
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void SinglePlaylistView::onAddToNowPlaying()

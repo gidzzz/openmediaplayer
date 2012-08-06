@@ -54,7 +54,7 @@ private:
 private slots:
     void onShareClicked();
     void onDeleteClicked();
-    void onContextMenuRequested(const QPoint &point);
+    void onContextMenuRequested(const QPoint &pos);
     void onVideoSelected(QModelIndex index);
     void onSortingChanged(QAction *action);
     void onSearchHideButtonClicked();

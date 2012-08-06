@@ -227,6 +227,8 @@ void SingleArtistView::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Backspace)
         this->close();
+    else if (e->key() == Qt::Key_Shift)
+        onContextMenuRequested(QPoint(35,35));
 }
 
 void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
@@ -336,14 +338,15 @@ void SingleArtistView::shuffleAllSongs()
 #endif
 }
 
-void SingleArtistView::onContextMenuRequested(const QPoint &point)
+void SingleArtistView::onContextMenuRequested(const QPoint &pos)
 {
     if (ui->albumList->currentRow() != 0) {
         QMenu *contextMenu = new QMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddAlbumToNowPlaying()));
         contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-        contextMenu->exec(point);
+        connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+        contextMenu->exec(this->mapToGlobal(pos));
     }
 }
 

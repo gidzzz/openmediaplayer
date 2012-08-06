@@ -64,7 +64,7 @@ private slots:
     void addAllToNowPlaying();
     void deleteCurrentArtist();
     void shuffleAllSongs();
-    void onContextMenuRequested(const QPoint &point);
+    void onContextMenuRequested(const QPoint &pos);
     void onAddAlbumToNowPlaying();
     void onNowPlayingWindowHidden();
     void onChildClosed();
