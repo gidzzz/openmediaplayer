@@ -367,15 +367,7 @@ void SingleArtistView::onContextMenuRequested(const QPoint &pos)
 void SingleArtistView::onDeleteClicked()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              " ",
-                              tr("Delete selected item from device?"),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         QListWidgetItem *item = ui->albumList->currentItem();
         mafwTrackerSource->destroyObject(item->data(UserRoleObjectID).toString().toUtf8());
         visibleSongs -= item->data(UserRoleSongCount).toInt(); updateSongCount();
@@ -388,15 +380,7 @@ void SingleArtistView::onDeleteClicked()
 void SingleArtistView::deleteCurrentArtist()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              " ",
-                              tr("Delete all items shown in view?"),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::DeleteAll, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(artistObjectId.toUtf8());
         this->close();
     }

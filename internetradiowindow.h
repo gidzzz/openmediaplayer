@@ -8,7 +8,6 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QSpacerItem>
-#include <QMessageBox>
 #include <QDialogButtonBox>
 #include "nowplayingindicator.h"
 #ifdef Q_WS_MAEMO_5
@@ -19,6 +18,7 @@
 #include "ui_internetradiowindow.h"
 #include "includes.h"
 #include "headerawareproxymodel.h"
+#include "confirmdialog.h"
 #include "radionowplayingwindow.h"
 #include "bookmarkdialog.h"
 #include "delegates/songlistitemdelegate.h"

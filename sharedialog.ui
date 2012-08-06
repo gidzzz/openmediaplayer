@@ -15,14 +15,14 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QPushButton" name="share_bt">
+    <widget class="QPushButton" name="bluetoothButton">
      <property name="text">
       <string>Send via bluetooth</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="share_mail">
+    <widget class="QPushButton" name="emailButton">
      <property name="text">
       <string>Send via e-mail</string>
      </property>

@@ -112,15 +112,7 @@ void VideosWindow::onContextMenuRequested(const QPoint &pos)
 void VideosWindow::onDeleteClicked()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              " ",
-                              tr("Delete selected item from device?"),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->videoList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
         videoProxyModel->removeRow(ui->videoList->currentIndex().row());
     }

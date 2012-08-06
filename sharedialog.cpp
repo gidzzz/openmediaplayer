@@ -24,6 +24,9 @@ ShareDialog::ShareDialog(QWidget *parent, QStringList files) :
 {
     ui->setupUi(this);
     this->files = files;
+
+    connect(ui->bluetoothButton, SIGNAL(clicked()), this, SLOT(sendViaBluetooth()));
+    connect(ui->emailButton, SIGNAL(clicked()), this, SLOT(sendViaEmail()));
 }
 
 ShareDialog::~ShareDialog()
@@ -31,7 +34,13 @@ ShareDialog::~ShareDialog()
     delete ui;
 }
 
-void ShareDialog::on_share_bt_released()
+void ShareDialog::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
+void ShareDialog::sendViaBluetooth()
 {
     QString params;
 
@@ -60,7 +69,7 @@ void ShareDialog::on_share_bt_released()
     this->close();
 }
 
-void ShareDialog::on_share_mail_released()
+void ShareDialog::sendViaEmail()
 {
     QString params;
 

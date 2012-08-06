@@ -13,6 +13,7 @@
 
 #include "ui_musicwindow.h"
 #include "headerawareproxymodel.h"
+#include "confirmdialog.h"
 #include "nowplayingwindow.h"
 #include "sharedialog.h"
 #include "delegates/songlistitemdelegate.h"

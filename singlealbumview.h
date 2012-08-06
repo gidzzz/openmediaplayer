@@ -16,6 +16,7 @@
 
 #include "ui_singlealbumview.h"
 #include "includes.h"
+#include "confirmdialog.h"
 #include "nowplayingwindow.h"
 #include "delegates/singlealbumviewdelegate.h"
 

@@ -82,6 +82,10 @@ RadioNowPlayingWindow::~RadioNowPlayingWindow()
 
 void RadioNowPlayingWindow::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Left), this), SIGNAL(activated()), mafwrenderer, SLOT(previous()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), mafwrenderer, SLOT(next()));
+
 #ifdef Q_WS_MAEMO_5
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
 #endif
@@ -144,6 +148,12 @@ void RadioNowPlayingWindow::setIcons()
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
 }
 
+void RadioNowPlayingWindow::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
 void RadioNowPlayingWindow::toggleVolumeSlider()
 {
     if (ui->volumeSlider->isHidden()) {
@@ -182,7 +192,7 @@ void RadioNowPlayingWindow::onVolumeSliderReleased()
 #ifdef MAFW
 void RadioNowPlayingWindow::onStateChanged(int state)
 {
-    this->mafwState = state;
+    mafwState = state;
 
     if (state == Paused) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
@@ -519,12 +529,10 @@ void RadioNowPlayingWindow::onStopButtonPressed()
 void RadioNowPlayingWindow::streamIsSeekable(bool seekable)
 {
 #ifdef MAFW
-    if (seekable) {
-        if (this->mafwState == Playing) {
-            this->onStateChanged(Playing);
-        }
-    } else {
-        if (this->mafwState == Playing) {
+    if (mafwState == Playing) {
+        if (seekable) {
+            onStateChanged(Playing);
+        } else {
             ui->playButton->setIcon(QIcon(stopButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
             connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(stop()));
@@ -535,6 +543,17 @@ void RadioNowPlayingWindow::streamIsSeekable(bool seekable)
                 positionTimer->start();
         }
     }
-    ui->positionSlider->setEnabled(seekable);
+#endif
+}
+
+void RadioNowPlayingWindow::togglePlayback()
+{
+#ifdef MAFW
+    if (mafwState == Playing)
+        mafwrenderer->pause();
+    else if (mafwState == Paused)
+        mafwrenderer->resume();
+    else if (mafwState == Stopped)
+        mafwrenderer->play();
 #endif
 }

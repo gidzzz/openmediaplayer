@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include "ui_singleplaylistview.h"
+#include "confirmdialog.h"
 #include "delegates/songlistitemdelegate.h"
 
 #ifdef Q_WS_MAEMO_5

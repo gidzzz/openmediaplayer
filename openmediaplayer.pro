@@ -115,7 +115,8 @@ HEADERS += \
     lyrics/abstractlyricsprovider.h \
     lyricsmanager.h \
     lyricsprovidersdialog.h \
-    headerawareproxymodel.h
+    headerawareproxymodel.h \
+    confirmdialog.h
 
 FORMS += \
     mainwindow.ui \

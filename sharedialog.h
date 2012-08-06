@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QtCore>
+#include <QKeyEvent>
 
 #include "ui_sharedialog.h"
 
@@ -17,14 +18,17 @@ class ShareDialog : public QDialog
 public:
     explicit ShareDialog(QWidget *parent = 0, QStringList files = QStringList());
     ~ShareDialog();
+
     QStringList files;
 
 private:
     Ui::ShareDialog *ui;
 
+    void keyPressEvent(QKeyEvent *e);
+
 private slots:
-    void on_share_mail_released();
-    void on_share_bt_released();
+    void sendViaBluetooth();
+    void sendViaEmail();
 
 };
 

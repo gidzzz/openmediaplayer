@@ -323,20 +323,10 @@ void MusicWindow::onRenamePlaylistAccepted()
 void MusicWindow::onDeletePlaylistClicked()
 {
 #ifdef MAFW
-    if (ui->playlistList->currentIndex().data(UserRoleObjectID).isNull()) {
-        QMessageBox confirmDelete(QMessageBox::NoIcon,
-                                  " ",
-                                  tr("Delete selected item from device?"),
-                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                                  this);
-        confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-        confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-        confirmDelete.exec();
-        if (confirmDelete.result() == QMessageBox::Yes) {
-            mafwPlaylistManager->deletePlaylist(ui->playlistList->currentIndex().data(Qt::DisplayRole).toString());
-            playlistProxyModel->removeRow(ui->playlistList->currentIndex().row());
-            --savedPlaylistCount;
-        }
+    if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
+        mafwPlaylistManager->deletePlaylist(ui->playlistList->currentIndex().data(Qt::DisplayRole).toString());
+        playlistProxyModel->removeRow(ui->playlistList->currentIndex().row());
+        --savedPlaylistCount;
     }
 #endif
     ui->playlistList->clearSelection();
@@ -345,17 +335,11 @@ void MusicWindow::onDeletePlaylistClicked()
 void MusicWindow::setRingingTone()
 {
 #ifdef MAFW
-    QMessageBox confirmRingtone(QMessageBox::NoIcon,
-                              " ",
-                              tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
-                              + ui->songList->currentIndex().data(Qt::DisplayRole).toString() + "\n"
-                              + ui->songList->currentIndex().data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmRingtone.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmRingtone.button(QMessageBox::No)->setText(tr("No"));
-    confirmRingtone.exec();
-    if (confirmRingtone.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::Ringtone, this,
+                      ui->songList->currentIndex().data(UserRoleSongArtist).toString(),
+                      ui->songList->currentIndex().data(Qt::DisplayRole).toString())
+        .exec() == QMessageBox::Yes)
+    {
         mafwTrackerSource->getUri(ui->songList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }
@@ -408,15 +392,7 @@ void MusicWindow::onShareUriReceived(QString objectId, QString uri)
 void MusicWindow::onDeleteClicked()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              " ",
-                              tr("Delete selected item from device?"),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(currentList()->currentIndex().data(UserRoleObjectID).toString().toUtf8());
         currentList()->model()->removeRow(currentList()->currentIndex().row());
     }

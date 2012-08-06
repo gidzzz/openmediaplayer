@@ -8,6 +8,7 @@
 
 #include "ui_videoswindow.h"
 #include "headerawareproxymodel.h"
+#include "confirmdialog.h"
 #include "videonowplayingwindow.h"
 #include "delegates/thumbnailitemdelegate.h"
 #include "delegates/mediawithicondelegate.h"

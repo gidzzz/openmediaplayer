@@ -40,6 +40,12 @@ PlaylistPicker::~PlaylistPicker()
     delete ui;
 }
 
+void PlaylistPicker::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
 void PlaylistPicker::onCreatePlaylist()
 {
     createPlaylistDialog = new QDialog(this);
@@ -77,15 +83,7 @@ void PlaylistPicker::onCreatePlaylistAccepted()
     }
 
     if (playlistExists) {
-        QMessageBox confirm(QMessageBox::NoIcon,
-                            " ",
-                            tr("Playlist with the same name exists, overwrite?"),
-                            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                            createPlaylistDialog);
-        confirm.button(QMessageBox::Yes)->setText(tr("Yes"));
-        confirm.button(QMessageBox::No)->setText(tr("No"));
-        confirm.exec();
-        if (confirm.result() == QMessageBox::Yes) {
+        if (ConfirmDialog(ConfirmDialog::OverwritePlaylist, this).exec() == QMessageBox::Yes) {
             createPlaylistDialog->close();
             mafwPlaylistManager->deletePlaylist(playlistName);
             mafwPlaylistManager->createPlaylist(playlistName);

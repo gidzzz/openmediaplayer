@@ -16,6 +16,7 @@
 #include "cqgraphicsview.h"
 #include "ui_nowplayingwindow.h"
 #include "includes.h"
+#include "confirmdialog.h"
 #include "delegates/playlistdelegate.h"
 #include "qmlview.h"
 #include "texteditautoresizer.h"

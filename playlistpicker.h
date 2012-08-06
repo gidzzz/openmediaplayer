@@ -4,12 +4,13 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include <QMessageBox>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QKeyEvent>
 
 #include "ui_playlistpicker.h"
 #include "includes.h"
+#include "confirmdialog.h"
 #include "rotator.h"
 
 #ifdef MAFW
@@ -33,6 +34,9 @@ public:
 
 private:
     Ui::PlaylistPicker *ui;
+
+    void keyPressEvent(QKeyEvent *e);
+
     QDialog *createPlaylistDialog;
     QLineEdit *playlistNameEdit;
 #ifdef MAFW

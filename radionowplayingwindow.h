@@ -43,10 +43,15 @@ public slots:
 
 private:
     Ui::RadioNowPlayingWindow *ui;
+
+    void keyPressEvent(QKeyEvent *e);
+
     void connectSignals();
     void setIcons();
+
     void setAlbumImage(QString image);
     QGraphicsScene *albumArtScene;
+
     QTimer *volumeTimer;
     QTimer *positionTimer;
     bool lazySliders;
@@ -63,6 +68,7 @@ private:
 #endif
 
 private slots:
+    void togglePlayback();
     void toggleVolumeSlider();
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();

@@ -11,6 +11,7 @@
 
 #include "ui_videonowplayingwindow.h"
 #include "includes.h"
+#include "confirmdialog.h"
 #include "rotator.h"
 #include "radionowplayingwindow.h"
 #include "bookmarkdialog.h"

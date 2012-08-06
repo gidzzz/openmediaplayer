@@ -406,17 +406,11 @@ void SingleAlbumView::onAddToPlaylist()
 void SingleAlbumView::setRingingTone()
 {
 #ifdef MAFW
-    QMessageBox confirmRingtone(QMessageBox::NoIcon,
-                              " ",
-                              tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
-                              + ui->songList->currentItem()->data(UserRoleSongTitle).toString() + "\n"
-                              + ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmRingtone.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmRingtone.button(QMessageBox::No)->setText(tr("No"));
-    confirmRingtone.exec();
-    if (confirmRingtone.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::Ringtone, this,
+                      ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
+                      ui->songList->currentItem()->data(UserRoleSongTitle).toString())
+        .exec() == QMessageBox::Yes)
+    {
         mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }
@@ -478,15 +472,7 @@ void SingleAlbumView::onContainerChanged(QString objectId)
 void SingleAlbumView::onDeleteClicked()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              " ",
-                              tr("Delete selected item from device?"),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         delete ui->songList->currentItem();
         --visibleSongs; updateSongCount();
@@ -498,15 +484,7 @@ void SingleAlbumView::onDeleteClicked()
 void SingleAlbumView::deleteCurrentAlbum()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              " ",
-                              tr("Delete all items shown in view?"),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::DeleteAll, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(albumObjectId.toUtf8());
         this->close();
     }

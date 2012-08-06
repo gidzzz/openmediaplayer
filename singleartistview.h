@@ -9,9 +9,10 @@
 #endif
 
 #include "ui_singleartistview.h"
+#include "includes.h"
+#include "confirmdialog.h"
 #include "singlealbumview.h"
 #include "delegates/thumbnailitemdelegate.h"
-#include "includes.h"
 
 namespace Ui {
     class SingleArtistView;

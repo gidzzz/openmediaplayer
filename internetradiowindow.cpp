@@ -175,22 +175,16 @@ void InternetRadioWindow::onEditClicked()
                        index.data(UserRoleValueText).toString(), index.data(Qt::DisplayRole).toString(),
                        index.data(UserRoleObjectID).toString())
         .exec() == QDialog::Accepted)
+    {
         listStations();
+    }
 #endif
 }
 
 void InternetRadioWindow::onDeleteClicked()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              " ",
-                              tr("Delete selected item from device?"),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwRadioSource->destroyObject(ui->stationList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
         stationProxyModel->removeRow(ui->stationList->currentIndex().row());
     }

@@ -1216,19 +1216,10 @@ void NowPlayingWindow::updatePlaylistState()
 
 void NowPlayingWindow::clearPlaylist()
 {
-    QMessageBox confirmClear(QMessageBox::NoIcon,
-                             " ",
-                             tr("Clear all songs from now playing?"),
-                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                             this);
-    confirmClear.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmClear.button(QMessageBox::No)->setText(tr("No"));
-    confirmClear.exec();
-    if (confirmClear.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::ClearCurrent, this).exec() == QMessageBox::Yes) {
         playlistTime = 0;
         playlist->clear();
         lastPlayingSong->set(1);
-        mafwrenderer->stop();
         this->close();
     }
 }
@@ -1278,17 +1269,11 @@ void NowPlayingWindow::onAddToPlaylist()
 void NowPlayingWindow::setRingingTone()
 {
 #ifdef MAFW
-    QMessageBox confirmRingtone(QMessageBox::NoIcon,
-                              " ",
-                              tr("Are you sure you want to set this song as ringing tone?")+ "\n\n"
-                              + ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString() + "\n"
-                              + ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmRingtone.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmRingtone.button(QMessageBox::No)->setText(tr("No"));
-    confirmRingtone.exec();
-    if (confirmRingtone.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::Ringtone, this,
+                      ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
+                      ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString())
+        .exec() == QMessageBox::Yes)
+    {
         mafwTrackerSource->getUri(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }
@@ -1317,17 +1302,11 @@ void NowPlayingWindow::onRingingToneUriReceived(QString objectId, QString uri)
 void NowPlayingWindow::onDeleteClicked()
 {
 #ifdef MAFW
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              tr("Delete song?"),
-                              tr("Are you sure you want to delete this song?")+ "\n\n"
-                              + ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString() + "\n"
-                              + ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::DeleteSong, this,
+                      ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString(),
+                      ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString())
+        .exec() == QMessageBox::Yes)
+    {
         playlist->removeItem(ui->songPlaylist->currentRow());
         mafwTrackerSource->destroyObject(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     }
@@ -1530,15 +1509,7 @@ void NowPlayingWindow::selectAlbumArt()
 
 void NowPlayingWindow::resetAlbumArt()
 {
-    QMessageBox confirm(QMessageBox::NoIcon,
-                             " ",
-                             tr("Reset album art?"),
-                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                             this);
-    confirm.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirm.button(QMessageBox::No)->setText(tr("No"));
-    confirm.exec();
-    if (confirm.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::ResetArt, this).exec() == QMessageBox::Yes) {
         setAlbumImage(MediaArt::setAlbumImage(ui->albumNameLabel->text(), ""));
 #ifdef Q_WS_MAEMO_5
         if (isDefaultArt) {

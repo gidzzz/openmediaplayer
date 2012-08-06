@@ -328,16 +328,7 @@ void VideoNowPlayingWindow::onDeleteClicked()
 #ifdef MAFW
     mafwrenderer->pause();
 
-    QMessageBox confirmDelete(QMessageBox::NoIcon,
-                              tr("Delete video?"),
-                              tr("Are you sure you want to delete this video?"),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this);
-    confirmDelete.button(QMessageBox::Yes)->setText(tr("Yes"));
-    confirmDelete.button(QMessageBox::No)->setText(tr("No"));
-    confirmDelete.exec();
-
-    if (confirmDelete.result() == QMessageBox::Yes) {
+    if (ConfirmDialog(ConfirmDialog::DeleteVideo, this).exec() == QMessageBox::Yes) {
         mafwSource->destroyObject(objectIdToPlay.toUtf8());
         this->close();
     }
