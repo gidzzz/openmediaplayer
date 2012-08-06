@@ -99,14 +99,14 @@ void VideosWindow::connectSignals()
 
 void VideosWindow::onContextMenuRequested(const QPoint &pos)
 {
-    if (!ui->videoList->currentIndex().data(Qt::UserRole).toBool()) {
-        QMenu *contextMenu = new QMenu(this);
-        contextMenu->setAttribute(Qt::WA_DeleteOnClose);
-        contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-        contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-        connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
-        contextMenu->exec(this->mapToGlobal(pos));
-    }
+    if (ui->videoList->currentIndex().data(UserRoleHeader).toBool()) return;
+
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void VideosWindow::onDeleteClicked()
@@ -156,7 +156,7 @@ void VideosWindow::onShareUriReceived(QString objectId, QString uri)
 
 void VideosWindow::onVideoSelected(QModelIndex index)
 {
-    if (index.data(Qt::UserRole).toBool()) return;
+    if (index.data(UserRoleHeader).toBool()) return;
 
     this->setEnabled(false);
 
@@ -179,7 +179,7 @@ void VideosWindow::onVideoSelected(QModelIndex index)
     gchar** videoAddBuffer = new gchar*[videoModel->rowCount()+1];
 
     for (int i = 0; i < videoModel->rowCount(); i++)
-        if (!videoModel->item(i)->data(Qt::UserRole).toBool())
+        if (!videoModel->item(i)->data(UserRoleHeader).toBool())
             videoAddBuffer[videoCount++] = qstrdup(videoModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
         else if (i < selectedRow)
             ++indexOffset;
@@ -397,14 +397,14 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
 
             if (!recordingsBufferList.isEmpty()) {
                 if (drawHeaders) {
-                    videoModel->item(i)->setData(true, Qt::UserRole);
+                    videoModel->item(i)->setData(true, UserRoleHeader);
                     videoModel->item(i)->setData(tr("Recorded by device camera"), UserRoleTitle);
                     videoModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
                     ++i;
                 }
 
                 while (!recordingsBufferList.isEmpty()) {
-                    videoModel->item(i)->setData(false, Qt::UserRole);
+                    videoModel->item(i)->setData(false, UserRoleHeader);
                     videoModel->item(i)->setData(recordingsBufferList.first()->data(UserRoleTitle), UserRoleTitle);
                     videoModel->item(i)->setData(recordingsBufferList.first()->data(UserRoleObjectID), UserRoleObjectID);
                     videoModel->item(i)->setData(recordingsBufferList.first()->data(UserRoleSongDuration), UserRoleSongDuration);
@@ -416,14 +416,14 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
 
             if (!filmsBufferList.isEmpty()) {
                 if (drawHeaders) {
-                    videoModel->item(i)->setData(true, Qt::UserRole);
+                    videoModel->item(i)->setData(true, UserRoleHeader);
                     videoModel->item(i)->setData(tr("Films"), UserRoleTitle);
                     videoModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
                     ++i;
                 }
 
                 while (!filmsBufferList.isEmpty()) {
-                    videoModel->item(i)->setData(false, Qt::UserRole);
+                    videoModel->item(i)->setData(false, UserRoleHeader);
                     videoModel->item(i)->setData(filmsBufferList.first()->data(UserRoleTitle), UserRoleTitle);
                     videoModel->item(i)->setData(filmsBufferList.first()->data(UserRoleObjectID), UserRoleObjectID);
                     videoModel->item(i)->setData(filmsBufferList.first()->data(UserRoleSongDuration), UserRoleSongDuration);

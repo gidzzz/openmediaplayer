@@ -345,6 +345,8 @@ void SingleAlbumView::addAllToNowPlaying()
 
 void SingleAlbumView::onContextMenuRequested(const QPoint &pos)
 {
+    if (ui->songList->currentRow() <= 0) return;
+
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));

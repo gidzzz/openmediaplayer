@@ -26,6 +26,9 @@
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -52,6 +55,9 @@
        </property>
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
        <property name="movement">
         <enum>QListView::Static</enum>
@@ -84,6 +90,9 @@
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -97,6 +106,9 @@
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -109,6 +121,9 @@
       <widget class="QListView" name="playlistList">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
        <property name="alternatingRowColors">
         <bool>true</bool>

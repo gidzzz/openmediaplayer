@@ -97,7 +97,7 @@ void InternetRadioWindow::showFMTXDialog()
 
 void InternetRadioWindow::onStationSelected(QModelIndex index)
 {
-    if (index.data(Qt::UserRole).toBool()) return;
+    if (index.data(UserRoleHeader).toBool()) return;
 
     this->setEnabled(false);
 
@@ -155,7 +155,7 @@ void InternetRadioWindow::onStationSelected(QModelIndex index)
 
 void InternetRadioWindow::onContextMenuRequested(const QPoint &pos)
 {
-    if (ui->stationList->currentIndex().data(Qt::UserRole).toBool()) return;
+    if (ui->stationList->currentIndex().data(UserRoleHeader).toBool()) return;
 
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -277,14 +277,14 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
 
         if (!audioBufferList.isEmpty()) {
             if (drawHeaders) {
-                stationModel->item(i)->setData(true, Qt::UserRole);
+                stationModel->item(i)->setData(true, UserRoleHeader);
                 stationModel->item(i)->setText(tr("Audio bookmarks"));
                 stationModel->item(i)->setData(QVariant(), UserRoleMIME);
                 ++i;
             }
 
             while (!audioBufferList.isEmpty()) {
-                stationModel->item(i)->setData(false, Qt::UserRole);
+                stationModel->item(i)->setData(false, UserRoleHeader);
                 stationModel->item(i)->setText(audioBufferList.first()->text());
                 stationModel->item(i)->setData(audioBufferList.first()->data(UserRoleValueText), UserRoleValueText);
                 stationModel->item(i)->setData(audioBufferList.first()->data(UserRoleObjectID), UserRoleObjectID);
@@ -300,14 +300,14 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
 
         if (!videoBufferList.isEmpty()) {
             if (drawHeaders) {
-                stationModel->item(i)->setData(true, Qt::UserRole);
+                stationModel->item(i)->setData(true, UserRoleHeader);
                 stationModel->item(i)->setText(tr("Video bookmarks"));
                 stationModel->item(i)->setData(QVariant(), UserRoleMIME);
                 ++i;
             }
 
             while (!videoBufferList.isEmpty()) {
-                stationModel->item(i)->setData(false, Qt::UserRole);
+                stationModel->item(i)->setData(false, UserRoleHeader);
                 stationModel->item(i)->setText(videoBufferList.first()->text());
                 stationModel->item(i)->setData(videoBufferList.first()->data(UserRoleValueText), UserRoleValueText);
                 stationModel->item(i)->setData(videoBufferList.first()->data(UserRoleObjectID), UserRoleObjectID);

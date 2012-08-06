@@ -289,6 +289,8 @@ void SingleGenreView::onSearchTextChanged(QString text)
 
 void SingleGenreView::onContextMenuRequested(const QPoint &pos)
 {
+    if (ui->artistList->currentRow() <= 0) return;
+
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(addArtistToNowPlaying()));

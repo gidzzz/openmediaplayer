@@ -25,7 +25,7 @@ void SongListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->save();
     QRect r = option.rect;
 
-    if (index.data(Qt::UserRole).toBool()) {
+    if (index.data(UserRoleHeader).toBool()) {
 #ifdef Q_WS_MAEMO_5
         QColor activeColor = QMaemo5Style::standardColor("ActiveTextColor");
 #else

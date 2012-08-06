@@ -92,7 +92,6 @@ void SingleArtistView::listAlbums()
     QListWidgetItem *shuffleButton = new QListWidgetItem(ui->albumList);
     shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     shuffleButton->setData(UserRoleTitle, tr("Shuffle songs"));
-    shuffleButton->setData(Qt::UserRole, "shuffle");
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -163,14 +162,12 @@ void SingleArtistView::onAlbumSelected(QListWidgetItem *item)
 #ifdef MAFW
     this->setEnabled(false);
 
-    if (item->data(Qt::UserRole).toString() == "shuffle")
-        this->shuffleAllSongs();
-    else {
-
+    if (ui->albumList->row(item) == 0) {
+        shuffleAllSongs();
+    } else {
         SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
         albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
         albumView->setWindowTitle(item->data(UserRoleTitle).toString());
-
         albumView->show();
 
         connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -340,14 +337,14 @@ void SingleArtistView::shuffleAllSongs()
 
 void SingleArtistView::onContextMenuRequested(const QPoint &pos)
 {
-    if (ui->albumList->currentRow() != 0) {
-        QMenu *contextMenu = new QMenu(this);
-        contextMenu->setAttribute(Qt::WA_DeleteOnClose);
-        contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddAlbumToNowPlaying()));
-        contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-        connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
-        contextMenu->exec(this->mapToGlobal(pos));
-    }
+    if (ui->albumList->currentRow() <= 0) return;
+
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddAlbumToNowPlaying()));
+    contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void SingleArtistView::onDeleteClicked()

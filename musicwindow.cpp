@@ -159,7 +159,7 @@ void MusicWindow::onSongSelected(QModelIndex index)
 
 void MusicWindow::onPlaylistSelected(QModelIndex index)
 {
-    if (index.data(Qt::UserRole).toBool()) return;
+    if (index.data(UserRoleHeader).toBool()) return;
 
     int row = playlistProxyModel->mapToSource(index).row();
 
@@ -231,7 +231,7 @@ void MusicWindow::connectSignals()
 
 void MusicWindow::onContextMenuRequested(const QPoint &pos)
 {
-    if (currentList() == ui->playlistList && ui->playlistList->currentIndex().data(Qt::UserRole).toBool()) return;
+    if (currentList() == ui->playlistList && ui->playlistList->currentIndex().data(UserRoleHeader).toBool()) return;
 
     QMenu *contextMenu = new QMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -814,7 +814,7 @@ void MusicWindow::listAutoPlaylists()
 
     QStandardItem *item = new QStandardItem();
     item->setText(tr("Automatic playlists"));
-    item->setData(true, Qt::UserRole);
+    item->setData(true, UserRoleHeader);
     playlistModel->appendRow(item);
 
     int limit = QSettings().value("music/playlistSize", 30).toInt();
@@ -862,7 +862,7 @@ void MusicWindow::listSavedPlaylists()
     if (playlists->len != 0) {
         QStandardItem *item = new QStandardItem();
         item->setText(tr("Saved"));
-        item->setData(true, Qt::UserRole);
+        item->setData(true, UserRoleHeader);
         playlistModel->insertRow(5, item);
         ++savedPlaylistCount;
 
@@ -936,7 +936,7 @@ void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint 
 
             QStandardItem *item = new QStandardItem();
             item->setText(tr("Imported playlists"));
-            item->setData(true, Qt::UserRole);
+            item->setData(true, UserRoleHeader);
             playlistModel->appendRow(item);
         }
 

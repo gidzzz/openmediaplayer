@@ -12,7 +12,7 @@ public:
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
     {
-        return this->sourceModel()->index(sourceRow, 0, sourceParent).data(Qt::UserRole).toBool() ||
+        return this->sourceModel()->index(sourceRow, 0, sourceParent).data(UserRoleHeader).toBool() ||
                QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
     }
 };
