@@ -66,6 +66,8 @@ void NowPlayingIndicator::paintEvent(QPaintEvent *)
 void NowPlayingIndicator::connectSignals()
 {
     connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(openWindow()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_M), this), SIGNAL(activated()), this, SLOT(onAudioPlaylistSelected()));
 
     connect(animationTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
     connect(pokeTimer, SIGNAL(timeout()), this, SLOT(onPokeTimeout()));
@@ -183,40 +185,44 @@ void NowPlayingIndicator::onAudioPlaylistSelected()
 
 void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton && this->rect().contains(e->pos())) {
+    if (e->button() == Qt::LeftButton && this->rect().contains(e->pos()))
+        openWindow();
+}
+
+void NowPlayingIndicator::openWindow()
+{
 #ifdef MAFW
-        QString playlistName = playlist->playlistName();
-        qDebug() << "Current playlist is" << playlistName;
+    QString playlistName = playlist->playlistName();
+    qDebug() << "Current playlist is" << playlistName;
 
-        if (window == 0) {
-            if (playlistName == "FmpRadioPlaylist")  {
-                window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
-                connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
-                window->show();
-            }
-            else if (playlistName == "FmpVideoPlaylist") {
-                window = new VideoNowPlayingWindow(this->parentWidget(), mafwFactory);
-                connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
-                window->showFullScreen();
-                // Currently there are some problems with resuming, so start playing immediately
-                QTimer::singleShot(500, window, SLOT(playVideo()));
-            }
-            // The user can only create audio playlists with the UX
-            // Assume all other playlists are audio ones.
-            else { // playlistName == "FmpAudioPlaylist"
-                window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
-                connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-                window->show();
-            }
-
-#else
-            NowPlayingWindow *window = NowPlayingWindow::acquire(this);
+    if (window == 0) {
+        if (playlistName == "FmpRadioPlaylist")  {
+            window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
+            connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
+            window->show();
+        }
+        else if (playlistName == "FmpVideoPlaylist") {
+            window = new VideoNowPlayingWindow(this->parentWidget(), mafwFactory);
+            connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
+            window->showFullScreen();
+            // Currently there are some problems with resuming, so start playing immediately
+            QTimer::singleShot(500, window, SLOT(playVideo()));
+        }
+        // The user can only create audio playlists with the UX
+        // Assume all other playlists are audio ones.
+        else { // playlistName == "FmpAudioPlaylist"
+            window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
             connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
             window->show();
+        }
+
+#else
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this);
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+        window->show();
 #endif
 
-            inhibit();
-        }
+        inhibit();
     }
 }
 

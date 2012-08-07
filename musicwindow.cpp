@@ -1166,6 +1166,8 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
         case Qt::Key_Enter:
         case Qt::Key_Backspace:
         case Qt::Key_Space:
+        case Qt::Key_Control:
+        case Qt::Key_Shift:
             return;
 
         case Qt::Key_Up:

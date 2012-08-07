@@ -92,6 +92,7 @@ private slots:
     void onPlaylistReady(MafwPlaylist*,uint,MafwPlayState, const char* objectId, QString);
 #endif
     void nextFrame();
+    void openWindow();
     void onWindowDestroyed();
     void onNowPlayingWindowHidden();
     void onPokeTimeout();
