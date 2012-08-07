@@ -86,6 +86,7 @@ private slots:
     void onSearchTextChanged(QString text);
     void onShuffleButtonClicked();
     void onContextMenuRequested(const QPoint &pos);
+    void showWindowMenu();
     void onAddToNowPlaying();
     void onAddToPlaylist();
     void setRingingTone();

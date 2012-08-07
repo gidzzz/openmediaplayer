@@ -106,6 +106,7 @@ private:
 
 private slots:
     void orientationChanged(int w, int h);
+    void showWindowMenu();
     void showAbout();
     void processListClicks(QListWidgetItem*);
     void openSettings();

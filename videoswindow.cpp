@@ -57,7 +57,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     sortByDate->setCheckable(true);
     sortByCategory = new QAction(tr("Category"), sortByActionGroup);
     sortByCategory->setCheckable(true);
-    this->menuBar()->addActions(sortByActionGroup->actions());
+    ui->windowMenu->addActions(sortByActionGroup->actions());
 
     connectSignals();
 
@@ -80,11 +80,14 @@ VideosWindow::~VideosWindow()
 
 void VideosWindow::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
+
     connect(ui->videoList, SIGNAL(activated(QModelIndex)), this, SLOT(onVideoSelected(QModelIndex)));
     connect(ui->videoList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->videoList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
 
-    connect(ui->menubar, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
+    connect(ui->windowMenu, SIGNAL(triggered(QAction*)), this, SLOT(onSortingChanged(QAction*)));
 
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), videoProxyModel, SLOT(setFilterFixedString(QString)));
@@ -107,6 +110,13 @@ void VideosWindow::onContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
+}
+
+void VideosWindow::showWindowMenu()
+{
+    ui->windowMenu->adjustSize();
+    int x = (this->width() - ui->windowMenu->width()) / 2;
+    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void VideosWindow::onDeleteClicked()

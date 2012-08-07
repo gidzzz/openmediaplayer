@@ -220,15 +220,18 @@ void MainWindow::setLabelText()
 
 void MainWindow::connectSignals()
 {
-    connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
-    connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
-    connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
-    connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->menuOptions), SIGNAL(activated()), ui->menuOptions, SLOT(close()));
 
     connect(new QShortcut(QKeySequence(Qt::Key_Q), this), SIGNAL(activated()), this, SLOT(showMusicWindow()));
     connect(new QShortcut(QKeySequence(Qt::Key_W), this), SIGNAL(activated()), this, SLOT(showVideosWindow()));
     connect(new QShortcut(QKeySequence(Qt::Key_E), this), SIGNAL(activated()), this, SLOT(showInternetRadioWindow()));
     connect(new QShortcut(QKeySequence(Qt::Key_R), this), SIGNAL(activated()), this, SLOT(onShuffleAllClicked()));
+
+    connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
+    connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
+    connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
+    connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
 
     connect(ui->menuList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
 
@@ -570,6 +573,13 @@ void MainWindow::createVideoNowPlayingWindow()
 #ifdef MAFW
     QTimer::singleShot(500, window, SLOT(playVideo()));
 #endif
+}
+
+void MainWindow::showWindowMenu()
+{
+    ui->menuOptions->adjustSize();
+    int x = (this->width() - ui->menuOptions->width()) / 2;
+    ui->menuOptions->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void MainWindow::orientationChanged(int w, int h)

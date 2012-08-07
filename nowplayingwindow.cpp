@@ -392,6 +392,9 @@ void NowPlayingWindow::onStateChanged(int state)
 
 void NowPlayingWindow::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
+
     connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
     connect(new QShortcut(QKeySequence(Qt::Key_Left), this), SIGNAL(activated()), mafwrenderer, SLOT(previous()));
     connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), mafwrenderer, SLOT(next()));
@@ -1251,6 +1254,13 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &pos)
     }
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
+}
+
+void NowPlayingWindow::showWindowMenu()
+{
+    ui->windowMenu->adjustSize();
+    int x = (this->width() - ui->windowMenu->width()) / 2;
+    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void NowPlayingWindow::onAddToPlaylist()

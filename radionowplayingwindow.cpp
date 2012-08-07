@@ -82,10 +82,13 @@ RadioNowPlayingWindow::~RadioNowPlayingWindow()
 
 void RadioNowPlayingWindow::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
+
     connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
     connect(new QShortcut(QKeySequence(Qt::Key_Left), this), SIGNAL(activated()), mafwrenderer, SLOT(previous()));
     connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), mafwrenderer, SLOT(next()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); // prevent Ctrl+Space from toggling plyback
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); // prevent Ctrl+Space from toggling playback
 
 #ifdef Q_WS_MAEMO_5
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
@@ -463,6 +466,13 @@ void RadioNowPlayingWindow::setAlbumImage(QString image)
 
     albumArtScene->addItem(item);
     m->setItem(item);
+}
+
+void RadioNowPlayingWindow::showWindowMenu()
+{
+    ui->windowMenu->adjustSize();
+    int x = (this->width() - ui->windowMenu->width()) / 2;
+    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void RadioNowPlayingWindow::orientationChanged(int w, int h)

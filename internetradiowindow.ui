@@ -87,14 +87,14 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuInternet_Radio">
+   <widget class="QMenu" name="windowMenu">
     <property name="title">
      <string>Internet Radio</string>
     </property>
     <addaction name="actionAdd_radio_bookmark"/>
     <addaction name="actionFM_transmitter"/>
    </widget>
-   <addaction name="menuInternet_Radio"/>
+   <addaction name="windowMenu"/>
   </widget>
   <action name="actionAdd_radio_bookmark">
    <property name="text">

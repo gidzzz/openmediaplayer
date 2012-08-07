@@ -71,6 +71,9 @@ InternetRadioWindow::~InternetRadioWindow()
 
 void InternetRadioWindow::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
+
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(onAddClicked()));
 
@@ -163,6 +166,13 @@ void InternetRadioWindow::onContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
+}
+
+void InternetRadioWindow::showWindowMenu()
+{
+    ui->windowMenu->adjustSize();
+    int x = (this->width() - ui->windowMenu->width()) / 2;
+    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void InternetRadioWindow::onEditClicked()

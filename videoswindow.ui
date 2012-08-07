@@ -93,6 +93,7 @@
     </property>
    </widget>
   </widget>
+
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -102,8 +103,15 @@
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="windowMenu">
+    <property name="title">
+     <string>Options</string>
+    </property>
+   </widget>
+   <addaction name="windowMenu"/>
   </widget>
  </widget>
+
  <customwidgets>
   <customwidget>
    <class>NowPlayingIndicator</class>

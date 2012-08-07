@@ -467,14 +467,14 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuOptions">
+   <widget class="QMenu" name="windowMenu">
     <property name="title">
      <string>Options</string>
     </property>
     <addaction name="actionFM_transmitter"/>
     <addaction name="actionAdd_radio_bookmark"/>
    </widget>
-   <addaction name="menuOptions"/>
+   <addaction name="windowMenu"/>
   </widget>
   <action name="actionFM_transmitter">
    <property name="text">

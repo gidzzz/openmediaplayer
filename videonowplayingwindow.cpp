@@ -140,6 +140,8 @@ void VideoNowPlayingWindow::setIcons()
 
 void VideoNowPlayingWindow::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(toggleOverlay()));
+
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPrevButtonClicked()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
 
@@ -580,6 +582,11 @@ void VideoNowPlayingWindow::paintEvent(QPaintEvent *)
 }
 
 void VideoNowPlayingWindow::mouseReleaseEvent(QMouseEvent *)
+{
+    toggleOverlay();
+}
+
+void VideoNowPlayingWindow::toggleOverlay()
 {
     overlayRequestedByUser = !overlayVisible;
     showOverlay(overlayRequestedByUser);

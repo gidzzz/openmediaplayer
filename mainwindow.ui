@@ -24,8 +24,8 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="songsButton">
-    <property name="enabled">
-     <bool>true</bool>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="geometry">
      <rect>
@@ -60,8 +60,8 @@ border: none;
     </property>
    </widget>
    <widget class="QPushButton" name="videosButton">
-    <property name="enabled">
-     <bool>true</bool>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="geometry">
      <rect>
@@ -96,8 +96,8 @@ border: none;
     </property>
    </widget>
    <widget class="QPushButton" name="radioButton">
-    <property name="enabled">
-     <bool>true</bool>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="geometry">
      <rect>
@@ -132,8 +132,8 @@ border: none;
     </property>
    </widget>
    <widget class="QPushButton" name="shuffleAllButton">
-    <property name="enabled">
-     <bool>true</bool>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="geometry">
      <rect>
@@ -376,7 +376,7 @@ border: none;
     </property>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>

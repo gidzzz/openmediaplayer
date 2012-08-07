@@ -88,6 +88,7 @@ private:
 #endif
 
 private slots:
+    void toggleOverlay();
     void toggleVolumeSlider();
     void volumeWatcher();
     void orientationChanged(int w, int h);

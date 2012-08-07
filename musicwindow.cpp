@@ -202,6 +202,9 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
 
 void MusicWindow::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
+
 #ifdef MAFW
     connect(ui->songList, SIGNAL(activated(QModelIndex)), this, SLOT(onSongSelected(QModelIndex)));
     connect(ui->albumList, SIGNAL(activated(QModelIndex)), this, SLOT(onAlbumSelected(QModelIndex)));
@@ -270,6 +273,14 @@ void MusicWindow::onContextMenuRequested(const QPoint &pos)
 
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
+}
+
+void MusicWindow::showWindowMenu()
+{
+    ui->windowMenu->adjustSize();
+    int x = (this->width() - ui->windowMenu->width()) / 2;
+    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
+    qDebug() << this->mapToGlobal(QPoint(x,-35));
 }
 
 void MusicWindow::onRenamePlaylist()
@@ -441,23 +452,27 @@ bool MusicWindow::eventFilter(QObject *obj, QEvent *e)
     return false;
 }
 
-void MusicWindow::populateMenuBar()
+void MusicWindow::populateWindowMenu()
 {
-    ui->menubar->clear();
-    if(ui->albumList->isHidden())
-        ui->menubar->addAction(tr("All albums"), this, SLOT(showAlbumView()));
-    if(ui->artistList->isHidden())
-        ui->menubar->addAction(tr("Artists"), this, SLOT(showArtistView()));
-    if(ui->songList->isHidden())
-        ui->menubar->addAction(tr("All songs"), this, SLOT(showSongsView()));
-    if(ui->genresList->isHidden())
-        ui->menubar->addAction(tr("Genres"), this, SLOT(showGenresView()));
-    if(ui->playlistList->isHidden())
-        ui->menubar->addAction(tr("Playlists"), this, SLOT(showPlayListView()));
+    ui->windowMenu->clear();
+
+    if (ui->albumList->isHidden())
+        ui->windowMenu->addAction(tr("All albums"), this, SLOT(showAlbumView()));
+    if (ui->artistList->isHidden())
+        ui->windowMenu->addAction(tr("Artists"), this, SLOT(showArtistView()));
+    if (ui->songList->isHidden())
+        ui->windowMenu->addAction(tr("All songs"), this, SLOT(showSongsView()));
+    if (ui->genresList->isHidden())
+        ui->windowMenu->addAction(tr("Genres"), this, SLOT(showGenresView()));
+    if (ui->playlistList->isHidden())
+        ui->windowMenu->addAction(tr("Playlists"), this, SLOT(showPlayListView()));
 }
 
 void MusicWindow::hideLayoutContents()
 {
+    // Prevent focus from disapearing when hiding lists to keep shortcuts working
+    this->setFocus();
+
     if(!ui->songList->isHidden())
         ui->songList->hide();
     if(!ui->artistList->isHidden())
@@ -487,7 +502,7 @@ void MusicWindow::showAlbumView()
 
     this->hideLayoutContents();
     ui->albumList->show();
-    this->populateMenuBar();
+    this->populateWindowMenu();
     QMainWindow::setWindowTitle(tr("Albums"));
     this->saveViewState("albums");
 #ifdef MAFW
@@ -508,7 +523,7 @@ void MusicWindow::showArtistView()
 
     this->hideLayoutContents();
     ui->artistList->show();
-    this->populateMenuBar();
+    this->populateWindowMenu();
     QMainWindow::setWindowTitle(tr("Artists"));
     this->saveViewState("artists");
 #ifdef MAFW
@@ -529,7 +544,7 @@ void MusicWindow::showGenresView()
 
     this->hideLayoutContents();
     ui->genresList->show();
-    this->populateMenuBar();
+    this->populateWindowMenu();
     QMainWindow::setWindowTitle(tr("Genres"));
     this->saveViewState("genres");
 #ifdef MAFW
@@ -550,7 +565,7 @@ void MusicWindow::showSongsView()
 
     this->hideLayoutContents();
     ui->songList->show();
-    this->populateMenuBar();
+    this->populateWindowMenu();
     QMainWindow::setWindowTitle(tr("Songs"));
     this->saveViewState("songs");
 #ifdef MAFW
@@ -571,7 +586,7 @@ void MusicWindow::showPlayListView()
 
     this->hideLayoutContents();
     ui->playlistList->show();
-    this->populateMenuBar();
+    this->populateWindowMenu();
     QMainWindow::setWindowTitle(tr("Playlists"));
     this->saveViewState("playlists");
 #ifdef MAFW

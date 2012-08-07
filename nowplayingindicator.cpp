@@ -67,7 +67,7 @@ void NowPlayingIndicator::connectSignals()
 {
     connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(openWindow()));
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_M), this), SIGNAL(activated()), this, SLOT(onAudioPlaylistSelected()));
+    //connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_M), this), SIGNAL(activated()), this, SLOT(onAudioPlaylistSelected()));
 
     connect(animationTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
     connect(pokeTimer, SIGNAL(timeout()), this, SLOT(onPokeTimeout()));

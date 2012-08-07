@@ -93,14 +93,14 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="windowMenu">
     <property name="title">
      <string>Options</string>
     </property>
     <addaction name="actionAdd_to_now_playing"/>
     <addaction name="actionDelete"/>
    </widget>
-   <addaction name="menuFile"/>
+   <addaction name="windowMenu"/>
   </widget>
   <action name="actionAdd_to_now_playing">
    <property name="text">

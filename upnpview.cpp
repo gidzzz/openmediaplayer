@@ -25,6 +25,9 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     objectProxyModel->setSourceModel(objectModel);
     ui->objectList->setModel(objectProxyModel);
 
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
+
     connect(ui->objectList, SIGNAL(activated(QModelIndex)), this, SLOT(onItemActivated(QModelIndex)));
     connect(ui->objectList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -199,6 +202,13 @@ void UpnpView::onContextMenuRequested(const QPoint &pos)
         connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
         contextMenu->exec(this->mapToGlobal(pos));
     }
+}
+
+void UpnpView::showWindowMenu()
+{
+    ui->windowMenu->adjustSize();
+    int x = (this->width() - ui->windowMenu->width()) / 2;
+    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void UpnpView::onItemActivated(QModelIndex index)

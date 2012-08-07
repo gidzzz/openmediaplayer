@@ -182,6 +182,7 @@ private slots:
     void onLyricsContextMenuRequested(const QPoint &pos);
     void onViewContextMenuRequested(const QPoint &pos);
     void onContextMenuRequested(const QPoint &pos);
+    void showWindowMenu();
 
     void onDeleteClicked();
     void onShareClicked();

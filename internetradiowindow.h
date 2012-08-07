@@ -65,6 +65,7 @@ private slots:
     void onDeleteClicked();
     void onStationSelected(QModelIndex index);
     void onContextMenuRequested(const QPoint &pos);
+    void showWindowMenu();
     void orientationChanged(int w, int h);
     void onChildClosed();
     void onSearchHideButtonClicked();

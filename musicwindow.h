@@ -98,7 +98,7 @@ private:
 #endif
     void connectSignals();
     void disconnectSearch();
-    void populateMenuBar();
+    void populateWindowMenu();
     void hideLayoutContents();
     void saveViewState(QVariant);
     void loadViewState();
@@ -109,6 +109,7 @@ private:
 
 private slots:
     void onContextMenuRequested(const QPoint &pos);
+    void showWindowMenu();
     void onSongSelected(QModelIndex index);
     void setRingingTone();
     void onShareClicked();
