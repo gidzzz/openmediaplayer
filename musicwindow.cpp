@@ -585,6 +585,11 @@ void MusicWindow::showPlayListView()
 #endif
 }
 
+void MusicWindow::refreshPlaylistView()
+{
+    if (playlistModel->rowCount() != 0) listPlaylists();
+}
+
 QListView* MusicWindow::currentList()
 {
     if (!ui->songList->isHidden())
@@ -1328,12 +1333,12 @@ void MusicWindow::onContainerChanged(QString objectId)
 
     if (objectId.startsWith("localtagfs::music")) {
         if (!objectId.endsWith("/playlists")) {
-            this->listArtists();
-            this->listGenres();
-            this->listAlbums();
-            this->listSongs();
+            listArtists();
+            listGenres();
+            listAlbums();
+            listSongs();
         }
-        this->listPlaylists();
+        listPlaylists();
     }
 }
 

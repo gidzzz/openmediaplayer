@@ -45,6 +45,7 @@ public:
     explicit MusicWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~MusicWindow();
     bool eventFilter(QObject *obj, QEvent *e);
+    void refreshPlaylistView();
 
 protected:
     void hideEvent(QHideEvent *);

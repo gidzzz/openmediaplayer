@@ -620,13 +620,13 @@ void MainWindow::processListClicks(QListWidgetItem* item)
 {
     QString itemName = item->statusTip();
     if (itemName == "songs_button")
-        this->showMusicWindow();
+        showMusicWindow();
     else if (itemName == "videos_button")
-        this->showVideosWindow();
+        showVideosWindow();
     else if (itemName == "radio_button")
-        this->showInternetRadioWindow();
+        showInternetRadioWindow();
     else if (itemName == "shuffle_button")
-        this->onShuffleAllClicked();
+        onShuffleAllClicked();
 }
 
 void MainWindow::openSettings()
@@ -639,6 +639,8 @@ void MainWindow::openSettings()
 void MainWindow::reloadSettings()
 {
     NowPlayingWindow::destroy();
+
+    musicWindow->refreshPlaylistView();
 
     QString orientation = QSettings().value("main/orientation").toString();
     Rotator::acquire()->setPolicy(orientation == "landscape" ? Rotator::Landscape :
