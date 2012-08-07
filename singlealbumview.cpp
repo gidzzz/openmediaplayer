@@ -45,7 +45,8 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     SingleAlbumViewDelegate *delegate = new SingleAlbumViewDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
 
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
+    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->songList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
@@ -295,15 +296,8 @@ void SingleAlbumView::onSearchTextChanged(QString text)
 
 void SingleAlbumView::keyPressEvent(QKeyEvent *e)
 {
-    switch (e->key()) {
-        case Qt::Key_Backspace:
-            this->close();
-            break;
-
-        case Qt::Key_Shift:
-            onContextMenuRequested(QPoint(35,35));
-            break;
-    }
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
 }
 
 void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)

@@ -80,7 +80,8 @@ VideosWindow::~VideosWindow()
 
 void VideosWindow::connectSignals()
 {
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
+    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->videoList, SIGNAL(activated(QModelIndex)), this, SLOT(onVideoSelected(QModelIndex)));
@@ -258,15 +259,8 @@ void VideosWindow::onSearchTextChanged(QString text)
 
 void VideosWindow::keyPressEvent(QKeyEvent *e)
 {
-    switch (e->key()) {
-        case Qt::Key_Backspace:
-            this->close();
-            break;
-
-        case Qt::Key_Shift:
-            onContextMenuRequested(QPoint(35,35));
-            break;
-    }
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
 }
 
 void VideosWindow::keyReleaseEvent(QKeyEvent *e)

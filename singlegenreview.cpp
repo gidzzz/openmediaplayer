@@ -46,7 +46,8 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 
     isShuffling = false;
 
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
+    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->artistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
@@ -228,15 +229,8 @@ void SingleGenreView::updateSongCount()
 
 void SingleGenreView::keyPressEvent(QKeyEvent *e)
 {
-    switch (e->key()) {
-        case Qt::Key_Backspace:
-            this->close();
-            break;
-
-        case Qt::Key_Shift:
-            onContextMenuRequested(QPoint(35,35));
-            break;
-    }
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
 }
 
 void SingleGenreView::keyReleaseEvent(QKeyEvent *e)

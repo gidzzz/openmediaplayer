@@ -392,7 +392,7 @@ void NowPlayingWindow::onStateChanged(int state)
 
 void NowPlayingWindow::connectSignals()
 {
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
@@ -853,6 +853,7 @@ void NowPlayingWindow::toggleList()
         ui->widget->hide();
         ui->songPlaylist->hide();
         ui->lyrics->show();
+        ui->lyrics->setFocus();
         ui->spacer1->hide();
         if (portrait) {
             ui->view_large->hide();
@@ -1084,27 +1085,23 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
             this->close();
             break;
 
-        case Qt::Key_Shift:
-            if (ui->songPlaylist->isVisible())
-                onContextMenuRequested(QPoint(35,35));
-            else if (ui->lyrics->isVisible())
-                onLyricsContextMenuRequested(QPoint(35,35));
+        case Qt::Key_Enter:
+            if (e->modifiers() & Qt::ControlModifier) {
+                if (ui->songPlaylist->isVisible())
+                    onContextMenuRequested(QPoint(this->width()/2,35));
+                else if (ui->lyrics->isVisible())
+                    onLyricsContextMenuRequested(QPoint(this->width()/2,35));
+            } else {
+                onPlaylistItemActivated(ui->songPlaylist->currentItem());
+            }
             break;
     }
 }
 
 void NowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
 {
-    switch (e->key()) {
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-            keyTimer->start();
-            break;
-
-        case Qt::Key_Enter:
-            onPlaylistItemActivated(ui->songPlaylist->currentItem());
-            break;
-    }
+    if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down)
+        keyTimer->start();
 }
 
 void NowPlayingWindow::togglePlayback()

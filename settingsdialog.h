@@ -6,6 +6,7 @@
 #include <QMaemo5InformationBox>
 #include <QMaemo5ListPickSelector>
 #include <QStandardItemModel>
+#include <QKeyEvent>
 
 #include "ui_settingsdialog.h"
 #include "confirmdialog.h"
@@ -28,6 +29,7 @@ public:
 
 private:
     Ui::SettingsDialog *ui;
+    void keyPressEvent(QKeyEvent *e);
 
     QString lyricsProviders;
     void setLyricsProviders(QString lyricsProviders);

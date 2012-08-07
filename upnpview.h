@@ -34,7 +34,7 @@ private slots:
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
-    void onContextMenuRequested(const QPoint &pos);
+    void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void showWindowMenu();
     void onItemActivated(QModelIndex index);
     void onAddOneToNowPlaying();

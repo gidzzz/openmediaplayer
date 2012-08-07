@@ -71,7 +71,8 @@ InternetRadioWindow::~InternetRadioWindow()
 
 void InternetRadioWindow::connectSignals()
 {
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
+    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
@@ -339,15 +340,8 @@ void InternetRadioWindow::onContainerChanged()
 
 void InternetRadioWindow::keyPressEvent(QKeyEvent *e)
 {
-    switch (e->key()) {
-        case Qt::Key_Backspace:
-            this->close();
-            break;
-
-        case Qt::Key_Shift:
-            onContextMenuRequested(QPoint(35,35));
-            break;
-    }
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
 }
 
 void InternetRadioWindow::keyReleaseEvent(QKeyEvent *e)

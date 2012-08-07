@@ -55,6 +55,12 @@ SleeperDialog::~SleeperDialog()
     delete ui;
 }
 
+void SleeperDialog::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
 void SleeperDialog::refreshTitle()
 {
     this->setWindowTitle(tr("Sleep timer") + " " + time_mmss( (timeoutStamp/1000 - QDateTime::currentMSecsSinceEpoch()/1000) ));

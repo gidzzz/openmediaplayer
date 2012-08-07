@@ -76,7 +76,7 @@ private slots:
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();
     void deleteCurrentAlbum();
-    void onContextMenuRequested(const QPoint &pos);
+    void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void showWindowMenu();
     void setRingingTone();
     void onShareClicked();

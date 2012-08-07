@@ -8,6 +8,7 @@
 #include <QAbstractButton>
 #include <QStandardItemModel>
 #include <QMaemo5ListPickSelector>
+#include <QKeyEvent>
 
 #include "includes.h"
 #include "rotator.h"
@@ -38,6 +39,7 @@ signals:
 
 private:
     Ui::SleeperDialog *ui;
+    void keyPressEvent(QKeyEvent *e);
     QTimer *refreshTimer;
     qint64 timeoutStamp;
 

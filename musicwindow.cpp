@@ -202,7 +202,8 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
 
 void MusicWindow::connectSignals()
 {
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
+    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
 #ifdef MAFW
@@ -1164,15 +1165,8 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
 
 void MusicWindow::keyPressEvent(QKeyEvent *e)
 {
-    switch (e->key()) {
-        case Qt::Key_Backspace:
-            this->close();
-            break;
-
-        case Qt::Key_Shift:
-            onContextMenuRequested(QPoint(35,35));
-            break;
-    }
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
 }
 
 void MusicWindow::keyReleaseEvent(QKeyEvent *e)

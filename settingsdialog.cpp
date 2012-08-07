@@ -137,6 +137,12 @@ SettingsDialog::~SettingsDialog()
     delete ui;
 }
 
+void SettingsDialog::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Backspace)
+        this->close();
+}
+
 void SettingsDialog::setLyricsProviders(QString lyricsProviders)
 {
     this->lyricsProviders = lyricsProviders;

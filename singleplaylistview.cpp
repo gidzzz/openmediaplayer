@@ -65,7 +65,8 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     clickTimer->setInterval(QApplication::doubleClickInterval());
     clickTimer->setSingleShot(true);
 
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
+    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
@@ -424,8 +425,8 @@ void SinglePlaylistView::keyPressEvent(QKeyEvent *e)
             this->close();
             break;
 
-        case Qt::Key_Shift:
-            onContextMenuRequested(QPoint(35,35));
+        case Qt::Key_Enter:
+            onItemActivated(ui->songList->currentItem());
             break;
     }
 }
@@ -433,6 +434,7 @@ void SinglePlaylistView::keyPressEvent(QKeyEvent *e)
 void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
 {
     switch (e->key()) {
+        case Qt::Key_Enter:
         case Qt::Key_Left:
         case Qt::Key_Right:
         case Qt::Key_Backspace:
@@ -440,10 +442,6 @@ void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
         case Qt::Key_Control:
         case Qt::Key_Shift:
             return;
-
-        case Qt::Key_Enter:
-            onItemActivated(ui->songList->currentItem());
-            break;
 
         case Qt::Key_Up:
         case Qt::Key_Down:
