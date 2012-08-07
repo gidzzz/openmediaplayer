@@ -3,10 +3,12 @@
 
 #include <QDialog>
 #include <QSettings>
+#include <QMaemo5InformationBox>
 #include <QMaemo5ListPickSelector>
 #include <QStandardItemModel>
 
 #include "ui_settingsdialog.h"
+#include "confirmdialog.h"
 #include "lyricsprovidersdialog.h"
 #include "rotator.h"
 
@@ -32,6 +34,7 @@ private:
 
 private slots:
     void configureLyricsProviders();
+    void clearLyricsCache();
     void accept();
     void orientationChanged(int h, int w);
 };

@@ -103,7 +103,9 @@ QString LyricsManager::cacheDirPath(QString artist, QString title)
 {
     Q_UNUSED(title);
 
-    return QString(LYRICS_DIR) + artist.remove('/') + '/';
+    artist = artist.remove('/');
+
+    return QString(LYRICS_DIR) + (artist.isEmpty() ? "_" : artist) + "/";
 }
 
 QString LyricsManager::loadLyrics(QString artist, QString title)
@@ -192,4 +194,28 @@ void LyricsManager::onLyricsError(QString message)
     qDebug() << "Lyrics error:" << message;
 
     queryNextProvider();
+}
+
+bool LyricsManager::clearCache()
+{
+    qDebug() << "Clearing cache";
+
+    bool clear = true;
+
+    QDir cacheDir(LYRICS_DIR);
+
+    QStringList artistDirs = cacheDir.entryList(QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot);
+    foreach (QString artistDir, artistDirs) {
+        QDir artist(cacheDir.absoluteFilePath(artistDir));
+
+        QStringList songFiles = artist.entryList(QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot);
+        foreach (QString song, songFiles)
+            artist.remove(song);
+
+        clear &= cacheDir.rmdir(artistDir);
+    }
+
+    qDebug() << "Cache cleared:" << clear;
+
+    return clear;
 }

@@ -125,6 +125,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->lyricsProvidersBox, SIGNAL(clicked()), this, SLOT(configureLyricsProviders()));
     ui->lyricsProvidersBox->installEventFilter(this);
 
+    connect(ui->clearLyricsButton, SIGNAL(clicked()), this, SLOT(clearLyricsCache()));
+
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
     orientationChanged(rotator->width(), rotator->height());
@@ -155,6 +157,13 @@ void SettingsDialog::configureLyricsProviders()
     LyricsProvidersDialog lpd(lyricsProviders, this);
     lpd.exec();
     setLyricsProviders(lpd.state());
+}
+
+void SettingsDialog::clearLyricsCache()
+{
+    if (ConfirmDialog(ConfirmDialog::ClearLyrics, this).exec() == QMessageBox::Yes)
+        QMaemo5InformationBox::information(this, LyricsManager::clearCache() ? tr("Operation complete") :
+                                                                               tr("Operation failed"));
 }
 
 void SettingsDialog::accept()

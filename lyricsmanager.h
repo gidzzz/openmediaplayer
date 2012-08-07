@@ -29,6 +29,7 @@ public:
     static QString loadLyrics(QString artist, QString title);
     static void storeLyrics(QString artist, QString title, QString lyrics);
     static void deleteLyrics(QString artist, QString title);
+    static bool clearCache();
 
 signals:
     void lyricsFetched(QString lyrics);

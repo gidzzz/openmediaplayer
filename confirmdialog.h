@@ -17,6 +17,7 @@ public:
         DeletePlaylist,
         DeleteAll,
         ClearCurrent,
+        ClearLyrics,
         OverwritePlaylist,
         Ringtone,
         ResetArt
@@ -60,6 +61,11 @@ public:
                 this->setText(tr("Clear all songs from now playing?"));
                 break;
 
+            case ClearLyrics:
+                this->setWindowTitle(" ");
+                this->setText(tr("Delete all downloaded lyrics?"));
+                break;
+
             case OverwritePlaylist:
                 this->setWindowTitle(" ");
                 this->setText(tr("Playlist with the same name exists, overwrite?"));
@@ -78,15 +84,15 @@ public:
     }
 
 protected:
-    void keyPressEvent(QKeyEvent *e)
+    void keyReleaseEvent(QKeyEvent *e)
     {
         switch (e->key()) {
             case Qt::Key_Y:
-                this->button(QMessageBox::Yes)->animateClick();
+                this->button(QMessageBox::Yes)->animateClick(50);
                 break;
 
             case Qt::Key_N:
-                this->button(QMessageBox::No)->animateClick();
+                this->button(QMessageBox::No)->animateClick(50);
                 break;
 
             case Qt::Key_Backspace:
