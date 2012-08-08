@@ -65,7 +65,10 @@ void NowPlayingIndicator::paintEvent(QPaintEvent *)
 
 void NowPlayingIndicator::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right), this), SIGNAL(activated()), mafwrenderer, SLOT(next()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left), this), SIGNAL(activated()), mafwrenderer, SLOT(previous()));
     connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(openWindow()));
     //connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_M), this), SIGNAL(activated()), this, SLOT(onAudioPlaylistSelected()));
 

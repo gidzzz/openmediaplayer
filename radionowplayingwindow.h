@@ -93,6 +93,7 @@ private slots:
     void onBufferingInfo(float buffer);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
+    void onPlayMenuRequested(const QPoint &pos);
     void onPositionSliderPressed();
     void onPositionSliderReleased();
     void onPositionSliderMoved(int position);

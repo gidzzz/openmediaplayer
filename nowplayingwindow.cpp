@@ -457,7 +457,6 @@ void NowPlayingWindow::connectSignals()
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
 
     connect(ui->playButton, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onPlayMenuRequested(QPoint)));
-    connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
 
@@ -1094,6 +1093,18 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
             } else {
                 onPlaylistItemActivated(ui->songPlaylist->currentItem());
             }
+            break;
+
+        case Qt::Key_S:
+            mafwrenderer->stop();
+            break;
+
+        case Qt::Key_E:
+            ui->shuffleButton->click();
+            break;
+
+        case Qt::Key_R:
+            ui->repeatButton->click();
             break;
     }
 }

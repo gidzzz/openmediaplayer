@@ -106,6 +106,7 @@ void RadioNowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
 #ifdef MAFW
+    connect(ui->playButton, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onPlayMenuRequested(QPoint)));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
 
@@ -154,8 +155,15 @@ void RadioNowPlayingWindow::setIcons()
 
 void RadioNowPlayingWindow::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Backspace)
-        this->close();
+    switch (e->key()) {
+        case Qt::Key_Backspace:
+            this->close();
+            break;
+
+        case Qt::Key_S:
+            mafwrenderer->stop();
+            break;
+    }
 }
 
 void RadioNowPlayingWindow::toggleVolumeSlider()
@@ -568,3 +576,13 @@ void RadioNowPlayingWindow::togglePlayback()
         mafwrenderer->play();
 #endif
 }
+
+#ifdef MAFW
+void RadioNowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
+{
+    QMenu *contextMenu = new QMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
+    contextMenu->addAction(tr("Stop playback"), mafwrenderer, SLOT(stop()));
+    contextMenu->exec(this->mapToGlobal(pos));
+}
+#endif
