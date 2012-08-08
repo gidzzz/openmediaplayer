@@ -63,7 +63,7 @@ public:
 
             case ClearLyrics:
                 this->setWindowTitle(" ");
-                this->setText(tr("Delete all downloaded lyrics?"));
+                this->setText(tr("Delete all stored lyrics?"));
                 break;
 
             case OverwritePlaylist:
