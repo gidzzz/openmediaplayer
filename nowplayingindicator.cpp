@@ -65,12 +65,16 @@ void NowPlayingIndicator::paintEvent(QPaintEvent *)
 
 void NowPlayingIndicator::connectSignals()
 {
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right), this), SIGNAL(activated()), mafwrenderer, SLOT(next()));
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left), this), SIGNAL(activated()), mafwrenderer, SLOT(previous()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+    QShortcut *shortcut;
+
+    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
+    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(previous()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(openWindow()));
-    //connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_M), this), SIGNAL(activated()), this, SLOT(onAudioPlaylistSelected()));
 
     connect(animationTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
     connect(pokeTimer, SIGNAL(timeout()), this, SLOT(onPokeTimeout()));

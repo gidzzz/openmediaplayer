@@ -140,7 +140,10 @@ void VideoNowPlayingWindow::setIcons()
 
 void VideoNowPlayingWindow::connectSignals()
 {
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(toggleOverlay()));
+    QShortcut *shortcut;
+
+    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(toggleOverlay()));
 
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPrevButtonClicked()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
@@ -156,7 +159,8 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
 
 #ifdef MAFW
-    connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
     connect(new QShortcut(QKeySequence(Qt::Key_Left), this), SIGNAL(activated()), this, SLOT(slowRev()));
     connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), this, SLOT(slowFwd()));
     connect(new QShortcut(QKeySequence(Qt::Key_Up), this), SIGNAL(activated()), this, SLOT(fastFwd()));

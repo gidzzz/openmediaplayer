@@ -82,12 +82,18 @@ RadioNowPlayingWindow::~RadioNowPlayingWindow()
 
 void RadioNowPlayingWindow::connectSignals()
 {
+    QShortcut *shortcut;
+
     connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
-    connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Left), this), SIGNAL(activated()), mafwrenderer, SLOT(previous()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), mafwrenderer, SLOT(next()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Left), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(previous()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
+
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); // prevent Ctrl+Space from toggling playback
 
 #ifdef Q_WS_MAEMO_5

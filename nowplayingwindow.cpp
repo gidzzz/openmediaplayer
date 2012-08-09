@@ -392,13 +392,26 @@ void NowPlayingWindow::onStateChanged(int state)
 
 void NowPlayingWindow::connectSignals()
 {
+    QShortcut *shortcut;
+
     connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
-    connect(new QShortcut(QKeySequence(Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(togglePlayback()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Left), this), SIGNAL(activated()), mafwrenderer, SLOT(previous()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), mafwrenderer, SLOT(next()));
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(toggleList()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Left), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(previous()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
+    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(toggleList()));
+
+    shortcut = new QShortcut(QKeySequence(Qt::Key_S), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(stop()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_E), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), ui->shuffleButton, SLOT(click()));
+    shortcut = new QShortcut(QKeySequence(Qt::Key_R), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), ui->repeatButton, SLOT(click()));
 
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_to_playlist, SIGNAL(triggered()), this, SLOT(onAddAllToPlaylist()));
@@ -1090,21 +1103,11 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
                     onContextMenuRequested(QPoint(this->width()/2,35));
                 else if (ui->lyrics->isVisible())
                     onLyricsContextMenuRequested(QPoint(this->width()/2,35));
+                else
+                    onViewContextMenuRequested(QPoint(35,35));
             } else {
                 onPlaylistItemActivated(ui->songPlaylist->currentItem());
             }
-            break;
-
-        case Qt::Key_S:
-            mafwrenderer->stop();
-            break;
-
-        case Qt::Key_E:
-            ui->shuffleButton->click();
-            break;
-
-        case Qt::Key_R:
-            ui->repeatButton->click();
             break;
     }
 }
@@ -1203,7 +1206,7 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     ui->trackLengthLabel->setText(time_mmss(songDuration));
 
     mafwrenderer->gotoIndex(ui->songPlaylist->row(item));
-    if (this->mafwState == Stopped)
+    if (mafwState == Stopped || mafwState == Paused)
         mafwrenderer->play();
 }
 
