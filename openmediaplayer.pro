@@ -55,7 +55,7 @@ SOURCES += \
     singlegenreview.cpp \
     singleplaylistview.cpp \
     aboutwindow.cpp \
-    home.cpp \
+    coverpicker.cpp \
     freqdlg.cpp \
     delegates/maintdelegate.cpp \
     editlyrics.cpp \
@@ -97,7 +97,7 @@ HEADERS += \
     singlegenreview.h \
     singleplaylistview.h \
     aboutwindow.h \
-    home.h \
+    coverpicker.h \
     texteditautoresizer.h \
     freqdlg.h \
     delegates/maintdelegate.h \
@@ -136,7 +136,7 @@ FORMS += \
     singlegenreview.ui \
     singleplaylistview.ui \
     aboutwindow.ui \
-    home.ui \
+    coverpicker.ui \
     freqdlg.ui \
     editlyrics.ui \
     tagwindow.ui \

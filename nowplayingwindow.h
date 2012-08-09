@@ -20,7 +20,7 @@
 #include "delegates/playlistdelegate.h"
 #include "qmlview.h"
 #include "texteditautoresizer.h"
-#include "home.h"
+#include "coverpicker.h"
 #include "editlyrics.h"
 #include "tagwindow.h"
 #include "mediaart.h"

@@ -1523,10 +1523,9 @@ void NowPlayingWindow::onViewContextMenuRequested(const QPoint &pos)
 
 void NowPlayingWindow::selectAlbumArt()
 {
-    Home hw(this, tr("Select album art"), "/home/user/MyDocs", ui->albumNameLabel->whatsThis());
-    hw.exec();
-    if (hw.result() == QDialog::Accepted)
-        setAlbumImage(hw.newAlbumArt);
+    CoverPicker picker(ui->albumNameLabel->whatsThis(), "/home/user/MyDocs", this);
+    if (picker.exec() == QDialog::Accepted)
+        setAlbumImage(MediaArt::setAlbumImage(ui->albumNameLabel->whatsThis(), picker.cover));
 }
 
 void NowPlayingWindow::resetAlbumArt()
