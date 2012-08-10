@@ -262,9 +262,8 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
     ui->songList->addItem(item);
 
     if (remainingCount == 0) {
-        connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
-        browsePlaylistId = MAFW_SOURCE_INVALID_BROWSE_ID;
+        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
         if (!ui->searchEdit->text().isEmpty())
             onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5

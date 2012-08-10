@@ -456,7 +456,6 @@ void MainWindow::mime_open(const QString &uriString)
             connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                     this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-            // for some reason, if metadata fetching is disabled here, IDs for filesystem instead of localtagfs are returned
             browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
                                                             MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
                                                             0, MAFW_SOURCE_BROWSE_ALL);

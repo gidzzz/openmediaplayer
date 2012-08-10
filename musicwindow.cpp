@@ -1248,7 +1248,7 @@ void MusicWindow::onAddToNowPlaying()
                 case 1: filter = ""; sorting = "-added"; break;
                 case 2: filter = "(play-count>0)"; sorting = "-last-played"; break;
                 case 3: filter = "(play-count>0)"; sorting = "-play-count,+title"; break;
-                case 4: filter = "(play-count=)"; sorting = "";
+                case 4: filter = "(play-count=)"; sorting = ""; limit = MAFW_SOURCE_BROWSE_ALL; break;
             }
 
             songAddBufferSize = 0;
@@ -1285,12 +1285,9 @@ void MusicWindow::onAddToNowPlaying()
             connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                     this, SLOT(onAddToNowPlayingCallback(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-            // for some reason, if metadata fetching is disabled here, IDs for filesystem instead of localtagfs are returned
+            // file size is not really needed, but MAFW_SOURCE_NO_KEYS would result in urisource IDs
             addToNowPlayingId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                                MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                                                  MAFW_METADATA_KEY_DURATION,
-                                                                                  MAFW_METADATA_KEY_ARTIST,
-                                                                                  MAFW_METADATA_KEY_ALBUM),
+                                                                MAFW_SOURCE_LIST (MAFW_METADATA_KEY_FILESIZE),
                                                                 0, MAFW_SOURCE_BROWSE_ALL);
         }
     }
