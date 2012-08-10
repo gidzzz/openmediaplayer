@@ -622,7 +622,7 @@ QListView* MusicWindow::currentList()
         return 0;
 }
 
-void MusicWindow::saveViewState(QVariant view)
+void MusicWindow::saveViewState(QString view)
 {
     QSettings().setValue("music/view", view);
 }
@@ -1262,19 +1262,18 @@ void MusicWindow::onAddToNowPlaying()
 
         // Saved playlist
         else if (index.data(UserRoleObjectID).isNull()) {
+
+            setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+            QApplication::processEvents();
+
             MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString()));
+            int size = playlist->getSizeOf(mafwplaylist);
+            gchar** items = mafw_playlist_get_items(mafwplaylist, 0, size-1, NULL);
+            playlist->appendItems((const gchar**)items);
+            g_strfreev(items);
 
-            songAddBufferSize = numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
-
-            if (numberOfSongsToAdd > 0) {
-                songAddBuffer = new gchar*[songAddBufferSize+1];
-                songAddBuffer[songAddBufferSize] = NULL;
-
-                connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
-                        this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
-
-                addToNowPlayingId = (uint)playlist->getItemsOf(mafwplaylist);
-            }
+            setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+            this->notifyOnAddedToNowPlaying(size);
         }
 
         // Imported playlist
@@ -1308,32 +1307,6 @@ void MusicWindow::onAddToPlaylist()
 #endif
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
-#endif
-    }
-}
-
-void MusicWindow::onGetItems(QString objectId, GHashTable*, guint index, gpointer op)
-{
-    if ((uint)op != addToNowPlayingId) return;
-
-    qDebug() << "MusicWindow::onGetItems | index: " << index;
-    songAddBuffer[index] = qstrdup(objectId.toUtf8());
-    numberOfSongsToAdd--;
-
-    if (numberOfSongsToAdd == 0) {
-        qDebug() << "disconnecting MusicWindow from onGetItems";
-        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
-                   this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
-
-        playlist->appendItems((const gchar**)songAddBuffer);
-
-        for (int i = 0; i < songAddBufferSize; i++)
-            delete[] songAddBuffer[i];
-        delete[] songAddBuffer;
-
-#ifdef Q_WS_MAEMO_5
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-        this->notifyOnAddedToNowPlaying(songAddBufferSize);
 #endif
     }
 }

@@ -89,9 +89,7 @@ private:
     unsigned int browseMostPlayedId;
     unsigned int browseNeverPlayedId;
     unsigned int browseImportedPlaylistsId;
-    void fetchUri(QString objectId);
-    uint addToNowPlayingId;
-    int numberOfSongsToAdd;
+    unsigned int addToNowPlayingId;
     gchar** songAddBuffer;
     int songAddBufferSize;
     int savedPlaylistCount;
@@ -100,7 +98,7 @@ private:
     void disconnectSearch();
     void populateWindowMenu();
     void hideLayoutContents();
-    void saveViewState(QVariant);
+    void saveViewState(QString view);
     void loadViewState();
     QListView* currentList();
 #ifdef Q_WS_MAEMO_5
@@ -143,7 +141,6 @@ private slots:
     void onArtistSelected(QModelIndex index);
     void onGenreSelected(QModelIndex index);
     void onPlaylistSelected(QModelIndex index);
-    void onGetItems(QString objectId, GHashTable*, guint index, gpointer op);
     void onContainerChanged(QString objectId);
 #endif
     void onAddToNowPlaying();
