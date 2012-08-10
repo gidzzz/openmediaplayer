@@ -8,6 +8,7 @@
 #endif
 
 #include "delegates/artistlistitemdelegate.h"
+#include "delegates/shufflebuttondelegate.h"
 #include "includes.h"
 #include "ui_singlegenreview.h"
 #include "singleartistview.h"
@@ -52,12 +53,8 @@ private:
     bool isShuffling;
 #endif
 #ifdef Q_WS_MAEMO_5
-    QMaemo5ValueButton *shuffleButton;
     void notifyOnAddedToNowPlaying(int songCount);
-#else
-    QPushButton *shuffleButton;
 #endif
-    void setupShuffleButton();
     void updateSongCount();
 
 private slots:
@@ -66,7 +63,6 @@ private slots:
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void addAllToNowPlaying();
-    void onShuffleButtonClicked();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void showWindowMenu();
     void addArtistToNowPlaying();

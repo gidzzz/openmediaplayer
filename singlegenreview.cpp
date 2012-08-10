@@ -41,8 +41,10 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     ui->indicator->setFactory(factory);
 #endif
 
-    ArtistListItemDelegate *delegate = new ArtistListItemDelegate(ui->artistList);
-    ui->artistList->setItemDelegate(delegate);
+    ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
+    ui->artistList->setItemDelegate(artistDelegate);
+    ShuffleButtonDelegate *shuffleDelegate = new ShuffleButtonDelegate(ui->artistList);
+    ui->artistList->setItemDelegateForRow(0, shuffleDelegate);
 
     isShuffling = false;
 
@@ -75,23 +77,6 @@ SingleGenreView::~SingleGenreView()
     delete ui;
 }
 
-void SingleGenreView::setupShuffleButton()
-{
-#ifdef Q_WS_MAEMO_5
-    shuffleButton = new QMaemo5ValueButton();
-    shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
-#else
-    shuffleButton = new QPushButton();
-#endif
-    connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
-
-    shuffleButton->setText(tr("Shuffle songs"));
-    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
-
-    ui->artistList->insertItem(0, new QListWidgetItem);
-    ui->artistList->setItemWidget(ui->artistList->item(0), shuffleButton);
-}
-
 void SingleGenreView::orientationChanged(int w, int h)
 {
     ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
@@ -101,35 +86,44 @@ void SingleGenreView::orientationChanged(int w, int h)
 void SingleGenreView::onItemActivated(QListWidgetItem *item)
 {
     if (ui->artistList->row(item) == 0) {
-        onShuffleButtonClicked();
-        return;
-    }
-
-    int songCount = item->data(UserRoleAlbumCount).toInt();
-
-    if (songCount == 0 || songCount == 1) {
         this->setEnabled(false);
 
-        SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
-        albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
-        albumView->setWindowTitle(item->text());
+        if (playlist->playlistName() != "FmpAudioPlaylist")
+            playlist->assignAudioPlaylist();
 
-        albumView->show();
-        connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-        ui->indicator->inhibit();
+        playlist->clear();
+        playlist->setShuffled(true);
+        isShuffling = true;
 
-    } else if (songCount > 1) {
-        this->setEnabled(false);
-
-        SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
-        artistView->browseAlbum(item->data(UserRoleObjectID).toString());
-        artistView->setWindowTitle(item->text());
-
-        artistView->show();
-        connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-        ui->indicator->inhibit();
+        addAllToNowPlaying();
     }
 
+    else {
+        int songCount = item->data(UserRoleAlbumCount).toInt();
+
+        if (songCount == 0 || songCount == 1) {
+            this->setEnabled(false);
+
+            SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
+            albumView->browseAlbumByObjectId(item->data(UserRoleObjectID).toString());
+            albumView->setWindowTitle(item->text());
+
+            albumView->show();
+            connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+            ui->indicator->inhibit();
+
+        } else if (songCount > 1) {
+            this->setEnabled(false);
+
+            SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
+            artistView->browseAlbum(item->data(UserRoleObjectID).toString());
+            artistView->setWindowTitle(item->text());
+
+            artistView->show();
+            connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+            ui->indicator->inhibit();
+        }
+    }
 }
 
 #ifdef MAFW
@@ -149,8 +143,8 @@ void SingleGenreView::listArtists()
 #endif
 
     ui->artistList->clear();
+    ui->artistList->addItem(new QListWidgetItem);
     visibleSongs = 0;
-    setupShuffleButton();
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -222,9 +216,7 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
 
 void SingleGenreView::updateSongCount()
 {
-#ifdef Q_WS_MAEMO_5
-    shuffleButton->setValueText(tr("%n song(s)", "", visibleSongs));
-#endif
+    ui->artistList->item(0)->setData(UserRoleSongCount, visibleSongs);
 }
 
 void SingleGenreView::keyPressEvent(QKeyEvent *e)
@@ -266,15 +258,12 @@ void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
 
 bool SingleGenreView::eventFilter(QObject *, QEvent *e)
 {
-    if (e->type() == QEvent::Resize)
-        ui->artistList->setFlow(ui->artistList->flow());
-    else
-        if (e->type() == QEvent::MouseButtonPress
-        && static_cast<QMouseEvent*>(e)->y() > ui->artistList->viewport()->height() - 25
-        && ui->searchWidget->isHidden()) {
-            ui->indicator->inhibit();
-            ui->searchWidget->show();
-        }
+    if (e->type() == QEvent::MouseButtonPress
+    && static_cast<QMouseEvent*>(e)->y() > ui->artistList->viewport()->height() - 25
+    && ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
     return false;
 }
 
@@ -289,16 +278,12 @@ void SingleGenreView::onSearchHideButtonClicked()
 
 void SingleGenreView::onSearchTextChanged(QString text)
 {
-    visibleSongs = 0;
     for (int i = 1; i < ui->artistList->count(); i++) {
         if (ui->artistList->item(i)->text().contains(text, Qt::CaseInsensitive)) {
             ui->artistList->item(i)->setHidden(false);
-            visibleSongs += ui->artistList->item(i)->data(UserRoleSongCount).toInt();
         } else
             ui->artistList->item(i)->setHidden(true);
     }
-
-    updateSongCount();
 
     if (text.isEmpty()) {
         ui->searchWidget->hide();
@@ -422,21 +407,6 @@ void SingleGenreView::addAllToNowPlaying()
 
     addToNowPlayingId = mafwTrackerSource->sourceBrowse(currentObjectId.toUtf8(), true, NULL, NULL,
                                                         0, 0, MAFW_SOURCE_BROWSE_ALL);
-#endif
-}
-
-void SingleGenreView::onShuffleButtonClicked()
-{
-#ifdef MAFW
-    this->setEnabled(false);
-    if (playlist->playlistName() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
-
-    playlist->clear();
-    playlist->setShuffled(true);
-    this->isShuffling = true;
-
-    this->addAllToNowPlaying();
 #endif
 }
 

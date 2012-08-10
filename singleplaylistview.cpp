@@ -47,9 +47,9 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 
     permanentDelete = QSettings().value("main/permanentDelete").toBool();
 
-    SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
+    SongListItemDelegate *songDelegate = new SongListItemDelegate(ui->songList);
     ShuffleButtonDelegate *shuffleDelegate = new ShuffleButtonDelegate(ui->songList);
-    ui->songList->setItemDelegate(delegate);
+    ui->songList->setItemDelegate(songDelegate);
     ui->songList->setItemDelegateForRow(0, shuffleDelegate);
 
     ui->songList->viewport()->installEventFilter(this);
@@ -612,9 +612,7 @@ void SinglePlaylistView::onDeleteClicked()
 
 void SinglePlaylistView::updateSongCount()
 {
-#ifdef Q_WS_MAEMO_5
     ui->songList->item(0)->setData(UserRoleSongCount, visibleSongs);
-#endif
 }
 
 void SinglePlaylistView::forgetClick()
@@ -626,11 +624,7 @@ void SinglePlaylistView::forgetClick()
 
 bool SinglePlaylistView::eventFilter(QObject *, QEvent *e)
 {
-    if (e->type() == QEvent::Resize) {
-        ui->songList->setFlow(ui->songList->flow());
-    }
-
-    else if (e->type() == QEvent::Drop) {
+    if (e->type() == QEvent::Drop) {
         static_cast<QDropEvent*>(e)->setDropAction(Qt::MoveAction);
         playlistModified = true;
     }

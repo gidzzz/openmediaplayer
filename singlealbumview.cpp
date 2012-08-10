@@ -42,8 +42,10 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
 
-    SingleAlbumViewDelegate *delegate = new SingleAlbumViewDelegate(ui->songList);
-    ui->songList->setItemDelegate(delegate);
+    SingleAlbumViewDelegate *songDelegate = new SingleAlbumViewDelegate(ui->songList);
+    ui->songList->setItemDelegate(songDelegate);
+    ShuffleButtonDelegate *shuffleDelegate = new ShuffleButtonDelegate(ui->songList);
+    ui->songList->setItemDelegateForRow(0, shuffleDelegate);
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
     connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
@@ -75,28 +77,9 @@ SingleAlbumView::~SingleAlbumView()
     delete ui;
 }
 
-void SingleAlbumView::setupShuffleButton()
-{
-#ifdef Q_WS_MAEMO_5
-    shuffleButton = new QMaemo5ValueButton();
-    shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
-#else
-    shuffleButton = new QPushButton();
-#endif
-    connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
-
-    shuffleButton->setText(tr("Shuffle songs"));
-    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
-
-    ui->songList->insertItem(0, new QListWidgetItem);
-    ui->songList->setItemWidget(ui->songList->item(0), shuffleButton);
-}
-
 void SingleAlbumView::updateSongCount()
 {
-#ifdef Q_WS_MAEMO_5
-    shuffleButton->setValueText(tr("%n song(s)", "", visibleSongs));
-#endif
+    ui->songList->item(0)->setData(UserRoleSongCount, visibleSongs);
 }
 
 #ifdef MAFW
@@ -107,8 +90,8 @@ void SingleAlbumView::listSongs()
 #endif
 
     ui->songList->clear();
+    ui->songList->addItem(new QListWidgetItem);
     visibleSongs = 0;
-    setupShuffleButton();
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
@@ -182,7 +165,7 @@ void SingleAlbumView::browseAlbumByObjectId(QString objectId)
 
 void SingleAlbumView::onItemActivated(QListWidgetItem *item)
 {
-    this->playAll(ui->songList->row(item), QSettings().value("main/playlistFilter", false).toBool());
+    playAll(ui->songList->row(item));
 }
 
 #endif
@@ -194,12 +177,7 @@ void SingleAlbumView::orientationChanged(int w, int h)
     ui->indicator->raise();
 }
 
-void SingleAlbumView::onShuffleButtonClicked()
-{
-    this->playAll(0, true);
-}
-
-void SingleAlbumView::playAll(int startIndex, bool filter)
+void SingleAlbumView::playAll(int startIndex)
 {
 #ifdef MAFW
     if (visibleSongs == 0) return;
@@ -210,6 +188,8 @@ void SingleAlbumView::playAll(int startIndex, bool filter)
         playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(startIndex < 1);
+
+    bool filter = startIndex == 0 || QSettings().value("main/playlistFilter", false).toBool();
 
     appendAllToPlaylist(filter);
 
@@ -333,15 +313,12 @@ void SingleAlbumView::keyReleaseEvent(QKeyEvent *e)
 
 bool SingleAlbumView::eventFilter(QObject *, QEvent *e)
 {
-    if (e->type() == QEvent::Resize)
-        ui->songList->setFlow(ui->songList->flow());
-    else
-        if (e->type() == QEvent::MouseButtonPress
-        && static_cast<QMouseEvent*>(e)->y() > ui->songList->viewport()->height() - 25
-        && ui->searchWidget->isHidden()) {
-            ui->indicator->inhibit();
-            ui->searchWidget->show();
-        }
+    if (e->type() == QEvent::MouseButtonPress
+    && static_cast<QMouseEvent*>(e)->y() > ui->songList->viewport()->height() - 25
+    && ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
     return false;
 }
 

@@ -19,6 +19,7 @@
 #include "confirmdialog.h"
 #include "nowplayingwindow.h"
 #include "delegates/singlealbumviewdelegate.h"
+#include "delegates/shufflebuttondelegate.h"
 
 
 namespace Ui {
@@ -44,10 +45,7 @@ private:
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
 #ifdef Q_WS_MAEMO_5
-    QMaemo5ValueButton *shuffleButton;
     void notifyOnAddedToNowPlaying(int songCount);
-#else
-    QPushButton *shuffleButton;
 #endif
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -56,7 +54,6 @@ private:
     MafwPlaylistAdapter* playlist;
     unsigned int browseAllSongsId;
 #endif
-    void setupShuffleButton();
     void updateSongCount();
 
 private slots:
@@ -70,8 +67,7 @@ private slots:
     void onContainerChanged(QString objectId);
 #endif
     int appendAllToPlaylist(bool filter);
-    void playAll(int startIndex, bool filter);
-    void onShuffleButtonClicked();
+    void playAll(int startIndex);
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();
