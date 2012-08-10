@@ -910,22 +910,26 @@ void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint 
     if (browseId == this->browseRecentlyAddedId) {
         mafwTrackerSource->cancelBrowse(browseId, error);
         browseRecentlyAddedId = MAFW_SOURCE_INVALID_BROWSE_ID;
-        playlistModel->item(1)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
+        int size = remainingCount == 0 && objectId.isNull() ? 0 : remainingCount+1;
+        playlistModel->item(1)->setData(tr("%n song(s)", "", size), UserRoleValueText);
 
     } else if (browseId == this->browseRecentlyPlayedId) {
         mafwTrackerSource->cancelBrowse(browseId, error);
         browseRecentlyPlayedId = MAFW_SOURCE_INVALID_BROWSE_ID;
-        playlistModel->item(2)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
+        int size = remainingCount == 0 && objectId.isNull() ? 0 : remainingCount+1;
+        playlistModel->item(2)->setData(tr("%n song(s)", "", size), UserRoleValueText);
 
     } else if (browseId == this->browseMostPlayedId) {
         mafwTrackerSource->cancelBrowse(browseId, error);
         browseMostPlayedId = MAFW_SOURCE_INVALID_BROWSE_ID;
-        playlistModel->item(3)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
+        int size = remainingCount == 0 && objectId.isNull() ? 0 : remainingCount+1;
+        playlistModel->item(3)->setData(tr("%n song(s)", "", size), UserRoleValueText);
 
     } else if (browseId == this->browseNeverPlayedId) {
         mafwTrackerSource->cancelBrowse(browseId, error);
         browseNeverPlayedId = MAFW_SOURCE_INVALID_BROWSE_ID;
-        playlistModel->item(4)->setData(tr("%n song(s)", "", remainingCount+1), UserRoleValueText);
+        int size = remainingCount == 0 && objectId.isNull() ? 0 : remainingCount+1;
+        playlistModel->item(4)->setData(tr("%n song(s)", "", size), UserRoleValueText);
 
     } else if (browseId == this->browseImportedPlaylistsId) {
         if (index == 0) {

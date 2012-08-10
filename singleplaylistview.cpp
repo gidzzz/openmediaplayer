@@ -211,17 +211,17 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
                                                        0, maxCount);
 }
 
-void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString)
+void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString)
 {
     if (browseId != this->browsePlaylistId) return;
 
-    QListWidgetItem *item = new QListWidgetItem();
+    if (index != 0 || remainingCount != 0 || !objectId.isNull()) {
+        QListWidgetItem *item = new QListWidgetItem();
+        setItemMetadata(item, objectId, metadata);
+        ui->songList->addItem(item);
 
-    setItemMetadata(item, objectId, metadata);
-
-    ++visibleSongs; updateSongCount();
-
-    ui->songList->addItem(item);
+        ++visibleSongs; updateSongCount();
+    }
 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),

@@ -28,7 +28,7 @@ void ShuffleButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
 bool ShuffleButtonDelegate::eventFilter(QObject*, QEvent *e)
 {
-    if (e->type() == QEvent::TouchEnd)
+    if (e->type() == QEvent::TouchEnd || e->type() == QEvent::MouseButtonRelease)
         static_cast<QListView*>(this->parent())->clearSelection();
 
     return false;

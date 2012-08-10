@@ -71,7 +71,7 @@ private slots:
 #ifdef MAFW
     void setItemMetadata(QListWidgetItem *item, QString objectId, GHashTable *metadata);
     void onGetItems(QString objectId, GHashTable* metadata, guint index);
-    void onBrowseResult(uint browseId, int, uint, QString objectId, GHashTable *metadata, QString);
+    void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString);
     void onShareUriReceived(QString objectId, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
