@@ -1,6 +1,6 @@
 #include "shufflebuttondelegate.h"
 
-ShuffleButtonDelegate::ShuffleButtonDelegate(QObject *parent) :
+ShuffleButtonDelegate::ShuffleButtonDelegate(QListView *parent) :
     QStyledItemDelegate(parent)
 {
     button = new QMaemo5ValueButton();
@@ -8,6 +8,8 @@ ShuffleButtonDelegate::ShuffleButtonDelegate(QObject *parent) :
     button->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     button->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
     button->setCheckable(true);
+
+    parent->viewport()->installEventFilter(this);
 }
 
 void ShuffleButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -22,6 +24,14 @@ void ShuffleButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     QPixmap pixmap(button->size());
     button->render(&pixmap);
     painter->drawPixmap(r.left(), r.top(), r.width(), r.height(), pixmap);
+}
+
+bool ShuffleButtonDelegate::eventFilter(QObject*, QEvent *e)
+{
+    if (e->type() == QEvent::TouchEnd)
+        static_cast<QListView*>(this->parent())->clearSelection();
+
+    return false;
 }
 
 QSize ShuffleButtonDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
