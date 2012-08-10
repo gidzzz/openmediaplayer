@@ -194,6 +194,23 @@ gpointer MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist)
     return pl->op;
 }
 
+gpointer MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist, int from, int to)
+{
+    get_items_cb_payload* pl = new get_items_cb_payload;
+    pl->adapter = this;
+    pl->op = mafw_playlist_get_items_md (playlist,
+                                         from,
+                                         to,
+                                         MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                          MAFW_METADATA_KEY_ALBUM,
+                                                          MAFW_METADATA_KEY_ARTIST,
+                                                          MAFW_METADATA_KEY_URI,
+                                                          MAFW_METADATA_KEY_DURATION),
+                                         MafwPlaylistAdapter::get_items_cb,
+                                         pl, get_items_free_cbarg);
+    return pl->op;
+}
+
 void MafwPlaylistAdapter::get_items_cb(MafwPlaylist*,
                                        guint index,
                                        const char *object_id,

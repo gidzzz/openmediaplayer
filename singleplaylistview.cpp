@@ -36,7 +36,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 #ifdef MAFW
     ui->indicator->setFactory(factory);
     browsePlaylistId = MAFW_SOURCE_INVALID_BROWSE_ID;
-    browsePlaylistOp = NULL;
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -95,29 +94,56 @@ SinglePlaylistView::~SinglePlaylistView()
 
 void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
 {
+    currentObjectId = QString();
     ui->songList->clear();
     ui->songList->addItem(new QListWidgetItem);
     visibleSongs = 0;
 
     connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
 
-    qDebug() << "connecting SinglePlaylistView to onGetItems";
-    connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
-            this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
+    int size = playlist->getSizeOf(mafwplaylist);
 
-    numberOfSongsToAdd = playlist->getSizeOf(mafwplaylist);
-    browsePlaylistOp = playlist->getItemsOf(mafwplaylist);
+    gchar** items = mafw_playlist_get_items(mafwplaylist, 0, size-1, NULL);
+    for (int i = 0; items[i] != NULL; i++) {
+        QListWidgetItem *item = new QListWidgetItem();
+        item->setData(UserRoleObjectID, QString::fromUtf8(items[i]));
+        item->setData(UserRoleSongDuration, Duration::Blank);
+        ui->songList->addItem(item);
+    }
+    g_strfreev(items);
+
+    playlistQM = new PlaylistQueryManager(this, playlist, mafwplaylist);
+    connect(playlistQM, SIGNAL(onGetItems(QString, GHashTable*, guint)), this, SLOT(onGetItems(QString, GHashTable*, guint)));
+    connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
+    playlistQM->getItems(0, size-1);
+
+    visibleSongs = remainingCount = size;
+    updateSongCount();
 }
 
-void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guint index, gpointer op)
+void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guint index)
 {
-    if (op != browsePlaylistOp) return;
+    remainingCount--;
 
-    qDebug() << "SinglePlaylistView::onGetItems |" << index;
-    numberOfSongsToAdd--;
+    if (playlistModified) {
+        for (int i = 1; i < ui->songList->count(); i++)
+            if (ui->songList->item(i)->data(UserRoleObjectID).toString() == objectId)
+                setItemMetadata(ui->songList->item(i), objectId, metadata);
+    } else {
+        setItemMetadata(ui->songList->item(index+1), objectId, metadata);
+    }
 
-    QListWidgetItem *item = new QListWidgetItem();
+    if (remainingCount == 0) {
+        if (!ui->searchEdit->text().isEmpty())
+            onSearchTextChanged(ui->searchEdit->text());
+#ifdef Q_WS_MAEMO_5
+        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
+    }
+}
 
+void SinglePlaylistView::setItemMetadata(QListWidgetItem *item, QString objectId, GHashTable *metadata)
+{
     if (metadata != NULL) {
         QString title;
         QString artist;
@@ -142,37 +168,16 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleObjectID, objectId);
-        item->setData(UserRoleSongIndex, index);
 
     } else {
         item->setText(tr("Information not available"));
-        item->setData(UserRoleSongDuration, Duration::Unknown);
-    }
-
-    ++visibleSongs; updateSongCount();
-
-    int position;
-    for (position = 1; position < ui->songList->count(); position++)
-        if (ui->songList->item(position)->data(UserRoleSongIndex).toUInt() > index)
-            break;
-    ui->songList->insertItem(position, item);
-
-    if (numberOfSongsToAdd == 0) {
-        qDebug() << "disconnecting SinglePlaylistView from onGetItems";
-        disconnect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
-                   this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
-        browsePlaylistOp = NULL;
-        if (!ui->searchEdit->text().isEmpty())
-            onSearchTextChanged(ui->searchEdit->text());
-#ifdef Q_WS_MAEMO_5
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
+        item->setData(UserRoleSongDuration, Duration::Blank);
     }
 }
 
 void SinglePlaylistView::browseImportedPlaylist(QString objectId)
 {
-    this->objectId = objectId;
+    currentObjectId = objectId;
     ui->songList->clear();
     ui->songList->addItem(new QListWidgetItem);
     visibleSongs = 0;
@@ -189,7 +194,7 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
 
 void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting, int maxCount)
 {
-    this->objectId = QString();
+    currentObjectId = QString();
     ui->songList->clear();
     ui->songList->addItem(new QListWidgetItem);
     visibleSongs = 0;
@@ -212,35 +217,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
     QListWidgetItem *item = new QListWidgetItem();
 
-    if (metadata != NULL) {
-        QString title;
-        QString artist;
-        QString album;
-        int duration;
-        GValue *v;
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
-        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
-        album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : Duration::Unknown;
-
-        item->setText(title);
-        item->setData(UserRoleSongArtist, artist);
-        item->setData(UserRoleSongAlbum, album);
-        item->setData(UserRoleObjectID, objectId);
-        item->setData(UserRoleSongDuration, duration);
-
-    } else {
-        item->setText(tr("Information not available"));
-        item->setData(UserRoleSongDuration, Duration::Unknown);
-    }
+    setItemMetadata(item, objectId, metadata);
 
     ++visibleSongs; updateSongCount();
 
@@ -281,18 +258,6 @@ void SinglePlaylistView::addAllToNowPlaying()
 #endif
 }
 
-QListWidgetItem* SinglePlaylistView::copyItem(QListWidgetItem *item, int index)
-{
-    QListWidgetItem *copy = new QListWidgetItem();
-    copy->setText(item->text());
-    copy->setData(UserRoleSongDuration, item->data(UserRoleSongDuration));
-    copy->setData(UserRoleSongAlbum, item->data(UserRoleSongAlbum));
-    copy->setData(UserRoleSongArtist, item->data(UserRoleSongArtist));
-    copy->setData(UserRoleObjectID, item->data(UserRoleObjectID));
-    copy->setData(UserRoleSongIndex, index);
-    return copy;
-}
-
 void SinglePlaylistView::addAllToPlaylist()
 {
     PlaylistPicker picker(this);
@@ -300,9 +265,9 @@ void SinglePlaylistView::addAllToPlaylist()
     if (picker.result() == QDialog::Accepted) {
         int songCount = ui->songList->count()-1;
 
-        if (objectId.isNull() && picker.playlistName == windowTitle()) {
+        if (currentObjectId.isNull() && picker.playlistName == windowTitle()) {
             for (int i = 0; i < songCount; i++)
-                ui->songList->addItem(copyItem(ui->songList->item(i+1), i+songCount));
+                ui->songList->addItem(ui->songList->item(i+1)->clone());
             visibleSongs += songCount; updateSongCount();
             playlistModified = true;
         } else {
@@ -487,7 +452,7 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
     contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
-    if (objectId.isNull()) contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
+    if (currentObjectId.isNull()) contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
     if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
@@ -521,8 +486,8 @@ void SinglePlaylistView::onAddToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        if (objectId.isNull() && picker.playlistName == windowTitle()) {
-            ui->songList->addItem(copyItem(ui->songList->currentItem(), ui->songList->count()-1));
+        if (currentObjectId.isNull() && picker.playlistName == windowTitle()) {
+            ui->songList->addItem(ui->songList->currentItem()->clone());
             ++visibleSongs; updateSongCount();
             playlistModified = true;
         }
@@ -657,13 +622,10 @@ void SinglePlaylistView::onItemDoubleClicked()
 void SinglePlaylistView::saveCurrentPlaylist()
 {
 #ifdef MAFW
-    QString playlistName = this->windowTitle();
-    int songCount = ui->songList->count();
-
-    MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(playlist->mafw_playlist_manager->createPlaylist(playlistName));
+    MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(playlist->mafw_playlist_manager->createPlaylist(this->windowTitle()));
     playlist->clear(targetPlaylist);
 
-    for (int i = 1; i < songCount; i++)
+    for (int i = 1; i < ui->songList->count(); i++)
         playlist->appendItem(targetPlaylist, ui->songList->item(i)->data(UserRoleObjectID).toString());
 
     playlistModified = false;
@@ -674,10 +636,10 @@ void SinglePlaylistView::deletePlaylist()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::DeletePlaylist, this).exec() == QMessageBox::Yes) {
-        if (objectId.isNull()) // Saved playlist
+        if (currentObjectId.isNull()) // Saved playlist
             playlist->mafw_playlist_manager->deletePlaylist(this->windowTitle());
         else // Imported playlist
-            mafwTrackerSource->destroyObject(objectId.toUtf8());
+            mafwTrackerSource->destroyObject(currentObjectId.toUtf8());
         this->close();
     }
 #endif
@@ -707,10 +669,8 @@ void SinglePlaylistView::closeEvent(QCloseEvent *e)
         if (!error.isEmpty())
             qDebug() << error;
     }
-    if (browsePlaylistOp)
-        mafw_playlist_cancel_get_items_md(browsePlaylistOp);
 
-    if (playlistModified && objectId.isNull()) {
+    if (playlistModified && currentObjectId.isNull()) {
         qDebug() << "Playlist modified, saving";
         saveCurrentPlaylist();
     }

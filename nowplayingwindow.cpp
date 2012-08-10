@@ -1501,7 +1501,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         }
 
         if (!synthetic) playlistQM->itemsInserted(from, nreplace);
-        playlistQM->getItems(from, from+nreplace);
+        playlistQM->getItems(from, from+nreplace-1);
     }
 
     if (synthetic)

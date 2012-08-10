@@ -34,6 +34,7 @@ public:
     int getSize();
     int getSizeOf(MafwPlaylist *playlist);
     gpointer getItemsOf(MafwPlaylist *playlist);
+    gpointer getItemsOf(MafwPlaylist *playlist, int from, int to);
     gpointer getItems(int from, int to);
     gpointer getAllItems();
     QString playlistName();

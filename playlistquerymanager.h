@@ -13,7 +13,7 @@ class PlaylistQueryManager : public QObject
     Q_OBJECT
 
 public:
-    explicit PlaylistQueryManager(QObject *parent, MafwPlaylistAdapter *playlist);
+    explicit PlaylistQueryManager(QObject *parent, MafwPlaylistAdapter *playlist, MafwPlaylist *mafwplaylist = NULL);
     ~PlaylistQueryManager();
     void getItems(int first, int last);
     void itemsInserted(int from, int amount);
@@ -31,6 +31,7 @@ private:
     void restart();
 
     MafwPlaylistAdapter *playlist;
+    MafwPlaylist *mafwplaylist;
     QList<int*> requests;
     gpointer getItemsOp;
     int priority;

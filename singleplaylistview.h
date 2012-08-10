@@ -5,6 +5,7 @@
 #include <QListWidgetItem>
 #include "ui_singleplaylistview.h"
 #include "confirmdialog.h"
+#include "playlistquerymanager.h"
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/shufflebuttondelegate.h"
 
@@ -52,24 +53,24 @@ private:
 #ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
 #endif
-    QListWidgetItem* copyItem(QListWidgetItem *item, int index);
 
 #ifdef MAFW
-    QString objectId;
+    QString currentObjectId;
+    PlaylistQueryManager *playlistQM;
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     uint browsePlaylistId;
-    gpointer browsePlaylistOp;
-    int numberOfSongsToAdd;
+    int remainingCount;
 #endif
     void updateSongCount();
 
 private slots:
     void orientationChanged(int w, int h);
 #ifdef MAFW
-    void onGetItems(QString objectId, GHashTable* metadata, guint index, gpointer op);
+    void setItemMetadata(QListWidgetItem *item, QString objectId, GHashTable *metadata);
+    void onGetItems(QString objectId, GHashTable* metadata, guint index);
     void onBrowseResult(uint browseId, int, uint, QString objectId, GHashTable *metadata, QString);
     void onShareUriReceived(QString objectId, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);

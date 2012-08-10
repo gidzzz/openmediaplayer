@@ -16,7 +16,8 @@ void ShuffleButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     button->setFixedWidth(r.width());
     button->setFixedHeight(r.height());
     button->setValueText(tr("%n song(s)", "", index.data(UserRoleSongCount).toInt()));
-    button->setChecked(option.state & (QStyle::State_Selected));
+    button->setEnabled(option.state & QStyle::State_Enabled);
+    button->setChecked(option.state & QStyle::State_Selected && button->isEnabled());
 
     QPixmap pixmap(button->size());
     button->render(&pixmap);

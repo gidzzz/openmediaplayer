@@ -5,10 +5,11 @@
 #define BATCH_SIZE 100
 #define ITEM_HEIGHT 70
 
-PlaylistQueryManager::PlaylistQueryManager(QObject *parent, MafwPlaylistAdapter *playlist) :
+PlaylistQueryManager::PlaylistQueryManager(QObject *parent, MafwPlaylistAdapter *playlist, MafwPlaylist *mafwplaylist) :
     QObject(parent)
 {
     this->playlist = playlist;
+    this->mafwplaylist = mafwplaylist;
     priority = 0;
     getItemsOp = NULL;
     connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
@@ -28,13 +29,18 @@ PlaylistQueryManager::~PlaylistQueryManager()
 
 void PlaylistQueryManager::setPriority(int position)
 {
-    this->priority = position/ITEM_HEIGHT;
+    priority = position/ITEM_HEIGHT;
 }
 
 void PlaylistQueryManager::getItems(int first, int last)
 {
-    if (last < 0 || last >= playlist->getSize())
+    if (mafwplaylist == NULL) {
+        if (last < 0 || last >= playlist->getSize())
         last = playlist->getSize()-1;
+    } else {
+        if (last < 0 || last >= playlist->getSizeOf(mafwplaylist))
+        last = playlist->getSizeOf(mafwplaylist)-1;
+    }
 
     if (last < first)
         return;
@@ -131,7 +137,11 @@ void PlaylistQueryManager::queryPlaylist()
         best[LAST] = first-1;
     }
 
-    getItemsOp = playlist->getItems(first, last);
+    if (mafwplaylist == NULL)
+        getItemsOp = playlist->getItems(first, last);
+    else
+        getItemsOp = playlist->getItemsOf(mafwplaylist, first, last);
+
     qDebug() << first << "-" << last << getItemsOp;
 
     // throw the range into the list of requests, in case of restart
