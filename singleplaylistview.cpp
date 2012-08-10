@@ -48,7 +48,9 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     permanentDelete = QSettings().value("main/permanentDelete").toBool();
 
     SongListItemDelegate *delegate = new SongListItemDelegate(ui->songList);
+    ShuffleButtonDelegate *shuffleDelegate = new ShuffleButtonDelegate(ui->songList);
     ui->songList->setItemDelegate(delegate);
+    ui->songList->setItemDelegateForRow(0, shuffleDelegate);
 
     ui->songList->viewport()->installEventFilter(this);
 
@@ -91,28 +93,11 @@ SinglePlaylistView::~SinglePlaylistView()
     delete ui;
 }
 
-void SinglePlaylistView::setupShuffleButton()
-{
-#ifdef Q_WS_MAEMO_5
-    shuffleButton = new QMaemo5ValueButton();
-    shuffleButton->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
-#else
-    shuffleButton = new QPushButton();
-#endif
-    connect(shuffleButton, SIGNAL(clicked()), this, SLOT(onShuffleButtonClicked()));
-
-    shuffleButton->setText(tr("Shuffle songs"));
-    shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
-
-    ui->songList->insertItem(0, new QListWidgetItem);
-    ui->songList->setItemWidget(ui->songList->item(0), shuffleButton);
-}
-
 void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
 {
     ui->songList->clear();
+    ui->songList->addItem(new QListWidgetItem);
     visibleSongs = 0;
-    setupShuffleButton();
 
     connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
 
@@ -189,8 +174,8 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
 {
     this->objectId = objectId;
     ui->songList->clear();
+    ui->songList->addItem(new QListWidgetItem);
     visibleSongs = 0;
-    setupShuffleButton();
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -206,8 +191,8 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
 {
     this->objectId = QString();
     ui->songList->clear();
+    ui->songList->addItem(new QListWidgetItem);
     visibleSongs = 0;
-    setupShuffleButton();
 
     ui->windowMenu->removeAction(ui->actionDelete_playlist);
 
@@ -274,7 +259,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint,
 
 void SinglePlaylistView::onItemActivated(QListWidgetItem *item)
 {
-    playAll(ui->songList->row(item), QSettings().value("main/playlistFilter", false).toBool());
+    playAll(ui->songList->row(item));
 }
 
 void SinglePlaylistView::orientationChanged(int w, int h)
@@ -343,7 +328,7 @@ void SinglePlaylistView::addAllToPlaylist()
     }
 }
 
-void SinglePlaylistView::playAll(int startIndex, bool filter)
+void SinglePlaylistView::playAll(int startIndex)
 {
 #ifdef MAFW
     if (visibleSongs == 0) return;
@@ -354,6 +339,8 @@ void SinglePlaylistView::playAll(int startIndex, bool filter)
         playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(startIndex < 1);
+
+    bool filter = startIndex == 0 || QSettings().value("main/playlistFilter", false).toBool();
 
     appendAllToPlaylist(filter);
 
@@ -491,11 +478,6 @@ void SinglePlaylistView::onSearchTextChanged(QString text)
     }
 }
 
-void SinglePlaylistView::onShuffleButtonClicked()
-{
-    this->playAll(0, true);
-}
-
 void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
 {
     if (ui->songList->currentRow() <= 0) return;
@@ -631,7 +613,7 @@ void SinglePlaylistView::onDeleteClicked()
 void SinglePlaylistView::updateSongCount()
 {
 #ifdef Q_WS_MAEMO_5
-    shuffleButton->setValueText(tr("%n song(s)", "", visibleSongs));
+    ui->songList->item(0)->setData(UserRoleSongCount, visibleSongs);
 #endif
 }
 

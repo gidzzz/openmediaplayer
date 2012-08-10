@@ -70,7 +70,8 @@ SOURCES += \
     sleeperdialog.cpp \
     bookmarkdialog.cpp \
     lyricsmanager.cpp \
-    lyricsprovidersdialog.cpp
+    lyricsprovidersdialog.cpp \
+    delegates/shufflebuttondelegate.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -116,7 +117,8 @@ HEADERS += \
     lyricsmanager.h \
     lyricsprovidersdialog.h \
     headerawareproxymodel.h \
-    confirmdialog.h
+    confirmdialog.h \
+    delegates/shufflebuttondelegate.h
 
 FORMS += \
     mainwindow.ui \

@@ -6,6 +6,7 @@
 #include "ui_singleplaylistview.h"
 #include "confirmdialog.h"
 #include "delegates/songlistitemdelegate.h"
+#include "delegates/shufflebuttondelegate.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
@@ -49,10 +50,7 @@ private:
     bool playlistModified;
     int visibleSongs;
 #ifdef Q_WS_MAEMO_5
-    QMaemo5ValueButton *shuffleButton;
     void notifyOnAddedToNowPlaying(int songCount);
-#else
-    QPushButton *shuffleButton;
 #endif
     QListWidgetItem* copyItem(QListWidgetItem *item, int index);
 
@@ -66,7 +64,6 @@ private:
     gpointer browsePlaylistOp;
     int numberOfSongsToAdd;
 #endif
-    void setupShuffleButton();
     void updateSongCount();
 
 private slots:
@@ -78,13 +75,12 @@ private slots:
     void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
     int appendAllToPlaylist(bool filter);
-    void playAll(int startIndex, bool filter);
+    void playAll(int startIndex);
     void onItemActivated(QListWidgetItem *item);
     void addAllToNowPlaying();
     void addAllToPlaylist();
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
-    void onShuffleButtonClicked();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void showWindowMenu();
     void onAddToNowPlaying();
