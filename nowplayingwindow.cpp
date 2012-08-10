@@ -1461,7 +1461,7 @@ void NowPlayingWindow::focusItemByRow(int row)
 
 void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 {
-    qDebug() << "NowPlayingWindow::updatePlaylist |" << from << nremove << nreplace;
+    qDebug() << "NowPlayingWindow::updatePlaylist @" << from << "-" << nremove << "+" << nreplace;
 
     if (playlist->playlistName() != "FmpAudioPlaylist") {
         qDebug() << "playlist type rejected, update aborted";
@@ -1490,15 +1490,17 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         this->updatePlaylistTimeLabel();
         playlistQM->itemsRemoved(from, nremove);
     }
-    else {
-        for (uint i = 0; i < nreplace; i++) {
+    else if (nreplace > 0) {
+        gchar** items = mafw_playlist_get_items(playlist->mafw_playlist, from, from+nreplace-1, NULL);
+        for (int i = 0; items[i] != NULL; i++) {
             QListWidgetItem *item = new QListWidgetItem();
-            item->setData(UserRoleValueText, " ");
             item->setData(UserRoleSongDuration, Duration::Blank);
-            ui->songPlaylist->insertItem(from, item);
+            item->setData(UserRoleObjectID, QString::fromUtf8(items[i]));
+            ui->songPlaylist->insertItem(from+i, item);
 
-            if (qmlView) qmlView->insertPlaylistItem(from, item);
+            if (qmlView) qmlView->insertPlaylistItem(from+i, item);
         }
+        g_strfreev(items);
 
         if (!synthetic) playlistQM->itemsInserted(from, nreplace);
         playlistQM->getItems(from, from+nreplace-1);
