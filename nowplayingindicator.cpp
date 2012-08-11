@@ -209,11 +209,9 @@ void NowPlayingIndicator::openWindow()
             window->show();
         }
         else if (playlistName == "FmpVideoPlaylist") {
-            window = new VideoNowPlayingWindow(this->parentWidget(), mafwFactory);
+            window = new VideoNowPlayingWindow(this->parentWidget(), mafwFactory, true);
             connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
             window->showFullScreen();
-            // Currently there are some problems with resuming, so start playing immediately
-            QTimer::singleShot(500, window, SLOT(playVideo()));
         }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.

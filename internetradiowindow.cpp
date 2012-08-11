@@ -145,7 +145,7 @@ void InternetRadioWindow::onStationSelected(QModelIndex index)
     } else { // type == "video"
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
         window->showFullScreen();
-        QTimer::singleShot(500, window, SLOT(playVideo()));
+        QTimer::singleShot(500, mafwrenderer, SLOT(play()));
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     }
 #else

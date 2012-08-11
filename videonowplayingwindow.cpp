@@ -18,7 +18,7 @@
 
 #include "videonowplayingwindow.h"
 
-VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
+VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory, bool overlay) :
     QMainWindow(parent),
     ui(new Ui::VideoNowPlayingWindow)
 #ifdef MAFW
@@ -76,7 +76,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     ui->currentPositionLabel->installEventFilter(this);
 
-    this->showOverlay(false);
+    showOverlay(overlay);
     ui->bufferBar->setAlignment(Qt::AlignCenter);
 
 #ifdef MAFW
@@ -84,13 +84,17 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     mafwrenderer->getVolume();
     ui->toolbarOverlay->setStyleSheet(ui->controlOverlay->styleSheet());
 #endif
+
+    QApplication::syncX();
+    mafwrenderer->getStatus();
+    mafwrenderer->setWindowXid(ui->widget->winId());
 }
 
 VideoNowPlayingWindow::~VideoNowPlayingWindow()
 {
 #ifdef MAFW
     if (saveStateOnClose) {
-        if (this->mafwState != Paused && this->mafwState != Stopped)
+        if (mafwState != Paused && mafwState != Stopped)
             mafwrenderer->pause();
 
         if (mafwSource) {
@@ -240,8 +244,12 @@ void VideoNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
 #endif
 
 #ifdef MAFW
-void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* object_id, QString error)
+void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char* object_id, QString error)
 {
+    disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+               this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+
+    onStateChanged(state);
     onMediaChanged(index, const_cast<char*>(object_id));
 
     if (!error.isEmpty())
@@ -427,8 +435,8 @@ void VideoNowPlayingWindow::volumeWatcher()
 #ifdef MAFW
 void VideoNowPlayingWindow::onStateChanged(int state)
 {
-    if (state != Stopped && state != Transitioning) this->gotInitialState = true;
-    this->mafwState = state;
+    if (state != Stopped && state != Transitioning) gotInitialState = true;
+    mafwState = state;
 
     if (state == Paused) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
@@ -536,14 +544,6 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metad
 
     if (!error.isEmpty())
         qDebug() << error;
-}
-
-void VideoNowPlayingWindow::playVideo()
-{
-    QApplication::syncX();
-    mafwrenderer->getStatus();
-    mafwrenderer->setWindowXid(ui->widget->winId());
-    mafwrenderer->play();
 }
 
 void VideoNowPlayingWindow::slowFwd()

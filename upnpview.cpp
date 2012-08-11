@@ -262,8 +262,9 @@ void UpnpView::onItemActivated(QModelIndex index)
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
-        mafwFactory->getRenderer()->gotoIndex(sameTypeIndex);
-        QTimer::singleShot(500, window, SLOT(playVideo()));
+        MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
+        mafwrenderer->gotoIndex(sameTypeIndex);
+        QTimer::singleShot(500, mafwrenderer, SLOT(play()));
 
     } else {
         ui->objectList->clearSelection();
