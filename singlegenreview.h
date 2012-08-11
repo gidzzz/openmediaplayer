@@ -9,6 +9,7 @@
 
 #include "delegates/artistlistitemdelegate.h"
 #include "delegates/shufflebuttondelegate.h"
+#include "headerawareproxymodel.h"
 #include "includes.h"
 #include "ui_singlegenreview.h"
 #include "singleartistview.h"
@@ -39,6 +40,10 @@ protected:
 
 private:
     Ui::SingleGenreView *ui;
+
+    QStandardItemModel *artistModel;
+    QSortFilterProxyModel *artistProxyModel;
+
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -59,7 +64,7 @@ private:
 
 private slots:
     void orientationChanged(int w, int h);
-    void onItemActivated(QListWidgetItem *item);
+    void onItemActivated(QModelIndex index);
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void addAllToNowPlaying();

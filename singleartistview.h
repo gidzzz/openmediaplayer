@@ -2,7 +2,6 @@
 #define SINGLEARTISTVIEW_H
 
 #include <QMainWindow>
-#include <QListWidgetItem>
 
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"

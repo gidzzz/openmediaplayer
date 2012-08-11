@@ -161,8 +161,6 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)));
-        if (!ui->searchEdit->text().isEmpty())
-            onSearchTextChanged(ui->searchEdit->text());
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
