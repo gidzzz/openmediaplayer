@@ -123,8 +123,7 @@ void MusicWindow::onSongSelected(QModelIndex index)
 
     bool filter = QSettings().value("main/playlistFilter", false).toBool();
 
-    int visibleCount = filter ? songProxyModel->rowCount() :
-                                songModel->rowCount();
+    int visibleCount = filter ? songProxyModel->rowCount() : songModel->rowCount();
 
     gchar** songAddBuffer = new gchar*[visibleCount+1];
 

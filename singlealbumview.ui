@@ -35,7 +35,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListWidget" name="songList">
+      <widget class="QListView" name="songList">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>

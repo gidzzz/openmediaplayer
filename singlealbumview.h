@@ -20,6 +20,7 @@
 #include "nowplayingwindow.h"
 #include "delegates/singlealbumviewdelegate.h"
 #include "delegates/shufflebuttondelegate.h"
+#include "headerawareproxymodel.h"
 
 
 namespace Ui {
@@ -40,8 +41,11 @@ public:
 
 private:
     Ui::SingleAlbumView *ui;
+
+    QStandardItemModel *songModel;
+    QSortFilterProxyModel *songProxyModel;
+
     QString albumObjectId;
-    int visibleSongs;
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
 #ifdef Q_WS_MAEMO_5
@@ -61,13 +65,12 @@ private slots:
 #ifdef MAFW
     void listSongs();
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void onItemActivated(QListWidgetItem *item);
+    void onItemActivated(QModelIndex index);
     void onRingingToneUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString objectId, QString uri);
     void onContainerChanged(QString objectId);
 #endif
     int appendAllToPlaylist(bool filter);
-    void playAll(int startIndex);
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);
     void addAllToNowPlaying();
