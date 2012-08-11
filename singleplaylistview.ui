@@ -25,7 +25,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListWidget" name="songList">
+      <widget class="QListView" name="songList">
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>

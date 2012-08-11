@@ -18,12 +18,14 @@ public:
     explicit ShuffleButtonDelegate(QListView *parent = 0);
     virtual ~ShuffleButtonDelegate() {}
 
-    bool eventFilter(QObject*, QEvent *e);
     void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
 private:
     QMaemo5ValueButton *button;
+
+private slots:
+    void onActivated(QModelIndex index);
 };
 
 

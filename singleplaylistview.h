@@ -8,6 +8,7 @@
 #include "playlistquerymanager.h"
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/shufflebuttondelegate.h"
+#include "headerawareproxymodel.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
@@ -45,11 +46,14 @@ protected:
 
 private:
     Ui::SinglePlaylistView *ui;
+
+    QStandardItemModel *songModel;
+    QSortFilterProxyModel *songProxyModel;
+
     QTimer *clickTimer;
-    QListWidgetItem *clickedItem;
+    QModelIndex clickedIndex;
     bool permanentDelete;
     bool playlistModified;
-    int visibleSongs;
 #ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
 #endif
@@ -69,15 +73,14 @@ private:
 private slots:
     void orientationChanged(int w, int h);
 #ifdef MAFW
-    void setItemMetadata(QListWidgetItem *item, QString objectId, GHashTable *metadata);
+    void setItemMetadata(QStandardItem *item, QString objectId, GHashTable *metadata);
     void onGetItems(QString objectId, GHashTable* metadata, guint index);
     void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString);
     void onShareUriReceived(QString objectId, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
     int appendAllToPlaylist(bool filter);
-    void playAll(int startIndex);
-    void onItemActivated(QListWidgetItem *item);
+    void onItemActivated(QModelIndex index);
     void addAllToNowPlaying();
     void addAllToPlaylist();
     void onSearchHideButtonClicked();

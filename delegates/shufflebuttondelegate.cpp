@@ -9,7 +9,7 @@ ShuffleButtonDelegate::ShuffleButtonDelegate(QListView *parent) :
     button->setValueLayout(QMaemo5ValueButton::ValueUnderTextCentered);
     button->setCheckable(true);
 
-    parent->viewport()->installEventFilter(this);
+    connect(parent, SIGNAL(activated(QModelIndex)), this, SLOT(onActivated(QModelIndex)));
 }
 
 void ShuffleButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -19,19 +19,17 @@ void ShuffleButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     button->setFixedHeight(r.height());
     button->setValueText(tr("%n song(s)", "", index.data(UserRoleSongCount).toInt()));
     button->setEnabled(option.state & QStyle::State_Enabled);
-    button->setChecked(option.state & QStyle::State_Selected && button->isEnabled());
+    button->setChecked(option.state & QStyle::State_Selected);
 
     QPixmap pixmap(button->size());
     button->render(&pixmap);
     painter->drawPixmap(r.left(), r.top(), r.width(), r.height(), pixmap);
 }
 
-bool ShuffleButtonDelegate::eventFilter(QObject*, QEvent *e)
+void ShuffleButtonDelegate::onActivated(QModelIndex index)
 {
-    if (e->type() == QEvent::TouchEnd || e->type() == QEvent::MouseButtonRelease)
+    if (index.row() == 0)
         static_cast<QListView*>(this->parent())->clearSelection();
-
-    return false;
 }
 
 QSize ShuffleButtonDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
