@@ -91,6 +91,12 @@ void MafwRendererAdapter::initializePlayback(MafwPlaylist*, uint, MafwPlayState 
 
 void MafwRendererAdapter::playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data)
 {
+// Waiting for an opinion from libplayback can take so long that there can be
+// a significant delay between disconnecting a headset and pausing music and
+// play/pause button also seems a bit laggy. Because of that it might be a good
+// idea to not wait for permission, but rather do what we have to do and later
+// only tell the playback manager what we wanted.
+#ifdef LIBPLAYBACK_FULL
     MafwRendererAdapter *adapter = static_cast<req_state_cb_payload*>(data)->adapter;
 
     if (adapter->mafw_renderer) {
@@ -115,6 +121,13 @@ void MafwRendererAdapter::playback_state_req_callback(pb_playback_t *pb, pb_stat
 
     pb_playback_req_completed(pb, req);
     delete static_cast<req_state_cb_payload*>(data);
+#else
+    Q_UNUSED(granted_state);
+    Q_UNUSED(reason);
+    Q_UNUSED(data);
+
+    pb_playback_req_completed(pb, req);
+#endif
 }
 
 void MafwRendererAdapter::playback_state_req_handler(pb_playback_t *pb, pb_state_e req_state, pb_req_t *ext_req, void *data)
@@ -286,6 +299,16 @@ void MafwRendererAdapter::onStateChanged(MafwRenderer*,
     qDebug() << "On state changed";
 #endif
     emit static_cast<MafwRendererAdapter*>(user_data)->stateChanged(state);
+
+#ifndef LIBPLAYBACK_FULL
+    if (state == Playing)
+        pb_playback_req_state(static_cast<MafwRendererAdapter*>(user_data)->playback,
+                              PB_STATE_PLAY, playback_state_req_callback, NULL);
+
+    else if (state == Paused || state == Stopped)
+        pb_playback_req_state(static_cast<MafwRendererAdapter*>(user_data)->playback,
+                              PB_STATE_STOP, playback_state_req_callback, NULL);
+#endif
 }
 
 void MafwRendererAdapter::play()
@@ -299,6 +322,7 @@ void MafwRendererAdapter::play()
     playlist->getSize();
 #endif
 
+#ifdef LIBPLAYBACK_FULL
     if (playback) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
@@ -308,12 +332,16 @@ void MafwRendererAdapter::play()
     } else if (mafw_renderer) {
         mafw_renderer_play(mafw_renderer, MafwRendererSignalHelper::play_playback_cb, this);
     }
+#else
+    if (mafw_renderer)
+        mafw_renderer_play(mafw_renderer, MafwRendererSignalHelper::play_playback_cb, this);
+#endif
 }
 
 void MafwRendererAdapter::playObject(const gchar* object_id)
 {
-    if(mafw_renderer)
-    {
+#ifdef LIBPLAYBACK_FULL
+    if (mafw_renderer) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
         pl->action = Dummy;
@@ -322,12 +350,16 @@ void MafwRendererAdapter::playObject(const gchar* object_id)
 
         mafw_renderer_play_object(mafw_renderer, object_id, MafwRendererSignalHelper::play_object_playback_cb, this);
     }
+#else
+    if (mafw_renderer)
+        mafw_renderer_play_object(mafw_renderer, object_id, MafwRendererSignalHelper::play_object_playback_cb, this);
+#endif
 }
 
 void MafwRendererAdapter::playURI(const gchar* uri)
 {
-    if(mafw_renderer)
-    {
+#ifdef LIBPLAYBACK_FULL
+    if (mafw_renderer) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
         pl->action = Dummy;
@@ -336,10 +368,15 @@ void MafwRendererAdapter::playURI(const gchar* uri)
 
         mafw_renderer_play_uri(mafw_renderer, uri, MafwRendererSignalHelper::play_uri_playback_cb, this);
     }
+#else
+    if (mafw_renderer)
+        mafw_renderer_play_uri(mafw_renderer, uri, MafwRendererSignalHelper::play_uri_playback_cb, this);
+#endif
 }
 
 void MafwRendererAdapter::stop()
 {
+#ifdef LIBPLAYBACK_FULL
     if (playback) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
@@ -349,10 +386,15 @@ void MafwRendererAdapter::stop()
     } else if (mafw_renderer) {
         mafw_renderer_stop(mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, this);
     }
+#else
+    if (mafw_renderer)
+        mafw_renderer_stop(mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, this);
+#endif
 }
 
 void MafwRendererAdapter::pause()
 {
+#ifdef LIBPLAYBACK_FULL
     if (playback) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
@@ -362,10 +404,15 @@ void MafwRendererAdapter::pause()
     } else if (mafw_renderer) {
         mafw_renderer_pause(mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, this);
     }
+#else
+    if (mafw_renderer)
+        mafw_renderer_pause(mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, this);
+#endif
 }
 
 void MafwRendererAdapter::resume()
 {
+#ifdef LIBPLAYBACK_FULL
     if (playback) {
         req_state_cb_payload *pl = new req_state_cb_payload;
         pl->adapter = this;
@@ -375,6 +422,10 @@ void MafwRendererAdapter::resume()
     } else if (mafw_renderer) {
         mafw_renderer_resume(mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, this);
     }
+#else
+    if (mafw_renderer)
+        mafw_renderer_resume(mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, this);
+#endif
 }
 
 void MafwRendererAdapter::getStatus()
