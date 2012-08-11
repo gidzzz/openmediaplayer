@@ -116,7 +116,7 @@ void SingleGenreView::onItemActivated(QListWidgetItem *item)
             this->setEnabled(false);
 
             SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
-            artistView->browseAlbum(item->data(UserRoleObjectID).toString());
+            artistView->browseArtist(item->data(UserRoleObjectID).toString());
             artistView->setWindowTitle(item->text());
 
             artistView->show();

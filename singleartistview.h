@@ -13,6 +13,7 @@
 #include "confirmdialog.h"
 #include "singlealbumview.h"
 #include "delegates/thumbnailitemdelegate.h"
+#include "headerawareproxymodel.h"
 
 namespace Ui {
     class SingleArtistView;
@@ -26,10 +27,14 @@ public:
     explicit SingleArtistView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SingleArtistView();
     bool eventFilter(QObject *, QEvent *e);
-    void browseAlbum(QString artistId);
+    void browseArtist(QString objectId);
 
 private:
     Ui::SingleArtistView *ui;
+
+    QStandardItemModel *albumModel;
+    QSortFilterProxyModel *albumProxyModel;
+
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
 #ifdef MAFW
@@ -58,10 +63,10 @@ private slots:
     void onAddAlbumBrowseResult(uint, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onContainerChanged(QString objectId);
 #endif
-    void onAlbumSelected(QListWidgetItem*);
+    void onAlbumSelected(QModelIndex index);
     void orientationChanged(int w, int h);
     void onSearchHideButtonClicked();
-    void onSearchTextChanged(QString);
+    void onSearchTextChanged(QString text);
     void addAllToNowPlaying();
     void deleteCurrentArtist();
     void shuffleAllSongs();

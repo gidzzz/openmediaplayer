@@ -25,7 +25,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListWidget" name="albumList">
+      <widget class="QListView" name="albumList">
        <property name="font">
         <font>
          <pointsize>13</pointsize>

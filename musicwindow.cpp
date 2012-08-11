@@ -683,7 +683,7 @@ void MusicWindow::onArtistSelected(QModelIndex index)
         this->setEnabled(false);
 
         SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
-        artistView->browseAlbum(index.data(UserRoleObjectID).toString());
+        artistView->browseArtist(index.data(UserRoleObjectID).toString());
         artistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
         artistView->show();
