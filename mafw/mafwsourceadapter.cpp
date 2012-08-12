@@ -35,9 +35,27 @@ MafwSourceAdapter::MafwSourceAdapter(MafwSource *source):
     g_object_ref(source);
     sourceName = mafw_extension_get_name(MAFW_EXTENSION(source));
     mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
-    mafw_shared_init(mafw_registry, NULL);
     mafw_source = source;
     connectRegistrySignals();
+}
+
+MafwSourceAdapter::MafwSourceAdapter():
+    sourceIsReady(false)
+{
+    mafw_source = NULL;
+    mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
+    connectRegistrySignals();
+}
+
+void MafwSourceAdapter::setSource(MafwSource *source)
+{
+    g_object_ref(source);
+    if (mafw_source)
+        g_object_unref(mafw_source);
+
+    mafw_source = source;
+    sourceName = mafw_extension_get_name(MAFW_EXTENSION(source));
+    sourceIsReady = true;
 }
 
 MafwSource* MafwSourceAdapter::getSourceByUUID(QString uuid)

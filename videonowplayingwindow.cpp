@@ -24,7 +24,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
-    mafwSource(NULL)
+    mafwSource(factory->getTempSource())
 #endif
 {
     /* Make Qt do the work of keeping the overlay the magic color  */
@@ -102,7 +102,7 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
             if (currentPosition == 0)
                 mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
             mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, currentPosition);
-            mafwSource->setMetadata(objectIdToPlay.toUtf8(), metadata);
+            mafwSource->setMetadata(currentObjectId.toUtf8(), metadata);
             mafw_metadata_release(metadata);
         }
 
@@ -183,6 +183,9 @@ void VideoNowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
             this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
 
+    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
+
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
     connect(ui->progressBar, SIGNAL(sliderPressed()), this, SLOT(onSliderPressed()));
@@ -260,14 +263,13 @@ void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState
 #ifdef MAFW
 void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
-    QString id = QString::fromUtf8(objectId);
+    currentObjectId = QString::fromUtf8(objectId);
+    mafwSource->setSource(mafwFactory->getTempSource()->getSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
+    mafwSource->getMetadata(currentObjectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI,
+                                                                       MAFW_METADATA_KEY_DURATION,
+                                                                       MAFW_METADATA_KEY_PAUSED_POSITION));
 
-    if (mafwSource) mafwSource->deleteLater();
-    mafwSource = new MafwSourceAdapter(mafwFactory->getTrackerSource()->getSourceByUUID(id.left(id.indexOf("::"))));
-    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
-
-    if (id.startsWith("localtagfs::")) { // local storage
+    if (currentObjectId.startsWith("localtagfs::")) { // local storage
         ui->bookmarkButton->hide();
         ui->shareButton->show();
         ui->deleteButton->show();
@@ -280,12 +282,6 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
     }
 
     videoLength = Duration::Unknown;
-    if (!id.isEmpty())
-        mafwSource->getMetadata(id.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI,
-                                                              MAFW_METADATA_KEY_DURATION,
-                                                              MAFW_METADATA_KEY_PAUSED_POSITION));
-
-    this->objectIdToPlay = id;
 }
 #endif
 
@@ -343,7 +339,7 @@ void VideoNowPlayingWindow::onDeleteClicked()
     mafwrenderer->pause();
 
     if (ConfirmDialog(ConfirmDialog::DeleteVideo, this).exec() == QMessageBox::Yes) {
-        mafwSource->destroyObject(objectIdToPlay.toUtf8());
+        mafwSource->destroyObject(currentObjectId.toUtf8());
         this->close();
     }
 #endif
@@ -353,7 +349,7 @@ void VideoNowPlayingWindow::onShareClicked()
 {
 #ifdef MAFW
     mafwrenderer->pause();
-    mafwSource->getUri(this->objectIdToPlay.toUtf8());
+    mafwSource->getUri(currentObjectId.toUtf8());
     connect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 #endif
 }
@@ -363,8 +359,7 @@ void VideoNowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
-    if (objectId != this->objectIdToPlay)
-        return;
+    if (objectId != currentObjectId) return;
 
     QStringList files;
 #ifdef DEBUG
@@ -520,8 +515,10 @@ void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 #endif
 
 #ifdef MAFW
-void VideoNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
+void VideoNowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error)
 {
+    if (objectId != currentObjectId) return;
+
     if (metadata != NULL) {
         GValue *v;
 

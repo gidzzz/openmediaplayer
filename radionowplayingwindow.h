@@ -62,6 +62,7 @@ private:
     MafwSourceAdapter *mafwSource;
     MafwPlaylistAdapter* playlist;
     int mafwState;
+    QString currentObjectId;
     QString artist;
     QString title;
     QString uri;
@@ -98,7 +99,7 @@ private slots:
     void onPositionSliderReleased();
     void onPositionSliderMoved(int position);
     void onRendererMetadataRequested(GHashTable*, QString, QString error);
-    void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
+    void onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error);
     void onRendererMetadataChanged(QString name, QVariant value);
 #endif
 };

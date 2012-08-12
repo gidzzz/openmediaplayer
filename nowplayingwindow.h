@@ -95,6 +95,7 @@ private:
     LyricsManager *lyricsManager;
     int mafwState;
     GConfItem *lastPlayingSong;
+    QString metadataObjectId;
     bool event(QEvent *event);
     void showEvent(QShowEvent *);
 #endif
@@ -148,7 +149,7 @@ private slots:
     void onStateChanged(int state);
     void onPositionChanged(int, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
-    void onRendererMetadataRequested(GHashTable*, QString object_id, QString);
+    void onRendererMetadataRequested(GHashTable*, QString objectId, QString);
     void onSourceMetadataRequested(QString, GHashTable*, QString);
     void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
     void setPosition(int newPosition);

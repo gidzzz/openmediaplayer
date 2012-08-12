@@ -60,7 +60,7 @@ private:
     void showOverlay(bool show);
     QTimer *volumeTimer;
     QTimer *positionTimer;
-    QString objectIdToPlay;
+    QString currentObjectId;
     QString uri;
     Rotator::Orientation savedPolicy;
     bool lazySliders;
@@ -113,7 +113,7 @@ private slots:
     void onBufferingInfo(float status);
     void onPositionChanged(int position, QString);
     void onRendererMetadataRequested(GHashTable *metadata, QString, QString error);
-    void onSourceMetadataRequested(QString, GHashTable *metadata, QString error);
+    void onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error);
     void onErrorOccured(const QDBusMessage &msg);
     void onShareUriReceived(QString objectId, QString uri);
 #endif

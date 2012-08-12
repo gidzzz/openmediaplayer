@@ -49,7 +49,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    metadataSource(NULL),
+    metadataSource(factory->getTempSource()),
     playlist(factory->getPlaylistAdapter())
 #else
     ui(new Ui::NowPlayingWindow)
@@ -467,6 +467,9 @@ void NowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
             this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
 
+    connect(metadataSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
+
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
 
     connect(ui->playButton, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onPlayMenuRequested(QPoint)));
@@ -592,16 +595,9 @@ void NowPlayingWindow::onItemMoved(guint from, guint to)
 #endif
 
 #ifdef MAFW
-void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString object_id, QString error)
+void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString objectId, QString error)
 {
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int, char*)), Qt::UniqueConnection);
-
-    if (metadataSource)
-        metadataSource->deleteLater(); // hmmm... instant delete causes segfaults
-
-    metadataSource = new MafwSourceAdapter(mafwTrackerSource->getSourceByUUID(object_id.left(object_id.indexOf("::"))));
-    connect(metadataSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
 
     QString title;
     QString artist;
@@ -613,7 +609,6 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     keys[1] = MAFW_METADATA_KEY_MIME;
     keys[2] = MAFW_METADATA_KEY_ALBUM_ART_URI;
     keys[3] = MAFW_METADATA_KEY_RENDERER_ART_URI;
-    //keys[4] = MAFW_METADATA_KEY_LYRICS;
     char currentKey = 4;
 
     QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
@@ -659,7 +654,9 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     // if the renderer can't determine seekability, there's probably no point in querying the source
 
     keys[currentKey] = NULL;
-    metadataSource->getMetadata(object_id.toUtf8(), keys);
+    metadataObjectId = objectId;
+    metadataSource->setSource(mafwFactory->getTempSource()->getSourceByUUID(objectId.left(objectId.indexOf("::"))));
+    metadataSource->getMetadata(objectId.toUtf8(), keys);
     delete[] keys;
 
     QFont f = ui->titleLabel->font();
@@ -688,8 +685,10 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
         qDebug() << error;
 }
 
-void NowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
+void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error)
 {
+    if (objectId != metadataObjectId) return;
+
     if (metadata != NULL) {
         QString albumArt;
         GValue *v;

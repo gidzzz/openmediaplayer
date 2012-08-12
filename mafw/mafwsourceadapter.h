@@ -16,9 +16,11 @@ class MafwSourceAdapter : public QObject
 
  public:
   MafwSourceAdapter(QString sourceName);
-  MafwSourceAdapter(MafwSource* source);
+  MafwSourceAdapter(MafwSource *source);
+  MafwSourceAdapter();
   ~MafwSourceAdapter();
 
+  void setSource(MafwSource *source);
   MafwSource* getSourceByUUID(QString uuid);
   QString getNameByUUID(QString uuid);
 

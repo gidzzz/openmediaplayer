@@ -24,7 +24,7 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
-    mafwSource(NULL),
+    mafwSource(factory->getTempSource()),
     playlist(factory->getPlaylistAdapter())
 #endif
 {
@@ -121,6 +121,9 @@ void RadioNowPlayingWindow::connectSignals()
     connect(ui->positionSlider, SIGNAL(sliderReleased()), this, SLOT(onPositionSliderReleased()));
     connect(ui->positionSlider, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+
+    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
 
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
@@ -264,16 +267,12 @@ void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
     ui->stationLabel->setText(tr("(unknown station)"));
 
-    if (mafwSource) mafwSource->deleteLater();
-    QString id = QString::fromUtf8(objectId);
-    mafwSource = new MafwSourceAdapter(mafwFactory->getRadioSource()->getSourceByUUID(id.left(id.indexOf("::"))));
-    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString, GHashTable*, QString)));
-
-    mafwrenderer->getCurrentMetadata();
-
+    currentObjectId = QString::fromUtf8(objectId);
+    mafwSource->setSource(mafwFactory->getTempSource()->getSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
     mafwSource->getMetadata(objectId, MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
                                                         MAFW_METADATA_KEY_URI));
+
+    mafwrenderer->getCurrentMetadata();
 }
 
 void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant value)
@@ -445,8 +444,10 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
         qDebug() << error;
 }
 
-void RadioNowPlayingWindow::onSourceMetadataRequested(QString, GHashTable *metadata, QString error)
+void RadioNowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error)
 {
+    if (objectId != currentObjectId) return;
+
     if (metadata != NULL) {
         QString station;
         GValue *v;
