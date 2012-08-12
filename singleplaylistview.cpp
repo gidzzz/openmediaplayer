@@ -102,6 +102,7 @@ SinglePlaylistView::~SinglePlaylistView()
 void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
 {
     currentObjectId = QString();
+
     songModel->clear();
     QStandardItem *item = new QStandardItem();
     item->setData(true, UserRoleHeader);
@@ -187,6 +188,8 @@ void SinglePlaylistView::setItemMetadata(QStandardItem *item, QString objectId, 
 void SinglePlaylistView::browseImportedPlaylist(QString objectId)
 {
     currentObjectId = objectId;
+    playlistLoaded = false;
+
     songModel->clear();
     QStandardItem *item = new QStandardItem();
     item->setData(true, UserRoleHeader);
@@ -205,6 +208,8 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
 void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting, int maxCount)
 {
     currentObjectId = QString();
+    playlistLoaded = false;
+
     songModel->clear();
     QStandardItem *item = new QStandardItem();
     item->setData(true, UserRoleHeader);
@@ -239,15 +244,21 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint 
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+        playlistLoaded = true;
+        if (pendingActivation.row() != -1)
+            onItemActivated(songProxyModel->mapFromSource(pendingActivation));
     }
 }
 
 void SinglePlaylistView::onItemActivated(QModelIndex index)
 {
 #ifdef MAFW
-    if (songModel->rowCount() == 1) return;
-
     this->setEnabled(false);
+
+    if (!playlistLoaded) {
+        pendingActivation = songProxyModel->mapToSource(index);
+        return;
+    }
 
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();

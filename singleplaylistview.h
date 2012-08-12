@@ -54,6 +54,8 @@ private:
     QModelIndex clickedIndex;
     bool permanentDelete;
     bool playlistModified;
+    bool playlistLoaded;
+    QModelIndex pendingActivation;
 #ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
 #endif
