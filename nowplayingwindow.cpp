@@ -37,7 +37,7 @@ NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory 
 void NowPlayingWindow::destroy()
 {
     if (instance) {
-        delete instance;
+        instance->deleteLater();
         instance = NULL;
     }
 }
@@ -181,6 +181,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
 NowPlayingWindow::~NowPlayingWindow()
 {
+    instance = NULL;
     delete ui;
 }
 
