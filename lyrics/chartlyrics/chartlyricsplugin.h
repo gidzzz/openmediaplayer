@@ -14,6 +14,7 @@ public:
     ChartLyricsPlugin();
 
     QString name() { return "ChartLyrics"; }
+    QString description() { return "http://www.chartlyrics.com"; }
 
     void fetch(QString artist, QString title);
     void abort();

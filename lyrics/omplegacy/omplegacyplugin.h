@@ -14,6 +14,7 @@ class OMPLegacyPlugin : public AbstractLyricsProvider
 
 public:
     QString name() { return "OMP pre-20120803 offline cache"; }
+    QString description() { return "/home/user/.lyrics/"; }
 
     void fetch(QString artist, QString title);
     void abort() { };

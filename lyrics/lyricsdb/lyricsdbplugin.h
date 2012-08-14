@@ -15,6 +15,7 @@ public:
     LyricsDBPlugin();
 
     QString name() { return "LyricsDB"; }
+    QString description() { return "http://lyrics.mirkforce.net"; }
 
     void fetch(QString artist, QString title);
     void abort();

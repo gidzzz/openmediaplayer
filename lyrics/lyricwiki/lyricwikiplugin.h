@@ -14,6 +14,7 @@ public:
     LyricWikiPlugin();
 
     QString name() { return "LyricWiki"; }
+    QString description() { return "http://lyrics.wikia.com"; }
 
     void fetch(QString artist, QString title);
     void abort();

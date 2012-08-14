@@ -9,8 +9,9 @@ LyricsProvidersDialog::LyricsProvidersDialog(QString state, QWidget *parent) :
     ui->upButton->setIcon(QIcon::fromTheme("keyboard_move_up"));
     ui->checkButton->setIcon(QIcon::fromTheme("widgets_tickmark_grid"));
     ui->downButton->setIcon(QIcon::fromTheme("keyboard_move_down"));
+    ui->providersList->setItemDelegate(new ProviderListItemDelegate(ui->providersList));
 
-    QStringList availableProviders = LyricsManager::listProviders();
+    QMap<QString,QString> availableProviders = LyricsManager::listProviders();
     QStringList configList = state.split(',', QString::SkipEmptyParts);
 
     foreach(QString config, configList) {
@@ -20,13 +21,13 @@ LyricsProvidersDialog::LyricsProvidersDialog(QString state, QWidget *parent) :
             config = config.mid(1);
 
         if (availableProviders.contains(config))
-            addProvider(config, active);
+            addProvider(config, availableProviders.value(config), active);
 
-        availableProviders.removeOne(config);
+        availableProviders.remove(config);
     }
 
     foreach (QString provider, availableProviders)
-        addProvider(provider, false);
+        addProvider(provider, availableProviders.value(provider), false);
 
     if (ui->providersList->count()) {
         connect(ui->checkButton, SIGNAL(toggled(bool)), this, SLOT(checkProvider(bool)));
@@ -52,13 +53,13 @@ LyricsProvidersDialog::~LyricsProvidersDialog()
     delete ui;
 }
 
-void LyricsProvidersDialog::addProvider(QString name, bool active)
+void LyricsProvidersDialog::addProvider(QString name, QString description, bool active)
 {
     QListWidgetItem *item = new QListWidgetItem();
 
     item->setText(name);
+    item->setData(UserRoleValueText, description);
     item->setData(Qt::UserRole, active);
-    item->setIcon(QIcon::fromTheme(active ? "general_tickmark_checked" : "general_tickmark_unchecked"));
 
     ui->providersList->addItem(item);
 }
@@ -68,7 +69,6 @@ void LyricsProvidersDialog::checkProvider(bool checked)
 {
     QListWidgetItem *item = ui->providersList->currentItem();
     item->setData(Qt::UserRole, checked);
-    item->setIcon(QIcon::fromTheme(checked ? "general_tickmark_checked" : "general_tickmark_unchecked"));
 }
 
 void LyricsProvidersDialog::onProviderChanged(QListWidgetItem *item)

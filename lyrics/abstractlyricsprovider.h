@@ -10,9 +10,12 @@ class AbstractLyricsProvider : public QObject
     Q_OBJECT
 
 public:
-    virtual QString name() = 0;
+    AbstractLyricsProvider() { nam = NULL; }
 
-    virtual void fetch(QString artistName, QString songName) = 0;
+    virtual QString name() = 0;
+    virtual QString description() = 0;
+
+    virtual void fetch(QString artist, QString title) = 0;
     virtual void abort() = 0;
 
     QNetworkAccessManager *nam;
@@ -23,6 +26,6 @@ signals:
     void error(QString message);
 };
 
-Q_DECLARE_INTERFACE(AbstractLyricsProvider, "org.openmediaplayer.AbstractLyricsProvider/1.0")
+Q_DECLARE_INTERFACE(AbstractLyricsProvider, "org.openmediaplayer.AbstractLyricsProvider/1.1")
 
 #endif // ABSTRACTLYRICSPROVIDER_H

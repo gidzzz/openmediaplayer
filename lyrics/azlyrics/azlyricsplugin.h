@@ -15,6 +15,7 @@ public:
     AZLyricsPlugin();
 
     QString name() { return "AZLyrics"; }
+    QString description() { return "http://www.azlyrics.com"; }
 
     void fetch(QString artist, QString title);
     void abort();

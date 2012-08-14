@@ -20,9 +20,9 @@ public:
     LyricsManager(QObject *parent = 0);
     ~LyricsManager();
 
-    void fetchLyrics(QString artist, QString title, bool cached = true);
+    void fetchLyrics(QString artist, QString title, bool useCache = true);
 
-    static QStringList listProviders();
+    static QMap<QString,QString> listProviders();
 
     static QString cacheFilePath(QString artist, QString title);
     static QString cacheDirPath(QString artist, QString title);
@@ -46,6 +46,7 @@ private:
     QList<QPluginLoader*> loadersList;
     QList<AbstractLyricsProvider*> providersList;
     void queryNextProvider();
+    bool connectionError;
     int retry;
 };
 

@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include "ui_lyricsprovidersdialog.h"
+#include "delegates/providerlistitemdelegate.h"
 #include "lyricsmanager.h"
 #include "includes.h"
 #include "rotator.h"
@@ -26,7 +27,7 @@ private:
     Ui::LyricsProvidersDialog *ui;
 
 private slots:
-    void addProvider(QString name, bool active);
+    void addProvider(QString name, QString description, bool active);
     void checkProvider(bool checked);
     void moveProviderUp();
     void moveProviderDown();

@@ -74,9 +74,9 @@ LyricsManager::~LyricsManager()
     }
 }
 
-QStringList LyricsManager::listProviders()
+QMap<QString,QString> LyricsManager::listProviders()
 {
-    QStringList plugins;
+    QMap<QString,QString> plugins;
 
     // Load a plugin, read the name, unload, repeat
     QDir pluginsDir = QDir(PLUGINS_DIR);
@@ -86,7 +86,7 @@ QStringList LyricsManager::listProviders()
         if (plugin) {
             AbstractLyricsProvider *provider = qobject_cast<AbstractLyricsProvider*>(plugin);
             if (provider)
-                plugins << provider->name();
+                plugins.insert(provider->name(), provider->description());
             loader.unload();
         }
     }
@@ -135,7 +135,7 @@ void LyricsManager::deleteLyrics(QString artist, QString title)
     QDir().rmdir(cacheDirPath(artist, title));
 }
 
-void LyricsManager::fetchLyrics(QString artist, QString title, bool cached)
+void LyricsManager::fetchLyrics(QString artist, QString title, bool useCache)
 {
         // Abort a possible pending operation
         if (retry != -1) {
@@ -148,21 +148,11 @@ void LyricsManager::fetchLyrics(QString artist, QString title, bool cached)
         this->title = title;
 
         // Fetch lyrics from cache or start querying providers
-        if (cached && QFile(cacheFilePath(artist, title)).exists()) {
+        if (useCache && QFile(cacheFilePath(artist, title)).exists()) {
             emit lyricsFetched(loadLyrics(artist, title));
-        } else if (QNetworkConfigurationManager().isOnline()) {
-            queryNextProvider();
         } else {
-            // A little hack waiting for a proper implemention of offline providers.
-            foreach(AbstractLyricsProvider *provider, providersList) {
-                if (provider->name().startsWith("OMP")) {
-                    retry = providersList.size();
-                    provider->fetch(artist, title);
-                    return;
-                }
-            }
-
-            emit lyricsError(tr("There is no active Internet connection"));
+            connectionError = false;
+            queryNextProvider();
         }
 }
 
@@ -171,11 +161,18 @@ void LyricsManager::queryNextProvider()
     // Check whether there are any providers remaining
     if (++retry < providersList.size()) {
         AbstractLyricsProvider *provider = providersList.at(retry);
-        qDebug() << "Querying" << provider->name();
-        provider->fetch(artist, title);
+        if (provider->nam == NULL || QNetworkConfigurationManager().isOnline()) {
+            qDebug() << "Querying" << provider->name();
+            provider->fetch(artist, title);
+        } else {
+            qDebug() << "Skipping" << provider->name();
+            connectionError = true;
+            queryNextProvider();
+        }
     } else {
         retry = -1;
-        emit lyricsError(tr("Lyrics not found"));
+        emit lyricsError(connectionError ? tr("There is no active Internet connection")
+                                         : tr("Lyrics not found"));
     }
 }
 

@@ -71,7 +71,8 @@ SOURCES += \
     bookmarkdialog.cpp \
     lyricsmanager.cpp \
     lyricsprovidersdialog.cpp \
-    delegates/shufflebuttondelegate.cpp
+    delegates/shufflebuttondelegate.cpp \
+    delegates/providerlistitemdelegate.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -118,7 +119,8 @@ HEADERS += \
     lyricsprovidersdialog.h \
     headerawareproxymodel.h \
     confirmdialog.h \
-    delegates/shufflebuttondelegate.h
+    delegates/shufflebuttondelegate.h \
+    delegates/providerlistitemdelegate.h
 
 FORMS += \
     mainwindow.ui \
