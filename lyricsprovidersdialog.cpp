@@ -26,7 +26,7 @@ LyricsProvidersDialog::LyricsProvidersDialog(QString state, QWidget *parent) :
         availableProviders.remove(config);
     }
 
-    foreach (QString provider, availableProviders)
+    foreach (QString provider, availableProviders.keys())
         addProvider(provider, availableProviders.value(provider), false);
 
     if (ui->providersList->count()) {

@@ -29,6 +29,11 @@ void LyricWikiPlugin::onReplyReceived()
         data.remove(0, data.indexOf("<div class='lyricbox'>")+22);
         data.remove(data.indexOf("<!--")+4, data.length());
 
+        if (data.contains("Category:Instrumental")) {
+            emit error("According to LyricWiki this track is instrumental.");
+            return;
+        }
+
         data.remove(0, data.indexOf("</div>")+6);
         data.remove(data.indexOf("<!--"), 4);
 

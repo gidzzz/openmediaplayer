@@ -3,4 +3,5 @@ SUBDIRS = azlyrics \
           chartlyrics \
           lyricsdb \
           lyricwiki \
-          omplegacy
+          omplegacy \
+          sonata
