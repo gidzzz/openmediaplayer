@@ -619,8 +619,18 @@ void SinglePlaylistView::saveCurrentPlaylist()
     MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(playlist->mafw_playlist_manager->createPlaylist(this->windowTitle()));
     playlist->clear(targetPlaylist);
 
-    for (int i = 1; i < songModel->rowCount(); i++)
-        playlist->appendItem(targetPlaylist, songModel->item(i)->data(UserRoleObjectID).toString());
+    int songCount = songModel->rowCount();
+    gchar** songAddBuffer = new gchar*[songCount];
+
+    for (int i = 1; i < songCount; i++)
+        songAddBuffer[i-1] = qstrdup(songModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    songAddBuffer[--songCount] = NULL;
+
+    playlist->appendItems(targetPlaylist, (const gchar**) songAddBuffer);
+
+    for (int i = 0; i < songCount; i++)
+        delete[] songAddBuffer[i];
+    delete[] songAddBuffer;
 
     playlistModified = false;
 #endif
