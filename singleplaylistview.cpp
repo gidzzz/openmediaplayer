@@ -67,6 +67,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     ui->songList->setDragEnabled(false);
 
     playlistModified = false;
+    pendingActivation = Nothing;
 
     clickedIndex = QModelIndex();
     clickTimer = new QTimer(this);
@@ -245,8 +246,23 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint 
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
         playlistLoaded = true;
-        if (pendingActivation.row() != -1)
-            onItemActivated(songProxyModel->mapFromSource(pendingActivation));
+
+        switch (pendingActivation) {
+            case Nothing:
+                break;
+
+            case AddToNowPlaying:
+                addAllToNowPlaying();
+                break;
+
+            case AddToPlaylist:
+                addAllToPlaylist();
+                break;
+
+            default:
+                onItemActivated(songProxyModel->mapFromSource(songModel->index(pendingActivation,0)));
+                break;
+        }
     }
 }
 
@@ -256,7 +272,7 @@ void SinglePlaylistView::onItemActivated(QModelIndex index)
     this->setEnabled(false);
 
     if (!playlistLoaded) {
-        pendingActivation = songProxyModel->mapToSource(index);
+        pendingActivation = songProxyModel->mapToSource(index).row();
         return;
     }
 
@@ -288,6 +304,11 @@ void SinglePlaylistView::orientationChanged(int w, int h)
 
 void SinglePlaylistView::addAllToNowPlaying()
 {
+    if (!playlistLoaded) {
+        pendingActivation = AddToNowPlaying;
+        return;
+    }
+
 #ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
@@ -301,6 +322,11 @@ void SinglePlaylistView::addAllToNowPlaying()
 
 void SinglePlaylistView::addAllToPlaylist()
 {
+    if (!playlistLoaded) {
+        pendingActivation = AddToPlaylist;
+        return;
+    }
+
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {

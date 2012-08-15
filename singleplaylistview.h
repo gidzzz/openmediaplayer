@@ -27,6 +27,12 @@ class SinglePlaylistView : public QMainWindow
 {
     Q_OBJECT
 
+    enum {
+        Nothing = -1,
+        AddToNowPlaying = -2,
+        AddToPlaylist = -3
+    };
+
 public:
     explicit SinglePlaylistView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
     ~SinglePlaylistView();
@@ -55,7 +61,7 @@ private:
     bool permanentDelete;
     bool playlistModified;
     bool playlistLoaded;
-    QModelIndex pendingActivation;
+    int pendingActivation;
 #ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
 #endif
