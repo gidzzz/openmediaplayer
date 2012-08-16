@@ -103,6 +103,7 @@ SinglePlaylistView::~SinglePlaylistView()
 void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
 {
     currentObjectId = QString();
+    playlistLoaded = true;
 
     songModel->clear();
     QStandardItem *item = new QStandardItem();
