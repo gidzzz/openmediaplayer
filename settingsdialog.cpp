@@ -26,7 +26,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->gridLayout_2->setContentsMargins(0,0,0,0);
     ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
 
-    ui->headsetNote->setText("* " + ui->headsetNote->text().arg(ui->playbackBox->text()));
+    ui->cssuNote->setText("* " + ui->cssuNote->text());
     ui->headsetButtonBox->setText(ui->headsetButtonBox->text() + " *");
 
     ui->fmtxdNote->setText("** " + ui->fmtxdNote->text());

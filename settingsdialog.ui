@@ -203,14 +203,14 @@
         </layout>
        </item>
        <item row="18" column="1">
-        <widget class="QLabel" name="headsetNote">
+        <widget class="QLabel" name="cssuNote">
          <property name="font">
           <font>
            <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>Requires "%1" disabled</string>
+          <string>Requires Community SSU update</string>
          </property>
         </widget>
        </item>
