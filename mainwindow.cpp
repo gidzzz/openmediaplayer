@@ -1142,19 +1142,13 @@ void MainWindow::updateWiredHeadset()
     // state contains jack GPIO state - false when nothing is not connected to jack
     bool state = static_cast< QDBusReply <bool> >(interface2.call("GetProperty", "button.state.value"));
 
-    // "Jack Bias" is alsa switch, when is off wired headset button is disabled
-    QStringList args;
-    args << "-c" << "0" << "sset" << "Jack Bias";
-
     bool connected = ( state && jackList.contains("headphone") );
 
     if (connected && !wiredHeadsetIsConnected) {
         onHeadsetConnected();
-        QProcess::startDetached("amixer", args << "on");
         wiredHeadsetIsConnected = true;
     } else if (!connected && wiredHeadsetIsConnected) {
         onHeadsetDisconnected();
-        QProcess::startDetached("amixer", args << "off");
         wiredHeadsetIsConnected = false;
     }
 }
