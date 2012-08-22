@@ -1520,6 +1520,7 @@ void NowPlayingWindow::onViewContextMenuRequested(const QPoint &pos)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Select album art"), this, SLOT(selectAlbumArt()));
     contextMenu->addAction(tr("Reset album art"), this, SLOT(resetAlbumArt()));
+    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 

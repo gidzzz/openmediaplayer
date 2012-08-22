@@ -207,6 +207,7 @@ void VideosWindow::onSortingChanged(QAction *action)
         QFont font; font.setPointSize(13); ui->videoList->setFont(font);
         ui->videoList->setAlternatingRowColors(false);
         ui->videoList->setViewMode(QListView::IconMode);
+        ui->videoList->itemDelegate()->deleteLater();
         ui->videoList->setItemDelegate(new ThumbnailItemDelegate(ui->videoList));
         ui->videoList->setWrapping(true);
         ui->videoList->setGridSize(QSize(155,215));
@@ -219,6 +220,7 @@ void VideosWindow::onSortingChanged(QAction *action)
         QFont font; font.setPointSize(18); ui->videoList->setFont(font);
         ui->videoList->setAlternatingRowColors(true);
         ui->videoList->setViewMode(QListView::ListMode);
+        ui->videoList->itemDelegate()->deleteLater();
         ui->videoList->setItemDelegate(new MediaWithIconDelegate(ui->videoList));
         ui->videoList->setWrapping(false);
         ui->videoList->setGridSize(QSize());
