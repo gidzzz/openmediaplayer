@@ -63,10 +63,16 @@ void MafwRendererAdapter::findRenderer()
     }
 }
 
-void MafwRendererAdapter::enablePlayback(bool enable)
+void MafwRendererAdapter::enablePlayback(bool enable, bool compatible)
 {
     if (enable) {
-        if (!playback) {
+        if (playback) {
+            if (compatiblePlayback != compatible) {
+                enablePlayback(false);
+                enablePlayback(true, compatible);
+            }
+        } else {
+            compatiblePlayback = compatible;
             connect(this, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                     this, SLOT(initializePlayback(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
             getStatus();
@@ -84,9 +90,9 @@ void MafwRendererAdapter::initializePlayback(MafwPlaylist*, uint, MafwPlayState 
     disconnect(this, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(initializePlayback(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
-    playback = pb_playback_new(dbus_g_connection_get_connection(dbus_g_bus_get(DBUS_BUS_SESSION, NULL)),
-                                 PB_CLASS_MEDIA, (state == Playing ? PB_STATE_PLAY : PB_STATE_STOP),
-                                 playback_state_req_handler, NULL);
+    playback = pb_playback_new(dbus_g_connection_get_connection(dbus_g_bus_get(DBUS_BUS_SESSION, NULL)), PB_CLASS_MEDIA,
+                               state == Playing && !compatiblePlayback ? PB_STATE_PLAY : PB_STATE_STOP,
+                               playback_state_req_handler, NULL);
 }
 
 void MafwRendererAdapter::playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data)
@@ -295,19 +301,23 @@ void MafwRendererAdapter::onStateChanged(MafwRenderer*,
                                          gint state,
                                          gpointer user_data)
 {
+    MafwRendererAdapter *adapter = static_cast<MafwRendererAdapter*>(user_data);
+
 #ifdef DEBUG
     qDebug() << "On state changed";
 #endif
-    emit static_cast<MafwRendererAdapter*>(user_data)->stateChanged(state);
+    emit adapter->stateChanged(state);
 
 #ifndef LIBPLAYBACK_FULL
-    if (state == Playing)
-        pb_playback_req_state(static_cast<MafwRendererAdapter*>(user_data)->playback,
-                              PB_STATE_PLAY, playback_state_req_callback, NULL);
+    if (adapter->playback) {
+        if (state == Paused || state == Stopped)
+            pb_playback_req_state(static_cast<MafwRendererAdapter*>(user_data)->playback,
+                                  PB_STATE_STOP, playback_state_req_callback, NULL);
 
-    else if (state == Paused || state == Stopped)
-        pb_playback_req_state(static_cast<MafwRendererAdapter*>(user_data)->playback,
-                              PB_STATE_STOP, playback_state_req_callback, NULL);
+        else if (state == Playing && !adapter->compatiblePlayback)
+            pb_playback_req_state(static_cast<MafwRendererAdapter*>(user_data)->playback,
+                                  PB_STATE_PLAY, playback_state_req_callback, NULL);
+    }
 #endif
 }
 

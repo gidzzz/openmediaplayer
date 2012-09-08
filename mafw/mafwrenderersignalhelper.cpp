@@ -23,6 +23,7 @@ void MafwRendererSignalHelper::play_playback_cb(MafwRenderer*,
                                                 const GError* error)
 {
     QString qerror;
+#ifdef LIBPLAYBACK_FULL
     if(error)
     {
         qerror = QString(error->message);
@@ -30,6 +31,19 @@ void MafwRendererSignalHelper::play_playback_cb(MafwRenderer*,
     if (!qerror.isEmpty())
         qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalPlay(qerror);
+#else
+    MafwRendererAdapter *adapter = static_cast<MafwRendererAdapter*>(user_data);
+
+    if (error) {
+        qerror = QString(error->message);
+        qDebug() << qerror;
+    } else {
+        if (adapter->playback && adapter->compatiblePlayback)
+            pb_playback_req_state(adapter->playback, PB_STATE_PLAY, adapter->playback_state_req_callback, NULL);
+    }
+
+    emit adapter->signalPlay(qerror);
+#endif
 
 #ifdef MAFW_WORKAROUNDS
     // MAFW behaves inconsistently when it comes to assigning items to
@@ -52,6 +66,7 @@ void MafwRendererSignalHelper::play_uri_playback_cb(MafwRenderer*,
                                                     const GError* error)
 {
     QString qerror;
+#ifdef LIBPLAYBACK_FULL
     if(error)
     {
         qerror = QString(error->message);
@@ -59,6 +74,19 @@ void MafwRendererSignalHelper::play_uri_playback_cb(MafwRenderer*,
     if (!qerror.isEmpty())
         qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalPlayURI(qerror);
+#else
+    MafwRendererAdapter *adapter = static_cast<MafwRendererAdapter*>(user_data);
+
+    if (error) {
+        qerror = QString(error->message);
+        qDebug() << qerror;
+    } else {
+        if (adapter->playback && adapter->compatiblePlayback)
+            pb_playback_req_state(adapter->playback, PB_STATE_PLAY, adapter->playback_state_req_callback, NULL);
+    }
+
+    emit adapter->signalPlayURI(qerror);
+#endif
 }
 
 void MafwRendererSignalHelper::play_object_playback_cb(MafwRenderer*,
@@ -66,6 +94,7 @@ void MafwRendererSignalHelper::play_object_playback_cb(MafwRenderer*,
                                                        const GError* error)
 {
     QString qerror;
+#ifdef LIBPLAYBACK_FULL
     if(error)
     {
         qerror = QString(error->message);
@@ -73,6 +102,19 @@ void MafwRendererSignalHelper::play_object_playback_cb(MafwRenderer*,
     if (!qerror.isEmpty())
         qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalPlayObject(qerror);
+#else
+    MafwRendererAdapter *adapter = static_cast<MafwRendererAdapter*>(user_data);
+
+    if (error) {
+        qerror = QString(error->message);
+        qDebug() << qerror;
+    } else {
+        if (adapter->playback && adapter->compatiblePlayback)
+            pb_playback_req_state(adapter->playback, PB_STATE_PLAY, adapter->playback_state_req_callback, NULL);
+    }
+
+    emit adapter->signalPlayObject(qerror);
+#endif
 }
 
 void MafwRendererSignalHelper::stop_playback_cb(MafwRenderer*,
@@ -108,6 +150,7 @@ void MafwRendererSignalHelper::resume_playback_cb(MafwRenderer*,
                                                   const GError* error)
 {
     QString qerror;
+#ifdef LIBPLAYBACK_FULL
     if(error)
     {
         qerror = QString(error->message);
@@ -115,6 +158,19 @@ void MafwRendererSignalHelper::resume_playback_cb(MafwRenderer*,
     if (!qerror.isEmpty())
         qDebug() << qerror;
     emit static_cast<MafwRendererAdapter*>(user_data)->signalResume(qerror);
+#else
+    MafwRendererAdapter *adapter = static_cast<MafwRendererAdapter*>(user_data);
+
+    if (error) {
+        qerror = QString(error->message);
+        qDebug() << qerror;
+    } else {
+        if (adapter->playback && adapter->compatiblePlayback)
+            pb_playback_req_state(adapter->playback, PB_STATE_PLAY, adapter->playback_state_req_callback, NULL);
+    }
+
+    emit adapter->signalResume(qerror);
+#endif
 }
 
 void MafwRendererSignalHelper::get_status_cb(MafwRenderer*,

@@ -6,12 +6,6 @@
 #include <QtDBus>
 #include <QTimer>
 
-#include <QNetworkConfigurationManager>
-#include <QNetworkAccessManager>
-#include <QUrl>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-
 #include "mirror.h"
 #include "cqgraphicsview.h"
 #include "ui_nowplayingwindow.h"

@@ -43,7 +43,7 @@ class MafwRendererAdapter : public QObject
   static void playback_state_req_handler(pb_playback_t *pb, pb_state_e req_state, pb_req_t *ext_req, void *data);
   static void playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data);
 
-  void enablePlayback(bool enable);
+  void enablePlayback(bool enable, bool compatible = false);
   bool isRendererReady();
 
  public slots:
@@ -68,7 +68,7 @@ class MafwRendererAdapter : public QObject
   bool assignPlaylist(MafwPlaylist* playlist);
 
  signals:
-  //MafwRenderer signals
+  // MafwRenderer signals
   void rendererReady();
   void bufferingInfo(float status);
   void mediaChanged(int index, char* objectId);
@@ -77,7 +77,7 @@ class MafwRendererAdapter : public QObject
   void stateChanged(int newState);
   void mediaIsSeekable(bool);
 
-  //Mafw callbacks as signals
+  // Mafw callbacks as signals
   void signalPlay(QString error);
   void signalPlayURI(QString error);
   void signalPlayObject(QString error);
@@ -119,6 +119,7 @@ class MafwRendererAdapter : public QObject
   MafwRegistry* mafw_registry;
   MafwRenderer* mafw_renderer;
   pb_playback_t* playback;
+  bool compatiblePlayback;
   GValue GVolume;
 
 #ifdef MAFW_WORKAROUNDS
