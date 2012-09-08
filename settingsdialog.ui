@@ -158,27 +158,34 @@
         </widget>
        </item>
        <item row="14" column="1">
+        <widget class="QMaemo5ValueButton" name="playbackMethodBox">
+         <property name="text">
+          <string>Interruptions prevention method</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="1">
         <widget class="QCheckBox" name="slidersCheckBox">
          <property name="text">
           <string>Lazy sliders</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="1">
+       <item row="16" column="1">
         <widget class="QCheckBox" name="deleteCheckBox">
          <property name="text">
           <string>"Delete" for playlist items</string>
          </property>
         </widget>
        </item>
-       <item row="16" column="1">
+       <item row="17" column="1">
         <widget class="QCheckBox" name="fmtxCheckBox">
          <property name="text">
           <string>Override FMTX checks in UI</string>
          </property>
         </widget>
        </item>
-       <item row="17" column="1">
+       <item row="18" column="1">
         <layout class="QHBoxLayout" name="languageCodeHBox">
          <item row="0" column="0">
           <widget class="QLabel" name="languageCodeLabel">
@@ -202,7 +209,7 @@
          </item>
         </layout>
        </item>
-       <item row="18" column="1">
+       <item row="19" column="1">
         <widget class="QLabel" name="cssuNote">
          <property name="font">
           <font>
@@ -214,7 +221,7 @@
          </property>
         </widget>
        </item>
-       <item row="19" column="1">
+       <item row="20" column="1">
         <widget class="QLabel" name="fmtxdNote">
          <property name="font">
           <font>
@@ -226,7 +233,7 @@
          </property>
         </widget>
        </item>
-       <item row="20" column="1">
+       <item row="21" column="1">
         <widget class="QLabel" name="restartNote">
          <property name="font">
           <font>

@@ -107,6 +107,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
                               QSettings().value("main/managedPlayback").toString() == "unlocked" ? 3 : 0);
     ui->playbackBox->setPickSelector(selector);
 
+    selector = new QMaemo5ListPickSelector;
+    model = new QStandardItemModel(0, 1, selector);
+    model->appendRow(new QStandardItem(tr("Compatible")));
+    model->appendRow(new QStandardItem(tr("Reliable")));
+    selector->setModel(model);
+    selector->setCurrentIndex(QSettings().value("main/compatiblePlayback", true).toBool() ? 0 : 1);
+    ui->playbackMethodBox->setPickSelector(selector);
+
     ui->headsetPauseCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
     ui->continuousCheckBox->setChecked(QSettings().value("Videos/continuousPlayback", false).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
@@ -208,6 +216,11 @@ void SettingsDialog::accept()
         case 1: QSettings().setValue("main/managedPlayback", "never"); break;
         case 2: QSettings().setValue("main/managedPlayback", "locked"); break;
         case 3: QSettings().setValue("main/managedPlayback", "unlocked"); break;
+    }
+
+    switch (static_cast<QMaemo5ListPickSelector*>(ui->playbackMethodBox->pickSelector())->currentIndex()) {
+        case 0: QSettings().setValue("main/compatiblePlayback", true); break;
+        case 1: QSettings().setValue("main/compatiblePlayback", false); break;
     }
 
     QSettings().setValue("main/pauseHeadset", ui->headsetPauseCheckBox->isChecked());

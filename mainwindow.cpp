@@ -323,12 +323,12 @@ void MainWindow::open_mp_radio_playing()
 
 void MainWindow::open_mp_now_playing_playback_on()
 {
-    this->activateWindow();
+    open_mp_now_playing();
 }
 
 void MainWindow::open_mp_radio_playing_playback_on()
 {
-    this->activateWindow();
+    open_mp_radio_playing();
 }
 
 void MainWindow::open_mp_car_view()
@@ -1026,9 +1026,11 @@ void MainWindow::onScreenLocked(bool locked)
 {
 #ifdef MAFW
     if (locked)
-        mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "locked");
+        mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "locked",
+                                     QSettings().value("main/compatiblePlayback", true).toBool());
     else
-        mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "unlocked");
+        mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "unlocked",
+                                     QSettings().value("main/compatiblePlayback", true).toBool());
 #endif
 }
 #endif
@@ -1040,7 +1042,7 @@ void MainWindow::setupPlayback()
 
     QString playback = QSettings().value("main/managedPlayback", "always").toString();
     if (playback == "always")
-        mafwrenderer->enablePlayback(true);
+        mafwrenderer->enablePlayback(true, QSettings().value("main/compatiblePlayback", true).toBool());
     else if (playback == "never")
         mafwrenderer->enablePlayback(false);
     else if (playback == "locked" || playback == "unlocked") {
