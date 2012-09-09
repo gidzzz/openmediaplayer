@@ -16,7 +16,6 @@
 #include "texteditautoresizer.h"
 #include "coverpicker.h"
 #include "editlyrics.h"
-#include "tagwindow.h"
 #include "mediaart.h"
 #include "playlistquerymanager.h"
 #include "playlistpicker.h"
@@ -160,7 +159,6 @@ private slots:
     void onShareUriReceived(QString objectId, QString uri);
 #endif
     void togglePlayback();
-    void editTags();
     void onMetadataChanged(QString name, QVariant value);
     void volumeWatcher();
     void onRepeatButtonToggled(bool checked);

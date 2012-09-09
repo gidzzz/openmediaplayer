@@ -1261,7 +1261,6 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &pos)
         contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-        //contextMenu->addAction(tr("Edit tags"), this, SLOT(editTags()));
     }
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
@@ -1568,26 +1567,6 @@ void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Reload lyrics"), this, SLOT(reloadLyricsOverridingCache()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
-}
-
-void NowPlayingWindow::editTags()
-{
-    QString objectId = ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString();
-    TagWindow *tw = new TagWindow(this, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString(),
-                                  ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString(),
-                                  ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
-                                  ui->songPlaylist->currentItem()->data(UserRoleSongAlbum).toString());
-
-    if ( tw->exec() == QDialog::Accepted ) {
-        qDebug() << objectId << tw->title << tw->artist << tw->album;
-        GHashTable *metadata = mafw_metadata_new();
-        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_TITLE, tw->title.toUtf8().data());
-        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_ARTIST, tw->artist.toUtf8().data());
-        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_ALBUM, tw->album.toUtf8().data());
-        mafwTrackerSource->setMetadata(objectId.toUtf8(), metadata);
-        mafw_metadata_release(metadata);
-    }
-    delete tw;
 }
 
 void NowPlayingWindow::closeEvent(QCloseEvent *e)

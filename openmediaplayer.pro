@@ -59,7 +59,6 @@ SOURCES += \
     freqdlg.cpp \
     delegates/maintdelegate.cpp \
     editlyrics.cpp \
-    tagwindow.cpp \
     mediaart.cpp \
     playlistquerymanager.cpp \
     upnpcontrol.cpp \
@@ -104,7 +103,6 @@ HEADERS += \
     freqdlg.h \
     delegates/maintdelegate.h \
     editlyrics.h \
-    tagwindow.h \
     mediaart.h \
     playlistquerymanager.h \
     upnpcontrol.h \
@@ -143,7 +141,6 @@ FORMS += \
     coverpicker.ui \
     freqdlg.ui \
     editlyrics.ui \
-    tagwindow.ui \
     upnpview.ui \
     upnpcontrol.ui \
     playlistpicker.ui \
@@ -165,7 +162,7 @@ for(TSFILE, TRANSLATIONS) {
 
 symbian {
     TARGET.UID3 = 0xedf29700
-    # TARGET.CAPABILITY += 
+    # TARGET.CAPABILITY +=
     TARGET.EPOCSTACKSIZE = 0x14000
     TARGET.EPOCHEAPSIZE = 0x020000 0x800000
 }
