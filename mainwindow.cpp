@@ -422,113 +422,107 @@ void MainWindow::openDirectory(QString uri, Media::Type type)
 void MainWindow::mime_open(const QString &uriString)
 {
 #ifdef MAFW
-    QString uriToPlay = uriString;
-
-    // Create an object ID from the provided URI
-    if (uriToPlay.startsWith("/")) uriToPlay.prepend("file://");
+    QString uriToPlay = uriString.startsWith("/") ? "file://" + uriString : uriString;
     QString objectId = mafwTrackerSource->createObjectId(uriToPlay);
     qDebug() << "ID to open:" << objectId;
 
-    // Determine the MIME from the name
-    const gchar* text_uri = uriToPlay.toUtf8();
-    const char* mimetype = gnome_vfs_get_mime_type_for_name(text_uri);
-    QString qmimetype = mimetype;
-    qDebug() << "MIME:" << mimetype;
+    // Local resource
+    if (uriToPlay.startsWith("file://")) {
+        QString mime(gnome_vfs_get_mime_type_for_name(uriToPlay.toUtf8()));
+        qDebug() << "MIME:" << mime;
 
-    // Audio or a playlist
-    if (qmimetype.startsWith("audio")) {
+        // Audio or a playlist
+        if (mime.startsWith("audio")) {
 
-        // M3U playlist, browse contents
-        if (qmimetype.endsWith("mpegurl")) {
+            // M3U playlist, browse contents
+            if (mime.endsWith("mpegurl")) {
 #ifdef Q_WS_MAEMO_5
-            setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+                setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-            // Converting urisource object to localtagfs:
-            // "urisource::file:///home/user/MyDocs/mix.m3u"
-            // "localtagfs::music/playlists/%2Fhome%2Fuser%2FMyDocs%2Fmix.m3u"
-            objectId = objectId.remove("urisource::file://")
-                               .replace("/", "%2F")
-                               .prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
-            qDebug() << "Converted ID:" << objectId;
+                objectId.remove(0, 18) // "urisource::file://"
+                        .replace("/", "%2F")
+                        .prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
+                qDebug() << "Converted ID:" << objectId;
 
-            songAddBufferSize = 0;
+                connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+                        this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-            connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                    this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
-
-            browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                            MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
-                                                            0, MAFW_SOURCE_BROWSE_ALL);
-        }
-
-        // Audio, a whole directory has to be added
-        else if (QSettings().value("main/openFolders").toBool()) {
-#ifdef Q_WS_MAEMO_5
-            setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
-            objectIdToPlay = objectId.remove("urisource::file://")
-                                     .replace("/", "%2F")
-                                     .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
-            qDebug() << "Converted ID:" << objectIdToPlay;
-
-            openDirectory(uriToPlay, Media::Audio);
-        }
-
-        // Audio, just one file
-        else {
-            objectId = objectId.remove("urisource::file://")
-                               .replace("/", "%2F")
-                               .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
-            qDebug() << "Converted ID:" << objectId;
-
-            if (playlist->playlistName() != "FmpAudioPlaylist")
-                playlist->assignAudioPlaylist();
-            if (!QSettings().value("main/appendSongs").toBool())
-                playlist->clear();
-            playlist->appendItem(objectId);
-
-            if (!QSettings().value("main/appendSongs").toBool()) {
-                if (mafwrenderer->isRendererReady())
-                    mafwrenderer->play();
-                else
-                    connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
+                songAddBufferSize = 0;
+                browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
+                                                                MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
+                                                                0, MAFW_SOURCE_BROWSE_ALL);
             }
 
-            createNowPlayingWindow();
-        }
-
-    // Video only
-    } else if (qmimetype.startsWith("video")) {
-
-        // A whole directory has to be added
-        if (QSettings().value("main/openFolders").toBool()) {
+            // Audio, a whole directory has to be added
+            else if (QSettings().value("main/openFolders").toBool()) {
 #ifdef Q_WS_MAEMO_5
-            setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+                setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-            objectIdToPlay = objectId.remove("urisource::file://")
-                                     .replace("/", "%2F")
-                                     .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
-            qDebug() << "Converted ID:" << objectIdToPlay;
+                objectIdToPlay = objectId.remove(0, 18) // "urisource::file://"
+                                         .replace("/", "%2F")
+                                         .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
+                qDebug() << "Converted ID:" << objectIdToPlay;
 
-            openDirectory(uriToPlay, Media::Video);
+                openDirectory(uriToPlay, Media::Audio);
+            }
+
+            // Audio, just one file
+            else {
+                objectId.remove(0, 18) // "urisource::file://"
+                        .replace("/", "%2F")
+                        .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
+                qDebug() << "Converted ID:" << objectId;
+
+                if (playlist->playlistName() != "FmpAudioPlaylist")
+                    playlist->assignAudioPlaylist();
+                if (!QSettings().value("main/appendSongs").toBool())
+                    playlist->clear();
+                playlist->appendItem(objectId);
+
+                if (!QSettings().value("main/appendSongs").toBool()) {
+                    if (mafwrenderer->isRendererReady())
+                        mafwrenderer->play();
+                    else
+                        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
+                }
+
+                createNowPlayingWindow();
+            }
         }
 
-        // Just one file
-        else {
-            objectId = objectId.remove("urisource::file://")
-                               .replace("/", "%2F")
-                               .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
-            qDebug() << "Converted ID:" << objectId;
+        // Video only
+        else if (mime.startsWith("video")) {
 
-            playlist->assignVideoPlaylist();
-            playlist->clear();
-            playlist->appendItem(objectId);
-            createVideoNowPlayingWindow();
+            // A whole directory has to be added
+            if (QSettings().value("main/openFolders").toBool()) {
+#ifdef Q_WS_MAEMO_5
+                setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+                objectIdToPlay = objectId.remove(0, 18) // "urisource::file://"
+                                         .replace("/", "%2F")
+                                         .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
+                qDebug() << "Converted ID:" << objectIdToPlay;
+
+                openDirectory(uriToPlay, Media::Video);
+            }
+
+            // Just one file
+            else {
+                objectId = objectId.remove(0, 18) // "urisource::file://"
+                                   .replace("/", "%2F")
+                                   .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
+                qDebug() << "Converted ID:" << objectId;
+
+                playlist->assignVideoPlaylist();
+                playlist->clear();
+                playlist->appendItem(objectId);
+                createVideoNowPlayingWindow();
+            }
         }
     }
 
-    // Unknown, use the video window for detection
-    else if (qmimetype == "application/octet-stream") {
+    // Remote resource, use the video window for media type detection
+    else {
         playlist->assignVideoPlaylist();
         playlist->clear();
         playlist->appendItem(objectId);

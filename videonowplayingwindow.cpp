@@ -227,6 +227,12 @@ void VideoNowPlayingWindow::onMetadataChanged(QString name, QVariant value)
 void VideoNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString, QString error)
 {
     if (metadata != NULL
+#ifdef MAFW_WORKAROUNDS
+    // Looks like the renderer cannot tell us the video codec in RTSP streams.
+    // Being able to play something without knowing the codec smells fishy,
+    // so I take it for a bug in MAFW and I'm putting this as a workaround.
+    && !currentObjectId.startsWith("urisource::rtsp://")
+#endif
     && mafw_metadata_first(metadata, MAFW_METADATA_KEY_AUDIO_CODEC)
     && !mafw_metadata_first(metadata, MAFW_METADATA_KEY_VIDEO_CODEC)) {
         qDebug() << "Video codec info unavailable, switching to radio mode";
