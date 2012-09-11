@@ -78,6 +78,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     showOverlay(overlay);
     ui->bufferBar->setAlignment(Qt::AlignCenter);
+    ui->bufferBar->setRange(0, 0);
 
 #ifdef MAFW
     mafwrenderer->setColorKey(199939);
@@ -439,55 +440,71 @@ void VideoNowPlayingWindow::onStateChanged(int state)
     if (state != Stopped && state != Transitioning) gotInitialState = true;
     mafwState = state;
 
-    if (state == Paused) {
-        ui->playButton->setIcon(QIcon(playButtonIcon));
-        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
-#ifdef Q_WS_MAEMO_5
-        this->setDNDAtom(false);
-#endif
-        mafwrenderer->getPosition();
-        this->pausedPosition = this->currentPosition;
-        mafwrenderer->getPosition();
-        if (positionTimer->isActive())
-            positionTimer->stop();
-    }
-    else if (state == Playing) {
-        ui->playButton->setIcon(QIcon(pauseButtonIcon));
-        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-        if (pausedPosition != -1 && pausedPosition != 0)
-            mafwrenderer->setPosition(SeekAbsolute, pausedPosition);
-        mafwrenderer->getPosition();
-#ifdef Q_WS_MAEMO_5
-        this->setDNDAtom(true);
-#endif
-        if (!positionTimer->isActive())
-            positionTimer->start();
-    }
-    else if (state == Stopped) {
-        currentPosition = 0;
-        ui->playButton->setIcon(QIcon(playButtonIcon));
-        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
-#ifdef Q_WS_MAEMO_5
-        this->setDNDAtom(false);
-#endif
-        if (positionTimer->isActive())
-            positionTimer->stop();
-        if (gotInitialState && !errorOccured) {
-            this->close();
-            delete this; // why is it not deleted automatically, despite WA_DeleteOnClose?
-        }
-    }
-    else if (state == Transitioning) {
+    if (state == Transitioning) {
         if (gotInitialState && !QSettings().value("Videos/continuousPlayback", false).toBool()) {
             mafwrenderer->stop();
             mafwrenderer->previous();
         }
+
         ui->progressBar->setEnabled(false);
         ui->progressBar->setValue(0);
         ui->currentPositionLabel->setText("00:00");
+
+        if (ui->bufferBar->maximum() == 0
+        && !currentObjectId.startsWith("localtagfs::")
+        && !currentObjectId.startsWith("urisource::file://")) {
+            showOverlay(true);
+            ui->positionWidget->hide();
+            ui->bufferBar->show();
+        }
+    } else {
+        if (ui->bufferBar->maximum() == 0) {
+            showOverlay(overlayRequestedByUser);
+            ui->bufferBar->hide();
+            ui->positionWidget->show();
+        }
+
+        if (state == Paused) {
+            ui->playButton->setIcon(QIcon(playButtonIcon));
+            disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+#ifdef Q_WS_MAEMO_5
+            this->setDNDAtom(false);
+#endif
+            mafwrenderer->getPosition();
+            this->pausedPosition = this->currentPosition;
+            mafwrenderer->getPosition();
+            if (positionTimer->isActive())
+                positionTimer->stop();
+        }
+        else if (state == Playing) {
+            ui->playButton->setIcon(QIcon(pauseButtonIcon));
+            disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+            if (pausedPosition != -1 && pausedPosition != 0)
+                mafwrenderer->setPosition(SeekAbsolute, pausedPosition);
+            mafwrenderer->getPosition();
+#ifdef Q_WS_MAEMO_5
+            this->setDNDAtom(true);
+#endif
+            if (!positionTimer->isActive())
+                positionTimer->start();
+        }
+        else if (state == Stopped) {
+            currentPosition = 0;
+            ui->playButton->setIcon(QIcon(playButtonIcon));
+            disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+#ifdef Q_WS_MAEMO_5
+            this->setDNDAtom(false);
+#endif
+            if (positionTimer->isActive())
+                positionTimer->stop();
+            if (gotInitialState && !errorOccured) {
+                this->close();
+                delete this; // why is it not deleted automatically, despite WA_DeleteOnClose?
+            }
+        }
     }
 }
 #endif
@@ -670,12 +687,13 @@ void VideoNowPlayingWindow::onBufferingInfo(float status)
             showOverlay(overlayRequestedByUser);
             ui->bufferBar->hide();
             ui->positionWidget->show();
+            ui->bufferBar->setRange(0, 0);
         }
     } else { // status == 0.0
         ui->bufferBar->setRange(0, 0);
     }
 
-    if (status != 1.0 && !ui->bufferBar->isVisible()) {
+    if (status != 1.0 && ui->bufferBar->isHidden()) {
         showOverlay(true);
         ui->positionWidget->hide();
         ui->bufferBar->show();
