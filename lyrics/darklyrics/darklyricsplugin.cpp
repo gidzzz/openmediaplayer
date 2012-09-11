@@ -50,7 +50,6 @@ void DarkLyricsPlugin::onArtistReplyReceived()
         request.setUrl("http://www.darklyrics.com" + data.mid(i, j-i));
         request.setRawHeader("User-Agent", USER_AGENT);
 
-        reply->deleteLater();
         reply = nam->get(request);
         connect(reply, SIGNAL(finished()), this, SLOT(onAlbumReplyReceived()));
     } else {

@@ -39,7 +39,7 @@ void AZLyricsPlugin::onReplyReceived()
         data.remove(data.indexOf("\r\n<!-- end of lyrics -->"), data.length());
 
         QTextDocument lyrics;
-        lyrics.setHtml(data);
+        lyrics.setHtml(QString::fromUtf8(data));
 
         emit fetched(lyrics.toPlainText());
     } else {
