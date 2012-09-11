@@ -20,10 +20,9 @@
 
 NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::NowPlayingIndicator)
-#ifdef MAFW
-    ,window(0)
-#endif
+    ui(new Ui::NowPlayingIndicator),
+    parentToReenable(0),
+    window(0)
 {
     ui->setupUi(this);
 
@@ -181,12 +180,8 @@ void NowPlayingIndicator::onAudioPlaylistSelected()
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    if (playlist->getSize()) {
-        window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
-        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-        window->show();
-        inhibit();
-    }
+    if (playlist->getSize())
+        openWindow();
 #endif
 }
 
@@ -203,26 +198,35 @@ void NowPlayingIndicator::openWindow()
     qDebug() << "Current playlist is" << playlistName;
 
     if (window == 0) {
+        QWidget *parentWindow = this->parentWidget();
+        while (parentWindow && !qobject_cast<QMainWindow*>(parentWindow))
+            parentWindow = parentWindow->parentWidget();
+
+        if (parentWindow && parentWindow->isEnabled()) {
+            parentToReenable = parentWindow;
+            parentToReenable->setEnabled(false);
+        }
+
         if (playlistName == "FmpRadioPlaylist")  {
-            window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
+            window = new RadioNowPlayingWindow(parentWindow, mafwFactory);
             connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
             window->show();
         }
         else if (playlistName == "FmpVideoPlaylist") {
-            window = new VideoNowPlayingWindow(this->parentWidget(), mafwFactory, true);
+            window = new VideoNowPlayingWindow(parentWindow, mafwFactory, true);
             connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
             window->showFullScreen();
         }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
         else { // playlistName == "FmpAudioPlaylist"
-            window = NowPlayingWindow::acquire(this->parentWidget(), mafwFactory);
+            window = NowPlayingWindow::acquire(parentWindow, mafwFactory);
             connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
             window->show();
         }
 
 #else
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this);
+        NowPlayingWindow *window = NowPlayingWindow::acquire(parentWindow);
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         window->show();
 #endif
@@ -234,14 +238,16 @@ void NowPlayingIndicator::openWindow()
 void NowPlayingIndicator::onWindowDestroyed()
 {
     restore();
+    if (parentToReenable)
+        parentToReenable->setEnabled(true);
+    parentToReenable = 0;
     window = 0;
 }
 
 void NowPlayingIndicator::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-    restore();
-    window = 0;
+    onWindowDestroyed();
 }
 
 #ifdef MAFW

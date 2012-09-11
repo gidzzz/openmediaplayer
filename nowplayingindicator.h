@@ -61,6 +61,7 @@ private:
     void stopAnimation();
     void triggerAnimation();
 
+    QWidget *parentToReenable;
     QMainWindow *window;
     QVector<QPixmap> images;
     QTimer *animationTimer;
