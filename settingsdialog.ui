@@ -217,7 +217,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Requires Community SSU update</string>
+          <string>Requires CSSU</string>
          </property>
         </widget>
        </item>

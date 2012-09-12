@@ -327,7 +327,7 @@ Unplug USB to continue using FM transmitter.</source>
     <name>MainWindow</name>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="869"/>
+        <location filename="../mainwindow.cpp" line="863"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n песня</numerusform>
@@ -337,7 +337,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="876"/>
+        <location filename="../mainwindow.cpp" line="870"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n клип</numerusform>
@@ -347,7 +347,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message numerus="yes">
         <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="892"/>
+        <location filename="../mainwindow.cpp" line="886"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n станция</numerusform>
@@ -380,32 +380,32 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Перемешать все</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="868"/>
+        <location filename="../mainwindow.cpp" line="862"/>
         <source>(no songs)</source>
         <translation>(музыки не найдено)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="875"/>
+        <location filename="../mainwindow.cpp" line="869"/>
         <source>(no videos)</source>
         <translation>(видео не найдено)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="891"/>
+        <location filename="../mainwindow.cpp" line="885"/>
         <source>(no stations)</source>
         <translation>(станций не найдено)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="999"/>
+        <location filename="../mainwindow.cpp" line="993"/>
         <source>Retrieving information on the new media files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1001"/>
+        <location filename="../mainwindow.cpp" line="995"/>
         <source>Estimated time remaining:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1003"/>
+        <location filename="../mainwindow.cpp" line="997"/>
         <source>Remaining items:</source>
         <translation>Остальные файлы</translation>
     </message>
@@ -658,7 +658,7 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>NowPlayingIndicator</name>
     <message>
-        <location filename="../nowplayingindicator.cpp" line="173"/>
+        <location filename="../nowplayingindicator.cpp" line="172"/>
         <source>Music</source>
         <translation>Музыка</translation>
     </message>
@@ -721,8 +721,8 @@ Unplug USB to continue using FM transmitter.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1286"/>
-        <location filename="../nowplayingwindow.cpp" line="1428"/>
+        <location filename="../nowplayingwindow.cpp" line="1285"/>
+        <location filename="../nowplayingwindow.cpp" line="1427"/>
         <source>%n clip(s) added to playlist</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -731,27 +731,27 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1319"/>
+        <location filename="../nowplayingwindow.cpp" line="1318"/>
         <source>Selected song set as ringing tone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1367"/>
+        <location filename="../nowplayingwindow.cpp" line="1366"/>
         <source>Entertainment View</source>
         <translation>Няшный вид</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1372"/>
+        <location filename="../nowplayingwindow.cpp" line="1371"/>
         <source>Car View</source>
         <translation>Интерфейс для автомобиля</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1521"/>
+        <location filename="../nowplayingwindow.cpp" line="1520"/>
         <source>Select album art</source>
         <translation>Выбрать картинку альбома</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1522"/>
+        <location filename="../nowplayingwindow.cpp" line="1521"/>
         <source>Reset album art</source>
         <translation>Обновить картинку альбома</translation>
     </message>
@@ -855,42 +855,42 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../radionowplayingwindow.ui" line="119"/>
-        <location filename="../radionowplayingwindow.cpp" line="268"/>
+        <location filename="../radionowplayingwindow.cpp" line="274"/>
         <source>(unknown station)</source>
         <translation>(неизвестная станция)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="475"/>
+        <location filename="../radionowplayingwindow.ui" line="481"/>
         <source>Options</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="484"/>
+        <location filename="../radionowplayingwindow.ui" line="490"/>
         <source>FM transmitter</source>
         <translation>FM-передатчик</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="489"/>
+        <location filename="../radionowplayingwindow.ui" line="495"/>
         <source>Add radio bookmark</source>
         <translation>Добавить закладку</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="313"/>
+        <location filename="../radionowplayingwindow.cpp" line="321"/>
         <source>(unknown artist)</source>
         <translation>(неизвестный исполнитель)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="313"/>
+        <location filename="../radionowplayingwindow.cpp" line="321"/>
         <source>(unknown song)</source>
         <translation>(неизвестная песня)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="339"/>
+        <location filename="../radionowplayingwindow.cpp" line="350"/>
         <source>Buffering</source>
         <translation>Буферизация</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="592"/>
+        <location filename="../radionowplayingwindow.cpp" line="588"/>
         <source>Stop playback</source>
         <translation>Остановить воспроизведение</translation>
     </message>
@@ -994,17 +994,27 @@ Unplug USB to continue using FM transmitter.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="158"/>
+        <location filename="../settingsdialog.cpp" line="112"/>
+        <source>Compatible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="113"/>
+        <source>Reliable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.cpp" line="166"/>
         <source>Only local cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="171"/>
+        <location filename="../settingsdialog.cpp" line="179"/>
         <source>Operation complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="172"/>
+        <location filename="../settingsdialog.cpp" line="180"/>
         <source>Operation failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1086,36 +1096,41 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="163"/>
+        <source>Interruptions prevention method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog.ui" line="170"/>
         <source>Lazy sliders</source>
         <translation>Ленивый ползунок перемотки</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="170"/>
+        <location filename="../settingsdialog.ui" line="177"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>Показывать кнопку удаления с устройства</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="177"/>
+        <location filename="../settingsdialog.ui" line="184"/>
         <source>Override FMTX checks in UI</source>
         <translation>Переписать настройки FMTX в UI</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="186"/>
+        <location filename="../settingsdialog.ui" line="193"/>
         <source>Force language code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="213"/>
-        <source>Requires &quot;%1&quot; disabled</source>
+        <location filename="../settingsdialog.ui" line="220"/>
+        <source>Requires CSSU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="225"/>
+        <location filename="../settingsdialog.ui" line="232"/>
         <source>Requires modified FMTXD</source>
         <translation>Требуется изменённый FMTXD</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="237"/>
+        <location filename="../settingsdialog.ui" line="244"/>
         <source>Requires application restart</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1328,27 +1343,27 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.cpp" line="165"/>
+        <location filename="../singleplaylistview.cpp" line="166"/>
         <source>(unknown song)</source>
         <translation>(неизвестная песня)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="168"/>
+        <location filename="../singleplaylistview.cpp" line="169"/>
         <source>(unknown artist)</source>
         <translation>(неизвестный исполнитель)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="171"/>
+        <location filename="../singleplaylistview.cpp" line="172"/>
         <source>(unknown album)</source>
         <translation>(неизвестный альбом)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="184"/>
+        <location filename="../singleplaylistview.cpp" line="185"/>
         <source>Information not available</source>
         <translation>Информация недоступна</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="393"/>
+        <location filename="../singleplaylistview.cpp" line="394"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n файл добавлен в список воспроизведения</numerusform>
@@ -1358,33 +1373,33 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="113"/>
-        <location filename="../singleplaylistview.cpp" line="468"/>
+        <location filename="../singleplaylistview.cpp" line="469"/>
         <source>Add to a playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="471"/>
+        <location filename="../singleplaylistview.cpp" line="472"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="469"/>
+        <location filename="../singleplaylistview.cpp" line="470"/>
         <source>Set as ringing tone</source>
         <translation>Установить как мелодию звонка</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="472"/>
+        <location filename="../singleplaylistview.cpp" line="473"/>
         <source>Share</source>
         <translation>Поделиться</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="470"/>
+        <location filename="../singleplaylistview.cpp" line="471"/>
         <source>Delete from playlist</source>
         <translation>Удалить из плейлиста</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="359"/>
-        <location filename="../singleplaylistview.cpp" line="514"/>
+        <location filename="../singleplaylistview.cpp" line="360"/>
+        <location filename="../singleplaylistview.cpp" line="515"/>
         <source>%n clip(s) added to playlist</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1393,7 +1408,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="547"/>
+        <location filename="../singleplaylistview.cpp" line="548"/>
         <source>Selected song set as ringing tone</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1404,7 +1419,7 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="108"/>
-        <location filename="../singleplaylistview.cpp" line="467"/>
+        <location filename="../singleplaylistview.cpp" line="468"/>
         <source>Add to now playing</source>
         <translation>Добавить в список воспроизведения</translation>
     </message>
@@ -1479,34 +1494,6 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
 </context>
 <context>
-    <name>TagWindow</name>
-    <message>
-        <location filename="../tagwindow.ui" line="14"/>
-        <source>Tags editor</source>
-        <translation>Редактор тегов</translation>
-    </message>
-    <message>
-        <location filename="../tagwindow.ui" line="30"/>
-        <source>Artist</source>
-        <translation>Исполнитель</translation>
-    </message>
-    <message>
-        <location filename="../tagwindow.ui" line="40"/>
-        <source>Album</source>
-        <translation>Альбом</translation>
-    </message>
-    <message>
-        <location filename="../tagwindow.ui" line="20"/>
-        <source>Title</source>
-        <translation>Название</translation>
-    </message>
-    <message>
-        <location filename="../tagwindow.ui" line="50"/>
-        <source>Save</source>
-        <translation>Сохранить</translation>
-    </message>
-</context>
-<context>
     <name>UpnpView</name>
     <message>
         <location filename="../upnpview.cpp" line="150"/>
@@ -1565,148 +1552,148 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Сейчас воспроизводится</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="661"/>
+        <location filename="../videonowplayingwindow.cpp" line="687"/>
         <source>Buffering</source>
         <translation>Буферизация</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="701"/>
-        <location filename="../videonowplayingwindow.cpp" line="794"/>
+        <location filename="../videonowplayingwindow.cpp" line="719"/>
+        <location filename="../videonowplayingwindow.cpp" line="812"/>
         <source>Unable to play media</source>
         <translation>Не получается воспроизвести этот файл</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="705"/>
+        <location filename="../videonowplayingwindow.cpp" line="723"/>
         <source>Media not found</source>
         <translation>Медиа-файлы не найдены</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="707"/>
+        <location filename="../videonowplayingwindow.cpp" line="725"/>
         <source>URI not available</source>
         <translation>URL не доступно</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="709"/>
+        <location filename="../videonowplayingwindow.cpp" line="727"/>
         <source>Invalid URI</source>
         <translation>Неверный адрес</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="711"/>
+        <location filename="../videonowplayingwindow.cpp" line="729"/>
         <source>Unable to open media</source>
         <translation>Не получается открыть этот файл</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="713"/>
+        <location filename="../videonowplayingwindow.cpp" line="731"/>
         <source>Playback stream no longer available</source>
         <translation>Потоковое воспроизведение больше не доступно</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="715"/>
+        <location filename="../videonowplayingwindow.cpp" line="733"/>
         <source>Could not determine MIME-type</source>
         <translation>Не удалось определить MIME-тип файла</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="717"/>
+        <location filename="../videonowplayingwindow.cpp" line="735"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Произошла ошибка, проигрывание преостановлено</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="719"/>
+        <location filename="../videonowplayingwindow.cpp" line="737"/>
         <source>General error occured</source>
         <translation>Произошла ошибка</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="721"/>
+        <location filename="../videonowplayingwindow.cpp" line="739"/>
         <source>Unsupported media</source>
         <translation>Неподдерживаемый формат файла</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="723"/>
+        <location filename="../videonowplayingwindow.cpp" line="741"/>
         <source>Unsupported resolution</source>
         <translation>Неподдерживаемое разрешение</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="725"/>
+        <location filename="../videonowplayingwindow.cpp" line="743"/>
         <source>Unsupported framerate</source>
         <translation>Неподдерживаемая частота кадров</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="727"/>
+        <location filename="../videonowplayingwindow.cpp" line="745"/>
         <source>Media is protected by DRM</source>
         <translation>Файл защищен с помощью DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="729"/>
+        <location filename="../videonowplayingwindow.cpp" line="747"/>
         <source>System sound device is unavailable</source>
         <translation>Звук недоступен</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="731"/>
+        <location filename="../videonowplayingwindow.cpp" line="749"/>
         <source>Media corrupted</source>
         <translation>Файл повреждён</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="733"/>
+        <location filename="../videonowplayingwindow.cpp" line="751"/>
         <source>Error while parsing playlist</source>
         <translation>Ошибка во время обработки плейлиста</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="734"/>
+        <location filename="../videonowplayingwindow.cpp" line="752"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Плейлист или повреждён или пуст</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="737"/>
+        <location filename="../videonowplayingwindow.cpp" line="755"/>
         <source>Codec not found:</source>
         <translation>Не найден подходящий кодек</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="741"/>
+        <location filename="../videonowplayingwindow.cpp" line="759"/>
         <source>Video codec not found:</source>
         <translation>Не найден подходящий видео-кодек</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="745"/>
+        <location filename="../videonowplayingwindow.cpp" line="763"/>
         <source>Audio codec not found:</source>
         <translation>Не найден подходящий аудио-кодек</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="749"/>
+        <location filename="../videonowplayingwindow.cpp" line="767"/>
         <source>No playlist assigned</source>
         <translation>Плейлист не составлен</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="751"/>
+        <location filename="../videonowplayingwindow.cpp" line="769"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Медиа-индекс не связан с пунктами в плейлисте</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="753"/>
+        <location filename="../videonowplayingwindow.cpp" line="771"/>
         <source>Unable to start playback</source>
         <translation>Невозможно начать воспроизведение</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="755"/>
+        <location filename="../videonowplayingwindow.cpp" line="773"/>
         <source>Unable to stop playback</source>
         <translation>Невозможно остановить воспроизведение</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="757"/>
+        <location filename="../videonowplayingwindow.cpp" line="775"/>
         <source>Unable to pause playback</source>
         <translation>Невозможно приостановить воспроизведение</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="759"/>
+        <location filename="../videonowplayingwindow.cpp" line="777"/>
         <source>Unable to seek position in media</source>
         <translation>Не получается найти позицию (место) в файле</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="761"/>
+        <location filename="../videonowplayingwindow.cpp" line="779"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Не удаётся получить текущую позицию в файле</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="763"/>
+        <location filename="../videonowplayingwindow.cpp" line="781"/>
         <source>Unable to get current playback status</source>
         <translation>Не удаётся получить данные о текущем воспроизведении</translation>
     </message>
@@ -1749,22 +1736,22 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Видео - последние</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="216"/>
+        <location filename="../videoswindow.cpp" line="217"/>
         <source>Videos - categories</source>
         <translation>Видео - по категориям</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="346"/>
+        <location filename="../videoswindow.cpp" line="348"/>
         <source>(unknown clip)</source>
         <translation>(неизвестный клип)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="415"/>
+        <location filename="../videoswindow.cpp" line="417"/>
         <source>Recorded by device camera</source>
         <translation>Записанные на камеру устройства</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="434"/>
+        <location filename="../videoswindow.cpp" line="436"/>
         <source>Films</source>
         <translation>Остальные клипы</translation>
     </message>
