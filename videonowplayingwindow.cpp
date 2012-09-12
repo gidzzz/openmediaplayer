@@ -61,9 +61,9 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     lazySliders = QSettings().value("main/lazySliders").toBool();
     reverseTime = QSettings().value("main/reverseTime").toBool();
 
+    this->overlayRequestedByUser = overlay;
     this->saveStateOnClose = true;
     this->overlayVisible = true;
-    this->overlayRequestedByUser = false;
     this->gotInitialState = false;
     this->buttonWasDown = false;
 #ifdef MAFW
@@ -72,13 +72,10 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     this->setIcons();
     this->connectSignals();
-    ui->volumeSlider->hide();
 
     ui->currentPositionLabel->installEventFilter(this);
 
     showOverlay(overlay);
-    ui->bufferBar->setAlignment(Qt::AlignCenter);
-    ui->bufferBar->setRange(0, 0);
 
 #ifdef MAFW
     mafwrenderer->setColorKey(199939);
@@ -289,6 +286,8 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
     }
 
     videoLength = Duration::Unknown;
+
+    onBufferingInfo(1.0);
 }
 #endif
 
@@ -676,27 +675,22 @@ void VideoNowPlayingWindow::onSliderMoved(int position)
 #ifdef MAFW
 void VideoNowPlayingWindow::onBufferingInfo(float status)
 {
-    if (status != 0.0) {
+    if (status == 1.0) {
+        showOverlay(overlayRequestedByUser);
+        ui->bufferBar->hide();
+        ui->positionWidget->show();
+        ui->bufferBar->setRange(0, 0);
+    } else { // status != 1.0
         int percentage = (int)(status*100);
         ui->bufferBar->setRange(0, 100);
         ui->bufferBar->setValue(percentage);
-
         ui->bufferBar->setFormat(tr("Buffering") + " %p%");
 
-        if (status == 1.0) {
-            showOverlay(overlayRequestedByUser);
-            ui->bufferBar->hide();
-            ui->positionWidget->show();
-            ui->bufferBar->setRange(0, 0);
+        if (ui->bufferBar->isHidden()) {
+            ui->positionWidget->hide();
+            ui->bufferBar->show();
+            showOverlay(true);
         }
-    } else { // status == 0.0
-        ui->bufferBar->setRange(0, 0);
-    }
-
-    if (status != 1.0 && ui->bufferBar->isHidden()) {
-        showOverlay(true);
-        ui->positionWidget->hide();
-        ui->bufferBar->show();
     }
 }
 #endif

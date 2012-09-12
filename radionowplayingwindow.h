@@ -91,7 +91,7 @@ private slots:
     void onPropertyChanged(const QDBusMessage &msg);
     void onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *, QString);
     void onGetPosition(int position, QString);
-    void onBufferingInfo(float buffer);
+    void onBufferingInfo(float status);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
     void onPlayMenuRequested(const QPoint &pos);

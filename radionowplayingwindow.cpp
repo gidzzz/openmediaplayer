@@ -48,17 +48,11 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     lazySliders = QSettings().value("main/lazySliders").toBool();
 
-    ui->volumeSlider->hide();
-    ui->bufferBar->hide();
-
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
 
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
-
-    ui->bufferBar->setRange(0, 2);
-    ui->bufferBar->setValue(1);
 
     this->updateSongLabel();
     this->setIcons();
@@ -215,41 +209,53 @@ void RadioNowPlayingWindow::onStateChanged(int state)
 {
     mafwState = state;
 
-    if (state == Paused) {
-        ui->playButton->setIcon(QIcon(playButtonIcon));
-        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
-        disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
-        disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
-        mafwrenderer->getPosition();
-        if (positionTimer->isActive())
-            positionTimer->stop();
-    }
-    else if (state == Playing) {
-        ui->playButton->setIcon(QIcon(pauseButtonIcon));
-        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-        disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
-        disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
-        mafwrenderer->getPosition();
-        if (!positionTimer->isActive())
-            positionTimer->start();
-    }
-    else if (state == Stopped) {
-        ui->playButton->setIcon(QIcon(playButtonIcon));
-        disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), this, SLOT(play()));
-        disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
-        disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
-        if (positionTimer->isActive())
-            positionTimer->stop();
-    }
-    else if (state == Transitioning) {
+    if (state == Transitioning) {
         ui->positionSlider->setEnabled(false);
         ui->positionSlider->setValue(0);
         ui->positionSlider->setRange(0, 99);
         ui->currentPositionLabel->setText("00:00");
+
+        if (ui->bufferBar->maximum() == 0) {
+            ui->seekWidget->hide();
+            ui->bufferBar->show();
+        }
+    } else {
+        if (ui->bufferBar->maximum() == 0) {
+            ui->bufferBar->hide();
+            ui->seekWidget->show();
+        }
+
+        if (state == Paused) {
+            ui->playButton->setIcon(QIcon(playButtonIcon));
+            disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+            disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+            disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+            mafwrenderer->getPosition();
+            if (positionTimer->isActive())
+                positionTimer->stop();
+        }
+        else if (state == Playing) {
+            ui->playButton->setIcon(QIcon(pauseButtonIcon));
+            disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+            disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+            disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+            mafwrenderer->getPosition();
+            if (!positionTimer->isActive())
+                positionTimer->start();
+        }
+        else if (state == Stopped) {
+            ui->playButton->setIcon(QIcon(playButtonIcon));
+            disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
+            connect(ui->playButton, SIGNAL(clicked()), this, SLOT(play()));
+            disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+            disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+            if (positionTimer->isActive())
+                positionTimer->stop();
+        }
     }
+
 }
 
 void RadioNowPlayingWindow::play()
@@ -273,6 +279,8 @@ void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
                                                         MAFW_METADATA_KEY_URI));
 
     mafwrenderer->getCurrentMetadata();
+
+    onBufferingInfo(1.0);
 }
 
 void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant value)
@@ -329,34 +337,22 @@ void RadioNowPlayingWindow::onGetPosition(int position, QString)
     }
 }
 
-void RadioNowPlayingWindow::onBufferingInfo(float buffer)
+void RadioNowPlayingWindow::onBufferingInfo(float status)
 {
-    if (buffer != 0.0) {
-        int percentage = (int)(buffer*100);
+    if (status == 1.0) {
+        ui->bufferBar->hide();
+        ui->seekWidget->show();
+        ui->bufferBar->setRange(0, 0);
+    } else { // status != 1.0
+        int percentage = (int)(status*100);
         ui->bufferBar->setRange(0, 100);
         ui->bufferBar->setValue(percentage);
-
         ui->bufferBar->setFormat(tr("Buffering") + " %p%");
 
-        if (buffer == 1.0) {
-            ui->bufferBar->hide();
-            ui->seekWidget->show();
-            if (!positionTimer->isActive())
-                positionTimer->start();
+        if (ui->bufferBar->isHidden()) {
+            ui->seekWidget->hide();
+            ui->bufferBar->show();
         }
-    } else { // buffer == 0.0
-        ui->bufferBar->setRange(0, 0);
-
-        // Qt doesn't want to display the label in the bouncing mode
-        /*ui->bufferBar->setFormat(tr("Connecting"));*/
-
-        if (positionTimer->isActive())
-            positionTimer->stop();
-    }
-
-    if (buffer != 1.0 && !ui->bufferBar->isVisible()) {
-        ui->seekWidget->hide();
-        ui->bufferBar->show();
     }
 }
 

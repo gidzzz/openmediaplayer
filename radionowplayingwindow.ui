@@ -184,14 +184,17 @@
              </item>
              <item>
               <widget class="QProgressBar" name="bufferBar">
+               <property name="visible">
+                <bool>false</bool>
+               </property>
                <property name="maximum">
                 <number>0</number>
                </property>
-               <property name="value">
-                <number>-1</number>
-               </property>
                <property name="textVisible">
                 <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <enum>Qt::AlignCenter</enum>
                </property>
               </widget>
              </item>
@@ -409,6 +412,9 @@
          </property>
          <item>
           <widget class="QSlider" name="volumeSlider">
+           <property name="visible">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
