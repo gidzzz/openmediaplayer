@@ -17,16 +17,15 @@
 **************************************************************************/
 
 #include "mainwindow.h"
-#include "delegates/maintdelegate.h"
+
 #ifdef Q_WS_MAEMO_5
-#include <QtGui/QX11Info>
-#include <X11/Xlib.h>
-#define HAL_PATH_RX51_JACK "/org/freedesktop/Hal/devices/platform_soc_audio_logicaldev_input"
+    #define HAL_PATH_RX51_JACK "/org/freedesktop/Hal/devices/platform_soc_audio_logicaldev_input"
 #endif
 
-QSettings settings( "/etc/hildon/theme/index.theme", QSettings::IniFormat );
-QString currtheme = settings.value("X-Hildon-Metatheme/IconTheme","hicolor").toString();
 QString albumImage, radioImage;
+QString currtheme = QSettings("/etc/hildon/theme/index.theme", QSettings::IniFormat)
+                    .value("X-Hildon-Metatheme/IconTheme","hicolor")
+                    .toString();
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -53,19 +52,12 @@ MainWindow::MainWindow(QWidget *parent) :
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
-    this->loadThemeIcons();
-    this->setButtonIcons();
-    this->setLabelText();
-    ui->menuList->hide();
+    loadThemeIcons();
+    setButtonIcons();
 
     ui->menuList->setItemDelegate(new MainDelegate(ui->menuList));
 
 #ifdef MAFW
-    TAGSOURCE_AUDIO_PATH = "localtagfs::music/songs";
-    TAGSOURCE_PLAYLISTS_PATH = "localtagfs::music/playlists";
-    TAGSOURCE_VIDEO_PATH = "localtagfs::videos";
-    RADIOSOURCE_PATH = "iradiosource::";
-
     mafwFactory = new MafwAdapterFactory(this);
     mafwrenderer = mafwFactory->getRenderer();
     mafwTrackerSource = mafwFactory->getTrackerSource();
@@ -108,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sleeperVolumeTimer = new QTimer(this);
     sleeperVolumeTimer->setSingleShot(true);
 
-    this->connectSignals();
+    connectSignals();
 
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
@@ -139,15 +131,16 @@ MainWindow::MainWindow(QWidget *parent) :
     layout->addWidget(updatingLabel);
     layout->addWidget(updatingProgressBar);
 
-    QWidget *widget = new QWidget;
-    widget->setLayout(layout);
+    QWidget *updatingWidget = new QWidget;
+    updatingWidget->setLayout(layout);
 
     updatingInfoBox = new QMaemo5InformationBox(this);
     updatingInfoBox->setTimeout(0);
-    updatingInfoBox->setWidget(widget);
+    updatingInfoBox->setWidget(updatingWidget);
 
     QTimer::singleShot(1000, this, SLOT(takeScreenshot()));
-    this->updateWiredHeadset();
+
+    updateWiredHeadset();
 #endif
 }
 
@@ -159,17 +152,14 @@ MainWindow::~MainWindow()
 #ifdef Q_WS_MAEMO_5
 void MainWindow::registerDbusService()
 {
-    if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE)) {
+    if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE))
         qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
-    }
 
-    if (!QDBusConnection::sessionBus().registerObject(DBUS_PATH, this, QDBusConnection::ExportScriptableSlots)) {
+    if (!QDBusConnection::sessionBus().registerObject(DBUS_PATH, this, QDBusConnection::ExportScriptableSlots))
         qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
-    }
 
-    if (!QDBusConnection::sessionBus().registerObject("/com/nokia/mediaplayer", this, QDBusConnection::ExportScriptableSlots)) {
+    if (!QDBusConnection::sessionBus().registerObject("/com/nokia/mediaplayer", this, QDBusConnection::ExportScriptableSlots))
         qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
-    }
 }
 #endif
 
@@ -181,12 +171,12 @@ void MainWindow::paintEvent(QPaintEvent*)
 
 void MainWindow::loadThemeIcons()
 {
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png").exists() )
+    if (QFileInfo("/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png").exists())
         albumImage = "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png";
     else
         albumImage = "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_album.png";
 
-    if ( QFileInfo("/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png").exists() )
+    if (QFileInfo("/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png").exists())
         radioImage = "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png";
     else
         radioImage = "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_stream.png";
@@ -194,7 +184,7 @@ void MainWindow::loadThemeIcons()
 
 void MainWindow::setButtonIcons()
 {
-    ui->songsButton->setIcon(QIcon::fromTheme(musicIcon));
+    ui->musicButton->setIcon(QIcon::fromTheme(musicIcon));
     ui->videosButton->setIcon(QIcon::fromTheme(videosIcon));
     ui->radioButton->setIcon(QIcon::fromTheme(radioIcon));
     ui->shuffleAllButton->setIcon(QIcon::fromTheme(shuffleIcon));
@@ -203,19 +193,6 @@ void MainWindow::setButtonIcons()
     ui->menuList->item(1)->setIcon(QIcon::fromTheme(videosIcon));
     ui->menuList->item(2)->setIcon(QIcon::fromTheme(radioIcon));
     ui->menuList->item(3)->setIcon(QIcon::fromTheme(shuffleIcon));
-}
-
-void MainWindow::setLabelText()
-{
-    ui->songsButtonLabel->setText(tr("Music"));
-    ui->videosButtonLabel->setText(tr("Videos"));
-    ui->radioButtonLabel->setText(tr("Internet Radio"));
-    ui->shuffleLabel->setText(tr("Shuffle all songs"));
-
-    ui->menuList->item(0)->setText(tr("Music"));
-    ui->menuList->item(1)->setText(tr("Videos"));
-    ui->menuList->item(2)->setText(tr("Internet Radio"));
-    ui->menuList->item(3)->setText(tr("Shuffle all songs"));
 }
 
 void MainWindow::connectSignals()
@@ -228,7 +205,7 @@ void MainWindow::connectSignals()
     connect(new QShortcut(QKeySequence(Qt::Key_E), this), SIGNAL(activated()), this, SLOT(showInternetRadioWindow()));
     connect(new QShortcut(QKeySequence(Qt::Key_R), this), SIGNAL(activated()), this, SLOT(onShuffleAllClicked()));
 
-    connect(ui->songsButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
+    connect(ui->musicButton, SIGNAL(clicked()), this, SLOT(showMusicWindow()));
     connect(ui->videosButton, SIGNAL(clicked()), this, SLOT(showVideosWindow()));
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(showInternetRadioWindow()));
     connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
@@ -294,8 +271,6 @@ void MainWindow::open_mp_main_view()
 
 void MainWindow::open_mp_now_playing()
 {
-    closeChildren();
-
     // maybe this check could be moved to NowPlayingWindow?
     if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && !playlist->isPlaylistNull()) {
 #ifdef MAFW
@@ -333,8 +308,6 @@ void MainWindow::open_mp_radio_playing_playback_on()
 
 void MainWindow::open_mp_car_view()
 {
-    closeChildren();
-
     createNowPlayingWindow()->showCarView();
 }
 
@@ -540,7 +513,6 @@ NowPlayingWindow* MainWindow::createNowPlayingWindow()
 #else
     NowPlayingWindow *window = NowPlayingWindow::acquire(this);
 #endif
-
     window->show();
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
@@ -579,8 +551,8 @@ void MainWindow::orientationChanged(int w, int h)
 {
     if (w > h) { // Landscape
         ui->menuList->hide();
-        ui->songsButton->show();
-        ui->songsButtonLabel->show();
+        ui->musicButton->show();
+        ui->musicButtonLabel->show();
         ui->videosButton->show();
         ui->videosButtonLabel->show();
         ui->radioButton->show();
@@ -591,8 +563,8 @@ void MainWindow::orientationChanged(int w, int h)
         ui->videoCountL->show();
         ui->stationCountL->show();
     } else { // Portrait
-        ui->songsButton->hide();
-        ui->songsButtonLabel->hide();
+        ui->musicButton->hide();
+        ui->musicButtonLabel->hide();
         ui->videosButton->hide();
         ui->videosButtonLabel->hide();
         ui->radioButton->hide();
@@ -615,21 +587,18 @@ void MainWindow::orientationChanged(int w, int h)
 
 void MainWindow::showAbout()
 {
-    AboutWindow *window = new AboutWindow(this);
-    window->show();
+    AboutWindow *about = new AboutWindow(this);
+    about->show();
 }
 
-void MainWindow::processListClicks(QListWidgetItem* item)
+void MainWindow::processListClicks(QListWidgetItem *item)
 {
-    QString itemName = item->statusTip();
-    if (itemName == "songs_button")
-        showMusicWindow();
-    else if (itemName == "videos_button")
-        showVideosWindow();
-    else if (itemName == "radio_button")
-        showInternetRadioWindow();
-    else if (itemName == "shuffle_button")
-        onShuffleAllClicked();
+    switch (ui->menuList->row(item)) {
+        case 0: showMusicWindow(); break;
+        case 1: showVideosWindow(); break;
+        case 2: showInternetRadioWindow(); break;
+        case 3: onShuffleAllClicked(); break;
+    }
 }
 
 void MainWindow::openSettings()
@@ -825,8 +794,8 @@ void MainWindow::showInternetRadioWindow()
 #ifdef MAFW
 void MainWindow::trackerSourceReady()
 {
-    this->countSongs();
-    this->countVideos();
+    countSongs();
+    countVideos();
 }
 
 void MainWindow::radioSourceReady()
@@ -877,7 +846,7 @@ void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, Q
         qDebug() << error;
 }
 
-void MainWindow::countRadioResult(QString, GHashTable* metadata, QString error)
+void MainWindow::countRadioResult(QString, GHashTable *metadata, QString error)
 {
     GValue *v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
     int count = v ? g_value_get_int(v) : -1;
@@ -960,7 +929,7 @@ void MainWindow::onShuffleAllClicked()
     songAddBufferSize = 0;
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseSongs(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
+            this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
     browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
                                                     MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
@@ -1046,18 +1015,18 @@ void MainWindow::setupPlayback()
 }
 #endif
 
-void MainWindow::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)
+void MainWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char*, QString)
 {
     this->mafwState = state;
 }
 
-void MainWindow::pausePlay()
+void MainWindow::togglePlayback()
 {
-    if (this->mafwState == Playing)
+    if (mafwState == Playing)
         mafwrenderer->pause();
-    else if (this->mafwState == Paused)
+    else if (mafwState == Paused)
         mafwrenderer->resume();
-    else if (this->mafwState == Stopped)
+    else if (mafwState == Stopped)
         mafwrenderer->play();
 }
 
@@ -1074,11 +1043,11 @@ void MainWindow::onStateChanged(int state)
 void MainWindow::onContainerChanged(QString objectId)
 {
     if (objectId == "localtagfs::music")
-        this->countSongs();
+        countSongs();
     else if (objectId == "localtagfs::videos")
-        this->countVideos();
+        countVideos();
     else if (objectId == "iradiosource::")
-        this->countRadioStations();
+        countRadioStations();
 }
 #endif
 
@@ -1087,14 +1056,14 @@ void MainWindow::phoneButton()
 {
     QString action = QSettings().value("main/headsetButtonAction", "next").toString();
     if (action == "next") {
-        if (this->mafwState == Playing)
+        if (mafwState == Playing)
             mafwrenderer->next();
         else
-            this->pausePlay();
+            togglePlayback();
     } else if (action == "previous")
         mafwrenderer->previous();
     else if (action == "playpause")
-        this->pausePlay();
+        togglePlayback();
     else if (action == "stop")
         mafwrenderer->stop();
 }
@@ -1129,8 +1098,7 @@ void MainWindow::updateWiredHeadset()
     QDBusInterface interface("org.freedesktop.Hal", HAL_PATH_RX51_JACK, "org.freedesktop.Hal.Device", QDBusConnection::systemBus(), this);
     QDBusInterface interface2("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/platform_headphone", "org.freedesktop.Hal.Device", QDBusConnection::systemBus(), this);
 
-    if (!interface.isValid() || !interface2.isValid())
-        return;
+    if (!interface.isValid() || !interface2.isValid()) return;
 
     // jackList contains "headphone" when headset is connected
     QStringList jackList = static_cast< QDBusReply <QStringList> >(interface.call("GetProperty", "input.jack.type"));
@@ -1153,7 +1121,7 @@ void MainWindow::onHeadsetButtonPressed(QDBusMessage msg)
 {
     if (msg.arguments()[0] == "ButtonPressed") {
         if (msg.arguments()[1] == "play-cd" || msg.arguments()[1] == "pause-cd")
-            this->pausePlay();
+            togglePlayback();
         else if (msg.arguments()[1] == "stop-cd")
             mafwrenderer->stop();
         else if (msg.arguments()[1] == "next-song")
@@ -1165,9 +1133,9 @@ void MainWindow::onHeadsetButtonPressed(QDBusMessage msg)
         else if (msg.arguments()[1] == "rewind")
             mafwrenderer->setPosition(SeekRelative, -3);
         else if (msg.arguments()[1] == "phone")
-            this->phoneButton();
+            phoneButton();
         else if (msg.arguments()[1] == "jack_insert" && msg.path() == HAL_PATH_RX51_JACK) // wired headset was connected or disconnected
-            this->updateWiredHeadset();
+            updateWiredHeadset();
     }
 }
 
@@ -1240,6 +1208,7 @@ void MainWindow::onNowPlayingWindowHidden()
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     this->onChildClosed();
 }
+
 void MainWindow::onChildClosed()
 {
     ui->indicator->restore();

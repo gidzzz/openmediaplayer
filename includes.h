@@ -4,9 +4,7 @@
 #include <QSettings>
 #include <QFileInfo>
 
-extern QSettings settings;
 extern QString currtheme;
-
 extern QString albumImage, radioImage;
 
 // Defines
@@ -24,7 +22,6 @@ extern QString albumImage, radioImage;
 //#define albumImage "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png"
 //#define radioImage "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png"
 
-#define idleFrame "/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator_pause.png"
 #define backgroundImage "/etc/hildon/theme/mediaplayer/background.png"
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
 #define prevButtonPressedIcon "/etc/hildon/theme/mediaplayer/BackPressed.png"

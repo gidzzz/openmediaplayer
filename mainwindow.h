@@ -16,19 +16,26 @@
 #include "settingsdialog.h"
 #include "sleeperdialog.h"
 #include "aboutwindow.h"
+#include "delegates/maintdelegate.h"
 #include "rotator.h"
-
 #include "upnpcontrol.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
+    #include <QtGui/QX11Info>
+    #include <X11/Xlib.h>
     #define DBUS_SERVICE   "com.nokia.mediaplayer"
     #define DBUS_PATH      "/com/nokia/osso/mediaplayer"
     #define DBUS_INTERFACE "com.nokia.mediaplayer"
 #endif
+
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
     #include <libgnomevfs/gnome-vfs-mime-utils.h>
+    #define TAGSOURCE_AUDIO_PATH     "localtagfs::music/songs"
+    #define TAGSOURCE_PLAYLISTS_PATH "localtagfs::music/playlists"
+    #define TAGSOURCE_VIDEO_PATH     "localtagfs::videos"
+    #define RADIOSOURCE_PATH         "iradiosource::"
 #endif
 
 namespace Ui {
@@ -66,7 +73,6 @@ private:
     void setButtonIcons();
     void connectSignals();
     void closeChildren();
-    void setLabelText();
     QTimer *sleeperTimer;
     QTimer *sleeperVolumeTimer;
     qint64 sleeperStartStamp;
@@ -91,10 +97,6 @@ private:
     MafwSourceAdapter *mafwRadioSource;
     MafwPlaylistAdapter* playlist;
     uint browseSongsId;
-    const char* TAGSOURCE_AUDIO_PATH;
-    const char* TAGSOURCE_PLAYLISTS_PATH;
-    const char* TAGSOURCE_VIDEO_PATH;
-    const char* RADIOSOURCE_PATH;
     void countSongs();
     void countVideos();
     int mafwState;
@@ -131,12 +133,12 @@ private slots:
     void trackerSourceReady();
     void radioSourceReady();
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
-    void countRadioResult(QString objectId, GHashTable* metadata, QString error);
+    void countRadioResult(QString objectId, GHashTable *metadata, QString error);
     void countRadioStations();
     void browseSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
-    void pausePlay();
+    void togglePlayback();
     void onStateChanged(int state);
     void onContainerChanged(QString objectId);
     void openDirectory(QString uri, Media::Type type);

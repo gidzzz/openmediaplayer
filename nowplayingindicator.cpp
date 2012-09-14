@@ -42,9 +42,9 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     animationTimer = new QTimer(this);
     animationTimer->setInterval(100);
 
-    images.reserve(11);
-    images << QPixmap(idleFrame);
-    for (int i = 1; i < 12; i++)
+    images.reserve(13);
+    images << QPixmap("/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator_pause.png");
+    for (int i = 1; i <= 12; i++)
         images << QPixmap("/usr/share/icons/hicolor/scalable/hildon/mediaplayer_nowplaying_indicator" + QString::number(i) + ".png");
     frame = 0;
 
@@ -139,7 +139,7 @@ void NowPlayingIndicator::onTkLockChanged(bool state)
 void NowPlayingIndicator::nextFrame()
 {
     // Update the widget frame by frame
-    if (frame == 11)
+    if (frame == 12)
         frame = 1;
     else
         frame++;

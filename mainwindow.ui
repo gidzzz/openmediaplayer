@@ -23,7 +23,7 @@
    <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="songsButton">
+   <widget class="QPushButton" name="musicButton">
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
     </property>
@@ -167,7 +167,7 @@ border: none;
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="songsButtonLabel">
+   <widget class="QLabel" name="musicButtonLabel">
     <property name="geometry">
      <rect>
       <x>35</x>
@@ -175,6 +175,9 @@ border: none;
       <width>164</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>Music</string>
     </property>
     <property name="font">
      <font>
@@ -197,6 +200,9 @@ border: none;
       <height>20</height>
      </rect>
     </property>
+    <property name="text">
+     <string>Videos</string>
+    </property>
     <property name="font">
      <font>
       <pointsize>13</pointsize>
@@ -214,6 +220,9 @@ border: none;
       <width>164</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>Internet Radio</string>
     </property>
     <property name="font">
      <font>
@@ -233,6 +242,9 @@ border: none;
       <height>20</height>
      </rect>
     </property>
+    <property name="text">
+     <string>Shuffle all songs</string>
+    </property>
     <property name="font">
      <font>
       <pointsize>13</pointsize>
@@ -243,6 +255,9 @@ border: none;
     </property>
    </widget>
    <widget class="QListWidget" name="menuList">
+    <property name="visible">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>290</x>
@@ -271,34 +286,22 @@ border: none;
     </property>
     <item>
      <property name="text">
-      <string> </string>
-     </property>
-     <property name="statusTip">
-      <string notr="true">songs_button</string>
+      <string>Music</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string> </string>
-     </property>
-     <property name="statusTip">
-      <string notr="true">videos_button</string>
+      <string>Videos</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string> </string>
-     </property>
-     <property name="statusTip">
-      <string notr="true">radio_button</string>
+      <string>Internet Radio</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string> </string>
-     </property>
-     <property name="statusTip">
-      <string notr="true">shuffle_button</string>
+      <string>Shuffle all songs</string>
      </property>
     </item>
    </widget>

@@ -43,22 +43,19 @@ int main(int argc, char *argv[])
         //QString lang = QLocale::languageToString(QLocale::system().language());
 
         // Open locale file to check current locale
-        QString line;
-        QFile data( "/etc/osso-af-init/locale" );
-        if (data.open(QFile::ReadOnly | QFile::Truncate))
-        {
-            QTextStream out(&data);
-            while ( !out.atEnd() )
-            {
-                line = out.readLine();
-                if ( line.indexOf("export LANG") == 0 )
-                {
-                    locale = line;
-                    locale.replace("export LANG=","");
+        QFile localeFile("/etc/osso-af-init/locale");
+        if (localeFile.open(QFile::ReadOnly)) {
+            QTextStream in(&localeFile);
+            while(!in.atEnd()) {
+                QString line = in.readLine();
+                if (line.startsWith("export LANG")) {
+                    locale = line.remove("export LANG=");
+                    break;
                 }
             }
         }
-        data.close();
+        localeFile.close();
+
         qDebug() << "Your locale is" << locale << "(detected)";
     } else {
         qDebug() << "Your locale is" << locale << "(forced)";
@@ -94,9 +91,8 @@ int main(int argc, char *argv[])
         << "under certain conditions; visit http://www.gnu.org/licenses/gpl.txt for details." << endl;*/
     MainWindow w;
 
-    if (!QDBusConnection::sessionBus().isConnected()) {
+    if (!QDBusConnection::sessionBus().isConnected())
         qWarning("Cannot connect to the D-Bus session bus.");
-    }
 
 #if defined(Q_WS_S60)
     w.showMaximized();
