@@ -433,7 +433,7 @@ border: none;
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="widget" native="true">
+   <widget class="QWidget" name="videoWidget" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>

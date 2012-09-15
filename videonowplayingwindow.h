@@ -58,6 +58,7 @@ private:
     void setIcons();
     void connectSignals();
     void showOverlay(bool show);
+    void setAspectRatio(float ratio);
     QTimer *volumeTimer;
     QTimer *positionTimer;
     QString currentObjectId;
@@ -83,6 +84,8 @@ private:
     int videoLength;
     int pausedPosition;
     int currentPosition;
+    int videoWidth;
+    int videoHeight;
     bool errorOccured;
     static QColor colorKey() {return QColor(3, 13, 3);}
 #endif

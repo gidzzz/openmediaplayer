@@ -37,7 +37,6 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     ui->setupUi(this);
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_DeleteOnClose);
-    ui->widget->setAttribute(Qt::WA_NativeWindow);
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
 
@@ -85,7 +84,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     QApplication::syncX();
     mafwrenderer->getStatus();
-    mafwrenderer->setWindowXid(ui->widget->winId());
+    mafwrenderer->setWindowXid(ui->videoWidget->winId());
 }
 
 VideoNowPlayingWindow::~VideoNowPlayingWindow()
@@ -210,6 +209,14 @@ void VideoNowPlayingWindow::onMetadataChanged(QString name, QVariant value)
 {
     qDebug() << "Metadata changed:" << name << "=" << value;
 
+    if (name == MAFW_METADATA_KEY_RES_X)
+        videoWidth = value.toInt();
+    else if (name == MAFW_METADATA_KEY_RES_Y)
+        videoHeight = value.toInt();
+
+    if (videoWidth && videoHeight && QSettings().value("Videos/fitToScreen").toBool())
+        setAspectRatio((float) videoWidth / videoHeight);
+
     mafwrenderer->getCurrentMetadata();
 
     // duration sometimes is misreported for UPnP, so don't set it from here unnecessarily
@@ -286,6 +293,9 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
     }
 
     videoLength = Duration::Unknown;
+
+    videoWidth = videoHeight = 0;
+    setAspectRatio(800.0 / 480.0);
 
     onBufferingInfo(1.0);
 }
@@ -393,7 +403,6 @@ void VideoNowPlayingWindow::onVolumeSliderReleased()
     mafwrenderer->setVolume(ui->volumeSlider->value());
 #endif
 }
-
 
 void VideoNowPlayingWindow::toggleVolumeSlider()
 {
@@ -516,15 +525,28 @@ void VideoNowPlayingWindow::orientationChanged(int w, int h)
                                     w, ui->toolbarOverlay->height());
     ui->wmCloseButton->setGeometry(w-ui->wmCloseButton->width(), 0,
                                    ui->wmCloseButton->width(), ui->wmCloseButton->height());
-    ui->widget->setGeometry(0, 0, w, h);
 
-    this->setIcons();
-    ui->wmCloseButton->setIconSize(QSize(112, 56));
-    ui->wmCloseButton->setGeometry(w-112, 0, 112, 56);
     ui->controlLayout->setDirection(QBoxLayout::LeftToRight);
-    ui->controlOverlay->setGeometry(230, 170, 318, 114);
     ui->volumeButton->show();
     ui->toolbarOverlay->show();
+}
+
+void VideoNowPlayingWindow::setAspectRatio(float ratio)
+{
+    int w, h;
+
+    if (ratio > 800.0/480.0) {
+        w = ratio * 480;
+        h = 480;
+    } else {
+        w = 800;
+        h = 800 / ratio;
+    }
+
+    if (w != ui->videoWidget->width() || h != ui->videoWidget->height()) {
+        qDebug() << "Aspect ratio chaged to" << ratio;
+        ui->videoWidget->setGeometry((800-w)/2, (480-h)/2, w, h);
+    }
 }
 
 #ifdef Q_WS_MAEMO_5
