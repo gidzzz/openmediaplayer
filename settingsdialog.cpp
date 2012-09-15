@@ -116,7 +116,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->playbackMethodBox->setPickSelector(selector);
 
     ui->headsetPauseCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
-    ui->continuousCheckBox->setChecked(QSettings().value("Videos/continuousPlayback", false).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
     ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
     ui->foldersCheckBox->setChecked(QSettings().value("main/openFolders", false).toBool());
@@ -224,7 +223,6 @@ void SettingsDialog::accept()
     }
 
     QSettings().setValue("main/pauseHeadset", ui->headsetPauseCheckBox->isChecked());
-    QSettings().setValue("Videos/continuousPlayback", ui->continuousCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/playlistFilter", ui->filterCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());

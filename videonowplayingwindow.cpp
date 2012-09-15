@@ -63,6 +63,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     fitToScreen = QSettings().value("Videos/fitToScreen").toBool();
 
     ui->fitCheckBox->setChecked(fitToScreen);
+    ui->continuousCheckBox->setChecked(QSettings().value("Videos/continuousPlayback").toBool());
 
     this->overlayRequestedByUser = overlay;
     this->saveStateOnClose = true;
@@ -157,6 +158,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->wmCloseButton, SIGNAL(clicked()), this, SLOT(close()));
     connect(ui->wmEditButton, SIGNAL(clicked()), this, SLOT(toggleSettings()));
     connect(ui->fitCheckBox, SIGNAL(toggled(bool)), this, SLOT(setFitToScreen(bool)));
+    connect(ui->continuousCheckBox, SIGNAL(toggled(bool)), this, SLOT(setContinuousPlayback(bool)));
 
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
@@ -545,15 +547,20 @@ void VideoNowPlayingWindow::orientationChanged(int w, int h)
     ui->toolbarOverlay->show();
 }
 
-void VideoNowPlayingWindow::setFitToScreen(bool fitToScreen)
+void VideoNowPlayingWindow::setFitToScreen(bool enable)
 {
-    this->fitToScreen = fitToScreen;
-    QSettings().setValue("Videos/fitToScreen", fitToScreen);
+    fitToScreen = enable;
+    QSettings().setValue("Videos/fitToScreen", enable);
 
-    if (fitToScreen && videoWidth && videoHeight)
+    if (enable && videoWidth && videoHeight)
         setAspectRatio((float) videoWidth / videoHeight);
     else
         setAspectRatio(800.0 / 480.0);
+}
+
+void VideoNowPlayingWindow::setContinuousPlayback(bool enable)
+{
+    QSettings().setValue("Videos/continuousPlayback", enable);
 }
 
 void VideoNowPlayingWindow::setAspectRatio(float ratio)

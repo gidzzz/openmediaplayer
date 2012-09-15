@@ -112,7 +112,14 @@ border: none;
       <widget class="QCheckBox" name="fitCheckBox">
        <property name="text">
         <string>Fit</string>
-        </property>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="continuousCheckBox">
+       <property name="text">
+        <string>Continuous</string>
+       </property>
       </widget>
      </item>
     </layout>

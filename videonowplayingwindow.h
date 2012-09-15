@@ -94,6 +94,7 @@ private:
 
 private slots:
     void setFitToScreen(bool enable);
+    void setContinuousPlayback(bool enable);
     void toggleOverlay();
     void toggleSettings();
     void toggleVolumeSlider();
