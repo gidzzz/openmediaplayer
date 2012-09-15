@@ -66,6 +66,8 @@ private:
     Rotator::Orientation savedPolicy;
     bool lazySliders;
     bool reverseTime;
+    bool showSettings;
+    bool fitToScreen;
     bool portrait;
     bool overlayVisible;
     bool overlayRequestedByUser;
@@ -91,7 +93,9 @@ private:
 #endif
 
 private slots:
+    void setFitToScreen(bool enable);
     void toggleOverlay();
+    void toggleSettings();
     void toggleVolumeSlider();
     void volumeWatcher();
     void orientationChanged(int w, int h);

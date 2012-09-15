@@ -36,7 +36,8 @@ extern QString albumImage, radioImage;
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
 #define shuffleButtonPressed "/etc/hildon/theme/mediaplayer/ShufflePressed.png"
 #define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
-#define wmCloseIcon "/etc/hildon/theme/images/wmBackIconPressed.png"
+#define wmCloseIcon "/etc/hildon/theme/images/wmBackIcon.png"
+#define wmEditIcon "/etc/hildon/theme/images/wmEditIcon.png"
 
 // Enums
 enum UserRoles { UserRoleName=Qt::UserRole,

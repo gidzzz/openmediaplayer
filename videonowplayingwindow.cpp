@@ -59,6 +59,10 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     lazySliders = QSettings().value("main/lazySliders").toBool();
     reverseTime = QSettings().value("main/reverseTime").toBool();
+    showSettings = QSettings().value("Videos/showSettings").toBool();
+    fitToScreen = QSettings().value("Videos/fitToScreen").toBool();
+
+    ui->fitCheckBox->setChecked(fitToScreen);
 
     this->overlayRequestedByUser = overlay;
     this->saveStateOnClose = true;
@@ -130,6 +134,7 @@ bool VideoNowPlayingWindow::eventFilter(QObject*, QEvent *event)
 void VideoNowPlayingWindow::setIcons()
 {
     ui->wmCloseButton->setIcon(QIcon(wmCloseIcon));
+    ui->wmEditButton->setIcon(QIcon(wmEditIcon));
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
@@ -148,6 +153,10 @@ void VideoNowPlayingWindow::connectSignals()
 
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPrevButtonClicked()));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
+
+    connect(ui->wmCloseButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(ui->wmEditButton, SIGNAL(clicked()), this, SLOT(toggleSettings()));
+    connect(ui->fitCheckBox, SIGNAL(toggled(bool)), this, SLOT(setFitToScreen(bool)));
 
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
@@ -214,8 +223,7 @@ void VideoNowPlayingWindow::onMetadataChanged(QString name, QVariant value)
     else if (name == MAFW_METADATA_KEY_RES_Y)
         videoHeight = value.toInt();
 
-    if (videoWidth && videoHeight && QSettings().value("Videos/fitToScreen").toBool())
-        setAspectRatio((float) videoWidth / videoHeight);
+    setFitToScreen(fitToScreen);
 
     mafwrenderer->getCurrentMetadata();
 
@@ -295,7 +303,7 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
     videoLength = Duration::Unknown;
 
     videoWidth = videoHeight = 0;
-    setAspectRatio(800.0 / 480.0);
+    setFitToScreen(fitToScreen);
 
     onBufferingInfo(1.0);
 }
@@ -402,6 +410,13 @@ void VideoNowPlayingWindow::onVolumeSliderReleased()
 #ifdef MAFW
     mafwrenderer->setVolume(ui->volumeSlider->value());
 #endif
+}
+
+void VideoNowPlayingWindow::toggleSettings()
+{
+    showSettings = !showSettings;
+    QSettings().setValue("Videos/showSettings", showSettings);
+    ui->settingsOverlay->setVisible(showSettings);
 }
 
 void VideoNowPlayingWindow::toggleVolumeSlider()
@@ -526,9 +541,19 @@ void VideoNowPlayingWindow::orientationChanged(int w, int h)
     ui->wmCloseButton->setGeometry(w-ui->wmCloseButton->width(), 0,
                                    ui->wmCloseButton->width(), ui->wmCloseButton->height());
 
-    ui->controlLayout->setDirection(QBoxLayout::LeftToRight);
     ui->volumeButton->show();
     ui->toolbarOverlay->show();
+}
+
+void VideoNowPlayingWindow::setFitToScreen(bool fitToScreen)
+{
+    this->fitToScreen = fitToScreen;
+    QSettings().setValue("Videos/fitToScreen", fitToScreen);
+
+    if (fitToScreen && videoWidth && videoHeight)
+        setAspectRatio((float) videoWidth / videoHeight);
+    else
+        setAspectRatio(800.0 / 480.0);
 }
 
 void VideoNowPlayingWindow::setAspectRatio(float ratio)
@@ -544,7 +569,7 @@ void VideoNowPlayingWindow::setAspectRatio(float ratio)
     }
 
     if (w != ui->videoWidget->width() || h != ui->videoWidget->height()) {
-        qDebug() << "Aspect ratio chaged to" << ratio;
+        qDebug() << "Aspect ratio changed to" << ratio;
         ui->videoWidget->setGeometry((800-w)/2, (480-h)/2, w, h);
     }
 }
@@ -655,9 +680,11 @@ void VideoNowPlayingWindow::keyPressEvent(QKeyEvent *e)
 
 void VideoNowPlayingWindow::showOverlay(bool show)
 {
-    ui->controlOverlay->setHidden(!show);
-    ui->toolbarOverlay->setHidden(!show);
-    ui->wmCloseButton->setHidden(!show);
+    ui->settingsOverlay->setVisible(show && showSettings);
+    ui->controlOverlay->setVisible(show);
+    ui->toolbarOverlay->setVisible(show);
+    ui->wmCloseButton->setVisible(show);
+    ui->wmEditButton->setVisible(show);
 
     overlayVisible = show;
 
