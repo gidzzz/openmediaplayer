@@ -25,7 +25,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListView" name="songList">
+      <widget class="FastListView" name="songList">
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
@@ -124,6 +124,12 @@
    <class>NowPlayingIndicator</class>
    <extends>QWidget</extends>
    <header>nowplayingindicator.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FastListView</class>
+   <extends>QListView</extends>
+   <header>fastlistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

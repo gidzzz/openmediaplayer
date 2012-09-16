@@ -25,7 +25,7 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QListView" name="stationList">
+      <widget class="FastListView" name="stationList">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
@@ -112,6 +112,12 @@
    <class>NowPlayingIndicator</class>
    <extends>QWidget</extends>
    <header>nowplayingindicator.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FastListView</class>
+   <extends>QListView</extends>
+   <header>fastlistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

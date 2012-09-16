@@ -43,6 +43,7 @@ public:
 private:
     Ui::InternetRadioWindow *ui;
     void connectSignals();
+
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
 

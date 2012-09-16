@@ -41,6 +41,7 @@ private:
 
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
+
     QAction *sortByDate;
     QAction *sortByCategory;
     void connectSignals();

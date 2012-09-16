@@ -25,7 +25,7 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QListView" name="videoList">
+      <widget class="FastListView" name="videoList">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
@@ -93,7 +93,6 @@
     </property>
    </widget>
   </widget>
-
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -111,12 +110,17 @@
    <addaction name="windowMenu"/>
   </widget>
  </widget>
-
  <customwidgets>
   <customwidget>
    <class>NowPlayingIndicator</class>
    <extends>QWidget</extends>
    <header>nowplayingindicator.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FastListView</class>
+   <extends>QListView</extends>
+   <header>fastlistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

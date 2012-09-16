@@ -118,7 +118,8 @@ HEADERS += \
     headerawareproxymodel.h \
     confirmdialog.h \
     delegates/shufflebuttondelegate.h \
-    delegates/providerlistitemdelegate.h
+    delegates/providerlistitemdelegate.h \
+    fastlistview.h
 
 FORMS += \
     mainwindow.ui \

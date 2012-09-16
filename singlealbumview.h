@@ -45,9 +45,9 @@ private:
     QStandardItemModel *songModel;
     QSortFilterProxyModel *songProxyModel;
 
-    QString albumObjectId;
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
+
 #ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
 #endif
@@ -56,6 +56,7 @@ private:
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
+    QString albumObjectId;
     unsigned int browseAllSongsId;
 #endif
     void updateSongCount();

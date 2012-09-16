@@ -398,6 +398,13 @@ void SinglePlaylistView::notifyOnAddedToNowPlaying(int songCount)
 void SinglePlaylistView::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
+        case Qt::Key_Left:
+        case Qt::Key_Right:
+        case Qt::Key_Space:
+        case Qt::Key_Control:
+        case Qt::Key_Shift:
+            break;
+
         case Qt::Key_Backspace:
             this->close();
             break;
@@ -405,20 +412,6 @@ void SinglePlaylistView::keyPressEvent(QKeyEvent *e)
         case Qt::Key_Enter:
             onItemActivated(ui->songList->currentIndex());
             break;
-    }
-}
-
-void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
-{
-    switch (e->key()) {
-        case Qt::Key_Enter:
-        case Qt::Key_Left:
-        case Qt::Key_Right:
-        case Qt::Key_Backspace:
-        case Qt::Key_Space:
-        case Qt::Key_Control:
-        case Qt::Key_Shift:
-            return;
 
         case Qt::Key_Up:
         case Qt::Key_Down:
@@ -436,6 +429,15 @@ void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
                 ui->searchEdit->setFocus();
             }
             break;
+    }
+}
+
+void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
+{
+    switch (e->key()) {
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            ui->songList->setFocus();
     }
 }
 

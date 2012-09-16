@@ -340,25 +340,22 @@ void InternetRadioWindow::onContainerChanged()
 
 void InternetRadioWindow::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Backspace)
-        this->close();
-}
-
-void InternetRadioWindow::keyReleaseEvent(QKeyEvent *e)
-{
     switch (e->key()) {
         case Qt::Key_Enter:
         case Qt::Key_Left:
         case Qt::Key_Right:
-        case Qt::Key_Backspace:
         case Qt::Key_Space:
         case Qt::Key_Control:
         case Qt::Key_Shift:
-            return;
+            break;
+
+        case Qt::Key_Backspace:
+            this->close();
+            break;
 
         case Qt::Key_Up:
         case Qt::Key_Down:
-             ui->stationList->setFocus();
+            ui->stationList->setFocus();
             break;
 
         default:
@@ -372,6 +369,15 @@ void InternetRadioWindow::keyReleaseEvent(QKeyEvent *e)
                 ui->searchEdit->setFocus();
             }
             break;
+    }
+}
+
+void InternetRadioWindow::keyReleaseEvent(QKeyEvent *e)
+{
+    switch (e->key()) {
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            ui->stationList->setFocus();
     }
 }
 

@@ -22,7 +22,7 @@
     </property>
     <layout class="QVBoxLayout" name="songsLayout">
      <item>
-      <widget class="QListView" name="songList">
+      <widget class="FastListView" name="songList">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
@@ -41,7 +41,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="albumList">
+      <widget class="FastListView" name="albumList">
        <property name="font">
         <font>
          <pointsize>13</pointsize>
@@ -86,7 +86,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="artistList">
+      <widget class="FastListView" name="artistList">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
@@ -102,7 +102,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="genresList">
+      <widget class="FastListView" name="genresList">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
@@ -118,7 +118,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="playlistList">
+      <widget class="FastListView" name="playlistList">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
@@ -218,6 +218,12 @@
    <class>NowPlayingIndicator</class>
    <extends>QWidget</extends>
    <header>nowplayingindicator.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FastListView</class>
+   <extends>QListView</extends>
+   <header>fastlistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

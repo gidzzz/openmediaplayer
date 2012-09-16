@@ -25,7 +25,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListView" name="albumList">
+      <widget class="FastListView" name="albumList">
        <property name="font">
         <font>
          <pointsize>13</pointsize>
@@ -149,6 +149,12 @@
    <class>NowPlayingIndicator</class>
    <extends>QWidget</extends>
    <header>nowplayingindicator.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FastListView</class>
+   <extends>QListView</extends>
+   <header>fastlistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

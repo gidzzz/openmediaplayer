@@ -2,7 +2,6 @@
 #define SINGLEPLAYLISTVIEW_H
 
 #include <QMainWindow>
-#include <QListWidgetItem>
 #include "ui_singleplaylistview.h"
 #include "confirmdialog.h"
 #include "playlistquerymanager.h"

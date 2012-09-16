@@ -4,7 +4,6 @@
 #include <QDialog>
 #include <QDir>
 #include <QFileInfo>
-#include <QListWidgetItem>
 #include <QMaemo5ValueButton>
 #include <QKeyEvent>
 

@@ -52,6 +52,7 @@ private:
 
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
+
     void notifyOnAddedToNowPlaying(int songCount);
     uint browseId;
     MafwAdapterFactory *mafwFactory;
