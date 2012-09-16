@@ -322,80 +322,80 @@ FM vericisi için USB kablosunu çıkarın.</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="863"/>
+        <location filename="../mainwindow.cpp" line="34"/>
+        <location filename="../mainwindow.cpp" line="837"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n şarkılar</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="37"/>
-        <location filename="../mainwindow.cpp" line="870"/>
+        <location filename="../mainwindow.cpp" line="35"/>
+        <location filename="../mainwindow.cpp" line="844"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n klipler</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="38"/>
-        <location filename="../mainwindow.cpp" line="886"/>
+        <location filename="../mainwindow.cpp" line="36"/>
+        <location filename="../mainwindow.cpp" line="860"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n istasyonlar</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="210"/>
-        <location filename="../mainwindow.cpp" line="215"/>
+        <location filename="../mainwindow.ui" line="180"/>
+        <location filename="../mainwindow.ui" line="289"/>
         <source>Music</source>
         <translation>Müzik</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="211"/>
-        <location filename="../mainwindow.cpp" line="216"/>
+        <location filename="../mainwindow.ui" line="204"/>
+        <location filename="../mainwindow.ui" line="294"/>
         <source>Videos</source>
         <translation>Videolar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="212"/>
-        <location filename="../mainwindow.cpp" line="217"/>
+        <location filename="../mainwindow.ui" line="225"/>
+        <location filename="../mainwindow.ui" line="299"/>
         <source>Internet Radio</source>
         <translation>İnternet Radyosu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="213"/>
-        <location filename="../mainwindow.cpp" line="218"/>
+        <location filename="../mainwindow.ui" line="246"/>
+        <location filename="../mainwindow.ui" line="304"/>
         <source>Shuffle all songs</source>
         <translation>Tüm şarkıları rastgele çal</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="862"/>
+        <location filename="../mainwindow.cpp" line="836"/>
         <source>(no songs)</source>
         <translation>(şarkı yok)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="869"/>
+        <location filename="../mainwindow.cpp" line="843"/>
         <source>(no videos)</source>
         <translation>(video yok)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="885"/>
+        <location filename="../mainwindow.cpp" line="859"/>
         <source>(no stations)</source>
         <translation>(istasyon yok)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="993"/>
+        <location filename="../mainwindow.cpp" line="967"/>
         <source>Retrieving information on the new media files</source>
         <translation>Yeni medya dosyaları hakkında bilgi alınıyor</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="995"/>
+        <location filename="../mainwindow.cpp" line="969"/>
         <source>Estimated time remaining:</source>
         <translation>Tahmini kalan süre:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="997"/>
+        <location filename="../mainwindow.cpp" line="971"/>
         <source>Remaining items:</source>
         <translation>Kalan öğeler:</translation>
     </message>
@@ -405,28 +405,28 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Medya oynatıcı</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="390"/>
-        <location filename="../mainwindow.ui" line="397"/>
+        <location filename="../mainwindow.ui" line="393"/>
+        <location filename="../mainwindow.ui" line="400"/>
         <source>Options</source>
         <translation>Seçenekler</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="407"/>
+        <location filename="../mainwindow.ui" line="410"/>
         <source>About</source>
         <translation>Hakkında</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="412"/>
+        <location filename="../mainwindow.ui" line="415"/>
         <source>About Qt</source>
         <translation>Qt Hakkında</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="417"/>
+        <location filename="../mainwindow.ui" line="420"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="422"/>
+        <location filename="../mainwindow.ui" line="425"/>
         <source>Sleep timer</source>
         <translation>Uyku zamanlayıcı</translation>
     </message>
@@ -583,14 +583,14 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1309"/>
+        <location filename="../musicwindow.cpp" line="1315"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip(ler) çalma listesine eklendi</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1364"/>
+        <location filename="../musicwindow.cpp" line="1370"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klibler şuanda oynuyor</numerusform>
@@ -646,98 +646,98 @@ FM vericisi için USB kablosunu çıkarın.</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="257"/>
+        <location filename="../nowplayingwindow.cpp" line="242"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n şarkılar</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="267"/>
+        <location filename="../nowplayingwindow.cpp" line="252"/>
         <source>total</source>
         <translation>toplam</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1172"/>
+        <location filename="../nowplayingwindow.cpp" line="1157"/>
         <source>Information not available</source>
         <translation>Bilgi mevcut değil</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1262"/>
+        <location filename="../nowplayingwindow.cpp" line="1247"/>
         <source>Set as ringing tone</source>
         <translation>Zil sesi olarak ayarla</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1258"/>
+        <location filename="../nowplayingwindow.cpp" line="1243"/>
         <source>Delete from now playing</source>
         <translation>Şuanda çalanı sil</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1263"/>
+        <location filename="../nowplayingwindow.cpp" line="1248"/>
         <source>Share</source>
         <translation>Paylaş</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="788"/>
-        <location filename="../nowplayingwindow.cpp" line="794"/>
+        <location filename="../nowplayingwindow.cpp" line="775"/>
+        <location filename="../nowplayingwindow.cpp" line="781"/>
         <source>Fetching lyrics...</source>
         <translation>Şarkı sözleri alınıyor...</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="989"/>
+        <location filename="../nowplayingwindow.cpp" line="976"/>
         <source>Stop playback</source>
         <translation>Oynatmayı durdur</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1260"/>
+        <location filename="../nowplayingwindow.cpp" line="1245"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1261"/>
+        <location filename="../nowplayingwindow.cpp" line="1246"/>
         <source>Add to a playlist</source>
         <translation>Çalma listesine ekle</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1285"/>
-        <location filename="../nowplayingwindow.cpp" line="1427"/>
+        <location filename="../nowplayingwindow.cpp" line="1270"/>
+        <location filename="../nowplayingwindow.cpp" line="1412"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip(ler) çalma listesine eklendi</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1318"/>
+        <location filename="../nowplayingwindow.cpp" line="1303"/>
         <source>Selected song set as ringing tone</source>
         <translation>Seçilen şarkıyı zil sesi olarak ayarla</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1366"/>
+        <location filename="../nowplayingwindow.cpp" line="1351"/>
         <source>Entertainment View</source>
         <translation>Eğlence Görünümü</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1371"/>
+        <location filename="../nowplayingwindow.cpp" line="1356"/>
         <source>Car View</source>
         <translation>Araç Görünümü</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1520"/>
+        <location filename="../nowplayingwindow.cpp" line="1505"/>
         <source>Select album art</source>
         <translation>Albüm kapak resmini seçin</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1521"/>
+        <location filename="../nowplayingwindow.cpp" line="1506"/>
         <source>Reset album art</source>
         <translation>Albüm kapak resmini sıfırla</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1566"/>
+        <location filename="../nowplayingwindow.cpp" line="1557"/>
         <source>Edit lyrics</source>
         <translation>Şarkı sözlerini düzenle</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1567"/>
+        <location filename="../nowplayingwindow.cpp" line="1558"/>
         <source>Reload lyrics</source>
         <translation>Şarkı sözlerini güncelle</translation>
     </message>
@@ -747,58 +747,58 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Şimdi çalıyor</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="191"/>
+        <location filename="../nowplayingwindow.ui" line="194"/>
         <source>--/-- songs</source>
         <translation>--/-- şarkılar</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="243"/>
-        <location filename="../nowplayingwindow.cpp" line="622"/>
-        <location filename="../nowplayingwindow.cpp" line="1148"/>
+        <location filename="../nowplayingwindow.ui" line="246"/>
+        <location filename="../nowplayingwindow.cpp" line="609"/>
+        <location filename="../nowplayingwindow.cpp" line="1133"/>
         <source>(unknown song)</source>
         <translation>(bilinmeyen şarkı)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="357"/>
-        <location filename="../nowplayingwindow.cpp" line="631"/>
-        <location filename="../nowplayingwindow.cpp" line="1151"/>
+        <location filename="../nowplayingwindow.ui" line="360"/>
+        <location filename="../nowplayingwindow.cpp" line="618"/>
+        <location filename="../nowplayingwindow.cpp" line="1136"/>
         <source>(unknown artist)</source>
         <translation>(bilinmeyen sanatçı)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="370"/>
-        <location filename="../nowplayingwindow.cpp" line="640"/>
-        <location filename="../nowplayingwindow.cpp" line="1154"/>
+        <location filename="../nowplayingwindow.ui" line="373"/>
+        <location filename="../nowplayingwindow.cpp" line="627"/>
+        <location filename="../nowplayingwindow.cpp" line="1139"/>
         <source>(unknown album)</source>
         <translation>(bilinmeyen albüm)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="921"/>
+        <location filename="../nowplayingwindow.ui" line="933"/>
         <source>Options</source>
         <translation>Seçenekler</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="933"/>
+        <location filename="../nowplayingwindow.ui" line="945"/>
         <source>FM Transmitter</source>
         <translation>FM Verici</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="938"/>
+        <location filename="../nowplayingwindow.ui" line="950"/>
         <source>Clear now playing</source>
         <translation>Çalanı şimdi temizle</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="943"/>
+        <location filename="../nowplayingwindow.ui" line="955"/>
         <source>Add songs to a playlist</source>
         <translation>Çalma listesine şarkı ekle</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="948"/>
+        <location filename="../nowplayingwindow.ui" line="960"/>
         <source>Entertainment view</source>
         <translation>Eğlence görünümü</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="953"/>
+        <location filename="../nowplayingwindow.ui" line="965"/>
         <source>Car view</source>
         <translation>Araç görünümü</translation>
     </message>
@@ -974,17 +974,17 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="166"/>
+        <location filename="../settingsdialog.cpp" line="165"/>
         <source>Only local cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="179"/>
+        <location filename="../settingsdialog.cpp" line="178"/>
         <source>Operation complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="180"/>
+        <location filename="../settingsdialog.cpp" line="179"/>
         <source>Operation failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1011,96 +1011,91 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     </message>
     <message>
         <location filename="../settingsdialog.ui" line="69"/>
-        <source>Continuous video playback</source>
-        <translation>Sürekli video oynat</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="76"/>
         <source>Enable lyrics</source>
         <translation>Şarkı sözlerini etkinleştirin</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="83"/>
+        <location filename="../settingsdialog.ui" line="76"/>
         <source>Lyrics providers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="90"/>
+        <location filename="../settingsdialog.ui" line="83"/>
         <source>Clear lyrics cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="97"/>
+        <location filename="../settingsdialog.ui" line="90"/>
         <source>Play only search results</source>
         <translation>Sadece arama sonuçlarını oynat</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="104"/>
+        <location filename="../settingsdialog.ui" line="97"/>
         <source>Open whole folders</source>
         <translation>Tüm klasörleri aç</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="111"/>
+        <location filename="../settingsdialog.ui" line="104"/>
         <source>Append opened songs</source>
         <translation>Açılacak şarkıları ekleyin</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="120"/>
+        <location filename="../settingsdialog.ui" line="113"/>
         <source>Size of automatic playlists</source>
         <translation>Otomatik çalma listeleri boyutu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="142"/>
+        <location filename="../settingsdialog.ui" line="135"/>
         <source>Headset button action</source>
         <translation>Kulaklık düğmesi işlemi</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="149"/>
+        <location filename="../settingsdialog.ui" line="142"/>
         <source>Orientation</source>
         <translation>Yön belirle</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="156"/>
+        <location filename="../settingsdialog.ui" line="149"/>
         <source>Prevent playback interruptions</source>
         <translation>Oynatma kesintilerini önle</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="163"/>
+        <location filename="../settingsdialog.ui" line="156"/>
         <source>Interruptions prevention method</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="170"/>
+        <location filename="../settingsdialog.ui" line="163"/>
         <source>Lazy sliders</source>
         <translation>Lazy kaydırıcıları</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="177"/>
+        <location filename="../settingsdialog.ui" line="170"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>Çalma listesi öğelerini &quot;Sil&quot;</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="184"/>
+        <location filename="../settingsdialog.ui" line="177"/>
         <source>Override FMTX checks in UI</source>
         <translation>UI FMTX kontrolleri geçersiz kılma</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="193"/>
+        <location filename="../settingsdialog.ui" line="186"/>
         <source>Force language code</source>
         <translation>Dil kodu gücü</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="220"/>
+        <location filename="../settingsdialog.ui" line="213"/>
         <source>Requires CSSU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="232"/>
+        <location filename="../settingsdialog.ui" line="225"/>
         <source>Requires modified FMTXD</source>
         <translation>FMTXD değiştirilmesi gereklidir</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="244"/>
+        <location filename="../settingsdialog.ui" line="237"/>
         <source>Requires application restart</source>
         <translation>Uygulamanın yeniden başlatılmasını gerektirir</translation>
     </message>
@@ -1161,39 +1156,39 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>(bilinmeyen albüm)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="318"/>
+        <location filename="../singlealbumview.cpp" line="324"/>
         <source>Add to now playing</source>
         <translation>Şimdi Çalınıyora ekle</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="319"/>
+        <location filename="../singlealbumview.cpp" line="325"/>
         <source>Add to a playlist</source>
         <translation>Çalma listesine ekle</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="321"/>
+        <location filename="../singlealbumview.cpp" line="327"/>
         <source>Set as ringing tone</source>
         <translation>Zil sesi olarak ayarla</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="322"/>
+        <location filename="../singlealbumview.cpp" line="328"/>
         <source>Share</source>
         <translation>Paylaş</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="358"/>
+        <location filename="../singlealbumview.cpp" line="364"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip(ler) çalma listesine eklendi</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="391"/>
+        <location filename="../singlealbumview.cpp" line="397"/>
         <source>Selected song set as ringing tone</source>
         <translation>Seçilen şarkıyı zil sesi olarak ayarla</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="452"/>
+        <location filename="../singlealbumview.cpp" line="458"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klipleri şimdi çalınıyora ekle</numerusform>
@@ -1211,7 +1206,7 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     </message>
     <message>
         <location filename="../singlealbumview.ui" line="112"/>
-        <location filename="../singlealbumview.cpp" line="320"/>
+        <location filename="../singlealbumview.cpp" line="326"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
@@ -1225,19 +1220,19 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="149"/>
-        <location filename="../singleartistview.cpp" line="268"/>
+        <location filename="../singleartistview.cpp" line="274"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n şarkılar</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="361"/>
+        <location filename="../singleartistview.cpp" line="367"/>
         <source>Add to now playing</source>
         <translation>Şimdi Çalınıyora ekle</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="461"/>
+        <location filename="../singleartistview.cpp" line="467"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klipleri şimdi çalınıyora ekle</numerusform>
@@ -1261,7 +1256,7 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     </message>
     <message>
         <location filename="../singleartistview.ui" line="143"/>
-        <location filename="../singleartistview.cpp" line="362"/>
+        <location filename="../singleartistview.cpp" line="368"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
@@ -1275,7 +1270,7 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>(bilinmeyen sanatçı)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlegenreview.cpp" line="417"/>
+        <location filename="../singlegenreview.cpp" line="423"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klipleri şimdi çalınıyora ekle</numerusform>
@@ -1288,7 +1283,7 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     </message>
     <message>
         <location filename="../singlegenreview.ui" line="108"/>
-        <location filename="../singlegenreview.cpp" line="301"/>
+        <location filename="../singlegenreview.cpp" line="307"/>
         <source>Add to now playing</source>
         <translation>Şimdi Çalınıyora ekle</translation>
     </message>
@@ -1329,40 +1324,40 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="113"/>
-        <location filename="../singleplaylistview.cpp" line="469"/>
+        <location filename="../singleplaylistview.cpp" line="471"/>
         <source>Add to a playlist</source>
         <translation>Çalma listesine ekle</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="472"/>
+        <location filename="../singleplaylistview.cpp" line="474"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="470"/>
+        <location filename="../singleplaylistview.cpp" line="472"/>
         <source>Set as ringing tone</source>
         <translation>Zil sesi olarak ayarla</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="473"/>
+        <location filename="../singleplaylistview.cpp" line="475"/>
         <source>Share</source>
         <translation>Paylaş</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="471"/>
+        <location filename="../singleplaylistview.cpp" line="473"/>
         <source>Delete from playlist</source>
         <translation>Çalma listesinden sil</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleplaylistview.cpp" line="360"/>
-        <location filename="../singleplaylistview.cpp" line="515"/>
+        <location filename="../singleplaylistview.cpp" line="517"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip(ler) çalma listesine eklendi</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="548"/>
+        <location filename="../singleplaylistview.cpp" line="550"/>
         <source>Selected song set as ringing tone</source>
         <translation>Seçilen şarkıyı zil sesi olarak ayarla</translation>
     </message>
@@ -1373,7 +1368,7 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.ui" line="108"/>
-        <location filename="../singleplaylistview.cpp" line="468"/>
+        <location filename="../singleplaylistview.cpp" line="470"/>
         <source>Add to now playing</source>
         <translation>Şimdi Çalınıyora ekle</translation>
     </message>
@@ -1450,34 +1445,34 @@ FM vericisi için USB kablosunu çıkarın.</translation>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.cpp" line="150"/>
+        <location filename="../upnpview.cpp" line="156"/>
         <source>(unknown song)</source>
         <translation>(bilinmeyen şarkı)</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="153"/>
+        <location filename="../upnpview.cpp" line="159"/>
         <source>(unknown type)</source>
         <translation>(bilinmeyen tür)</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="194"/>
+        <location filename="../upnpview.cpp" line="200"/>
         <source>Add to now playing</source>
         <translation>Şimdi Çalınıyora ekle</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="195"/>
+        <location filename="../upnpview.cpp" line="201"/>
         <source>Add to a playlist</source>
         <translation>Çalma listesine ekle</translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="291"/>
+        <location filename="../upnpview.cpp" line="297"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip(ler) çalma listesine eklendi</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="328"/>
+        <location filename="../upnpview.cpp" line="334"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klibleri şimdi çalınıyora ekle</numerusform>
@@ -1502,148 +1497,158 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Şimdi Yürütülüyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="687"/>
+        <location filename="../videonowplayingwindow.ui" line="114"/>
+        <source>Fit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../videonowplayingwindow.ui" line="124"/>
+        <source>Continuous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../videonowplayingwindow.cpp" line="711"/>
         <source>Buffering</source>
         <translation>Arabelleğe alınıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="719"/>
-        <location filename="../videonowplayingwindow.cpp" line="812"/>
+        <location filename="../videonowplayingwindow.cpp" line="743"/>
+        <location filename="../videonowplayingwindow.cpp" line="836"/>
         <source>Unable to play media</source>
         <translation>Medya oynatılamıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="723"/>
+        <location filename="../videonowplayingwindow.cpp" line="747"/>
         <source>Media not found</source>
         <translation>Medya bulunamadı</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="725"/>
+        <location filename="../videonowplayingwindow.cpp" line="749"/>
         <source>URI not available</source>
         <translation>URI mevcut değil</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="727"/>
+        <location filename="../videonowplayingwindow.cpp" line="751"/>
         <source>Invalid URI</source>
         <translation>URI Geçersiz</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="729"/>
+        <location filename="../videonowplayingwindow.cpp" line="753"/>
         <source>Unable to open media</source>
         <translation>Medya açılamıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="731"/>
+        <location filename="../videonowplayingwindow.cpp" line="755"/>
         <source>Playback stream no longer available</source>
         <translation>Mevcut oynatma akışı</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="733"/>
+        <location filename="../videonowplayingwindow.cpp" line="757"/>
         <source>Could not determine MIME-type</source>
         <translation>MIME-type tespit edilemedi</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="735"/>
+        <location filename="../videonowplayingwindow.cpp" line="759"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Genel hata, Medya oynatmaya devam edemiyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="737"/>
+        <location filename="../videonowplayingwindow.cpp" line="761"/>
         <source>General error occured</source>
         <translation>Genel hata oluştu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="739"/>
+        <location filename="../videonowplayingwindow.cpp" line="763"/>
         <source>Unsupported media</source>
         <translation>Medya desteklenmiyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="741"/>
+        <location filename="../videonowplayingwindow.cpp" line="765"/>
         <source>Unsupported resolution</source>
         <translation>Çözünürlük desteklenmiyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="743"/>
+        <location filename="../videonowplayingwindow.cpp" line="767"/>
         <source>Unsupported framerate</source>
         <translation>Kare hızı desteklenmiyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="745"/>
+        <location filename="../videonowplayingwindow.cpp" line="769"/>
         <source>Media is protected by DRM</source>
         <translation>Medya DRM tarafından korunmaktadır</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="747"/>
+        <location filename="../videonowplayingwindow.cpp" line="771"/>
         <source>System sound device is unavailable</source>
         <translation>Sistem ses aygıtı kullanılamıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="749"/>
+        <location filename="../videonowplayingwindow.cpp" line="773"/>
         <source>Media corrupted</source>
         <translation>Medya ortamı bozuk</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="751"/>
+        <location filename="../videonowplayingwindow.cpp" line="775"/>
         <source>Error while parsing playlist</source>
         <translation>Çalma listesi ayrıştırılırken hata oluştu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="752"/>
+        <location filename="../videonowplayingwindow.cpp" line="776"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Çalma listesi bozuk veya boş olabilir</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="755"/>
+        <location filename="../videonowplayingwindow.cpp" line="779"/>
         <source>Codec not found:</source>
         <translation>Codec bulunamadı:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="759"/>
+        <location filename="../videonowplayingwindow.cpp" line="783"/>
         <source>Video codec not found:</source>
         <translation>Video codec&apos;ki bulunamadı:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="763"/>
+        <location filename="../videonowplayingwindow.cpp" line="787"/>
         <source>Audio codec not found:</source>
         <translation>Ses codec&apos;ki bulunamadı:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="767"/>
+        <location filename="../videonowplayingwindow.cpp" line="791"/>
         <source>No playlist assigned</source>
         <translation>Çalma listesi atanmamış</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="769"/>
+        <location filename="../videonowplayingwindow.cpp" line="793"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Medya anasayfası çalma listesi öğeleri ile bağlı değildir</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="771"/>
+        <location filename="../videonowplayingwindow.cpp" line="795"/>
         <source>Unable to start playback</source>
         <translation>Oynatma başlatılamıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="773"/>
+        <location filename="../videonowplayingwindow.cpp" line="797"/>
         <source>Unable to stop playback</source>
         <translation>Oynatma durdurululamıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="775"/>
+        <location filename="../videonowplayingwindow.cpp" line="799"/>
         <source>Unable to pause playback</source>
         <translation>Oynatma duraklatılamıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="777"/>
+        <location filename="../videonowplayingwindow.cpp" line="801"/>
         <source>Unable to seek position in media</source>
         <translation>Aramak için medya konumu açılamıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="779"/>
+        <location filename="../videonowplayingwindow.cpp" line="803"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Medya geçerli konumu alınamıyor</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="781"/>
+        <location filename="../videonowplayingwindow.cpp" line="805"/>
         <source>Unable to get current playback status</source>
         <translation>Mevcut oynatma durumu alınamıyor</translation>
     </message>
@@ -1656,7 +1661,7 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Videolar</translation>
     </message>
     <message>
-        <location filename="../videoswindow.ui" line="108"/>
+        <location filename="../videoswindow.ui" line="107"/>
         <source>Options</source>
         <translation>Seçenekler</translation>
     </message>
@@ -1691,17 +1696,17 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Videolar - kategoriler</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="348"/>
+        <location filename="../videoswindow.cpp" line="354"/>
         <source>(unknown clip)</source>
         <translation>(bilinmeyen klip)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="417"/>
+        <location filename="../videoswindow.cpp" line="423"/>
         <source>Recorded by device camera</source>
         <translation>Cihaz kamerası tarafından kaydedilen</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="436"/>
+        <location filename="../videoswindow.cpp" line="442"/>
         <source>Films</source>
         <translation>Filmler</translation>
     </message>
