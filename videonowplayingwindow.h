@@ -49,7 +49,6 @@ public:
     bool eventFilter(QObject*, QEvent *event);
 
 protected:
-    void paintEvent(QPaintEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *e);
 
@@ -89,7 +88,7 @@ private:
     int videoWidth;
     int videoHeight;
     bool errorOccured;
-    static QColor colorKey() {return QColor(3, 13, 3);}
+    static QColor colorKey() { return QColor(3, 13, 3); }
 #endif
 
 private slots:
@@ -99,7 +98,6 @@ private slots:
     void toggleSettings();
     void toggleVolumeSlider();
     void volumeWatcher();
-    void orientationChanged(int w, int h);
     void onBookmarkClicked();
     void onShareClicked();
     void onDeleteClicked();

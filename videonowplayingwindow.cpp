@@ -28,11 +28,9 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #endif
 {
     /* Make Qt do the work of keeping the overlay the magic color  */
-    QWidget::setBackgroundRole(QPalette::Window);
-    QWidget::setAutoFillBackground(true);
     QPalette overlayPalette = QWidget::palette();
     overlayPalette.setColor(QPalette::Window, colorKey());
-    QWidget::setPalette(overlayPalette);
+    this->setPalette(overlayPalette);
 
     ui->setupUi(this);
     setAttribute(Qt::WA_OpaquePaintEvent);
@@ -48,7 +46,6 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     Rotator *rotator = Rotator::acquire();
     savedPolicy = rotator->policy();
     rotator->setPolicy(Rotator::Landscape);
-    orientationChanged(rotator->width(), rotator->height());
 #endif
 
     volumeTimer = new QTimer(this);
@@ -82,9 +79,8 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     showOverlay(overlay);
 
 #ifdef MAFW
-    mafwrenderer->setColorKey(199939);
+    mafwrenderer->setColorKey(colorKey().rgb() & 0xffffff);
     mafwrenderer->getVolume();
-    ui->toolbarOverlay->setStyleSheet(ui->controlOverlay->styleSheet());
 #endif
 
     QApplication::syncX();
@@ -129,6 +125,7 @@ bool VideoNowPlayingWindow::eventFilter(QObject*, QEvent *event)
                                                                   ui->progressBar->value()));
         return true;
     }
+
     return false;
 }
 
@@ -142,7 +139,7 @@ void VideoNowPlayingWindow::setIcons()
     ui->bookmarkButton->setIcon(QIcon::fromTheme(bookmarkButtonIcon));
     ui->deleteButton->setIcon(QIcon::fromTheme(deleteButtonIcon));
     ui->shareButton->setIcon(QIcon::fromTheme(shareButtonIcon));
-    ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
+    ui->volumeButton->setIcon(QIcon(volumeButtonOverlayIcon));
 }
 
 void VideoNowPlayingWindow::connectSignals()
@@ -294,12 +291,10 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
         ui->bookmarkButton->hide();
         ui->shareButton->show();
         ui->deleteButton->show();
-        ui->toolbarLayout->setContentsMargins(0,0,0,0);
     } else { // remote sources
         ui->shareButton->hide();
         ui->deleteButton->hide();
         ui->bookmarkButton->show();
-        ui->toolbarLayout->setContentsMargins(20,0,0,0);
     }
 
     videoLength = Duration::Unknown;
@@ -446,10 +441,6 @@ void VideoNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 #endif
         ui->volumeSlider->setValue(volumeLevel);
     }
-
-    else if (msg.arguments()[0].toString() == "colorkey") {
-        colorkey = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
-    }
 }
 #endif
 
@@ -533,19 +524,6 @@ void VideoNowPlayingWindow::onStateChanged(int state)
     }
 }
 #endif
-
-void VideoNowPlayingWindow::orientationChanged(int w, int h)
-{
-    ui->controlOverlay->setGeometry((w - ui->controlOverlay->width())/2, (h - ui->controlOverlay->height())/2,
-                                    ui->controlOverlay->width(), ui->controlOverlay->height());
-    ui->toolbarOverlay->setGeometry(0, h-ui->toolbarOverlay->height(),
-                                    w, ui->toolbarOverlay->height());
-    ui->wmCloseButton->setGeometry(w-ui->wmCloseButton->width(), 0,
-                                   ui->wmCloseButton->width(), ui->wmCloseButton->height());
-
-    ui->volumeButton->show();
-    ui->toolbarOverlay->show();
-}
 
 void VideoNowPlayingWindow::setFitToScreen(bool enable)
 {
@@ -647,16 +625,6 @@ void VideoNowPlayingWindow::fastRev()
         mafwrenderer->getPosition();
 }
 #endif
-
-void VideoNowPlayingWindow::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    QBrush brush;
-    brush.setColor(QColor(3, 13, 3));
-    painter.setBrush(brush);
-    QPalette palette = this->palette();
-    palette.setColor(this->backgroundRole(), QColor(3, 13, 3));
-}
 
 void VideoNowPlayingWindow::mouseReleaseEvent(QMouseEvent *)
 {

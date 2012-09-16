@@ -5,7 +5,8 @@
 #include <QFileInfo>
 
 extern QString currtheme;
-extern QString albumImage, radioImage;
+extern QString albumImage;
+extern QString radioImage;
 
 // Defines
 #define musicIcon "mediaplayer_main_button_music"
@@ -21,6 +22,8 @@ extern QString albumImage, radioImage;
 
 //#define albumImage "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png"
 //#define radioImage "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png"
+#define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
+#define volumeButtonOverlayIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_video_overlay_volume.png"
 
 #define backgroundImage "/etc/hildon/theme/mediaplayer/background.png"
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"
@@ -35,7 +38,6 @@ extern QString albumImage, radioImage;
 #define repeatButtonPressedIcon "/etc/hildon/theme/mediaplayer/RepeatPressed.png"
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
 #define shuffleButtonPressed "/etc/hildon/theme/mediaplayer/ShufflePressed.png"
-#define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
 #define wmCloseIcon "/etc/hildon/theme/images/wmBackIcon.png"
 #define wmEditIcon "/etc/hildon/theme/images/wmEditIcon.png"
 
