@@ -57,7 +57,6 @@ private:
     void setIcons();
     void connectSignals();
     void showOverlay(bool show);
-    void setAspectRatio(float ratio);
     QTimer *volumeTimer;
     QTimer *positionTimer;
     QString currentObjectId;

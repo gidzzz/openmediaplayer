@@ -530,33 +530,31 @@ void VideoNowPlayingWindow::setFitToScreen(bool enable)
     fitToScreen = enable;
     QSettings().setValue("Videos/fitToScreen", enable);
 
-    if (enable && videoWidth && videoHeight)
-        setAspectRatio((float) videoWidth / videoHeight);
-    else
-        setAspectRatio(800.0 / 480.0);
+    int w, h;
+
+    // Some sizes cause wrong colors, so it's safer to use constant values which
+    // are known to work. The multiplier of 2 will allow up to 50% of the image
+    // to be outside of the screen.
+    if (enable && videoWidth && videoHeight) {
+        if((float) videoWidth / videoHeight > 800.0 / 480.0) {
+            w = 800 * 2;
+            h = 480;
+        } else {
+            w = 800;
+            h = 480 * 2;
+        }
+    } else {
+        w = 800;
+        h = 480;
+    }
+
+    if (w != ui->videoWidget->width() || h != ui->videoWidget->height())
+        ui->videoWidget->setGeometry((800-w)/2, (480-h)/2, w, h);
 }
 
 void VideoNowPlayingWindow::setContinuousPlayback(bool enable)
 {
     QSettings().setValue("Videos/continuousPlayback", enable);
-}
-
-void VideoNowPlayingWindow::setAspectRatio(float ratio)
-{
-    int w, h;
-
-    if (ratio > 800.0/480.0) {
-        w = ratio * 480;
-        h = 480;
-    } else {
-        w = 800;
-        h = 800 / ratio;
-    }
-
-    if (w != ui->videoWidget->width() || h != ui->videoWidget->height()) {
-        qDebug() << "Aspect ratio changed to" << ratio;
-        ui->videoWidget->setGeometry((800-w)/2, (480-h)/2, w, h);
-    }
 }
 
 #ifdef Q_WS_MAEMO_5
