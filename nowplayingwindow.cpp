@@ -24,10 +24,10 @@ NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory 
 {
     if (instance) {
         instance->setParent(parent, Qt::Window);
-        qDebug() << "handing out running NPW instance";
+        qDebug() << "Handing out running NPW instance";
     }
     else {
-        qDebug() << "handing out new NPW instance";
+        qDebug() << "Handing out new NPW instance";
         instance = new NowPlayingWindow(parent, mafwFactory);
     }
 
@@ -79,11 +79,10 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     setAttribute(Qt::WA_Maemo5StackedWindow);
 #endif
     setAttribute(Qt::WA_DeleteOnClose);
+
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
-    playlistTime = 0;
-    clickedItem = NULL;
     albumArtSceneLarge = new QGraphicsScene(ui->view_large);
     albumArtSceneSmall = new QGraphicsScene(ui->view_small);
     qmlView = 0;
@@ -100,6 +99,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui->songPlaylist->setDragEnabled(false);
     dragInProgress = false;
 
+    clickedItem = NULL;
     clickTimer = new QTimer(this);
     clickTimer->setInterval(QApplication::doubleClickInterval());
     clickTimer->setSingleShot(true);
@@ -108,26 +108,19 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     keyTimer->setInterval(5000);
     keyTimer->setSingleShot(true);
 
-    ui->view_small->hide();
-    ui->volSliderWidget->hide();
-    ui->songPlaylist->hide();
-    ui->lyrics->hide();
-
-    this->isMediaSeekable = false;
-    this->playlistRequested = false;
-
-    PlayListDelegate *delegate = new PlayListDelegate(ui->songPlaylist);
-    ui->songPlaylist->setItemDelegate(delegate);
+    ui->songPlaylist->setItemDelegate(new PlayListDelegate(ui->songPlaylist));
 
     this->setButtonIcons();
-    //ui->buttonsWidget->setLayout(ui->buttonsLayout);
 
     QMainWindow::setCentralWidget(ui->verticalWidget);
 
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
 
+    isMediaSeekable = false;
+    playlistRequested = false;
     buttonWasDown = false;
+    playlistTime = 0;
 
 #ifdef Q_WS_MAEMO_5
     lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
@@ -166,7 +159,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     connect(playlistQM, SIGNAL(onGetItems(QString, GHashTable*, guint)), this, SLOT(onGetPlaylistItems(QString, GHashTable*, guint)));
     connect(ui->songPlaylist->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
 
-    mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
     if (mafwrenderer->isRendererReady()) {
         mafwrenderer->getCurrentMetadata();
         mafwrenderer->getStatus();
@@ -199,35 +191,28 @@ void NowPlayingWindow::setAlbumImage(QString image)
 {
     qDeleteAll(albumArtSceneLarge->items());
     qDeleteAll(albumArtSceneSmall->items());
-    this->albumArtUri = image;
-    if (image == albumImage)
-    {
+
+    if (image == defaultAlbumImage) {
         // If there's no album art, search for it in song's directory
-        QString albumInFolder = currentURI;
-        albumInFolder.remove("file://").replace("%20"," ");
-        albumInFolder.truncate(albumInFolder.lastIndexOf("/"));
+        QString dirArtPath = currentURI;
+        dirArtPath.remove("file://").replace("%20"," ");
+        dirArtPath.truncate(dirArtPath.lastIndexOf("/"));
 
-        if ( QFileInfo(albumInFolder + "/cover.jpg").exists() )
-            albumInFolder.append("/cover.jpg");
-        else if ( QFileInfo(albumInFolder + "/front.jpg").exists() )
-            albumInFolder.append("/front.jpg");
+        if (QFileInfo(dirArtPath + "/cover.jpg").exists())
+            dirArtPath.append("/cover.jpg");
+        else if (QFileInfo(dirArtPath + "/front.jpg").exists())
+            dirArtPath.append("/front.jpg");
         else
-            albumInFolder.append("/folder.jpg");
+            dirArtPath.append("/folder.jpg");
 
-        if ( QFileInfo(albumInFolder).exists() )
-        {
-            image = MediaArt::setAlbumImage(ui->albumNameLabel->text(), albumInFolder);
-            this->isDefaultArt = false;
-        }
-        else
-            this->isDefaultArt = true;
+        albumArtPath = QFileInfo(dirArtPath).exists() ? MediaArt::setAlbumImage(ui->albumNameLabel->text(), dirArtPath) : defaultAlbumImage;
+    } else {
+        albumArtPath = QFileInfo(image).exists() ? image : defaultAlbumImage;
     }
-    else
-        this->isDefaultArt = false;
 
     mirror *m;
     QGraphicsPixmapItem *item;
-    QPixmap albumArt(image);
+    QPixmap albumArt(albumArtPath);
 
     ui->view_large->setScene(albumArtSceneLarge);
     albumArtSceneLarge->setBackgroundBrush(QBrush(Qt::transparent));
@@ -300,7 +285,7 @@ void NowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 
 void NowPlayingWindow::setButtonIcons()
 {
-    this->setAlbumImage(albumImage);
+    setAlbumImage(defaultAlbumImage);
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
@@ -315,38 +300,40 @@ void NowPlayingWindow::onMetadataChanged(QString name, QVariant value)
     QFontMetrics fm(f);
     QString elided = fm.elidedText(value.toString(), Qt::ElideRight, 420);
 
-    if (name == "title" /*MAFW_METADATA_KEY_TITLE*/) {
+    if (name == MAFW_METADATA_KEY_TITLE) {
         ui->titleLabel->setText(elided);
         ui->titleLabel->setWhatsThis(value.toString());
         if (!this->isActiveWindow())
             this->setWindowTitle(value.toString());
     }
 
-    else if (name == "artist" /*MAFW_METADATA_KEY_ARTIST*/) {
+    else if (name == MAFW_METADATA_KEY_ARTIST) {
         ui->artistLabel->setText(elided);
         ui->artistLabel->setWhatsThis(value.toString());
     }
 
-    else if (name == "album" /*MAFW_METADATA_KEY_ALBUM*/) {
+    else if (name == MAFW_METADATA_KEY_ALBUM) {
         ui->albumNameLabel->setWhatsThis(value.toString());
         ui->albumNameLabel->setText(elided);
     }
 
-    else if (name == "duration") {
+    else if (name == MAFW_METADATA_KEY_DURATION) {
         songDuration = value.toInt();
         ui->trackLengthLabel->setText(time_mmss(songDuration));
         ui->songProgress->setRange(0, songDuration);
     }
 
-    else if (name == "uri")
+    else if (name == MAFW_METADATA_KEY_URI) {
         currentURI = value.toString();
+    }
 
-    // else if (name == "mime");
+    // else if (name == "MAFW_METADATA_KEY_MIME");
 
-    // else if (name == "album-art-uri");
+    // else if (name == MAFW_METADATA_KEY_ALBUM_ART_URI);
 
-    else if (name == "renderer-art-uri")
-        this->setAlbumImage(value.toString());
+    else if (name == MAFW_METADATA_KEY_RENDERER_ART_URI) {
+        setAlbumImage(value.toString());
+    }
 
     // else if (name == "lyrics");
 
@@ -763,7 +750,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *m
                 if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
                     setAlbumImage(QString::fromUtf8(filename));
             } else
-                setAlbumImage(albumImage);
+                setAlbumImage(defaultAlbumImage);
         }
 
         if (enableLyrics)
@@ -1039,19 +1026,18 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
     }
 }
 
-void NowPlayingWindow::onGetStatus(MafwPlaylist* MafwPlaylist, uint index, MafwPlayState state, const char *, QString)
+void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char*, QString)
 {
     if (!this->playlistRequested) {
         this->updatePlaylist();
         this->updatePlaylistState();
         this->playlistRequested = true;
     }
-    int indexAsInt = index; // sometimes the value is wrong, visible mainly while using the playlist editor
-    lastPlayingSong->set(indexAsInt);
-    this->mafwPlaylist = MafwPlaylist;
-    this->setSongNumber(index+1, playlist->getSize());
-    this->selectItemByRow(indexAsInt);
-    this->onStateChanged(state);
+
+    lastPlayingSong->set((int)index); // sometimes the value is wrong, noticable mainly while using the playlist editor
+    setSongNumber(index+1, playlist->getSize());
+    selectItemByRow(index);
+    onStateChanged(state);
 }
 
 void NowPlayingWindow::setPosition(int newPosition)
@@ -1078,7 +1064,6 @@ void NowPlayingWindow::onGconfValueChanged()
 void NowPlayingWindow::onMediaChanged(int index, char*)
 {
     lastPlayingSong->set(index);
-    this->isDefaultArt = true;
     focusItemByRow(index);
     mafwrenderer->getCurrentMetadata();
 }
@@ -1390,7 +1375,7 @@ void NowPlayingWindow::updateQmlViewMetadata()
         qmlView->setMetadata(ui->titleLabel->text(),
                              ui->albumNameLabel->text(),
                              ui->artistLabel->text(),
-                             this->albumArtUri,
+                             this->albumArtPath,
                              this->songDuration);
         qmlView->setCurrentRow(ui->songPlaylist->currentRow());
     }
@@ -1533,9 +1518,15 @@ void NowPlayingWindow::selectAlbumArt()
 void NowPlayingWindow::resetAlbumArt()
 {
     if (ConfirmDialog(ConfirmDialog::ResetArt, this).exec() == QMessageBox::Yes) {
+        // Remove old art using MediaArt::setAlbumImage() and let
+        // NowPlayingWindow::setAlbumImage() search for covers.
         setAlbumImage(MediaArt::setAlbumImage(ui->albumNameLabel->text(), ""));
+
 #ifdef Q_WS_MAEMO_5
-        if (isDefaultArt) {
+        // Even if NowPlayingWindow::setAlbumImage() falls back to the default
+        // art, there still can be the embedded image, so poke Tracker to
+        // recheck the song file.
+        if (albumArtPath == defaultAlbumImage) {
             QDBusMessage msg = QDBusMessage::createMethodCall("org.freedesktop.Tracker.Extract",
                                                               "/org/freedesktop/Tracker/Extract",
                                                               "", "GetMetadata");
@@ -1556,7 +1547,7 @@ void NowPlayingWindow::refreshAlbumArt()
 {
     QString image = MediaArt::albumArtPath(ui->albumNameLabel->text());
     if (QFileInfo(image).exists())
-        this->setAlbumImage(image);
+        setAlbumImage(image);
 }
 
 void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)

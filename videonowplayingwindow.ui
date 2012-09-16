@@ -391,14 +391,12 @@ border: none;
        <property name="styleSheet">
         <string notr="true">QToolButton
 {
-background: transparent url(/etc/hildon/theme/mediaplayer/VideoOverlayButton.png);
 border: none;
 }
 
 QToolButton:pressed
 {
-background: transparent url(/etc/hildon/theme/mediaplayer/VideoOverlayButtonPressed.png);
-border: none;
+background: transparent;
 }</string>
        </property>
        <property name="text">
@@ -444,14 +442,12 @@ border: none;
        <property name="styleSheet">
         <string notr="true">QToolButton
 {
-background: transparent url(/etc/hildon/theme/mediaplayer/VideoOverlayButton.png);
 border: none;
 }
 
 QToolButton:pressed
 {
-background: transparent url(/etc/hildon/theme/mediaplayer/VideoOverlayButtonPressed.png);
-border: none;
+background: transparent;
 }</string>
        </property>
        <property name="text">
@@ -488,14 +484,12 @@ border: none;
        <property name="styleSheet">
         <string notr="true">QToolButton
 {
-background: transparent url(/etc/hildon/theme/mediaplayer/VideoOverlayButton.png);
 border: none;
 }
 
 QToolButton:pressed
 {
-background: transparent url(/etc/hildon/theme/mediaplayer/VideoOverlayButtonPressed.png);
-border: none;
+background: transparent;;
 }</string>
        </property>
        <property name="text">

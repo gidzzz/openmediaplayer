@@ -4,9 +4,9 @@
 #include <QSettings>
 #include <QFileInfo>
 
-extern QString currtheme;
-extern QString albumImage;
-extern QString radioImage;
+extern QString defaultAlbumImage;
+extern QString defaultRadioImage;
+extern QString volumeButtonIcon;
 
 // Defines
 #define musicIcon "mediaplayer_main_button_music"
@@ -19,11 +19,7 @@ extern QString radioImage;
 #define bookmarkButtonIcon "general_add"
 #define shareButtonIcon "general_share"
 #define deleteButtonIcon "general_delete"
-
-//#define albumImage "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png"
-//#define radioImage "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png"
-#define volumeButtonIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png"
-#define volumeButtonOverlayIcon "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_video_overlay_volume.png"
+#define volumeButtonOverlayIcon "general_speaker"
 
 #define backgroundImage "/etc/hildon/theme/mediaplayer/background.png"
 #define prevButtonIcon "/etc/hildon/theme/mediaplayer/Back.png"

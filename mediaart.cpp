@@ -7,26 +7,26 @@ QString MediaArt::setAlbumImage(QString album, QString image)
 
     // Get album art path
     file = hildon_albumart_get_path(NULL, album.toUtf8(), "album");
-    QString newArtFile = QString::fromUtf8(file);
-    delete file;
+    QString artFile = QString::fromUtf8(file);
+    g_free(file);
 
     // Remove old album art
-    if (QFileInfo(newArtFile).exists())
-        QFile::remove(newArtFile);
+    if (QFileInfo(artFile).exists())
+        QFile::remove(artFile);
 
     // Store new album art
     if (!image.isEmpty())
-        QFile::copy(image, newArtFile);
+        QFile::copy(image, artFile);
 
     // Get thumbnail path
-    uri = g_filename_to_uri(newArtFile.toUtf8(), NULL, NULL);
+    uri = g_filename_to_uri(artFile.toUtf8(), NULL, NULL);
     file = hildon_thumbnail_get_uri(uri, 124, 124, true);
-    QString newThumbFile = QString::fromUtf8(file).remove("file://");
-    delete file;
+    QString thumbFile = QString::fromUtf8(file).remove("file://");
+    g_free(file);
 
     // Remove old thumbnail
-    if (image.isEmpty() && QFileInfo(newThumbFile).exists())
-        QFile::remove(newThumbFile);
+    if (image.isEmpty() && QFileInfo(thumbFile).exists())
+        QFile::remove(thumbFile);
 
     // Generate new thumbanil
     if (!image.isEmpty()) {
@@ -37,9 +37,9 @@ QString MediaArt::setAlbumImage(QString album, QString image)
                                                                 NULL, payload, destructor);
     }
 
-    delete uri;
+    g_free(uri);
 
-    return image.isEmpty() ? albumImage : newArtFile;
+    return image.isEmpty() ? defaultAlbumImage : artFile;
 }
 
 void MediaArt::destructor(gpointer user_data)
@@ -54,6 +54,6 @@ QString MediaArt::albumArtPath(QString album)
 {
     gchar *path = hildon_albumart_get_path(NULL, album.toUtf8(), "album");
     QString path_qstr = QString::fromUtf8(path);
-    delete path;
+    g_free(path);
     return path_qstr;
 }

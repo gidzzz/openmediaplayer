@@ -87,6 +87,9 @@
            </item>
            <item>
             <widget class="CQGraphicsView" name="view_small">
+             <property name="visible">
+              <bool>false</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -386,6 +389,9 @@
             </item>
             <item row="10" column="1">
              <widget class="QListWidget" name="songPlaylist">
+              <property name="visible">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -408,6 +414,9 @@
             </item>
             <item row="11" column="1">
              <widget class="QScrollArea" name="lyrics">
+              <property name="visible">
+               <bool>false</bool>
+              </property>
               <property name="widgetResizable">
                <bool>true</bool>
               </property>
@@ -761,6 +770,9 @@ border: none;
           </item>
           <item>
            <widget class="QWidget" name="volSliderWidget" native="true">
+            <property name="visible">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>

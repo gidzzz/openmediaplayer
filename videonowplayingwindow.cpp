@@ -131,15 +131,17 @@ bool VideoNowPlayingWindow::eventFilter(QObject*, QEvent *event)
 
 void VideoNowPlayingWindow::setIcons()
 {
-    ui->wmCloseButton->setIcon(QIcon(wmCloseIcon));
     ui->wmEditButton->setIcon(QIcon(wmEditIcon));
+    ui->wmCloseButton->setIcon(QIcon(wmCloseIcon));
+
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
+
     ui->bookmarkButton->setIcon(QIcon::fromTheme(bookmarkButtonIcon));
-    ui->deleteButton->setIcon(QIcon::fromTheme(deleteButtonIcon));
     ui->shareButton->setIcon(QIcon::fromTheme(shareButtonIcon));
-    ui->volumeButton->setIcon(QIcon(volumeButtonOverlayIcon));
+    ui->deleteButton->setIcon(QIcon::fromTheme(deleteButtonIcon));
+    ui->volumeButton->setIcon(QIcon::fromTheme(volumeButtonOverlayIcon));
 }
 
 void VideoNowPlayingWindow::connectSignals()

@@ -22,10 +22,9 @@
     #define HAL_PATH_RX51_JACK "/org/freedesktop/Hal/devices/platform_soc_audio_logicaldev_input"
 #endif
 
-QString albumImage, radioImage;
-QString currtheme = QSettings("/etc/hildon/theme/index.theme", QSettings::IniFormat)
-                    .value("X-Hildon-Metatheme/IconTheme","hicolor")
-                    .toString();
+QString defaultAlbumImage;
+QString defaultRadioImage;
+QString volumeButtonIcon;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -171,15 +170,21 @@ void MainWindow::paintEvent(QPaintEvent*)
 
 void MainWindow::loadThemeIcons()
 {
-    if (QFileInfo("/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png").exists())
-        albumImage = "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_album.png";
-    else
-        albumImage = "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_album.png";
+    QString theme = QSettings("/etc/hildon/theme/index.theme", QSettings::IniFormat)
+                    .value("X-Hildon-Metatheme/IconTheme","hicolor")
+                    .toString();
 
-    if (QFileInfo("/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png").exists())
-        radioImage = "/usr/share/icons/"+currtheme+"/295x295/hildon/mediaplayer_default_stream.png";
-    else
-        radioImage = "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_stream.png";
+    defaultAlbumImage = QFileInfo("/usr/share/icons/"+theme+"/295x295/hildon/mediaplayer_default_album.png").exists()
+                      ? "/usr/share/icons/"+theme+"/295x295/hildon/mediaplayer_default_album.png"
+                      : "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_album.png";
+
+    defaultRadioImage = QFileInfo("/usr/share/icons/"+theme+"/295x295/hildon/mediaplayer_default_stream.png").exists()
+                      ? "/usr/share/icons/"+theme+"/295x295/hildon/mediaplayer_default_stream.png"
+                      : "/usr/share/icons/hicolor/295x295/hildon/mediaplayer_default_stream.png";
+
+    volumeButtonIcon = QFileInfo("/usr/share/icons/"+theme+"/64x64/hildon/mediaplayer_volume.png").exists()
+                     ? "/usr/share/icons/"+theme+"/64x64/hildon/mediaplayer_volume.png"
+                     : "/usr/share/icons/hicolor/64x64/hildon/mediaplayer_volume.png";
 }
 
 void MainWindow::setButtonIcons()

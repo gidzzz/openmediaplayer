@@ -44,7 +44,7 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
                                  .arg(secondaryColor.blue()));
 
     albumArtScene = new QGraphicsScene(ui->albumArtView);
-    setAlbumImage(radioImage);
+    setAlbumImage(defaultRadioImage);
 
     lazySliders = QSettings().value("main/lazySliders").toBool();
 
@@ -422,7 +422,7 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
         isSeekable = v ? g_value_get_boolean (v) : false;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_RENDERER_ART_URI); // it's really a path, not a URI
-        setAlbumImage(v ? QString::fromUtf8(g_value_get_string(v)) : radioImage);
+        setAlbumImage(v ? QString::fromUtf8(g_value_get_string(v)) : defaultRadioImage);
 
         updateSongLabel();
 

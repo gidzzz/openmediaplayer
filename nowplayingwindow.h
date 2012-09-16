@@ -82,8 +82,6 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *metadataSource;
     MafwPlaylistAdapter* playlist;
-    MafwPlaylist *mafwPlaylist;
-    MafwPlaylistManagerAdapter *mafw_playlist_manager;
     PlaylistQueryManager *playlistQM;
     LyricsManager *lyricsManager;
     int mafwState;
@@ -101,7 +99,6 @@ private:
     QTimer *volumeTimer;
     QTimer *positionTimer;
     bool playlistRequested;
-    bool isDefaultArt;
     bool isMediaSeekable;
     bool buttonWasDown;
     bool enableLyrics;
@@ -115,7 +112,7 @@ private:
     int currentSongPosition;
     QGraphicsScene *albumArtSceneLarge;
     QGraphicsScene *albumArtSceneSmall;
-    QString albumArtUri;
+    QString albumArtPath;
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
 #ifdef Q_WS_MAEMO_5
@@ -141,7 +138,7 @@ private slots:
     void onPropertyChanged(const QDBusMessage &msg);
     void onStateChanged(int state);
     void onPositionChanged(int, QString);
-    void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
+    void onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char* ,QString);
     void onRendererMetadataRequested(GHashTable*, QString objectId, QString);
     void onSourceMetadataRequested(QString, GHashTable*, QString);
     void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
