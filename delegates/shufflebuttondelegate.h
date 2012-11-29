@@ -16,7 +16,7 @@ class ShuffleButtonDelegate : public QStyledItemDelegate
 
 public:
     explicit ShuffleButtonDelegate(QListView *parent = 0);
-    virtual ~ShuffleButtonDelegate() {}
+    virtual ~ShuffleButtonDelegate();
 
     void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;

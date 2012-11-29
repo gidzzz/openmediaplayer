@@ -12,6 +12,11 @@ ShuffleButtonDelegate::ShuffleButtonDelegate(QListView *parent) :
     connect(parent, SIGNAL(activated(QModelIndex)), this, SLOT(onActivated(QModelIndex)));
 }
 
+ShuffleButtonDelegate::~ShuffleButtonDelegate()
+{
+    delete button;
+}
+
 void ShuffleButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QRect r = option.rect;
