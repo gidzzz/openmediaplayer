@@ -84,15 +84,15 @@ public:
     }
 
 protected:
-    void keyReleaseEvent(QKeyEvent *e)
+    void keyPressEvent(QKeyEvent *e)
     {
         switch (e->key()) {
             case Qt::Key_Y:
-                this->button(QMessageBox::Yes)->animateClick(50);
+                this->button(QMessageBox::Yes)->animateClick(100);
                 break;
 
             case Qt::Key_N:
-                this->button(QMessageBox::No)->animateClick(50);
+                this->button(QMessageBox::No)->animateClick(100);
                 break;
 
             case Qt::Key_Backspace:

@@ -105,6 +105,11 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
         }
 
         mafwrenderer->stop();
+
+        // I thought that it could stop a frenzy of immediately disappearing
+        // windows experienced by some people even after the previous attempt
+        // to fix the issue, but there was no positive feedback so far.
+        //mafwrenderer->setWindowXid(NULL);
     }
 #endif
 
