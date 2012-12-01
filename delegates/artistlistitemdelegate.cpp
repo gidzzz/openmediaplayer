@@ -27,9 +27,6 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     albumSongCount.append(", ");
     albumSongCount.append(tr("%n song(s)", "", index.data(UserRoleSongCount).toInt()));
 
-    QPixmap albumArt = index.data(UserRoleAlbumArt).isNull() ? QIcon::fromTheme(defaultAlbumIcon).pixmap(64) :
-                                                               QPixmap(index.data(UserRoleAlbumArt).toString());
-
     painter->save();
     QRect r = option.rect;
 
@@ -42,7 +39,9 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     QColor secondaryColor(156, 154, 156);
 #endif
 
-    painter->drawPixmap(r.right()-70+3, r.top()+3, 64, 64, albumArt);
+    painter->drawPixmap(r.right()-70+3, r.top()+3, 64, 64,
+                        qvariant_cast<QIcon>(index.data(Qt::DecorationRole)).pixmap(64));
+
     int textWidth = r.width() - (15+70+15);
 
     QFont f = painter->font();

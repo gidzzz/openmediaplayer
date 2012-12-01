@@ -366,8 +366,6 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
             const gchar* filename = g_value_get_string(v); // the uri is really a filename
             if (filename != NULL)
                 item->setIcon(QIcon(QString::fromUtf8(filename)));
-            else
-                item->setIcon(QIcon::fromTheme(defaultVideoIcon));
         } else {
             v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_THUMBNAIL_URI);
             if (v != NULL) {
@@ -375,8 +373,6 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
                 gchar* filename;
                 if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
                     item->setIcon(QIcon(QString::fromUtf8(filename)));
-                else
-                    item->setIcon(QIcon::fromTheme(defaultVideoIcon));
             } else {
                 item->setIcon(QIcon::fromTheme(defaultVideoIcon));
             }

@@ -139,9 +139,8 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         if (v != NULL) {
             const gchar* file_uri = g_value_get_string(v);
             gchar* filename = NULL;
-            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL) {
+            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
                 item->setIcon(QIcon(QString::fromUtf8(filename)));
-            }
         } else {
             item->setIcon(QIcon::fromTheme(defaultAlbumIcon));
         }

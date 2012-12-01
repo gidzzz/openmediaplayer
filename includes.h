@@ -50,7 +50,6 @@ enum UserRoles { UserRoleName=Qt::UserRole,
                  UserRoleSongIndex,
                  UserRoleAlbumCount,
                  UserRoleArtistCount,
-                 UserRoleAlbumArt,
                  UserRoleObjectID,
                  UserRoleMIME,
                  UserRoleValueText
