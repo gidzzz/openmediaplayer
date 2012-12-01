@@ -2,7 +2,8 @@
 #define SHAREDIALOG_H
 
 #include <QDialog>
-#include <QtCore>
+#include <QDBusInterface>
+#include <QUrl>
 #include <QKeyEvent>
 
 #include "ui_sharedialog.h"
@@ -16,7 +17,7 @@ class ShareDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ShareDialog(QWidget *parent = 0, QStringList files = QStringList());
+    explicit ShareDialog(QStringList files, QWidget *parent = 0);
     ~ShareDialog();
 
     QStringList files;
@@ -27,8 +28,8 @@ private:
     void keyPressEvent(QKeyEvent *e);
 
 private slots:
-    void sendViaBluetooth();
-    void sendViaEmail();
+    void onEmailClicked();
+    void onBluetoothClicked();
 
 };
 

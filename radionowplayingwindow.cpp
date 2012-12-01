@@ -287,22 +287,22 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
 {
     qDebug() << "Metadata changed:" << name << "=" << value;
 
-    if (name == "is-seekable" /*MAFW_METADATA_KEY_IS_SEEKABLE*/) {
+    if (name == MAFW_METADATA_KEY_IS_SEEKABLE) {
         ui->positionSlider->setEnabled(value.toBool());
         this->streamIsSeekable(value.toBool());
     }
-    else if (name == "artist") {
+    else if (name == MAFW_METADATA_KEY_ARTIST) {
         this->artist = value.toString();
         this->updateSongLabel();
     }
-    else if (name == "title") {
+    else if (name == MAFW_METADATA_KEY_TITLE) {
         this->title = value.toString();
         this->updateSongLabel();
     }
-    else if (name == "duration" /*MAFW_METADATA_KEY_DURATION*/) {
+    else if (name == MAFW_METADATA_KEY_DURATION) {
         ui->streamLengthLabel->setText(time_mmss(value.toInt()));
     }
-    else if (name == "renderer-art-uri") {
+    else if (name == MAFW_METADATA_KEY_RENDERER_ART_URI) {
         setAlbumImage(value.toString());
     }
 }

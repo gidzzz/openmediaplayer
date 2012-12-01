@@ -417,7 +417,7 @@ void SingleAlbumView::onShareUriReceived(QString objectId, QString uri)
     QStringList files;
     files.append(uri);
 #ifdef Q_WS_MAEMO_5
-    ShareDialog(this, files).exec();
+    ShareDialog(files, this).exec();
 #endif
 }
 #endif
