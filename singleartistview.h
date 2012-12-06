@@ -1,7 +1,7 @@
 #ifndef SINGLEARTISTVIEW_H
 #define SINGLEARTISTVIEW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
 
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
@@ -18,7 +18,7 @@ namespace Ui {
     class SingleArtistView;
 }
 
-class SingleArtistView : public QMainWindow
+class SingleArtistView : public BaseWindow
 {
     Q_OBJECT
 
@@ -71,7 +71,6 @@ private slots:
     void deleteCurrentArtist();
     void shuffleAllSongs();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void showWindowMenu();
     void onAddAlbumToNowPlaying();
     void onNowPlayingWindowHidden();
     void onChildClosed();

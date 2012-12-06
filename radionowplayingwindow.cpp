@@ -19,7 +19,7 @@
 #include "radionowplayingwindow.h"
 
 RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
-    QMainWindow(parent),
+    BaseWindow(parent),
     ui(new Ui::RadioNowPlayingWindow)
 #ifdef MAFW
     ,mafwFactory(factory),
@@ -77,9 +77,6 @@ RadioNowPlayingWindow::~RadioNowPlayingWindow()
 void RadioNowPlayingWindow::connectSignals()
 {
     QShortcut *shortcut;
-
-    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
@@ -477,13 +474,6 @@ void RadioNowPlayingWindow::setAlbumImage(QString image)
 
     albumArtScene->addItem(item);
     m->setItem(item);
-}
-
-void RadioNowPlayingWindow::showWindowMenu()
-{
-    ui->windowMenu->adjustSize();
-    int x = (this->width() - ui->windowMenu->width()) / 2;
-    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void RadioNowPlayingWindow::orientationChanged(int w, int h)

@@ -1,7 +1,8 @@
 #ifndef RADIONOWPLAYINGWINDOW_H
 #define RADIONOWPLAYINGWINDOW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
+
 #include <QTimer>
 #include <QTime>
 #include <QNetworkConfigurationManager>
@@ -30,7 +31,7 @@ namespace Ui {
     class RadioNowPlayingWindow;
 }
 
-class RadioNowPlayingWindow : public QMainWindow
+class RadioNowPlayingWindow : public BaseWindow
 {
     Q_OBJECT
 
@@ -73,7 +74,6 @@ private slots:
     void toggleVolumeSlider();
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();
-    void showWindowMenu();
     void orientationChanged(int w, int h);
     void volumeWatcher();
 #ifdef Q_WS_MAEMO_5

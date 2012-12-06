@@ -71,7 +71,8 @@ SOURCES += \
     lyricsmanager.cpp \
     lyricsprovidersdialog.cpp \
     delegates/shufflebuttondelegate.cpp \
-    delegates/providerlistitemdelegate.cpp
+    delegates/providerlistitemdelegate.cpp \
+    basewindow.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -119,7 +120,9 @@ HEADERS += \
     confirmdialog.h \
     delegates/shufflebuttondelegate.h \
     delegates/providerlistitemdelegate.h \
-    fastlistview.h
+    fastlistview.h \
+    basewindow.h \
+    kbmenu.h
 
 FORMS += \
     mainwindow.ui \
@@ -157,7 +160,7 @@ isEmpty(QMAKE_LRELEASE) {
 
 for(TSFILE, TRANSLATIONS) {
     exists($$TSFILE) {
-	system($$QMAKE_LRELEASE $$TSFILE)
+    system($$QMAKE_LRELEASE $$TSFILE)
     }
 }
 
@@ -227,7 +230,7 @@ contains(DEFINES, MAFW) {
         mafw/mafwadapterfactory.h
 }
 
-LIBS += -lhildonthumbnail
+LIBS += -lhildonthumbnail -lX11
 PKGCONFIG += glib-2.0 gtk+-2.0
 
 OTHER_FILES += \

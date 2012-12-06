@@ -19,7 +19,7 @@
 #include "singleplaylistview.h"
 
 SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *factory) :
-    QMainWindow(parent),
+    BaseWindow(parent),
     ui(new Ui::SinglePlaylistView)
 #ifdef MAFW
     ,mafwFactory(factory),
@@ -75,8 +75,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     clickTimer->setSingleShot(true);
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
-    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -475,13 +473,6 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
-}
-
-void SinglePlaylistView::showWindowMenu()
-{
-    ui->windowMenu->adjustSize();
-    int x = (this->width() - ui->windowMenu->width()) / 2;
-    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void SinglePlaylistView::onAddToNowPlaying()

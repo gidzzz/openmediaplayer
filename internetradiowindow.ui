@@ -87,7 +87,7 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="windowMenu">
+   <widget class="KbMenu" name="windowMenu">
     <property name="title">
      <string>Internet Radio</string>
     </property>
@@ -118,6 +118,12 @@
    <class>FastListView</class>
    <extends>QListView</extends>
    <header>fastlistview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KbMenu</class>
+   <extends>QMenu</extends>
+   <header>kbmenu.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

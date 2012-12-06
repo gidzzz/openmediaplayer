@@ -19,7 +19,7 @@
 #include "singlealbumview.h"
 
 SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
-    QMainWindow(parent),
+    BaseWindow(parent),
     ui(new Ui::SingleAlbumView)
 #ifdef MAFW
     ,mafwFactory(factory),
@@ -55,8 +55,6 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
     ui->songList->setModel(songProxyModel);
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
-    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->songList, SIGNAL(activated(QModelIndex)), this, SLOT(onItemActivated(QModelIndex)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
@@ -328,13 +326,6 @@ void SingleAlbumView::onContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
-}
-
-void SingleAlbumView::showWindowMenu()
-{
-    ui->windowMenu->adjustSize();
-    int x = (this->width() - ui->windowMenu->width()) / 2;
-    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void SingleAlbumView::onAddToNowPlaying()

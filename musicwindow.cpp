@@ -19,7 +19,7 @@
 #include "musicwindow.h"
 
 MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
-        QMainWindow(parent),
+        BaseWindow(parent),
 #ifdef MAFW
         ui(new Ui::MusicWindow),
         mafwFactory(factory),
@@ -202,8 +202,6 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
 void MusicWindow::connectSignals()
 {
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
-    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
 #ifdef MAFW
     connect(ui->songList, SIGNAL(activated(QModelIndex)), this, SLOT(onSongSelected(QModelIndex)));
@@ -273,14 +271,6 @@ void MusicWindow::onContextMenuRequested(const QPoint &pos)
 
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
-}
-
-void MusicWindow::showWindowMenu()
-{
-    ui->windowMenu->adjustSize();
-    int x = (this->width() - ui->windowMenu->width()) / 2;
-    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
-    qDebug() << this->mapToGlobal(QPoint(x,-35));
 }
 
 void MusicWindow::onRenamePlaylist()

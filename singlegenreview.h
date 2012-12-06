@@ -1,7 +1,7 @@
 #ifndef SINGLEGENREVIEW_H
 #define SINGLEGENREVIEW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
 
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
@@ -24,7 +24,7 @@ namespace Ui {
     class SingleGenreView;
 }
 
-class SingleGenreView : public QMainWindow
+class SingleGenreView : public BaseWindow
 {
     Q_OBJECT
 
@@ -69,7 +69,6 @@ private slots:
     void onSearchTextChanged(QString text);
     void addAllToNowPlaying();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void showWindowMenu();
     void addArtistToNowPlaying();
     void onNowPlayingWindowHidden();
     void onChildClosed();

@@ -1,7 +1,8 @@
 #ifndef VIDEOSWINDOW_H
 #define VIDEOSWINDOW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
+
 #include <QActionGroup>
 #include <QAction>
 #include <QSettings>
@@ -22,7 +23,7 @@ namespace Ui {
     class VideosWindow;
 }
 
-class VideosWindow : public QMainWindow
+class VideosWindow : public BaseWindow
 {
     Q_OBJECT
 
@@ -57,7 +58,6 @@ private slots:
     void onShareClicked();
     void onDeleteClicked();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void showWindowMenu();
     void onVideoSelected(QModelIndex index);
     void onSortingChanged(QAction *action);
     void onSearchHideButtonClicked();

@@ -1,7 +1,8 @@
 #ifndef SINGLEPLAYLISTVIEW_H
 #define SINGLEPLAYLISTVIEW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
+
 #include "ui_singleplaylistview.h"
 #include "confirmdialog.h"
 #include "playlistquerymanager.h"
@@ -22,11 +23,11 @@ namespace Ui {
     class SinglePlaylistView;
 }
 
-class SinglePlaylistView : public QMainWindow
+class SinglePlaylistView : public BaseWindow
 {
     Q_OBJECT
 
-    enum {
+    enum PendingActivation {
         Nothing = -1,
         AddToNowPlaying = -2,
         AddToPlaylist = -3
@@ -93,7 +94,6 @@ private slots:
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString text);
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void showWindowMenu();
     void onAddToNowPlaying();
     void onAddToPlaylist();
     void setRingingTone();

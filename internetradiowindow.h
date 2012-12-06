@@ -1,7 +1,8 @@
 #ifndef INTERNETRADIOWINDOW_H
 #define INTERNETRADIOWINDOW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
+
 #include <QDialog>
 #include <QLabel>
 #include <QLayout>
@@ -31,7 +32,7 @@ namespace Ui {
     class InternetRadioWindow;
 }
 
-class InternetRadioWindow : public QMainWindow
+class InternetRadioWindow : public BaseWindow
 {
     Q_OBJECT
 
@@ -66,7 +67,6 @@ private slots:
     void onDeleteClicked();
     void onStationSelected(QModelIndex index);
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void showWindowMenu();
     void orientationChanged(int w, int h);
     void onChildClosed();
     void onSearchHideButtonClicked();

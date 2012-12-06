@@ -1,7 +1,8 @@
 #ifndef NOWPLAYINGWINDOW_H
 #define NOWPLAYINGWINDOW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
+
 #include <QtGui>
 #include <QtDBus>
 #include <QTimer>
@@ -41,7 +42,7 @@ namespace Ui {
     class NowPlayingWindow;
 }
 
-class NowPlayingWindow : public QMainWindow
+class NowPlayingWindow : public BaseWindow
 {
     Q_OBJECT
 
@@ -172,7 +173,6 @@ private slots:
     void onLyricsContextMenuRequested(const QPoint &pos);
     void onViewContextMenuRequested(const QPoint &pos);
     void onContextMenuRequested(const QPoint &pos);
-    void showWindowMenu();
 
     void onDeleteClicked();
     void onShareClicked();

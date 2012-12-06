@@ -1,7 +1,8 @@
 #ifndef MUSICWINDOW_H
 #define MUSICWINDOW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
+
 #include <QDir>
 #include <QStringList>
 #include <QDirIterator>
@@ -37,7 +38,7 @@ namespace Ui {
     class MusicWindow;
 }
 
-class MusicWindow : public QMainWindow
+class MusicWindow : public BaseWindow
 {
     Q_OBJECT
 
@@ -108,7 +109,6 @@ private:
 
 private slots:
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void showWindowMenu();
     void onSongSelected(QModelIndex index);
     void setRingingTone();
     void onShareClicked();

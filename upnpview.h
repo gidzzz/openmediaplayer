@@ -1,7 +1,7 @@
 #ifndef UPNPVIEW_H
 #define UPNPVIEW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
 
 #include "ui_upnpview.h"
 #include "includes.h"
@@ -17,7 +17,7 @@ namespace Ui {
     class UpnpView;
 }
 
-class UpnpView : public QMainWindow
+class UpnpView : public BaseWindow
 {
     Q_OBJECT
 
@@ -35,7 +35,6 @@ private slots:
     void onSearchTextChanged(QString text);
     void onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void showWindowMenu();
     void onItemActivated(QModelIndex index);
     void onAddOneToNowPlaying();
     void onAddOneToPlaylist();

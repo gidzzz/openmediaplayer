@@ -19,7 +19,7 @@
 #include "videoswindow.h"
 
 VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
-    QMainWindow(parent),
+    BaseWindow(parent),
     ui(new Ui::VideosWindow)
 #ifdef MAFW
     ,mafwFactory(factory),
@@ -81,8 +81,6 @@ VideosWindow::~VideosWindow()
 void VideosWindow::connectSignals()
 {
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
-    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->videoList, SIGNAL(activated(QModelIndex)), this, SLOT(onVideoSelected(QModelIndex)));
     connect(ui->videoList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -111,13 +109,6 @@ void VideosWindow::onContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
-}
-
-void VideosWindow::showWindowMenu()
-{
-    ui->windowMenu->adjustSize();
-    int x = (this->width() - ui->windowMenu->width()) / 2;
-    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void VideosWindow::onDeleteClicked()

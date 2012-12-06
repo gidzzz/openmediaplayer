@@ -1,7 +1,8 @@
 #ifndef SINGLEALBUMVIEW_H
 #define SINGLEALBUMVIEW_H
 
-#include <QMainWindow>
+#include "basewindow.h"
+
 #include <QTime>
 
 #ifdef Q_WS_MAEMO_5
@@ -27,7 +28,7 @@ namespace Ui {
     class SingleAlbumView;
 }
 
-class SingleAlbumView : public QMainWindow
+class SingleAlbumView : public BaseWindow
 {
     Q_OBJECT
 
@@ -77,7 +78,6 @@ private slots:
     void addAllToNowPlaying();
     void deleteCurrentAlbum();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void showWindowMenu();
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();

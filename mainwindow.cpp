@@ -27,7 +27,7 @@ QString defaultRadioImage;
 QString volumeButtonIcon;
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
+    BaseWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -202,9 +202,6 @@ void MainWindow::setButtonIcons()
 
 void MainWindow::connectSignals()
 {
-    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->menuOptions), SIGNAL(activated()), ui->menuOptions, SLOT(close()));
-
     connect(new QShortcut(QKeySequence(Qt::Key_Q), this), SIGNAL(activated()), this, SLOT(showMusicWindow()));
     connect(new QShortcut(QKeySequence(Qt::Key_W), this), SIGNAL(activated()), this, SLOT(showVideosWindow()));
     connect(new QShortcut(QKeySequence(Qt::Key_E), this), SIGNAL(activated()), this, SLOT(showInternetRadioWindow()));
@@ -543,13 +540,6 @@ void MainWindow::createVideoNowPlayingWindow()
 #ifdef MAFW
     QTimer::singleShot(500, mafwrenderer, SLOT(play()));
 #endif
-}
-
-void MainWindow::showWindowMenu()
-{
-    ui->menuOptions->adjustSize();
-    int x = (this->width() - ui->menuOptions->width()) / 2;
-    ui->menuOptions->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void MainWindow::orientationChanged(int w, int h)

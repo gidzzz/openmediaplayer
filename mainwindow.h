@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "basewindow.h"
+
 #include <QMainWindow>
 #include <QPainter>
 #include <QDebug>
@@ -42,7 +44,7 @@ namespace Ui {
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public BaseWindow
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.nokia.mediaplayer")
@@ -100,7 +102,6 @@ private:
     void countSongs();
     void countVideos();
     int mafwState;
-    int rendererStatusNotifications;
     int songAddBufferSize;
     gchar** songAddBuffer;
     QString objectIdToPlay;
@@ -108,7 +109,6 @@ private:
 
 private slots:
     void orientationChanged(int w, int h);
-    void showWindowMenu();
     void showAbout();
     void processListClicks(QListWidgetItem*);
     void openSettings();

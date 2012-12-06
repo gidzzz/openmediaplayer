@@ -19,7 +19,7 @@
 #include "singlegenreview.h"
 
 SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
-    QMainWindow(parent),
+    BaseWindow(parent),
     ui(new Ui::SingleGenreView)
 #ifdef MAFW
     ,mafwFactory(factory),
@@ -55,8 +55,6 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     isShuffling = false;
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
-    connect(new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(showWindowMenu()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), ui->windowMenu), SIGNAL(activated()), ui->windowMenu, SLOT(close()));
 
     connect(ui->artistList, SIGNAL(activated(QModelIndex)), this, SLOT(onItemActivated(QModelIndex)));
     connect(ui->artistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
@@ -308,13 +306,6 @@ void SingleGenreView::onContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(addArtistToNowPlaying()));
     connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
-}
-
-void SingleGenreView::showWindowMenu()
-{
-    ui->windowMenu->adjustSize();
-    int x = (this->width() - ui->windowMenu->width()) / 2;
-    ui->windowMenu->exec(this->mapToGlobal(QPoint(x,-35)));
 }
 
 void SingleGenreView::addArtistToNowPlaying()
