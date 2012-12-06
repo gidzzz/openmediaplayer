@@ -193,11 +193,10 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
 void UpnpView::onContextMenuRequested(const QPoint &pos)
 {
     if (ui->objectList->currentIndex().data(UserRoleMIME).toString().startsWith("audio")) {
-        QMenu *contextMenu = new QMenu(this);
+        QMenu *contextMenu = new KbMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddOneToNowPlaying()));
         contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddOneToPlaylist()));
-        connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
         contextMenu->exec(this->mapToGlobal(pos));
     }
 }

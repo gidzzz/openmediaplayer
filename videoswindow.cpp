@@ -103,11 +103,10 @@ void VideosWindow::onContextMenuRequested(const QPoint &pos)
 {
     if (ui->videoList->currentIndex().data(UserRoleHeader).toBool()) return;
 
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 

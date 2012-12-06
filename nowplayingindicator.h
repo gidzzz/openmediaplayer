@@ -21,6 +21,7 @@
 #include "nowplayingwindow.h"
 #include "radionowplayingwindow.h"
 #include "videonowplayingwindow.h"
+#include "kbmenu.h"
 
 namespace Ui {
     class NowPlayingIndicator;

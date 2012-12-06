@@ -234,7 +234,7 @@ void MusicWindow::onContextMenuRequested(const QPoint &pos)
 {
     if (currentList() == ui->playlistList && ui->playlistList->currentIndex().data(UserRoleHeader).toBool()) return;
 
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
 
     // All views
@@ -269,7 +269,6 @@ void MusicWindow::onContextMenuRequested(const QPoint &pos)
         }
     }
 
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 

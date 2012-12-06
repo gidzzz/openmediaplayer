@@ -3,14 +3,11 @@
 
 #include <QMainWindow>
 
-#include <QDebug>
-
 #include <QShortcut>
 #include <QMenuBar>
 #include <QMenu>
 
-/*#include "includes.h"
-#include "rotator.h"*/
+//#include "rotator.h"
 
 class BaseWindow : public QMainWindow
 {
@@ -20,10 +17,9 @@ public:
     explicit BaseWindow(QWidget *parent = 0);
 
 private:
-    /*void closeChildren();*/
+    //void closeChildren();
 
 private slots:
-    /*void orientationChanged(int w, int h);*/
     void showWindowMenu();
 };
 

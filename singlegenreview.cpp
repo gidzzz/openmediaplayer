@@ -301,10 +301,9 @@ void SingleGenreView::onContextMenuRequested(const QPoint &pos)
 {
     if (ui->artistList->currentIndex().row() <= 0) return;
 
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(addArtistToNowPlaying()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 

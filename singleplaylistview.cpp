@@ -463,7 +463,7 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
 {
     if (ui->songList->currentIndex().row() <= 0) return;
 
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
     contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
@@ -471,7 +471,6 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
     if (currentObjectId.isNull()) contextMenu->addAction(tr("Delete from playlist"), this, SLOT(onDeleteFromPlaylist()));
     if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 

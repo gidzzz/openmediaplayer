@@ -968,7 +968,7 @@ void NowPlayingWindow::onPositionSliderMoved(int position)
 #ifdef MAFW
 void NowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
 {
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Stop playback"), mafwrenderer, SLOT(stop()));
     contextMenu->exec(this->mapToGlobal(pos));
@@ -1235,7 +1235,7 @@ void NowPlayingWindow::onPlaylistChanged()
 
 void NowPlayingWindow::onContextMenuRequested(const QPoint &pos)
 {
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
     if (!ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().startsWith("_uuid_")) {
@@ -1244,7 +1244,6 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &pos)
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
         contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
     }
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -1490,11 +1489,10 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 
 void NowPlayingWindow::onViewContextMenuRequested(const QPoint &pos)
 {
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Select album art"), this, SLOT(selectAlbumArt()));
     contextMenu->addAction(tr("Reset album art"), this, SLOT(resetAlbumArt()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -1542,11 +1540,10 @@ void NowPlayingWindow::refreshAlbumArt()
 
 void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
 {
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Edit lyrics"), this, SLOT(editLyrics()));
     contextMenu->addAction(tr("Reload lyrics"), this, SLOT(reloadLyricsOverridingCache()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Backspace), contextMenu), SIGNAL(activated()), contextMenu, SLOT(close()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 

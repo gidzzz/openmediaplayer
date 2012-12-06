@@ -573,7 +573,7 @@ void RadioNowPlayingWindow::togglePlayback()
 #ifdef MAFW
 void RadioNowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
 {
-    QMenu *contextMenu = new QMenu(this);
+    QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Stop playback"), mafwrenderer, SLOT(stop()));
     contextMenu->exec(this->mapToGlobal(pos));
