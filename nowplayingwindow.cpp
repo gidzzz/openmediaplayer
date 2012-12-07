@@ -75,9 +75,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
                               .arg(secondaryColor.blue()));
     defaultWindowTitle = this->windowTitle();
 
-#ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
-#endif
     setAttribute(Qt::WA_DeleteOnClose);
 
     positionTimer = new QTimer(this);

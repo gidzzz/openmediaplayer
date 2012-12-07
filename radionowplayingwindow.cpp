@@ -31,9 +31,8 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     ui->setupUi(this);
 
     setAttribute(Qt::WA_DeleteOnClose);
-#ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
 
+#ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
     QColor secondaryColor(156, 154, 156);
@@ -57,6 +56,8 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     this->updateSongLabel();
     this->setIcons();
     this->connectSignals();
+
+    networkSession = new QNetworkSession(QNetworkConfigurationManager().defaultConfiguration(), this);
 
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
@@ -118,6 +119,7 @@ void RadioNowPlayingWindow::connectSignals()
 
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
+
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
     connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
@@ -257,13 +259,12 @@ void RadioNowPlayingWindow::onStateChanged(int state)
 
 void RadioNowPlayingWindow::play()
 {
-    QNetworkConfigurationManager manager;
-    QNetworkSession session(manager.defaultConfiguration());
-    if (!session.isOpen()) {
-        session.open();
-        session.waitForOpened();
+    if (networkSession->isOpen()) {
+        mafwrenderer->play();
+    } else {
+        connect(networkSession, SIGNAL(opened()), mafwrenderer, SLOT(play()), Qt::UniqueConnection);
+        networkSession->open();
     }
-    mafwrenderer->play();
 }
 
 void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)

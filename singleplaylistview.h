@@ -12,7 +12,6 @@
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
-    #include <QMaemo5ValueButton>
 #endif
 
 #ifdef MAFW

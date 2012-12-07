@@ -11,9 +11,6 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     ui->centralwidget->setLayout(ui->verticalLayout);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
-#ifdef Q_WS_MAEMO_5
-    this->setAttribute(Qt::WA_Maemo5StackedWindow);
-#endif
     this->setAttribute(Qt::WA_DeleteOnClose);
 
     ui->objectList->setItemDelegate(new MediaWithIconDelegate(ui->objectList));

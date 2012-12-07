@@ -7,9 +7,6 @@
 #include <QStringList>
 #include <QDirIterator>
 #include <QtGui>
-#ifdef Q_WS_MAEMO_5
-    #include <QMaemo5ValueButton>
-#endif
 
 #include "ui_musicwindow.h"
 #include "headerawareproxymodel.h"

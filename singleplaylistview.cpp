@@ -39,7 +39,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 #endif
 
 #ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif

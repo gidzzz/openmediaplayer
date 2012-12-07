@@ -69,8 +69,6 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
-
     ui->songCountL->clear();
     ui->videoCountL->clear();
     ui->stationCountL->clear();

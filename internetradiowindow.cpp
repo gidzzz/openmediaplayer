@@ -31,7 +31,6 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
 #ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
     ui->centralwidget->setLayout(ui->verticalLayout);

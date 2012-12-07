@@ -5,12 +5,6 @@
 
 #include <QTime>
 
-#ifdef Q_WS_MAEMO_5
-    #include <QMaemo5ValueButton>
-#else
-    #include <QPushButton>
-#endif
-
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
 #endif

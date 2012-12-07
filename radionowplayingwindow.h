@@ -53,6 +53,8 @@ private:
     void setAlbumImage(QString image);
     QGraphicsScene *albumArtScene;
 
+    QNetworkSession *networkSession;
+
     QTimer *volumeTimer;
     QTimer *positionTimer;
     bool lazySliders;

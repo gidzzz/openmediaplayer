@@ -32,9 +32,6 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     ui->centralwidget->setLayout(ui->verticalLayout);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
-#ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
-#endif
     setAttribute(Qt::WA_DeleteOnClose);
 
 #ifdef MAFW

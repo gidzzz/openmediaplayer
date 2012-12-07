@@ -32,7 +32,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5StackedWindow);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
 #ifdef MAFW
