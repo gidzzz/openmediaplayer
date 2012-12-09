@@ -394,6 +394,10 @@ void MainWindow::openDirectory(QString uri, Media::Type type)
 
 void MainWindow::mime_open(const QString &uriString)
 {
+    if (QSettings().value("main/showOpenDialog", false).toBool())
+        if (OpenDialog(this).exec() == QDialog::Rejected)
+            return;
+
 #ifdef MAFW
     QString uriToPlay = uriString.startsWith("/") ? "file://" + uriString : uriString;
     QString objectId = mafwTrackerSource->createObjectId(uriToPlay);

@@ -118,6 +118,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->headsetPauseCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
     ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
+    ui->openDialogCheckBox->setChecked(QSettings().value("main/showOpenDialog", false).toBool());
     ui->foldersCheckBox->setChecked(QSettings().value("main/openFolders", false).toBool());
     ui->appendCheckBox->setChecked(QSettings().value("main/appendSongs", false).toBool());
     ui->deleteCheckBox->setChecked(QSettings().value("main/permanentDelete", false).toBool());
@@ -225,6 +226,7 @@ void SettingsDialog::accept()
     QSettings().setValue("main/pauseHeadset", ui->headsetPauseCheckBox->isChecked());
     QSettings().setValue("lyrics/enable", ui->lyricsCheckBox->isChecked());
     QSettings().setValue("main/playlistFilter", ui->filterCheckBox->isChecked());
+    QSettings().setValue("main/showOpenDialog", ui->openDialogCheckBox->isChecked());
     QSettings().setValue("main/openFolders", ui->foldersCheckBox->isChecked());
     QSettings().setValue("main/appendSongs", ui->appendCheckBox->isChecked());
     QSettings().setValue("main/permanentDelete", ui->deleteCheckBox->isChecked());

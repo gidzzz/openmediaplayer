@@ -72,7 +72,8 @@ SOURCES += \
     lyricsprovidersdialog.cpp \
     delegates/shufflebuttondelegate.cpp \
     delegates/providerlistitemdelegate.cpp \
-    basewindow.cpp
+    basewindow.cpp \
+    opendialog.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -122,7 +123,8 @@ HEADERS += \
     delegates/providerlistitemdelegate.h \
     fastlistview.h \
     basewindow.h \
-    kbmenu.h
+    kbmenu.h \
+    opendialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -150,7 +152,8 @@ FORMS += \
     playlistpicker.ui \
     sleeperdialog.ui \
     bookmarkdialog.ui \
-    lyricsprovidersdialog.ui
+    lyricsprovidersdialog.ui \
+    opendialog.ui
 
 #generate translations
 isEmpty(QMAKE_LRELEASE) {

@@ -21,6 +21,7 @@
 #include "delegates/maintdelegate.h"
 #include "rotator.h"
 #include "upnpcontrol.h"
+#include "opendialog.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
