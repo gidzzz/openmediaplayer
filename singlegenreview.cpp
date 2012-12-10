@@ -49,7 +49,7 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     artistProxyModel->setSourceModel(artistModel);
     ui->artistList->setModel(artistProxyModel);
 
-    isShuffling = false;
+    shuffleRequested = false;
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
 
@@ -94,7 +94,7 @@ void SingleGenreView::onItemActivated(QModelIndex index)
 
         playlist->clear();
         playlist->setShuffled(true);
-        isShuffling = true;
+        shuffleRequested = true;
 
         addAllToNowPlaying();
     }
@@ -162,7 +162,7 @@ void SingleGenreView::listArtists()
 
 void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
 {
-    if (browseId != this->browseGenreId) return;
+    if (browseId != browseGenreId) return;
 
     if (metadata != NULL) {
         QString title;
@@ -310,70 +310,38 @@ void SingleGenreView::addArtistToNowPlaying()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-#ifdef MAFW
-    if (playlist->playlistName() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
-
-    QString objectIdToBrowse = ui->artistList->currentIndex().data(UserRoleObjectID).toString();
-    songAddBufferSize = 0;
-
     ui->artistList->clearSelection();
 
-    isShuffling = false;
+    shuffleRequested = false;
 
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onNowPlayingBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
-
-    addToNowPlayingId = mafwTrackerSource->sourceBrowse(objectIdToBrowse.toUtf8(), true, NULL, NULL,
-                                                        0, 0, MAFW_SOURCE_BROWSE_ALL);
-#endif
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
+    playlistToken = cpm->appendBrowsed(ui->artistList->currentIndex().data(UserRoleObjectID).toString());
 }
 
-#ifdef MAFW
-void SingleGenreView::onNowPlayingBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*,QString)
+void SingleGenreView::onAddFinished(uint token, int count)
 {
-    if (browseId != this->addToNowPlayingId) return;
+    if (token != playlistToken) return;
 
-    if (songAddBufferSize == 0) {
-        songAddBufferSize = remainingCount+1;
-        songAddBuffer = new gchar*[songAddBufferSize+1];
-        songAddBuffer[songAddBufferSize] = NULL;
+    if (shuffleRequested) {
+        mafwrenderer->play();
+
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+        window->show();
+
+        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
+        ui->indicator->inhibit();
+
+        shuffleRequested = false;
     }
-
-    songAddBuffer[index] = qstrdup(objectId.toUtf8());
-
-    if (remainingCount == 0) {
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(onNowPlayingBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
-
-        playlist->appendItems((const gchar**)songAddBuffer);
-
-        for (int i = 0; i < songAddBufferSize; i++)
-            delete[] songAddBuffer[i];
-        delete[] songAddBuffer;
-
-        if (this->isShuffling) {
-            mafwrenderer->play();
-
-            NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-            window->show();
-
-            connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-            ui->indicator->inhibit();
-
-            this->isShuffling = false;
-        }
 #ifdef Q_WS_MAEMO_5
-        else {
-            this->notifyOnAddedToNowPlaying(songAddBufferSize);
-        }
-
-        setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
-        songAddBufferSize = 0;
+    else {
+        this->notifyOnAddedToNowPlaying(count);
     }
-}
+
+    setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
+}
 
 #ifdef MAFW
 void SingleGenreView::onContainerChanged(QString objectId)
@@ -389,20 +357,11 @@ void SingleGenreView::addAllToNowPlaying()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-#ifdef MAFW
-    if (playlist->playlistName() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
-
-    songAddBufferSize = 0;
-
     ui->artistList->clearSelection();
 
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onNowPlayingBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
-
-    addToNowPlayingId = mafwTrackerSource->sourceBrowse(currentObjectId.toUtf8(), true, NULL, NULL,
-                                                        0, 0, MAFW_SOURCE_BROWSE_ALL);
-#endif
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
+    playlistToken = cpm->appendBrowsed(currentObjectId);
 }
 
 #ifdef Q_WS_MAEMO_5

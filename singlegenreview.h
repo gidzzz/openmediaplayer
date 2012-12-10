@@ -14,6 +14,7 @@
 #include "ui_singlegenreview.h"
 #include "singleartistview.h"
 #include "nowplayingwindow.h"
+#include "currentplaylistmanager.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
@@ -49,12 +50,10 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     uint browseGenreId;
-    uint addToNowPlayingId;
+    uint playlistToken;
     QString currentObjectId;
-    gchar** songAddBuffer;
-    int songAddBufferSize;
     int visibleSongs;
-    bool isShuffling;
+    bool shuffleRequested;
 #endif
 #ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
@@ -74,7 +73,7 @@ private slots:
 #ifdef MAFW
     void listArtists();
     void browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
-    void onNowPlayingBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable*,QString);
+    void onAddFinished(uint browseId, int count);
     void onContainerChanged(QString objectId);
 #endif
 };

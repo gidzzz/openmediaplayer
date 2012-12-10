@@ -13,6 +13,7 @@
 #include "singlealbumview.h"
 #include "delegates/thumbnailitemdelegate.h"
 #include "headerawareproxymodel.h"
+#include "currentplaylistmanager.h"
 
 namespace Ui {
     class SingleArtistView;
@@ -42,11 +43,9 @@ private:
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
-    uint browseAllAlbumsId;
-    uint addToNowPlayingId;
+    uint browseArtistId;
+    uint playlistToken;
     QString artistObjectId;
-    gchar** songAddBuffer;
-    int songAddBufferSize;
     int visibleSongs;
     bool shuffleRequested;
     void listAlbums();
@@ -58,9 +57,9 @@ private:
 
 private slots:
 #ifdef MAFW
+    void onArtistAddFinished(uint token, int count);
+    void onAlbumAddFinished(uint token, int count);
     void browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error);
-    void onBrowseAllSongs(uint, int remainingCount, uint, QString objectId, GHashTable*, QString);
-    void onAddAlbumBrowseResult(uint, int remainingCount, uint, QString objectId, GHashTable*, QString);
     void onContainerChanged(QString objectId);
 #endif
     void onAlbumSelected(QModelIndex index);

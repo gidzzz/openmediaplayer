@@ -73,7 +73,8 @@ SOURCES += \
     delegates/shufflebuttondelegate.cpp \
     delegates/providerlistitemdelegate.cpp \
     basewindow.cpp \
-    opendialog.cpp
+    opendialog.cpp \
+    currentplaylistmanager.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -124,7 +125,8 @@ HEADERS += \
     fastlistview.h \
     basewindow.h \
     kbmenu.h \
-    opendialog.h
+    opendialog.h \
+    currentplaylistmanager.h
 
 FORMS += \
     mainwindow.ui \

@@ -52,7 +52,7 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     QString albumObjectId;
-    unsigned int browseAllSongsId;
+    uint browseAlbumId;
 #endif
     void updateSongCount();
 

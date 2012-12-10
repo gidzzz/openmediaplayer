@@ -422,12 +422,12 @@ void MainWindow::mime_open(const QString &uriString)
                 qDebug() << "Converted ID:" << objectId;
 
                 connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                        this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+                        this, SLOT(browsePlaylist(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
                 songAddBufferSize = 0;
-                browseSongsId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                                MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
-                                                                0, MAFW_SOURCE_BROWSE_ALL);
+                browsePlaylistId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
+                                                                   MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
+                                                                   0, MAFW_SOURCE_BROWSE_ALL);
             }
 
             // Audio, a whole directory has to be added
@@ -858,9 +858,11 @@ void MainWindow::countRadioResult(QString, GHashTable *metadata, QString error)
         qDebug() << error;
 }
 
-void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata , QString)
+void MainWindow::browsePlaylist(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata , QString error)
 {
-    if (browseId != browseSongsId) return;
+    if (browseId != browsePlaylistId) return;
+
+    if (!error.isEmpty()) qDebug() << error;
 
     if (songAddBufferSize == 0) {
         songAddBufferSize = remainingCount+1;
@@ -882,7 +884,7 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browsePlaylist(uint,int,uint,QString,GHashTable*,QString)));
 
         playlist->appendItems((const gchar**)songAddBuffer);
 
@@ -908,6 +910,17 @@ void MainWindow::browseSongs(uint browseId, int remainingCount, uint index, QStr
     }
 }
 
+void MainWindow::onShuffleFinished(uint token)
+{
+    if (token != playlistToken) return;
+
+    mafwrenderer->play();
+    createNowPlayingWindow();
+
+#ifdef Q_WS_MAEMO_5
+    setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+#endif
+}
 #endif
 
 void MainWindow::onShuffleAllClicked()
@@ -923,14 +936,9 @@ void MainWindow::onShuffleAllClicked()
     playlist->clear();
     playlist->setShuffled(true);
 
-    songAddBufferSize = 0;
-
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
-
-    browseSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
-                                                    MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
-                                                    0, MAFW_SOURCE_BROWSE_ALL);
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onShuffleFinished(uint)), Qt::UniqueConnection);
+    playlistToken = cpm->appendBrowsed("localtagfs::music/songs");
 #endif
 }
 

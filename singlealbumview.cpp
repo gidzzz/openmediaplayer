@@ -105,17 +105,17 @@ void SingleAlbumView::listSongs()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseAllSongsId = mafwTrackerSource->sourceBrowse(albumObjectId.toUtf8(), true, NULL, "+track,+title",
-                                                       MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                        MAFW_METADATA_KEY_ALBUM,
-                                                                        MAFW_METADATA_KEY_ARTIST,
-                                                                        MAFW_METADATA_KEY_DURATION),
-                                                       0, MAFW_SOURCE_BROWSE_ALL);
+    browseAlbumId = mafwTrackerSource->sourceBrowse(albumObjectId.toUtf8(), true, NULL, "+track,+title",
+                                                    MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                     MAFW_METADATA_KEY_ALBUM,
+                                                                     MAFW_METADATA_KEY_ARTIST,
+                                                                     MAFW_METADATA_KEY_DURATION),
+                                                    0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
 {
-    if (browseId != browseAllSongsId) return;
+    if (browseId != browseAlbumId) return;
 
     if (metadata != NULL) {
         QString title;

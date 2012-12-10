@@ -88,8 +88,7 @@ private:
     unsigned int browseNeverPlayedId;
     unsigned int browseImportedPlaylistsId;
     unsigned int addToNowPlayingId;
-    gchar** songAddBuffer;
-    int songAddBufferSize;
+    uint playlistToken;
     int savedPlaylistCount;
 #endif
     void connectSignals();
@@ -123,7 +122,7 @@ private slots:
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllGenres(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void onAddToNowPlayingCallback(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString error);
+    void onAddFinished(uint token, int count);
     void onShareUriReceived(QString, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
     void listSongs();

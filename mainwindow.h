@@ -22,6 +22,7 @@
 #include "rotator.h"
 #include "upnpcontrol.h"
 #include "opendialog.h"
+#include "currentplaylistmanager.h"
 
 #ifdef Q_WS_MAEMO_5
     #include <QMaemo5InformationBox>
@@ -99,7 +100,8 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
     MafwPlaylistAdapter* playlist;
-    uint browseSongsId;
+    uint browsePlaylistId;
+    uint playlistToken;
     void countSongs();
     void countVideos();
     int mafwState;
@@ -136,7 +138,8 @@ private slots:
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
     void countRadioResult(QString objectId, GHashTable *metadata, QString error);
     void countRadioStations();
-    void browseSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString);
+    void onShuffleFinished(uint token);
+    void browsePlaylist(uint browseId, int remainingCount, uint, QString objectId, GHashTable*, QString error);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
     void togglePlayback();
