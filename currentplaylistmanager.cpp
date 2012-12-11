@@ -17,10 +17,10 @@ CurrentPlaylistManager::CurrentPlaylistManager(MafwAdapterFactory *factory) :
 }
 
 // Place a request to append browse results to the playlist
-uint CurrentPlaylistManager::appendBrowsed(QString objectId, bool tagfs, QString filter, QString sorting, uint limit)
+uint CurrentPlaylistManager::appendBrowsed(QString objectId, QString filter, QString sorting, uint limit)
 {
     // Create and enqueue a job
-    Job job = { ++currentToken, objectId, tagfs, filter, sorting, limit };
+    Job job = { ++currentToken, objectId, filter, sorting, limit };
     jobs.append(job);
 
     qDebug() << "Adding job" << jobs.last().token << jobs.last().objectId;
@@ -46,7 +46,7 @@ void CurrentPlaylistManager::process()
     browseId = mafwTrackerSource->sourceBrowse(job.objectId.toUtf8(), true,
                                                job.filter.isNull() ? NULL : job.filter.toUtf8().data(),
                                                job.sorting.isNull() ? NULL : job.sorting.toUtf8().data(),
-                                               job.tagfs ? MAFW_SOURCE_LIST(MAFW_METADATA_KEY_FILESIZE) : MAFW_SOURCE_NO_KEYS,
+                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_MIME),
                                                0, job.limit);
 }
 
@@ -66,7 +66,7 @@ void CurrentPlaylistManager::finalize()
     if (!jobs.isEmpty()) process();
 }
 
-void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable*, QString error)
+void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error)
 {
     if (browseId != this->browseId) return;
 
@@ -99,9 +99,18 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
         disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 
-        // It has to be the music playlist
-        if (playlist->playlistName() != "FmpAudioPlaylist")
-            playlist->assignAudioPlaylist();
+        // MIME is required to determine which playlist should be used
+        QString mime = QString::fromUtf8(g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));
+        qDebug() << "Last item MIME:" << mime;
+
+        // Assing the proper playlist
+        if (mime.startsWith("audio")) {
+            if (playlist->playlistName() != "FmpAudioPlaylist")
+                playlist->assignAudioPlaylist();
+        } else {
+            if (playlist->playlistName() != "FmpVideoPlaylist")
+                playlist->assignVideoPlaylist();
+        }
 
         // Add songs to the playlist
         playlist->appendItems((const gchar**)songBuffer);

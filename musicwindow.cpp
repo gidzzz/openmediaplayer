@@ -1243,7 +1243,7 @@ void MusicWindow::onAddToNowPlaying()
 
             CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
             connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
-            playlistToken = cpm->appendBrowsed("localtagfs::music/songs", false, filter, sorting, limit);
+            playlistToken = cpm->appendBrowsed("localtagfs::music/songs", filter, sorting, limit);
         }
 
         // Saved playlist
@@ -1266,7 +1266,7 @@ void MusicWindow::onAddToNowPlaying()
         else {
             CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
             connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
-            playlistToken = cpm->appendBrowsed(index.data(UserRoleObjectID).toString(), true);
+            playlistToken = cpm->appendBrowsed(index.data(UserRoleObjectID).toString());
         }
     }
 #endif
