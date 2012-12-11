@@ -336,7 +336,7 @@ void SingleGenreView::onAddFinished(uint token, int count)
     }
 #ifdef Q_WS_MAEMO_5
     else {
-        this->notifyOnAddedToNowPlaying(count);
+        notifyOnAddedToNowPlaying(count);
     }
 
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);

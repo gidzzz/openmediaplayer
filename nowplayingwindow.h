@@ -146,7 +146,6 @@ private slots:
     void setPosition(int newPosition);
     void onPlaylistItemActivated(QListWidgetItem*);
     void clearPlaylist();
-    void onPlaylistChanged();
     void onGconfValueChanged();
     void onMediaChanged(int index, char*);
     void onMediaIsSeekable(bool seekable);

@@ -812,25 +812,23 @@ void MusicWindow::listAutoPlaylists()
     }
 
     browseNeverPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
-                                                          "(play-count=)",
-                                                          NULL,
-                                                          MAFW_SOURCE_LIST(),
+                                                          "(play-count=)", NULL,
+                                                          MAFW_SOURCE_NO_KEYS,
                                                           0, MAFW_SOURCE_BROWSE_ALL);
 
     browseMostPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
-                                                         "(play-count>0)",
-                                                         "-play-count,+title",
-                                                         MAFW_SOURCE_LIST(),
+                                                         "(play-count>0)", "-play-count,+title",
+                                                         MAFW_SOURCE_NO_KEYS,
                                                          0, limit);
 
     browseRecentlyPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
-                                                             "(play-count>0)",
-                                                             "-last-played",
-                                                             MAFW_SOURCE_LIST(),
+                                                             "(play-count>0)", "-last-played",
+                                                             MAFW_SOURCE_NO_KEYS,
                                                              0, limit);
 
-    browseRecentlyAddedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, "-added",
-                                                            MAFW_SOURCE_LIST(),
+    browseRecentlyAddedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
+                                                            NULL, "-added",
+                                                            MAFW_SOURCE_NO_KEYS,
                                                             0, limit);
 }
 
@@ -1261,7 +1259,7 @@ void MusicWindow::onAddToNowPlaying()
             g_strfreev(items);
 
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-            this->notifyOnAddedToNowPlaying(size);
+            notifyOnAddedToNowPlaying(size);
         }
 
         // Imported playlist
@@ -1309,7 +1307,7 @@ void MusicWindow::onAddFinished(uint token, int count)
 
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-    this->notifyOnAddedToNowPlaying(count);
+    notifyOnAddedToNowPlaying(count);
 #endif
 }
 

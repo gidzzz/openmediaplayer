@@ -273,8 +273,8 @@ void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 
     currentObjectId = QString::fromUtf8(objectId);
     mafwSource->setSource(mafwFactory->getTempSource()->getSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
-    mafwSource->getMetadata(objectId, MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                        MAFW_METADATA_KEY_URI));
+    mafwSource->getMetadata(objectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                       MAFW_METADATA_KEY_URI));
 
     mafwrenderer->getCurrentMetadata();
 

@@ -306,7 +306,7 @@ void SingleAlbumView::addAllToNowPlaying()
         playlist->assignAudioPlaylist();
 
 #ifdef Q_WS_MAEMO_5
-    this->notifyOnAddedToNowPlaying(appendAllToPlaylist(true));
+    notifyOnAddedToNowPlaying(appendAllToPlaylist(true));
 #endif
 
 #endif
@@ -335,7 +335,7 @@ void SingleAlbumView::onAddToNowPlaying()
     playlist->appendItem(ui->songList->currentIndex().data(UserRoleObjectID).toString());
 
 #ifdef Q_WS_MAEMO_5
-    this->notifyOnAddedToNowPlaying(1);
+    notifyOnAddedToNowPlaying(1);
 #endif
 
 #endif

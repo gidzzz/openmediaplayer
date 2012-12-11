@@ -197,10 +197,10 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
     browsePlaylistId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                       MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                                         MAFW_METADATA_KEY_DURATION,
-                                                                         MAFW_METADATA_KEY_ARTIST,
-                                                                         MAFW_METADATA_KEY_ALBUM),
+                                                       MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                        MAFW_METADATA_KEY_DURATION,
+                                                                        MAFW_METADATA_KEY_ARTIST,
+                                                                        MAFW_METADATA_KEY_ALBUM),
                                                        0, MAFW_SOURCE_BROWSE_ALL);
 }
 
@@ -219,10 +219,10 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
     browsePlaylistId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
-                                                       MAFW_SOURCE_LIST (MAFW_METADATA_KEY_TITLE,
-                                                                         MAFW_METADATA_KEY_DURATION,
-                                                                         MAFW_METADATA_KEY_ARTIST,
-                                                                         MAFW_METADATA_KEY_ALBUM),
+                                                       MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                        MAFW_METADATA_KEY_DURATION,
+                                                                        MAFW_METADATA_KEY_ARTIST,
+                                                                        MAFW_METADATA_KEY_ALBUM),
                                                        0, maxCount);
 }
 

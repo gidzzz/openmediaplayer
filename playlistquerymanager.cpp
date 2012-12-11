@@ -89,13 +89,12 @@ void PlaylistQueryManager::mergeRequest(int first, int last)
 
 void PlaylistQueryManager::queryPlaylist()
 {
-    if (!requests.size())
-        return;
+    if (requests.isEmpty()) return;
 
     // search for a good request to process
     int* best = requests.at(0);
     for (int i = 1; i < requests.size(); i++)
-        if (qAbs(priority - (requests.at(i)[FIRST] + requests.at(i)[LAST])/2) < ABS(priority - (best[FIRST] + best[LAST])/2))
+        if (qAbs(priority - (requests.at(i)[FIRST] + requests.at(i)[LAST])/2) < qAbs(priority - (best[FIRST] + best[LAST])/2))
             best = requests.at(i);
 
     // try to fit a batch in the selected request
@@ -119,7 +118,7 @@ void PlaylistQueryManager::queryPlaylist()
     // right side filled
     else if (last == best[LAST]) {
         first = qMax(best[FIRST], first-pool);
-        if (first == best[FIRST]) { //whole range filled
+        if (first == best[FIRST]) { // whole range filled
             requests.removeOne(best);
             delete best;
         }
@@ -153,8 +152,7 @@ void PlaylistQueryManager::queryPlaylist()
 
 void PlaylistQueryManager::onGetItems(QString objectId, GHashTable *metadata, guint index, gpointer op)
 {
-    if (op != getItemsOp)
-        return;
+    if (op != getItemsOp) return;
 
     emit onGetItems(objectId, metadata, index);
 }

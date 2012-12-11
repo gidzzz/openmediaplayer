@@ -426,7 +426,7 @@ void MainWindow::mime_open(const QString &uriString)
 
                 songAddBufferSize = 0;
                 browsePlaylistId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                                   MAFW_SOURCE_LIST (MAFW_METADATA_KEY_MIME),
+                                                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_MIME),
                                                                    0, MAFW_SOURCE_BROWSE_ALL);
             }
 

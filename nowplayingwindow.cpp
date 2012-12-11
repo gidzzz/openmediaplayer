@@ -1110,7 +1110,7 @@ void NowPlayingWindow::togglePlayback()
 }
 
 #ifdef MAFW
-void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index)
+void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata, guint index)
 {
     QListWidgetItem *item =  ui->songPlaylist->item(index);
 
@@ -1145,7 +1145,7 @@ void NowPlayingWindow::onGetPlaylistItems(QString object_id, GHashTable *metadat
         item->setData(UserRoleSongDuration, duration);
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleSongArtist, artist);
-        item->setData(UserRoleObjectID, object_id);
+        item->setData(UserRoleObjectID, objectId);
         item->setData(UserRoleSongIndex, index);
     } else {
         item->setData(UserRoleSongTitle, tr("Information not available"));
@@ -1216,17 +1216,6 @@ void NowPlayingWindow::clearPlaylist()
         lastPlayingSong->set(1);
         this->close();
     }
-}
-
-void NowPlayingWindow::onPlaylistChanged()
-{
-    qDebug() << "NowPlayingWindow::onPlaylistChanged";
-    for (int i = 0; i < ui->songPlaylist->count(); i++) {
-        QListWidgetItem *item = ui->songPlaylist->item(i);
-        ui->songPlaylist->removeItemWidget(item);
-        delete item;
-    }
-    this->updatePlaylist();
 }
 #endif
 

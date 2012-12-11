@@ -298,7 +298,7 @@ void SingleArtistView::onArtistAddFinished(uint token, int count)
     }
 #ifdef Q_WS_MAEMO_5
     else {
-        this->notifyOnAddedToNowPlaying(count);
+        notifyOnAddedToNowPlaying(count);
     }
 
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
@@ -370,7 +370,7 @@ void SingleArtistView::onAlbumAddFinished(uint token, int count)
 
 #ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-    this->notifyOnAddedToNowPlaying(count);
+    notifyOnAddedToNowPlaying(count);
 #endif
 }
 
