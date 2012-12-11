@@ -341,7 +341,6 @@ void MainWindow::openDirectory(QString uri, Media::Type type)
         // maybe there's a better way to ignore playlists
         if (mime.startsWith(filter) && !mime.endsWith("mpegurl"))
             songAddBuffer[songAddBufferPos++] = qstrdup(file.prepend(path)
-                                                            .replace(" ", "%20")
                                                             .replace("/", "%2F")
                                                             .prepend(root)
                                                             .toUtf8());
