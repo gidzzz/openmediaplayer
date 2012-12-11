@@ -151,7 +151,7 @@ private slots:
     void onMediaIsSeekable(bool seekable);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
-    void updatePlaylist(guint from = 0, guint nremove = 0, guint nreplace = 0);
+    void updatePlaylist(guint from = -1, guint nremove = 0, guint nreplace = 0);
     void onRingingToneUriReceived(QString objectId, QString uri);
     void onShareUriReceived(QString objectId, QString uri);
 #endif

@@ -467,11 +467,16 @@ void NowPlayingWindow::connectSignals()
                                           "com.nokia.mafw.extension",
                                           "property_changed",
                                           this, SLOT(onPropertyChanged(const QDBusMessage &)));
+
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "property_changed",
                                           this, SLOT(updatePlaylistState()));
-    QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "playlist_updated", this, SLOT(updatePlaylist()));
     connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(updatePlaylist(guint, guint, guint)));
     connect(playlist, SIGNAL(itemMoved(guint, guint)), this, SLOT(onItemMoved(guint, guint)));
+
+    // What's this? It's totally undocumented -- the only place where I have
+    // found it mentioned is a header filer for Harmattan. Moreover, I don't
+    // think I have ever seen this signal being emitted.
+    QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "playlist_updated", this, SLOT(updatePlaylist()));
 #endif
 }
 
@@ -1420,21 +1425,22 @@ void NowPlayingWindow::focusItemByRow(int row)
 
 void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 {
-    qDebug() << "NowPlayingWindow::updatePlaylist @" << from << "-" << nremove << "+" << nreplace;
+    qDebug() << "Playlist contents changed: @" << from << "-" << nremove << "+" << nreplace;
 
     if (playlist->playlistName() != "FmpAudioPlaylist") {
-        qDebug() << "playlist type rejected, update aborted";
+        qDebug() << "Playlist type rejected, update aborted";
         return;
     }
 
-    bool synthetic = (from + nremove + nreplace) == 0;
+    bool synthetic = from == -1;
 
     if (synthetic) {
         playlistTime = 0;
         ui->songPlaylist->clear();
-        nreplace = playlist->getSize();
-
         if (qmlView) qmlView->clearPlaylist();
+
+        from = 0;
+        nreplace = playlist->getSize();
     }
 
     if (nremove > 0) {
@@ -1471,6 +1477,8 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
     mafwrenderer->getStatus();
 
     this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
+
+    qDebug() << "Playlist reserved slots:" << ui->songPlaylist->count();
 }
 
 void NowPlayingWindow::onViewContextMenuRequested(const QPoint &pos)
