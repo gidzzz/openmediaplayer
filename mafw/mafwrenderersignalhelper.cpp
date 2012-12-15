@@ -18,6 +18,10 @@
 
 #include "mafwrenderersignalhelper.h"
 
+#ifdef MAFW_WORKAROUNDS
+int MafwRendererSignalHelper::play_retries = 0;
+#endif
+
 void MafwRendererSignalHelper::play_playback_cb(MafwRenderer*,
                                                 gpointer user_data,
                                                 const GError* error)
@@ -53,11 +57,18 @@ void MafwRendererSignalHelper::play_playback_cb(MafwRenderer*,
     if (error && error->code == MAFW_RENDERER_ERROR_NO_MEDIA) {
         MafwRendererAdapter* mafwrenderer = static_cast<MafwRendererAdapter*>(user_data);
         if (mafwrenderer->playlist->getSize()) {
-            qDebug() << "Trying to recover from MAFW_RENDERER_ERROR_NO_MEDIA";
-            mafwrenderer->next();
-            mafwrenderer->play();
+            if (play_retries < 5) {
+                qDebug() << "Trying to recover from MAFW_RENDERER_ERROR_NO_MEDIA";
+                ++play_retries;
+                mafwrenderer->next();
+                mafwrenderer->play();
+            } else {
+                qDebug() << "Giving up on MAFW_RENDERER_ERROR_NO_MEDIA";
+            }
+            return;
         }
     }
+    play_retries = 0;
 #endif
 }
 
