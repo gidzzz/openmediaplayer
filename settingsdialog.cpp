@@ -238,7 +238,7 @@ void SettingsDialog::accept()
     QSettings().setValue("main/language", ui->languageCodeBox->text());
     QSettings().setValue("lyrics/providers", lyricsProviders);
 
-    this->close();
+    QDialog::accept();
 }
 
 void SettingsDialog::orientationChanged(int w, int h)

@@ -425,9 +425,11 @@ void MainWindow::mime_open(const QString &uriString)
 
             else {
                 // Allow the user to select the opening mode
-                if (QSettings().value("main/showOpenDialog", false).toBool())
+                if (QSettings().value("main/showOpenDialog", false).toBool()) {
+                    closeChildren();
                     if (OpenDialog(this).exec() == QDialog::Rejected)
                         return;
+                }
 
                 // Audio, a whole directory has to be added
                 if (QSettings().value("main/openFolders").toBool()) {
@@ -470,9 +472,11 @@ void MainWindow::mime_open(const QString &uriString)
         // Video only
         else if (mime.startsWith("video")) {
             // Allow the user to select the opening mode
-            if (QSettings().value("main/showOpenDialog", false).toBool())
+            if (QSettings().value("main/showOpenDialog", false).toBool()) {
+                closeChildren();
                 if (OpenDialog(this, true).exec() == QDialog::Rejected)
                     return;
+            }
 
             // A whole directory has to be added
             if (QSettings().value("main/openFolders").toBool()) {
@@ -605,7 +609,7 @@ void MainWindow::processListClicks(QListWidgetItem *item)
 void MainWindow::openSettings()
 {
     SettingsDialog *settings = new SettingsDialog(this);
-    connect(settings, SIGNAL(destroyed()), this, SLOT(reloadSettings()));
+    connect(settings, SIGNAL(accepted()), this, SLOT(reloadSettings()));
     settings->show();
 }
 
@@ -1153,6 +1157,10 @@ void MainWindow::takeScreenshot()
 
 void MainWindow::closeChildren()
 {
+    QList<QDialog*> dialogs = findChildren<QDialog*>();
+    for (int i = 0; i < dialogs.size(); i++)
+        dialogs.at(i)->close();
+
     QList<QMainWindow*> windows = findChildren<QMainWindow*>();
     for (int i = 0; i < windows.size(); i++)
         windows.at(i)->close();
