@@ -3,31 +3,35 @@
  <class>OpenDialog</class>
  <widget class="QDialog" name="OpenDialog">
   <property name="windowTitle">
-   <string>Open</string>
+   <string>Opening options</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QPushButton" name="appendButton">
-     <property name="text">
-      <string>Append</string>
-     </property>
-    </widget>
+  <layout class="QVBoxLayout" name="mainLayout">
+   <item>
+    <layout class="QHBoxLayout" name="buttonsLayout">
+     <item>
+      <widget class="QPushButton" name="replaceButton">
+       <property name="text">
+        <string>Replace</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="appendButton">
+       <property name="text">
+        <string>Append</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="QPushButton" name="replaceButton">
-     <property name="text">
-      <string>Replace</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
+   <item>
     <widget class="QCheckBox" name="folderCheckBox">
      <property name="text">
       <string>Open whole folder</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
+   <item>
     <widget class="QCheckBox" name="rememberCheckBox">
      <property name="text">
       <string>Rembember my choice</string>

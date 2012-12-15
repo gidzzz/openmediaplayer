@@ -393,10 +393,6 @@ void MainWindow::openDirectory(QString uri, Media::Type type)
 
 void MainWindow::mime_open(const QString &uriString)
 {
-    if (QSettings().value("main/showOpenDialog", false).toBool())
-        if (OpenDialog(this).exec() == QDialog::Rejected)
-            return;
-
 #ifdef MAFW
     QString uriToPlay = uriString.startsWith("/") ? "file://" + uriString : uriString;
     QString objectId = mafwTrackerSource->createObjectId(uriToPlay);
@@ -427,45 +423,56 @@ void MainWindow::mime_open(const QString &uriString)
                 playlistToken = cpm->appendBrowsed(objectId);
             }
 
-            // Audio, a whole directory has to be added
-            else if (QSettings().value("main/openFolders").toBool()) {
-#ifdef Q_WS_MAEMO_5
-                setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
-                objectIdToPlay = objectId.remove(0, 18) // "urisource::file://"
-                                         .replace("/", "%2F")
-                                         .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
-                qDebug() << "Converted ID:" << objectIdToPlay;
-
-                openDirectory(uriToPlay, Media::Audio);
-            }
-
-            // Audio, just one file
             else {
-                objectId.remove(0, 18) // "urisource::file://"
-                        .replace("/", "%2F")
-                        .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
-                qDebug() << "Converted ID:" << objectId;
+                // Allow the user to select the opening mode
+                if (QSettings().value("main/showOpenDialog", false).toBool())
+                    if (OpenDialog(this).exec() == QDialog::Rejected)
+                        return;
 
-                if (playlist->playlistName() != "FmpAudioPlaylist")
-                    playlist->assignAudioPlaylist();
-                if (!QSettings().value("main/appendSongs").toBool())
-                    playlist->clear();
-                playlist->appendItem(objectId);
+                // Audio, a whole directory has to be added
+                if (QSettings().value("main/openFolders").toBool()) {
+#ifdef Q_WS_MAEMO_5
+                    setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+#endif
+                    objectIdToPlay = objectId.remove(0, 18) // "urisource::file://"
+                                            .replace("/", "%2F")
+                                            .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
+                    qDebug() << "Converted ID:" << objectIdToPlay;
 
-                if (!QSettings().value("main/appendSongs").toBool()) {
-                    if (mafwrenderer->isRendererReady())
-                        mafwrenderer->play();
-                    else
-                        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
+                    openDirectory(uriToPlay, Media::Audio);
                 }
 
-                createNowPlayingWindow();
+                // Audio, just one file
+                else {
+                    objectId.remove(0, 18) // "urisource::file://"
+                            .replace("/", "%2F")
+                            .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
+                    qDebug() << "Converted ID:" << objectId;
+
+                    if (playlist->playlistName() != "FmpAudioPlaylist")
+                        playlist->assignAudioPlaylist();
+                    if (!QSettings().value("main/appendSongs").toBool())
+                        playlist->clear();
+                    playlist->appendItem(objectId);
+
+                    if (!QSettings().value("main/appendSongs").toBool()) {
+                        if (mafwrenderer->isRendererReady())
+                            mafwrenderer->play();
+                        else
+                            connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
+                    }
+
+                    createNowPlayingWindow();
+                }
             }
         }
 
         // Video only
         else if (mime.startsWith("video")) {
+            // Allow the user to select the opening mode
+            if (QSettings().value("main/showOpenDialog", false).toBool())
+                if (OpenDialog(this, true).exec() == QDialog::Rejected)
+                    return;
 
             // A whole directory has to be added
             if (QSettings().value("main/openFolders").toBool()) {

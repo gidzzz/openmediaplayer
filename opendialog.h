@@ -16,7 +16,7 @@ class OpenDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit OpenDialog(QWidget *parent = 0);
+    explicit OpenDialog(QWidget *parent = 0, bool simplified = false);
     ~OpenDialog();
 
 private:

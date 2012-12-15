@@ -94,7 +94,7 @@
        <item row="7" column="1">
         <widget class="QCheckBox" name="openDialogCheckBox">
          <property name="text">
-          <string>Show open dialog</string>
+          <string>Show opening dialog</string>
          </property>
         </widget>
        </item>
