@@ -34,7 +34,7 @@
    <item>
     <widget class="QCheckBox" name="rememberCheckBox">
      <property name="text">
-      <string>Rembember my choice</string>
+      <string>Remember this choice</string>
      </property>
     </widget>
    </item>

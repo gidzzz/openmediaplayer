@@ -23,7 +23,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
-    ui->gridLayout_2->setContentsMargins(0,0,0,0);
     ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
 
     ui->cssuNote->setText("* " + ui->cssuNote->text());
@@ -243,14 +242,14 @@ void SettingsDialog::accept()
 
 void SettingsDialog::orientationChanged(int w, int h)
 {
-    ui->gridLayout->removeWidget(ui->buttonBox);
+    ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
         this->setFixedHeight(680);
-        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount());
+        ui->mainLayout->addWidget(ui->buttonBox, 1, 0, 1, ui->mainLayout->columnCount());
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout->addWidget(ui->buttonBox, 2, 1, 1, 1, Qt::AlignBottom);
+        ui->mainLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
         this->setFixedHeight(360);
     }
 }
