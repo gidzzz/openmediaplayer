@@ -425,7 +425,7 @@ void MainWindow::mime_open(const QString &uriString)
 
             else {
                 // Allow the user to select the opening mode
-                if (QSettings().value("main/showOpenDialog", false).toBool()) {
+                if (QSettings().value("main/showOpenDialog", true).toBool()) {
                     closeChildren();
                     if (OpenDialog(this).exec() == QDialog::Rejected)
                         return;
@@ -472,7 +472,7 @@ void MainWindow::mime_open(const QString &uriString)
         // Video only
         else if (mime.startsWith("video")) {
             // Allow the user to select the opening mode
-            if (QSettings().value("main/showOpenDialog", false).toBool()) {
+            if (QSettings().value("main/showOpenDialog", true).toBool()) {
                 closeChildren();
                 if (OpenDialog(this, true).exec() == QDialog::Rejected)
                     return;

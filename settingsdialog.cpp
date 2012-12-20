@@ -117,7 +117,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->headsetPauseCheckBox->setChecked(QSettings().value("main/pauseHeadset", true).toBool());
     ui->lyricsCheckBox->setChecked(QSettings().value("lyrics/enable", false).toBool());
     ui->filterCheckBox->setChecked(QSettings().value("main/playlistFilter", false).toBool());
-    ui->openDialogCheckBox->setChecked(QSettings().value("main/showOpenDialog", false).toBool());
+    ui->openDialogCheckBox->setChecked(QSettings().value("main/showOpenDialog", true).toBool());
     ui->foldersCheckBox->setChecked(QSettings().value("main/openFolders", false).toBool());
     ui->appendCheckBox->setChecked(QSettings().value("main/appendSongs", false).toBool());
     ui->deleteCheckBox->setChecked(QSettings().value("main/permanentDelete", false).toBool());
