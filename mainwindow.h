@@ -63,6 +63,8 @@ public slots:
     Q_SCRIPTABLE void open_mp_radio_playing_playback_on();
     Q_SCRIPTABLE void open_mp_car_view();
     Q_SCRIPTABLE void mime_open(const QString &uri);
+    Q_SCRIPTABLE void play_automatic_playlist(const QString &playlistName, bool shuffle = false);
+    Q_SCRIPTABLE void play_saved_playlist(const QString &playlistName, bool shuffle = false);
 
 signals:
     void sleeperSet(qint64 timestamp);
@@ -99,6 +101,7 @@ private:
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
+    MafwPlaylistManagerAdapter* mafwPlaylistManager;
     MafwPlaylistAdapter* playlist;
     uint browsePlaylistId;
     uint playlistToken;

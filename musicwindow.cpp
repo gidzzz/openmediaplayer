@@ -849,10 +849,10 @@ void MusicWindow::listSavedPlaylists()
         ++savedPlaylistCount;
 
         for (int i = playlists->len-1; i >= 0; i--) {
-            MafwPlaylistManagerItem* plItem = &g_array_index(playlists, MafwPlaylistManagerItem, i);
+            MafwPlaylistManagerItem plItem = g_array_index(playlists, MafwPlaylistManagerItem, i);
 
-            QString playlistName = QString::fromUtf8(plItem->name);
-            int playlistSize = playlist->getSizeOf(MAFW_PLAYLIST (mafwPlaylistManager->getPlaylist(plItem->id)));
+            QString playlistName = QString::fromUtf8(plItem.name);
+            int playlistSize = playlist->getSizeOf(MAFW_PLAYLIST (mafwPlaylistManager->getPlaylist(plItem.id)));
 
             if (playlistName != "FmpAudioPlaylist"
             && playlistName != "FmpVideoPlaylist"
@@ -869,7 +869,7 @@ void MusicWindow::listSavedPlaylists()
         }
     }
 
-    mafw_playlist_manager_free_list_of_playlists(playlists);
+    mafwPlaylistManager->freeListOfPlaylists(playlists);
 }
 
 void MusicWindow::listImportedPlaylists()
@@ -1250,7 +1250,7 @@ void MusicWindow::onAddToNowPlaying()
         else if (index.data(UserRoleObjectID).isNull()) {
 
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-            QApplication::processEvents();
+            QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
             MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString()));
             int size = playlist->getSizeOf(mafwplaylist);

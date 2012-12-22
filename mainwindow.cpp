@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwrenderer = mafwFactory->getRenderer();
     mafwTrackerSource = mafwFactory->getTrackerSource();
     mafwRadioSource = mafwFactory->getRadioSource();
+    mafwPlaylistManager = new MafwPlaylistManagerAdapter(this);
     playlist = mafwFactory->getPlaylistAdapter();
     if (mafwrenderer->isRendererReady())
         mafwrenderer->getStatus();
@@ -513,6 +514,70 @@ void MainWindow::mime_open(const QString &uriString)
         playlist->appendItem(objectId);
         createVideoNowPlayingWindow();
     }
+#endif
+}
+
+void MainWindow::play_automatic_playlist(const QString &playlistName, bool shuffle)
+{
+#ifdef MAFW
+    QString filter;
+    QString sorting;
+    int limit = QSettings().value("music/playlistSize", 30).toInt();
+
+    if (playlistName == "recently-added") {
+        filter = ""; sorting = "-added";
+    } else if (playlistName == "recently-played") {
+        filter = "(play-count>0)"; sorting = "-last-played";
+    } else if (playlistName == "most-played") {
+        filter = "(play-count>0)"; sorting = "-play-count,+title";
+    } else if (playlistName == "never-played") {
+        filter = "(play-count=)"; sorting = ""; limit = MAFW_SOURCE_BROWSE_ALL;
+    } else {
+        return;
+    }
+
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+
+    if (playlist->playlistName() != "FmpAudioPlaylist")
+        playlist->assignAudioPlaylist();
+    playlist->clear();
+    playlist->setShuffled(shuffle);
+
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
+    playlistToken = cpm->appendBrowsed("localtagfs::music/songs", filter, sorting, limit);
+#endif
+}
+
+void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
+{
+#ifdef MAFW
+    GArray* playlists = mafwPlaylistManager->listPlaylists();
+
+    if (playlists->len != 0) {
+        for (int i = 0; i < playlists->len; i++) {
+            if (playlistName == QString::fromUtf8(g_array_index(playlists, MafwPlaylistManagerItem, i).name)) {
+                setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+                QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+                if (playlist->playlistName() != "FmpAudioPlaylist")
+                    playlist->assignAudioPlaylist();
+                playlist->clear();
+                playlist->setShuffled(shuffle);
+
+                MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(playlistName));
+                gchar** items = mafw_playlist_get_items(mafwplaylist, 0, playlist->getSizeOf(mafwplaylist)-1, NULL);
+                playlist->appendItems((const gchar**)items);
+                g_strfreev(items);
+
+                mafwrenderer->play();
+                createNowPlayingWindow();
+                setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+            }
+        }
+    }
+
+    mafwPlaylistManager->freeListOfPlaylists(playlists);
 #endif
 }
 
