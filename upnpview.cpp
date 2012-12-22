@@ -319,14 +319,15 @@ int UpnpView::appendAllToPlaylist(QString type, bool filter)
     gchar** itemAddBuffer = new gchar*[visibleCount+1];
 
     int sameTypeCount = 0;
-    if (filter)
+    if (filter) {
         for (int i = 0; i < visibleCount; i++)
             if (objectProxyModel->index(i,0).data(UserRoleMIME).toString().startsWith(type))
                 itemAddBuffer[sameTypeCount++] = qstrdup(objectProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
-    else
+    } else {
         for (int i = 0; i < visibleCount; i++)
             if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith(type))
                 itemAddBuffer[sameTypeCount++] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    }
 
     itemAddBuffer[sameTypeCount] = NULL;
 
