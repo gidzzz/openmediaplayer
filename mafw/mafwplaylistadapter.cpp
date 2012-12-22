@@ -23,7 +23,6 @@ MafwPlaylistAdapter::MafwPlaylistAdapter(QObject *parent, MafwRendererAdapter *m
     mafwrenderer(mra)
 {
     mafw_playlist = NULL;
-    mafw_playlist_manager = new MafwPlaylistManagerAdapter(this);
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
     connect(mafwrenderer, SIGNAL(playlistChanged(GObject*)), this, SLOT(onPlaylistChanged(GObject*)));
@@ -267,7 +266,7 @@ QString MafwPlaylistAdapter::playlistName()
 void MafwPlaylistAdapter::assignAudioPlaylist()
 {
     disconnectPlaylistSignals();
-    mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpAudioPlaylist"));
+    mafw_playlist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpAudioPlaylist"));
     connectPlaylistSignals();
     mafwrenderer->assignPlaylist(mafw_playlist);
 }
@@ -275,7 +274,7 @@ void MafwPlaylistAdapter::assignAudioPlaylist()
 void MafwPlaylistAdapter::assignVideoPlaylist()
 {
     disconnectPlaylistSignals();
-    mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpVideoPlaylist"));
+    mafw_playlist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpVideoPlaylist"));
     connectPlaylistSignals();
     mafwrenderer->assignPlaylist(mafw_playlist);
 }
@@ -283,13 +282,14 @@ void MafwPlaylistAdapter::assignVideoPlaylist()
 void MafwPlaylistAdapter::assignRadioPlaylist()
 {
     disconnectPlaylistSignals();
-    mafw_playlist = MAFW_PLAYLIST(mafw_playlist_manager->createPlaylist("FmpRadioPlaylist"));
+    mafw_playlist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpRadioPlaylist"));
     connectPlaylistSignals();
     mafwrenderer->assignPlaylist(mafw_playlist);
 }
 
 void MafwPlaylistAdapter::duplicatePlaylist(QString newName)
 {
+    MafwPlaylistManagerAdapter *mafw_playlist_manager = MafwPlaylistManagerAdapter::get();
     mafw_playlist_manager->duplicatePlaylist(newName, mafw_playlist_manager->createPlaylist(this->playlistName()));
 }
 

@@ -14,7 +14,8 @@ PlaylistPicker::PlaylistPicker(QWidget *parent) :
     connect(ui->playlistList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
 
 #ifdef MAFW
-    mafwPlaylistManager = new MafwPlaylistManagerAdapter(this);
+    MafwPlaylistManagerAdapter *mafwPlaylistManager = MafwPlaylistManagerAdapter::get();
+
     GArray* playlists = mafwPlaylistManager->listPlaylists();
 
     for (uint i = 0; i < playlists->len; i++) {
@@ -27,7 +28,7 @@ PlaylistPicker::PlaylistPicker(QWidget *parent) :
             (new QListWidgetItem(ui->playlistList))->setText(playlistName);
     }
 
-    mafw_playlist_manager_free_list_of_playlists(playlists);
+    mafwPlaylistManager->freeListOfPlaylists(playlists);
 #endif
 
     Rotator *rotator = Rotator::acquire();
@@ -82,6 +83,8 @@ void PlaylistPicker::onCreatePlaylistAccepted()
         }
     }
 
+    MafwPlaylistManagerAdapter *mafwPlaylistManager = MafwPlaylistManagerAdapter::get();
+
     if (playlistExists) {
         if (ConfirmDialog(ConfirmDialog::OverwritePlaylist, this).exec() == QMessageBox::Yes) {
             createPlaylistDialog->close();
@@ -112,7 +115,7 @@ void PlaylistPicker::orientationChanged(int w, int h)
 void PlaylistPicker::onItemActivated(QListWidgetItem *item)
 {
     if (ui->playlistList->row(item) > 0) {
-        playlist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(item->text()));
+        playlist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(item->text()));
         this->playlistName = item->text();
         this->accept();
     }

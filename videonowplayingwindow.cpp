@@ -256,7 +256,7 @@ void VideoNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
     && !mafw_metadata_first(metadata, MAFW_METADATA_KEY_VIDEO_CODEC)) {
         qDebug() << "Video codec info unavailable, switching to radio mode";
 
-        MafwPlaylistManagerAdapter *playlistManager = mafwFactory->getPlaylistAdapter()->mafw_playlist_manager;
+        MafwPlaylistManagerAdapter *playlistManager = MafwPlaylistManagerAdapter::get();
         playlistManager->deletePlaylist("FmpRadioPlaylist");
         mafw_playlist_set_name(MAFW_PLAYLIST(playlistManager->createPlaylist("FmpVideoPlaylist")), "FmpRadioPlaylist");
 

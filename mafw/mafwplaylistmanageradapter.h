@@ -8,7 +8,7 @@ class MafwPlaylistManagerAdapter : public QObject
 {
     Q_OBJECT
 public:
-    explicit MafwPlaylistManagerAdapter(QObject *parent = 0);
+    static MafwPlaylistManagerAdapter* get();
 
     void importPlaylist(QString playlistUri);
     void duplicatePlaylist(QString newPlaylistName, MafwProxyPlaylist *playlist);
@@ -26,10 +26,10 @@ signals:
 public slots:
 
 private:
+    explicit MafwPlaylistManagerAdapter();
+    static MafwPlaylistManagerAdapter* instance;
+
     MafwPlaylistManager* playlist_manager;
-
-
-
 };
 
 #endif // MAFWPLAYLISTMANAGERADAPTER_H

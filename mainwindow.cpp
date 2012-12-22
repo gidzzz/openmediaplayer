@@ -61,7 +61,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwrenderer = mafwFactory->getRenderer();
     mafwTrackerSource = mafwFactory->getTrackerSource();
     mafwRadioSource = mafwFactory->getRadioSource();
-    mafwPlaylistManager = new MafwPlaylistManagerAdapter(this);
     playlist = mafwFactory->getPlaylistAdapter();
     if (mafwrenderer->isRendererReady())
         mafwrenderer->getStatus();
@@ -552,6 +551,8 @@ void MainWindow::play_automatic_playlist(const QString &playlistName, bool shuff
 void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
 {
 #ifdef MAFW
+    MafwPlaylistManagerAdapter *mafwPlaylistManager = MafwPlaylistManagerAdapter::get();
+
     GArray* playlists = mafwPlaylistManager->listPlaylists();
 
     if (playlists->len != 0) {

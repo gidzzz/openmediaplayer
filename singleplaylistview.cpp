@@ -634,7 +634,7 @@ void SinglePlaylistView::onItemDoubleClicked()
 void SinglePlaylistView::saveCurrentPlaylist()
 {
 #ifdef MAFW
-    MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(playlist->mafw_playlist_manager->createPlaylist(this->windowTitle()));
+    MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(this->windowTitle()));
     playlist->clear(targetPlaylist);
 
     int songCount = songModel->rowCount();
@@ -659,7 +659,7 @@ void SinglePlaylistView::deletePlaylist()
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::DeletePlaylist, this).exec() == QMessageBox::Yes) {
         if (currentObjectId.isNull()) // Saved playlist
-            playlist->mafw_playlist_manager->deletePlaylist(this->windowTitle());
+            MafwPlaylistManagerAdapter::get()->deletePlaylist(this->windowTitle());
         else // Imported playlist
             mafwTrackerSource->destroyObject(currentObjectId.toUtf8());
         this->close();

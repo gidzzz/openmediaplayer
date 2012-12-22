@@ -18,8 +18,14 @@
 
 #include "mafwplaylistmanageradapter.h"
 
-MafwPlaylistManagerAdapter::MafwPlaylistManagerAdapter(QObject *parent) :
-    QObject(parent)
+MafwPlaylistManagerAdapter* MafwPlaylistManagerAdapter::instance = NULL;
+
+MafwPlaylistManagerAdapter* MafwPlaylistManagerAdapter::get()
+{
+    return instance ? instance : instance = new MafwPlaylistManagerAdapter();
+}
+
+MafwPlaylistManagerAdapter::MafwPlaylistManagerAdapter()
 {
     this->playlist_manager = mafw_playlist_manager_get();
 }

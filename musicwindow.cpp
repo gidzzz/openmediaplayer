@@ -34,9 +34,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
 #ifdef Q_WS_MAEMO_5
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
-#ifdef MAFW
-    mafwPlaylistManager = new MafwPlaylistManagerAdapter(this);
-#endif
     ui->centralwidget->setLayout(ui->songsLayout);
     SongListItemDelegate *songDelegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
@@ -188,7 +185,7 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
         playlistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
         if (index.data(UserRoleObjectID).isNull())
-            playlistView->browseSavedPlaylist(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString())));
+            playlistView->browseSavedPlaylist(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(index.data(Qt::DisplayRole).toString())));
         else
             playlistView->browseImportedPlaylist(index.data(UserRoleObjectID).toString());
 
@@ -300,17 +297,18 @@ void MusicWindow::onRenamePlaylistAccepted()
         renamePlaylistDialog->close();
     } else {
 #ifdef MAFW
+        MafwPlaylistManagerAdapter *mafwPlaylistManager = MafwPlaylistManagerAdapter::get();
         GArray* playlists = mafwPlaylistManager->listPlaylists();
         for (uint i = 0; i < playlists->len; i++) {
             if (QString::fromUtf8(g_array_index(playlists, MafwPlaylistManagerItem, i).name) == newName) {
 #ifdef Q_WS_MAEMO_5
                 QMaemo5InformationBox::information(this, "Playlist with the same name exists");
 #endif
-                mafw_playlist_manager_free_list_of_playlists(playlists);
+                mafwPlaylistManager->freeListOfPlaylists(playlists);
                 return;
             }
         }
-        mafw_playlist_manager_free_list_of_playlists(playlists);
+        mafwPlaylistManager->freeListOfPlaylists(playlists);
 
         renamePlaylistDialog->close();
         mafw_playlist_set_name(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(oldName)), newName.toUtf8());
@@ -323,7 +321,7 @@ void MusicWindow::onDeletePlaylistClicked()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
-        mafwPlaylistManager->deletePlaylist(ui->playlistList->currentIndex().data(Qt::DisplayRole).toString());
+        MafwPlaylistManagerAdapter::get()->deletePlaylist(ui->playlistList->currentIndex().data(Qt::DisplayRole).toString());
         playlistProxyModel->removeRow(ui->playlistList->currentIndex().row());
         --savedPlaylistCount;
     }
@@ -838,6 +836,7 @@ void MusicWindow::listSavedPlaylists()
 
     playlistModel->removeRows(5, savedPlaylistCount);
 
+    MafwPlaylistManagerAdapter *mafwPlaylistManager = MafwPlaylistManagerAdapter::get();
     GArray* playlists = mafwPlaylistManager->listPlaylists();
     savedPlaylistCount = 0;
 
@@ -1252,7 +1251,7 @@ void MusicWindow::onAddToNowPlaying()
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
             QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
-            MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(index.data(Qt::DisplayRole).toString()));
+            MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(index.data(Qt::DisplayRole).toString()));
             int size = playlist->getSizeOf(mafwplaylist);
             gchar** items = mafw_playlist_get_items(mafwplaylist, 0, size-1, NULL);
             playlist->appendItems((const gchar**)items);

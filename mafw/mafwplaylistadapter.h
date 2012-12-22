@@ -39,7 +39,6 @@ public:
     gpointer getAllItems();
     QString playlistName();
     MafwPlaylist *mafw_playlist;
-    MafwPlaylistManagerAdapter *mafw_playlist_manager;
 
     static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
     static void get_items_free_cbarg(gpointer user_data);

@@ -101,7 +101,6 @@ private:
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
-    MafwPlaylistManagerAdapter* mafwPlaylistManager;
     MafwPlaylistAdapter* playlist;
     uint browsePlaylistId;
     uint playlistToken;

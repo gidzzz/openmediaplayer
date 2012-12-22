@@ -39,9 +39,6 @@ private:
 
     QDialog *createPlaylistDialog;
     QLineEdit *playlistNameEdit;
-#ifdef MAFW
-    MafwPlaylistManagerAdapter *mafwPlaylistManager;
-#endif
 
 private slots:
     void onCreatePlaylist();
