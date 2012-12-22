@@ -34,7 +34,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
 #ifdef Q_WS_MAEMO_5
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
-    ui->centralwidget->setLayout(ui->songsLayout);
     SongListItemDelegate *songDelegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ThumbnailItemDelegate *albumDelegate = new ThumbnailItemDelegate(ui->albumList);

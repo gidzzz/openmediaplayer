@@ -29,7 +29,6 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
 #endif
 {
     ui->setupUi(this);
-    ui->centralwidget->setLayout(ui->verticalLayout);
 
     setAttribute(Qt::WA_DeleteOnClose);
 

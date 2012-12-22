@@ -29,7 +29,6 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 #endif
 {
     ui->setupUi(this);
-    ui->centralwidget->setLayout(ui->verticalLayout);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
     setAttribute(Qt::WA_DeleteOnClose);

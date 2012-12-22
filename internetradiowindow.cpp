@@ -33,7 +33,6 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
 #ifdef Q_WS_MAEMO_5
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
-    ui->centralwidget->setLayout(ui->verticalLayout);
     ui->stationList->setItemDelegate(new SongListItemDelegate(ui->stationList));
 
 #ifdef MAFW

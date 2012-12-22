@@ -32,7 +32,6 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
 #ifdef Q_WS_MAEMO_5
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
-    ui->centralwidget->setLayout(ui->verticalLayout);
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
 #endif

@@ -29,7 +29,6 @@ SingleAlbumView::SingleAlbumView(QWidget *parent, MafwAdapterFactory *factory) :
 #endif
 {
     ui->setupUi(this);
-    ui->centralwidget->setLayout(ui->verticalLayout);
 
     setAttribute(Qt::WA_DeleteOnClose);
 

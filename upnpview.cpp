@@ -8,7 +8,6 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     playlist(factory->getPlaylistAdapter())
 {
     ui->setupUi(this);
-    ui->centralwidget->setLayout(ui->verticalLayout);
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
     this->setAttribute(Qt::WA_DeleteOnClose);
