@@ -165,16 +165,29 @@ void VideosWindow::onVideoSelected(QModelIndex index)
     playlist->assignVideoPlaylist();
     playlist->clear();
 
-    int selectedRow = videoProxyModel->mapToSource(index).row();
+    int selectedRow;
     int indexOffset = 0;
     int videoCount = 0;
     gchar** videoAddBuffer = new gchar*[videoModel->rowCount()+1];
 
-    for (int i = 0; i < videoModel->rowCount(); i++)
-        if (!videoModel->item(i)->data(UserRoleHeader).toBool())
-            videoAddBuffer[videoCount++] = qstrdup(videoModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
-        else if (i < selectedRow)
-            ++indexOffset;
+    bool filter = QSettings().value("main/playlistFilter", false).toBool();
+
+    if (filter) {
+        selectedRow = index.row();
+        for (int i = 0; i < videoProxyModel->rowCount(); i++)
+            if (!videoProxyModel->index(i,0).data(UserRoleHeader).toBool())
+                videoAddBuffer[videoCount++] = qstrdup(videoProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
+            else if (i < selectedRow)
+                ++indexOffset;
+    } else {
+        selectedRow = videoProxyModel->mapToSource(index).row();
+        for (int i = 0; i < videoModel->rowCount(); i++)
+            if (!videoModel->item(i)->data(UserRoleHeader).toBool())
+                videoAddBuffer[videoCount++] = qstrdup(videoModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
+            else if (i < selectedRow)
+                ++indexOffset;
+    }
+
     videoAddBuffer[videoCount] = NULL;
 
     playlist->appendItems((const gchar**)videoAddBuffer);
