@@ -39,7 +39,7 @@ private slots:
     void onAddOneToNowPlaying();
     void onAddOneToPlaylist();
     void addAllToNowPlaying();
-    int appendAllToPlaylist(QString type);
+    int appendAllToPlaylist(QString type, bool filter);
     void onNowPlayingWindowHidden();
     void onChildClosed();
 

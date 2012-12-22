@@ -99,7 +99,7 @@ void SingleAlbumView::listSongs()
     songModel->appendRow(item);
 
 #ifdef Q_WS_MAEMO_5
-    setAttribute(Qt::WA_Maemo5ShowProgressIndicator);
+    setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),

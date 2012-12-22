@@ -219,13 +219,22 @@ void UpnpView::onItemActivated(QModelIndex index)
         playlist->clear();
         playlist->setShuffled(false);
 
-        appendAllToPlaylist("audio");
+        bool filter = QSettings().value("main/playlistFilter", false).toBool();
 
-        int selectedRow = objectProxyModel->mapToSource(index).row();
+        appendAllToPlaylist("audio", filter);
+
         int sameTypeIndex = 0;
-        for (int i = 0; i < selectedRow; i++)
-            if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
-               ++sameTypeIndex;
+        if (filter) {
+            int selectedRow = index.row();
+            for (int i = 0; i < selectedRow; i++)
+                if (objectProxyModel->index(i,0).data(UserRoleMIME).toString().startsWith("audio"))
+                    ++sameTypeIndex;
+        } else {
+            int selectedRow = objectProxyModel->mapToSource(index).row();
+            for (int i = 0; i < selectedRow; i++)
+                if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
+                    ++sameTypeIndex;
+        }
 
         MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
         mafwrenderer->gotoIndex(sameTypeIndex);
@@ -241,13 +250,23 @@ void UpnpView::onItemActivated(QModelIndex index)
         this->setEnabled(false);
         playlist->assignVideoPlaylist();
         playlist->clear();
-        appendAllToPlaylist("video");
 
-        int selectedRow = objectProxyModel->mapToSource(index).row();
+        bool filter = QSettings().value("main/playlistFilter", false).toBool();
+
+        appendAllToPlaylist("video", filter);
+
         int sameTypeIndex = 0;
-        for (int i = 0; i < selectedRow; i++)
-            if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith("video"))
-               ++sameTypeIndex;
+        if (filter) {
+            int selectedRow = index.row();
+            for (int i = 0; i < selectedRow; i++)
+                if (objectProxyModel->index(i,0).data(UserRoleMIME).toString().startsWith("video"))
+                    ++sameTypeIndex;
+        } else {
+            int selectedRow = objectProxyModel->mapToSource(index).row();
+            for (int i = 0; i < selectedRow; i++)
+                if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith("video"))
+                    ++sameTypeIndex;
+        }
 
         VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
         window->showFullScreen();
@@ -291,18 +310,23 @@ void UpnpView::addAllToNowPlaying()
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    notifyOnAddedToNowPlaying(appendAllToPlaylist("audio"));
+    notifyOnAddedToNowPlaying(appendAllToPlaylist("audio", true));
 }
 
-int UpnpView::appendAllToPlaylist(QString type)
+int UpnpView::appendAllToPlaylist(QString type, bool filter)
 {
-    int itemCount = objectModel->rowCount();
-    gchar** itemAddBuffer = new gchar*[itemCount+1];
+    int visibleCount = filter ? objectProxyModel->rowCount() : objectModel->rowCount();
+    gchar** itemAddBuffer = new gchar*[visibleCount+1];
 
     int sameTypeCount = 0;
-    for (int i = 0; i < itemCount; i++)
-        if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith(type))
-            itemAddBuffer[sameTypeCount++] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
+    if (filter)
+        for (int i = 0; i < visibleCount; i++)
+            if (objectProxyModel->index(i,0).data(UserRoleMIME).toString().startsWith(type))
+                itemAddBuffer[sameTypeCount++] = qstrdup(objectProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
+    else
+        for (int i = 0; i < visibleCount; i++)
+            if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith(type))
+                itemAddBuffer[sameTypeCount++] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
     itemAddBuffer[sameTypeCount] = NULL;
 
