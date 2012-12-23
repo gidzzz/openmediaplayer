@@ -241,12 +241,7 @@ void NowPlayingWindow::setSongNumber(int currentSong, int numberOfSongs)
 
 void NowPlayingWindow::updatePlaylistTimeLabel()
 {
-    QString total;
-    if (playlistTime > 0)
-        total = time_mmss(playlistTime);
-    else
-        total = "--:--";
-    ui->playlistTimeLabel->setText(total + " " + tr("total"));
+    ui->playlistTimeLabel->setText(mmss_len(playlistTime) + " " + tr("total"));
 }
 
 void NowPlayingWindow::toggleVolumeSlider()
@@ -316,7 +311,7 @@ void NowPlayingWindow::onMetadataChanged(QString name, QVariant value)
 
     else if (name == MAFW_METADATA_KEY_DURATION) {
         songDuration = value.toInt();
-        ui->trackLengthLabel->setText(time_mmss(songDuration));
+        ui->trackLengthLabel->setText(mmss_len(songDuration));
         ui->songProgress->setRange(0, songDuration);
     }
 
@@ -370,7 +365,7 @@ void NowPlayingWindow::onStateChanged(int state)
     if (state == Transitioning || state == Stopped) {
         ui->songProgress->setEnabled(false);
         ui->songProgress->setValue(0);
-        ui->currentPositionLabel->setText("00:00");
+        ui->currentPositionLabel->setText(mmss_pos(0));
     }
 }
 #endif
@@ -520,8 +515,8 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
     if (object == ui->currentPositionLabel && event->type() == QEvent::MouseButtonPress) {
         reverseTime = !reverseTime;
         QSettings().setValue("main/reverseTime", reverseTime);
-        ui->currentPositionLabel->setText(time_mmss(reverseTime ? ui->songProgress->value()-songDuration :
-                                                                  ui->songProgress->value()));
+        ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->songProgress->value()-songDuration :
+                                                                 ui->songProgress->value()));
     }
 
     else if (object == ui->songPlaylist->viewport()) {
@@ -663,7 +658,7 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     album = fm.elidedText(album, Qt::ElideRight, 420);
     ui->albumNameLabel->setText(album);
 
-    ui->trackLengthLabel->setText(time_mmss(songDuration));
+    ui->trackLengthLabel->setText(mmss_len(songDuration));
     ui->songProgress->setRange(0, songDuration);
 
     updateQmlViewMetadata();
@@ -716,7 +711,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *m
 
         if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION) )) {
             songDuration = g_value_get_int (v);
-            ui->trackLengthLabel->setText(time_mmss(songDuration));
+            ui->trackLengthLabel->setText(mmss_len(songDuration));
             ui->songProgress->setRange(0, songDuration);
             if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank)
                 item->setData(UserRoleSongDuration, songDuration);
@@ -953,14 +948,14 @@ void NowPlayingWindow::onPositionSliderReleased()
 {
 #ifdef MAFW
     mafwrenderer->setPosition(SeekAbsolute, ui->songProgress->value());
-    ui->currentPositionLabel->setText(time_mmss(reverseTime ? ui->songProgress->value()-songDuration :
-                                                              ui->songProgress->value()));
+    ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->songProgress->value()-songDuration :
+                                                             ui->songProgress->value()));
 #endif
 }
 
 void NowPlayingWindow::onPositionSliderMoved(int position)
 {
-    ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-songDuration : position));
+    ui->currentPositionLabel->setText(mmss_pos(reverseTime ? position-songDuration : position));
 #ifdef MAFW
     if (!lazySliders)
         mafwrenderer->setPosition(SeekAbsolute, position);
@@ -1013,7 +1008,7 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
 {
     currentSongPosition = position;
     if (!ui->songProgress->isSliderDown())
-        ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-songDuration : position));
+        ui->currentPositionLabel->setText(mmss_pos(reverseTime ? position-songDuration : position));
 
     if (this->songDuration != 0 && this->songDuration != -1 && qmlView == 0) {
 #ifdef DEBUG
@@ -1185,9 +1180,9 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     elided = fm.elidedText(item->data(UserRoleSongAlbum).toString(), Qt::ElideRight, 420);
     ui->albumNameLabel->setText(elided);
 
-    ui->currentPositionLabel->setText("00:00");
+    ui->currentPositionLabel->setText(mmss_pos(0));
     this->songDuration = item->data(UserRoleSongDuration).toInt();
-    ui->trackLengthLabel->setText(time_mmss(songDuration));
+    ui->trackLengthLabel->setText(mmss_len(songDuration));
 
     mafwrenderer->gotoIndex(ui->songPlaylist->row(item));
     if (mafwState == Stopped || mafwState == Paused)

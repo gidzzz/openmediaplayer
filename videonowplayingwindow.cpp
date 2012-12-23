@@ -126,8 +126,8 @@ bool VideoNowPlayingWindow::eventFilter(QObject*, QEvent *event)
     if (event->type() == QEvent::MouseButtonPress) {
         reverseTime = !reverseTime;
         QSettings().setValue("main/reverseTime", reverseTime);
-        ui->currentPositionLabel->setText(time_mmss(reverseTime ? ui->progressBar->value()-videoLength :
-                                                                  ui->progressBar->value()));
+        ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->progressBar->value()-videoLength :
+                                                                 ui->progressBar->value()));
         return true;
     }
 
@@ -236,7 +236,7 @@ void VideoNowPlayingWindow::onMetadataChanged(QString name, QVariant value)
     // duration sometimes is misreported for UPnP, so don't set it from here unnecessarily
     if (videoLength == Duration::Unknown && name == "duration") {
         videoLength = value.toInt();
-        ui->videoLengthLabel->setText(time_mmss(videoLength));
+        ui->videoLengthLabel->setText(mmss_len(videoLength));
         ui->progressBar->setRange(0, videoLength);
     }
 }
@@ -471,7 +471,7 @@ void VideoNowPlayingWindow::onStateChanged(int state)
 
         ui->progressBar->setEnabled(false);
         ui->progressBar->setValue(0);
-        ui->currentPositionLabel->setText("00:00");
+        ui->currentPositionLabel->setText(mmss_pos(0));
 
         if (ui->bufferBar->maximum() == 0
         && !currentObjectId.startsWith("localtagfs::")
@@ -593,7 +593,7 @@ void VideoNowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTab
         if (pausedPosition != -1)
             qDebug() << "paused position:" << pausedPosition;
 
-        ui->videoLengthLabel->setText(time_mmss(videoLength));
+        ui->videoLengthLabel->setText(mmss_len(videoLength));
         ui->progressBar->setRange(0, videoLength);
 
     }
@@ -687,14 +687,14 @@ void VideoNowPlayingWindow::onSliderReleased()
 {
 #ifdef MAFW
     mafwrenderer->setPosition(SeekAbsolute, ui->progressBar->value());
-    ui->currentPositionLabel->setText(time_mmss(reverseTime ? ui->progressBar->value()-videoLength :
-                                                              ui->progressBar->value()));
+    ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->progressBar->value()-videoLength :
+                                                             ui->progressBar->value()));
 #endif
 }
 
 void VideoNowPlayingWindow::onSliderMoved(int position)
 {
-    ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-videoLength : position));
+    ui->currentPositionLabel->setText(mmss_pos(reverseTime ? position-videoLength : position));
 #ifdef MAFW
     if (!lazySliders)
         mafwrenderer->setPosition(SeekAbsolute, position);
@@ -731,7 +731,7 @@ void VideoNowPlayingWindow::onPositionChanged(int position, QString)
     if (this->mafwState == Paused)
          this->pausedPosition = position;
     if (!ui->progressBar->isSliderDown() && ui->progressBar->isVisible()) {
-        ui->currentPositionLabel->setText(time_mmss(reverseTime ? position-videoLength : position));
+        ui->currentPositionLabel->setText(mmss_pos(reverseTime ? position-videoLength : position));
         if (ui->progressBar->isEnabled())
             ui->progressBar->setValue(position);
     }

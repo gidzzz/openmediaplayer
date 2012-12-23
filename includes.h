@@ -1,5 +1,6 @@
 #ifndef INCLUDES_H
 #define INCLUDES_H
+
 #include <Qt>
 #include <QSettings>
 #include <QFileInfo>
@@ -67,14 +68,23 @@ namespace Media {
     };
 }
 
-// handy function to generate "mm:ss" time string
-inline QString time_mmss(int seconds)
+// Handy function to generate "mm:ss" time string, support for negative values
+inline QString mmss_pos(int seconds)
 {
     if (seconds < 0) {
         seconds = -seconds;
         return QString("-%1:%2").arg(seconds/60, 2, 10, QChar('0')).arg(seconds%60, 2, 10, QChar('0'));
-    } else
+    } else {
         return QString("%1:%2").arg(seconds/60, 2, 10, QChar('0')).arg(seconds%60, 2, 10, QChar('0'));
+    }
+}
+
+// Handy function to generate "mm:ss" time string, support for duration codes
+inline QString mmss_len(int seconds)
+{
+    return seconds == Duration::Blank ? QString() :
+           seconds == Duration::Unknown ? "--:--" :
+           QString("%1:%2").arg(seconds/60, 2, 10, QChar('0')).arg(seconds%60, 2, 10, QChar('0'));
 }
 
 #endif // INCLUDES_H

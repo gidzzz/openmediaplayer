@@ -992,7 +992,7 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
     QString text;
     text.append(tr("Retrieving information on the new media files"));
     text.append("\n");
-    text.append(tr("Estimated time remaining:") + " " + (remaining_time < 0 ? "?" : time_mmss(remaining_time)));
+    text.append(tr("Estimated time remaining:") + " " + (remaining_time < 0 ? "?" : mmss_len(remaining_time)));
     text.append("\n");
     text.append(tr("Remaining items:") + " " + (remaining_items < 0 ? "?" : QString::number(remaining_items)));
 

@@ -18,10 +18,7 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     }
 
     else {
-        int duration = index.data(UserRoleSongDuration).toInt();
-        QString songLength = duration == Duration::Blank ? "" :
-                             duration == Duration::Unknown ? "--:--" :
-                                         time_mmss(duration);
+        QString songLength = mmss_len(index.data(UserRoleSongDuration).toInt());
 
         if (option.state & QStyle::State_Selected)
             QStyledItemDelegate::paint(painter, option, QModelIndex());

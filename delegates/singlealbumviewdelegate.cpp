@@ -22,10 +22,7 @@ void SingleAlbumViewDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 {
     QString title = index.data(UserRoleSongTitle).toString();
 
-    int duration = index.data(UserRoleSongDuration).toInt();
-    QString songLength = duration == Duration::Blank ? "" :
-                         duration == Duration::Unknown ? "--:--" :
-                                     time_mmss(duration);
+    QString songLength = mmss_len(index.data(UserRoleSongDuration).toInt());
 
     painter->save();
     QRect r = option.rect;

@@ -63,7 +63,7 @@ void SleeperDialog::keyPressEvent(QKeyEvent *e)
 
 void SleeperDialog::refreshTitle()
 {
-    this->setWindowTitle(tr("Sleep timer") + " " + time_mmss( (timeoutStamp/1000 - QDateTime::currentMSecsSinceEpoch()/1000) ));
+    this->setWindowTitle(tr("Sleep timer") + " " + mmss_pos( (timeoutStamp/1000 - QDateTime::currentMSecsSinceEpoch()/1000) ));
 }
 
 void SleeperDialog::setTimeoutStamp(qint64 timeoutStamp)

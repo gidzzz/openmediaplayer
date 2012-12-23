@@ -80,7 +80,7 @@ Rectangle {
                 x: 271
                 y: 180
                 color: "#ffffff"
-                text: "00:00/00:00"
+                text: "00:00/--:--"
                 font.pointSize: 13
                 anchors.right: slider.right
             }

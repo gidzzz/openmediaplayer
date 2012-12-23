@@ -212,7 +212,7 @@ void RadioNowPlayingWindow::onStateChanged(int state)
         ui->positionSlider->setEnabled(false);
         ui->positionSlider->setValue(0);
         ui->positionSlider->setRange(0, 99);
-        ui->currentPositionLabel->setText("00:00");
+        ui->currentPositionLabel->setText(mmss_pos(0));
 
         if (ui->bufferBar->maximum() == 0) {
             ui->seekWidget->hide();
@@ -298,7 +298,7 @@ void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant val
         this->updateSongLabel();
     }
     else if (name == MAFW_METADATA_KEY_DURATION) {
-        ui->streamLengthLabel->setText(time_mmss(value.toInt()));
+        ui->streamLengthLabel->setText(mmss_len(value.toInt()));
     }
     else if (name == MAFW_METADATA_KEY_RENDERER_ART_URI) {
         setAlbumImage(value.toString());
@@ -325,8 +325,9 @@ void RadioNowPlayingWindow::updateSongLabel()
 
 void RadioNowPlayingWindow::onGetPosition(int position, QString)
 {
-    ui->currentPositionLabel->setText(time_mmss(position));
-    if (ui->streamLengthLabel->text() != "--:--") {
+    ui->currentPositionLabel->setText(mmss_pos(position));
+
+    if (ui->positionSlider->maximum() != 0) {
         if (!ui->positionSlider->isSliderDown())
             ui->positionSlider->setValue(position);
     } else {
@@ -387,13 +388,13 @@ void RadioNowPlayingWindow::onPositionSliderPressed()
 
 void RadioNowPlayingWindow::onPositionSliderReleased()
 {
-    ui->currentPositionLabel->setText(time_mmss(ui->positionSlider->value()));
+    ui->currentPositionLabel->setText(mmss_pos(ui->positionSlider->value()));
     mafwrenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
 }
 
 void RadioNowPlayingWindow::onPositionSliderMoved(int position)
 {
-    ui->currentPositionLabel->setText(time_mmss(position));
+    ui->currentPositionLabel->setText(mmss_pos(position));
     if (!lazySliders)
         mafwrenderer->setPosition(SeekAbsolute, position);
 }
@@ -426,12 +427,8 @@ void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QS
 
         streamIsSeekable(isSeekable);
 
-        if (duration != Duration::Unknown) {
-            ui->streamLengthLabel->setText(time_mmss(duration));
-            ui->positionSlider->setRange(0, duration);
-        } else {
-            ui->streamLengthLabel->setText("--:--");
-        }
+        ui->streamLengthLabel->setText(mmss_len(duration));
+        ui->positionSlider->setRange(0, duration);
     }
 
     if (!error.isEmpty())

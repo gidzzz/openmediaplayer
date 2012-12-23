@@ -124,7 +124,7 @@ void QmlView::setDNDAtom(bool dnd)
 #ifdef MAFW
 void QmlView::onPositionChanged(int position, QString)
 {
-    duration = time_mmss(position) + "/" + time_mmss(songDuration);
+    duration = mmss_pos(position) + "/" + mmss_len(songDuration);
     emit durationTextChanged(duration);
     emit positionChanged(position);
 }
@@ -164,7 +164,7 @@ void QmlView::onStateChanged(int state)
         /*ui->songProgress->setEnabled(false);
         ui->songProgress->setValue(0);
         ui->songProgress->setRange(0, 99);
-        ui->currentPositionLabel->setText("00:00");*/
+        ui->currentPositionLabel->setText(mmss_pos(0));*/
     }
     emit stateIconChanged(playButtonIconString);
 }
@@ -193,7 +193,7 @@ void QmlView::appendPlaylistItem(QListWidgetItem *item)
 {
     emit playlistItemAppended(item->data(UserRoleSongTitle).toString(),
                               QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
-                              time_mmss(item->data(UserRoleSongDuration).toInt()));
+                              mmss_len(item->data(UserRoleSongDuration).toInt()));
 }
 
 void QmlView::insertPlaylistItem(int index, QListWidgetItem *item)
@@ -201,7 +201,7 @@ void QmlView::insertPlaylistItem(int index, QListWidgetItem *item)
     emit playlistItemInserted(index,
                               item->data(UserRoleSongTitle).toString(),
                               QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
-                              time_mmss(item->data(UserRoleSongDuration).toInt()));
+                              mmss_len(item->data(UserRoleSongDuration).toInt()));
 }
 
 void QmlView::setPlaylistItem(int index, QListWidgetItem *item)
@@ -209,7 +209,7 @@ void QmlView::setPlaylistItem(int index, QListWidgetItem *item)
     emit playlistItemSet(index,
                               item->data(UserRoleSongTitle).toString(),
                               QVariant(item->data(UserRoleSongArtist).toString() + " / " + item->data(UserRoleSongAlbum).toString()),
-                              time_mmss(item->data(UserRoleSongDuration).toInt()));
+                              mmss_len(item->data(UserRoleSongDuration).toInt()));
 }
 
 void QmlView::removePlaylistItem(int index)
