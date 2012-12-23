@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QPainter>
 #include <QStyledItemDelegate>
-#include <QStyleOptionViewItem>
 #include <QMaemo5ValueButton>
 #include <QListView>
 #include <QEvent>
@@ -27,6 +26,5 @@ private:
 private slots:
     void onActivated(QModelIndex index);
 };
-
 
 #endif // SHUFFLEBUTTONDELEGATE_H

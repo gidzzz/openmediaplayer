@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QStyledItemDelegate>
 #include <QPainter>
-#include <QApplication>
-#include <QDesktopWidget>
 #include "includes.h"
 
 #ifdef Q_WS_MAEMO_5

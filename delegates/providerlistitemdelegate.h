@@ -9,7 +9,6 @@
 #include <QFont>
 #include <QColor>
 #include <QStyledItemDelegate>
-#include <QStyleOptionViewItem>
 #include <QMaemo5Style>
 #include "includes.h"
 

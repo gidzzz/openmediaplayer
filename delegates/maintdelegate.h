@@ -9,11 +9,6 @@
 #include <QFont>
 #include <QColor>
 #include <QStyledItemDelegate>
-#include <QDesktopServices>
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QTime>
-#include <QStyleOptionViewItem>
 #include "includes.h"
 
 #ifdef Q_WS_MAEMO_5

@@ -9,10 +9,6 @@
 #include <QFont>
 #include <QColor>
 #include <QStyledItemDelegate>
-#include <QDesktopServices>
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QStyleOptionViewItem>
 #include "includes.h"
 
 class SingleAlbumViewDelegate : public QStyledItemDelegate
