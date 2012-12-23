@@ -22,12 +22,13 @@
 
 class MainDelegate : public QStyledItemDelegate
 {
-public:
-        explicit MainDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
-        virtual ~MainDelegate() {}
+    Q_OBJECT
 
-        void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-        QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+public:
+    explicit MainDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) { }
+
+    void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif // MAINDELEGATE_H

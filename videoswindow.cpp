@@ -211,7 +211,7 @@ void VideosWindow::onSortingChanged(QAction *action)
         ui->videoList->itemDelegate()->deleteLater();
         ui->videoList->setItemDelegate(new ThumbnailItemDelegate(ui->videoList));
         ui->videoList->setWrapping(true);
-        ui->videoList->setGridSize(QSize(155,215));
+        ui->videoList->setGridSize(QSize(155, gridHeight));
         ui->videoList->setFlow(QListView::LeftToRight);
 
     } else if (action == sortByCategory) {
@@ -234,7 +234,7 @@ void VideosWindow::onSortingChanged(QAction *action)
 
 void VideosWindow::selectView()
 {
-    if (QSettings().value("Videos/Sortby").toString() == "category") {
+    if (QSettings().value("Videos/Sortby", "date").toString() == "category") {
         sortByCategory->setChecked(true);
         onSortingChanged(sortByCategory);
     } else {
@@ -502,6 +502,8 @@ void VideosWindow::onContainerChanged(QString objectId)
 
 void VideosWindow::orientationChanged(int w, int h)
 {
+    ui->videoList->setGridSize(QSize(155, gridHeight = w > h ? 212 : 186));
+
     ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
 }

@@ -15,9 +15,9 @@
 class MediaWithIconDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
+
 public:
-    explicit MediaWithIconDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
-    virtual ~MediaWithIconDelegate() {}
+    explicit MediaWithIconDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) { }
 
     void paint (QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;

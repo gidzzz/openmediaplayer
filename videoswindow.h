@@ -39,6 +39,7 @@ private:
     QSortFilterProxyModel *videoProxyModel;
     QList<QStandardItem*> recordingsBufferList;
     QList<QStandardItem*> filmsBufferList;
+    int gridHeight;
 
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);

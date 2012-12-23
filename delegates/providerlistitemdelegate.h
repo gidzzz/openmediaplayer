@@ -15,9 +15,10 @@
 
 class ProviderListItemDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
+
 public:
-    explicit ProviderListItemDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) {}
-    virtual ~ProviderListItemDelegate() {}
+    explicit ProviderListItemDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) { }
 
     void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;

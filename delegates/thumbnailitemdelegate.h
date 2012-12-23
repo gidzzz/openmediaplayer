@@ -21,12 +21,13 @@
 
 class ThumbnailItemDelegate : public QStyledItemDelegate
 {
-public:
-        explicit ThumbnailItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
-        virtual ~ThumbnailItemDelegate() {}
+    Q_OBJECT
 
-        void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-        QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+public:
+    explicit ThumbnailItemDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) { }
+
+    void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif // THUMBNAILITEMDELEGATE_H

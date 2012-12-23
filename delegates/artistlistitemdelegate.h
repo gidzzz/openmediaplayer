@@ -15,9 +15,9 @@
 class ArtistListItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
+
 public:
-    explicit ArtistListItemDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
-    virtual ~ArtistListItemDelegate() {}
+    explicit ArtistListItemDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) { }
 
     void paint (QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;

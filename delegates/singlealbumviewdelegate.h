@@ -17,12 +17,13 @@
 
 class SingleAlbumViewDelegate : public QStyledItemDelegate
 {
-public:
-        explicit SingleAlbumViewDelegate(QObject *parent=0) : QStyledItemDelegate(parent) {}
-        virtual ~SingleAlbumViewDelegate() {}
+    Q_OBJECT
 
-        void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-        QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+public:
+    explicit SingleAlbumViewDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) { }
+
+    void paint (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif // SINGLEALBUMVIEWDELEGATE_H

@@ -416,6 +416,8 @@ void MusicWindow::onSearchTextChanged()
 
 void MusicWindow::orientationChanged(int w, int h)
 {
+    ui->albumList->setGridSize(QSize(155, w > h ? 212 : 186));
+
     ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
 }
