@@ -69,7 +69,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
-    ui->albumNameLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+    ui->albumLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
@@ -89,11 +89,11 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     permanentDelete = QSettings().value("main/permanentDelete").toBool();
     reverseTime = QSettings().value("main/reverseTime").toBool();
 
-    ui->songPlaylist->setDragDropMode(QAbstractItemView::InternalMove);
-    ui->songPlaylist->viewport()->setAcceptDrops(true);
-    ui->songPlaylist->setAutoScrollMargin(70);
+    ui->songList->setDragDropMode(QAbstractItemView::InternalMove);
+    ui->songList->viewport()->setAcceptDrops(true);
+    ui->songList->setAutoScrollMargin(70);
     QApplication::setStartDragDistance(20);
-    ui->songPlaylist->setDragEnabled(false);
+    ui->songList->setDragEnabled(false);
     dragInProgress = false;
 
     clickedItem = NULL;
@@ -105,11 +105,9 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     keyTimer->setInterval(5000);
     keyTimer->setSingleShot(true);
 
-    ui->songPlaylist->setItemDelegate(new PlayListDelegate(ui->songPlaylist));
+    ui->songList->setItemDelegate(new PlayListDelegate(ui->songList));
 
     this->setButtonIcons();
-
-    QMainWindow::setCentralWidget(ui->verticalWidget);
 
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
@@ -127,19 +125,19 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
     this->connectSignals();
 
-    ui->songPlaylist->viewport()->installEventFilter(this);
+    ui->songList->viewport()->installEventFilter(this);
     ui->currentPositionLabel->installEventFilter(this);
 
     ui->shuffleButton->setFixedSize(ui->shuffleButton->sizeHint());
     ui->repeatButton->setFixedSize(ui->repeatButton->sizeHint());
     ui->volumeButton->setFixedSize(ui->volumeButton->sizeHint());
 
-    ui->toolBarWidget->setFixedHeight(73);
-    ui->songPlaylist->setFixedHeight(351);
+    ui->toolbarWidget->setFixedHeight(73);
+    ui->songList->setFixedHeight(351);
     ui->view_large->setFixedHeight(360);
     ui->view_small->setFixedHeight(299);
     ui->view_small->setFixedWidth(470);
-    ui->lyrics->setFixedHeight(351);
+    ui->lyricsArea->setFixedHeight(351);
 
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
@@ -154,7 +152,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 #ifdef MAFW
     playlistQM = new PlaylistQueryManager(this, playlist);
     connect(playlistQM, SIGNAL(onGetItems(QString, GHashTable*, guint)), this, SLOT(onGetPlaylistItems(QString, GHashTable*, guint)));
-    connect(ui->songPlaylist->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
+    connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
 
     if (mafwrenderer->isRendererReady()) {
         mafwrenderer->getCurrentMetadata();
@@ -202,7 +200,7 @@ void NowPlayingWindow::setAlbumImage(QString image)
         else
             dirArtPath.append("/folder.jpg");
 
-        albumArtPath = QFileInfo(dirArtPath).exists() ? MediaArt::setAlbumImage(ui->albumNameLabel->text(), dirArtPath) : defaultAlbumImage;
+        albumArtPath = QFileInfo(dirArtPath).exists() ? MediaArt::setAlbumImage(ui->albumLabel->text(), dirArtPath) : defaultAlbumImage;
     } else {
         albumArtPath = QFileInfo(image).exists() ? image : defaultAlbumImage;
     }
@@ -246,12 +244,12 @@ void NowPlayingWindow::updatePlaylistTimeLabel()
 
 void NowPlayingWindow::toggleVolumeSlider()
 {
-    if (ui->volSliderWidget->isHidden()) {
+    if (ui->volumeSlider->isHidden()) {
         ui->buttonsWidget->hide();
-        ui->volSliderWidget->show();
+        ui->volumeSlider->show();
 
     } else {
-        ui->volSliderWidget->hide();
+        ui->volumeSlider->hide();
         ui->buttonsWidget->show();
 
         if (volumeTimer->isActive())
@@ -305,14 +303,14 @@ void NowPlayingWindow::onMetadataChanged(QString name, QVariant value)
     }
 
     else if (name == MAFW_METADATA_KEY_ALBUM) {
-        ui->albumNameLabel->setWhatsThis(value.toString());
-        ui->albumNameLabel->setText(elided);
+        ui->albumLabel->setWhatsThis(value.toString());
+        ui->albumLabel->setText(elided);
     }
 
     else if (name == MAFW_METADATA_KEY_DURATION) {
         songDuration = value.toInt();
         ui->trackLengthLabel->setText(mmss_len(songDuration));
-        ui->songProgress->setRange(0, songDuration);
+        ui->positionSlider->setRange(0, songDuration);
     }
 
     else if (name == MAFW_METADATA_KEY_URI) {
@@ -346,7 +344,7 @@ void NowPlayingWindow::onStateChanged(int state)
             positionTimer->stop();
     }
     else if (state == Playing) {
-        ui->songProgress->setEnabled(isMediaSeekable);
+        ui->positionSlider->setEnabled(isMediaSeekable);
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
@@ -363,8 +361,8 @@ void NowPlayingWindow::onStateChanged(int state)
     }
 
     if (state == Transitioning || state == Stopped) {
-        ui->songProgress->setEnabled(false);
-        ui->songProgress->setValue(0);
+        ui->positionSlider->setEnabled(false);
+        ui->positionSlider->setValue(0);
         ui->currentPositionLabel->setText(mmss_pos(0));
     }
 }
@@ -409,7 +407,7 @@ void NowPlayingWindow::connectSignals()
     connect(ui->view_large, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
     connect(ui->view_small, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
     connect(ui->lyricsText,SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onLyricsContextMenuRequested(QPoint)));
-    connect(ui->songPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
     connect(ui->repeatButton, SIGNAL(clicked(bool)), this, SLOT(onRepeatButtonToggled(bool)));
     connect(ui->shuffleButton, SIGNAL(clicked(bool)), this, SLOT(onShuffleButtonToggled(bool)));
@@ -419,14 +417,14 @@ void NowPlayingWindow::connectSignals()
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
 
-    connect(ui->songProgress, SIGNAL(sliderPressed()), this, SLOT(onPositionSliderPressed()));
-    connect(ui->songProgress, SIGNAL(sliderReleased()), this, SLOT(onPositionSliderReleased()));
-    connect(ui->songProgress, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
+    connect(ui->positionSlider, SIGNAL(sliderPressed()), this, SLOT(onPositionSliderPressed()));
+    connect(ui->positionSlider, SIGNAL(sliderReleased()), this, SLOT(onPositionSliderReleased()));
+    connect(ui->positionSlider, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
 
     connect(keyTimer, SIGNAL(timeout()), this, SLOT(onKeyTimeout()));
     connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
 
-    connect(ui->songPlaylist, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
+    connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
     connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
 
 #ifdef Q_WS_MAEMO_5
@@ -505,7 +503,7 @@ void NowPlayingWindow::onKeyTimeout()
 void NowPlayingWindow::forgetClick()
 {
     if (clickedItem) onPlaylistItemActivated(clickedItem);
-    ui->songPlaylist->setDragEnabled(false);
+    ui->songList->setDragEnabled(false);
     selectItemByRow(lastPlayingSong->value().toInt());
     clickedItem = NULL;
 }
@@ -515,18 +513,18 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
     if (object == ui->currentPositionLabel && event->type() == QEvent::MouseButtonPress) {
         reverseTime = !reverseTime;
         QSettings().setValue("main/reverseTime", reverseTime);
-        ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->songProgress->value()-songDuration :
-                                                                 ui->songProgress->value()));
+        ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-songDuration :
+                                                                 ui->positionSlider->value()));
     }
 
-    else if (object == ui->songPlaylist->viewport()) {
+    else if (object == ui->songList->viewport()) {
         if (event->type() == QEvent::DragMove) {
             dragInProgress = true;
         }
 
         else if (event->type() == QEvent::Drop) {
             static_cast<QDropEvent*>(event)->setDropAction(Qt::MoveAction);
-            emit itemDropped(ui->songPlaylist->currentItem(), ui->songPlaylist->currentRow());
+            emit itemDropped(ui->songList->currentItem(), ui->songList->currentRow());
             dragInProgress = false;
         }
 
@@ -536,11 +534,11 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
         }
 
         else if (event->type() == QEvent::MouseButtonPress) {
-            clickedItem = ui->songPlaylist->itemAt(0, static_cast<QMouseEvent*>(event)->y());
+            clickedItem = ui->songList->itemAt(0, static_cast<QMouseEvent*>(event)->y());
         }
 
         else if (event->type() == QEvent::MouseButtonRelease) {
-            if (clickedItem != ui->songPlaylist->currentItem())
+            if (clickedItem != ui->songList->currentItem())
                 clickedItem = NULL;
             clickTimer->start();
         }
@@ -551,7 +549,7 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
 
 void NowPlayingWindow::onItemDoubleClicked()
 {
-    ui->songPlaylist->setDragEnabled(true);
+    ui->songList->setDragEnabled(true);
     clickedItem = NULL;
     clickTimer->start();
 }
@@ -559,7 +557,7 @@ void NowPlayingWindow::onItemDoubleClicked()
 void NowPlayingWindow::onItemDropped(QListWidgetItem *item, int from)
 {
 #ifdef MAFW
-    playlist->moveItem(from, ui->songPlaylist->row(item));
+    playlist->moveItem(from, ui->songList->row(item));
 #endif
 }
 
@@ -569,7 +567,7 @@ void NowPlayingWindow::onItemMoved(guint from, guint to)
     playlistQM->itemsRemoved(from, 1);
     playlistQM->itemsInserted(to, 1);
 
-    if (ui->songPlaylist->item(to)->data(UserRoleSongDuration) == Duration::Blank)
+    if (ui->songList->item(to)->data(UserRoleSongDuration) == Duration::Blank)
         playlistQM->getItems(to,to);
 
     mafwrenderer->getStatus();
@@ -593,7 +591,7 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     keys[3] = MAFW_METADATA_KEY_RENDERER_ART_URI;
     char currentKey = 4;
 
-    QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
+    QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
 
     if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE) )) {
         title = QString::fromUtf8(g_value_get_string (v));
@@ -654,12 +652,12 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     artist = fm.elidedText(artist, Qt::ElideRight, 420);
     ui->artistLabel->setText(artist);
 
-    ui->albumNameLabel->setWhatsThis(album);
+    ui->albumLabel->setWhatsThis(album);
     album = fm.elidedText(album, Qt::ElideRight, 420);
-    ui->albumNameLabel->setText(album);
+    ui->albumLabel->setText(album);
 
     ui->trackLengthLabel->setText(mmss_len(songDuration));
-    ui->songProgress->setRange(0, songDuration);
+    ui->positionSlider->setRange(0, songDuration);
 
     updateQmlViewMetadata();
 
@@ -675,7 +673,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *m
         QString albumArt;
         GValue *v;
 
-        QListWidgetItem* item = ui->songPlaylist->item(lastPlayingSong->value().toInt());
+        QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
 
         QFont f = ui->titleLabel->font();
         QFontMetrics fm(f);
@@ -702,9 +700,9 @@ void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *m
 
         if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM) )) {
             QString album = QString::fromUtf8(g_value_get_string(v));
-            ui->albumNameLabel->setWhatsThis(album);
+            ui->albumLabel->setWhatsThis(album);
             album = fm.elidedText(album, Qt::ElideRight, 420);
-            ui->albumNameLabel->setText(album);
+            ui->albumLabel->setText(album);
             if (item && item->data(UserRoleSongAlbum).toString().isEmpty())
                 item->setData(UserRoleSongAlbum, album);
         }
@@ -712,7 +710,7 @@ void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *m
         if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION) )) {
             songDuration = g_value_get_int (v);
             ui->trackLengthLabel->setText(mmss_len(songDuration));
-            ui->songProgress->setRange(0, songDuration);
+            ui->positionSlider->setRange(0, songDuration);
             if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank)
                 item->setData(UserRoleSongDuration, songDuration);
         }
@@ -785,18 +783,17 @@ void NowPlayingWindow::orientationChanged(int w, int h)
 {
     if (w > h) { // Landscape mode
         portrait = false;
-        ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
-        if (ui->volWidget->isHidden())
-            ui->volWidget->show();
+        ui->orientationLayout->setDirection(QBoxLayout::LeftToRight);
+        if (ui->volumeWidget->isHidden())
+            ui->volumeWidget->show();
 
         ui->view_large->setFixedWidth(340);
         ui->volumeWidget->setContentsMargins(0,0,9,9);
-        ui->space2->show();
         ui->buttonsLayout->setSpacing(60);
 
         ui->titleLabel->setAlignment(Qt::AlignLeft);
         ui->artistLabel->setAlignment(Qt::AlignLeft);
-        ui->albumNameLabel->setAlignment(Qt::AlignLeft);
+        ui->albumLabel->setAlignment(Qt::AlignLeft);
         ui->lyricsText->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
         ui->view_small->hide();
@@ -804,21 +801,20 @@ void NowPlayingWindow::orientationChanged(int w, int h)
 
     } else { // Portrait mode
         portrait = true;
-        ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
+        ui->orientationLayout->setDirection(QBoxLayout::TopToBottom);
         if (!ui->volumeButton->isHidden())
-            ui->volWidget->hide();
+            ui->volumeWidget->hide();
 
-        ui->space2->hide();
         ui->view_large->setFixedWidth(470);
         ui->volumeWidget->setContentsMargins(18,0,9,9);
         ui->buttonsLayout->setSpacing(27);
 
         ui->titleLabel->setAlignment(Qt::AlignHCenter);
         ui->artistLabel->setAlignment(Qt::AlignHCenter);
-        ui->albumNameLabel->setAlignment(Qt::AlignHCenter);
+        ui->albumLabel->setAlignment(Qt::AlignHCenter);
         ui->lyricsText->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
 
-        if (ui->widget->isHidden()) {
+        if (ui->infoWidget->isHidden()) {
             ui->view_large->hide();
             ui->view_small->show();
         }
@@ -827,27 +823,25 @@ void NowPlayingWindow::orientationChanged(int w, int h)
 
 void NowPlayingWindow::toggleList()
 {
-    if (ui->songPlaylist->isHidden() && ui->lyrics->isHidden()) {
+    if (ui->songList->isHidden() && ui->lyricsArea->isHidden()) {
         // Playlist view
         if (portrait) {
             ui->view_large->hide();
             ui->view_small->show();
         }
-        ui->widget->hide();
-        ui->lyrics->hide();
-        ui->songPlaylist->show();
-        ui->songPlaylist->setFocus();
-        ui->spacer1->hide();
+        ui->infoWidget->hide();
+        ui->lyricsArea->hide();
+        ui->songList->show();
+        ui->songList->setFocus();
 #ifdef MAFW
         positionTimer->stop();
 #endif
-    } else if (enableLyrics && ui->lyrics->isHidden() && ui->widget->isHidden()) {
+    } else if (enableLyrics && ui->lyricsArea->isHidden() && ui->infoWidget->isHidden()) {
         // Lyrics view
-        ui->widget->hide();
-        ui->songPlaylist->hide();
-        ui->lyrics->show();
-        ui->lyrics->setFocus();
-        ui->spacer1->hide();
+        ui->infoWidget->hide();
+        ui->songList->hide();
+        ui->lyricsArea->show();
+        ui->lyricsArea->setFocus();
         if (portrait) {
             ui->view_large->hide();
             ui->view_small->show();
@@ -857,10 +851,9 @@ void NowPlayingWindow::toggleList()
 #endif
     } else {
         // Song info view
-        ui->lyrics->hide();
-        ui->songPlaylist->hide();
-        ui->widget->show();
-        ui->spacer1->show();
+        ui->lyricsArea->hide();
+        ui->songList->hide();
+        ui->infoWidget->show();
         if (portrait) {
             ui->view_small->hide();
             ui->view_large->show();
@@ -876,7 +869,7 @@ void NowPlayingWindow::toggleList()
 
 void NowPlayingWindow::volumeWatcher()
 {
-    if (!ui->volSliderWidget->isHidden())
+    if (!ui->volumeSlider->isHidden())
         volumeTimer->start();
 }
 
@@ -941,15 +934,15 @@ void NowPlayingWindow::onVolumeSliderReleased()
 
 void NowPlayingWindow::onPositionSliderPressed()
 {
-    onPositionSliderMoved(ui->songProgress->value());
+    onPositionSliderMoved(ui->positionSlider->value());
 }
 
 void NowPlayingWindow::onPositionSliderReleased()
 {
 #ifdef MAFW
-    mafwrenderer->setPosition(SeekAbsolute, ui->songProgress->value());
-    ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->songProgress->value()-songDuration :
-                                                             ui->songProgress->value()));
+    mafwrenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
+    ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-songDuration :
+                                                             ui->positionSlider->value()));
 #endif
 }
 
@@ -1007,7 +1000,7 @@ void NowPlayingWindow::onPreviousButtonClicked()
 void NowPlayingWindow::onPositionChanged(int position, QString)
 {
     currentSongPosition = position;
-    if (!ui->songProgress->isSliderDown())
+    if (!ui->positionSlider->isSliderDown())
         ui->currentPositionLabel->setText(mmss_pos(reverseTime ? position-songDuration : position));
 
     if (this->songDuration != 0 && this->songDuration != -1 && qmlView == 0) {
@@ -1015,8 +1008,8 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
         qDebug() << "Current position: " << position;
         qDebug() << "Song Length: " << this->songDuration;
 #endif
-        if (!ui->songProgress->isSliderDown() && ui->songProgress->isVisible())
-            ui->songProgress->setValue(position);
+        if (!ui->positionSlider->isSliderDown() && ui->positionSlider->isVisible())
+            ui->positionSlider->setValue(position);
     }
 }
 
@@ -1046,12 +1039,12 @@ void NowPlayingWindow::showEvent(QShowEvent *)
     this->updatePlaylistState();
     this->setWindowTitle(defaultWindowTitle); // avoid showing a different title for a split second
     if (positionTimer->isActive())
-        ui->songProgress->setEnabled(true);
+        ui->positionSlider->setEnabled(true);
 }
 
 void NowPlayingWindow::onGconfValueChanged()
 {
-    this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
+    this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
     this->selectItemByRow(lastPlayingSong->value().toInt());
 }
 
@@ -1064,7 +1057,7 @@ void NowPlayingWindow::onMediaChanged(int index, char*)
 
 void NowPlayingWindow::onMediaIsSeekable(bool seekable)
 {
-    ui->songProgress->setEnabled(seekable);
+    ui->positionSlider->setEnabled(seekable);
     this->isMediaSeekable = seekable;
 }
 #endif
@@ -1078,14 +1071,14 @@ void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 
         case Qt::Key_Enter:
             if (e->modifiers() & Qt::ControlModifier) {
-                if (ui->songPlaylist->isVisible())
+                if (ui->songList->isVisible())
                     onContextMenuRequested(QPoint(this->width()/2,35));
-                else if (ui->lyrics->isVisible())
+                else if (ui->lyricsArea->isVisible())
                     onLyricsContextMenuRequested(QPoint(this->width()/2,35));
                 else
                     onViewContextMenuRequested(QPoint(35,35));
             } else {
-                onPlaylistItemActivated(ui->songPlaylist->currentItem());
+                onPlaylistItemActivated(ui->songList->currentItem());
             }
             break;
     }
@@ -1112,7 +1105,7 @@ void NowPlayingWindow::togglePlayback()
 #ifdef MAFW
 void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata, guint index)
 {
-    QListWidgetItem *item =  ui->songPlaylist->item(index);
+    QListWidgetItem *item =  ui->songList->item(index);
 
     if (!item) return; // in case of query manager's outdated request
 
@@ -1158,10 +1151,10 @@ void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata
 void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 {
 #ifdef DEBUG
-    qDebug() << "Selected item number: " << ui->songPlaylist->currentRow();
+    qDebug() << "Selected item number: " << ui->songList->currentRow();
 #endif
-    this->setSongNumber(ui->songPlaylist->currentRow()+1, ui->songPlaylist->count());
-    lastPlayingSong->set(ui->songPlaylist->currentRow());
+    this->setSongNumber(ui->songList->currentRow()+1, ui->songList->count());
+    lastPlayingSong->set(ui->songList->currentRow());
 
     QFont f = ui->titleLabel->font();
     QFontMetrics fm(f);
@@ -1176,15 +1169,15 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     elided = fm.elidedText(item->data(UserRoleSongArtist).toString(), Qt::ElideRight, 420);
     ui->artistLabel->setText(elided);
 
-    ui->albumNameLabel->setWhatsThis(item->data(UserRoleSongAlbum).toString());
+    ui->albumLabel->setWhatsThis(item->data(UserRoleSongAlbum).toString());
     elided = fm.elidedText(item->data(UserRoleSongAlbum).toString(), Qt::ElideRight, 420);
-    ui->albumNameLabel->setText(elided);
+    ui->albumLabel->setText(elided);
 
     ui->currentPositionLabel->setText(mmss_pos(0));
     this->songDuration = item->data(UserRoleSongDuration).toInt();
     ui->trackLengthLabel->setText(mmss_len(songDuration));
 
-    mafwrenderer->gotoIndex(ui->songPlaylist->row(item));
+    mafwrenderer->gotoIndex(ui->songList->row(item));
     if (mafwState == Stopped || mafwState == Paused)
         mafwrenderer->play();
 }
@@ -1224,7 +1217,7 @@ void NowPlayingWindow::onContextMenuRequested(const QPoint &pos)
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Delete from now playing"), this, SLOT(onDeleteFromNowPlaying()));
-    if (!ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().startsWith("_uuid_")) {
+    if (!ui->songList->currentItem()->data(UserRoleObjectID).toString().startsWith("_uuid_")) {
         if (permanentDelete) contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
         contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
         contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
@@ -1239,7 +1232,7 @@ void NowPlayingWindow::onAddToPlaylist()
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
 #ifdef MAFW
-        playlist->appendItem(picker.playlist, ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString());
+        playlist->appendItem(picker.playlist, ui->songList->currentItem()->data(UserRoleObjectID).toString());
 #endif
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
@@ -1251,11 +1244,11 @@ void NowPlayingWindow::setRingingTone()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Ringtone, this,
-                      ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString(),
-                      ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString())
+                      ui->songList->currentItem()->data(UserRoleSongArtist).toString(),
+                      ui->songList->currentItem()->data(UserRoleSongTitle).toString())
         .exec() == QMessageBox::Yes)
     {
-        mafwTrackerSource->getUri(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }
 #endif
@@ -1266,7 +1259,7 @@ void NowPlayingWindow::onRingingToneUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
 
-    if (objectId != ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString())
+    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
         return;
 
 #ifdef Q_WS_MAEMO_5
@@ -1284,12 +1277,12 @@ void NowPlayingWindow::onDeleteClicked()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::DeleteSong, this,
-                      ui->songPlaylist->currentItem()->data(UserRoleSongTitle).toString(),
-                      ui->songPlaylist->currentItem()->data(UserRoleSongArtist).toString())
+                      ui->songList->currentItem()->data(UserRoleSongTitle).toString(),
+                      ui->songList->currentItem()->data(UserRoleSongArtist).toString())
         .exec() == QMessageBox::Yes)
     {
-        playlist->removeItem(ui->songPlaylist->currentRow());
-        mafwTrackerSource->destroyObject(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        playlist->removeItem(ui->songList->currentRow());
+        mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     }
 #endif
 }
@@ -1297,7 +1290,7 @@ void NowPlayingWindow::onDeleteClicked()
 void NowPlayingWindow::onShareClicked()
 {
 #ifdef MAFW
-    mafwTrackerSource->getUri(ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+    mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
     connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 #endif
 }
@@ -1307,7 +1300,7 @@ void NowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
-    if (objectId != ui->songPlaylist->currentItem()->data(UserRoleObjectID).toString())
+    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
         return;
 
     QStringList files;
@@ -1336,8 +1329,8 @@ void NowPlayingWindow::createQmlView(QUrl source, QString title)
     if (!qmlView) {
         qmlView = new QmlView(source, this, mafwFactory);
         qmlView->setWindowTitle(title);
-        for (int i = 0; i < ui->songPlaylist->count(); i++)
-            qmlView->appendPlaylistItem(ui->songPlaylist->item(i));
+        for (int i = 0; i < ui->songList->count(); i++)
+            qmlView->appendPlaylistItem(ui->songList->item(i));
         connect(qmlView, SIGNAL(destroyed()), this, SLOT(nullQmlView()));
         updateQmlViewMetadata();
     }
@@ -1348,11 +1341,11 @@ void NowPlayingWindow::updateQmlViewMetadata()
 {
     if (qmlView) {
         qmlView->setMetadata(ui->titleLabel->text(),
-                             ui->albumNameLabel->text(),
+                             ui->albumLabel->text(),
                              ui->artistLabel->text(),
                              this->albumArtPath,
                              this->songDuration);
-        qmlView->setCurrentRow(ui->songPlaylist->currentRow());
+        qmlView->setCurrentRow(ui->songList->currentRow());
     }
 }
 
@@ -1369,11 +1362,11 @@ void NowPlayingWindow::onAddAllToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        int songCount = ui->songPlaylist->count();
+        int songCount = ui->songList->count();
         gchar** songAddBuffer = new gchar*[songCount+1];
 
         for (int i = 0; i < songCount; i++)
-            songAddBuffer[i] = qstrdup(ui->songPlaylist->item(i)->data(UserRoleObjectID).toString().toUtf8());
+            songAddBuffer[i] = qstrdup(ui->songList->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
         songAddBuffer[songCount] = NULL;
 
@@ -1392,29 +1385,29 @@ void NowPlayingWindow::onAddAllToPlaylist()
 void NowPlayingWindow::onDeleteFromNowPlaying()
 {
 #ifdef MAFW
-    playlist->removeItem(ui->songPlaylist->currentRow());
+    playlist->removeItem(ui->songList->currentRow());
 #endif
 }
 
 void NowPlayingWindow::selectItemByRow(int row)
 {
-    if (!dragInProgress && ui->songPlaylist->item(row)) {
-        ui->songPlaylist->clearSelection();
-        ui->songPlaylist->item(row)->setSelected(true);
+    if (!dragInProgress && ui->songList->item(row)) {
+        ui->songList->clearSelection();
+        ui->songList->item(row)->setSelected(true);
     }
 }
 
 void NowPlayingWindow::focusItemByRow(int row)
 {
-    if (!dragInProgress && ui->songPlaylist->item(row)) {
+    if (!dragInProgress && ui->songList->item(row)) {
         // Prevent instant scrolling caused by setCurrentRow()
-        int pos = ui->songPlaylist->verticalScrollBar()->value();
-        ui->songPlaylist->setCurrentRow(row);
-        ui->songPlaylist->verticalScrollBar()->setValue(pos);
+        int pos = ui->songList->verticalScrollBar()->value();
+        ui->songList->setCurrentRow(row);
+        ui->songList->verticalScrollBar()->setValue(pos);
 
         // Scroll smoothly
-        ui->songPlaylist->property("kineticScroller").value<QAbstractKineticScroller*>()
-                        ->scrollTo(QPoint(0, qBound(0, row*70 + 35-ui->songPlaylist->height()/2, ui->songPlaylist->verticalScrollBar()->maximum())));
+        ui->songList->property("kineticScroller").value<QAbstractKineticScroller*>()
+                    ->scrollTo(QPoint(0, qBound(0, row*70 + 35-ui->songList->height()/2, ui->songList->verticalScrollBar()->maximum())));
     }
 }
 
@@ -1431,7 +1424,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 
     if (synthetic) {
         playlistTime = 0;
-        ui->songPlaylist->clear();
+        ui->songList->clear();
         if (qmlView) qmlView->clearPlaylist();
 
         from = 0;
@@ -1440,7 +1433,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 
     if (nremove > 0) {
         for (uint i = 0; i < nremove; i++) {
-            QListWidgetItem *item = ui->songPlaylist->takeItem(from);
+            QListWidgetItem *item = ui->songList->takeItem(from);
             if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
                 playlistTime -= item->data(UserRoleSongDuration).toInt();
             delete item;
@@ -1456,7 +1449,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
             QListWidgetItem *item = new QListWidgetItem();
             item->setData(UserRoleSongDuration, Duration::Blank);
             item->setData(UserRoleObjectID, QString::fromUtf8(items[i]));
-            ui->songPlaylist->insertItem(from+i, item);
+            ui->songList->insertItem(from+i, item);
 
             if (qmlView) qmlView->insertPlaylistItem(from+i, item);
         }
@@ -1471,9 +1464,9 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 
     mafwrenderer->getStatus();
 
-    this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songPlaylist->count());
+    this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
 
-    qDebug() << "Playlist reserved slots:" << ui->songPlaylist->count();
+    qDebug() << "Playlist reserved slots:" << ui->songList->count();
 }
 
 void NowPlayingWindow::onViewContextMenuRequested(const QPoint &pos)
@@ -1487,9 +1480,9 @@ void NowPlayingWindow::onViewContextMenuRequested(const QPoint &pos)
 
 void NowPlayingWindow::selectAlbumArt()
 {
-    CoverPicker picker(ui->albumNameLabel->whatsThis(), "/home/user/MyDocs", this);
+    CoverPicker picker(ui->albumLabel->whatsThis(), "/home/user/MyDocs", this);
     if (picker.exec() == QDialog::Accepted)
-        setAlbumImage(MediaArt::setAlbumImage(ui->albumNameLabel->whatsThis(), picker.cover));
+        setAlbumImage(MediaArt::setAlbumImage(ui->albumLabel->whatsThis(), picker.cover));
 }
 
 void NowPlayingWindow::resetAlbumArt()
@@ -1497,7 +1490,7 @@ void NowPlayingWindow::resetAlbumArt()
     if (ConfirmDialog(ConfirmDialog::ResetArt, this).exec() == QMessageBox::Yes) {
         // Remove old art using MediaArt::setAlbumImage() and let
         // NowPlayingWindow::setAlbumImage() search for covers.
-        setAlbumImage(MediaArt::setAlbumImage(ui->albumNameLabel->text(), ""));
+        setAlbumImage(MediaArt::setAlbumImage(ui->albumLabel->text(), ""));
 
 #ifdef Q_WS_MAEMO_5
         // Even if NowPlayingWindow::setAlbumImage() falls back to the default
@@ -1522,7 +1515,7 @@ void NowPlayingWindow::resetAlbumArt()
 
 void NowPlayingWindow::refreshAlbumArt()
 {
-    QString image = MediaArt::albumArtPath(ui->albumNameLabel->text());
+    QString image = MediaArt::albumArtPath(ui->albumLabel->text());
     if (QFileInfo(image).exists())
         setAlbumImage(image);
 }
