@@ -37,7 +37,7 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
 #else
     freqButton = new QPushButton("Frequency", this);
 #endif
-    ui->gridLayout->addWidget(freqButton, 1, 0, 1, 1);
+    ui->mainLayout->addWidget(freqButton, 1, 0, 1, 1);
 
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
@@ -57,6 +57,7 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
     connect(freqButton, SIGNAL(clicked()), this, SLOT(showDialog()));
     connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
+    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     connect(ui->fmtxCheckbox, SIGNAL(clicked()), this, SLOT(onCheckboxClicked()));
     freqButton->setValueText(selector->currentValueText());
 }
@@ -104,14 +105,14 @@ void FMTXDialog::onStateChanged()
 
 void FMTXDialog::orientationChanged(int w, int h)
 {
-    ui->gridLayout->removeWidget(ui->buttonBox);
+    ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
         this->setFixedHeight(230);
-        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, ui->gridLayout->columnCount());
+        ui->mainLayout->addWidget(ui->buttonBox, 2, 0, 1, 1);
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout->addWidget(ui->buttonBox, 1, 1, 1, 1, Qt::AlignBottom);
+        ui->mainLayout->addWidget(ui->buttonBox, 0, 1, 2, 1, Qt::AlignBottom);
         this->setFixedHeight(160);
     }
 }

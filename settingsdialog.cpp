@@ -248,7 +248,7 @@ void SettingsDialog::orientationChanged(int w, int h)
     ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
         this->setFixedHeight(680);
-        ui->mainLayout->addWidget(ui->buttonBox, 1, 0, 1, ui->mainLayout->columnCount());
+        ui->mainLayout->addWidget(ui->buttonBox, 1, 0, 1, 1);
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());

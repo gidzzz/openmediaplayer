@@ -9,6 +9,8 @@
 #include <QDBusMessage>
 #include <QDBusVariant>
 #include <QDBusReply>
+
+#include "ui_freqdlg.h"
 #include "dbus/dbus-shared.h"
 #include <libintl.h>
 #include <gq/GConfItem>

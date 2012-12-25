@@ -1,5 +1,4 @@
 #include "freqdlg.h"
-#include "ui_freqdlg.h"
 
 FreqDlg::FreqDlg(QWidget *parent) :
     QDialog(parent),
@@ -26,15 +25,15 @@ FreqDlg::~FreqDlg()
 
 void FreqDlg::orientationChanged(int w, int h)
 {
-    ui->gridLayout_2->removeWidget(ui->buttonBox);
+    ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
         this->setFixedHeight(680);
-        ui->gridLayout_2->addWidget(ui->buttonBox, 2, 0, 1, 2);
+        ui->mainLayout->addWidget(ui->buttonBox, 2, 0, 1, 2);
         ui->buttonBox->setSizePolicy(QSizePolicy::Minimum, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
-        this->setFixedHeight(350);
+        this->setFixedHeight(360);
         ui->buttonBox->setSizePolicy(QSizePolicy::Minimum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout_2->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
+        ui->mainLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
     }
 }
 
