@@ -150,7 +150,6 @@ FORMS += \
     freqdlg.ui \
     editlyrics.ui \
     upnpview.ui \
-    upnpcontrol.ui \
     playlistpicker.ui \
     sleeperdialog.ui \
     bookmarkdialog.ui \

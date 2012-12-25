@@ -643,7 +643,7 @@ void MainWindow::orientationChanged(int w, int h)
         ui->menuList->show();
     }
 
-    upnpControl->setGeometry(0, h-(70+56), w-(112+8), upnpControl->height());
+    upnpControl->setGeometry(0, h-(56+16+upnpControl->height()), w-(112+8), upnpControl->height());
     ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
 
     upnpControl->raise();

@@ -1,9 +1,8 @@
 #ifndef UPNPCONTROL_H
 #define UPNPCONTROL_H
 
-#include <QMainWindow>
+#include <QListWidget>
 
-#include "ui_upnpcontrol.h"
 #include "includes.h"
 #include "upnpview.h"
 
@@ -13,13 +12,12 @@ namespace Ui {
     class UpnpControl;
 }
 
-class UpnpControl : public QWidget
+class UpnpControl : public QListWidget
 {
     Q_OBJECT
 
 public:
     explicit UpnpControl(QWidget *parent = 0, MafwAdapterFactory *factory = 0);
-    ~UpnpControl();
 
 signals:
     void childOpened();
@@ -32,7 +30,6 @@ private slots:
     void onChildClosed();
 
 private:
-    Ui::UpnpControl *ui;
     MafwAdapterFactory *mafwFactory;
     MafwSourceAdapter *mafwUpnpSource;
     QStringList sources;

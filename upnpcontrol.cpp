@@ -1,31 +1,30 @@
 #include "upnpcontrol.h"
 
 UpnpControl::UpnpControl(QWidget *parent, MafwAdapterFactory *factory) :
-    QWidget(parent),
-    ui(new Ui::UpnpControl),
+    QListWidget(parent),
     mafwFactory(factory)
 {
-    ui->setupUi(this);
+    QFont font;
+    font.setPointSize(13);
+    this->setFont(font);
 
-    this->setFocusProxy(ui->upnpList);
+    this->setFlow(QListView::LeftToRight);
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     QColor c = QMaemo5Style::standardColor("ActiveTextColor");
 
-    ui->upnpList->setStyleSheet(QString("QListWidget {background-color: transparent;}"
-                                        "QListWidget::item {background-color: transparent;}"
-                                        "QListWidget::item {selection-color: rgb(%1, %2, %3);}")
-                                        .arg(c.red()).arg(c.green()).arg(c.blue()));
+    this->setStyleSheet(QString("QListWidget {background-color: transparent;}"
+                                "QListWidget::item {background-color: transparent;}"
+                                "QListWidget::item {selection-color: rgb(%1, %2, %3);}")
+                                .arg(c.red()).arg(c.green()).arg(c.blue()));
 
     mafwUpnpSource = mafwFactory->getUpnpSource();
 
     connect(mafwUpnpSource, SIGNAL(sourceAdded(QString)), this, SLOT(onSourceAdded(QString)));
     connect(mafwUpnpSource, SIGNAL(sourceRemoved(QString)), this, SLOT(onSourceRemoved(QString)));
-    connect(ui->upnpList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
-}
-
-UpnpControl::~UpnpControl()
-{
-    delete ui;
+    connect(this, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
 }
 
 void UpnpControl::onSourceAdded(QString uuid)
@@ -41,7 +40,7 @@ void UpnpControl::onSourceAdded(QString uuid)
         item->setText(mafwUpnpSource->getNameByUUID(uuid));
         item->setData(UserRoleObjectID, uuid);
 
-        ui->upnpList->addItem(item);
+        this->addItem(item);
     }
 }
 
@@ -49,9 +48,9 @@ void UpnpControl::onSourceRemoved(QString uuid)
 {
     qDebug() << "source removed:" << uuid;
 
-    for (int i = 0; i < ui->upnpList->count(); i++) {
-        if (ui->upnpList->item(i)->data(UserRoleObjectID).toString() == uuid) {
-            delete ui->upnpList->item(i);
+    for (int i = 0; i < this->count(); i++) {
+        if (this->item(i)->data(UserRoleObjectID).toString() == uuid) {
+            delete this->item(i);
             break;
         }
     }
@@ -77,6 +76,6 @@ void UpnpControl::onItemActivated(QListWidgetItem *item)
 
 void UpnpControl::onChildClosed()
 {
-    ui->upnpList->clearSelection();
+    this->clearSelection();
     emit childClosed();
 }
