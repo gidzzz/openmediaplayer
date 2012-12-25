@@ -29,9 +29,6 @@
     <property name="styleSheet">
      <string notr="true">background: transparent;</string>
     </property>
-    <property name="text">
-     <string/>
-    </property>
     <property name="iconSize">
      <size>
       <width>112</width>
@@ -53,9 +50,6 @@
     </property>
     <property name="styleSheet">
      <string notr="true">background: transparent;</string>
-    </property>
-    <property name="text">
-     <string/>
     </property>
     <property name="iconSize">
      <size>
@@ -137,7 +131,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QWidget" name="buttonWidget" native="true">
+      <widget class="QWidget" name="buttonWidget">
        <layout class="QHBoxLayout" name="buttonLayout">
         <property name="margin">
          <number>0</number>
@@ -255,7 +249,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="volumeWidget" native="true">
+      <widget class="QWidget" name="volumeWidget">
        <layout class="QHBoxLayout" name="volumeLayout">
         <property name="margin">
          <number>0</number>
@@ -283,9 +277,6 @@
          <widget class="QToolButton" name="volumeButton">
           <property name="styleSheet">
            <string notr="true">background: transparent;</string>
-          </property>
-          <property name="text">
-           <string/>
           </property>
           <property name="iconSize">
            <size>
@@ -342,9 +333,6 @@
        <property name="styleSheet">
         <string notr="true">background: transparent;</string>
        </property>
-       <property name="text">
-        <string/>
-       </property>
        <property name="iconSize">
         <size>
          <width>64</width>
@@ -385,9 +373,6 @@
        <property name="styleSheet">
         <string notr="true">background: transparent;</string>
        </property>
-       <property name="text">
-        <string/>
-       </property>
        <property name="iconSize">
         <size>
          <width>64</width>
@@ -418,9 +403,6 @@
        </property>
        <property name="styleSheet">
         <string notr="true">background: transparent;</string>
-       </property>
-       <property name="text">
-        <string/>
        </property>
        <property name="iconSize">
         <size>

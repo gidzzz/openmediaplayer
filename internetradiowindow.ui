@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>424</height>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,14 +17,14 @@
    <widget class="NowPlayingIndicator" name="indicator" native="true">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>330</y>
+      <x>680</x>
+      <y>380</y>
       <width>112</width>
       <height>70</height>
      </rect>
     </property>
    </widget>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="centralLayout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -52,7 +52,7 @@
       <property name="visible">
        <bool>false</bool>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="searchLayout">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -63,11 +63,7 @@
         <widget class="QLineEdit" name="searchEdit"/>
        </item>
        <item>
-        <widget class="QToolButton" name="searchHideButton">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
+        <widget class="QToolButton" name="searchHideButton"/>
        </item>
       </layout>
      </widget>

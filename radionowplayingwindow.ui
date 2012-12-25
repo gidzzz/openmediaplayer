@@ -322,9 +322,6 @@
              <property name="styleSheet">
               <string notr="true">background: transparent;</string>
              </property>
-             <property name="text">
-              <string/>
-             </property>
              <property name="iconSize">
               <size>
                <width>64</width>

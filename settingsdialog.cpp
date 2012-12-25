@@ -134,6 +134,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     connect(ui->clearLyricsButton, SIGNAL(clicked()), this, SLOT(clearLyricsCache()));
 
+    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
     orientationChanged(rotator->width(), rotator->height());

@@ -6,7 +6,7 @@ SleeperDialog::SleeperDialog(QWidget *parent) :
     ui(new Ui::SleeperDialog)
 {
     ui->setupUi(this);
-    ui->gridLayout_2->setContentsMargins(0,0,0,0);
+
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Start"));
     ui->buttonBox->button(QDialogButtonBox::Reset)->setText(tr("Stop"));
 
@@ -107,13 +107,13 @@ void SleeperDialog::onButtonClicked(QAbstractButton *button)
 
 void SleeperDialog::orientationChanged(int w, int h)
 {
-    ui->gridLayout->removeWidget(ui->buttonBox);
+    ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
-        ui->gridLayout->addWidget(ui->buttonBox, 1, 0, 1, 1);
+        ui->mainLayout->addWidget(ui->buttonBox, 1, 0, 1, 1);
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
+        ui->mainLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
     }
     this->adjustSize();
 }

@@ -66,16 +66,16 @@ void BookmarkDialog::accept()
 
 void BookmarkDialog::orientationChanged(int w, int h)
 {
-    ui->gridLayout->removeWidget(ui->videoBox);
-    ui->gridLayout->removeWidget(ui->buttonBox);
+    ui->mainLayout->removeWidget(ui->videoBox);
+    ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
-        ui->gridLayout->addWidget(ui->videoBox, 2, 0, 1, 2);
-        ui->gridLayout->addWidget(ui->buttonBox, 3, 0, 1, 2);
+        ui->mainLayout->addWidget(ui->videoBox, 2, 0, 1, 2);
+        ui->mainLayout->addWidget(ui->buttonBox, 3, 0, 1, 2);
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->gridLayout->addWidget(ui->videoBox, 0, 2, 1, 1);
-        ui->gridLayout->addWidget(ui->buttonBox, 1, 2, 1, 1, Qt::AlignBottom);
+        ui->mainLayout->addWidget(ui->videoBox, 0, 2, 1, 1);
+        ui->mainLayout->addWidget(ui->buttonBox, 1, 2, 1, 1, Qt::AlignBottom);
     }
     this->adjustSize();
 }

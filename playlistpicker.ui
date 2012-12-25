@@ -2,18 +2,10 @@
 <ui version="4.0">
  <class>PlaylistPicker</class>
  <widget class="QDialog" name="PlaylistPicker">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>360</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Select a playlst</string>
   </property>
-  <layout class="QVBoxLayout" name="layout">
+  <layout class="QVBoxLayout" name="mainLayout">
    <item>
     <widget class="QListWidget" name="playlistList">
      <property name="editTriggers">

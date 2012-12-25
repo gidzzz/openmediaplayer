@@ -2,7 +2,7 @@
 <ui version="4.0">
  <class>BookmarkDialog</class>
  <widget class="QDialog" name="BookmarkDialog">
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="mainLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="nameLabel">
      <property name="text">
@@ -12,9 +12,6 @@
    </item>
    <item row="0" column="1">
     <widget class="QLineEdit" name="nameBox">
-     <property name="text">
-      <string/>
-     </property>
     </widget>
    </item>
    <item row="1" column="0">
@@ -26,9 +23,6 @@
    </item>
    <item row="1" column="1">
     <widget class="QLineEdit" name="addressBox">
-     <property name="text">
-      <string/>
-     </property>
     </widget>
    </item>
    <item row="0" column="2">

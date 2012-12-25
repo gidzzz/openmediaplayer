@@ -2,18 +2,10 @@
 <ui version="4.0">
  <class>ShareDialog</class>
  <widget class="QDialog" name="ShareDialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>100</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Share</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="mainLayout">
    <item>
     <widget class="QPushButton" name="bluetoothButton">
      <property name="text">

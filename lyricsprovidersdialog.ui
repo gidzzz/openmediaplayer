@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>LyricsProvidersDialog</class>
  <widget class="QDialog" name="LyricsProvidersDialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>360</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Lyrics providers</string>
   </property>

@@ -2,7 +2,10 @@
 <ui version="4.0">
  <class>SleeperDialog</class>
  <widget class="QDialog" name="SleeperDialog">
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="mainLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
@@ -14,41 +17,35 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QWidget" name="widget">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+    <widget class="QWidget" name="settingsWidget">
+     <layout class="QVBoxLayout" name="settingsLayout">
       <property name="margin">
        <number>0</number>
       </property>
-      <item row="0" column="1">
+      <item>
        <widget class="QMaemo5ValueButton" name="actionBox">
         <property name="text">
          <string>Action</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item>
        <widget class="QMaemo5ValueButton" name="volumeBox">
         <property name="text">
          <string>Volume reduction</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item row="0" column="0">
+      <item>
+       <layout class="QHBoxLayout" name="minutesLayout">
+        <item>
          <widget class="QLabel" name="minutesLabel">
           <property name="text">
            <string>Time (minutes)</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item>
          <widget class="QSpinBox" name="minutesBox">
           <property name="minimum">
            <number>1</number>

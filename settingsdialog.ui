@@ -28,7 +28,7 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="QScrollArea" name="settingsArea">
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -41,7 +41,7 @@
         <height>346</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="scrollLayout">
+      <layout class="QVBoxLayout" name="settingsLayout">
        <property name="margin">
         <number>0</number>
        </property>
@@ -61,14 +61,14 @@
        </item>
        <item>
         <layout class="QHBoxLayout" name="playlistSizeHBox">
-         <item row="0" column="0">
+         <item>
           <widget class="QLabel" name="playlistSizeLabel">
            <property name="text">
             <string>Size of automatic playlists</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item>
           <widget class="QLineEdit" name="playlistSizeBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -232,14 +232,14 @@
        </item>
        <item>
         <layout class="QHBoxLayout" name="languageCodeHBox">
-         <item row="0" column="0">
+         <item>
           <widget class="QLabel" name="languageCodeLabel">
            <property name="text">
             <string>Force language code</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item>
           <widget class="QLineEdit" name="languageCodeBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -304,38 +304,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>SettingsDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>SettingsDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

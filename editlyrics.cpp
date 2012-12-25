@@ -16,9 +16,9 @@ EditLyrics::EditLyrics(QString artist, QString title, QWidget *parent) :
 
     this->setWindowTitle(artist + " - " + title);
 
-    new TextEditAutoResizer(ui->content);
-    ui->content->setPlainText(LyricsManager::loadLyrics(artist, title));
-    ui->content->setFocus();
+    new TextEditAutoResizer(ui->lyricsField);
+    ui->lyricsField->setPlainText(LyricsManager::loadLyrics(artist, title));
+    ui->lyricsField->setFocus();
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this), SIGNAL(activated()), this, SLOT(save()));
     connect(ui->saveButton, SIGNAL(pressed()), this, SLOT(save()));
@@ -31,7 +31,7 @@ EditLyrics::~EditLyrics()
 
 void EditLyrics::save()
 {
-    QString lyrics = ui->content->toPlainText();
+    QString lyrics = ui->lyricsField->toPlainText();
     NowPlayingWindow *parent = qobject_cast<NowPlayingWindow*>(this->parentWidget());
 
     if (lyrics.isEmpty()) {

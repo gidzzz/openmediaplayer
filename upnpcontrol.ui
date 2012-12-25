@@ -10,7 +10,7 @@
     <height>80</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_1">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QListWidget" name="upnpList">
      <property name="sizePolicy">
