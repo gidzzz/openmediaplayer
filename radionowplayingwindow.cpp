@@ -211,7 +211,7 @@ void RadioNowPlayingWindow::onStateChanged(int state)
     if (state == Transitioning) {
         ui->positionSlider->setEnabled(false);
         ui->positionSlider->setValue(0);
-        ui->positionSlider->setRange(0, 99);
+        ui->positionSlider->setMaximum(0);
         ui->currentPositionLabel->setText(mmss_pos(0));
 
         if (ui->bufferBar->maximum() == 0) {
@@ -320,7 +320,7 @@ void RadioNowPlayingWindow::updateSongLabel()
     else if (!artist.isEmpty())
         labelText.prepend(artist + " / ");
 
-    ui->songLabel->setText(QFontMetrics(ui->songLabel->font()).elidedText(labelText, Qt::ElideRight, 410));
+    ui->songLabel->setText(QFontMetrics(ui->songLabel->font()).elidedText(labelText, Qt::ElideRight, 430));
 }
 
 void RadioNowPlayingWindow::onGetPosition(int position, QString)
@@ -445,7 +445,7 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTab
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         station = QString::fromUtf8(g_value_get_string (v));
-        ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 410));
+        ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 430));
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         uri = v ? QString::fromUtf8(g_value_get_string(v)) : "";
@@ -477,21 +477,13 @@ void RadioNowPlayingWindow::setAlbumImage(QString image)
 void RadioNowPlayingWindow::orientationChanged(int w, int h)
 {
     if (w > h) { // Landscape
-        ui->verticalLayout->setContentsMargins(-1, 5, -1, -1);
-        ui->mainLayout->setDirection(QBoxLayout::LeftToRight);
+        ui->orientationLayout->setDirection(QBoxLayout::LeftToRight);
         ui->volumeWidget->show();
-        ui->spacerWidget->show();
-        ui->spacerWidget2->show();
-        ui->metadataWidget->setFixedWidth(440);
         ui->stationLabel->setAlignment(Qt::AlignLeft);
         ui->songLabel->setAlignment(Qt::AlignLeft);
     } else { // Portrait
         ui->volumeWidget->hide();
-        ui->mainLayout->setDirection(QBoxLayout::TopToBottom);
-        ui->verticalLayout->setContentsMargins(-1, 80, -1, -1);
-        ui->spacerWidget2->hide();
-        ui->spacerWidget->hide();
-        ui->metadataWidget->setFixedWidth(470);
+        ui->orientationLayout->setDirection(QBoxLayout::TopToBottom);
         ui->stationLabel->setAlignment(Qt::AlignHCenter);
         ui->songLabel->setAlignment(Qt::AlignHCenter);
     }

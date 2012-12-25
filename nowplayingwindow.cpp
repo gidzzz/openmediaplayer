@@ -134,7 +134,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
     ui->toolbarWidget->setFixedHeight(73);
     ui->songList->setFixedHeight(351);
-    ui->view_large->setFixedHeight(360);
+    ui->view_large->setFixedHeight(346);
     ui->view_small->setFixedHeight(299);
     ui->view_small->setFixedWidth(470);
     ui->lyricsArea->setFixedHeight(351);

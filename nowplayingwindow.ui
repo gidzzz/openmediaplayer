@@ -40,9 +40,6 @@
        </property>
        <item>
         <layout class="QVBoxLayout" name="coverLayout">
-         <property name="spacing">
-          <number>6</number>
-         </property>
          <property name="topMargin">
           <number>5</number>
          </property>
@@ -100,18 +97,12 @@
         </layout>
        </item>
        <item>
-        <widget class="QWidget" name="mainArea">
+        <widget class="QWidget" name="mainWidget">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>0</height>
-          </size>
          </property>
          <layout class="QVBoxLayout" name="mainLayout">
           <property name="leftMargin">
@@ -271,7 +262,7 @@
                <item>
                 <widget class="QSlider" name="positionSlider">
                  <property name="enabled">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -282,6 +273,9 @@
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
+                 <property name="maximum">
+                  <number>0</number>
+                </property>
                 </widget>
                </item>
                <item>

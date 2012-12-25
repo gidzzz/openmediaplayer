@@ -13,87 +13,68 @@
   <property name="windowTitle">
    <string>Now playing</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_5">
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="centralLayout">
     <property name="margin">
      <number>0</number>
     </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item>
-     <layout class="QHBoxLayout" name="mainLayout">
+     <layout class="QHBoxLayout" name="orientationLayout">
       <property name="spacing">
        <number>0</number>
       </property>
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout" name="coverLayout">
+        <property name="topMargin">
+         <number>5</number>
+        </property>
         <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+         <widget class="QGraphicsView" name="albumArtView">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
           </property>
-          <property name="sizeHint" stdset="0">
+          <property name="minimumSize">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>340</width>
+            <height>346</height>
            </size>
           </property>
-         </spacer>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QGraphicsView" name="albumArtView">
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>360</width>
-              <height>360</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>360</width>
-              <height>360</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
+          <property name="maximumSize">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>340</width>
+            <height>346</height>
            </size>
           </property>
-         </spacer>
+         </widget>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QWidget" name="metadataWidget" native="true">
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+       <widget class="QWidget" name="mainWidget">
+        <layout class="QVBoxLayout" name="mainLayout">
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>18</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <item>
-          <spacer name="verticalSpacer_4">
+          <spacer name="mainSpacer_1">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -102,7 +83,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>20</width>
+             <width>1</width>
              <height>80</height>
             </size>
            </property>
@@ -130,80 +111,76 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <layout class="QHBoxLayout" name="progressLayout">
            <property name="spacing">
             <number>12</number>
            </property>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QWidget" name="seekWidget" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_7">
-                <property name="margin">
+            <widget class="QWidget" name="seekWidget">
+             <layout class="QHBoxLayout" name="seekLayout">
+              <property name="margin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="currentPositionLabel">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">00:00</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSlider" name="positionSlider">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="maximum">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QLabel" name="currentPositionLabel">
-                  <property name="font">
-                   <font>
-                    <pointsize>13</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string notr="true">00:00</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSlider" name="positionSlider">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="streamLengthLabel">
-                  <property name="font">
-                   <font>
-                    <pointsize>13</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string notr="true">--:--</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QProgressBar" name="bufferBar">
-               <property name="visible">
-                <bool>false</bool>
-               </property>
-               <property name="maximum">
-                <number>0</number>
-               </property>
-               <property name="textVisible">
-                <bool>true</bool>
-               </property>
-               <property name="alignment">
-                <enum>Qt::AlignCenter</enum>
-               </property>
-              </widget>
-             </item>
-            </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="streamLengthLabel">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">--:--</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QProgressBar" name="bufferBar">
+             <property name="visible">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>0</number>
+             </property>
+             <property name="textVisible">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <enum>Qt::AlignCenter</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
          <item>
-          <spacer name="verticalSpacer_3">
+          <spacer name="mainSpacer_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -212,8 +189,8 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>20</width>
-             <height>40</height>
+             <width>1</width>
+             <height>1</height>
             </size>
            </property>
           </spacer>
@@ -224,246 +201,225 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
-      <item>
-       <widget class="QWidget" name="buttonsWidget" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <layout class="QHBoxLayout" name="buttonsLayout">
-         <property name="spacing">
-          <number>25</number>
+     <widget class="QWidget" name="toolbarWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>73</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>800</width>
+        <height>73</height>
+       </size>
+      </property>
+      <layout class="QHBoxLayout" name="toolbarLayout">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>350</number>
+       </property>
+       <item>
+        <widget class="QWidget" name="buttonsWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QWidget" name="spacerWidget" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>5</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="prevButton">
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">border: none;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="autoRepeat">
-            <bool>true</bool>
-           </property>
-           <property name="autoRepeatDelay">
-            <number>1000</number>
-           </property>
-           <property name="autoRepeatInterval">
-            <number>200</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="playButton">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">border: none;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="nextButton">
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">border: none;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="autoRepeat">
-            <bool>true</bool>
-           </property>
-           <property name="autoRepeatDelay">
-            <number>1000</number>
-           </property>
-           <property name="autoRepeatInterval">
-            <number>200</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QWidget" name="spacerWidget2" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <property name="spacing">
-             <number>0</number>
+         <layout class="QHBoxLayout" name="buttonsLayout">
+          <property name="spacing">
+           <number>50</number>
+          </property>
+          <property name="leftMargin">
+           <number>32</number>
+          </property>
+          <property name="rightMargin">
+           <number>32</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="prevButton">
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
             </property>
-            <property name="margin">
-             <number>0</number>
+            <property name="maximumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
             </property>
-            <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="volumeWidget" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <property name="leftMargin">
-          <number>20</number>
+            <property name="styleSheet">
+             <string notr="true">border: none;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="autoRepeat">
+             <bool>true</bool>
+            </property>
+            <property name="autoRepeatDelay">
+             <number>1000</number>
+            </property>
+            <property name="autoRepeatInterval">
+             <number>200</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="playButton">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: none;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="nextButton">
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: none;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="autoRepeat">
+             <bool>true</bool>
+            </property>
+            <property name="autoRepeatDelay">
+             <number>1000</number>
+            </property>
+            <property name="autoRepeatInterval">
+             <number>200</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="volumeWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <item>
-          <widget class="QSlider" name="volumeSlider">
-           <property name="visible">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="singleStep">
-            <number>1</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="volumeButton">
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">border: none;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
+         <layout class="QHBoxLayout" name="volumeLayout">
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <item>
+           <widget class="QSlider" name="volumeSlider">
+            <property name="visible">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="singleStep">
+             <number>1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="volumeButton">
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: none;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
    </layout>
   </widget>
