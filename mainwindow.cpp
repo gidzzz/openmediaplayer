@@ -31,23 +31,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->songCountL->setText(tr("%n song(s)", "", 0));
-    ui->videoCountL->setText(tr("%n clip(s)", "", 0));
-    ui->stationCountL->setText(tr("%n station(s)", "", 0));
+
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
     QColor secondaryColor(156, 154, 156);
 #endif
-    ui->songCountL->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+    ui->songCountLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
-    ui->videoCountL->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+    ui->videoCountLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
-    ui->stationCountL->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+    ui->stationCountLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
@@ -69,10 +67,6 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef Q_WS_MAEMO_5
-    ui->songCountL->clear();
-    ui->videoCountL->clear();
-    ui->stationCountL->clear();
-
     wiredHeadsetIsConnected = false;
     headsetPauseStamp = -1;
     pausedByCall = false;
@@ -630,9 +624,9 @@ void MainWindow::orientationChanged(int w, int h)
         ui->radioButtonLabel->show();
         ui->shuffleAllButton->show();
         ui->shuffleLabel->show();
-        ui->songCountL->show();
-        ui->videoCountL->show();
-        ui->stationCountL->show();
+        ui->songCountLabel->show();
+        ui->videoCountLabel->show();
+        ui->stationCountLabel->show();
     } else { // Portrait
         ui->musicButton->hide();
         ui->musicButtonLabel->hide();
@@ -642,9 +636,9 @@ void MainWindow::orientationChanged(int w, int h)
         ui->radioButtonLabel->hide();
         ui->shuffleAllButton->hide();
         ui->shuffleLabel->hide();
-        ui->songCountL->hide();
-        ui->videoCountL->hide();
-        ui->stationCountL->hide();
+        ui->songCountLabel->hide();
+        ui->videoCountLabel->hide();
+        ui->stationCountLabel->hide();
         ui->menuList->setGeometry(QRect(0, 0, w, h));
         ui->menuList->show();
     }
@@ -902,14 +896,14 @@ void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, Q
         QString countStr = (count == -1) ? tr("(no songs)") :
                                            tr("%n song(s)", "", count);
 
-        ui->songCountL->setText(countStr);
+        ui->songCountLabel->setText(countStr);
         ui->menuList->item(0)->setData(UserRoleValueText, countStr);
 
     } else if (objectId == TAGSOURCE_VIDEO_PATH) {
         QString countStr = (count == -1) ? tr("(no videos)") :
                                            tr("%n clip(s)", "", count);
 
-        ui->videoCountL->setText(countStr);
+        ui->videoCountLabel->setText(countStr);
         ui->menuList->item(1)->setData(UserRoleValueText, countStr);
     }
 
@@ -925,7 +919,7 @@ void MainWindow::countRadioResult(QString, GHashTable *metadata, QString error)
     QString countStr = (count == -1) ? tr("(no stations)") :
                                        tr("%n station(s)", "", count);
 
-    ui->stationCountL->setText(countStr);
+    ui->stationCountLabel->setText(countStr);
     ui->menuList->item(2)->setData(UserRoleValueText, countStr);
 
     if (!error.isEmpty())

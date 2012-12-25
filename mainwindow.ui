@@ -7,20 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>424</height>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Media player</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
-  <property name="toolButtonStyle">
-   <enum>Qt::ToolButtonTextOnly</enum>
-  </property>
-  <property name="tabShape">
-   <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="musicButton">
@@ -41,9 +32,6 @@
 background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
 border: none;
 }</string>
-    </property>
-    <property name="text">
-     <string/>
     </property>
     <property name="icon">
      <iconset>
@@ -78,9 +66,6 @@ background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
 border: none;
 }</string>
     </property>
-    <property name="text">
-     <string/>
-    </property>
     <property name="icon">
      <iconset>
       <normaloff>:/video</normaloff>:/video</iconset>
@@ -113,9 +98,6 @@ border: none;
 background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
 border: none;
 }</string>
-    </property>
-    <property name="text">
-     <string/>
     </property>
     <property name="icon">
      <iconset>
@@ -150,9 +132,6 @@ background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
 border: none;
 }</string>
     </property>
-    <property name="text">
-     <string/>
-    </property>
     <property name="icon">
      <iconset>
       <normaloff>:/shuffe</normaloff>:/shuffe</iconset>
@@ -183,9 +162,6 @@ border: none;
      <font>
       <pointsize>13</pointsize>
      </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -258,20 +234,6 @@ border: none;
     <property name="visible">
      <bool>false</bool>
     </property>
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>310</y>
-      <width>121</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
     <property name="editTriggers">
      <set>QAbstractItemView::NoEditTriggers</set>
     </property>
@@ -305,7 +267,7 @@ border: none;
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="songCountL">
+   <widget class="QLabel" name="songCountLabel">
     <property name="geometry">
      <rect>
       <x>35</x>
@@ -332,7 +294,7 @@ border: none;
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="videoCountL">
+   <widget class="QLabel" name="videoCountLabel">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -350,7 +312,7 @@ border: none;
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="stationCountL">
+   <widget class="QLabel" name="stationCountLabel">
     <property name="geometry">
      <rect>
       <x>410</x>
@@ -371,8 +333,8 @@ border: none;
    <widget class="NowPlayingIndicator" name="indicator" native="true">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>330</y>
+      <x>680</x>
+      <y>380</y>
       <width>112</width>
       <height>70</height>
      </rect>
@@ -426,7 +388,6 @@ border: none;
    </property>
   </action>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>NowPlayingIndicator</class>

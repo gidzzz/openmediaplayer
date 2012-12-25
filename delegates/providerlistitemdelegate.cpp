@@ -11,21 +11,19 @@ void ProviderListItemDelegate::paint(QPainter *painter, const QStyleOptionViewIt
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
     QFont f = painter->font();
     QRect r = option.rect;
-    int isz = option.decorationSize.width();
-    if (isz < 0) isz = 48;
-    int textWidth = r.width() - (3+isz+3);
+    int textWidth = r.width() - (3+48+3);
 
     painter->save();
 
-    painter->drawPixmap(3, r.top()+(70-isz)/2, isz, isz,
-                        QIcon::fromTheme(index.data(Qt::UserRole).toBool() ? "general_tickmark_checked" : "general_tickmark_unchecked").pixmap(isz));
+    painter->drawPixmap(3, r.top()+11, 48, 48,
+                        QIcon::fromTheme(index.data(Qt::UserRole).toBool() ? "general_tickmark_checked" : "general_tickmark_unchecked").pixmap(48));
 
     f.setPointSize(18);
     painter->setFont(f);
 
     QFontMetrics fm1(f);
     name = fm1.elidedText(name, Qt::ElideRight, textWidth);
-    painter->drawText(3+isz+3, r.top()+5, textWidth, r.height(), Qt::AlignTop|Qt::AlignLeft, name);
+    painter->drawText(3+48+3, r.top()+5, textWidth, r.height(), Qt::AlignTop|Qt::AlignLeft, name);
 
     f.setPointSize(13);
     painter->setFont(f);
@@ -34,7 +32,7 @@ void ProviderListItemDelegate::paint(QPainter *painter, const QStyleOptionViewIt
 
     QFontMetrics fm2(f);
     description = fm2.elidedText(description, Qt::ElideRight, textWidth);
-    painter->drawText(3+isz+3, r.top(), textWidth, r.height(), Qt::AlignBottom|Qt::AlignLeft, description);
+    painter->drawText(3+48+3, r.top(), textWidth, r.height(), Qt::AlignBottom|Qt::AlignLeft, description);
 
     painter->restore();
 }

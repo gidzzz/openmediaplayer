@@ -6,6 +6,12 @@
    <string>Select a playlst</string>
   </property>
   <layout class="QVBoxLayout" name="mainLayout">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QListWidget" name="playlistList">
      <property name="editTriggers">
@@ -13,9 +19,6 @@
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
-     </property>
-     <property name="resizeMode">
-      <enum>QListView::Adjust</enum>
      </property>
      <property name="uniformItemSizes">
       <bool>true</bool>
