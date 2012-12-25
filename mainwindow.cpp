@@ -616,30 +616,9 @@ void MainWindow::orientationChanged(int w, int h)
 {
     if (w > h) { // Landscape
         ui->menuList->hide();
-        ui->musicButton->show();
-        ui->musicButtonLabel->show();
-        ui->videosButton->show();
-        ui->videosButtonLabel->show();
-        ui->radioButton->show();
-        ui->radioButtonLabel->show();
-        ui->shuffleAllButton->show();
-        ui->shuffleLabel->show();
-        ui->songCountLabel->show();
-        ui->videoCountLabel->show();
-        ui->stationCountLabel->show();
+        ui->menuWidget->show();
     } else { // Portrait
-        ui->musicButton->hide();
-        ui->musicButtonLabel->hide();
-        ui->videosButton->hide();
-        ui->videosButtonLabel->hide();
-        ui->radioButton->hide();
-        ui->radioButtonLabel->hide();
-        ui->shuffleAllButton->hide();
-        ui->shuffleLabel->hide();
-        ui->songCountLabel->hide();
-        ui->videoCountLabel->hide();
-        ui->stationCountLabel->hide();
-        ui->menuList->setGeometry(QRect(0, 0, w, h));
+        ui->menuWidget->hide();
         ui->menuList->show();
     }
 

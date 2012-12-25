@@ -14,322 +14,304 @@
    <string>Media player</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="musicButton">
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>35</x>
-      <y>90</y>
-      <width>164</width>
-      <height>164</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton:pressed
-{
-background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
-border: none;
-}</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>:/music</normaloff>:/music</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>164</width>
-      <height>164</height>
-     </size>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="videosButton">
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>90</y>
-      <width>164</width>
-      <height>164</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton:pressed
-{
-background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
-border: none;
-}</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>:/video</normaloff>:/video</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>164</width>
-      <height>164</height>
-     </size>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="radioButton">
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>90</y>
-      <width>164</width>
-      <height>164</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton:pressed
-{
-background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
-border: none;
-}</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>:/radio</normaloff>:/radio</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>164</width>
-      <height>164</height>
-     </size>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="shuffleAllButton">
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>600</x>
-      <y>93</y>
-      <width>164</width>
-      <height>164</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton:pressed
-{
-background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
-border: none;
-}</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>:/shuffe</normaloff>:/shuffe</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>164</width>
-      <height>164</height>
-     </size>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="musicButtonLabel">
-    <property name="geometry">
-     <rect>
-      <x>35</x>
-      <y>260</y>
-      <width>164</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Music</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="videosButtonLabel">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>260</y>
-      <width>164</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Videos</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="radioButtonLabel">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>260</y>
-      <width>164</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Internet Radio</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="shuffleLabel">
-    <property name="geometry">
-     <rect>
-      <x>600</x>
-      <y>260</y>
-      <width>164</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Shuffle all songs</string>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="menuList">
-    <property name="visible">
-     <bool>false</bool>
-    </property>
-    <property name="editTriggers">
-     <set>QAbstractItemView::NoEditTriggers</set>
-    </property>
-    <property name="alternatingRowColors">
-     <bool>true</bool>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>128</width>
-      <height>128</height>
-     </size>
+   <layout class="QHBoxLayout" name="centralLayout">
+    <property name="margin">
+     <number>0</number>
     </property>
     <item>
-     <property name="text">
-      <string>Music</string>
-     </property>
+     <widget class="QWidget" name="menuWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum"/>
+      </property>
+      <layout class="QGridLayout" name="menuLayout">
+       <property name="bottomMargin">
+        <number>21</number>
+       </property>
+       <property name="horizontalSpacing">
+        <number>24</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>4</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="musicButton">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="MaximumSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:pressed
+  {
+  background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
+  border: none;
+  }</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="videosButton">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="MaximumSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:pressed
+  {
+  background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
+  border: none;
+  }</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="radioButton">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="MaximumSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:pressed
+  {
+  background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
+  border: none;
+  }</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QPushButton" name="shuffleAllButton">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="MaximumSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:pressed
+  {
+  background: transparent url(/etc/hildon/theme/mediaplayer/Button.png);
+  border: none;
+  }</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>164</width>
+           <height>164</height>
+          </size>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="musicButtonLabel">
+         <property name="text">
+          <string>Music</string>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="videosButtonLabel">
+         <property name="text">
+          <string>Videos</string>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="radioButtonLabel">
+         <property name="text">
+          <string>Internet Radio</string>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLabel" name="shuffleLabel">
+         <property name="text">
+          <string>Shuffle all songs</string>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="songCountLabel">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="videoCountLabel">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="stationCountLabel">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item>
-     <property name="text">
-      <string>Videos</string>
-     </property>
+     <widget class="QListWidget" name="menuList">
+      <property name="visible">
+       <bool>false</bool>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>128</width>
+        <height>128</height>
+       </size>
+      </property>
+      <item>
+       <property name="text">
+        <string>Music</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Videos</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Internet Radio</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Shuffle all songs</string>
+       </property>
+      </item>
+     </widget>
     </item>
-    <item>
-     <property name="text">
-      <string>Internet Radio</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Shuffle all songs</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QLabel" name="songCountLabel">
-    <property name="geometry">
-     <rect>
-      <x>35</x>
-      <y>287</y>
-      <width>164</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="videoCountLabel">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>287</y>
-      <width>164</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="stationCountLabel">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>287</y>
-      <width>164</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
+   </layout>
    <widget class="NowPlayingIndicator" name="indicator" native="true">
     <property name="geometry">
      <rect>
