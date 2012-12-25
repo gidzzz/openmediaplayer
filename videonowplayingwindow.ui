@@ -27,15 +27,7 @@
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="styleSheet">
-     <string notr="true">QToolButton:pressed
-{
-background transparent;
-}
-
-QToolButton
-{
-border: none;
-}</string>
+     <string notr="true">background: transparent;</string>
     </property>
     <property name="text">
      <string/>
@@ -60,15 +52,7 @@ border: none;
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="styleSheet">
-     <string notr="true">QToolButton:pressed
-{
-background transparent;
-}
-
-QToolButton
-{
-border: none;
-}</string>
+     <string notr="true">background: transparent;</string>
     </property>
     <property name="text">
      <string/>
@@ -161,15 +145,7 @@ border: none;
         <item>
          <widget class="QToolButton" name="bookmarkButton">
           <property name="styleSheet">
-           <string notr="true">QToolButton:pressed
-{
-background transparent;
-}
-
-QToolButton
-{
-border: none;
-}</string>
+           <string notr="true">background: transparent;</string>
           </property>
           <property name="iconSize">
            <size>
@@ -182,15 +158,7 @@ border: none;
         <item>
          <widget class="QToolButton" name="shareButton">
           <property name="styleSheet">
-           <string notr="true">QToolButton:pressed
-{
-background transparent;
-}
-
-QToolButton
-{
-border: none;
-}</string>
+           <string notr="true">background: transparent;</string>
           </property>
           <property name="iconSize">
            <size>
@@ -203,16 +171,7 @@ border: none;
         <item>
          <widget class="QToolButton" name="deleteButton">
           <property name="styleSheet">
-           <string notr="true">QToolButton:pressed
-{
-background transparent;
-}
-
-QToolButton
-{
-border: none;
-}
-</string>
+           <string notr="true">background: transparent;</string>
           </property>
           <property name="iconSize">
            <size>
@@ -323,15 +282,7 @@ border: none;
         <item>
          <widget class="QToolButton" name="volumeButton">
           <property name="styleSheet">
-           <string notr="true">QToolButton:pressed
-{
-background transparent;
-}
-
-QToolButton
-{
-border: none;
-}</string>
+           <string notr="true">background: transparent;</string>
           </property>
           <property name="text">
            <string/>
@@ -389,15 +340,7 @@ border: none;
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">QToolButton
-{
-border: none;
-}
-
-QToolButton:pressed
-{
-background: transparent;
-}</string>
+        <string notr="true">background: transparent;</string>
        </property>
        <property name="text">
         <string/>
@@ -440,15 +383,7 @@ background: transparent;
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">QToolButton
-{
-border: none;
-}
-
-QToolButton:pressed
-{
-background: transparent;
-}</string>
+        <string notr="true">background: transparent;</string>
        </property>
        <property name="text">
         <string/>
@@ -482,15 +417,7 @@ background: transparent;
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">QToolButton
-{
-border: none;
-}
-
-QToolButton:pressed
-{
-background: transparent;;
-}</string>
+        <string notr="true">background: transparent;</string>
        </property>
        <property name="text">
         <string/>

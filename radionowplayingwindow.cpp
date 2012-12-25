@@ -320,7 +320,7 @@ void RadioNowPlayingWindow::updateSongLabel()
     else if (!artist.isEmpty())
         labelText.prepend(artist + " / ");
 
-    ui->songLabel->setText(QFontMetrics(ui->songLabel->font()).elidedText(labelText, Qt::ElideRight, 430));
+    ui->songLabel->setText(QFontMetrics(ui->songLabel->font()).elidedText(labelText, Qt::ElideRight, 425));
 }
 
 void RadioNowPlayingWindow::onGetPosition(int position, QString)
@@ -445,7 +445,7 @@ void RadioNowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTab
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         station = QString::fromUtf8(g_value_get_string (v));
-        ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 430));
+        ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 425));
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
         uri = v ? QString::fromUtf8(g_value_get_string(v)) : "";
