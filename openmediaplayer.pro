@@ -23,6 +23,7 @@ TRANSLATIONS = lang/openmediaplayer.ar_SA.ts \
                lang/openmediaplayer.pt_PT.ts \
                lang/openmediaplayer.ro.ts \
                lang/openmediaplayer.ru.ts \
+               lang/openmediaplayer.sk.ts \
                lang/openmediaplayer.sv.ts \
                lang/openmediaplayer.tr.ts \
                lang/openmediaplayer.uk.ts \
