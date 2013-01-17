@@ -65,6 +65,7 @@ public slots:
     Q_SCRIPTABLE void mime_open(const QString &uri);
     Q_SCRIPTABLE void play_automatic_playlist(const QString &playlistName, bool shuffle = false);
     Q_SCRIPTABLE void play_saved_playlist(const QString &playlistName, bool shuffle = false);
+    Q_SCRIPTABLE void top_application();
 
 signals:
     void sleeperSet(qint64 timestamp);

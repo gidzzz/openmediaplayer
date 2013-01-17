@@ -35,6 +35,15 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion("0.1");
     QApplication a(argc, argv);
 
+    if (!QDBusConnection::sessionBus().isConnected())
+        qWarning("Cannot connect to the D-Bus session bus.");
+
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(DBUS_SERVICE)) {
+        qWarning("Mediaplayer already running.");
+        QDBusConnection::sessionBus().send(QDBusMessage::createMethodCall(DBUS_SERVICE, DBUS_PATH, DBUS_INTERFACE, "top_application"));
+        return 0;
+    }
+
     QString locale = QSettings().value("main/language").toString();
     QString langPath = "/opt/openmediaplayer/lang/";
 
@@ -90,9 +99,6 @@ int main(int argc, char *argv[])
         << "This is free software, and you are welcome to redistribute it" << endl
         << "under certain conditions; visit http://www.gnu.org/licenses/gpl.txt for details." << endl;*/
     MainWindow w;
-
-    if (!QDBusConnection::sessionBus().isConnected())
-        qWarning("Cannot connect to the D-Bus session bus.");
 
 #if defined(Q_WS_S60)
     w.showMaximized();

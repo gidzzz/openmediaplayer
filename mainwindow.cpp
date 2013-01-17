@@ -576,6 +576,12 @@ void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
 #endif
 }
 
+void MainWindow::top_application()
+{
+    raise();
+    activateWindow();
+}
+
 NowPlayingWindow* MainWindow::createNowPlayingWindow()
 {
     closeChildren();
