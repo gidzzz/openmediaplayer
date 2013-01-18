@@ -38,7 +38,8 @@ int main(int argc, char *argv[])
     if (!QDBusConnection::sessionBus().isConnected())
         qWarning("Cannot connect to the D-Bus session bus.");
 
-    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(DBUS_SERVICE)) {
+    if (!(argc > 1 && QString(argv[1]) == "--allow-multiple-instances")
+    && QDBusConnection::sessionBus().interface()->isServiceRegistered(DBUS_SERVICE)) {
         qWarning("Mediaplayer already running.");
         QDBusConnection::sessionBus().send(QDBusMessage::createMethodCall(DBUS_SERVICE, DBUS_PATH, DBUS_INTERFACE, "top_application"));
         return 0;
