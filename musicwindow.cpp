@@ -1318,12 +1318,7 @@ void MusicWindow::notifyOnAddedToNowPlaying(int songCount)
 }
 #endif
 
-void MusicWindow::showEvent(QShowEvent *)
-{
-    emit shown();
-}
-
-void MusicWindow::hideEvent(QHideEvent *)
+void MusicWindow::closeEvent(QCloseEvent *e)
 {
     QMainWindow *child = findChild<QMainWindow*>();
     if (child) child->close();

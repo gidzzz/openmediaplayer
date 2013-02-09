@@ -45,12 +45,10 @@ public:
     void refreshPlaylistView();
 
 protected:
-    void hideEvent(QHideEvent *);
-    void showEvent(QShowEvent *);
+    void closeEvent(QCloseEvent *e);
 
 signals:
     void hidden();
-    void shown();
 
 private:
     Ui::MusicWindow *ui;

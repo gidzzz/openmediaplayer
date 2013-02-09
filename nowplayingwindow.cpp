@@ -75,8 +75,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
                               .arg(secondaryColor.blue()));
     defaultWindowTitle = this->windowTitle();
 
-    setAttribute(Qt::WA_DeleteOnClose);
-
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
@@ -1518,8 +1516,6 @@ void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
 
 void NowPlayingWindow::closeEvent(QCloseEvent *e)
 {
-    this->hide();
     this->setParent(0);
     emit hidden();
-    e->ignore();
 }
