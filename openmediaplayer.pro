@@ -9,6 +9,7 @@ QT += core gui dbus declarative opengl network
 TARGET = openmediaplayer
 TEMPLATE = app
 TRANSLATIONS = lang/openmediaplayer.ar_SA.ts \
+               lang/openmediaplayer.bg.ts \
                lang/openmediaplayer.cs.ts \
                lang/openmediaplayer.de.ts \
                lang/openmediaplayer.en.ts \
