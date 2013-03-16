@@ -9,7 +9,7 @@
         <translation></translation>
     </message>
     <message utf8="true">
-        <location filename="../aboutwindow.ui" line="82"/>
+        <location filename="../aboutwindow.ui" line="46"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -56,12 +56,12 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.ui" line="23"/>
+        <location filename="../bookmarkdialog.ui" line="20"/>
         <source>Web address</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.ui" line="37"/>
+        <location filename="../bookmarkdialog.ui" line="31"/>
         <source>Video</source>
         <translation></translation>
     </message>
@@ -193,13 +193,13 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FMTXDialog</name>
     <message>
-        <location filename="../fmtxdialog.ui" line="14"/>
+        <location filename="../fmtxdialog.ui" line="6"/>
         <location filename="../fmtxdialog.cpp" line="36"/>
         <source>FM transmitter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../fmtxdialog.ui" line="26"/>
+        <location filename="../fmtxdialog.ui" line="12"/>
         <location filename="../fmtxdialog.cpp" line="35"/>
         <source>FM transmitter on</source>
         <translation></translation>
@@ -220,13 +220,13 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../fmtxdialog.cpp" line="130"/>
+        <location filename="../fmtxdialog.cpp" line="131"/>
         <source>Unable to use FM transmitter while headset or TV out cable is connected.
 Unplug cable to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../fmtxdialog.cpp" line="134"/>
+        <location filename="../fmtxdialog.cpp" line="135"/>
         <source>Unable to use FM transmitter while USB is connected.
 Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
@@ -235,12 +235,12 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>FreqDlg</name>
     <message>
-        <location filename="../freqdlg.cpp" line="9"/>
+        <location filename="../freqdlg.cpp" line="8"/>
         <source>Done</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../freqdlg.cpp" line="13"/>
+        <location filename="../freqdlg.cpp" line="12"/>
         <source>Select frequency</source>
         <translation></translation>
     </message>
@@ -253,47 +253,47 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.ui" line="92"/>
+        <location filename="../internetradiowindow.ui" line="84"/>
         <source>Internet Radio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.ui" line="101"/>
+        <location filename="../internetradiowindow.ui" line="93"/>
         <source>Add radio bookmark</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.ui" line="106"/>
+        <location filename="../internetradiowindow.ui" line="98"/>
         <source>FM transmitter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="163"/>
+        <location filename="../internetradiowindow.cpp" line="162"/>
         <source>Edit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="164"/>
+        <location filename="../internetradiowindow.cpp" line="163"/>
         <source>Delete</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="239"/>
+        <location filename="../internetradiowindow.cpp" line="238"/>
         <source>(unknown station)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="245"/>
+        <location filename="../internetradiowindow.cpp" line="244"/>
         <source>(unknown)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="275"/>
+        <location filename="../internetradiowindow.cpp" line="274"/>
         <source>Audio bookmarks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="298"/>
+        <location filename="../internetradiowindow.cpp" line="297"/>
         <source>Video bookmarks</source>
         <translation></translation>
     </message>
@@ -314,7 +314,7 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>LyricsProvidersDialog</name>
     <message>
-        <location filename="../lyricsprovidersdialog.ui" line="14"/>
+        <location filename="../lyricsprovidersdialog.ui" line="6"/>
         <source>Lyrics providers</source>
         <translation></translation>
     </message>
@@ -322,8 +322,7 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="34"/>
-        <location filename="../mainwindow.cpp" line="837"/>
+        <location filename="../mainwindow.cpp" line="882"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n song</numerusform>
@@ -331,8 +330,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="35"/>
-        <location filename="../mainwindow.cpp" line="844"/>
+        <location filename="../mainwindow.cpp" line="889"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n clip</numerusform>
@@ -340,8 +338,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="36"/>
-        <location filename="../mainwindow.cpp" line="860"/>
+        <location filename="../mainwindow.cpp" line="905"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n station</numerusform>
@@ -349,56 +346,56 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="180"/>
-        <location filename="../mainwindow.ui" line="289"/>
+        <location filename="../mainwindow.ui" line="179"/>
+        <location filename="../mainwindow.ui" line="294"/>
         <source>Music</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="204"/>
-        <location filename="../mainwindow.ui" line="294"/>
+        <location filename="../mainwindow.ui" line="194"/>
+        <location filename="../mainwindow.ui" line="299"/>
         <source>Videos</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="225"/>
-        <location filename="../mainwindow.ui" line="299"/>
+        <location filename="../mainwindow.ui" line="209"/>
+        <location filename="../mainwindow.ui" line="304"/>
         <source>Internet Radio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="246"/>
-        <location filename="../mainwindow.ui" line="304"/>
+        <location filename="../mainwindow.ui" line="224"/>
+        <location filename="../mainwindow.ui" line="309"/>
         <source>Shuffle all songs</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="836"/>
+        <location filename="../mainwindow.cpp" line="881"/>
         <source>(no songs)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="843"/>
+        <location filename="../mainwindow.cpp" line="888"/>
         <source>(no videos)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="859"/>
+        <location filename="../mainwindow.cpp" line="904"/>
         <source>(no stations)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="927"/>
+        <location filename="../mainwindow.cpp" line="972"/>
         <source>Retrieving information on the new media files</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="929"/>
+        <location filename="../mainwindow.cpp" line="974"/>
         <source>Estimated time remaining:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="931"/>
+        <location filename="../mainwindow.cpp" line="976"/>
         <source>Remaining items:</source>
         <translation></translation>
     </message>
@@ -408,28 +405,28 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="393"/>
-        <location filename="../mainwindow.ui" line="400"/>
+        <location filename="../mainwindow.ui" line="337"/>
+        <location filename="../mainwindow.ui" line="344"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="410"/>
+        <location filename="../mainwindow.ui" line="354"/>
         <source>About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="415"/>
+        <location filename="../mainwindow.ui" line="359"/>
         <source>About Qt</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="420"/>
+        <location filename="../mainwindow.ui" line="364"/>
         <source>Settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="425"/>
+        <location filename="../mainwindow.ui" line="369"/>
         <source>Sleep timer</source>
         <translation></translation>
     </message>
@@ -437,59 +434,59 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>MusicWindow</name>
     <message>
-        <location filename="../musicwindow.cpp" line="240"/>
+        <location filename="../musicwindow.cpp" line="236"/>
         <source>Add to now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="246"/>
+        <location filename="../musicwindow.cpp" line="242"/>
         <source>Add to a playlist</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="262"/>
-        <location filename="../musicwindow.cpp" line="277"/>
+        <location filename="../musicwindow.cpp" line="258"/>
+        <location filename="../musicwindow.cpp" line="273"/>
         <source>Rename playlist</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="263"/>
-        <location filename="../musicwindow.cpp" line="266"/>
+        <location filename="../musicwindow.cpp" line="259"/>
+        <location filename="../musicwindow.cpp" line="262"/>
         <source>Delete playlist</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="248"/>
+        <location filename="../musicwindow.cpp" line="244"/>
         <source>Delete</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="251"/>
+        <location filename="../musicwindow.cpp" line="247"/>
         <source>Set as ringing tone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="252"/>
+        <location filename="../musicwindow.cpp" line="248"/>
         <source>Share</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="283"/>
+        <location filename="../musicwindow.cpp" line="279"/>
         <source>Save</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="362"/>
+        <location filename="../musicwindow.cpp" line="359"/>
         <source>Selected song set as ringing tone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="494"/>
+        <location filename="../musicwindow.cpp" line="493"/>
         <source>Albums</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="557"/>
+        <location filename="../musicwindow.cpp" line="556"/>
         <source>Songs</source>
         <translation></translation>
     </message>
@@ -518,27 +515,27 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="800"/>
+        <location filename="../musicwindow.cpp" line="799"/>
         <source>Automatic playlists</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="806"/>
+        <location filename="../musicwindow.cpp" line="805"/>
         <source>Recently added</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="806"/>
+        <location filename="../musicwindow.cpp" line="805"/>
         <source>Recently played</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="806"/>
+        <location filename="../musicwindow.cpp" line="805"/>
         <source>Most played</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="806"/>
+        <location filename="../musicwindow.cpp" line="805"/>
         <source>Never played</source>
         <translation></translation>
     </message>
@@ -605,40 +602,40 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="185"/>
+        <location filename="../musicwindow.ui" line="171"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="192"/>
-        <location filename="../musicwindow.cpp" line="448"/>
+        <location filename="../musicwindow.ui" line="178"/>
+        <location filename="../musicwindow.cpp" line="447"/>
         <source>All albums</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="197"/>
-        <location filename="../musicwindow.cpp" line="450"/>
-        <location filename="../musicwindow.cpp" line="515"/>
+        <location filename="../musicwindow.ui" line="183"/>
+        <location filename="../musicwindow.cpp" line="449"/>
+        <location filename="../musicwindow.cpp" line="514"/>
         <source>Artists</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="202"/>
-        <location filename="../musicwindow.cpp" line="454"/>
-        <location filename="../musicwindow.cpp" line="536"/>
+        <location filename="../musicwindow.ui" line="188"/>
+        <location filename="../musicwindow.cpp" line="453"/>
+        <location filename="../musicwindow.cpp" line="535"/>
         <source>Genres</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="207"/>
-        <location filename="../musicwindow.cpp" line="456"/>
-        <location filename="../musicwindow.cpp" line="578"/>
+        <location filename="../musicwindow.ui" line="193"/>
+        <location filename="../musicwindow.cpp" line="455"/>
+        <location filename="../musicwindow.cpp" line="577"/>
         <source>Playlists</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../musicwindow.ui" line="212"/>
-        <location filename="../musicwindow.cpp" line="452"/>
+        <location filename="../musicwindow.ui" line="198"/>
+        <location filename="../musicwindow.cpp" line="451"/>
         <source>All songs</source>
         <translation></translation>
     </message>
@@ -654,7 +651,7 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>NowPlayingWindow</name>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="239"/>
+        <location filename="../nowplayingwindow.cpp" line="224"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n song</numerusform>
@@ -662,54 +659,54 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="249"/>
+        <location filename="../nowplayingwindow.cpp" line="229"/>
         <source>total</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1156"/>
+        <location filename="../nowplayingwindow.cpp" line="1129"/>
         <source>Information not available</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1235"/>
+        <location filename="../nowplayingwindow.cpp" line="1208"/>
         <source>Set as ringing tone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1231"/>
+        <location filename="../nowplayingwindow.cpp" line="1204"/>
         <source>Delete from now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1236"/>
+        <location filename="../nowplayingwindow.cpp" line="1209"/>
         <source>Share</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="774"/>
-        <location filename="../nowplayingwindow.cpp" line="780"/>
+        <location filename="../nowplayingwindow.cpp" line="754"/>
+        <location filename="../nowplayingwindow.cpp" line="760"/>
         <source>Fetching lyrics...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="975"/>
+        <location filename="../nowplayingwindow.cpp" line="948"/>
         <source>Stop playback</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1233"/>
+        <location filename="../nowplayingwindow.cpp" line="1206"/>
         <source>Delete</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1234"/>
+        <location filename="../nowplayingwindow.cpp" line="1207"/>
         <source>Add to a playlist</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1250"/>
-        <location filename="../nowplayingwindow.cpp" line="1392"/>
+        <location filename="../nowplayingwindow.cpp" line="1223"/>
+        <location filename="../nowplayingwindow.cpp" line="1365"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n clip added to playlist</numerusform>
@@ -717,37 +714,37 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1283"/>
+        <location filename="../nowplayingwindow.cpp" line="1256"/>
         <source>Selected song set as ringing tone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1331"/>
+        <location filename="../nowplayingwindow.cpp" line="1304"/>
         <source>Entertainment View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1336"/>
+        <location filename="../nowplayingwindow.cpp" line="1309"/>
         <source>Car View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1488"/>
+        <location filename="../nowplayingwindow.cpp" line="1461"/>
         <source>Select album art</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1489"/>
+        <location filename="../nowplayingwindow.cpp" line="1462"/>
         <source>Reset album art</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1539"/>
+        <location filename="../nowplayingwindow.cpp" line="1512"/>
         <source>Edit lyrics</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1540"/>
+        <location filename="../nowplayingwindow.cpp" line="1513"/>
         <source>Reload lyrics</source>
         <translation></translation>
     </message>
@@ -757,58 +754,58 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="194"/>
+        <location filename="../nowplayingwindow.ui" line="166"/>
         <source>--/-- songs</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="246"/>
-        <location filename="../nowplayingwindow.cpp" line="608"/>
-        <location filename="../nowplayingwindow.cpp" line="1132"/>
+        <location filename="../nowplayingwindow.ui" line="212"/>
+        <location filename="../nowplayingwindow.cpp" line="588"/>
+        <location filename="../nowplayingwindow.cpp" line="1105"/>
         <source>(unknown song)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="360"/>
-        <location filename="../nowplayingwindow.cpp" line="617"/>
-        <location filename="../nowplayingwindow.cpp" line="1135"/>
+        <location filename="../nowplayingwindow.ui" line="282"/>
+        <location filename="../nowplayingwindow.cpp" line="597"/>
+        <location filename="../nowplayingwindow.cpp" line="1108"/>
         <source>(unknown artist)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="373"/>
-        <location filename="../nowplayingwindow.cpp" line="626"/>
-        <location filename="../nowplayingwindow.cpp" line="1138"/>
+        <location filename="../nowplayingwindow.ui" line="289"/>
+        <location filename="../nowplayingwindow.cpp" line="606"/>
+        <location filename="../nowplayingwindow.cpp" line="1111"/>
         <source>(unknown album)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="933"/>
+        <location filename="../nowplayingwindow.ui" line="618"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="945"/>
+        <location filename="../nowplayingwindow.ui" line="630"/>
         <source>FM Transmitter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="950"/>
+        <location filename="../nowplayingwindow.ui" line="635"/>
         <source>Clear now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="955"/>
+        <location filename="../nowplayingwindow.ui" line="640"/>
         <source>Add songs to a playlist</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="960"/>
+        <location filename="../nowplayingwindow.ui" line="645"/>
         <source>Entertainment view</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="965"/>
+        <location filename="../nowplayingwindow.ui" line="650"/>
         <source>Car view</source>
         <translation></translation>
     </message>
@@ -849,18 +846,18 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>PlaylistPicker</name>
     <message>
-        <location filename="../playlistpicker.ui" line="14"/>
+        <location filename="../playlistpicker.ui" line="6"/>
         <source>Select a playlst</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="9"/>
-        <location filename="../playlistpicker.cpp" line="52"/>
+        <location filename="../playlistpicker.cpp" line="53"/>
         <source>New playlist</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../playlistpicker.cpp" line="59"/>
+        <location filename="../playlistpicker.cpp" line="60"/>
         <source>Save</source>
         <translation></translation>
     </message>
@@ -873,23 +870,23 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="119"/>
+        <location filename="../radionowplayingwindow.ui" line="116"/>
         <location filename="../radionowplayingwindow.cpp" line="272"/>
         <source>(unknown station)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="481"/>
+        <location filename="../radionowplayingwindow.ui" line="420"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="490"/>
+        <location filename="../radionowplayingwindow.ui" line="429"/>
         <source>FM transmitter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="495"/>
+        <location filename="../radionowplayingwindow.ui" line="434"/>
         <source>Add radio bookmark</source>
         <translation></translation>
     </message>
@@ -904,12 +901,12 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="348"/>
+        <location filename="../radionowplayingwindow.cpp" line="349"/>
         <source>Buffering</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="579"/>
+        <location filename="../radionowplayingwindow.cpp" line="568"/>
         <source>Stop playback</source>
         <translation></translation>
     </message>
@@ -1020,17 +1017,17 @@ Unplug USB to continue using FM transmitter.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="165"/>
+        <location filename="../settingsdialog.cpp" line="168"/>
         <source>Only local cache</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="178"/>
+        <location filename="../settingsdialog.cpp" line="181"/>
         <source>Operation complete</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="179"/>
+        <location filename="../settingsdialog.cpp" line="182"/>
         <source>Operation failed</source>
         <translation></translation>
     </message>
@@ -1159,17 +1156,17 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>ShareDialog</name>
     <message>
-        <location filename="../sharedialog.ui" line="14"/>
+        <location filename="../sharedialog.ui" line="6"/>
         <source>Share</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sharedialog.ui" line="20"/>
+        <location filename="../sharedialog.ui" line="12"/>
         <source>Send via bluetooth</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sharedialog.ui" line="27"/>
+        <location filename="../sharedialog.ui" line="19"/>
         <source>Send via e-mail</source>
         <translation></translation>
     </message>
@@ -1193,42 +1190,42 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.cpp" line="128"/>
+        <location filename="../singlealbumview.cpp" line="127"/>
         <source>(unknown song)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="131"/>
+        <location filename="../singlealbumview.cpp" line="130"/>
         <source>(unknown artist)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="134"/>
+        <location filename="../singlealbumview.cpp" line="133"/>
         <source>(unknown album)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="321"/>
+        <location filename="../singlealbumview.cpp" line="320"/>
         <source>Add to now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="322"/>
+        <location filename="../singlealbumview.cpp" line="321"/>
         <source>Add to a playlist</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="324"/>
+        <location filename="../singlealbumview.cpp" line="323"/>
         <source>Set as ringing tone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="325"/>
+        <location filename="../singlealbumview.cpp" line="324"/>
         <source>Share</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="353"/>
+        <location filename="../singlealbumview.cpp" line="352"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n clip added to playlist</numerusform>
@@ -1236,12 +1233,12 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="386"/>
+        <location filename="../singlealbumview.cpp" line="385"/>
         <source>Selected song set as ringing tone</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="447"/>
+        <location filename="../singlealbumview.cpp" line="446"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n clip added to now playing</numerusform>
@@ -1249,18 +1246,18 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singlealbumview.ui" line="98"/>
+        <location filename="../singlealbumview.ui" line="81"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlealbumview.ui" line="107"/>
+        <location filename="../singlealbumview.ui" line="90"/>
         <source>Add songs to now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlealbumview.ui" line="112"/>
-        <location filename="../singlealbumview.cpp" line="323"/>
+        <location filename="../singlealbumview.ui" line="95"/>
+        <location filename="../singlealbumview.cpp" line="322"/>
         <source>Delete</source>
         <translation></translation>
     </message>
@@ -1268,13 +1265,13 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SingleArtistView</name>
     <message>
-        <location filename="../singleartistview.cpp" line="128"/>
+        <location filename="../singleartistview.cpp" line="127"/>
         <source>(unknown album)</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="143"/>
-        <location filename="../singleartistview.cpp" line="268"/>
+        <location filename="../singleartistview.cpp" line="142"/>
+        <location filename="../singleartistview.cpp" line="269"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n song</numerusform>
@@ -1282,12 +1279,12 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="328"/>
+        <location filename="../singleartistview.cpp" line="329"/>
         <source>Add to now playing</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="388"/>
+        <location filename="../singleartistview.cpp" line="389"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n clip added to now playing</numerusform>
@@ -1295,24 +1292,24 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="75"/>
-        <location filename="../singleartistview.cpp" line="101"/>
+        <location filename="../singleartistview.ui" line="73"/>
+        <location filename="../singleartistview.cpp" line="100"/>
         <source>Shuffle songs</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="129"/>
+        <location filename="../singleartistview.ui" line="112"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="138"/>
+        <location filename="../singleartistview.ui" line="121"/>
         <source>Add songs to now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleartistview.ui" line="143"/>
-        <location filename="../singleartistview.cpp" line="329"/>
+        <location filename="../singleartistview.ui" line="126"/>
+        <location filename="../singleartistview.cpp" line="330"/>
         <source>Delete</source>
         <translation></translation>
     </message>
@@ -1320,13 +1317,13 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.cpp" line="176"/>
-        <location filename="../singlegenreview.cpp" line="194"/>
+        <location filename="../singlegenreview.cpp" line="175"/>
+        <location filename="../singlegenreview.cpp" line="193"/>
         <source>(unknown artist)</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlegenreview.cpp" line="370"/>
+        <location filename="../singlegenreview.cpp" line="369"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n clip added to now playing</numerusform>
@@ -1334,18 +1331,18 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="100"/>
+        <location filename="../singlegenreview.ui" line="81"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="108"/>
-        <location filename="../singlegenreview.cpp" line="303"/>
+        <location filename="../singlegenreview.ui" line="89"/>
+        <location filename="../singlegenreview.cpp" line="302"/>
         <source>Add to now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singlegenreview.ui" line="113"/>
+        <location filename="../singlegenreview.ui" line="94"/>
         <source>Delete</source>
         <translation></translation>
     </message>
@@ -1353,27 +1350,27 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.cpp" line="163"/>
+        <location filename="../singleplaylistview.cpp" line="162"/>
         <source>(unknown song)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="166"/>
+        <location filename="../singleplaylistview.cpp" line="165"/>
         <source>(unknown artist)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="169"/>
+        <location filename="../singleplaylistview.cpp" line="168"/>
         <source>(unknown album)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="182"/>
+        <location filename="../singleplaylistview.cpp" line="181"/>
         <source>Information not available</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="391"/>
+        <location filename="../singleplaylistview.cpp" line="390"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n clip added to now playing</numerusform>
@@ -1381,34 +1378,34 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="113"/>
-        <location filename="../singleplaylistview.cpp" line="468"/>
+        <location filename="../singleplaylistview.ui" line="96"/>
+        <location filename="../singleplaylistview.cpp" line="467"/>
         <source>Add to a playlist</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="471"/>
+        <location filename="../singleplaylistview.cpp" line="470"/>
         <source>Delete</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="469"/>
+        <location filename="../singleplaylistview.cpp" line="468"/>
         <source>Set as ringing tone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="472"/>
+        <location filename="../singleplaylistview.cpp" line="471"/>
         <source>Share</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="470"/>
+        <location filename="../singleplaylistview.cpp" line="469"/>
         <source>Delete from playlist</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="357"/>
-        <location filename="../singleplaylistview.cpp" line="506"/>
+        <location filename="../singleplaylistview.cpp" line="356"/>
+        <location filename="../singleplaylistview.cpp" line="505"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n clip added to playlist</numerusform>
@@ -1416,23 +1413,23 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="539"/>
+        <location filename="../singleplaylistview.cpp" line="538"/>
         <source>Selected song set as ringing tone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="98"/>
+        <location filename="../singleplaylistview.ui" line="81"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="108"/>
-        <location filename="../singleplaylistview.cpp" line="467"/>
+        <location filename="../singleplaylistview.ui" line="91"/>
+        <location filename="../singleplaylistview.cpp" line="466"/>
         <source>Add to now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.ui" line="118"/>
+        <location filename="../singleplaylistview.ui" line="101"/>
         <source>Delete playlist</source>
         <translation></translation>
     </message>
@@ -1440,17 +1437,17 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SleeperDialog</name>
     <message>
-        <location filename="../sleeperdialog.ui" line="31"/>
+        <location filename="../sleeperdialog.ui" line="28"/>
         <source>Action</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sleeperdialog.ui" line="38"/>
+        <location filename="../sleeperdialog.ui" line="35"/>
         <source>Volume reduction</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sleeperdialog.ui" line="47"/>
+        <location filename="../sleeperdialog.ui" line="44"/>
         <source>Time (minutes)</source>
         <translation></translation>
     </message>
@@ -1504,27 +1501,27 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.cpp" line="151"/>
+        <location filename="../upnpview.cpp" line="150"/>
         <source>(unknown song)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="154"/>
+        <location filename="../upnpview.cpp" line="153"/>
         <source>(unknown type)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="195"/>
+        <location filename="../upnpview.cpp" line="194"/>
         <source>Add to now playing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="196"/>
+        <location filename="../upnpview.cpp" line="195"/>
         <source>Add to a playlist</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="284"/>
+        <location filename="../upnpview.cpp" line="302"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n clip added to playlist</numerusform>
@@ -1532,7 +1529,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="321"/>
+        <location filename="../upnpview.cpp" line="345"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n clip added to now playing</numerusform>
@@ -1540,12 +1537,12 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../upnpview.ui" line="104"/>
+        <location filename="../upnpview.ui" line="87"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../upnpview.ui" line="112"/>
+        <location filename="../upnpview.ui" line="95"/>
         <source>Add songs to now playing</source>
         <translation></translation>
     </message>
@@ -1558,12 +1555,12 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.ui" line="114"/>
+        <location filename="../videonowplayingwindow.ui" line="92"/>
         <source>Fit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.ui" line="124"/>
+        <location filename="../videonowplayingwindow.ui" line="102"/>
         <source>Continuous</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1722,52 +1719,52 @@ Unplug USB to continue using FM transmitter.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.ui" line="107"/>
+        <location filename="../videoswindow.ui" line="96"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="55"/>
+        <location filename="../videoswindow.cpp" line="54"/>
         <source>Date</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="57"/>
+        <location filename="../videoswindow.cpp" line="56"/>
         <source>Category</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="107"/>
+        <location filename="../videoswindow.cpp" line="106"/>
         <source>Delete</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="108"/>
+        <location filename="../videoswindow.cpp" line="107"/>
         <source>Share</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="193"/>
+        <location filename="../videoswindow.cpp" line="205"/>
         <source>Videos - latest</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="206"/>
+        <location filename="../videoswindow.cpp" line="218"/>
         <source>Videos - categories</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="343"/>
+        <location filename="../videoswindow.cpp" line="355"/>
         <source>(unknown clip)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="408"/>
+        <location filename="../videoswindow.cpp" line="420"/>
         <source>Recorded by device camera</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="427"/>
+        <location filename="../videoswindow.cpp" line="439"/>
         <source>Films</source>
         <translation></translation>
     </message>
