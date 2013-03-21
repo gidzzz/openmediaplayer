@@ -250,6 +250,7 @@ OTHER_FILES += \
     qml_carview/SongView.qml \
     qtc_packaging/meego.spec \
     lang/openmediaplayer.ar_SA.qm \
+    lang/openmediaplayer.bg.qm \
     lang/openmediaplayer.cs.qm \
     lang/openmediaplayer.de.qm \
     lang/openmediaplayer.en.qm \
@@ -264,6 +265,7 @@ OTHER_FILES += \
     lang/openmediaplayer.pt_PT.qm \
     lang/openmediaplayer.ro.qm \
     lang/openmediaplayer.ru.qm \
+    lang/openmediaplayer.sk.qm \
     lang/openmediaplayer.sv.qm \
     lang/openmediaplayer.tr.qm \
     lang/openmediaplayer.uk.qm \
@@ -282,6 +284,7 @@ qml_carview.files += qml_carview/SongView.qml
 qml_carview.path = /opt/openmediaplayer/qml/carview/
 
 lang.files += lang/openmediaplayer.ar_SA.qm
+lang.files += lang/openmediaplayer.bg.qm
 lang.files += lang/openmediaplayer.cs.qm
 lang.files += lang/openmediaplayer.de.qm
 lang.files += lang/openmediaplayer.en.qm
@@ -296,6 +299,7 @@ lang.files += lang/openmediaplayer.pt_BR.qm
 lang.files += lang/openmediaplayer.pt_PT.qm
 lang.files += lang/openmediaplayer.ro.qm
 lang.files += lang/openmediaplayer.ru.qm
+lang.files += lang/openmediaplayer.sk.qm
 lang.files += lang/openmediaplayer.sv.qm
 lang.files += lang/openmediaplayer.tr.qm
 lang.files += lang/openmediaplayer.uk.qm
