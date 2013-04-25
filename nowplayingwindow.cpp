@@ -73,13 +73,17 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
                               .arg(secondaryColor.red())
                               .arg(secondaryColor.green())
                               .arg(secondaryColor.blue()));
+    ui->artistHeaderLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
+                              .arg(secondaryColor.red())
+                              .arg(secondaryColor.green())
+                              .arg(secondaryColor.blue()));
     defaultWindowTitle = this->windowTitle();
 
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
-    albumArtSceneLarge = new QGraphicsScene(ui->view_large);
-    albumArtSceneSmall = new QGraphicsScene(ui->view_small);
+    albumArtSceneLarge = new QGraphicsScene(ui->coverViewLarge);
+    albumArtSceneSmall = new QGraphicsScene(ui->coverViewSmall);
     qmlView = 0;
 
     enableLyrics = QSettings().value("lyrics/enable").toBool();
@@ -113,6 +117,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     isMediaSeekable = false;
     playlistRequested = false;
     buttonWasDown = false;
+    toggleAreaPressed = false;
     playlistTime = 0;
 
 #ifdef Q_WS_MAEMO_5
@@ -196,7 +201,7 @@ void NowPlayingWindow::setAlbumImage(QString image)
     QGraphicsPixmapItem *item;
     QPixmap albumArt(albumArtPath);
 
-    ui->view_large->setScene(albumArtSceneLarge);
+    ui->coverViewLarge->setScene(albumArtSceneLarge);
     albumArtSceneLarge->setBackgroundBrush(QBrush(Qt::transparent));
     m = new mirror();
     albumArtSceneLarge->addItem(m);
@@ -205,18 +210,43 @@ void NowPlayingWindow::setAlbumImage(QString image)
     albumArtSceneLarge->addItem(item);
     m->setItem(item);
 
-    ui->view_small->setScene(albumArtSceneSmall);
+    ui->coverViewSmall->setScene(albumArtSceneSmall);
     albumArtSceneSmall->setBackgroundBrush(QBrush(Qt::transparent));
     m = new mirror();
     albumArtSceneSmall->addItem(m);
-    albumArt = albumArt.scaled(QSize(245, 245), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    albumArt = albumArt.scaled(QSize(80, 80), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     item = new QGraphicsPixmapItem(albumArt);
     albumArtSceneSmall->addItem(item);
     m->setItem(item);
 
     /*QTransform t;
     t = t.rotate(-10, Qt::YAxis);
-    ui->view_large->setTransform(t);*/
+    ui->coverViewLarge->setTransform(t);*/
+}
+
+void NowPlayingWindow::setTitle(QString title)
+{
+    ui->titleLabel->setWhatsThis(title);
+    ui->titleLabel->setText(QFontMetrics(ui->titleLabel->font()).elidedText(title, Qt::ElideRight, 425));
+
+    ui->titleHeaderLabel->setText(QFontMetrics(ui->titleHeaderLabel->font()).elidedText(title, Qt::ElideRight, 370));
+
+    if (!this->isActiveWindow())
+        this->setWindowTitle(title);
+}
+
+void NowPlayingWindow::setArtist(QString artist)
+{
+    ui->artistLabel->setWhatsThis(artist);
+    ui->artistLabel->setText(QFontMetrics(ui->artistLabel->font()).elidedText(artist, Qt::ElideRight, 425));
+
+    ui->artistHeaderLabel->setText(QFontMetrics(ui->artistHeaderLabel->font()).elidedText(artist, Qt::ElideRight, 370));
+}
+
+void NowPlayingWindow::setAlbum(QString album)
+{
+    ui->albumLabel->setWhatsThis(album);
+    ui->albumLabel->setText(QFontMetrics(ui->albumLabel->font()).elidedText(album, Qt::ElideRight, 425));
 }
 
 void NowPlayingWindow::setSongNumber(int currentSong, int numberOfSongs)
@@ -278,20 +308,15 @@ void NowPlayingWindow::onMetadataChanged(QString name, QVariant value)
     QString elided = fm.elidedText(value.toString(), Qt::ElideRight, 425);
 
     if (name == MAFW_METADATA_KEY_TITLE) {
-        ui->titleLabel->setText(elided);
-        ui->titleLabel->setWhatsThis(value.toString());
-        if (!this->isActiveWindow())
-            this->setWindowTitle(value.toString());
+        setTitle(value.toString());
     }
 
     else if (name == MAFW_METADATA_KEY_ARTIST) {
-        ui->artistLabel->setText(elided);
-        ui->artistLabel->setWhatsThis(value.toString());
+        setArtist(value.toString());
     }
 
     else if (name == MAFW_METADATA_KEY_ALBUM) {
-        ui->albumLabel->setWhatsThis(value.toString());
-        ui->albumLabel->setText(elided);
+        setAlbum(value.toString());
     }
 
     else if (name == MAFW_METADATA_KEY_DURATION) {
@@ -388,11 +413,8 @@ void NowPlayingWindow::connectSignals()
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
 
-    connect(ui->view_large, SIGNAL(clicked()), this, SLOT(toggleList()));
-    connect(ui->view_small, SIGNAL(clicked()), this, SLOT(toggleList()));
-
-    connect(ui->view_large, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
-    connect(ui->view_small, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
+    connect(ui->coverViewLarge, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
+    connect(ui->coverViewSmall, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onViewContextMenuRequested(QPoint)));
     connect(ui->lyricsText,SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onLyricsContextMenuRequested(QPoint)));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
@@ -629,19 +651,9 @@ void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString
     QFont f = ui->titleLabel->font();
     QFontMetrics fm(f);
 
-    ui->titleLabel->setWhatsThis(title);
-    if (!this->isActiveWindow())
-        this->setWindowTitle(title);
-    title = fm.elidedText(title, Qt::ElideRight, 425);
-    ui->titleLabel->setText(title);
-
-    ui->artistLabel->setWhatsThis(artist);
-    artist = fm.elidedText(artist, Qt::ElideRight, 425);
-    ui->artistLabel->setText(artist);
-
-    ui->albumLabel->setWhatsThis(album);
-    album = fm.elidedText(album, Qt::ElideRight, 425);
-    ui->albumLabel->setText(album);
+    setTitle(title);
+    setArtist(artist);
+    setAlbum(album);
 
     ui->trackLengthLabel->setText(mmss_len(songDuration));
     ui->positionSlider->setRange(0, songDuration);
@@ -667,29 +679,21 @@ void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *m
 
         if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE) )) {
             QString title = QString::fromUtf8(g_value_get_string (v));
-            ui->titleLabel->setWhatsThis(title);
-            if (!this->isActiveWindow())
-                this->setWindowTitle(title);
-            title = fm.elidedText(title, Qt::ElideRight, 425);
-            ui->titleLabel->setText(title);
+            setTitle(title);
             if (item && item->data(UserRoleSongTitle).toString().isEmpty())
                 item->setData(UserRoleSongTitle, title);
         }
 
         if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST) )) {
             QString artist = QString::fromUtf8(g_value_get_string(v));
-            ui->artistLabel->setWhatsThis(artist);
-            artist = fm.elidedText(artist, Qt::ElideRight, 425);
-            ui->artistLabel->setText(artist);
+            setArtist(artist);
             if (item && item->data(UserRoleSongArtist).toString().isEmpty())
                 item->setData(UserRoleSongArtist, artist);
         }
 
         if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM) )) {
             QString album = QString::fromUtf8(g_value_get_string(v));
-            ui->albumLabel->setWhatsThis(album);
-            album = fm.elidedText(album, Qt::ElideRight, 425);
-            ui->albumLabel->setText(album);
+            setAlbum(album);
             if (item && item->data(UserRoleSongAlbum).toString().isEmpty())
                 item->setData(UserRoleSongAlbum, album);
         }
@@ -774,6 +778,7 @@ void NowPlayingWindow::orientationChanged(int w, int h)
         if (ui->volumeWidget->isHidden())
             ui->volumeWidget->show();
 
+        ui->infoLayout->setContentsMargins(0,0,16,0);
         ui->volumeWidget->setContentsMargins(0,0,9,9);
         ui->buttonsLayout->setSpacing(60);
 
@@ -782,8 +787,8 @@ void NowPlayingWindow::orientationChanged(int w, int h)
         ui->albumLabel->setAlignment(Qt::AlignLeft);
         ui->lyricsText->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
-        ui->view_small->hide();
-        ui->view_large->show();
+        ui->headerWidget->hide();
+        ui->coverViewLarge->show();
 
     } else { // Portrait mode
         portrait = true;
@@ -791,6 +796,7 @@ void NowPlayingWindow::orientationChanged(int w, int h)
         if (!ui->volumeButton->isHidden())
             ui->volumeWidget->hide();
 
+        ui->infoLayout->setContentsMargins(16,0,16,0);
         ui->volumeWidget->setContentsMargins(18,0,9,9);
         ui->buttonsLayout->setSpacing(27);
 
@@ -800,8 +806,8 @@ void NowPlayingWindow::orientationChanged(int w, int h)
         ui->lyricsText->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
 
         if (ui->infoWidget->isHidden()) {
-            ui->view_large->hide();
-            ui->view_small->show();
+            ui->coverViewLarge->hide();
+            ui->headerWidget->show();
         }
     }
 }
@@ -811,8 +817,8 @@ void NowPlayingWindow::toggleList()
     if (ui->songList->isHidden() && ui->lyricsArea->isHidden()) {
         // Playlist view
         if (portrait) {
-            ui->view_large->hide();
-            ui->view_small->show();
+            ui->coverViewLarge->hide();
+            ui->headerWidget->show();
         }
         ui->infoWidget->hide();
         ui->lyricsArea->hide();
@@ -828,8 +834,8 @@ void NowPlayingWindow::toggleList()
         ui->lyricsArea->show();
         ui->lyricsArea->setFocus();
         if (portrait) {
-            ui->view_large->hide();
-            ui->view_small->show();
+            ui->coverViewLarge->hide();
+            ui->headerWidget->show();
         }
 #ifdef MAFW
         positionTimer->stop();
@@ -840,8 +846,8 @@ void NowPlayingWindow::toggleList()
         ui->songList->hide();
         ui->infoWidget->show();
         if (portrait) {
-            ui->view_small->hide();
-            ui->view_large->show();
+            ui->headerWidget->hide();
+            ui->coverViewLarge->show();
         }
 #ifdef MAFW
         if (!positionTimer->isActive() && this->mafwState == Playing) {
@@ -1075,6 +1081,28 @@ void NowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
         keyTimer->start();
 }
 
+void NowPlayingWindow::mousePressEvent(QMouseEvent *e)
+{
+    if (!ui->headerWidget->isHidden() && ui->headerWidget->frameGeometry().contains(e->pos()) ||
+        !ui->coverViewLarge->isHidden() && ui->orientationLayout->itemAt(0)->geometry().contains(e->pos()))
+        toggleAreaPressed = true;
+}
+
+void NowPlayingWindow::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (toggleAreaPressed
+    && (!ui->headerWidget->isHidden() && ui->headerWidget->frameGeometry().contains(e->pos()) ||
+        !ui->coverViewLarge->isHidden() && ui->orientationLayout->itemAt(0)->geometry().contains(e->pos())))
+        toggleList();
+
+    toggleAreaPressed = false;
+}
+
+void NowPlayingWindow::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    mousePressEvent(e);
+}
+
 void NowPlayingWindow::togglePlayback()
 {
 #ifdef MAFW
@@ -1144,19 +1172,9 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     QFont f = ui->titleLabel->font();
     QFontMetrics fm(f);
 
-    ui->titleLabel->setWhatsThis(item->data(UserRoleSongTitle).toString());
-    if (!this->isActiveWindow())
-        this->setWindowTitle(item->data(UserRoleSongTitle).toString());
-    QString elided = fm.elidedText(item->data(UserRoleSongTitle).toString(), Qt::ElideRight, 425);
-    ui->titleLabel->setText(elided);
-
-    ui->artistLabel->setWhatsThis(item->data(UserRoleSongArtist).toString());
-    elided = fm.elidedText(item->data(UserRoleSongArtist).toString(), Qt::ElideRight, 425);
-    ui->artistLabel->setText(elided);
-
-    ui->albumLabel->setWhatsThis(item->data(UserRoleSongAlbum).toString());
-    elided = fm.elidedText(item->data(UserRoleSongAlbum).toString(), Qt::ElideRight, 425);
-    ui->albumLabel->setText(elided);
+    setTitle(item->data(UserRoleSongTitle).toString());
+    setArtist(item->data(UserRoleSongArtist).toString());
+    setAlbum(item->data(UserRoleSongAlbum).toString());
 
     ui->currentPositionLabel->setText(mmss_pos(0));
     this->songDuration = item->data(UserRoleSongDuration).toInt();

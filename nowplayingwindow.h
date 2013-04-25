@@ -64,7 +64,6 @@ public slots:
     void reloadLyrics();
     void setAlbumImage(QString);
     void onShuffleButtonToggled(bool);
-    void closeEvent(QCloseEvent *e);
 #ifdef MAFW
     void updatePlaylistState();
 #endif
@@ -77,6 +76,7 @@ private:
     Ui::NowPlayingWindow *ui;
     QmlView *qmlView;
     int playlistTime;
+    bool toggleAreaPressed;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -92,6 +92,9 @@ private:
     void showEvent(QShowEvent *);
 #endif
     void setButtonIcons();
+    void setTitle(QString title);
+    void setArtist(QString artist);
+    void setAlbum(QString album);
     void setSongNumber(int currentSong, int numberOfSongs);
     void updatePlaylistTimeLabel();
     void connectSignals();
@@ -116,6 +119,10 @@ private:
     QString albumArtPath;
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *e);
+    void closeEvent(QCloseEvent *e);
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;
 #endif
