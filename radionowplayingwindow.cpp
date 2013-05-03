@@ -32,15 +32,15 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     setAttribute(Qt::WA_DeleteOnClose);
 
+    QPalette palette;
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
     QColor secondaryColor(156, 154, 156);
 #endif
-    ui->songLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                                 .arg(secondaryColor.red())
-                                 .arg(secondaryColor.green())
-                                 .arg(secondaryColor.blue()));
+    palette.setColor(QPalette::WindowText, secondaryColor);
+
+    ui->songLabel->setPalette(palette);
 
     albumArtScene = new QGraphicsScene(ui->albumArtView);
     setAlbumImage(defaultRadioImage);
@@ -140,7 +140,7 @@ void RadioNowPlayingWindow::connectSignals()
 #ifdef MAFW
 void RadioNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 {
-    if (msg.arguments()[0].toString() == "volume") {
+    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
         if (!ui->volumeSlider->isSliderDown())
             ui->volumeSlider->setValue(qdbus_cast<QVariant>(msg.arguments()[1]).toInt());
     }

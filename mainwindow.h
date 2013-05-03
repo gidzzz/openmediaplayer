@@ -18,7 +18,7 @@
 #include "settingsdialog.h"
 #include "sleeperdialog.h"
 #include "aboutwindow.h"
-#include "delegates/maintdelegate.h"
+#include "delegates/maindelegate.h"
 #include "rotator.h"
 #include "upnpcontrol.h"
 #include "opendialog.h"

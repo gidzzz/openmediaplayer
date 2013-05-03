@@ -441,7 +441,7 @@ void VideoNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 {
     /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
                  /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.extension.get_extension_property string:volume*/
-    if (msg.arguments()[0].toString() == "volume") {
+    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
         int volumeLevel = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
 #ifdef DEBUG
         qDebug() << QString::number(volumeLevel);

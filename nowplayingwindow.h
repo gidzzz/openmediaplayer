@@ -122,7 +122,7 @@ private:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void mouseDoubleClickEvent(QMouseEvent *e);
-    void closeEvent(QCloseEvent *e);
+    void closeEvent(QCloseEvent *);
 #ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;
 #endif
@@ -135,7 +135,7 @@ private slots:
     void reloadLyricsOverridingCache();
     void toggleVolumeSlider();
     void showFMTXDialog();
-    void toggleList();
+    void toggleView();
     void setRingingTone();
     void onKeyTimeout();
     void forgetClick();

@@ -32,23 +32,18 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QPalette palette;
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
     QColor secondaryColor(156, 154, 156);
 #endif
-    ui->songCountLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                              .arg(secondaryColor.red())
-                              .arg(secondaryColor.green())
-                              .arg(secondaryColor.blue()));
-    ui->videoCountLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                              .arg(secondaryColor.red())
-                              .arg(secondaryColor.green())
-                              .arg(secondaryColor.blue()));
-    ui->stationCountLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                              .arg(secondaryColor.red())
-                              .arg(secondaryColor.green())
-                              .arg(secondaryColor.blue()));
+    palette.setColor(QPalette::WindowText, secondaryColor);
+
+    ui->songCountLabel->setPalette(palette);
+    ui->videoCountLabel->setPalette(palette);
+    ui->stationCountLabel->setPalette(palette);
+
     loadThemeIcons();
     setButtonIcons();
 
@@ -550,7 +545,7 @@ void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
     GArray* playlists = mafwPlaylistManager->listPlaylists();
 
     if (playlists->len != 0) {
-        for (int i = 0; i < playlists->len; i++) {
+        for (uint i = 0; i < playlists->len; i++) {
             if (playlistName == QString::fromUtf8(g_array_index(playlists, MafwPlaylistManagerItem, i).name)) {
                 setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
                 QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -724,7 +719,7 @@ void MainWindow::getInitialVolume(int volume)
 #ifdef MAFW
 void MainWindow::onPropertyChanged(const QDBusMessage &msg)
 {
-    if (msg.arguments()[0].toString() == "volume") {
+    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
         volume = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
         scheduleSleeperVolume();
     }

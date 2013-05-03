@@ -59,7 +59,7 @@ SOURCES += \
     aboutwindow.cpp \
     coverpicker.cpp \
     freqdlg.cpp \
-    delegates/maintdelegate.cpp \
+    delegates/maindelegate.cpp \
     editlyrics.cpp \
     mediaart.cpp \
     playlistquerymanager.cpp \
@@ -106,7 +106,7 @@ HEADERS += \
     coverpicker.h \
     texteditautoresizer.h \
     freqdlg.h \
-    delegates/maintdelegate.h \
+    delegates/maindelegate.h \
     editlyrics.h \
     mediaart.h \
     playlistquerymanager.h \

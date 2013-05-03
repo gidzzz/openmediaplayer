@@ -106,11 +106,11 @@ MusicWindow::~MusicWindow()
     delete ui;
 }
 
+#ifdef MAFW
 void MusicWindow::onSongSelected(QModelIndex index)
 {
     this->setEnabled(false);
 
-#ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
     playlist->clear();
@@ -141,9 +141,6 @@ void MusicWindow::onSongSelected(QModelIndex index)
     mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
-#else
-    NowPlayingWindow *window = NowPlayingWindow::acquire(this);
-#endif
 
     window->show();
 
@@ -193,6 +190,7 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
         ui->indicator->inhibit();
     }
 }
+#endif
 
 void MusicWindow::connectSignals()
 {
@@ -460,16 +458,11 @@ void MusicWindow::hideLayoutContents()
     // Prevent focus from disapearing when hiding lists to keep shortcuts working
     this->setFocus();
 
-    if(!ui->songList->isHidden())
-        ui->songList->hide();
-    if(!ui->artistList->isHidden())
-        ui->artistList->hide();
-    if(!ui->genresList->isHidden())
-        ui->genresList->hide();
-    if(!ui->albumList->isHidden())
-        ui->albumList->hide();
-    if(!ui->playlistList->isHidden())
-        ui->playlistList->hide();
+    ui->songList->hide();
+    ui->artistList->hide();
+    ui->genresList->hide();
+    ui->albumList->hide();
+    ui->playlistList->hide();
 }
 
 void MusicWindow::disconnectSearch()
@@ -494,8 +487,8 @@ void MusicWindow::showAlbumView()
     this->saveViewState("albums");
 #ifdef MAFW
     if (albumModel->rowCount() == 0) {
-        if(mafwTrackerSource->isReady())
-            this->listAlbums();
+        if (mafwTrackerSource->isReady())
+            listAlbums();
         else
             connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listAlbums()));
     }
@@ -515,8 +508,8 @@ void MusicWindow::showArtistView()
     this->saveViewState("artists");
 #ifdef MAFW
     if (artistModel->rowCount() == 0) {
-        if(mafwTrackerSource->isReady())
-            this->listArtists();
+        if (mafwTrackerSource->isReady())
+            listArtists();
         else
             connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listArtists()));
     }
@@ -537,7 +530,7 @@ void MusicWindow::showGenresView()
 #ifdef MAFW
     if (genresModel->rowCount() == 0) {
         if (mafwTrackerSource->isReady())
-            this->listGenres();
+            listGenres();
         else
             connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listGenres()));
     }
@@ -557,8 +550,8 @@ void MusicWindow::showSongsView()
     this->saveViewState("songs");
 #ifdef MAFW
     if (songModel->rowCount() == 0) {
-        if(mafwTrackerSource->isReady())
-            this->listSongs();
+        if (mafwTrackerSource->isReady())
+            listSongs();
         else
             connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
     }
@@ -580,7 +573,7 @@ void MusicWindow::showPlayListView()
     if (playlistModel->rowCount() == 0) {
         savedPlaylistCount = 0;
         if (mafwTrackerSource->isReady())
-            this->listPlaylists();
+            listPlaylists();
         else
             connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listPlaylists()), Qt::UniqueConnection);
     }
@@ -1318,7 +1311,7 @@ void MusicWindow::notifyOnAddedToNowPlaying(int songCount)
 }
 #endif
 
-void MusicWindow::closeEvent(QCloseEvent *e)
+void MusicWindow::closeEvent(QCloseEvent *)
 {
     QMainWindow *child = findChild<QMainWindow*>();
     if (child) child->close();
@@ -1329,5 +1322,5 @@ void MusicWindow::closeEvent(QCloseEvent *e)
 void MusicWindow::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-    this->onChildClosed();
+    onChildClosed();
 }

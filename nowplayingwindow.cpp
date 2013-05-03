@@ -56,27 +56,20 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 #endif
 {
     ui->setupUi(this);
+
+    QPalette palette;
 #ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
 #else
     QColor secondaryColor(156, 154, 156);
 #endif
-    ui->songNumberLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                              .arg(secondaryColor.red())
-                              .arg(secondaryColor.green())
-                              .arg(secondaryColor.blue()));
-    ui->playlistTimeLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                              .arg(secondaryColor.red())
-                              .arg(secondaryColor.green())
-                              .arg(secondaryColor.blue()));
-    ui->albumLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                              .arg(secondaryColor.red())
-                              .arg(secondaryColor.green())
-                              .arg(secondaryColor.blue()));
-    ui->artistHeaderLabel->setStyleSheet(QString("color: rgb(%1, %2, %3);")
-                              .arg(secondaryColor.red())
-                              .arg(secondaryColor.green())
-                              .arg(secondaryColor.blue()));
+    palette.setColor(QPalette::WindowText, secondaryColor);
+
+    ui->songNumberLabel->setPalette(palette);
+    ui->playlistTimeLabel->setPalette(palette);
+    ui->albumLabel->setPalette(palette);
+    ui->artistHeaderLabel->setPalette(palette);
+
     defaultWindowTitle = this->windowTitle();
 
     positionTimer = new QTimer(this);
@@ -279,7 +272,7 @@ void NowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 {
     /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
                  /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.extension.get_extension_property string:volume*/
-    if (msg.arguments()[0].toString() == "volume") {
+    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
         int volumeLevel = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
 #ifdef DEBUG
         qDebug() << QString::number(volumeLevel);
@@ -391,7 +384,7 @@ void NowPlayingWindow::connectSignals()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
     shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), this, SLOT(toggleList()));
+    connect(shortcut, SIGNAL(activated()), this, SLOT(toggleView()));
 
     shortcut = new QShortcut(QKeySequence(Qt::Key_S), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(stop()));
@@ -812,7 +805,7 @@ void NowPlayingWindow::orientationChanged(int w, int h)
     }
 }
 
-void NowPlayingWindow::toggleList()
+void NowPlayingWindow::toggleView()
 {
     if (ui->songList->isHidden() && ui->lyricsArea->isHidden()) {
         // Playlist view
@@ -1035,8 +1028,8 @@ void NowPlayingWindow::showEvent(QShowEvent *)
 
 void NowPlayingWindow::onGconfValueChanged()
 {
-    this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
-    this->selectItemByRow(lastPlayingSong->value().toInt());
+    setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
+    selectItemByRow(lastPlayingSong->value().toInt());
 }
 
 void NowPlayingWindow::onMediaChanged(int index, char*)
@@ -1093,7 +1086,7 @@ void NowPlayingWindow::mouseReleaseEvent(QMouseEvent *e)
     if (toggleAreaPressed
     && (!ui->headerWidget->isHidden() && ui->headerWidget->frameGeometry().contains(e->pos()) ||
         !ui->coverViewLarge->isHidden() && ui->orientationLayout->itemAt(0)->geometry().contains(e->pos())))
-        toggleList();
+        toggleView();
 
     toggleAreaPressed = false;
 }
@@ -1166,11 +1159,8 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 #ifdef DEBUG
     qDebug() << "Selected item number: " << ui->songList->currentRow();
 #endif
-    this->setSongNumber(ui->songList->currentRow()+1, ui->songList->count());
+    setSongNumber(ui->songList->currentRow()+1, ui->songList->count());
     lastPlayingSong->set(ui->songList->currentRow());
-
-    QFont f = ui->titleLabel->font();
-    QFontMetrics fm(f);
 
     setTitle(item->data(UserRoleSongTitle).toString());
     setArtist(item->data(UserRoleSongArtist).toString());
@@ -1423,7 +1413,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         return;
     }
 
-    bool synthetic = from == -1;
+    bool synthetic = from == (uint) -1;
 
     if (synthetic) {
         playlistTime = 0;
@@ -1467,7 +1457,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
 
     mafwrenderer->getStatus();
 
-    this->setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
+    setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
 
     qDebug() << "Playlist reserved slots:" << ui->songList->count();
 }
@@ -1532,7 +1522,7 @@ void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
-void NowPlayingWindow::closeEvent(QCloseEvent *e)
+void NowPlayingWindow::closeEvent(QCloseEvent *)
 {
     this->setParent(0);
     emit hidden();

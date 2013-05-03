@@ -44,9 +44,6 @@ public:
     bool eventFilter(QObject *obj, QEvent *e);
     void refreshPlaylistView();
 
-protected:
-    void closeEvent(QCloseEvent *e);
-
 signals:
     void hidden();
 
@@ -69,6 +66,7 @@ private:
 
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
+    void closeEvent(QCloseEvent *);
 
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -101,7 +99,6 @@ private:
 
 private slots:
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void onSongSelected(QModelIndex index);
     void setRingingTone();
     void onShareClicked();
     void onDeleteClicked();
@@ -113,15 +110,19 @@ private slots:
     void showGenresView();
     void onSearchHideButtonClicked();
     void onSearchTextChanged();
+
 #ifdef MAFW
     void browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString, GHashTable* metadata, QString error);
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllGenres(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+
     void onAddFinished(uint token, int count);
+
     void onShareUriReceived(QString, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
+
     void listSongs();
     void listArtists();
     void listAlbums();
@@ -130,12 +131,16 @@ private slots:
     void listAutoPlaylists();
     void listSavedPlaylists();
     void listImportedPlaylists();
+
+    void onSongSelected(QModelIndex index);
     void onAlbumSelected(QModelIndex index);
     void onArtistSelected(QModelIndex index);
     void onGenreSelected(QModelIndex index);
     void onPlaylistSelected(QModelIndex index);
+
     void onContainerChanged(QString objectId);
 #endif
+
     void onAddToNowPlaying();
     void onAddToPlaylist();
     void onRenamePlaylist();
