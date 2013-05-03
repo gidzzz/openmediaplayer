@@ -76,7 +76,8 @@ private:
     Ui::NowPlayingWindow *ui;
     QmlView *qmlView;
     int playlistTime;
-    bool toggleAreaPressed;
+    int currentViewId;
+    int swipeStart;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -135,7 +136,8 @@ private slots:
     void reloadLyricsOverridingCache();
     void toggleVolumeSlider();
     void showFMTXDialog();
-    void toggleView();
+    void cycleView(int direction = 1);
+    void cycleViewBack();
     void setRingingTone();
     void onKeyTimeout();
     void forgetClick();

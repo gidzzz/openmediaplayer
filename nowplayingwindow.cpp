@@ -110,8 +110,9 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     isMediaSeekable = false;
     playlistRequested = false;
     buttonWasDown = false;
-    toggleAreaPressed = false;
     playlistTime = 0;
+    currentViewId = 0;
+    swipeStart = -1;
 
 #ifdef Q_WS_MAEMO_5
     lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
@@ -384,7 +385,9 @@ void NowPlayingWindow::connectSignals()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
     shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), this, SLOT(toggleView()));
+    connect(shortcut, SIGNAL(activated()), this, SLOT(cycleView()));
+    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(cycleViewBack()));
 
     shortcut = new QShortcut(QKeySequence(Qt::Key_S), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(stop()));
@@ -469,7 +472,7 @@ void NowPlayingWindow::connectSignals()
     connect(playlist, SIGNAL(itemMoved(guint, guint)), this, SLOT(onItemMoved(guint, guint)));
 
     // What's this? It's totally undocumented -- the only place where I have
-    // found it mentioned is a header filer for Harmattan. Moreover, I don't
+    // found it mentioned is a header file for Harmattan. Moreover, I don't
     // think I have ever seen this signal being emitted.
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "playlist_updated", this, SLOT(updatePlaylist()));
 #endif
@@ -805,50 +808,61 @@ void NowPlayingWindow::orientationChanged(int w, int h)
     }
 }
 
-void NowPlayingWindow::toggleView()
+void NowPlayingWindow::cycleView(int direction)
 {
-    if (ui->songList->isHidden() && ui->lyricsArea->isHidden()) {
-        // Playlist view
-        if (portrait) {
-            ui->coverViewLarge->hide();
-            ui->headerWidget->show();
-        }
-        ui->infoWidget->hide();
-        ui->lyricsArea->hide();
-        ui->songList->show();
-        ui->songList->setFocus();
+    const int numViews = 2 + enableLyrics;
+    currentViewId = (currentViewId + direction + numViews) % numViews;
+
+    switch (currentViewId) {
+        case 0: // Song info view
+            if (portrait) {
+                ui->headerWidget->hide();
+                ui->coverViewLarge->show();
+            }
+            ui->lyricsArea->hide();
+            ui->songList->hide();
+            ui->infoWidget->show();
 #ifdef MAFW
-        positionTimer->stop();
+            if (!positionTimer->isActive() && mafwState == Playing) {
+                positionTimer->start();
+                mafwrenderer->getPosition();
+            }
 #endif
-    } else if (enableLyrics && ui->lyricsArea->isHidden() && ui->infoWidget->isHidden()) {
-        // Lyrics view
-        ui->infoWidget->hide();
-        ui->songList->hide();
-        ui->lyricsArea->show();
-        ui->lyricsArea->setFocus();
-        if (portrait) {
-            ui->coverViewLarge->hide();
-            ui->headerWidget->show();
-        }
+            break;
+
+        case 1: // Playlist view
+            if (portrait) {
+                ui->coverViewLarge->hide();
+                ui->headerWidget->show();
+            }
+            ui->infoWidget->hide();
+            ui->lyricsArea->hide();
+            ui->songList->show();
+            ui->songList->setFocus();
 #ifdef MAFW
-        positionTimer->stop();
+            positionTimer->stop();
 #endif
-    } else {
-        // Song info view
-        ui->lyricsArea->hide();
-        ui->songList->hide();
-        ui->infoWidget->show();
-        if (portrait) {
-            ui->headerWidget->hide();
-            ui->coverViewLarge->show();
-        }
+            break;
+
+        case 2: // Lyrics view
+            if (portrait) {
+                ui->coverViewLarge->hide();
+                ui->headerWidget->show();
+            }
+            ui->infoWidget->hide();
+            ui->songList->hide();
+            ui->lyricsArea->show();
+            ui->lyricsArea->setFocus();
 #ifdef MAFW
-        if (!positionTimer->isActive() && this->mafwState == Playing) {
-            positionTimer->start();
-            mafwrenderer->getPosition();
-        }
+            positionTimer->stop();
 #endif
+            break;
     }
+}
+
+void NowPlayingWindow::cycleViewBack()
+{
+    cycleView(-1);
 }
 
 void NowPlayingWindow::volumeWatcher()
@@ -1076,19 +1090,26 @@ void NowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
 
 void NowPlayingWindow::mousePressEvent(QMouseEvent *e)
 {
-    if (!ui->headerWidget->isHidden() && ui->headerWidget->frameGeometry().contains(e->pos()) ||
-        !ui->coverViewLarge->isHidden() && ui->orientationLayout->itemAt(0)->geometry().contains(e->pos()))
-        toggleAreaPressed = true;
+    if (!ui->headerWidget->isHidden() && ui->headerWidget->frameGeometry().contains(e->pos())
+    ||  !ui->coverViewLarge->isHidden() && ui->orientationLayout->itemAt(0)->geometry().contains(e->pos()))
+        swipeStart = e->x();
 }
 
 void NowPlayingWindow::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (toggleAreaPressed
-    && (!ui->headerWidget->isHidden() && ui->headerWidget->frameGeometry().contains(e->pos()) ||
-        !ui->coverViewLarge->isHidden() && ui->orientationLayout->itemAt(0)->geometry().contains(e->pos())))
-        toggleView();
+    // Accept only gestures on cover area's level
+    if (swipeStart == -1
+    || !ui->headerWidget->isHidden() && e->y() > ui->headerWidget->frameGeometry().bottom()
+    || !ui->coverViewLarge->isHidden() && e->y() > ui->orientationLayout->itemAt(0)->geometry().bottom())
+        return;
 
-    toggleAreaPressed = false;
+    if (e->x() - swipeStart > 100) {
+        cycleViewBack();
+    } else {
+        cycleView();
+    }
+
+    swipeStart = -1;
 }
 
 void NowPlayingWindow::mouseDoubleClickEvent(QMouseEvent *e)
