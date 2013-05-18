@@ -6,6 +6,12 @@
    <string>Select a playlst</string>
   </property>
   <layout class="QVBoxLayout" name="mainLayout">
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
    <property name="topMargin">
     <number>0</number>
    </property>

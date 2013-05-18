@@ -6,7 +6,7 @@ PlaylistPicker::PlaylistPicker(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QPushButton *newButton = new QPushButton(tr("New playlist"));
+    QPushButton *newButton = new QPushButton(QIcon::fromTheme("general_add"), tr("New playlist"));
     ui->playlistList->insertItem(0, new QListWidgetItem());
     ui->playlistList->setItemWidget(ui->playlistList->item(0), newButton);
 

@@ -4,7 +4,7 @@
  <widget class="QDialog" name="SleeperDialog">
   <layout class="QGridLayout" name="mainLayout">
    <property name="margin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <item row="0" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
