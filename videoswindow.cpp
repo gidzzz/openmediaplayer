@@ -44,6 +44,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
 
     videoModel = new QStandardItemModel(this);
     videoProxyModel = new HeaderAwareProxyModel(this);
+    videoProxyModel->setDynamicSortFilter(true);
     videoProxyModel->setFilterRole(UserRoleTitle);
     videoProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     videoProxyModel->setSourceModel(videoModel);
