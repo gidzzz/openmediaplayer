@@ -747,17 +747,19 @@ void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *m
 void NowPlayingWindow::setLyrics(QString lyrics)
 {
     ui->lyricsText->setText(lyrics);
+    ui->lyricsText->adjustSize();
+    ui->lyricsArea->verticalScrollBar()->setValue(0);
 }
 
 void NowPlayingWindow::reloadLyrics()
 {
-    ui->lyricsText->setText(tr("Fetching lyrics..."));
+    setLyrics(tr("Fetching lyrics..."));
     lyricsManager->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis());
 }
 
 void NowPlayingWindow::reloadLyricsOverridingCache()
 {
-    ui->lyricsText->setText(tr("Fetching lyrics..."));
+    setLyrics(tr("Fetching lyrics..."));
     lyricsManager->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), false);
 }
 
