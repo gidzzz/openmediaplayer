@@ -48,6 +48,8 @@ public:
     ~VideoNowPlayingWindow();
     bool eventFilter(QObject*, QEvent *event);
 
+    void play();
+
 protected:
     void mouseReleaseEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *e);
@@ -59,9 +61,12 @@ private:
     void showOverlay(bool show);
     QTimer *volumeTimer;
     QTimer *positionTimer;
+
     QString currentObjectId;
+    QString playedObjectId;
+
     QString uri;
-    Rotator::Orientation savedPolicy;
+    Rotator::Orientation rotatorPolicy;
     bool lazySliders;
     bool reverseTime;
     bool showSettings;
@@ -69,8 +74,11 @@ private:
     bool portrait;
     bool overlayVisible;
     bool overlayRequestedByUser;
+    bool playWhenReady;
     bool saveStateOnClose;
-    bool gotInitialState;
+    bool gotInitialStopState;
+    bool gotInitialPlayState;
+    bool gotCurrentPlayState;
     bool buttonWasDown;
 #ifdef Q_WS_MAEMO_5
     void setDNDAtom(bool dnd);
@@ -82,7 +90,7 @@ private:
     int colorkey;
     int mafwState;
     int videoLength;
-    int pausedPosition;
+    int resumePosition;
     int currentPosition;
     int videoWidth;
     int videoHeight;
@@ -96,7 +104,6 @@ private slots:
     void toggleOverlay();
     void toggleSettings();
     void toggleVolumeSlider();
-    void volumeWatcher();
     void onBookmarkClicked();
     void onShareClicked();
     void onDeleteClicked();
@@ -114,17 +121,17 @@ private slots:
     void onPropertyChanged(const QDBusMessage &msg);
     void onMetadataChanged(QString name, QVariant value);
     void onStateChanged(int state);
-    void onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* object_id, QString error);
+    void onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* objectId, QString error);
     void onBufferingInfo(float status);
     void onPositionChanged(int position, QString);
-    void onRendererMetadataRequested(GHashTable *metadata, QString, QString error);
-    void onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error);
+    void handleRendererMetadata(GHashTable *metadata, QString, QString error);
+    void handleSourceMetadata(QString objectId, GHashTable *metadata, QString error);
     void onErrorOccured(const QDBusMessage &msg);
     void onShareUriReceived(QString objectId, QString uri);
 #endif
-    void onSliderPressed();
-    void onSliderReleased();
-    void onSliderMoved(int);
+    void onPositionSliderPressed();
+    void onPositionSliderReleased();
+    void onPositionSliderMoved(int);
 };
 
 #endif // VIDEONOWPLAYINGWINDOW_H

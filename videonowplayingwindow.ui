@@ -138,6 +138,9 @@
         </property>
         <item>
          <widget class="QToolButton" name="bookmarkButton">
+          <property name="visible">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">background: transparent;</string>
           </property>
@@ -151,6 +154,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="shareButton">
+          <property name="visible">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">background: transparent;</string>
           </property>
@@ -164,6 +170,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="deleteButton">
+          <property name="visible">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">background: transparent;</string>
           </property>
@@ -192,7 +201,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSlider" name="progressBar">
+            <widget class="QSlider" name="positionSlider">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>

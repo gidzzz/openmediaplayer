@@ -197,7 +197,7 @@ void VideosWindow::onVideoSelected(QModelIndex index)
     delete[] videoAddBuffer;
 
     mafwrenderer->gotoIndex(selectedRow-indexOffset);
-    QTimer::singleShot(500, mafwrenderer, SLOT(play()));
+    window->play();
 }
 
 void VideosWindow::onSortingChanged(QAction *action)

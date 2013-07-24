@@ -275,7 +275,7 @@ void UpnpView::onItemActivated(QModelIndex index)
 
         MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
         mafwrenderer->gotoIndex(sameTypeIndex);
-        QTimer::singleShot(500, mafwrenderer, SLOT(play()));
+        window->play();
 
     } else {
         ui->objectList->clearSelection();

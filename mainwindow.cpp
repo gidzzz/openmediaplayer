@@ -609,7 +609,7 @@ void MainWindow::createVideoNowPlayingWindow()
     ui->indicator->inhibit();
 
 #ifdef MAFW
-    QTimer::singleShot(500, mafwrenderer, SLOT(play()));
+    window->play();
 #endif
 }
 
