@@ -10,7 +10,7 @@
 #include <QDir>
 #include <QDebug>
 
-#include "lyrics/abstractlyricsprovider.h"
+#include "abstractlyricsprovider.h"
 
 class LyricsManager : public QObject
 {

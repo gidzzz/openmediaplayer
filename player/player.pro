@@ -31,7 +31,7 @@ TRANSLATIONS = lang/openmediaplayer.ar_SA.ts \
                lang/openmediaplayer.zh.ts
 
 DEFINES += MAFW MAFW_WORKAROUNDS
-INCLUDEPATH += /usr/lib/madde/linux-x86_64/sysroots/meego-core-armv7l-madde-sysroot-1.1-fs/usr/include/libmafw/
+INCLUDEPATH += ../lyrics
 
 SOURCES += \
     main.cpp \
