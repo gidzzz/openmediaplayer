@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Open Media Player
+X-Text-Domain=mediaplayer
+Exec=openmediaplayer
+Icon=openmediaplayer
+X-HildonDesk-ShowInToolbar=true
+X-Osso-Type=application/x-executable
+MimeType=video/quicktime;video/x-msvideo;audio/x-mp3;video/mpeg;audio/x-wav;audio/x-m4a;audio/mp4;audio/x-amr;audio/AMR;video/mp4;video/x-mp4;video/3gpp;audio/mp2;audio/x-mp2;audio/x-ms-wma;audio/x-ms-asx;video/x-ms-asx;video/x-ms-wmv;video/x-ms-wm;audio/x-mpegurl;audio/mpegurl;audio/x-mpeg;audio/x-scpls;video/x-ms-asf;video/x-ms-asf-plugin;application/x-ms-asx;audio/x-ms-wax;video/x-ms-wvx;video/x-ms-wax;video/x-ms-wmx;application/vnd.ms-wpl;application/pls;application/smil;application/m3u;audio/mp3;video/avi;audio/wav;audio/mpeg;application/x-mplayer2;audio/AMR-WB

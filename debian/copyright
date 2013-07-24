@@ -1,0 +1,48 @@
+This work was packaged for Debian by:
+
+    Grzegorz Gidel <grg.gdl@gmail.com> on Sat, 22 Oct 2011 12:48:08 +0200
+
+It was downloaded from:
+
+    http://gitorious.org/qt-mediaplayer/mediaplayer
+
+Upstream Author(s):
+
+    Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>
+    Grzegorz Gidel <grg.gdl@gmail.com>
+    Matias Perez <cepiperez@gmail.com>
+    Nicolai Hess <nicolaihess@web.de>
+    Timur Kristof <venemo@msn.com>
+
+Copyright:
+
+    Copyright (C) 2010-2013 Mohammad Abu-Garbeyyeh
+                            Grzegorz Gidel
+                            Matias Perez
+                            Pali Rohár
+                            Nicolai Hess
+                            Timur Kristof
+
+License:
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This package is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+On Debian systems, the complete text of the GNU General
+Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
+
+The Debian packaging is:
+
+    Copyright (C) 2011 Grzegorz Gidel <grg.gdl@gmail.com>
+
+and is licensed under the GPL version 3, see above.

@@ -1,0 +1,80 @@
+Source: openmediaplayer
+Section: user/multimedia
+Priority: extra
+Maintainer: Grzegorz Gidel <grg.gdl@gmail.com>
+Build-Depends: debhelper (>= 5), libqt4-dev, libdbus-1-dev, libmafw0-dev, libmafw-shared0-dev, libglib2.0-dev, libgq-gconf-dev, libosso-gnomevfs2-dev, libgtk2.0-dev, libhildon-thumbnail-dev, libplayback-1-dev
+Standards-Version: 3.8.4
+Homepage: http://gitorious.org/qt-mediaplayer
+
+Package: openmediaplayer
+Architecture: armel
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Potential replacement for the stock media player
+XSBC-Maemo-Display-Name: Open Media Player
+XB-Maemo-Icon-26:
+ iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAAXNSR0IArs4c
+ 6QAAAv1QTFRFaQAAKwAANAEAPAEAQwAASQADTgABVAAFVwACXQAGYAABWgIA
+ WgIEYwEAYgEEZwAGawACbgEAbQEEcwABZQQGdgADdAAKeAEAfgACfAAIbwQH
+ RBASeAIFeAMOggEFgwIAigACjgIAlQACmAAAlgAOgwcOjgQOogADoAAJqwAA
+ hwoKqwAITxsdmwcHaRUUgA8TuQAAmwgOcRQXwwAFkg0XwQAOZhoZwwAPQCUm
+ xAAQehUcgxQbaBwfqgoQjRMVsQkUqAwWdhogxgQYjBYaZiEggBsbZiImvAoa
+ vgsNvQsUoRMZdCAhmhcWmhccZScncSQmix0hYSkmqxQeYCkrZSgsyQ0UrRUZ
+ TTAythMegiMnpRoilh8kwhQXnx4guRcawhUesRwizBQjkyUmxBgZiSgrdC4w
+ xBkloyMolSctxhshvB4ovh8jriQo0BsgnykymCs1tiMsyB8ouSUoWEBAnC4y
+ ljAwwSQswyUnfzg6mDM4xCczdT4/xSgu1iQqlDY8visxoDM7wC0tpDY6bUZF
+ wi80wS85ujI3mzw8zy40uzU9fkdJk0RHwTg7zzQ7eU9OdVVWqkdNbFtdfl5f
+ lF1gimBifmRje2dknmFgd2xsiWhpq2Bk7FBWiW5t3ldYlGxvpmhnrmhqpmtu
+ iHR0gXZ2kHV0qXJ0jHp8r3F1in5/n3l7l3x7qnh4iYSDloOF6W1yn4OCjY2K
+ uYGDrIWEtYODmIyMpIuLjpOVkZOQtI6QjZmZnJeVl5mWo5eYq5WWu5iZs5uc
+ pZ+eq56foaOgwJydoKWonKip/5CTs6enrqmnvqWjoa2uqqyoyKSlqq+xuq2u
+ rrO1sbOwya+trLm5xrK0rrq7vLe1ubu4xLi4uL2/z7m2xb++vcLFxMHF0L7A
+ uMXFw8XBzcfGzMrO1cjIx8zPyszJ2s3O0NLP/8XHzdPV1NHW3NfW0N3e19zf
+ 2t3Z6dzc3+He5uHf4OXo5efk6+3p5+7w8u3r8PLu8Pb4+fTy6/j59vj1+vz5
+ //37+f///f/8yYjkHgAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBI
+ WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3AEeCzgkA0fIIwAABIdJREFUSMdj
+ YBjZ4Njs3FBjGDCHACcnp+TkGE9NbOrXORmbepjDgId5TExycnJ8fGZmYWFh
+ mj2G8udzDYzNkQHY7HiQBpCOjjB5NA1zDcxR1YPMT4YqL6+p6QhCcw+a+hio
+ +WkQ5TU1Vb0mKP5NxFQfDwJA5WUg5S0trW0CSBpmo6kHehhkfFpaOUg9UHlL
+ T6u9BJKGWiTVHkDlMfFg9dllQNBYX9/S2lOkramApCEXHp4enp5Q5dnZIPVV
+ 9fX1rW09EZramkpIGkIhGjyAyoEaYOqzysqAyuvbOtvsNbW1tdE1eHhA1Lu7
+ Q1RnZYENb2vrzNFWBwJtFSQN5prqyuqaIOWecfYauoaGDglZRQVePr6+vumd
+ QUoK8kCgIIykQX3C8o2znBW03d3jbCcsX7hw+YL0hALfBUuXLl09y1Cxff50
+ MJgBV79j49N/QHDRWikiQvEMiPmv2yvH6i+IcVdC9OQ/KPh9GqL+6r/VvEtB
+ st9SdLMUDoNk/q22850MVnRXXPAwVP2ff/92g9Rv//1vs4J85COg0Dt9BwWI
+ 9F1rGYjOm6IC+4CMR8FTvgKpZyAN7//926xkryy+ECiyWk0OqO4DkOUo8vTf
+ q8///l0WBmu4zMLR9+/Hv/cgCz5//bdJ0T7CQT7y4r8P+pL7/v56deDfr+rU
+ D//2PPj397KgwN6/3/4dZ2RZ9e/zL5ANFz5/+LlSISwsLEFFdvKrFNEdPz8/
+ mPj3y8zmz/9mnPj1/aQg79bvnz6/PHj986dP3y4ANZx+/+rLSrWwoKCgHBO+
+ yXUymz6+vxX+8dOuGd8/FR/48nG/AO/6j29fvf3y5f3bD/dBXtj97MHreWpB
+ QVFRqt5bX0fKrn/94qrOuTe3Try5JX3wzYu9Aryr3jx58vD24ztXD0FC9dqt
+ F/O0vKJMZLuuvt7rqr/y8f2rLKte3L//4jjjgRePtwrwLXl8//EuaX8XC2i0
+ 7b56b4pqrKr/2ns37nUFWC+5ceMES9+9CxduL2HadfvGWl6+OTcu3F7BKorI
+ QAeuTBGT6jpy5fSlJVZ5rnPOnz3A5nbk7Omz1Sxbzp9dxss19fzp88s45EQR
+ SenoJLcVpw4dObrIMaPJetKpI7u5ubecOnKUh23NqSOL+bimnjp0ajGHDHLi
+ q1izfcOaxdVWGU3Rwv07t63h5Zu2cxtQ6eKd26bx8vXv3LBzGreoEJIGNcfU
+ VH+rgJKmaHkJIz8/F1FxPb8QM2Fhm8BAM0FBs+DgYBsBYeRCICojOimjpKHE
+ Tl5OTlxYWFxCQlxQUFhUVFhAAEgJ8vLyCggJoWooKSlpSJIDAQk5CSAQF5cR
+ BQNhMBAUQtUQm19SUukMVSshIy6KpBikFAz4kG0oraxUhSiWQVYsCFcNBFxI
+ GmwrM+SAjkBxhRCSYhERPj4+diQN2s6i4hhOhqvmAwMuFuTCVUkYxRlCaIqB
+ yvnYUItvOSF0ZyAp5uLk5EJTz6AgLoSkml9EBEkxJw8PJxszRh0kKgBXjWQ0
+ DxBw8nCwYavkhAT4ECqhajk4gIiDjWWEtxcAXr8zgPoK3fAAAAAASUVORK5C
+ YII=
+XB-Maemo-Upgrade-Description: UI tweaks and cleanups
+ Version 20130321-1 changes:
+  * Added D-Bus calls to play a playlist.
+  * UPnP and video browser respect the "play only search results" option.
+  * Different grid sizes for landscape and portrait.
+  * Changed -00:01 to --:-- in track length labels.
+  * A great amount of various, mostly UI-related, cleanups.
+  * Allow only one instance of the application (multiple windows can still be opened with --allow-multiple-instances).
+  * Fixed certain windows being closed whenever hildon-desktop is restarted.
+  * New translations: Bulgarian by B.U.S.T.T.E.R., Slovak by Pali (based on slovak-l10n project by rmoravcik).
+  * Updated translations: Russian (thanks to DarkSide25), French (thanks to Pinky007) and more.
+
+Package: openmediaplayer-dbg
+Architecture: armel
+Section: debug
+Priority: extra
+Depends:
+    openmediaplayer (= ${binary:Version}),
+Description: Debugging symbols for Open Media Player

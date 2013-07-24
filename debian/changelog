@@ -1,0 +1,525 @@
+openmediaplayer (20130321-next-1) unstable; urgency=low
+
+  * Modified the portrait layout in Now Playing.
+  * Views in Now Playing can be cycled in the reverse order by swiping the cover area from left to right or with Ctrl + Shift + Space.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 03 May 2013 15:54:16 +0200
+
+openmediaplayer (20130321-1) unstable; urgency=low
+
+  * Added D-Bus calls to play a playlist.
+  * UPnP and video browser respect the "play only search results" option.
+  * Different grid sizes for landscape and portrait.
+  * Changed -00:01 to --:-- in track length labels.
+  * A great amount of various, mostly UI-related, cleanups.
+  * Allow only one instance of the application (multiple windows can still be opened with --allow-multiple-instances).
+  * Fixed certain windows being closed whenever hildon-desktop is restarted.
+  * New translations: Bulgarian by B.U.S.T.T.E.R., Slovak by Pali (based on slovak-l10n project by rmoravcik).
+  * Updated translations: Russian (thanks to DarkSide25), French (thanks to Pinky007) and more.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Thu, 21 Mar 2013 21:02:58 +0100
+
+openmediaplayer (20121220-1) unstable; urgency=low
+
+  * Added a dialog that appears when the player is ordered to open a file and asks what to do with it.
+  * Fixed a problem with empty items appearing in now playing.
+  * Fixed a memory leak that progressed each time a list with shuffle button was opened.
+  * Fixed a crash caused by closing the radio now playing window just after opening it.
+  * Fixed the default album icon not showing up whan browsing artists of a genre.
+  * Fixed a rare infinite loop when trying to recover from MAFW's failure to start playback.
+  * Fixed funny behavior of the window manager after opening a file when a dialog window is visible.
+  * Cleanups in the settings window.
+  * More resonsive keyboard shortcuts in confirmation dialogs.
+  * Closing a window that was used to add songs to now playing does not interrupt the song adding operation.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Thu, 20 Dec 2012 20:21:54 +0100
+
+openmediaplayer (20120917-1) unstable; urgency=low
+
+  * Added an option to zoom videos to fit the screen.
+  * Moved "Continuous video playback" option to the video window.
+  * Slightly refined the appearance of already existing elements of the video window.
+  * Eliminated the delay between pressing a key and starting searching.
+  * Searching does not cause jumping to the middle of a list.
+  * Volume buttons use icons from the active theme.
+  * Added the missing animation frame in the playback indicator.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Mon, 17 Sep 2012 00:15:37 +0200
+
+openmediaplayer (20120912-1) unstable; urgency=low
+
+  * Dropped the hack behind "Headset button action" at the cost of making this feature CSSU-only, but then it works also with "Prevent playback interruptions".
+  * Added an option to choose a method of silencing notifications.
+  * Added Dark Lyrics plugin.
+  * Fixed UTF-8 in AZLyrics plugin.
+  * Fixed problems with opening some streams.
+  * Improved feedback when opening streams by bouncing the buffering bar.
+  * Fixed outdated buffering info sometimes being shown after changing a station.
+  * Prevented detached and dead windows from appearing when activating the playback indicator and something else shortly thereafter.
+  * open_mp_now_playing_playback_on and open_mp_radio_playing_playback_on (used by the desktop widget) open the appropriate window.
+  * Added the missing shortcut to close the album art menu.
+  * Optified the package with debugging symbols.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 12 Sep 2012 18:00:59 +0200
+
+openmediaplayer (20120815-2) unstable; urgency=low
+
+  * Fixed a regression that made it impossible to play saved playlists.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Thu, 16 Aug 2012 21:45:57 +0200
+
+openmediaplayer (20120815-1) unstable; urgency=low
+
+  * Support for offline lyrics providers and additional provider description.
+  * Added plugins to use lyrics from MaeLyrica and Sonata.
+  * Significantly improved overall speed of loading a playlist in the playlist browser.
+  * Much faster saving of playlists after editing.
+  * Saved playlists load adaptively, prioritizing currently visible items.
+  * Improved way of lading saved playlists and current playlist makes saving, sharing, shuffling, etc. immediately work correctly.
+  * Group operations on automatic and imported playlists wait for loading to finish before taking effect.
+  * Improved responsiveness while searching in a playlist, artist's albums, a single album and a genre.
+  * Massively improved speed of adding a saved playlist to now playing from context menu.
+  * Opening video window from the playback indicator does not start playback.
+  * Eliminated delay in controlling playback with "Prevent playback interruptions" enabled.
+  * Fixed problems with video resuming and thumbnails when "Prevent playback interruptions" is enabled.
+  * Fixed automatic playlists showing 1 song if they are empty.
+  * Shuffle buttons can be highlighted when navigating with keyboard.
+  * Fixed a bug with not all songs being added from "Never played" to now playing when using context menu.
+  * Reworked album art selection dialog and made it resize itself properly when rotating.
+  * Invoking context menu in Now Playing with a shortcut when song progress is visible results in album art's menu.
+  * Disabled autorepeat for shortcuts where it was not desirable.
+  * Fixed S, E, R shortcuts not working in Now Playing when playlist is visible.
+  * Selecting a song from the playlist in Now Playing window starts playing it also if playback was paused.
+  * Fixed a crash caused by opening Now Playing, quickly closing the underlying window while it is still visible and then trying to open Now Playing again.
+  * Fixed a rare crash when changing a track in an unfortunate moment.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 15 Aug 2012 16:28:55 +0200
+
+openmediaplayer (20120808-1) unstable; urgency=low
+
+  * Extensive usage of keyboard shortcuts.
+  * Added an option to clear lyrics cache.
+  * Fixed shuffle button sometimes not resizing properly after rotating to portrait.
+  * Prevented context menu from popping up for shuffle buttons.
+  * Fixed the song count of automatic playlists not being refreshed immediately.
+  * Fixed shuffle mode not turning off when selecting a song in UPnP view.
+  * Fixed wrong positions of some context menus.
+  * Repositioned the playback indicator to sit exactly in the corner.
+  * Prevented editing of headers that was possible in some lists.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 08 Aug 2012 16:35:18 +0200
+
+openmediaplayer (20120805-1) unstable; urgency=low
+
+  * Improved the playback state indicator for some CPU and memory savings.
+  * Fixed multiple bookmarks being created instead of one.
+  * Updated translations: Finnish, Italian.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 05 Aug 2012 22:49:13 +0200
+
+openmediaplayer (20120804-1) unstable; urgency=low
+
+  * Fixed LyricWiki plugin not recognizing missing lyrics properly and made it ignore incomplete lyrics.
+  * Fixed a crash that could occur when rapidly switching songs with online lyrics active.
+  * Somewhat faster (mainly more responsive when searching) radio browser, video browser and UPnP browser.
+  * Headers in the video browser are not displayed if there's only one category.
+  * Made playlist browser headers immune to filtering.
+  * Got rid of the imported playlists header and an empty playlist appearing even if there are no imported playlists.
+  * Restored seamless refreshing in the radio browser that probably got lost a few updates ago.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 04 Aug 2012 20:32:56 +0200
+
+openmediaplayer (20120803-1) unstable; urgency=low
+
+  * Support for pluggable, dynamically loaded lyrics providers.
+  * Plugins for AZLyrics, ChartLyrics, LyricsDB (the old integrated provider, now improved), LyricsWiki.
+  * Increased the space for lyrics in the lyrics editor.
+  * Added a shortcut to save changes in the lyrics editor (Ctrl+S).
+  * Saving empty lyrics in the lyrics editor deletes the lyrics file.
+  * Changed the lyrics cache format and location ("/home/user/.cache/openmediaplayer/lyrics/"), and added a plugin to read lyrics from the previous directory.
+  * Moved the configuration file to "/home/user/.config/openmediaplayer/openmediaplayer.conf".
+  * "Open whole folders" option works for videos.
+  * Fixed the endless loading icon after opening a whole folder.
+  * Added a note in the settings dialog to warn about libplayback conflicting with the wired headset button.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 03 Aug 2012 16:24:42 +0200
+
+openmediaplayer (20120727-1) unstable; urgency=low
+
+  * Fixed some random crashes.
+  * Fixed refreshing of saved playlists after deleting one of them.
+  * Fixed song counting after deleting an album in artist's window.
+  * When the lyrics server gives a backtrace, display an error message instead of taking it for the actual lyrics.
+  * Various cleanups.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 27 Jul 2012 02:51:03 +0200
+
+openmediaplayer (20120717-1) unstable; urgency=low
+
+  * Display cover art when listening to radio, if provided by the station.
+  * QML song lists are kept synchronized with Now Playing (e.g. early open_mp_car_view does not cause an empty playlist).
+  * Reconnecting a headset does not resume playback if it was paused manually in the meantime.
+  * Endindg a call does not resume playback if a headset was disconnected in the meantime.
+  * Fixed frequent failures when trying to open an audio stream.
+  * Opening a whole directory does not rely on Tracker, making it usable for unindexed files.
+  * Improved reliability of metadata in the radio window and reduced the number of queries.
+  * Fixed the address field not being filled automatically in the bookmark dialog for new audio streams.
+  * Fixed a problem with starting playback when opening a whole directory in presence of UTF-8 names.
+  * Fixed problems with starting playback after building a new playlist while in the paused state.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Tue, 17 Jul 2012 16:33:16 +0200
+
+openmediaplayer (20120713-1) unstable; urgency=low
+
+  * Searching in the video browser.
+  * Fixed ghost windows popping up after returning from a video.
+  * Added support for D-Bus calls: open_mp_main_view (from the stock player) and open_mp_car_view (exclusive to OMP).
+  * Fixed uneditable text fields when adding a bookmark from the video window.
+  * Made headers in the radio browser immune to filtering.
+  * Added a few missing keyboard shortcuts.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 13 Jul 2012 16:46:20 +0200
+
+openmediaplayer (20120625-1) unstable; urgency=low
+
+  * Added an option to prevent audio from being interrupted by sound notifications.
+  * Added support for video stream bookmarks.
+  * Added an option to keep playing further videos when the current one ends.
+  * Properly rotate the bookmark dialog.
+  * The bookmark button in radio "Now playing" works.
+  * Fixed an untranslatable string.
+  * New translation: Portuguese (Brazil) by VGs and saponga.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Mon, 25 Jun 2012 05:49:18 +0200
+
+openmediaplayer (20120617-1) unstable; urgency=low
+
+  * Added an option to resume playback only when a headset is reconnected within specified time.
+  * Added an option to manually choose a translation.
+  * Fixed a regression causing "Shuffle all songs" to open the radio window.
+  * New translation: Arabic (Saudi Arabia) by laith.my.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 17 Jun 2012 22:07:51 +0200
+
+openmediaplayer (20120616-1) unstable; urgency=low
+
+  * Added a sleep timer.
+  * Media type detection for streams.
+  * Buffering info for video streams.
+  * Minor visual touch-ups in the radio window.
+  * Mark video radio stations with "[VIDEO]".
+  * Working progress slider in the radio window for streams which support seeking.
+  * Fixed determining stream duration in the radio window.
+  * Updated translations: German, Portuguese (Portugal).
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 16 Jun 2012 17:38:25 +0200
+
+openmediaplayer (20120611-1) unstable; urgency=low
+
+  * Holding previous/next in the video window rewinds the movie.
+  * More efficient updates of the playlist list.
+  * Keyboard shortcuts for next/previous should work again.
+  * Added an option to add all songs from one playlist to another.
+  * Autosaving after editing a playlist.
+  * Made library update notifications less sensitive.
+  * Disabled removing and rearranging songs in uneditable playlists.
+  * Fixed "Add songs to a playlist" adding one duplicate song.
+  * Fixed rearranging songs in the playlist browser causing songs in now playing to be moved at the same time.
+  * New translation: Portuguese (Portugal) by joaoheitormarques.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Mon, 11 Jun 2012 22:39:01 +0200
+
+openmediaplayer (20120601-1) unstable; urgency=low
+
+  * Added an option to pause playback on exit.
+  * Pressing the previous button in the middle of a video jumps to the beginning.
+  * Added a context menu to the playback indicator, which makes it posible to quickly restore the music playlist after playing radio/video.
+  * Added an option to add a song to an arbitrary playlist.
+  * Replaced "Save playlist" in "Now playing" with a more flexible solution, which allows songs to be appended to an existing playlist.
+  * Made it possible to delete a playlist from within its window.
+  * Added an option to rename playlists.
+  * Support for video M3U playlists in mime_open.
+  * Improved cooperation with the media player widget.
+  * The playlist list is refreshed each time it is shown to avoid outdated entries.
+  * Made the playlist browser show also empty playlists.
+  * Enlarged the settings dialog for portrait mode.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 01 Jun 2012 21:13:43 +0200
+
+openmediaplayer (20120518-1) unstable; urgency=low
+
+  * Play button can be long-pressed to stop playback.
+  * Added an option to show/hide "Delete [permanently]" option for playlist items. It affects both stored playlists and "Now playing".
+  * Locked QML views to landscape.
+  * Fixed a bug that sometimes disallowed updates of the current playlist.
+  * Fixed the song progress bar sometmies not being reset after playback has finished.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 18 May 2012 14:16:53 +0200
+
+openmediaplayer (20120511-1) unstable; urgency=low
+
+  * Title of "Now playing" window is set to the current song when switching to the task navigator.
+  * Added an option to lock the player in portrait or landscape.
+  * Fixed the video window not staying in landscape.
+  * New translation: Ukrainian by int_ua.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 11 May 2012 16:33:17 +0200
+
+openmediaplayer (20120428-1) unstable; urgency=low
+
+  * Added support for pausing/resuming when bluetooth headset is connected/disconnected.
+  * Added a notification for library updates.
+  * Massive speed improvements for some lists (no more lag when searching).
+  * Implemented resuming a video by clicking the playback status indicator.
+  * Somehow more reliable way of getting metadata when playing videos.
+  * Fixed a problem with keyboard grabbing.
+  * Fixed playback indicator sometimes not reappearing.
+  * Fixed null objects being added to the playlist when selecting a video from the categories view.
+  * Updated translations. Thanks to new contributors:
+    - qingxianhao for Chinese,
+    - hobarrera for Spanish.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 28 Apr 2012 23:29:37 +0200
+
+openmediaplayer (20120326-1) unstable; urgency=low
+
+  * Smooth scrolling to the current song in "Now playing".
+  * Updated translations: Finnish, Italian, German, Dutch.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Mon, 26 Mar 2012 16:08:59 +0200
+
+openmediaplayer (20120321-1) unstable; urgency=low
+
+  * Searching without sliding out the keyboard: slide your finger up from the very bottom of the screen.
+  * Support for Bluetooth headset "stop" button (thanks to pali).
+  * Support for headset "phone" button with configurable action (thanks to pali).
+  * Building the playlist from search results after a song is selected is now configurable.
+  * Added searching and keyboard shortcuts to the radio list.
+  * Disabled "Delete" in "Now playing".
+  * Minor changes in the settings window: there's slightly more space and "Stop playback on exit" option is now handled by a checkbox.
+  * Enabled the lost Turkish translation.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 21 Mar 2012 16:52:59 +0100
+
+openmediaplayer (20120311-2) unstable; urgency=low
+
+  * Fixed a crash when selecting a song in "All songs".
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 11 Mar 2012 11:01:06 +0100
+
+openmediaplayer (20120311-1) unstable; urgency=low
+
+  * Adding songs from a song list to now playing respects search results.
+  * Automatic and seamless refreshing of the radio list (probably also fixes the repeated stations bug).
+  * Removed context menu entries for clearing and saving the playlist in "Now playing", because they're already in the titlebar menu and they're more global than contextual.
+  * Added an option to permanently delete a song in "Now playing".
+  * Added a possibility to close confirmation messages by touching the blurred background.
+  * Lifted "http://" prefix restriction from radio bookamrks.
+  * Larger song progress font in the car view.
+  * Fixed clickable category names in the video browser.
+  * Fixed album searching in the artist view.
+  * Fixed searching being ignored if invoked before song listing is complete.
+  * Searching speed improved a bit.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 11 Mar 2012 00:04:38 +0100
+
+openmediaplayer (20120201-1) unstable; urgency=low
+
+  * Enabled previous/next buttons for UPnP videos.
+  * Added missing keyboard shortcuts to the playlist browser.
+  * Fixed a bug with the progress slider sometimes being unnecessarliy disabled.
+  * Fixed problems with UTF-8 in names of playlists and UPnP shares.
+  * Fixed wrong song being selected when different kinds of files are present in one UPnP directory.
+  * Shiny icon.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 01 Feb 2012 18:04:41 +0100
+
+openmediaplayer (20120115-1) unstable; urgency=low
+
+  * Working previous and next buttons in the video window.
+  * Support for Bluetooth fast-forward and rewind (thanks to cybjit).
+  * Video playback makes use of a playlist, which fixes some compatibility issues.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 15 Jan 2012 15:56:13 +0100
+
+openmediaplayer (20111226-1) unstable; urgency=low
+
+  * Finger-friendly size of current position labels.
+  * Fixed the regression with selecting songs.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Mon, 26 Dec 2011 12:56:59 +0100
+
+openmediaplayer (20111223-1) unstable; urgency=low
+
+  * Fixed songs being changed when toggling the time label mode.
+  * Fixed (probably) a crash when opening the player through a desktop widget.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 23 Dec 2011 10:44:13 +0100
+
+openmediaplayer (20111219-1) unstable; urgency=low
+
+  * QML views update current position in the playlist.
+  * Added an option to append songs to the playlist when opening them from a file browser.
+  * Fixed multiple windows appearing when opening a file from a file browser
+  * Enlarged the settings dialog
+  * Some UTF-8 fixes.
+  * Updated the Swedish translation (thanks to FireyFly).
+  * New translation: Turkish by MysD.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Mon, 19 Dec 2011 14:10:24 +0100
+
+openmediaplayer (20111206-1) unstable; urgency=low
+
+  * Auto-connect when starting an Internet radio.
+  * Ask for confirmation before deleting a radio bookmark.
+  * Updated the Swedish translation (thanks to almehdi).
+  * Fixed a case where an empty item was being added to the playlist.
+  * Fixed copying new album art.
+  * Possible fix for the "100% CPU / staying in the background" bug.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Tue, 06 Dec 2011 00:10:17 +0100
+
+openmediaplayer (20111204-1) unstable; urgency=low
+
+  * More reliable metadata fetching in NowPlayingWindow.
+  * Fixed keyboard focus in the lyrics editor.
+  * Modified playlist editing in the playlist browser to work in a similar manner to "Now playing".
+  * Disabed the progress slider in "Now playing" for the stopped state.
+  * Shuffle buttons are scrolled together with the song/artist list.
+  * Fixed wrong song count being displayed in certain situations.
+  * Fixed up/down shortcuts in some views.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 04 Dec 2011 06:51:03 +0100
+
+openmediaplayer (20111126-1) unstable; urgency=low
+
+  * Suspend the playback when making or receiveing a call.
+  * Fixed a bug that sometimes prevented the playback indicator from reappearing.
+  * Hungarian translation by zdanee.
+  * Update of the Romanian translation (thanks to mirciox).
+  * Small updates to other translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 26 Nov 2011 07:38:47 +0100
+
+openmediaplayer (20111120-2) unstable; urgency=low
+
+  * Updated the Chinese translation (thanks to microjo).
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 20 Nov 2011 03:03:45 +0100
+
+openmediaplayer (20111120-1) unstable; urgency=low
+
+  * Fix continuous 100% CPU usage when creating a thumbnail in certain cases.
+  * Don't clear the list of videos when refreshing it.
+  * Support for opening HTTP video streams.
+  * More meaningful window titles for the UPnP browser.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 20 Nov 2011 02:21:46 +0100
+
+openmediaplayer (20111118-1) unstable; urgency=low
+
+  * Updated translations:
+    - Polish (Estel),
+    - French (mirandir),
+    - German (sbock),
+    - Dutch (ade),
+    - Czech (Linnar),
+    - Swedish (robin92),
+    - Finnish (megaexer).
+  * New translations:
+    - Chinese by bccwvfwcw,
+    - Italian by Lestat.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 18 Nov 2011 15:35:41 +0100
+
+openmediaplayer (20111116-1) unstable; urgency=low
+
+  * Added an option to open all songs from a folder.
+  * Stopping the playback on exit is now the default behavior.
+  * New translations: Russian by wow23, Czech by Linnar.
+  * When changing song/radio, info is updated even in the stopped state.
+  * The radio window displays better info and looks more like the stock one.
+  * Added an option to edit radio bookmarks.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 16 Nov 2011 01:51:40 +0100
+
+openmediaplayer (20111113-1) unstable; urgency=low
+
+  * Updated translations: Swedish (thanks to robin92), German (thanks to sbock).
+  * Fixed a bug with the video window not being closed after the playback is finshed.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 12 Nov 2011 22:41:28 +0100
+
+openmediaplayer (20111112-1) unstable; urgency=low
+
+  * Updated translation: French (thanks to mirandir).
+  * New translation: Dutch (thanks to ade).
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 12 Nov 2011 01:49:31 +0100
+
+openmediaplayer (20111111-1) unstable; urgency=low
+
+  * Fixed crashes on mime_open (opening files from a file browser should work now).
+  * Fixed some untranslatable strings.
+  * Updated translations: Spanish (thanks to Zentenario), French (thanks to mirandir).
+  * New translation: Romanian by ioncelmare.
+  * Restoring default album art supports embedded images.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 11 Nov 2011 17:44:42 +0100
+
+openmediaplayer (20111105-1) unstable; urgency=low
+
+  * Translation fixes for the FM transmitter dialog.
+  * New translations: Swedish (by robin92), French (by GaRy delaMEr) and German (by sbock).
+  * Some updates to the existing translations.
+  * Show correct song/movie length when streaming from UPnP.
+  * Click song/movie position label to toggle between elapsed and remaining.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 05 Nov 2011 17:56:10 +0100
+
+openmediaplayer (20111102-1) unstable; urgency=low
+
+  * Single click to select a song.
+  * More translation-related cleanups.
+  * Finnish translation by megaexer.
+  * 90% complete Spanish translation by CepiPerez.
+  * Updated the Polish translation.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 02 Nov 2011 15:05:24 +0100
+
+openmediaplayer (20111031-1) unstable; urgency=low
+
+  * Cleaned up the code for translations. Added a Polish translation.
+  * Support for UPnP. It still requires some work and it's not well tested, so bug reports are especially welcome.
+  * Categories view for videos.
+  * Reworked list drawng. It might be somewhat faster and certain themes don't suffer from ugly backgrounds.
+  * Fixed missing context menu entries in "All songs" view.
+  * Tweaked the playlist saving dialog.
+  * Fixed a segfault and some minor bugs here and there.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Mon, 31 Oct 2011 15:09:25 +0100
+
+openmediaplayer (20111022-1) unstable; urgency=low
+
+  * Initial packaging.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 22 Oct 2011 15:54:28 +0200
+
+
+

@@ -1,0 +1,57 @@
+#!/usr/bin/make -f
+APPNAME := openmediaplayer
+builddir:
+	mkdir -p builddir
+
+builddir/Makefile: builddir
+	cd builddir && qmake-qt4 PREFIX=/usr QMAKE_STRIP=echo QMAKE_CXXFLAGS=-g ../$(APPNAME).pro
+	#cd builddir && qmake-qt4 PREFIX=/usr QMAKE_STRIP=echo QMAKE_CXXFLAGS='-g -mthumb' ../$(APPNAME).pro
+
+build: build-stamp
+
+build-stamp: builddir/Makefile
+	dh_testdir
+	# Commands to compile the package.
+	cd builddir && $(MAKE)
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	# Commands to clean up after the build process.
+	rm -rf builddir
+	dh_clean
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# Commands to install the package into debian/appname.
+	cd builddir && $(MAKE) INSTALL_ROOT=$(CURDIR)/debian/$(APPNAME) install
+
+# Build architecture-independent files here.
+binary-indep: build install
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installexamples
+	dh_installman
+	dh_link
+	dh_strip --dbg-package=openmediaplayer-dbg
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	maemo-optify openmediaplayer-dbg
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
+
