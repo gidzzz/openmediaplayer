@@ -374,8 +374,7 @@ void VideoNowPlayingWindow::onPrevButtonClicked()
 #ifdef MAFW
     if (ui->prevButton->isDown()) {
         buttonWasDown = true;
-        mafwrenderer->setPosition(SeekRelative, -10);
-        mafwrenderer->getPosition();
+        slowRev();
     } else {
         if (!buttonWasDown) {
             if (this->currentPosition > 3) {
@@ -396,8 +395,7 @@ void VideoNowPlayingWindow::onNextButtonClicked()
 #ifdef MAFW
     if (ui->nextButton->isDown()) {
         buttonWasDown = true;
-        mafwrenderer->setPosition(SeekRelative, 10);
-        mafwrenderer->getPosition();
+        slowFwd();
     } else {
         if (!buttonWasDown) {
             gotCurrentPlayState = false;
@@ -767,33 +765,28 @@ void VideoNowPlayingWindow::handleSourceMetadata(QString objectId, GHashTable *m
 void VideoNowPlayingWindow::slowFwd()
 {
     mafwrenderer->setPosition(SeekRelative, 10);
-    // Position change signal is not emitted in the paused state
-    if (mafwState == Paused)
-        mafwrenderer->getPosition();
+    mafwrenderer->getPosition();
 }
 
 // Move playback backward by a small amount
 void VideoNowPlayingWindow::slowRev()
 {
     mafwrenderer->setPosition(SeekRelative, -10);
-    if (mafwState == Paused)
-        mafwrenderer->getPosition();
+    mafwrenderer->getPosition();
 }
 
 // Move playback forward by a large amount
 void VideoNowPlayingWindow::fastFwd()
 {
     mafwrenderer->setPosition(SeekRelative, 60);
-    if (mafwState == Paused)
-        mafwrenderer->getPosition();
+    mafwrenderer->getPosition();
 }
 
 // Move playback backward by a small amount
 void VideoNowPlayingWindow::fastRev()
 {
     mafwrenderer->setPosition(SeekRelative, -60);
-    if (mafwState == Paused)
-        mafwrenderer->getPosition();
+    mafwrenderer->getPosition();
 }
 #endif
 
