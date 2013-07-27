@@ -503,7 +503,10 @@ void VideosWindow::onContainerChanged(QString objectId)
 
 void VideosWindow::orientationChanged(int w, int h)
 {
-    ui->videoList->setGridSize(QSize(155, gridHeight = w > h ? 212 : 186));
+    gridHeight = w > h ? 212 : 186;
+
+    if (ui->videoList->viewMode() == QListView::IconMode)
+        ui->videoList->setGridSize(QSize(155, gridHeight));
 
     ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
