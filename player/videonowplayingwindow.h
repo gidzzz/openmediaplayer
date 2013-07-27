@@ -53,14 +53,18 @@ public:
 protected:
     void mouseReleaseEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
+    void changeEvent(QEvent *e);
 
 private:
     Ui::VideoNowPlayingWindow *ui;
     void setIcons();
     void connectSignals();
     void showOverlay(bool show);
+
     QTimer *volumeTimer;
     QTimer *positionTimer;
+    QTimer *keyRepeatTimer;
 
     QString currentObjectId;
     QString playedObjectId;
@@ -80,6 +84,7 @@ private:
     bool gotInitialPlayState;
     bool gotCurrentPlayState;
     bool buttonWasDown;
+    int keyToRepeat;
 #ifdef Q_WS_MAEMO_5
     void setDNDAtom(bool dnd);
 #endif
@@ -111,6 +116,7 @@ private slots:
     void onVolumeSliderReleased();
     void onPrevButtonClicked();
     void onNextButtonClicked();
+    void repeatKey();
 #ifdef MAFW
     void togglePlayback();
     void slowFwd();

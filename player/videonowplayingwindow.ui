@@ -91,6 +91,9 @@
        <property name="text">
         <string>Fit</string>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
       </widget>
      </item>
      <item>
@@ -100,6 +103,9 @@
        </property>
        <property name="text">
         <string>Continuous</string>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
        </property>
       </widget>
      </item>
@@ -150,6 +156,9 @@
             <height>48</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
          </widget>
         </item>
         <item>
@@ -166,6 +175,9 @@
             <height>48</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
          </widget>
         </item>
         <item>
@@ -181,6 +193,9 @@
             <width>48</width>
             <height>48</height>
            </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
           </property>
          </widget>
         </item>
@@ -207,6 +222,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
              </property>
              <property name="enabled">
               <bool>false</bool>
@@ -274,6 +292,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
           <property name="maximum">
            <number>100</number>
           </property>
@@ -292,6 +313,9 @@
             <width>64</width>
             <height>64</height>
            </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
           </property>
          </widget>
         </item>
@@ -354,8 +378,8 @@
        <property name="autoRepeatDelay">
         <number>1000</number>
        </property>
-       <property name="autoRepeatInterval">
-        <number>250</number>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
        </property>
       </widget>
      </item>
@@ -387,6 +411,9 @@
          <width>64</width>
          <height>64</height>
         </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
        </property>
       </widget>
      </item>
@@ -425,8 +452,8 @@
        <property name="autoRepeatDelay">
         <number>1000</number>
        </property>
-       <property name="autoRepeatInterval">
-        <number>250</number>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
        </property>
       </widget>
      </item>

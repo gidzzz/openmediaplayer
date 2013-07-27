@@ -54,6 +54,12 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
+    // Autorepeating of playback controls
+    keyRepeatTimer = new QTimer(this);
+    keyRepeatTimer->setInterval(250);
+    ui->prevButton->setAutoRepeatInterval(250);
+    ui->nextButton->setAutoRepeatInterval(250);
+
     // Load saved settings
     QSettings settings;
     lazySliders = settings.value("main/lazySliders").toBool();
@@ -202,10 +208,7 @@ void VideoNowPlayingWindow::connectSignals()
     // Shortcuts to control the playback
     shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Left),  this), SIGNAL(activated()), this, SLOT(slowRev()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Right), this), SIGNAL(activated()), this, SLOT(slowFwd()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Up),   this), SIGNAL(activated()), this, SLOT(fastFwd()));
-    connect(new QShortcut(QKeySequence(Qt::Key_Down), this), SIGNAL(activated()), this, SLOT(fastRev()));
+    connect(keyRepeatTimer, SIGNAL(timeout()), this, SLOT(repeatKey()));
 
     // Initial status
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
@@ -812,8 +815,46 @@ void VideoNowPlayingWindow::mouseReleaseEvent(QMouseEvent *)
 
 void VideoNowPlayingWindow::keyPressEvent(QKeyEvent *e)
 {
+    if (e->isAutoRepeat()) return;
+
     if (e->key() == Qt::Key_Backspace)
         this->close();
+
+    else if (e->key() == Qt::Key_Left
+         ||  e->key() == Qt::Key_Right
+         ||  e->key() == Qt::Key_Up
+         ||  e->key() == Qt::Key_Down)
+    {
+        keyToRepeat = e->key();
+        keyRepeatTimer->start();
+        repeatKey();
+    }
+}
+
+void VideoNowPlayingWindow::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e && e->isAutoRepeat()) return;
+
+    keyRepeatTimer->stop();
+}
+
+void VideoNowPlayingWindow::changeEvent(QEvent *e)
+{
+    if (e->type() == QEvent::ActivationChange && !this->isActiveWindow())
+        keyReleaseEvent(NULL);
+
+    QMainWindow::changeEvent(e);
+}
+
+void VideoNowPlayingWindow::repeatKey()
+{
+    switch (keyToRepeat)
+    {
+        case Qt::Key_Left:  slowRev(); break;
+        case Qt::Key_Right: slowFwd(); break;
+        case Qt::Key_Up:    fastFwd(); break;
+        case Qt::Key_Down:  fastRev(); break;
+    }
 }
 
 // Set the visibility of the overlay
@@ -1011,4 +1052,3 @@ void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
     }
 }
 #endif
-
