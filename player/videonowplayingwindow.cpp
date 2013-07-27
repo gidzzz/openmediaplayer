@@ -567,7 +567,7 @@ void VideoNowPlayingWindow::onStateChanged(int state)
         return;
     }
 
-    if (state == Playing || state == Paused) {
+    if (state == Playing) {
         gotInitialPlayState = true;
         gotCurrentPlayState = true;
     }
@@ -638,10 +638,11 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             this->setDNDAtom(true);
 #endif
 
-            // If there is a saved position to resume from, perform the operation
-            // and disable resuming for the lifetime of this window.
-            if (resumePosition > 0) {
-                mafwrenderer->setPosition(SeekAbsolute, resumePosition);
+            // The resume position should be touched only if proper metadata has
+            // already arrived.
+            if (resumePosition != Duration::Unknown) {
+                if (resumePosition > 0)
+                    mafwrenderer->setPosition(SeekAbsolute, resumePosition);
                 resumePosition = Duration::Blank;
             }
 
@@ -722,7 +723,6 @@ void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 
 #ifdef MAFW
 void VideoNowPlayingWindow::handleSourceMetadata(QString objectId, GHashTable *metadata, QString error)
-
 {
     // Ignore stray results that could apppear after quickly changing media
     if (objectId != currentObjectId) return;
@@ -748,12 +748,21 @@ void VideoNowPlayingWindow::handleSourceMetadata(QString objectId, GHashTable *m
 
     qDebug() << "Position to resume from:" << resumePosition;
 
+    // If it was impossible to determine the paused position, give it the value
+    // of 0. This will on one hand prevent resuming if there is simply no info,
+    // on the other, in opposition to Duration::Blank, it will allow to set the
+    // paused position again, in case this function was called as a result of
+    // some song not being stopped in time before creating this window.
+    if (resumePosition == Duration::Unknown)
+        resumePosition = 0;
+
     // Check if things have settled down and the proper playback has started
-    if (gotCurrentPlayState && resumePosition > 0) {
+    if (gotCurrentPlayState) {
         // We are late with fetching the paused position, but in practice it is
         // usually a few seconds at most, so restoring the saved position is
-        // probabl still desired.
-        mafwrenderer->setPosition(SeekAbsolute, resumePosition);
+        // probably still desired.
+        if (resumePosition > 0)
+            mafwrenderer->setPosition(SeekAbsolute, resumePosition);
         resumePosition = Duration::Blank;
     }
 
