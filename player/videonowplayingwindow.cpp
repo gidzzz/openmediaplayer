@@ -574,11 +574,13 @@ void VideoNowPlayingWindow::onStateChanged(int state)
 
     if (state == Transitioning) {
         // Discard state information for the track that was playing a moment ago
-        GHashTable* metadata = mafw_metadata_new();
-        mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, 0);
-        mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
-        mafwSource->setMetadata(playedObjectId.toUtf8(), metadata);
-        mafw_metadata_release(metadata);
+        if (!playedObjectId.isEmpty()) {
+            GHashTable* metadata = mafw_metadata_new();
+            mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, 0);
+            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
+            mafwSource->setMetadata(playedObjectId.toUtf8(), metadata);
+            mafw_metadata_release(metadata);
+        }
 
         // If the renderer is transitioning, it means that another video will be
         // played in a moment. If the continuous mode is not enabled, this is
