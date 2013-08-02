@@ -556,3 +556,9 @@ void MafwRendererAdapter::setColorKey(int colorKey)
         mafw_extension_set_property_int (MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_COLORKEY, colorKey);
     }
 }
+
+void MafwRendererAdapter::setErrorPolicy(uint errorPolicy)
+{
+    if (mafw_renderer)
+        mafw_extension_set_property_uint(MAFW_EXTENSION(mafw_renderer), MAFW_PROPERTY_RENDERER_ERROR_POLICY, errorPolicy);
+}

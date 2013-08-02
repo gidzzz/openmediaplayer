@@ -64,6 +64,7 @@ class MafwRendererAdapter : public QObject
   void getVolume();
   void setWindowXid(uint Xid);
   void setColorKey(int colorKey);
+  void setErrorPolicy(uint errorPolicy);
 
   bool assignPlaylist(MafwPlaylist* playlist);
 

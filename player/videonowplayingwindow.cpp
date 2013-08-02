@@ -94,6 +94,9 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     mafwrenderer->setColorKey(colorKey().rgb() & 0xffffff);
     mafwrenderer->setWindowXid(ui->videoWidget->winId());
 
+    // Do not jump to the next playlist item if an error occurs
+    mafwrenderer->setErrorPolicy(MAFW_RENDERER_ERROR_POLICY_STOP);
+
     // Request some initial values
     mafwrenderer->getStatus();
     mafwrenderer->getVolume();
@@ -136,6 +139,9 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
         // only then close the window.
     }
 #endif
+
+    // Restore the default error policy
+    mafwrenderer->setErrorPolicy(MAFW_RENDERER_ERROR_POLICY_CONTINUE);
 
     // Restore the rotation policy to the one used before opening this window
     Rotator::acquire()->setPolicy(rotatorPolicy);
