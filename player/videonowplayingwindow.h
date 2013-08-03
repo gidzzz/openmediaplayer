@@ -99,7 +99,6 @@ private:
     int currentPosition;
     int videoWidth;
     int videoHeight;
-    bool errorOccured;
     static QColor colorKey() { return QColor(3, 13, 3); }
 #endif
 

@@ -76,7 +76,6 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     gotInitialStopState = false;
     gotInitialPlayState = false;
     gotCurrentPlayState = false;
-    errorOccured = false;
     buttonWasDown = false;
 
     resumePosition = Duration::Unknown;
@@ -678,9 +677,8 @@ void VideoNowPlayingWindow::onStateChanged(int state)
 
             positionTimer->stop();
 
-            if (gotCurrentPlayState && !errorOccured) {
+            if (gotCurrentPlayState)
                 delete this; // why is it not deleted automatically, despite WA_DeleteOnClose?
-            }
         }
     }
 }
@@ -960,7 +958,6 @@ void VideoNowPlayingWindow::onPositionChanged(int position, QString)
 #ifdef MAFW
 void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
 {
-    this->errorOccured = true;
     QString errorMsg;
 
     if (msg.arguments()[0] == "com.nokia.mafw.error.renderer") {
@@ -1029,33 +1026,18 @@ void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
             errorMsg.append(tr("Unable to get current playback status"));
 
 #ifdef Q_WS_MAEMO_5
-        QMaemo5InformationBox *box = new QMaemo5InformationBox(this);
-        box->setAttribute(Qt::WA_DeleteOnClose);
+        QLabel *errorInfo = new QLabel(errorMsg);
+        errorInfo->setWordWrap(true);
 
-        QWidget *widget = new QWidget(box);
-        QSpacerItem *spacer = new QSpacerItem(90, 20, QSizePolicy::Fixed, QSizePolicy::Maximum);
+        QMaemo5InformationBox *errorBox = new QMaemo5InformationBox(this);
+        errorBox->setAttribute(Qt::WA_DeleteOnClose);
+        errorBox->setTimeout(QMaemo5InformationBox::NoTimeout);
+        errorBox->setContentsMargins(90, 30, 90, 30);
+        errorBox->setWidget(errorInfo);
 
-        QLabel *errorLabel = new QLabel(box);
+        errorBox->exec();
 
-        QHBoxLayout *layout = new QHBoxLayout(widget);
-
-        layout->addItem(spacer);
-        layout->addWidget(errorLabel);
-        layout->setSpacing(0);
-
-        widget->setLayout(layout);
-
-        // Bad padding in default widget, use tabbing to cover it up, sigh :/
-        errorLabel->setText("\n" + errorMsg + "\n");
-        errorLabel->setAlignment(Qt::AlignLeft);
-        errorLabel->setWordWrap(true);
-
-        box->setWidget(widget);
-        box->setTimeout(QMaemo5InformationBox::NoTimeout);
-
-        connect(box, SIGNAL(clicked()), this, SLOT(close()));
-
-        box->exec();
+        this->close();
 #else
         QMessageBox::critical(this, tr("Unable to play media") + "\n", errorMsg);
 #endif
