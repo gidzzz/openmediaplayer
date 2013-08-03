@@ -1,37 +1,11 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2010-12-07T20:00:31
-#
-#-------------------------------------------------
-
-QT += core gui dbus declarative opengl network
+QT += core gui dbus declarative opengl network maemo5
 
 TARGET = openmediaplayer
 TEMPLATE = app
-TRANSLATIONS = lang/openmediaplayer.ar_SA.ts \
-               lang/openmediaplayer.bg.ts \
-               lang/openmediaplayer.cs.ts \
-               lang/openmediaplayer.de.ts \
-               lang/openmediaplayer.en.ts \
-               lang/openmediaplayer.es.ts \
-               lang/openmediaplayer.fi.ts \
-               lang/openmediaplayer.fr.ts \
-               lang/openmediaplayer.hu.ts \
-               lang/openmediaplayer.it.ts \
-               lang/openmediaplayer.nl.ts \
-               lang/openmediaplayer.pl.ts \
-               lang/openmediaplayer.pt_BR.ts \
-               lang/openmediaplayer.pt_PT.ts \
-               lang/openmediaplayer.ro.ts \
-               lang/openmediaplayer.ru.ts \
-               lang/openmediaplayer.sk.ts \
-               lang/openmediaplayer.sv.ts \
-               lang/openmediaplayer.tr.ts \
-               lang/openmediaplayer.uk.ts \
-               lang/openmediaplayer.zh.ts
+
+INCLUDEPATH += ../lyrics
 
 DEFINES += MAFW MAFW_WORKAROUNDS
-INCLUDEPATH += ../lyrics
 
 SOURCES += \
     main.cpp \
@@ -76,7 +50,9 @@ SOURCES += \
     delegates/providerlistitemdelegate.cpp \
     basewindow.cpp \
     opendialog.cpp \
-    currentplaylistmanager.cpp
+    currentplaylistmanager.cpp \
+    maemo5deviceevents.cpp \
+    fmtxdialog.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -128,7 +104,9 @@ HEADERS += \
     basewindow.h \
     kbmenu.h \
     opendialog.h \
-    currentplaylistmanager.h
+    currentplaylistmanager.h \
+    maemo5deviceevents.h \
+    fmtxdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -158,62 +136,17 @@ FORMS += \
     lyricsprovidersdialog.ui \
     opendialog.ui
 
-#generate translations
-isEmpty(QMAKE_LRELEASE) {
-  win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe
-  else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
-}
-
-for(TSFILE, TRANSLATIONS) {
-    exists($$TSFILE) {
-    system($$QMAKE_LRELEASE $$TSFILE)
-    }
-}
-
-symbian {
-    TARGET.UID3 = 0xedf29700
-    # TARGET.CAPABILITY +=
-    TARGET.EPOCSTACKSIZE = 0x14000
-    TARGET.EPOCHEAPSIZE = 0x020000 0x800000
-}
-
-unix:!symbian {
-
-    isEmpty(PREFIX) {
-        PREFIX = /usr
-    }
-
-    BINDIR = $$PREFIX/bin
-    DATADIR =$$PREFIX/share
-
-    DEFINES += DATADIR=\\\"$$DATADIR\\\" PKGDATADIR=\\\"$$PKGDATADIR\\\"
-
-    maemo5 {
-        QT += maemo5
-        CONFIG += link_pkgconfig
-        PKGCONFIG += dbus-1
-        DEFINES += MAFW
-        SOURCES += maemo5deviceevents.cpp \
-                   fmtxdialog.cpp
-        HEADERS += maemo5deviceevents.h \
-                   fmtxdialog.h
-        include(external-includepaths.pro)
-    }
-
-    INSTALLS += target desktop icon64
-
-    target.path = $$BINDIR
-
-    desktop.path = $$DATADIR/applications/hildon
-    desktop.files += ../extra/$${TARGET}.desktop
-
-    icon64.path = $$DATADIR/icons/hicolor/64x64/apps
-    icon64.files += ../extra/$${TARGET}.png
-
-}
+OTHER_FILES += \
+    qml_entertainmentview/entertainmentview.qml \
+    qml_entertainmentview/Slider.qml \
+    qml_carview/carview.qml \
+    qml_carview/Button.qml \
+    qml_carview/MetadataText.qml \
+    qml_carview/Playlist.qml \
+    qml_carview/Slider.qml \
+    qml_carview/SongView.qml
 
 contains(DEFINES, MAFW) {
-
     CONFIG += link_pkgconfig
     PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0 libplayback-1
 
@@ -237,75 +170,77 @@ contains(DEFINES, MAFW) {
 }
 
 LIBS += -lhildonthumbnail -lX11
-PKGCONFIG += glib-2.0 gtk+-2.0
+CONFIG += link_pkgconfig
+PKGCONFIG += dbus-1 gtk+-2.0
 
-OTHER_FILES += \
-    qml_entertainmentview/entertainmentview.qml \
-    qml_entertainmentview/Slider.qml \
-    qml_carview/carview.qml \
-    qml_carview/Button.qml \
-    qml_carview/MetadataText.qml \
-    qml_carview/Playlist.qml \
-    qml_carview/Slider.qml \
-    qml_carview/SongView.qml \
-    qtc_packaging/meego.spec \
-    lang/openmediaplayer.ar_SA.qm \
-    lang/openmediaplayer.bg.qm \
-    lang/openmediaplayer.cs.qm \
-    lang/openmediaplayer.de.qm \
-    lang/openmediaplayer.en.qm \
-    lang/openmediaplayer.es.qm \
-    lang/openmediaplayer.fi.qm \
-    lang/openmediaplayer.fr.qm \
-    lang/openmediaplayer.hu.qm \
-    lang/openmediaplayer.it.qm \
-    lang/openmediaplayer.nl.qm \
-    lang/openmediaplayer.pl.qm \
-    lang/openmediaplayer.pt_BR.qm \
-    lang/openmediaplayer.pt_PT.qm \
-    lang/openmediaplayer.ro.qm \
-    lang/openmediaplayer.ru.qm \
-    lang/openmediaplayer.sk.qm \
-    lang/openmediaplayer.sv.qm \
-    lang/openmediaplayer.tr.qm \
-    lang/openmediaplayer.uk.qm \
-    lang/openmediaplayer.zh.qm
+TRANSLATIONS = \
+    lang/openmediaplayer.ar_SA.ts \
+    lang/openmediaplayer.bg.ts \
+    lang/openmediaplayer.cs.ts \
+    lang/openmediaplayer.de.ts \
+    lang/openmediaplayer.en.ts \
+    lang/openmediaplayer.es.ts \
+    lang/openmediaplayer.fi.ts \
+    lang/openmediaplayer.fr.ts \
+    lang/openmediaplayer.hu.ts \
+    lang/openmediaplayer.it.ts \
+    lang/openmediaplayer.nl.ts \
+    lang/openmediaplayer.pl.ts \
+    lang/openmediaplayer.pt_BR.ts \
+    lang/openmediaplayer.pt_PT.ts \
+    lang/openmediaplayer.ro.ts \
+    lang/openmediaplayer.ru.ts \
+    lang/openmediaplayer.sk.ts \
+    lang/openmediaplayer.sv.ts \
+    lang/openmediaplayer.tr.ts \
+    lang/openmediaplayer.uk.ts \
+    lang/openmediaplayer.zh.ts
 
+isEmpty(QMAKE_LRELEASE) {
+    QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+}
+lrelease.input = TRANSLATIONS
+lrelease.output = ${QMAKE_FILE_BASE}.qm
+lrelease.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_BASE}.qm
+lrelease.CONFIG += no_link target_predeps
+QMAKE_EXTRA_COMPILERS += lrelease
+
+isEmpty(PREFIX) {
+    PREFIX = /usr
+}
+BINDIR = $$PREFIX/bin
+DATADIR = $$PREFIX/share
+PKGDATADIR = /opt/$$TARGET
+
+INSTALLS += target
+target.path = $$BINDIR
+
+INSTALLS += desktop
+desktop.path = $$DATADIR/applications/hildon
+desktop.files += ../extra/$${TARGET}.desktop
+
+INSTALLS += icon64
+icon64.path = $$DATADIR/icons/hicolor/64x64/apps
+icon64.files += ../extra/$${TARGET}.png
+
+INSTALLS += qml_entertainmentview
 qml_entertainmentview.files += qml_entertainmentview/entertainmentview.qml
 qml_entertainmentview.files += qml_entertainmentview/Slider.qml
-qml_entertainmentview.path = /opt/openmediaplayer/qml/entertainmentview/
+qml_entertainmentview.path = $$PKGDATADIR/qml/entertainmentview/
 
+INSTALLS += qml_carview
 qml_carview.files += qml_carview/carview.qml
 qml_carview.files += qml_carview/Button.qml
 qml_carview.files += qml_carview/MetadataText.qml
 qml_carview.files += qml_carview/Playlist.qml
 qml_carview.files += qml_carview/Slider.qml
 qml_carview.files += qml_carview/SongView.qml
-qml_carview.path = /opt/openmediaplayer/qml/carview/
+qml_carview.path = $$PKGDATADIR/qml/carview/
 
-lang.files += lang/openmediaplayer.ar_SA.qm
-lang.files += lang/openmediaplayer.bg.qm
-lang.files += lang/openmediaplayer.cs.qm
-lang.files += lang/openmediaplayer.de.qm
-lang.files += lang/openmediaplayer.en.qm
-lang.files += lang/openmediaplayer.es.qm
-lang.files += lang/openmediaplayer.fi.qm
-lang.files += lang/openmediaplayer.fr.qm
-lang.files += lang/openmediaplayer.hu.qm
-lang.files += lang/openmediaplayer.it.qm
-lang.files += lang/openmediaplayer.nl.qm
-lang.files += lang/openmediaplayer.pl.qm
-lang.files += lang/openmediaplayer.pt_BR.qm
-lang.files += lang/openmediaplayer.pt_PT.qm
-lang.files += lang/openmediaplayer.ro.qm
-lang.files += lang/openmediaplayer.ru.qm
-lang.files += lang/openmediaplayer.sk.qm
-lang.files += lang/openmediaplayer.sv.qm
-lang.files += lang/openmediaplayer.tr.qm
-lang.files += lang/openmediaplayer.uk.qm
-lang.files += lang/openmediaplayer.zh.qm
-lang.path = /opt/openmediaplayer/lang/
-
-INSTALLS += qml_entertainmentview
-INSTALLS += qml_carview
 INSTALLS += lang
+for(TSFILE, TRANSLATIONS) {
+    QMFILE = $$replace(TSFILE, ".ts", ".qm")
+    lang.files += $$OUT_PWD/$$basename(QMFILE)
+}
+lang.CONFIG += no_check_exist
+lang.path = $$PKGDATADIR/lang
