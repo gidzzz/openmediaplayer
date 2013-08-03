@@ -27,11 +27,6 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     mafwSource(factory->getTempSource())
 #endif
 {
-    /* Make Qt do the work of keeping the overlay the magic color  */
-    QPalette overlayPalette = this->palette();
-    overlayPalette.setColor(QPalette::Window, colorKey());
-    this->setPalette(overlayPalette);
-
     ui->setupUi(this);
     setIcons();
 
