@@ -1,9 +1,24 @@
-openmediaplayer (20130321-next-1) unstable; urgency=low
+openmediaplayer (20130804-1) unstable; urgency=low
 
   * Modified the portrait layout in Now Playing.
-  * Views in Now Playing can be cycled in the reverse order by swiping the cover area from left to right or with Ctrl + Shift + Space.
+  * Added an icon to the button in playlist picker.
+  * Views in Now Playing can be cycled in the reverse order by swiping the cover area from left to right or with Ctrl+Shift+Space.
+  * Extensive changes in the video playback window, most notably:
+    - fixed a failure to reset saved playback position,
+    - fixed a failure to resume from saved playback position,
+    - fixed a failure to start video playback when music is playing,
+    - fixed jumpy resuming from pause,
+    - keyboard shortcuts to control playback progress work at the same rate as their touch counterparts and without the initial delay,
+    - prevented skipping to another video and playing it in the background if an error has occured,
+    - panels use background color from theme.
+  * Changing view mode in video browser no longer causes an empty list if a filter is present.
+  * Fixed wrong size of lyrics area (too much space or unable to scroll) after changing songs with lyrics hidden.
+  * Fixed wrong size of list items in the video browser after changing device orientation when in category mode.
+  * Fixed an occasional crash that occured when trying to play an unavailabe bookmarked video stream and possibly in other situations.
+  * Some packaging and build tweaks.
+  * Updated translations: Hungarian (thanks to salmi), Russian.
 
- -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 03 May 2013 15:54:16 +0200
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sun, 04 Aug 2013 20:34:22 +0200
 
 openmediaplayer (20130321-1) unstable; urgency=low
 
