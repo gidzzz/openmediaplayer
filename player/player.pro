@@ -93,7 +93,7 @@ HEADERS += \
     playlistpicker.h \
     sleeperdialog.h \
     bookmarkdialog.h \
-    lyrics/abstractlyricsprovider.h \
+    ../lyrics/abstractlyricsprovider.h \
     lyricsmanager.h \
     lyricsprovidersdialog.h \
     headerawareproxymodel.h \
