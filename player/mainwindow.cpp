@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseWindow(parent),
     ui(new Ui::MainWindow)
 {
+    resumeTimer = NULL;
     ui->setupUi(this);
 
     QPalette palette;
@@ -234,11 +235,11 @@ void MainWindow::connectSignals()
 #endif
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Connected",
-                                         this, SLOT(onHeadsetConnected()));
+                                         this, SLOT(onWirelessHeadsetConnected()));
     QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Disconnected",
                                          this, SLOT(onHeadsetDisconnected()));
     QDBusConnection::systemBus().connect("", "", "org.bluez.Headset", "Connected",
-                                         this, SLOT(onHeadsetConnected()));
+                                         this, SLOT(onWirelessHeadsetConnected()));
     QDBusConnection::systemBus().connect("", "", "org.bluez.Headset", "Disconnected",
                                          this, SLOT(onHeadsetDisconnected()));
 
@@ -1073,6 +1074,18 @@ void MainWindow::phoneButton()
         mafwrenderer->stop();
 }
 
+void MainWindow::onWirelessHeadsetConnected()
+{
+    if (!resumeTimer) {
+        resumeTimer = new QTimer(this);
+        resumeTimer->setSingleShot(true);
+        connect(resumeTimer, SIGNAL(timeout()), this, SLOT(onHeadsetConnected()));
+    } else {
+        resumeTimer->stop();
+    }
+    resumeTimer->start(4000);
+}
+
 void MainWindow::onHeadsetConnected()
 {
     qint64 headsetResumeTime = QSettings().value("main/headsetResumeSeconds", -1).toInt();
@@ -1095,6 +1108,12 @@ void MainWindow::onHeadsetDisconnected()
         } else if (pausedByCall) {
             headsetPauseStamp = QDateTime::currentMSecsSinceEpoch();
         }
+    }
+    if (resumeTimer) {
+        disconnect(resumeTimer, SIGNAL(timeout()), this, SLOT(onHeadsetConnected()));
+        resumeTimer->stop();
+        resumeTimer->deleteLater();
+        resumeTimer = NULL;
     }
 }
 

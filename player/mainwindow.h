@@ -82,6 +82,7 @@ private:
     void closeChildren();
     QTimer *sleeperTimer;
     QTimer *sleeperVolumeTimer;
+    QTimer *resumeTimer;
     qint64 sleeperStartStamp;
     qint64 sleeperTimeoutStamp;
     int volume;
@@ -149,6 +150,7 @@ private slots:
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();
+    void onWirelessHeadsetConnected();
     void onHeadsetConnected();
     void onHeadsetDisconnected();
     void onHeadsetButtonPressed(QDBusMessage msg);
