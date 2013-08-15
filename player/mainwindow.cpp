@@ -1074,6 +1074,12 @@ void MainWindow::phoneButton()
         mafwrenderer->stop();
 }
 
+// The purpose of distinction between wired and wireless headset is to postpone
+// playback resuming when Bluetooth headset is connected. This is needed because
+// the signal from Bluetooth daemon arrives before audio system is reconfigured,
+// which results in OMP playing via internal speakers for 1-2 seconds.
+// NOTE: There are 2 assumptions: a) it takes no more than 4 seconds to change
+// the audio output; b) headset will not be disconnected within those 4 seconds.
 void MainWindow::onWirelessHeadsetConnected()
 {
     if (!resumeTimer) {
