@@ -27,6 +27,16 @@ MafwPlaylistAdapter::MafwPlaylistAdapter(QObject *parent, MafwRendererAdapter *m
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*, QString)));
     connect(mafwrenderer, SIGNAL(playlistChanged(GObject*)), this, SLOT(onPlaylistChanged(GObject*)));
     connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
+
+#ifdef MAFW_WORKAROUNDS
+    // Calling mafw_playlist_get_size() for the first time after restarting the
+    // device or after killing MAFW daemons can block execution for a long time
+    // (~20 s). However, ensuring that mafw_playlist_manager_get() is called
+    // before the blocking function is enough to eliminate the delay.
+    // mafw_playlist_manager_get() itself is very fast, so the delay completely
+    // disappears rather than moves in time.
+    MafwPlaylistManagerAdapter::get();
+#endif
 }
 
 void MafwPlaylistAdapter::clear()
