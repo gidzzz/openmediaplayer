@@ -75,6 +75,9 @@
            <property name="text">
             <string>Size of automatic playlists</string>
            </property>
+           <property name="leftMargin">
+            <number>8</number>
+           </property>
           </widget>
          </item>
          <item>
