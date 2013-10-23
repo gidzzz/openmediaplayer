@@ -240,30 +240,6 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="languageCodeHBox">
-         <item>
-          <widget class="QLabel" name="languageCodeLabel">
-           <property name="text">
-            <string>Force language code</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="languageCodeBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maxLength">
-            <number>5</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
         <widget class="QFrame" name="separator">
          <property name="frameShape">
           <enum>QFrame::HLine</enum>
@@ -291,18 +267,6 @@
          </property>
          <property name="text">
           <string>Requires modified FMTXD</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="restartNote">
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Requires application restart</string>
          </property>
         </widget>
        </item>

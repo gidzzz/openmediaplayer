@@ -1,6 +1,6 @@
 /**************************************************************************
     Open MediaPlayer
-    Copyright (C) 2010-2012 Mohammad Abu-Garbeyyeh
+    Copyright (C) 2010-2013 Mohammad Abu-Garbeyyeh
                             Grzegorz Gidel
                             Matias Perez
                             Pali Rohár
@@ -45,37 +45,14 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    QString locale = QSettings().value("main/language").toString();
     QString langPath = "/opt/openmediaplayer/lang/";
-
-    if (locale.isEmpty()) {
-        // This thing returns the device language, not the current language
-        //QString lang = QLocale::languageToString(QLocale::system().language());
-
-        // Open locale file to check current locale
-        QFile localeFile("/etc/osso-af-init/locale");
-        if (localeFile.open(QFile::ReadOnly)) {
-            QTextStream in(&localeFile);
-            while(!in.atEnd()) {
-                QString line = in.readLine();
-                if (line.startsWith("export LANG")) {
-                    locale = line.remove("export LANG=");
-                    break;
-                }
-            }
-        }
-        localeFile.close();
-
-        qDebug() << "Your locale is" << locale << "(detected)";
-    } else {
-        qDebug() << "Your locale is" << locale << "(forced)";
-    }
-
-    QLocale::setDefault(locale);
+    QString lang = qgetenv("LANG");
+    QLocale::setDefault(lang);
+    qDebug() << "Detected language:" << lang;
 
     // Install language file
     QTranslator translator;
-    if (translator.load("openmediaplayer." + locale, langPath)) {
+    if (translator.load("openmediaplayer." + lang, langPath)) {
         qDebug() << "Translator successfully loaded";
         a.installTranslator(&translator);
     } else {

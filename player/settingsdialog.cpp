@@ -31,9 +31,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->fmtxdNote->setText("** " + ui->fmtxdNote->text());
     ui->fmtxCheckBox->setText(ui->fmtxCheckBox->text() + " **");
 
-    ui->restartNote->setText("*** " + ui->restartNote->text());
-    ui->languageCodeLabel->setText(ui->languageCodeLabel->text() + " ***");
-
     this->setAttribute(Qt::WA_DeleteOnClose);
 
     QMaemo5ListPickSelector *selector;
@@ -126,7 +123,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->playlistSizeBox->setText(QSettings().value("music/playlistSize", 30).toString());
     ui->playlistSizeBox->setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]{0,3}"), this));
-    ui->languageCodeBox->setText(QSettings().value("main/language").toString());
 
     setLyricsProviders(QSettings().value("lyrics/providers").toString());
     connect(ui->lyricsProvidersBox, SIGNAL(clicked()), this, SLOT(configureLyricsProviders()));
@@ -237,7 +233,6 @@ void SettingsDialog::accept()
 
     int playlistSize = ui->playlistSizeBox->text().toInt();
     QSettings().setValue("music/playlistSize", playlistSize ? playlistSize : 30);
-    QSettings().setValue("main/language", ui->languageCodeBox->text());
     QSettings().setValue("lyrics/providers", lyricsProviders);
 
     QDialog::accept();
