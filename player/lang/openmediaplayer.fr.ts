@@ -339,7 +339,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="877"/>
+        <location filename="../mainwindow.cpp" line="878"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n morceau</numerusform>
@@ -347,7 +347,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="884"/>
+        <location filename="../mainwindow.cpp" line="885"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n vidéo</numerusform>
@@ -355,7 +355,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="900"/>
+        <location filename="../mainwindow.cpp" line="901"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n station</numerusform>
@@ -387,32 +387,32 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>Lecture aléatoire</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="876"/>
+        <location filename="../mainwindow.cpp" line="877"/>
         <source>(no songs)</source>
         <translation>(aucun morceau)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="883"/>
+        <location filename="../mainwindow.cpp" line="884"/>
         <source>(no videos)</source>
         <translation>(aucune vidéo)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="899"/>
+        <location filename="../mainwindow.cpp" line="900"/>
         <source>(no stations)</source>
         <translation>(aucune station)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="967"/>
+        <location filename="../mainwindow.cpp" line="968"/>
         <source>Retrieving information on the new media files</source>
         <translation>Récupération des informations des nouveaux fichiers</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="970"/>
         <source>Estimated time remaining:</source>
         <translation>Temps restant estimé :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="971"/>
+        <location filename="../mainwindow.cpp" line="972"/>
         <source>Remaining items:</source>
         <translation>Fichiers restant :</translation>
     </message>
@@ -936,39 +936,39 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>Media Player - Configuration</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="72"/>
+        <location filename="../settingsdialog.cpp" line="69"/>
         <source>Next song</source>
         <translation>Chanson suivante</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="73"/>
+        <location filename="../settingsdialog.cpp" line="70"/>
         <source>Previous song</source>
         <translation>Chanson précédente</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="74"/>
+        <location filename="../settingsdialog.cpp" line="71"/>
         <source>Play / Pause</source>
         <translation>Lecture / Pause</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="46"/>
-        <location filename="../settingsdialog.cpp" line="76"/>
+        <location filename="../settingsdialog.cpp" line="43"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Do nothing</source>
         <translation>Ne rien faire</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="45"/>
+        <location filename="../settingsdialog.cpp" line="42"/>
         <source>Pause playback</source>
         <translation>Mettre en pause la lecture</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="55"/>
-        <location filename="../settingsdialog.cpp" line="99"/>
+        <location filename="../settingsdialog.cpp" line="52"/>
+        <location filename="../settingsdialog.cpp" line="96"/>
         <source>Never</source>
         <translation>Jamais</translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="56"/>
+        <location filename="../settingsdialog.cpp" line="53"/>
         <source>%n second(s)</source>
         <translation>
             <numerusform>%n seconde</numerusform>
@@ -976,8 +976,8 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="57"/>
-        <location filename="../settingsdialog.cpp" line="58"/>
+        <location filename="../settingsdialog.cpp" line="54"/>
+        <location filename="../settingsdialog.cpp" line="55"/>
         <source>%n minute(s)</source>
         <translation>
             <numerusform>%n minute</numerusform>
@@ -985,7 +985,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="59"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
         <source>%n hour(s)</source>
         <translation>
             <numerusform>%n heure</numerusform>
@@ -993,64 +993,64 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="60"/>
-        <location filename="../settingsdialog.cpp" line="98"/>
+        <location filename="../settingsdialog.cpp" line="57"/>
+        <location filename="../settingsdialog.cpp" line="95"/>
         <source>Always</source>
         <translation>Toujours</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="87"/>
+        <location filename="../settingsdialog.cpp" line="84"/>
         <source>Automatic</source>
         <translation>Automatique</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="88"/>
+        <location filename="../settingsdialog.cpp" line="85"/>
         <source>Landscape</source>
         <translation>Paysage</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="89"/>
+        <location filename="../settingsdialog.cpp" line="86"/>
         <source>Portrait</source>
         <translation>Portrait</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="100"/>
+        <location filename="../settingsdialog.cpp" line="97"/>
         <source>With screen locked</source>
         <translation>Lorsque l&apos;écran est verrouillé</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="101"/>
+        <location filename="../settingsdialog.cpp" line="98"/>
         <source>With screen unlocked</source>
         <translation>Lorsque l&apos;écran est déverrouillé</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="111"/>
+        <location filename="../settingsdialog.cpp" line="108"/>
         <source>Compatible</source>
         <translation>Compatible</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="112"/>
+        <location filename="../settingsdialog.cpp" line="109"/>
         <source>Reliable</source>
         <translation>Sûre</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="168"/>
+        <location filename="../settingsdialog.cpp" line="164"/>
         <source>Only local cache</source>
         <translation>Uniquement le cache local</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="181"/>
+        <location filename="../settingsdialog.cpp" line="177"/>
         <source>Operation complete</source>
         <translation>Opération effectuée</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="182"/>
+        <location filename="../settingsdialog.cpp" line="178"/>
         <source>Operation failed</source>
         <translation>Échec de l&apos;opération</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="44"/>
-        <location filename="../settingsdialog.cpp" line="75"/>
+        <location filename="../settingsdialog.cpp" line="41"/>
+        <location filename="../settingsdialog.cpp" line="72"/>
         <source>Stop playback</source>
         <translation>Arrêter la lecture</translation>
     </message>
@@ -1060,27 +1060,27 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>En quittant l&apos;application</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="105"/>
+        <location filename="../settingsdialog.ui" line="108"/>
         <source>Disconnect headset to pause</source>
         <translation>Débrancher les écouteurs met en pause</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="112"/>
+        <location filename="../settingsdialog.ui" line="115"/>
         <source>Reconnect headset to resume</source>
         <translation>Rebrancher les écouteurs relance la lecture</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="133"/>
+        <location filename="../settingsdialog.ui" line="136"/>
         <source>Enable lyrics</source>
         <translation>Activer les paroles</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="140"/>
+        <location filename="../settingsdialog.ui" line="143"/>
         <source>Lyrics providers</source>
         <translation>Fournisseurs de paroles</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="147"/>
+        <location filename="../settingsdialog.ui" line="150"/>
         <source>Clear lyrics cache</source>
         <translation>Supprimer les paroles sauvegardées</translation>
     </message>
@@ -1090,12 +1090,12 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>Lire uniquement les résultats de recherche</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="168"/>
+        <location filename="../settingsdialog.ui" line="171"/>
         <source>Open whole folders</source>
         <translation>Ouvrir des dossiers entiers</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="175"/>
+        <location filename="../settingsdialog.ui" line="178"/>
         <source>Append opened songs</source>
         <translation>Ajouter les morceaux déjà ouverts</translation>
     </message>
@@ -1105,64 +1105,54 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
         <translation>Taille des listes de lecture automatiques</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="119"/>
+        <location filename="../settingsdialog.ui" line="122"/>
         <source>Headset button action</source>
         <translation>Action du bouton des écouteurs</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="189"/>
+        <location filename="../settingsdialog.ui" line="192"/>
         <source>Orientation</source>
         <translation>Orientation</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="217"/>
+        <location filename="../settingsdialog.ui" line="220"/>
         <source>Prevent playback interruptions</source>
         <translation>Empêcher les interruptions de lecture</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="224"/>
+        <location filename="../settingsdialog.ui" line="227"/>
         <source>Interruptions prevention method</source>
         <translation>Méthode pour prévenir les interruptions</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="196"/>
+        <location filename="../settingsdialog.ui" line="199"/>
         <source>Lazy sliders</source>
         <translation>Défilement lent</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="161"/>
+        <location filename="../settingsdialog.ui" line="164"/>
         <source>Show opening dialog</source>
         <translation>Afficher la fenêtre de lancement</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="203"/>
+        <location filename="../settingsdialog.ui" line="206"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>&quot;Supprimer&quot; pour les éléments des playlists</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="238"/>
+        <location filename="../settingsdialog.ui" line="241"/>
         <source>Override FMTX checks in UI</source>
         <translation>Outrepasser les vérifications FMTX dans l&apos;interface</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="247"/>
-        <source>Force language code</source>
-        <translation>Forcer la langue</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="281"/>
+        <location filename="../settingsdialog.ui" line="260"/>
         <source>Requires CSSU</source>
         <translation>Nécessite le CSSU</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="293"/>
+        <location filename="../settingsdialog.ui" line="272"/>
         <source>Requires modified FMTXD</source>
         <translation>nécessite un FMTXD modifié</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="305"/>
-        <source>Requires application restart</source>
-        <translation>Nécessite un redémarrage de l&apos;application (Code Transifex.com)</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="26"/>

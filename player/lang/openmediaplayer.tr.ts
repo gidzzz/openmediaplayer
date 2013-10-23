@@ -322,21 +322,21 @@ FM vericisi için USB kablosunu çıkarın.</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="877"/>
+        <location filename="../mainwindow.cpp" line="878"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n şarkılar</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="884"/>
+        <location filename="../mainwindow.cpp" line="885"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n klipler</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="900"/>
+        <location filename="../mainwindow.cpp" line="901"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n istasyonlar</numerusform>
@@ -367,32 +367,32 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Tüm şarkıları rastgele çal</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="876"/>
+        <location filename="../mainwindow.cpp" line="877"/>
         <source>(no songs)</source>
         <translation>(şarkı yok)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="883"/>
+        <location filename="../mainwindow.cpp" line="884"/>
         <source>(no videos)</source>
         <translation>(video yok)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="899"/>
+        <location filename="../mainwindow.cpp" line="900"/>
         <source>(no stations)</source>
         <translation>(istasyon yok)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="967"/>
+        <location filename="../mainwindow.cpp" line="968"/>
         <source>Retrieving information on the new media files</source>
         <translation>Yeni medya dosyaları hakkında bilgi alınıyor</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="970"/>
         <source>Estimated time remaining:</source>
         <translation>Tahmini kalan süre:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="971"/>
+        <location filename="../mainwindow.cpp" line="972"/>
         <source>Remaining items:</source>
         <translation>Kalan öğeler:</translation>
     </message>
@@ -909,118 +909,118 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Medya oynatıcı - Ayarları</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="72"/>
+        <location filename="../settingsdialog.cpp" line="69"/>
         <source>Next song</source>
         <translation>Sonraki şarkı</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="73"/>
+        <location filename="../settingsdialog.cpp" line="70"/>
         <source>Previous song</source>
         <translation>Önceki şarkı</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="74"/>
+        <location filename="../settingsdialog.cpp" line="71"/>
         <source>Play / Pause</source>
         <translation>Çal / Duraklat</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="46"/>
-        <location filename="../settingsdialog.cpp" line="76"/>
+        <location filename="../settingsdialog.cpp" line="43"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Do nothing</source>
         <translation>Hiçbir şey yapma</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="45"/>
+        <location filename="../settingsdialog.cpp" line="42"/>
         <source>Pause playback</source>
         <translation>Oynatmayı duraklat</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="55"/>
-        <location filename="../settingsdialog.cpp" line="99"/>
+        <location filename="../settingsdialog.cpp" line="52"/>
+        <location filename="../settingsdialog.cpp" line="96"/>
         <source>Never</source>
         <translation>Asla</translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="56"/>
+        <location filename="../settingsdialog.cpp" line="53"/>
         <source>%n second(s)</source>
         <translation>
             <numerusform>%n saniye</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="57"/>
-        <location filename="../settingsdialog.cpp" line="58"/>
+        <location filename="../settingsdialog.cpp" line="54"/>
+        <location filename="../settingsdialog.cpp" line="55"/>
         <source>%n minute(s)</source>
         <translation>
             <numerusform>%n dakika</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="59"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
         <source>%n hour(s)</source>
         <translation>
             <numerusform>%n saat</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="60"/>
-        <location filename="../settingsdialog.cpp" line="98"/>
+        <location filename="../settingsdialog.cpp" line="57"/>
+        <location filename="../settingsdialog.cpp" line="95"/>
         <source>Always</source>
         <translation>Her zaman</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="87"/>
+        <location filename="../settingsdialog.cpp" line="84"/>
         <source>Automatic</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="88"/>
+        <location filename="../settingsdialog.cpp" line="85"/>
         <source>Landscape</source>
         <translation>Yatay mod</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="89"/>
+        <location filename="../settingsdialog.cpp" line="86"/>
         <source>Portrait</source>
         <translation>Dikey mod</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="100"/>
+        <location filename="../settingsdialog.cpp" line="97"/>
         <source>With screen locked</source>
         <translation>Ekran kilitli</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="101"/>
+        <location filename="../settingsdialog.cpp" line="98"/>
         <source>With screen unlocked</source>
         <translation>Ekran kilitsiz</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="111"/>
+        <location filename="../settingsdialog.cpp" line="108"/>
         <source>Compatible</source>
         <translation>Uyumlu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="112"/>
+        <location filename="../settingsdialog.cpp" line="109"/>
         <source>Reliable</source>
         <translation>Güvenilir</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="168"/>
+        <location filename="../settingsdialog.cpp" line="164"/>
         <source>Only local cache</source>
         <translation>Sadece yerel önbellek</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="181"/>
+        <location filename="../settingsdialog.cpp" line="177"/>
         <source>Operation complete</source>
         <translation>İşlem tamamlandı</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="182"/>
+        <location filename="../settingsdialog.cpp" line="178"/>
         <source>Operation failed</source>
         <translation>İşlem başarısız oldu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="44"/>
-        <location filename="../settingsdialog.cpp" line="75"/>
+        <location filename="../settingsdialog.cpp" line="41"/>
+        <location filename="../settingsdialog.cpp" line="72"/>
         <source>Stop playback</source>
         <translation>Oynatmayı durdur</translation>
     </message>
@@ -1030,27 +1030,27 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Uygulamadan çıkın</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="105"/>
+        <location filename="../settingsdialog.ui" line="108"/>
         <source>Disconnect headset to pause</source>
         <translation>Kulaklığı çıkarınca duraklat</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="112"/>
+        <location filename="../settingsdialog.ui" line="115"/>
         <source>Reconnect headset to resume</source>
         <translation>Devam etmek için kulaklık takın</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="133"/>
+        <location filename="../settingsdialog.ui" line="136"/>
         <source>Enable lyrics</source>
         <translation>Şarkı sözlerini etkinleştirin</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="140"/>
+        <location filename="../settingsdialog.ui" line="143"/>
         <source>Lyrics providers</source>
         <translation>Şarkı sözü sağlayıcıları</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="147"/>
+        <location filename="../settingsdialog.ui" line="150"/>
         <source>Clear lyrics cache</source>
         <translation>Şarkı sözleri önbelleğini temizle</translation>
     </message>
@@ -1060,12 +1060,12 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Sadece arama sonuçlarını oynat</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="168"/>
+        <location filename="../settingsdialog.ui" line="171"/>
         <source>Open whole folders</source>
         <translation>Tüm klasörleri aç</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="175"/>
+        <location filename="../settingsdialog.ui" line="178"/>
         <source>Append opened songs</source>
         <translation>Açılacak şarkıları ekleyin</translation>
     </message>
@@ -1075,64 +1075,54 @@ FM vericisi için USB kablosunu çıkarın.</translation>
         <translation>Otomatik çalma listeleri boyutu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="119"/>
+        <location filename="../settingsdialog.ui" line="122"/>
         <source>Headset button action</source>
         <translation>Kulaklık düğmesi işlemi</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="189"/>
+        <location filename="../settingsdialog.ui" line="192"/>
         <source>Orientation</source>
         <translation>Yön belirle</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="217"/>
+        <location filename="../settingsdialog.ui" line="220"/>
         <source>Prevent playback interruptions</source>
         <translation>Oynatma kesintilerini önle</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="224"/>
+        <location filename="../settingsdialog.ui" line="227"/>
         <source>Interruptions prevention method</source>
         <translation>Duraklamaları önleme yöntemi</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="196"/>
+        <location filename="../settingsdialog.ui" line="199"/>
         <source>Lazy sliders</source>
         <translation>Lazy kaydırıcıları</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="161"/>
+        <location filename="../settingsdialog.ui" line="164"/>
         <source>Show opening dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="203"/>
+        <location filename="../settingsdialog.ui" line="206"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>Çalma listesi öğelerini &quot;Sil&quot;</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="238"/>
+        <location filename="../settingsdialog.ui" line="241"/>
         <source>Override FMTX checks in UI</source>
         <translation>UI FMTX kontrolleri geçersiz kılma</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="247"/>
-        <source>Force language code</source>
-        <translation>Dil kodu gücü</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="281"/>
+        <location filename="../settingsdialog.ui" line="260"/>
         <source>Requires CSSU</source>
         <translation>CSSU gerekir</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="293"/>
+        <location filename="../settingsdialog.ui" line="272"/>
         <source>Requires modified FMTXD</source>
         <translation>FMTXD değiştirilmesi gereklidir</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="305"/>
-        <source>Requires application restart</source>
-        <translation>Uygulamanın yeniden başlatılmasını gerektirir</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="26"/>

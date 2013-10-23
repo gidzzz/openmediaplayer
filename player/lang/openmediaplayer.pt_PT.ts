@@ -324,7 +324,7 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="877"/>
+        <location filename="../mainwindow.cpp" line="878"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>um: %n song
@@ -333,7 +333,7 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="884"/>
+        <location filename="../mainwindow.cpp" line="885"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>um: %n clip
@@ -342,7 +342,7 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="900"/>
+        <location filename="../mainwindow.cpp" line="901"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>um: %n clip</numerusform>
@@ -374,32 +374,32 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
         <translation>Misturar  todas as Música</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="876"/>
+        <location filename="../mainwindow.cpp" line="877"/>
         <source>(no songs)</source>
         <translation>(sem músicas)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="883"/>
+        <location filename="../mainwindow.cpp" line="884"/>
         <source>(no videos)</source>
         <translation>(sem vídeos)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="899"/>
+        <location filename="../mainwindow.cpp" line="900"/>
         <source>(no stations)</source>
         <translation>(sem estações)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="967"/>
+        <location filename="../mainwindow.cpp" line="968"/>
         <source>Retrieving information on the new media files</source>
         <translation>Actualizando informação dos ficheiros de média</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="970"/>
         <source>Estimated time remaining:</source>
         <translation>Tempo restante estimado:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="971"/>
+        <location filename="../mainwindow.cpp" line="972"/>
         <source>Remaining items:</source>
         <translation>Arquivos restantes:</translation>
     </message>
@@ -924,39 +924,39 @@ de Reprodução Atual</translation>
         <translation>Media Player - Configurações</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="72"/>
+        <location filename="../settingsdialog.cpp" line="69"/>
         <source>Next song</source>
         <translation>Música seguinte</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="73"/>
+        <location filename="../settingsdialog.cpp" line="70"/>
         <source>Previous song</source>
         <translation>Música anterior</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="74"/>
+        <location filename="../settingsdialog.cpp" line="71"/>
         <source>Play / Pause</source>
         <translation>Play / Pausa</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="46"/>
-        <location filename="../settingsdialog.cpp" line="76"/>
+        <location filename="../settingsdialog.cpp" line="43"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Do nothing</source>
         <translation>Fazer Nada</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="45"/>
+        <location filename="../settingsdialog.cpp" line="42"/>
         <source>Pause playback</source>
         <translation>Pausar reprodução</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="55"/>
-        <location filename="../settingsdialog.cpp" line="99"/>
+        <location filename="../settingsdialog.cpp" line="52"/>
+        <location filename="../settingsdialog.cpp" line="96"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="56"/>
+        <location filename="../settingsdialog.cpp" line="53"/>
         <source>%n second(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -964,8 +964,8 @@ de Reprodução Atual</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="57"/>
-        <location filename="../settingsdialog.cpp" line="58"/>
+        <location filename="../settingsdialog.cpp" line="54"/>
+        <location filename="../settingsdialog.cpp" line="55"/>
         <source>%n minute(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -973,7 +973,7 @@ de Reprodução Atual</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="59"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
         <source>%n hour(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -981,64 +981,64 @@ de Reprodução Atual</translation>
         </translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="60"/>
-        <location filename="../settingsdialog.cpp" line="98"/>
+        <location filename="../settingsdialog.cpp" line="57"/>
+        <location filename="../settingsdialog.cpp" line="95"/>
         <source>Always</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="87"/>
+        <location filename="../settingsdialog.cpp" line="84"/>
         <source>Automatic</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="88"/>
+        <location filename="../settingsdialog.cpp" line="85"/>
         <source>Landscape</source>
         <translation>Paisagem</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="89"/>
+        <location filename="../settingsdialog.cpp" line="86"/>
         <source>Portrait</source>
         <translation>Retrato</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="100"/>
+        <location filename="../settingsdialog.cpp" line="97"/>
         <source>With screen locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="101"/>
+        <location filename="../settingsdialog.cpp" line="98"/>
         <source>With screen unlocked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="111"/>
+        <location filename="../settingsdialog.cpp" line="108"/>
         <source>Compatible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="112"/>
+        <location filename="../settingsdialog.cpp" line="109"/>
         <source>Reliable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="168"/>
+        <location filename="../settingsdialog.cpp" line="164"/>
         <source>Only local cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="181"/>
+        <location filename="../settingsdialog.cpp" line="177"/>
         <source>Operation complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="182"/>
+        <location filename="../settingsdialog.cpp" line="178"/>
         <source>Operation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="44"/>
-        <location filename="../settingsdialog.cpp" line="75"/>
+        <location filename="../settingsdialog.cpp" line="41"/>
+        <location filename="../settingsdialog.cpp" line="72"/>
         <source>Stop playback</source>
         <translation>Parar a reprodução</translation>
     </message>
@@ -1048,27 +1048,27 @@ de Reprodução Atual</translation>
         <translation>Na saída da aplicação</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="105"/>
+        <location filename="../settingsdialog.ui" line="108"/>
         <source>Disconnect headset to pause</source>
         <translation>Desligar auricular para pausar</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="112"/>
+        <location filename="../settingsdialog.ui" line="115"/>
         <source>Reconnect headset to resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="133"/>
+        <location filename="../settingsdialog.ui" line="136"/>
         <source>Enable lyrics</source>
         <translation>Exibir letra</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="140"/>
+        <location filename="../settingsdialog.ui" line="143"/>
         <source>Lyrics providers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="147"/>
+        <location filename="../settingsdialog.ui" line="150"/>
         <source>Clear lyrics cache</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1078,12 +1078,12 @@ de Reprodução Atual</translation>
         <translation>Reproduzir resultados da pesquisa</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="168"/>
+        <location filename="../settingsdialog.ui" line="171"/>
         <source>Open whole folders</source>
         <translation>Abrir a pasta inteira</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="175"/>
+        <location filename="../settingsdialog.ui" line="178"/>
         <source>Append opened songs</source>
         <translation>Adicionar músicas abertas</translation>
     </message>
@@ -1093,64 +1093,54 @@ de Reprodução Atual</translation>
         <translation>Tamanho da lista de reprodução automática</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="119"/>
+        <location filename="../settingsdialog.ui" line="122"/>
         <source>Headset button action</source>
         <translation>Acção do botão do auricular</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="189"/>
+        <location filename="../settingsdialog.ui" line="192"/>
         <source>Orientation</source>
         <translation>Orientação</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="217"/>
+        <location filename="../settingsdialog.ui" line="220"/>
         <source>Prevent playback interruptions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="224"/>
+        <location filename="../settingsdialog.ui" line="227"/>
         <source>Interruptions prevention method</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="196"/>
+        <location filename="../settingsdialog.ui" line="199"/>
         <source>Lazy sliders</source>
         <translation>Deslizamento lento</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="161"/>
+        <location filename="../settingsdialog.ui" line="164"/>
         <source>Show opening dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="203"/>
+        <location filename="../settingsdialog.ui" line="206"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="238"/>
+        <location filename="../settingsdialog.ui" line="241"/>
         <source>Override FMTX checks in UI</source>
         <translation>Carregar FMTX na UI</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="247"/>
-        <source>Force language code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="281"/>
+        <location filename="../settingsdialog.ui" line="260"/>
         <source>Requires CSSU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="293"/>
+        <location filename="../settingsdialog.ui" line="272"/>
         <source>Requires modified FMTXD</source>
         <translation>Requer um FMTXD Modificado</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="305"/>
-        <source>Requires application restart</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="26"/>

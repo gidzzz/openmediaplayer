@@ -339,7 +339,7 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="877"/>
+        <location filename="../mainwindow.cpp" line="878"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n nummer</numerusform>
@@ -347,7 +347,7 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="884"/>
+        <location filename="../mainwindow.cpp" line="885"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n clip</numerusform>
@@ -355,7 +355,7 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="900"/>
+        <location filename="../mainwindow.cpp" line="901"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n zender</numerusform>
@@ -387,32 +387,32 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         <translation>Willekeurig afspelen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="876"/>
+        <location filename="../mainwindow.cpp" line="877"/>
         <source>(no songs)</source>
         <translation>(geen nummers)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="883"/>
+        <location filename="../mainwindow.cpp" line="884"/>
         <source>(no videos)</source>
         <translation>(geen video&apos;s)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="899"/>
+        <location filename="../mainwindow.cpp" line="900"/>
         <source>(no stations)</source>
         <translation>(geen zenders)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="967"/>
+        <location filename="../mainwindow.cpp" line="968"/>
         <source>Retrieving information on the new media files</source>
         <translation>Bezig met het ophalen van informatie over de nieuwe mediabestanden</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="970"/>
         <source>Estimated time remaining:</source>
         <translation>Geschatte resterende tijd:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="971"/>
+        <location filename="../mainwindow.cpp" line="972"/>
         <source>Remaining items:</source>
         <translation>Resterende items:</translation>
     </message>
@@ -936,39 +936,39 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         <translation>Mediaspeler - Instellingen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="72"/>
+        <location filename="../settingsdialog.cpp" line="69"/>
         <source>Next song</source>
         <translation>Volgend nummer</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="73"/>
+        <location filename="../settingsdialog.cpp" line="70"/>
         <source>Previous song</source>
         <translation>Vorig nummer</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="74"/>
+        <location filename="../settingsdialog.cpp" line="71"/>
         <source>Play / Pause</source>
         <translation>Spelen/Pauze</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="46"/>
-        <location filename="../settingsdialog.cpp" line="76"/>
+        <location filename="../settingsdialog.cpp" line="43"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Do nothing</source>
         <translation>Niets doen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="45"/>
+        <location filename="../settingsdialog.cpp" line="42"/>
         <source>Pause playback</source>
         <translation>Afspelen pauzeren</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="55"/>
-        <location filename="../settingsdialog.cpp" line="99"/>
+        <location filename="../settingsdialog.cpp" line="52"/>
+        <location filename="../settingsdialog.cpp" line="96"/>
         <source>Never</source>
         <translation>Nooit</translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="56"/>
+        <location filename="../settingsdialog.cpp" line="53"/>
         <source>%n second(s)</source>
         <translation>
             <numerusform>%n seconde</numerusform>
@@ -976,8 +976,8 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="57"/>
-        <location filename="../settingsdialog.cpp" line="58"/>
+        <location filename="../settingsdialog.cpp" line="54"/>
+        <location filename="../settingsdialog.cpp" line="55"/>
         <source>%n minute(s)</source>
         <translation>
             <numerusform>%n minuut</numerusform>
@@ -985,7 +985,7 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="59"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
         <source>%n hour(s)</source>
         <translation>
             <numerusform>%n uur</numerusform>
@@ -993,64 +993,64 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="60"/>
-        <location filename="../settingsdialog.cpp" line="98"/>
+        <location filename="../settingsdialog.cpp" line="57"/>
+        <location filename="../settingsdialog.cpp" line="95"/>
         <source>Always</source>
         <translation>Altijd</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="87"/>
+        <location filename="../settingsdialog.cpp" line="84"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="88"/>
+        <location filename="../settingsdialog.cpp" line="85"/>
         <source>Landscape</source>
         <translation>Liggend beeld</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="89"/>
+        <location filename="../settingsdialog.cpp" line="86"/>
         <source>Portrait</source>
         <translation>Rechtopstaand beeld</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="100"/>
+        <location filename="../settingsdialog.cpp" line="97"/>
         <source>With screen locked</source>
         <translation>Met vergrendeld scherm</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="101"/>
+        <location filename="../settingsdialog.cpp" line="98"/>
         <source>With screen unlocked</source>
         <translation>Met ontgrendeld scherm</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="111"/>
+        <location filename="../settingsdialog.cpp" line="108"/>
         <source>Compatible</source>
         <translation>Compatibel</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="112"/>
+        <location filename="../settingsdialog.cpp" line="109"/>
         <source>Reliable</source>
         <translation>Betrouwbaar</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="168"/>
+        <location filename="../settingsdialog.cpp" line="164"/>
         <source>Only local cache</source>
         <translation>Alleen lokale cache</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="181"/>
+        <location filename="../settingsdialog.cpp" line="177"/>
         <source>Operation complete</source>
         <translation>Actie afgerond</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="182"/>
+        <location filename="../settingsdialog.cpp" line="178"/>
         <source>Operation failed</source>
         <translation>Actie mislukt</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="44"/>
-        <location filename="../settingsdialog.cpp" line="75"/>
+        <location filename="../settingsdialog.cpp" line="41"/>
+        <location filename="../settingsdialog.cpp" line="72"/>
         <source>Stop playback</source>
         <translation>Stop met afspelen</translation>
     </message>
@@ -1060,27 +1060,27 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         <translation>Bij afsluiten programma</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="105"/>
+        <location filename="../settingsdialog.ui" line="108"/>
         <source>Disconnect headset to pause</source>
         <translation>Verwijder koptelefoon om te pauzeren</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="112"/>
+        <location filename="../settingsdialog.ui" line="115"/>
         <source>Reconnect headset to resume</source>
         <translation>Sluit koptelefoon weer aan om verder te gaan</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="133"/>
+        <location filename="../settingsdialog.ui" line="136"/>
         <source>Enable lyrics</source>
         <translation>Songteksten inschakelen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="140"/>
+        <location filename="../settingsdialog.ui" line="143"/>
         <source>Lyrics providers</source>
         <translation>Aanbieders van songteksten</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="147"/>
+        <location filename="../settingsdialog.ui" line="150"/>
         <source>Clear lyrics cache</source>
         <translation>Wis songteksten cache</translation>
     </message>
@@ -1090,12 +1090,12 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         <translation>Speel alleen zoekresultaten</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="168"/>
+        <location filename="../settingsdialog.ui" line="171"/>
         <source>Open whole folders</source>
         <translation>Volledige map openen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="175"/>
+        <location filename="../settingsdialog.ui" line="178"/>
         <source>Append opened songs</source>
         <translation>Geopende nummers bijvoegen</translation>
     </message>
@@ -1105,64 +1105,54 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
         <translation>Grootte van automatische afspeellijsten</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="119"/>
+        <location filename="../settingsdialog.ui" line="122"/>
         <source>Headset button action</source>
         <translation>Headsetknop-actie</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="189"/>
+        <location filename="../settingsdialog.ui" line="192"/>
         <source>Orientation</source>
         <translation>Oriëntatie</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="217"/>
+        <location filename="../settingsdialog.ui" line="220"/>
         <source>Prevent playback interruptions</source>
         <translation>Voorkom onderbrekingen tijdens afspelen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="224"/>
+        <location filename="../settingsdialog.ui" line="227"/>
         <source>Interruptions prevention method</source>
         <translation>Methode voor het voorkomen van onderbrekingen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="196"/>
+        <location filename="../settingsdialog.ui" line="199"/>
         <source>Lazy sliders</source>
         <translation>Lazy sliders</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="161"/>
+        <location filename="../settingsdialog.ui" line="164"/>
         <source>Show opening dialog</source>
         <translation>Toon openings dialoog</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="203"/>
+        <location filename="../settingsdialog.ui" line="206"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>&quot;Verwijder&quot; optie in afspeellijst</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="238"/>
+        <location filename="../settingsdialog.ui" line="241"/>
         <source>Override FMTX checks in UI</source>
         <translation>Negeer FMTX checks in de gebruikersomgeving</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="247"/>
-        <source>Force language code</source>
-        <translation>Forceer taalcode</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="281"/>
+        <location filename="../settingsdialog.ui" line="260"/>
         <source>Requires CSSU</source>
         <translation>CSSU vereist</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="293"/>
+        <location filename="../settingsdialog.ui" line="272"/>
         <source>Requires modified FMTXD</source>
         <translation>Vereist aangepaste FMTXD</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="305"/>
-        <source>Requires application restart</source>
-        <translation>Vereist een herstart van de applicatie</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="26"/>

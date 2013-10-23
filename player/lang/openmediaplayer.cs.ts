@@ -342,7 +342,7 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="877"/>
+        <location filename="../mainwindow.cpp" line="878"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -351,7 +351,7 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="884"/>
+        <location filename="../mainwindow.cpp" line="885"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n klip</numerusform>
@@ -360,7 +360,7 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="900"/>
+        <location filename="../mainwindow.cpp" line="901"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n stanice</numerusform>
@@ -393,32 +393,32 @@ Pro obnovení funkce FM vysílače odpojte USB.</translation>
         <translation>Zamíchat skladby</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="876"/>
+        <location filename="../mainwindow.cpp" line="877"/>
         <source>(no songs)</source>
         <translation>(žádné skladby)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="883"/>
+        <location filename="../mainwindow.cpp" line="884"/>
         <source>(no videos)</source>
         <translation>(žádná videa)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="899"/>
+        <location filename="../mainwindow.cpp" line="900"/>
         <source>(no stations)</source>
         <translation>(žádné stanice)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="967"/>
+        <location filename="../mainwindow.cpp" line="968"/>
         <source>Retrieving information on the new media files</source>
         <translation>Získávání informací o nových multimediálních souborech</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="969"/>
+        <location filename="../mainwindow.cpp" line="970"/>
         <source>Estimated time remaining:</source>
         <translation>Odhadovaný zbývající čas:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="971"/>
+        <location filename="../mainwindow.cpp" line="972"/>
         <source>Remaining items:</source>
         <translation>Zbývající položky:</translation>
     </message>
@@ -951,39 +951,39 @@ do seznamu stop</translation>
         <translation>Přehrávač médií - nastavení</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="72"/>
+        <location filename="../settingsdialog.cpp" line="69"/>
         <source>Next song</source>
         <translation>Následující skladba</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="73"/>
+        <location filename="../settingsdialog.cpp" line="70"/>
         <source>Previous song</source>
         <translation>Předchozí skladba</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="74"/>
+        <location filename="../settingsdialog.cpp" line="71"/>
         <source>Play / Pause</source>
         <translation>Přehrát / pozastavit</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="46"/>
-        <location filename="../settingsdialog.cpp" line="76"/>
+        <location filename="../settingsdialog.cpp" line="43"/>
+        <location filename="../settingsdialog.cpp" line="73"/>
         <source>Do nothing</source>
         <translation>Nedělat nic</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="45"/>
+        <location filename="../settingsdialog.cpp" line="42"/>
         <source>Pause playback</source>
         <translation>Pozastavit přehrávání</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="55"/>
-        <location filename="../settingsdialog.cpp" line="99"/>
+        <location filename="../settingsdialog.cpp" line="52"/>
+        <location filename="../settingsdialog.cpp" line="96"/>
         <source>Never</source>
         <translation>Nikdy</translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="56"/>
+        <location filename="../settingsdialog.cpp" line="53"/>
         <source>%n second(s)</source>
         <translation>
             <numerusform>%n sekunda</numerusform>
@@ -992,8 +992,8 @@ do seznamu stop</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="57"/>
-        <location filename="../settingsdialog.cpp" line="58"/>
+        <location filename="../settingsdialog.cpp" line="54"/>
+        <location filename="../settingsdialog.cpp" line="55"/>
         <source>%n minute(s)</source>
         <translation>
             <numerusform>%n minuta</numerusform>
@@ -1002,7 +1002,7 @@ do seznamu stop</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../settingsdialog.cpp" line="59"/>
+        <location filename="../settingsdialog.cpp" line="56"/>
         <source>%n hour(s)</source>
         <translation>
             <numerusform>%n hodina</numerusform>
@@ -1011,64 +1011,64 @@ do seznamu stop</translation>
         </translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="60"/>
-        <location filename="../settingsdialog.cpp" line="98"/>
+        <location filename="../settingsdialog.cpp" line="57"/>
+        <location filename="../settingsdialog.cpp" line="95"/>
         <source>Always</source>
         <translation>Vždy</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="87"/>
+        <location filename="../settingsdialog.cpp" line="84"/>
         <source>Automatic</source>
         <translation>Automaticky</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="88"/>
+        <location filename="../settingsdialog.cpp" line="85"/>
         <source>Landscape</source>
         <translation>Na šířku</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="89"/>
+        <location filename="../settingsdialog.cpp" line="86"/>
         <source>Portrait</source>
         <translation>Na výšku</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="100"/>
+        <location filename="../settingsdialog.cpp" line="97"/>
         <source>With screen locked</source>
         <translation>Při zamčeném displeji</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="101"/>
+        <location filename="../settingsdialog.cpp" line="98"/>
         <source>With screen unlocked</source>
         <translation>Při odemčeném displeji</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="111"/>
+        <location filename="../settingsdialog.cpp" line="108"/>
         <source>Compatible</source>
         <translation>Kompatibilní</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="112"/>
+        <location filename="../settingsdialog.cpp" line="109"/>
         <source>Reliable</source>
         <translation>Spolehlivý</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="168"/>
+        <location filename="../settingsdialog.cpp" line="164"/>
         <source>Only local cache</source>
         <translation>Pouze uložené v přístroji</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="181"/>
+        <location filename="../settingsdialog.cpp" line="177"/>
         <source>Operation complete</source>
         <translation>Operace dokončena</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="182"/>
+        <location filename="../settingsdialog.cpp" line="178"/>
         <source>Operation failed</source>
         <translation>Operace selhala</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.cpp" line="44"/>
-        <location filename="../settingsdialog.cpp" line="75"/>
+        <location filename="../settingsdialog.cpp" line="41"/>
+        <location filename="../settingsdialog.cpp" line="72"/>
         <source>Stop playback</source>
         <translation>Zastavit přehrávání</translation>
     </message>
@@ -1078,27 +1078,27 @@ do seznamu stop</translation>
         <translation>Při ukončení aplikace</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="105"/>
+        <location filename="../settingsdialog.ui" line="108"/>
         <source>Disconnect headset to pause</source>
         <translation>Pozastavit při odpojení headsetu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="112"/>
+        <location filename="../settingsdialog.ui" line="115"/>
         <source>Reconnect headset to resume</source>
         <translation>Při připojení headsetu pokračovat</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="133"/>
+        <location filename="../settingsdialog.ui" line="136"/>
         <source>Enable lyrics</source>
         <translation>Povolit zobrazení textů skladeb</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="140"/>
+        <location filename="../settingsdialog.ui" line="143"/>
         <source>Lyrics providers</source>
         <translation>Zdroje textů skladeb</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="147"/>
+        <location filename="../settingsdialog.ui" line="150"/>
         <source>Clear lyrics cache</source>
         <translation>Vymazat uložené texty skladeb</translation>
     </message>
@@ -1108,12 +1108,12 @@ do seznamu stop</translation>
         <translation>Přehrávat jen výsledky hledání</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="168"/>
+        <location filename="../settingsdialog.ui" line="171"/>
         <source>Open whole folders</source>
         <translation>Otevírat celé složky</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="175"/>
+        <location filename="../settingsdialog.ui" line="178"/>
         <source>Append opened songs</source>
         <translation>Otevírané soubory přidávat</translation>
     </message>
@@ -1123,64 +1123,54 @@ do seznamu stop</translation>
         <translation>Velikost automatických seznamů stop</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="119"/>
+        <location filename="../settingsdialog.ui" line="122"/>
         <source>Headset button action</source>
         <translation>Akce tlačítka headsetu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="189"/>
+        <location filename="../settingsdialog.ui" line="192"/>
         <source>Orientation</source>
         <translation>Orientace displeje</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="217"/>
+        <location filename="../settingsdialog.ui" line="220"/>
         <source>Prevent playback interruptions</source>
         <translation>Nepřerušovat přehrávaní kvůli upozornění</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="224"/>
+        <location filename="../settingsdialog.ui" line="227"/>
         <source>Interruptions prevention method</source>
         <translation>Způsob zabránění přerušení přehrávání</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="196"/>
+        <location filename="../settingsdialog.ui" line="199"/>
         <source>Lazy sliders</source>
         <translation>&quot;Líné&quot; posuvníky</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="161"/>
+        <location filename="../settingsdialog.ui" line="164"/>
         <source>Show opening dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="203"/>
+        <location filename="../settingsdialog.ui" line="206"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>Zobrazit volbu &quot;Odstranit&quot; v seznamech stop</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="238"/>
+        <location filename="../settingsdialog.ui" line="241"/>
         <source>Override FMTX checks in UI</source>
         <translation>Vypnout FMTX ověřování</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="247"/>
-        <source>Force language code</source>
-        <translation>Vynutit jazyk s kódem</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="281"/>
+        <location filename="../settingsdialog.ui" line="260"/>
         <source>Requires CSSU</source>
         <translation>Vyžaduje CSSU</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="293"/>
+        <location filename="../settingsdialog.ui" line="272"/>
         <source>Requires modified FMTXD</source>
         <translation>Vyžaduje modifikované FMTXD</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog.ui" line="305"/>
-        <source>Requires application restart</source>
-        <translation>vyžaduje restart aplikace</translation>
     </message>
     <message>
         <location filename="../settingsdialog.cpp" line="26"/>
