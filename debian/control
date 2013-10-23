@@ -59,17 +59,6 @@ XB-Maemo-Icon-26:
  yvnYUItvOSF0ZyAp5uLk5EJTz6AgLoSkml9EBEkxJw8PJxszRh0kKgBXjWQ0
  DxBw8nCwYavkhAT4ECqhajk4gIiDjWWEtxcAXr8zgPoK3fAAAAAASUVORK5C
  YII=
-XB-Maemo-Upgrade-Description: UI tweaks and cleanups
- Version 20130321-1 changes:
-  * Added D-Bus calls to play a playlist.
-  * UPnP and video browser respect the "play only search results" option.
-  * Different grid sizes for landscape and portrait.
-  * Changed -00:01 to --:-- in track length labels.
-  * A great amount of various, mostly UI-related, cleanups.
-  * Allow only one instance of the application (multiple windows can still be opened with --allow-multiple-instances).
-  * Fixed certain windows being closed whenever hildon-desktop is restarted.
-  * New translations: Bulgarian by B.U.S.T.T.E.R., Slovak by Pali (based on slovak-l10n project by rmoravcik).
-  * Updated translations: Russian (thanks to DarkSide25), French (thanks to Pinky007) and more.
 
 Package: openmediaplayer-dbg
 Architecture: armel

@@ -1,3 +1,14 @@
+openmediaplayer (20131024-1) unstable; urgency=low
+
+  * Added a workaround for the long startup time with locked GUI after the OS is restarted.
+  * Added some delay before automatically resuming playback with Bluetooth headsets so that there is enough time to reconfigure the audio output.
+  * Use LANG environment variable to detect language.
+  * Removed language selection from the settings, as it can now be accomplished by changing LANG.
+  * Added a small margin for the playlist size label in the settings to improve alignment with buttons.
+  * Updated translations: Finnish (thanks to jonkha), Brazilian Portuguese.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Thu, 24 Oct 2013 00:57:39 +0200
+
 openmediaplayer (20130804-1) unstable; urgency=low
 
   * Modified the portrait layout in Now Playing.
