@@ -160,6 +160,15 @@ bool VideoNowPlayingWindow::eventFilter(QObject*, QEvent *event)
     return false;
 }
 
+void VideoNowPlayingWindow::onScreenLocked(bool locked)
+{
+    if (locked) {
+        positionTimer->stop();
+    } else {
+        startPositionTimer();
+    }
+}
+
 void VideoNowPlayingWindow::setIcons()
 {
     ui->wmEditButton->setIcon(QIcon(wmEditIcon));
@@ -209,6 +218,9 @@ void VideoNowPlayingWindow::connectSignals()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
     connect(keyRepeatTimer, SIGNAL(timeout()), this, SLOT(repeatKey()));
+
+    // Screen locking
+    connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
     // Initial status
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
@@ -490,6 +502,18 @@ void VideoNowPlayingWindow::toggleVolumeSlider()
     }
 }
 
+void VideoNowPlayingWindow::startPositionTimer()
+{
+    if (!positionTimer->isActive()
+    &&  mafwState == Playing
+    &&  overlayVisible
+    &&  !Maemo5DeviceEvents::acquire()->isScreenLocked())
+    {
+        mafwrenderer->getPosition();
+        positionTimer->start();
+    }
+}
+
 // Toggle the visibility of the settings bar
 void VideoNowPlayingWindow::toggleSettings()
 {
@@ -657,8 +681,7 @@ void VideoNowPlayingWindow::onStateChanged(int state)
 
             mafwrenderer->getPosition();
 
-            if (!positionTimer->isActive())
-                positionTimer->start();
+            startPositionTimer();
         }
         else if (state == Stopped) {
             // The play button becomes itself
@@ -875,16 +898,11 @@ void VideoNowPlayingWindow::showOverlay(bool show)
 
     overlayVisible = show;
 
-#ifdef MAFW
-    if (!show) {
-        // Position requests can be stopped if the position is not displayed
+    if (show) {
+        startPositionTimer();
+    } else {
         positionTimer->stop();
-    } else if (show && !this->positionTimer->isActive() && mafwState != Stopped) {
-        // Start making position requests again
-        positionTimer->start();
-        mafwrenderer->getPosition();
     }
-#endif
 }
 
 void VideoNowPlayingWindow::onPositionSliderPressed()

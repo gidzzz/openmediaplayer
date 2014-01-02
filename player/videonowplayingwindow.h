@@ -23,6 +23,7 @@
     #include <X11/Xutil.h>
     #include <QMaemo5InformationBox>
     #include <QSpacerItem>
+    #include "maemo5deviceevents.h"
     #include "sharedialog.h"
 #endif
 
@@ -60,6 +61,7 @@ private:
     Ui::VideoNowPlayingWindow *ui;
     void setIcons();
     void connectSignals();
+    void startPositionTimer();
     void showOverlay(bool show);
 
     QTimer *volumeTimer;
@@ -115,6 +117,7 @@ private slots:
     void onVolumeSliderReleased();
     void onPrevButtonClicked();
     void onNextButtonClicked();
+    void onScreenLocked(bool locked);
     void repeatKey();
 #ifdef MAFW
     void togglePlayback();

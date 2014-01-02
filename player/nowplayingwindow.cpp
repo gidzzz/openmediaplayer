@@ -253,6 +253,19 @@ void NowPlayingWindow::updatePlaylistTimeLabel()
     ui->playlistTimeLabel->setText(mmss_len(playlistTime) + " " + tr("total"));
 }
 
+void NowPlayingWindow::startPositionTimer()
+{
+    if (!positionTimer->isActive()
+    &&  mafwState == Playing
+    &&  !this->isHidden()
+    &&  !ui->infoWidget->isHidden()
+    &&  !Maemo5DeviceEvents::acquire()->isScreenLocked())
+    {
+        mafwrenderer->getPosition();
+        positionTimer->start();
+    }
+}
+
 void NowPlayingWindow::toggleVolumeSlider()
 {
     if (ui->volumeSlider->isHidden()) {
@@ -345,25 +358,21 @@ void NowPlayingWindow::onStateChanged(int state)
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+        positionTimer->stop();
         mafwrenderer->getPosition();
-        if (positionTimer->isActive())
-            positionTimer->stop();
     }
     else if (state == Playing) {
         ui->positionSlider->setEnabled(isMediaSeekable);
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-        mafwrenderer->getPosition();
-        if (!positionTimer->isActive())
-            positionTimer->start();
+        startPositionTimer();
     }
     else if (state == Stopped) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
-        if (positionTimer->isActive())
-            positionTimer->stop();
+        positionTimer->stop();
     }
 
     if (state == Transitioning || state == Stopped) {
@@ -482,12 +491,9 @@ void NowPlayingWindow::connectSignals()
 void NowPlayingWindow::onScreenLocked(bool locked)
 {
     if (locked) {
-        if (positionTimer->isActive())
-            positionTimer->stop();
+        positionTimer->stop();
     } else {
-        if (!positionTimer->isActive() && this->mafwState == Playing)
-            positionTimer->start();
-        mafwrenderer->getPosition();
+        startPositionTimer();
     }
 }
 #endif
@@ -825,10 +831,7 @@ void NowPlayingWindow::cycleView(int direction)
             ui->songList->hide();
             ui->infoWidget->show();
 #ifdef MAFW
-            if (!positionTimer->isActive() && mafwState == Playing) {
-                positionTimer->start();
-                mafwrenderer->getPosition();
-            }
+            startPositionTimer();
 #endif
             break;
 
@@ -1038,6 +1041,9 @@ void NowPlayingWindow::showEvent(QShowEvent *)
     mafwrenderer->getStatus();
     this->updatePlaylistState();
     this->setWindowTitle(defaultWindowTitle); // avoid showing a different title for a split second
+
+    startPositionTimer();
+
     if (positionTimer->isActive())
         ui->positionSlider->setEnabled(true);
 }
@@ -1548,5 +1554,8 @@ void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
 void NowPlayingWindow::closeEvent(QCloseEvent *)
 {
     this->setParent(0);
+
+    positionTimer->stop();
+
     emit hidden();
 }

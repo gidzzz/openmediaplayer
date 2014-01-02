@@ -11,6 +11,7 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
+    #include "maemo5deviceevents.h"
 #endif
 
 #include "ui_radionowplayingwindow.h"
@@ -50,6 +51,8 @@ private:
     void connectSignals();
     void setIcons();
 
+    void startPositionTimer();
+
     void setAlbumImage(QString image);
     QGraphicsScene *albumArtScene;
 
@@ -77,6 +80,7 @@ private slots:
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();
     void orientationChanged(int w, int h);
+    void onScreenLocked(bool locked);
     void volumeWatcher();
 #ifdef Q_WS_MAEMO_5
     void showFMTXDialog();

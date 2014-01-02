@@ -98,6 +98,7 @@ private:
     void setAlbum(QString album);
     void setSongNumber(int currentSong, int numberOfSongs);
     void updatePlaylistTimeLabel();
+    void startPositionTimer();
     void connectSignals();
     QTimer *keyTimer;
     QTimer *clickTimer;
@@ -124,9 +125,6 @@ private:
     void mouseReleaseEvent(QMouseEvent *e);
     void mouseDoubleClickEvent(QMouseEvent *e);
     void closeEvent(QCloseEvent *);
-#ifdef Q_WS_MAEMO_5
-    Maemo5DeviceEvents *deviceEvents;
-#endif
 
 private slots:
     void selectAlbumArt();
