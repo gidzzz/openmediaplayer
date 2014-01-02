@@ -1,3 +1,11 @@
+openmediaplayer (20140102-1) unstable; urgency=low
+
+  * Disabled radio mode fallback for local videos.
+  * Stricter checks regarding starting/stopping of media position polling.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Thu, 02 Jan 2014 16:48:25 +0100
+
 openmediaplayer (20131024-1) unstable; urgency=low
 
   * Added a workaround for the long startup time with locked GUI after the OS is restarted.
