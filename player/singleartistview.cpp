@@ -19,8 +19,7 @@
 #include "singleartistview.h"
 
 SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory) :
-    BaseWindow(parent),
-    ui(new Ui::SingleArtistView)
+    BrowserWindow(parent, factory)
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
@@ -28,51 +27,29 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     playlist(factory->getPlaylistAdapter())
 #endif
 {
-    ui->setupUi(this);
-    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
+    QFont font; font.setPointSize(13);
+    ui->objectList->setFont(font);
+    ui->objectList->setAlternatingRowColors(false);
+    ui->objectList->setViewMode(QListView::IconMode);
+    ui->objectList->setDragDropMode(QAbstractItemView::NoDragDrop);
+    ui->objectList->setMovement(QListView::Static);
+    ui->objectList->setItemDelegate(new ThumbnailItemDelegate(ui->objectList));
 
-    setAttribute(Qt::WA_DeleteOnClose);
+    objectProxyModel->setFilterRole(UserRoleTitle);
 
-    ThumbnailItemDelegate *delegate = new ThumbnailItemDelegate(ui->albumList);
-    ui->albumList->setItemDelegate(delegate);
-
-    albumModel = new QStandardItemModel(this);
-    albumProxyModel = new HeaderAwareProxyModel(this);
-    albumProxyModel->setFilterRole(UserRoleTitle);
-    albumProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    albumProxyModel->setSourceModel(albumModel);
-    ui->albumList->setModel(albumProxyModel);
+    ui->windowMenu->addAction(tr("Add songs to now playing"), this, SLOT(addAllToNowPlaying()));
+    ui->windowMenu->addAction(tr("Delete"                  ), this, SLOT(deleteCurrentArtist()));
 
 #ifdef MAFW
     shuffleRequested = false;
-
-    ui->indicator->setFactory(mafwFactory);
 
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
 #endif
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
 
-    connect(ui->albumList, SIGNAL(activated(QModelIndex)), this, SLOT(onAlbumSelected(QModelIndex)));
-    connect(ui->albumList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
-    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
-
-    connect(ui->actionAdd_songs_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
-    connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteCurrentArtist()));
-
-    ui->albumList->viewport()->installEventFilter(this);
-
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
-}
-
-SingleArtistView::~SingleArtistView()
-{
-    delete ui;
+    connect(ui->objectList, SIGNAL(activated(QModelIndex)), this, SLOT(onAlbumSelected(QModelIndex)));
+    connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 }
 
 void SingleArtistView::browseArtist(QString objectId)
@@ -92,14 +69,14 @@ void SingleArtistView::listAlbums()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    albumModel->clear();
+    objectModel->clear();
     visibleSongs = 0;
 
     QStandardItem *shuffleButton = new QStandardItem();
     shuffleButton->setIcon(QIcon::fromTheme(defaultShuffleIcon));
     shuffleButton->setData(tr("Shuffle songs"), UserRoleTitle);
     shuffleButton->setData(true, UserRoleHeader);
-    albumModel->appendRow(shuffleButton);
+    objectModel->appendRow(shuffleButton);
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -144,7 +121,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         item->setData(objectId, UserRoleObjectID);
         item->setData(albumTitle, UserRoleTitle);
 
-        albumModel->appendRow(item);
+        objectModel->appendRow(item);
         visibleSongs += childcount; updateSongCount();
     }
 
@@ -180,98 +157,14 @@ void SingleArtistView::onAlbumSelected(QModelIndex index)
 #endif
 }
 
-void SingleArtistView::orientationChanged(int w, int h)
-{
-    ui->albumList->setGridSize(QSize(155, w > h ? 212 : 186));
-
-    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
-    ui->indicator->raise();
-}
-
-bool SingleArtistView::eventFilter(QObject *, QEvent *e)
-{
-    if (e->type() == QEvent::Resize)
-        ui->albumList->setFlow(ui->albumList->flow());
-    else
-        if (e->type() == QEvent::MouseButtonPress
-        && static_cast<QMouseEvent*>(e)->y() > ui->albumList->viewport()->height() - 25
-        && ui->searchWidget->isHidden()) {
-            ui->indicator->inhibit();
-            ui->searchWidget->show();
-        }
-    return false;
-}
-
-void SingleArtistView::onSearchHideButtonClicked()
-{
-    if (ui->searchEdit->text().isEmpty()) {
-        ui->searchWidget->hide();
-        ui->indicator->restore();
-    } else
-        ui->searchEdit->clear();
-}
-
-void SingleArtistView::onSearchTextChanged(QString text)
-{
-    albumProxyModel->setFilterFixedString(text);
-
-    if (text.isEmpty()) {
-        ui->searchWidget->hide();
-        ui->indicator->restore();
-    }
-}
-
-void SingleArtistView::keyPressEvent(QKeyEvent *e)
-{
-    switch (e->key()) {
-        case Qt::Key_Enter:
-        case Qt::Key_Left:
-        case Qt::Key_Right:
-        case Qt::Key_Space:
-        case Qt::Key_Control:
-        case Qt::Key_Shift:
-            break;
-
-        case Qt::Key_Backspace:
-            this->close();
-            break;
-
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-            ui->albumList->setFocus();
-            break;
-
-        default:
-            ui->albumList->clearSelection();
-            if (ui->searchWidget->isHidden()) {
-                ui->indicator->inhibit();
-                ui->searchWidget->show();
-            }
-            if (!ui->searchEdit->hasFocus()) {
-                ui->searchEdit->setText(ui->searchEdit->text() + e->text());
-                ui->searchEdit->setFocus();
-            }
-            break;
-    }
-}
-
-void SingleArtistView::keyReleaseEvent(QKeyEvent *e)
-{
-    switch (e->key()) {
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-            ui->albumList->setFocus();
-    }
-}
-
 void SingleArtistView::updateSongCount()
 {
-    albumModel->item(0)->setData(tr("%n song(s)", "", visibleSongs), UserRoleValueText);
+    objectModel->item(0)->setData(tr("%n song(s)", "", visibleSongs), UserRoleValueText);
 }
 
 void SingleArtistView::addAllToNowPlaying()
 {
-    if (albumModel->rowCount() > 1) {
+    if (objectModel->rowCount() > 1) {
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
@@ -322,7 +215,7 @@ void SingleArtistView::shuffleAllSongs()
 
 void SingleArtistView::onContextMenuRequested(const QPoint &pos)
 {
-    if (ui->albumList->currentIndex().row() <= 0) return;
+    if (ui->objectList->currentIndex().row() <= 0) return;
 
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -335,13 +228,13 @@ void SingleArtistView::onDeleteClicked()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
-        QModelIndex index = ui->albumList->currentIndex();
+        QModelIndex index = ui->objectList->currentIndex();
         mafwTrackerSource->destroyObject(index.data(UserRoleObjectID).toString().toUtf8());
         visibleSongs -= index.data(UserRoleSongCount).toInt(); updateSongCount();
-        albumProxyModel->removeRow(index.row());
+        objectProxyModel->removeRow(index.row());
     }
 #endif
-    ui->albumList->clearSelection();
+    ui->objectList->clearSelection();
 }
 
 void SingleArtistView::deleteCurrentArtist()
@@ -362,7 +255,7 @@ void SingleArtistView::onAddAlbumToNowPlaying()
 
     CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAlbumAddFinished(uint,int)), Qt::UniqueConnection);
-    playlistToken = cpm->appendBrowsed(ui->albumList->currentIndex().data(UserRoleObjectID).toString());
+    playlistToken = cpm->appendBrowsed(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 }
 
 void SingleArtistView::onAlbumAddFinished(uint token, int count)
@@ -393,12 +286,6 @@ void SingleArtistView::notifyOnAddedToNowPlaying(int songCount)
 void SingleArtistView::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-    this->onChildClosed();
-}
 
-void SingleArtistView::onChildClosed()
-{
-    ui->indicator->restore();
-    ui->albumList->clearSelection();
-    this->setEnabled(true);
+    this->onChildClosed();
 }

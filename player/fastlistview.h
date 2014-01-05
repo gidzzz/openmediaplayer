@@ -25,6 +25,16 @@ protected:
                 e->ignore();
         }
     }
+
+    void resizeEvent(QResizeEvent *e)
+    {
+        QListView::resizeEvent(e);
+
+        // QListView in icon mode seems to forget to reflow the items from time
+        // to time when its size changes.
+        if (this->viewMode() == QListView::IconMode)
+            this->setFlow(this->flow());
+    }
 };
 
 #endif // FASTLISTVIEW_H

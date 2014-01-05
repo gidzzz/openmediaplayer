@@ -19,8 +19,7 @@
 #include "singleplaylistview.h"
 
 SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *factory) :
-    BaseWindow(parent),
-    ui(new Ui::SinglePlaylistView)
+    BrowserWindow(parent, factory)
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
@@ -28,41 +27,26 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     playlist(factory->getPlaylistAdapter())
 #endif
 {
-    ui->setupUi(this);
-
-    setAttribute(Qt::WA_DeleteOnClose);
-
 #ifdef MAFW
-    ui->indicator->setFactory(factory);
     browsePlaylistId = MAFW_SOURCE_INVALID_BROWSE_ID;
 #endif
 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 #endif
 
     permanentDelete = QSettings().value("main/permanentDelete").toBool();
 
-    SongListItemDelegate *songDelegate = new SongListItemDelegate(ui->songList);
-    ShuffleButtonDelegate *shuffleDelegate = new ShuffleButtonDelegate(ui->songList);
-    ui->songList->setItemDelegate(songDelegate);
-    ui->songList->setItemDelegateForRow(0, shuffleDelegate);
+    ui->objectList->setItemDelegate(new SongListItemDelegate(ui->objectList));
+    ui->objectList->setItemDelegateForRow(0, new ShuffleButtonDelegate(ui->objectList));
 
-    songModel = new QStandardItemModel(this);
-    songProxyModel = new HeaderAwareProxyModel(this);
-    songProxyModel->setFilterRole(UserRoleFilterString);
-    songProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    songProxyModel->setSourceModel(songModel);
-    ui->songList->setModel(songProxyModel);
+    objectProxyModel->setFilterRole(UserRoleFilterString);
 
-    ui->songList->viewport()->installEventFilter(this);
-
-    ui->songList->setDragDropMode(QAbstractItemView::InternalMove);
-    ui->songList->viewport()->setAcceptDrops(true);
-    ui->songList->setAutoScrollMargin(70);
+    ui->objectList->setDragDropMode(QAbstractItemView::InternalMove);
+    ui->objectList->viewport()->setAcceptDrops(true);
+    ui->objectList->setAutoScrollMargin(70);
     QApplication::setStartDragDistance(20);
-    ui->songList->setDragEnabled(false);
+    ui->objectList->setDragEnabled(false);
 
     playlistModified = false;
     pendingActivation = Nothing;
@@ -72,28 +56,17 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     clickTimer->setInterval(QApplication::doubleClickInterval());
     clickTimer->setSingleShot(true);
 
+    ui->windowMenu->addAction(tr("Add to now playing"), this, SLOT(addAllToNowPlaying()));
+    ui->windowMenu->addAction(tr("Add to a playlist" ), this, SLOT(addAllToPlaylist()));
+    ui->windowMenu->addAction(tr("Delete playlist"   ), this, SLOT(deletePlaylist()));
+
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
 
-    connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
+    connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
-    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
-
-    connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
-    connect(ui->actionAdd_to_playlist, SIGNAL(triggered()), this, SLOT(addAllToPlaylist()));
-    connect(ui->actionDelete_playlist, SIGNAL(triggered()), this, SLOT(deletePlaylist()));
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(updateSongCount()));
 
     connect(clickTimer, SIGNAL(timeout()), this, SLOT(forgetClick()));
-
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
-}
-
-SinglePlaylistView::~SinglePlaylistView()
-{
-    delete ui;
 }
 
 void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
@@ -101,14 +74,14 @@ void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
     currentObjectId = QString();
     playlistLoaded = true;
 
-    songModel->clear();
+    objectModel->clear();
     QStandardItem *item = new QStandardItem();
     item->setData(true, UserRoleHeader);
     item->setDragEnabled(false);
     item->setDropEnabled(false);
-    songModel->appendRow(item);
+    objectModel->appendRow(item);
 
-    connect(ui->songList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onItemDoubleClicked()));
+    connect(ui->objectList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onItemDoubleClicked()));
 
     int size = playlist->getSizeOf(mafwplaylist);
 
@@ -118,13 +91,13 @@ void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
         item->setData(QString::fromUtf8(items[i]), UserRoleObjectID);
         item->setData(Duration::Blank, UserRoleSongDuration);
         item->setDropEnabled(false);
-        songModel->appendRow(item);
+        objectModel->appendRow(item);
     }
     g_strfreev(items);
 
     playlistQM = new PlaylistQueryManager(this, playlist, mafwplaylist);
     connect(playlistQM, SIGNAL(onGetItems(QString, GHashTable*, guint)), this, SLOT(onGetItems(QString, GHashTable*, guint)));
-    connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
+    connect(ui->objectList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
     playlistQM->getItems(0, size-1);
 
     remainingCount = size;
@@ -136,11 +109,11 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
     remainingCount--;
 
     if (playlistModified) {
-        for (int i = 1; i < songModel->rowCount(); i++)
-            if (songModel->item(i)->data(UserRoleObjectID).toString() == objectId)
-                setItemMetadata(songModel->item(i), objectId, metadata);
+        for (int i = 1; i < objectModel->rowCount(); i++)
+            if (objectModel->item(i)->data(UserRoleObjectID).toString() == objectId)
+                setItemMetadata(objectModel->item(i), objectId, metadata);
     } else {
-        setItemMetadata(songModel->item(index+1), objectId, metadata);
+        setItemMetadata(objectModel->item(index+1), objectId, metadata);
     }
 
 #ifdef Q_WS_MAEMO_5
@@ -188,10 +161,10 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
     currentObjectId = objectId;
     playlistLoaded = false;
 
-    songModel->clear();
+    objectModel->clear();
     QStandardItem *item = new QStandardItem();
     item->setData(true, UserRoleHeader);
-    songModel->appendRow(item);
+    objectModel->appendRow(item);
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -208,12 +181,14 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
     currentObjectId = QString();
     playlistLoaded = false;
 
-    songModel->clear();
+    objectModel->clear();
     QStandardItem *item = new QStandardItem();
     item->setData(true, UserRoleHeader);
-    songModel->appendRow(item);
+    objectModel->appendRow(item);
 
-    ui->windowMenu->removeAction(ui->actionDelete_playlist);
+    // Assume that extended actions are at the end of the menu, in this case the
+    // only one should be the delete action.
+    ui->windowMenu->removeAction(ui->windowMenu->actions().last());
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -232,7 +207,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint 
     if (index != 0 || remainingCount != 0 || !objectId.isNull()) {
         QStandardItem *item = new QStandardItem();
         setItemMetadata(item, objectId, metadata);
-        songModel->appendRow(item);
+        objectModel->appendRow(item);
         updateSongCount();
     }
 
@@ -257,7 +232,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint 
                 break;
 
             default:
-                onItemActivated(songProxyModel->mapFromSource(songModel->index(pendingActivation,0)));
+                onItemActivated(objectProxyModel->mapFromSource(objectModel->index(pendingActivation,0)));
                 break;
         }
     }
@@ -269,7 +244,7 @@ void SinglePlaylistView::onItemActivated(QModelIndex index)
     this->setEnabled(false);
 
     if (!playlistLoaded) {
-        pendingActivation = songProxyModel->mapToSource(index).row();
+        pendingActivation = objectProxyModel->mapToSource(index).row();
         return;
     }
 
@@ -282,7 +257,7 @@ void SinglePlaylistView::onItemActivated(QModelIndex index)
 
     appendAllToPlaylist(filter);
 
-    mafwrenderer->gotoIndex((filter ? index.row() : songProxyModel->mapToSource(index).row())-1);
+    mafwrenderer->gotoIndex((filter ? index.row() : objectProxyModel->mapToSource(index).row())-1);
     mafwrenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
@@ -291,12 +266,6 @@ void SinglePlaylistView::onItemActivated(QModelIndex index)
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->inhibit();
 #endif
-}
-
-void SinglePlaylistView::orientationChanged(int w, int h)
-{
-    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
-    ui->indicator->raise();
 }
 
 void SinglePlaylistView::addAllToNowPlaying()
@@ -327,11 +296,11 @@ void SinglePlaylistView::addAllToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        int songCount = songProxyModel->rowCount();
+        int songCount = objectProxyModel->rowCount();
 
         if (currentObjectId.isNull() && picker.playlistName == windowTitle()) {
             for (int i = 1; i < songCount; i++)
-                songModel->appendRow(songModel->item(songProxyModel->mapToSource(songProxyModel->index(i,0)).row())->clone());
+                objectModel->appendRow(objectModel->item(objectProxyModel->mapToSource(objectProxyModel->index(i,0)).row())->clone());
             updateSongCount();
             playlistModified = true;
             --songCount;
@@ -340,7 +309,7 @@ void SinglePlaylistView::addAllToPlaylist()
             gchar** songAddBuffer = new gchar*[songCount];
 
             for (int i = 1; i < songCount; i++)
-                songAddBuffer[i-1] = qstrdup(songProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
+                songAddBuffer[i-1] = qstrdup(objectProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
 
             songAddBuffer[--songCount] = NULL;
 
@@ -361,16 +330,16 @@ void SinglePlaylistView::addAllToPlaylist()
 int SinglePlaylistView::appendAllToPlaylist(bool filter)
 {
 #ifdef MAFW
-    int visibleCount = filter ? songProxyModel->rowCount() : songModel->rowCount();
+    int visibleCount = filter ? objectProxyModel->rowCount() : objectModel->rowCount();
 
     gchar** songAddBuffer = new gchar*[visibleCount];
 
     if (filter)
         for (int i = 1; i < visibleCount; i++)
-            songAddBuffer[i-1] = qstrdup(songProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
+            songAddBuffer[i-1] = qstrdup(objectProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
     else
         for (int i = 1; i < visibleCount; i++)
-            songAddBuffer[i-1] = qstrdup(songModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
+            songAddBuffer[i-1] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
 
     songAddBuffer[--visibleCount] = NULL;
 
@@ -394,72 +363,19 @@ void SinglePlaylistView::notifyOnAddedToNowPlaying(int songCount)
 void SinglePlaylistView::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
-        case Qt::Key_Left:
-        case Qt::Key_Right:
-        case Qt::Key_Space:
-        case Qt::Key_Control:
-        case Qt::Key_Shift:
-            break;
-
-        case Qt::Key_Backspace:
-            this->close();
-            break;
-
         case Qt::Key_Enter:
-            onItemActivated(ui->songList->currentIndex());
-            break;
-
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-            ui->songList->setFocus();
+            onItemActivated(ui->objectList->currentIndex());
             break;
 
         default:
-            ui->songList->clearSelection();
-            if (ui->searchWidget->isHidden()) {
-                ui->indicator->inhibit();
-                ui->searchWidget->show();
-            }
-            if (!ui->searchEdit->hasFocus()) {
-                ui->searchEdit->setText(ui->searchEdit->text() + e->text());
-                ui->searchEdit->setFocus();
-            }
+            BrowserWindow::keyPressEvent(e);
             break;
-    }
-}
-
-void SinglePlaylistView::keyReleaseEvent(QKeyEvent *e)
-{
-    switch (e->key()) {
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-            ui->songList->setFocus();
-    }
-}
-
-void SinglePlaylistView::onSearchHideButtonClicked()
-{
-    if (ui->searchEdit->text().isEmpty()) {
-        ui->searchWidget->hide();
-        ui->indicator->restore();
-    } else
-        ui->searchEdit->clear();
-}
-
-void SinglePlaylistView::onSearchTextChanged(QString text)
-{
-    songProxyModel->setFilterFixedString(text);
-    updateSongCount();
-
-    if (text.isEmpty()) {
-        ui->searchWidget->hide();
-        ui->indicator->restore();
     }
 }
 
 void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
 {
-    if (ui->songList->currentIndex().row() <= 0) return;
+    if (ui->objectList->currentIndex().row() <= 0) return;
 
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -478,7 +394,7 @@ void SinglePlaylistView::onAddToNowPlaying()
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    playlist->appendItem(ui->songList->currentIndex().data(UserRoleObjectID).toString());
+    playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 
 #ifdef Q_WS_MAEMO_5
     notifyOnAddedToNowPlaying(1);
@@ -493,13 +409,13 @@ void SinglePlaylistView::onAddToPlaylist()
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
         if (currentObjectId.isNull() && picker.playlistName == windowTitle()) {
-            songModel->appendRow(songModel->item(songProxyModel->mapToSource(ui->songList->currentIndex()).row())->clone());
+            objectModel->appendRow(objectModel->item(objectProxyModel->mapToSource(ui->objectList->currentIndex()).row())->clone());
             updateSongCount();
             playlistModified = true;
         }
 #ifdef MAFW
         else
-            playlist->appendItem(picker.playlist, ui->songList->currentIndex().data(UserRoleObjectID).toString());
+            playlist->appendItem(picker.playlist, ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 #endif
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
@@ -511,15 +427,15 @@ void SinglePlaylistView::setRingingTone()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Ringtone, this,
-                      ui->songList->currentIndex().data(UserRoleSongArtist).toString(),
-                      ui->songList->currentIndex().data(Qt::DisplayRole).toString())
+                      ui->objectList->currentIndex().data(UserRoleSongArtist).toString(),
+                      ui->objectList->currentIndex().data(Qt::DisplayRole).toString())
         .exec() == QMessageBox::Yes)
     {
-        mafwTrackerSource->getUri(ui->songList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+        mafwTrackerSource->getUri(ui->objectList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
         connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
     }
 #endif
-    ui->songList->clearSelection();
+    ui->objectList->clearSelection();
 }
 
 #ifdef MAFW
@@ -527,7 +443,7 @@ void SinglePlaylistView::onRingingToneUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
 
-    if (objectId != ui->songList->currentIndex().data(UserRoleObjectID).toString()) return;
+    if (objectId != ui->objectList->currentIndex().data(UserRoleObjectID).toString()) return;
 
 #ifdef Q_WS_MAEMO_5
     QDBusInterface setRingtone("com.nokia.profiled",
@@ -543,7 +459,7 @@ void SinglePlaylistView::onRingingToneUriReceived(QString objectId, QString uri)
 void SinglePlaylistView::onShareClicked()
 {
 #ifdef MAFW
-    mafwTrackerSource->getUri(ui->songList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+    mafwTrackerSource->getUri(ui->objectList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
     connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 #endif
 }
@@ -553,7 +469,7 @@ void SinglePlaylistView::onShareUriReceived(QString objectId, QString uri)
 {
     disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
 
-    if (objectId != ui->songList->currentIndex().data(UserRoleObjectID).toString()) return;
+    if (objectId != ui->objectList->currentIndex().data(UserRoleObjectID).toString()) return;
 
     QStringList files;
 #ifdef DEBUG
@@ -570,61 +486,58 @@ void SinglePlaylistView::onDeleteClicked()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(ui->songList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
-        songProxyModel->removeRow(ui->songList->currentIndex().row());
+        mafwTrackerSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+        objectProxyModel->removeRow(ui->objectList->currentIndex().row());
         updateSongCount();
         playlistModified = true;
     }
 #endif
-    ui->songList->clearSelection();
+    ui->objectList->clearSelection();
 }
 
 void SinglePlaylistView::updateSongCount()
 {
-    songModel->item(0)->setData(songProxyModel->rowCount()-1, UserRoleSongCount);
+    objectModel->item(0)->setData(objectProxyModel->rowCount()-1, UserRoleSongCount);
 }
 
 void SinglePlaylistView::forgetClick()
 {
     if (clickedIndex.row() != -1) onItemActivated(clickedIndex);
-    ui->songList->setDragEnabled(false);
+    ui->objectList->setDragEnabled(false);
     clickedIndex = QModelIndex();
 }
 
-bool SinglePlaylistView::eventFilter(QObject *, QEvent *e)
+bool SinglePlaylistView::eventFilter(QObject *obj, QEvent *e)
 {
-    if (e->type() == QEvent::Drop) {
-        QDropEvent *de = static_cast<QDropEvent*>(e);
-        if (ui->songList->indexAt(de->pos()).row() == 0) {
-            de->setDropAction(Qt::IgnoreAction);
-        } else {
-            de->setDropAction(Qt::MoveAction);
-            playlistModified = true;
+    switch (e->type()) {
+        case QEvent::Drop: {
+            QDropEvent *de = static_cast<QDropEvent*>(e);
+            if (ui->objectList->indexAt(de->pos()).row() == 0) {
+                de->setDropAction(Qt::IgnoreAction);
+            } else {
+                de->setDropAction(Qt::MoveAction);
+                playlistModified = true;
+            }
+            return false;
+        }
+
+        case QEvent::MouseButtonRelease: {
+            if (clickedIndex != ui->objectList->currentIndex())
+                clickedIndex = QModelIndex();
+            clickTimer->start();
+            return false;
+        }
+
+        default: {
+            return BrowserWindow::eventFilter(obj, e);
         }
     }
-
-    else if (e->type() == QEvent::MouseButtonPress) {
-        if (static_cast<QMouseEvent*>(e)->y() > ui->songList->viewport()->height() - 25
-        && ui->searchWidget->isHidden()) {
-            ui->indicator->inhibit();
-            ui->searchWidget->show();
-        }
-        clickedIndex = ui->songList->indexAt(QPoint(0,static_cast<QMouseEvent*>(e)->y()));
-    }
-
-    else if (e->type() == QEvent::MouseButtonRelease) {
-        if (clickedIndex != ui->songList->currentIndex())
-            clickedIndex = QModelIndex();
-        clickTimer->start();
-    }
-
-    return false;
 }
 
 void SinglePlaylistView::onItemDoubleClicked()
 {
-    if (ui->songList->currentIndex().row() != 0) {
-        ui->songList->setDragEnabled(true);
+    if (ui->objectList->currentIndex().row() != 0) {
+        ui->objectList->setDragEnabled(true);
         clickedIndex = QModelIndex();
         clickTimer->start();
     }
@@ -636,11 +549,11 @@ void SinglePlaylistView::saveCurrentPlaylist()
     MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(this->windowTitle()));
     playlist->clear(targetPlaylist);
 
-    int songCount = songModel->rowCount();
+    int songCount = objectModel->rowCount();
     gchar** songAddBuffer = new gchar*[songCount];
 
     for (int i = 1; i < songCount; i++)
-        songAddBuffer[i-1] = qstrdup(songModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
+        songAddBuffer[i-1] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
     songAddBuffer[--songCount] = NULL;
 
     playlist->appendItems(targetPlaylist, (const gchar**) songAddBuffer);
@@ -668,7 +581,7 @@ void SinglePlaylistView::deletePlaylist()
 
 void SinglePlaylistView::onDeleteFromPlaylist()
 {
-    songProxyModel->removeRow(ui->songList->currentIndex().row());
+    objectProxyModel->removeRow(ui->objectList->currentIndex().row());
     updateSongCount();
     playlistModified = true;
 }
@@ -676,9 +589,8 @@ void SinglePlaylistView::onDeleteFromPlaylist()
 void SinglePlaylistView::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-    ui->indicator->restore();
-    ui->songList->clearSelection();
-    this->setEnabled(true);
+
+    this->onChildClosed();
 }
 
 #ifdef MAFW

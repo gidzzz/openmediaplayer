@@ -49,6 +49,7 @@ SOURCES += \
     delegates/shufflebuttondelegate.cpp \
     delegates/providerlistitemdelegate.cpp \
     basewindow.cpp \
+    browserwindow.cpp \
     opendialog.cpp \
     currentplaylistmanager.cpp \
     maemo5deviceevents.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
     delegates/providerlistitemdelegate.h \
     fastlistview.h \
     basewindow.h \
+    browserwindow.h \
     kbmenu.h \
     opendialog.h \
     currentplaylistmanager.h \
@@ -112,28 +114,22 @@ FORMS += \
     mainwindow.ui \
     musicwindow.ui \
     nowplayingwindow.ui \
-    videoswindow.ui \
-    internetradiowindow.ui \
     sharedialog.ui \
     fmtxdialog.ui \
     videonowplayingwindow.ui \
     nowplayingindicator.ui \
     radionowplayingwindow.ui \
-    singlealbumview.ui \
-    singleartistview.ui \
     settingsdialog.ui \
     qmlview.ui \
-    singlegenreview.ui \
-    singleplaylistview.ui \
     aboutwindow.ui \
     coverpicker.ui \
     freqdlg.ui \
     editlyrics.ui \
-    upnpview.ui \
     playlistpicker.ui \
     sleeperdialog.ui \
     bookmarkdialog.ui \
     lyricsprovidersdialog.ui \
+    browserwindow.ui \
     opendialog.ui
 
 OTHER_FILES += \

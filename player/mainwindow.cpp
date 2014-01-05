@@ -813,7 +813,6 @@ void MainWindow::showVideosWindow()
 #else
     VideosWindow *window = new VideosWindow(this);
 #endif
-    window->setAttribute(Qt::WA_DeleteOnClose);
 
     window->show();
 

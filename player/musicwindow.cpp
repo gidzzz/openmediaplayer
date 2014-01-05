@@ -422,10 +422,7 @@ void MusicWindow::orientationChanged(int w, int h)
 
 bool MusicWindow::eventFilter(QObject *obj, QEvent *e)
 {
-    if (obj == ui->albumList->viewport() && e->type() == QEvent::Resize)
-        ui->albumList->setFlow(ui->albumList->flow());
-
-    else if (obj == ui->playlistList->viewport() && e->type() == QEvent::WindowActivate)
+    if (obj == ui->playlistList->viewport() && e->type() == QEvent::WindowActivate)
         listSavedPlaylists();
 
     else if (e->type() == QEvent::MouseButtonPress
@@ -434,6 +431,7 @@ bool MusicWindow::eventFilter(QObject *obj, QEvent *e)
              ui->indicator->inhibit();
              ui->searchWidget->show();
          }
+
     return false;
 }
 

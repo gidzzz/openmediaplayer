@@ -19,8 +19,7 @@
 #include "singlegenreview.h"
 
 SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
-    BaseWindow(parent),
-    ui(new Ui::SingleGenreView)
+    BrowserWindow(parent, factory)
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
@@ -28,59 +27,21 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     playlist(factory->getPlaylistAdapter())
 #endif
 {
-    ui->setupUi(this);
-    ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
+    ui->objectList->setItemDelegate(new ArtistListItemDelegate(ui->objectList));
+    ui->objectList->setItemDelegateForRow(0, new ShuffleButtonDelegate(ui->objectList));
 
-    setAttribute(Qt::WA_DeleteOnClose);
-
-#ifdef MAFW
-    ui->indicator->setFactory(factory);
-#endif
-
-    ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
-    ui->artistList->setItemDelegate(artistDelegate);
-    ShuffleButtonDelegate *shuffleDelegate = new ShuffleButtonDelegate(ui->artistList);
-    ui->artistList->setItemDelegateForRow(0, shuffleDelegate);
-
-    artistModel = new QStandardItemModel(this);
-    artistProxyModel = new HeaderAwareProxyModel(this);
-    artistProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    artistProxyModel->setSourceModel(artistModel);
-    ui->artistList->setModel(artistProxyModel);
+    ui->windowMenu->addAction(tr("Add to now playing"), this, SLOT(addAllToNowPlaying()));
 
     shuffleRequested = false;
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
 
-    connect(ui->artistList, SIGNAL(activated(QModelIndex)), this, SLOT(onItemActivated(QModelIndex)));
-    connect(ui->artistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
-    connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
-    connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
-
-    connect(ui->actionAdd_to_now_playing, SIGNAL(triggered()), this, SLOT(addAllToNowPlaying()));
+    connect(ui->objectList, SIGNAL(activated(QModelIndex)), this, SLOT(onItemActivated(QModelIndex)));
+    connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
 #endif
-
-    ui->artistList->viewport()->installEventFilter(this);
-
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
-}
-
-SingleGenreView::~SingleGenreView()
-{
-    delete ui;
-}
-
-void SingleGenreView::orientationChanged(int w, int h)
-{
-    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
-    ui->indicator->raise();
 }
 
 void SingleGenreView::onItemActivated(QModelIndex index)
@@ -143,10 +104,10 @@ void SingleGenreView::listArtists()
 #endif
 
     visibleSongs = 0;
-    artistModel->clear();
+    objectModel->clear();
     QStandardItem *item = new QStandardItem();
     item->setData(true, UserRoleHeader);
-    artistModel->appendRow(item);
+    objectModel->appendRow(item);
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -197,7 +158,7 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
         item->setData(albumCount, UserRoleAlbumCount);
         item->setData(objectId, UserRoleObjectID);
 
-        artistModel->appendRow(item);
+        objectModel->appendRow(item);
         visibleSongs += songCount; updateSongCount();
 
     }
@@ -217,85 +178,12 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
 
 void SingleGenreView::updateSongCount()
 {
-    artistModel->item(0)->setData(visibleSongs, UserRoleSongCount);
-}
-
-void SingleGenreView::keyPressEvent(QKeyEvent *e)
-{
-    switch (e->key()) {
-        case Qt::Key_Enter:
-        case Qt::Key_Left:
-        case Qt::Key_Right:
-        case Qt::Key_Space:
-        case Qt::Key_Control:
-        case Qt::Key_Shift:
-            break;
-
-        case Qt::Key_Backspace:
-            this->close();
-            break;
-
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-            ui->artistList->setFocus();
-            break;
-
-        default:
-            ui->artistList->clearSelection();
-            if (ui->searchWidget->isHidden()) {
-                ui->indicator->inhibit();
-                ui->searchWidget->show();
-            }
-            if (!ui->searchEdit->hasFocus()) {
-                ui->searchEdit->setText(ui->searchEdit->text() + e->text());
-                ui->searchEdit->setFocus();
-            }
-            break;
-    }
-}
-
-void SingleGenreView::keyReleaseEvent(QKeyEvent *e)
-{
-    switch (e->key()) {
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-            ui->artistList->setFocus();
-    }
-}
-
-bool SingleGenreView::eventFilter(QObject *, QEvent *e)
-{
-    if (e->type() == QEvent::MouseButtonPress
-    && static_cast<QMouseEvent*>(e)->y() > ui->artistList->viewport()->height() - 25
-    && ui->searchWidget->isHidden()) {
-        ui->indicator->inhibit();
-        ui->searchWidget->show();
-    }
-    return false;
-}
-
-void SingleGenreView::onSearchHideButtonClicked()
-{
-    if (ui->searchEdit->text().isEmpty()) {
-        ui->searchWidget->hide();
-        ui->indicator->restore();
-    } else
-        ui->searchEdit->clear();
-}
-
-void SingleGenreView::onSearchTextChanged(QString text)
-{
-    artistProxyModel->setFilterFixedString(text);
-
-    if (text.isEmpty()) {
-        ui->searchWidget->hide();
-        ui->indicator->restore();
-    }
+    objectModel->item(0)->setData(visibleSongs, UserRoleSongCount);
 }
 
 void SingleGenreView::onContextMenuRequested(const QPoint &pos)
 {
-    if (ui->artistList->currentIndex().row() <= 0) return;
+    if (ui->objectList->currentIndex().row() <= 0) return;
 
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -309,13 +197,13 @@ void SingleGenreView::addArtistToNowPlaying()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    ui->artistList->clearSelection();
+    ui->objectList->clearSelection();
 
     shuffleRequested = false;
 
     CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
-    playlistToken = cpm->appendBrowsed(ui->artistList->currentIndex().data(UserRoleObjectID).toString());
+    playlistToken = cpm->appendBrowsed(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 }
 
 void SingleGenreView::onAddFinished(uint token, int count)
@@ -356,7 +244,7 @@ void SingleGenreView::addAllToNowPlaying()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    ui->artistList->clearSelection();
+    ui->objectList->clearSelection();
 
     CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
@@ -373,12 +261,6 @@ void SingleGenreView::notifyOnAddedToNowPlaying(int songCount)
 void SingleGenreView::onNowPlayingWindowHidden()
 {
     disconnect(NowPlayingWindow::acquire(), SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-    this->onChildClosed();
-}
 
-void SingleGenreView::onChildClosed()
-{
-    ui->indicator->restore();
-    ui->artistList->clearSelection();
-    this->setEnabled(true);
+    this->onChildClosed();
 }

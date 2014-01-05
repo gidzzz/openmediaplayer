@@ -1,29 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>VideosWindow</class>
- <widget class="QMainWindow" name="VideosWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>400</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Videos</string>
-  </property>
+ <class>BrowserWindow</class>
+ <widget class="QMainWindow" name="BrowserWindow">
   <widget class="QWidget" name="centralWidget">
-   <widget class="NowPlayingIndicator" name="indicator" native="true">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>320</y>
-      <width>120</width>
-      <height>80</height>
-     </rect>
-    </property>
-   </widget>
+   <widget class="NowPlayingIndicator" name="indicator" native="true"/>
    <layout class="QVBoxLayout" name="centralLayout">
     <property name="spacing">
      <number>0</number>
@@ -32,30 +12,18 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="FastListView" name="videoList">
+     <widget class="FastListView" name="objectList">
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
-      <property name="dragDropMode">
-       <enum>QAbstractItemView::NoDragDrop</enum>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>64</width>
-        <height>64</height>
-       </size>
-      </property>
-      <property name="movement">
-       <enum>QListView::Static</enum>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
       </property>
       <property name="uniformItemSizes">
        <bool>true</bool>
-      </property>
-      <property name="selectionRectVisible">
-       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -83,14 +51,6 @@
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>25</height>
-    </rect>
-   </property>
    <widget class="KbMenu" name="windowMenu">
     <property name="title">
      <string>Options</string>
@@ -104,19 +64,16 @@
    <class>NowPlayingIndicator</class>
    <extends>QWidget</extends>
    <header>nowplayingindicator.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>FastListView</class>
    <extends>QListView</extends>
    <header>fastlistview.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KbMenu</class>
    <extends>QMenu</extends>
    <header>kbmenu.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

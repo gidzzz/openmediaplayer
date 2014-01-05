@@ -1,43 +1,27 @@
 #ifndef SINGLEARTISTVIEW_H
 #define SINGLEARTISTVIEW_H
 
-#include "basewindow.h"
+#include "browserwindow.h"
 
 #ifdef MAFW
     #include "mafw/mafwadapterfactory.h"
 #endif
 
-#include "ui_singleartistview.h"
 #include "includes.h"
 #include "confirmdialog.h"
 #include "singlealbumview.h"
 #include "delegates/thumbnailitemdelegate.h"
-#include "headerawareproxymodel.h"
 #include "currentplaylistmanager.h"
 
-namespace Ui {
-    class SingleArtistView;
-}
-
-class SingleArtistView : public BaseWindow
+class SingleArtistView : public BrowserWindow
 {
     Q_OBJECT
 
 public:
     explicit SingleArtistView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
-    ~SingleArtistView();
-    bool eventFilter(QObject *, QEvent *e);
     void browseArtist(QString objectId);
 
 private:
-    Ui::SingleArtistView *ui;
-
-    QStandardItemModel *albumModel;
-    QSortFilterProxyModel *albumProxyModel;
-
-    void keyPressEvent(QKeyEvent *e);
-    void keyReleaseEvent(QKeyEvent *e);
-
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -63,16 +47,12 @@ private slots:
     void onContainerChanged(QString objectId);
 #endif
     void onAlbumSelected(QModelIndex index);
-    void orientationChanged(int w, int h);
-    void onSearchHideButtonClicked();
-    void onSearchTextChanged(QString text);
     void addAllToNowPlaying();
     void deleteCurrentArtist();
     void shuffleAllSongs();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void onAddAlbumToNowPlaying();
     void onNowPlayingWindowHidden();
-    void onChildClosed();
     void onDeleteClicked();
 };
 
