@@ -12,6 +12,8 @@
 #include "ui_nowplayingwindow.h"
 #include "includes.h"
 #include "confirmdialog.h"
+#include "ringtonedialog.h"
+#include "sharedialog.h"
 #include "delegates/playlistdelegate.h"
 #include "qmlview.h"
 #include "texteditautoresizer.h"
@@ -25,7 +27,6 @@
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
-    #include "sharedialog.h"
     #include "maemo5deviceevents.h"
 #endif
 
@@ -136,7 +137,6 @@ private slots:
     void showFMTXDialog();
     void cycleView(int direction = 1);
     void cycleViewBack();
-    void setRingingTone();
     void onKeyTimeout();
     void forgetClick();
     void onItemDoubleClicked();
@@ -159,7 +159,6 @@ private slots:
     void onNextButtonClicked();
     void onPreviousButtonClicked();
     void updatePlaylist(guint from = -1, guint nremove = 0, guint nreplace = 0);
-    void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
     void togglePlayback();
     void onMetadataChanged(QString name, QVariant value);
@@ -180,6 +179,7 @@ private slots:
     void onContextMenuRequested(const QPoint &pos);
 
     void onDeleteClicked();
+    void onRingtoneClicked();
     void onShareClicked();
     void createQmlView(QUrl source, QString title);
     void updateQmlViewMetadata();

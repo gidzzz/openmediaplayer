@@ -42,14 +42,13 @@ private slots:
     void updateSongCount();
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onItemActivated(QModelIndex index);
-    void onRingingToneUriReceived(QString objectId, QString uri);
     void onContainerChanged(QString objectId);
 #endif
     int appendAllToPlaylist(bool filter);
     void addAllToNowPlaying();
     void deleteCurrentAlbum();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void setRingingTone();
+    void onRingtoneClicked();
     void onShareClicked();
     void onDeleteClicked();
     void onAddToNowPlaying();

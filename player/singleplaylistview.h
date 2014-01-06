@@ -69,7 +69,6 @@ private slots:
     void setItemMetadata(QStandardItem *item, QString objectId, GHashTable *metadata);
     void onGetItems(QString objectId, GHashTable* metadata, guint index);
     void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString);
-    void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
     int appendAllToPlaylist(bool filter);
     void onItemActivated(QModelIndex index);
@@ -78,7 +77,7 @@ private slots:
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void onAddToNowPlaying();
     void onAddToPlaylist();
-    void setRingingTone();
+    void onRingtoneClicked();
     void onShareClicked();
     void onDeleteClicked();
     void onDeleteFromPlaylist();

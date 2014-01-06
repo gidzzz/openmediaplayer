@@ -12,6 +12,7 @@
 #include "headerawareproxymodel.h"
 #include "confirmdialog.h"
 #include "nowplayingwindow.h"
+#include "ringtonedialog.h"
 #include "sharedialog.h"
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/artistlistitemdelegate.h"
@@ -99,7 +100,7 @@ private:
 
 private slots:
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-    void setRingingTone();
+    void onRingtoneClicked();
     void onShareClicked();
     void onDeleteClicked();
     void orientationChanged(int w, int h);
@@ -120,7 +121,6 @@ private slots:
 
     void onAddFinished(uint token, int count);
 
-    void onRingingToneUriReceived(QString objectId, QString uri);
 
     void listSongs();
     void listArtists();

@@ -242,7 +242,7 @@ void MusicWindow::onContextMenuRequested(const QPoint &pos)
         contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
         // Song view
         if (currentList() == ui->songList) {
-            contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(setRingingTone()));
+            contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(onRingtoneClicked()));
             contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
         }
     }
@@ -326,38 +326,16 @@ void MusicWindow::onDeletePlaylistClicked()
     ui->playlistList->clearSelection();
 }
 
-void MusicWindow::setRingingTone()
+void MusicWindow::onRingtoneClicked()
 {
-#ifdef MAFW
-    if (ConfirmDialog(ConfirmDialog::Ringtone, this,
-                      ui->songList->currentIndex().data(UserRoleSongArtist).toString(),
-                      ui->songList->currentIndex().data(Qt::DisplayRole).toString())
-        .exec() == QMessageBox::Yes)
-    {
-        mafwTrackerSource->getUri(ui->songList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
-        connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
-    }
-#endif
+    (new RingtoneDialog(this, mafwTrackerSource,
+                        ui->songList->currentIndex().data(UserRoleObjectID).toString(),
+                        ui->songList->currentIndex().data(Qt::DisplayRole).toString(),
+                        ui->songList->currentIndex().data(UserRoleSongArtist).toString()))
+    ->show();
+
     ui->songList->clearSelection();
 }
-
-#ifdef MAFW
-void MusicWindow::onRingingToneUriReceived(QString objectId, QString uri)
-{
-    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onRingingToneUriReceived(QString,QString)));
-
-    if (objectId != ui->songList->currentIndex().data(UserRoleObjectID).toString())
-        return;
-#ifdef Q_WS_MAEMO_5
-    QDBusInterface setRingtone("com.nokia.profiled",
-                               "/com/nokia/profiled",
-                               "com.nokia.profiled",
-                               QDBusConnection::sessionBus(), this);
-    setRingtone.call("set_value", "general", "ringing.alert.tone", uri);
-    QMaemo5InformationBox::information(this, tr("Selected song set as ringing tone"));
-#endif
-}
-#endif
 
 void MusicWindow::onShareClicked()
 {

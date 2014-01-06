@@ -15,6 +15,7 @@ SOURCES += \
     videoswindow.cpp \
     internetradiowindow.cpp \
     sharedialog.cpp \
+    ringtonedialog.cpp \
     videonowplayingwindow.cpp \
     cqgraphicsview.cpp \
     nowplayingindicator.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
     videoswindow.h \
     internetradiowindow.h \
     sharedialog.h \
+    ringtonedialog.h \
     videonowplayingwindow.h \
     mirror.h \
     cqgraphicsview.h \
