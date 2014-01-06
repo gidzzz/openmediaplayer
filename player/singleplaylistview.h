@@ -69,7 +69,6 @@ private slots:
     void setItemMetadata(QStandardItem *item, QString objectId, GHashTable *metadata);
     void onGetItems(QString objectId, GHashTable* metadata, guint index);
     void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString);
-    void onShareUriReceived(QString objectId, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
 #endif
     int appendAllToPlaylist(bool filter);

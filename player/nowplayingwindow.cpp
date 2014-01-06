@@ -1311,30 +1311,8 @@ void NowPlayingWindow::onDeleteClicked()
 
 void NowPlayingWindow::onShareClicked()
 {
-#ifdef MAFW
-    mafwTrackerSource->getUri(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
-    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
-#endif
+    (new ShareDialog(this, mafwTrackerSource, ui->songList->currentItem()->data(UserRoleObjectID).toString()))->show();
 }
-
-#ifdef MAFW
-void NowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
-{
-    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
-
-    if (objectId != ui->songList->currentItem()->data(UserRoleObjectID).toString())
-        return;
-
-    QStringList files;
-#ifdef DEBUG
-    qDebug() << "Sending file:" << uri;
-#endif
-    files.append(uri);
-#ifdef Q_WS_MAEMO_5
-    ShareDialog(files, this).exec();
-#endif
-}
-#endif
 
 void NowPlayingWindow::showEntertainmentView()
 {

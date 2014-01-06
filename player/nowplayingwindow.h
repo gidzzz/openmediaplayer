@@ -160,7 +160,6 @@ private slots:
     void onPreviousButtonClicked();
     void updatePlaylist(guint from = -1, guint nremove = 0, guint nreplace = 0);
     void onRingingToneUriReceived(QString objectId, QString uri);
-    void onShareUriReceived(QString objectId, QString uri);
 #endif
     void togglePlayback();
     void onMetadataChanged(QString name, QVariant value);

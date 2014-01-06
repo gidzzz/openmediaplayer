@@ -120,7 +120,6 @@ private slots:
 
     void onAddFinished(uint token, int count);
 
-    void onShareUriReceived(QString, QString uri);
     void onRingingToneUriReceived(QString objectId, QString uri);
 
     void listSongs();

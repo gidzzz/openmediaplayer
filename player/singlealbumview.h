@@ -43,7 +43,6 @@ private slots:
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onItemActivated(QModelIndex index);
     void onRingingToneUriReceived(QString objectId, QString uri);
-    void onShareUriReceived(QString objectId, QString uri);
     void onContainerChanged(QString objectId);
 #endif
     int appendAllToPlaylist(bool filter);

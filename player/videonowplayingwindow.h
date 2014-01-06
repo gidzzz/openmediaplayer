@@ -135,7 +135,6 @@ private slots:
     void handleRendererMetadata(GHashTable *metadata, QString, QString error);
     void handleSourceMetadata(QString objectId, GHashTable *metadata, QString error);
     void onErrorOccured(const QDBusMessage &msg);
-    void onShareUriReceived(QString objectId, QString uri);
 #endif
     void onPositionSliderPressed();
     void onPositionSliderReleased();

@@ -448,28 +448,9 @@ void VideoNowPlayingWindow::onDeleteClicked()
 // Share the video
 void VideoNowPlayingWindow::onShareClicked()
 {
-#ifdef MAFW
     mafwrenderer->pause();
-    mafwSource->getUri(currentObjectId.toUtf8());
-    connect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
-#endif
+    (new ShareDialog(this, mafwSource, currentObjectId))->show();
 }
-
-#ifdef MAFW
-void VideoNowPlayingWindow::onShareUriReceived(QString objectId, QString uri)
-{
-    disconnect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
-
-    if (objectId != currentObjectId) return;
-
-    QStringList files;
-
-    files.append(uri);
-#ifdef Q_WS_MAEMO_5
-    ShareDialog(files, this).exec();
-#endif
-}
-#endif
 
 // The volume slider was pressed, make sure that the volume is in sync with it
 void VideoNowPlayingWindow::onVolumeSliderPressed()

@@ -458,29 +458,8 @@ void SinglePlaylistView::onRingingToneUriReceived(QString objectId, QString uri)
 
 void SinglePlaylistView::onShareClicked()
 {
-#ifdef MAFW
-    mafwTrackerSource->getUri(ui->objectList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
-    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
-#endif
+    (new ShareDialog(this, mafwTrackerSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
-
-#ifdef MAFW
-void SinglePlaylistView::onShareUriReceived(QString objectId, QString uri)
-{
-    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
-
-    if (objectId != ui->objectList->currentIndex().data(UserRoleObjectID).toString()) return;
-
-    QStringList files;
-#ifdef DEBUG
-    qDebug() << "Sending file:" << uri;
-#endif
-    files.append(uri);
-#ifdef Q_WS_MAEMO_5
-    ShareDialog(files, this).exec();
-#endif
-}
-#endif
 
 void SinglePlaylistView::onDeleteClicked()
 {

@@ -361,27 +361,8 @@ void MusicWindow::onRingingToneUriReceived(QString objectId, QString uri)
 
 void MusicWindow::onShareClicked()
 {
-#ifdef MAFW
-    mafwTrackerSource->getUri(ui->songList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
-    connect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
-#endif
+    (new ShareDialog(this, mafwTrackerSource, ui->songList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
-
-#ifdef MAFW
-void MusicWindow::onShareUriReceived(QString objectId, QString uri)
-{
-    disconnect(mafwTrackerSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onShareUriReceived(QString,QString)));
-
-    if (objectId != ui->songList->currentIndex().data(UserRoleObjectID).toString())
-        return;
-
-    QStringList files;
-    files.append(uri);
-#ifdef Q_WS_MAEMO_5
-    ShareDialog(files, this).exec();
-#endif
-}
-#endif
 
 void MusicWindow::onDeleteClicked()
 {

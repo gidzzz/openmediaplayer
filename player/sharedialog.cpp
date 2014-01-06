@@ -1,15 +1,24 @@
 #include "sharedialog.h"
 
-ShareDialog::ShareDialog(QStringList files, QWidget *parent) :
+ShareDialog::ShareDialog(QWidget *parent, MafwSourceAdapter *mafwSource, QString objectId) :
     QDialog(parent),
-    ui(new Ui::ShareDialog)
+    ui(new Ui::ShareDialog),
+    objectId(objectId),
+    shareAction(NULL)
 {
     ui->setupUi(this);
 
-    this->files = files;
+    this->setAttribute(Qt::WA_DeleteOnClose);
+    // This is a workaround for Qt::WA_Maemo5ShowProgressIndicator not being
+    // properly handled when enabled from the constructor.
+    QTimer::singleShot(0, this, SLOT(setProgressIndicator()));
 
     connect(ui->bluetoothButton, SIGNAL(clicked()), this, SLOT(onBluetoothClicked()));
     connect(ui->emailButton, SIGNAL(clicked()), this, SLOT(onEmailClicked()));
+
+    connect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onUriReceived(QString,QString)));
+
+    mafwSource->getUri(objectId.toUtf8());
 }
 
 ShareDialog::~ShareDialog()
@@ -23,10 +32,46 @@ void ShareDialog::keyPressEvent(QKeyEvent *e)
         this->close();
 }
 
+void ShareDialog::setProgressIndicator()
+{
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
+}
+
+void ShareDialog::onUriReceived(QString objectId, QString uri)
+{
+    if (objectId != this->objectId) return;
+
+    this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+
+    this->uri = uri;
+
+    if (shareAction)
+        (this->*shareAction)();
+}
+
 void ShareDialog::onBluetoothClicked()
 {
-    for (int i = 0; i < files.size(); i++)
-        files[i] = QUrl::fromLocalFile(files.at(i)).toEncoded();
+    if (uri.isNull()) {
+        this->setEnabled(false);
+        shareAction = &ShareDialog::shareViaBluetooth;
+    } else {
+        shareViaBluetooth();
+    }
+}
+
+void ShareDialog::onEmailClicked()
+{
+    if (uri.isNull()) {
+        this->setEnabled(false);
+        shareAction = &ShareDialog::shareViaEmail;
+    } else {
+        shareViaEmail();
+    }
+}
+
+void ShareDialog::shareViaBluetooth()
+{
+    QStringList files; files << QString(QUrl::fromLocalFile(uri).toEncoded());
 
     QDBusInterface("com.nokia.icd_ui",
                    "/com/nokia/bt_ui",
@@ -37,11 +82,8 @@ void ShareDialog::onBluetoothClicked()
     this->close();
 }
 
-void ShareDialog::onEmailClicked()
+void ShareDialog::shareViaEmail()
 {
-    for (int i = 0; i < files.size(); i++)
-        files[i] = QUrl::fromLocalFile(files.at(i)).toEncoded();
-
     QDBusInterface("com.nokia.modest",
                    "/com/nokia/modest",
                    "com.nokia.modest",
@@ -52,7 +94,7 @@ void ShareDialog::onEmailClicked()
            QString(), // bcc
            QString(), // subject
            QString(), // body
-           files.join(","));
+           QString(QUrl::fromLocalFile(uri).toEncoded()));
 
     this->close();
 }
