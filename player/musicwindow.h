@@ -87,11 +87,10 @@ private:
     uint playlistToken;
     int savedPlaylistCount;
 #endif
+    void (MusicWindow::*readyAction)();
     void connectSignals();
-    void disconnectSearch();
-    void populateWindowMenu();
-    void hideLayoutContents();
-    void saveViewState(QString view);
+    void showChild(QMainWindow *window);
+    void showView(QListView *listView, void (MusicWindow::*listAction)(), QString name, QString title);
     void loadViewState();
     QListView* currentList();
 #ifdef Q_WS_MAEMO_5
@@ -99,6 +98,7 @@ private:
 #endif
 
 private slots:
+    void onSourceReady();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void onRingtoneClicked();
     void onShareClicked();

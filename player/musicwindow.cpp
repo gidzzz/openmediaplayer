@@ -19,16 +19,15 @@
 #include "musicwindow.h"
 
 MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
-        BaseWindow(parent),
+    BaseWindow(parent),
+    ui(new Ui::MusicWindow),
 #ifdef MAFW
-        ui(new Ui::MusicWindow),
-        mafwFactory(factory),
-        mafwrenderer(factory->getRenderer()),
-        mafwTrackerSource(factory->getTrackerSource()),
-        playlist(factory->getPlaylistAdapter())
-#else
-        ui(new Ui::MusicWindow)
+    mafwFactory(factory),
+    mafwrenderer(factory->getRenderer()),
+    mafwTrackerSource(factory->getTrackerSource()),
+    playlist(factory->getPlaylistAdapter()),
 #endif
+    readyAction(NULL)
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -170,10 +169,7 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
         else if (row == 4)
             playlistView->browseAutomaticPlaylist("(play-count=)", "", MAFW_SOURCE_BROWSE_ALL);
 
-        playlistView->show();
-        connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-        ui->indicator->inhibit();
-
+        showChild(playlistView);
     } else if (row >= 6) {
         this->setEnabled(false);
 
@@ -185,9 +181,7 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
         else
             playlistView->browseImportedPlaylist(index.data(UserRoleObjectID).toString());
 
-        playlistView->show();
-        connect(playlistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-        ui->indicator->inhibit();
+        showChild(playlistView);
     }
 }
 #endif
@@ -209,6 +203,7 @@ void MusicWindow::connectSignals()
     connect(ui->genresList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->playlistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
 
+    connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(onSourceReady()));
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseSourcePlaylists(uint,int,uint,QString,GHashTable*,QString)));
@@ -394,147 +389,97 @@ bool MusicWindow::eventFilter(QObject *obj, QEvent *e)
     return false;
 }
 
-void MusicWindow::populateWindowMenu()
+void MusicWindow::showChild(QMainWindow *window)
 {
-    ui->windowMenu->clear();
+    window->show();
 
-    if (ui->albumList->isHidden())
-        ui->windowMenu->addAction(tr("All albums"), this, SLOT(showAlbumView()));
-    if (ui->artistList->isHidden())
-        ui->windowMenu->addAction(tr("Artists"), this, SLOT(showArtistView()));
-    if (ui->songList->isHidden())
-        ui->windowMenu->addAction(tr("All songs"), this, SLOT(showSongsView()));
-    if (ui->genresList->isHidden())
-        ui->windowMenu->addAction(tr("Genres"), this, SLOT(showGenresView()));
-    if (ui->playlistList->isHidden())
-        ui->windowMenu->addAction(tr("Playlists"), this, SLOT(showPlayListView()));
+    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
+
+    ui->indicator->inhibit();
 }
 
-void MusicWindow::hideLayoutContents()
+void MusicWindow::onSourceReady()
 {
+    if (readyAction)
+        (this->*readyAction)();
+}
+
+void MusicWindow::showView(QListView *listView, void (MusicWindow::*listAction)(), QString name, QString title)
+{
+    QSortFilterProxyModel *proxyModel = static_cast<QSortFilterProxyModel*>(listView->model());
+
+    QSettings().setValue("music/view", name);
+
+    QMainWindow::setWindowTitle(title);
+
     // Prevent focus from disapearing when hiding lists to keep shortcuts working
     this->setFocus();
 
-    ui->songList->hide();
-    ui->artistList->hide();
-    ui->genresList->hide();
-    ui->albumList->hide();
-    ui->playlistList->hide();
-}
+    ui->searchEdit->clear();
 
-void MusicWindow::disconnectSearch()
-{
-    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), songProxyModel, SLOT(setFilterFixedString(QString)));
-    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), albumProxyModel, SLOT(setFilterFixedString(QString)));
-    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), artistProxyModel, SLOT(setFilterFixedString(QString)));
-    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), genresProxyModel, SLOT(setFilterFixedString(QString)));
-    disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), playlistProxyModel, SLOT(setFilterFixedString(QString)));
+    ui->windowMenu->clear();
+
+    if (listView != ui->artistList) {
+        disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), artistProxyModel, SLOT(setFilterFixedString(QString)));
+        ui->artistList->hide();
+        ui->windowMenu->addAction(tr("Artists"), this, SLOT(showArtistView()));
+    }
+    if (listView != ui->albumList) {
+        disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), albumProxyModel, SLOT(setFilterFixedString(QString)));
+        ui->albumList->hide();
+        ui->windowMenu->addAction(tr("All albums"), this, SLOT(showAlbumView()));
+    }
+    if (listView != ui->songList) {
+        disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), songProxyModel, SLOT(setFilterFixedString(QString)));
+        ui->songList->hide();
+        ui->windowMenu->addAction(tr("All songs"), this, SLOT(showSongsView()));
+    }
+    if (listView != ui->genresList) {
+        disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), genresProxyModel, SLOT(setFilterFixedString(QString)));
+        ui->genresList->hide();
+        ui->windowMenu->addAction(tr("Genres"), this, SLOT(showGenresView()));
+    }
+    if (listView != ui->playlistList) {
+        disconnect(ui->searchEdit, SIGNAL(textChanged(QString)), playlistProxyModel, SLOT(setFilterFixedString(QString)));
+        ui->playlistList->hide();
+        ui->windowMenu->addAction(tr("Playlists"), this, SLOT(showPlayListView()));
+    }
+    connect(ui->searchEdit, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterFixedString(QString)));
+    listView->show();
+
+    // Populate the list only if it is still empty
+    if (proxyModel->sourceModel()->rowCount() == 0) {
+        if (mafwTrackerSource->isReady()) {
+            (this->*listAction)();
+        } else {
+            readyAction = listAction;
+        }
+    }
 }
 
 void MusicWindow::showAlbumView()
 {
-    ui->searchEdit->clear();
-    disconnectSearch();
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), albumProxyModel, SLOT(setFilterFixedString(QString)));
-
-    this->hideLayoutContents();
-    ui->albumList->show();
-    this->populateWindowMenu();
-    QMainWindow::setWindowTitle(tr("Albums"));
-    this->saveViewState("albums");
-#ifdef MAFW
-    if (albumModel->rowCount() == 0) {
-        if (mafwTrackerSource->isReady())
-            listAlbums();
-        else
-            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listAlbums()));
-    }
-#endif
+    showView(ui->albumList, &MusicWindow::listAlbums, "albums", tr("Albums"));
 }
 
 void MusicWindow::showArtistView()
 {
-    ui->searchEdit->clear();
-    disconnectSearch();
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), artistProxyModel, SLOT(setFilterFixedString(QString)));
-
-    this->hideLayoutContents();
-    ui->artistList->show();
-    this->populateWindowMenu();
-    QMainWindow::setWindowTitle(tr("Artists"));
-    this->saveViewState("artists");
-#ifdef MAFW
-    if (artistModel->rowCount() == 0) {
-        if (mafwTrackerSource->isReady())
-            listArtists();
-        else
-            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listArtists()));
-    }
-#endif
+    showView(ui->artistList, &MusicWindow::listArtists, "artists", tr("Artists"));
 }
 
 void MusicWindow::showGenresView()
 {
-    ui->searchEdit->clear();
-    disconnectSearch();
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), genresProxyModel, SLOT(setFilterFixedString(QString)));
-
-    this->hideLayoutContents();
-    ui->genresList->show();
-    this->populateWindowMenu();
-    QMainWindow::setWindowTitle(tr("Genres"));
-    this->saveViewState("genres");
-#ifdef MAFW
-    if (genresModel->rowCount() == 0) {
-        if (mafwTrackerSource->isReady())
-            listGenres();
-        else
-            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listGenres()));
-    }
-#endif
+    showView(ui->genresList, &MusicWindow::listGenres, "genres", tr("Genres"));
 }
 
 void MusicWindow::showSongsView()
 {
-    ui->searchEdit->clear();
-    disconnectSearch();
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), songProxyModel, SLOT(setFilterFixedString(QString)));
-
-    this->hideLayoutContents();
-    ui->songList->show();
-    this->populateWindowMenu();
-    QMainWindow::setWindowTitle(tr("Songs"));
-    this->saveViewState("songs");
-#ifdef MAFW
-    if (songModel->rowCount() == 0) {
-        if (mafwTrackerSource->isReady())
-            listSongs();
-        else
-            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listSongs()));
-    }
-#endif
+    showView(ui->songList, &MusicWindow::listSongs, "songs", tr("Songs"));
 }
 
 void MusicWindow::showPlayListView()
 {
-    ui->searchEdit->clear();
-    disconnectSearch();
-    connect(ui->searchEdit, SIGNAL(textChanged(QString)), playlistProxyModel, SLOT(setFilterFixedString(QString)));
-
-    this->hideLayoutContents();
-    ui->playlistList->show();
-    this->populateWindowMenu();
-    QMainWindow::setWindowTitle(tr("Playlists"));
-    this->saveViewState("playlists");
-#ifdef MAFW
-    if (playlistModel->rowCount() == 0) {
-        savedPlaylistCount = 0;
-        if (mafwTrackerSource->isReady())
-            listPlaylists();
-        else
-            connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listPlaylists()), Qt::UniqueConnection);
-    }
-#endif
+    showView(ui->playlistList, &MusicWindow::listPlaylists, "playlists", tr("Playlists"));
 }
 
 void MusicWindow::refreshPlaylistView()
@@ -556,11 +501,6 @@ QListView* MusicWindow::currentList()
         return ui->playlistList;
     else
         return 0;
-}
-
-void MusicWindow::saveViewState(QString view)
-{
-    QSettings().setValue("music/view", view);
 }
 
 void MusicWindow::loadViewState()
@@ -595,10 +535,7 @@ void MusicWindow::onAlbumSelected(QModelIndex index)
     albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
     albumView->setWindowTitle(index.data(UserRoleTitle).toString());
 
-    albumView->show();
-
-    connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-    ui->indicator->inhibit();
+    showChild(albumView);
 }
 
 void MusicWindow::onArtistSelected(QModelIndex index)
@@ -612,9 +549,7 @@ void MusicWindow::onArtistSelected(QModelIndex index)
         albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
         albumView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
-        albumView->show();
-        connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-        ui->indicator->inhibit();
+        showChild(albumView);
 
     } else if (songCount > 1) {
         this->setEnabled(false);
@@ -623,9 +558,7 @@ void MusicWindow::onArtistSelected(QModelIndex index)
         artistView->browseArtist(index.data(UserRoleObjectID).toString());
         artistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
-        artistView->show();
-        connect(artistView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-        ui->indicator->inhibit();
+        showChild(artistView);
     }
 }
 
@@ -634,14 +567,10 @@ void MusicWindow::onGenreSelected(QModelIndex index)
     this->setEnabled(false);
 
     SingleGenreView *genreView = new SingleGenreView(this, mafwFactory);
+    genreView->browseGenre(index.data(UserRoleObjectID).toString());
     genreView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
-    genreView->show();
-
-    connect(genreView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-    ui->indicator->inhibit();
-
-    genreView->browseGenre(index.data(UserRoleObjectID).toString());
+    showChild(genreView);
 }
 
 void MusicWindow::listSongs()
