@@ -20,7 +20,6 @@
 #include "aboutwindow.h"
 #include "delegates/maindelegate.h"
 #include "rotator.h"
-#include "upnpcontrol.h"
 #include "opendialog.h"
 #include "currentplaylistmanager.h"
 
@@ -73,7 +72,6 @@ signals:
 private:
     Ui::MainWindow *ui;
     MusicWindow *musicWindow;
-    UpnpControl *upnpControl;
     void paintEvent(QPaintEvent*);
     void closeEvent(QCloseEvent *);
     void loadThemeIcons();

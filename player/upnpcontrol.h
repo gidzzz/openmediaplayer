@@ -17,7 +17,9 @@ class UpnpControl : public QListWidget
     Q_OBJECT
 
 public:
-    explicit UpnpControl(QWidget *parent = 0, MafwAdapterFactory *factory = 0);
+    explicit UpnpControl(QWidget *parent);
+
+    void setFactory(MafwAdapterFactory *factory);
 
 signals:
     void childOpened();

@@ -312,15 +312,18 @@
      </widget>
     </item>
    </layout>
-   <widget class="NowPlayingIndicator" name="indicator" native="true">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>380</y>
-      <width>112</width>
-      <height>70</height>
-     </rect>
-    </property>
+   <widget class="QWidget" name="bottomWidget">
+    <layout class="QHBoxLayout" name="bottomLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="UpnpControl" name="upnpControl"/>
+     </item>
+     <item>
+      <widget class="NowPlayingIndicator" name="indicator" native="true"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -371,6 +374,12 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>UpnpControl</class>
+   <extends>QListWidget</extends>
+   <header>upnpcontrol.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>NowPlayingIndicator</class>
    <extends>QWidget</extends>

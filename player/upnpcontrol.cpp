@@ -1,8 +1,7 @@
 #include "upnpcontrol.h"
 
-UpnpControl::UpnpControl(QWidget *parent, MafwAdapterFactory *factory) :
-    QListWidget(parent),
-    mafwFactory(factory)
+UpnpControl::UpnpControl(QWidget *parent) :
+    QListWidget(parent)
 {
     QFont font;
     font.setPointSize(13);
@@ -19,7 +18,11 @@ UpnpControl::UpnpControl(QWidget *parent, MafwAdapterFactory *factory) :
                                 "QListWidget::item {background-color: transparent;}"
                                 "QListWidget::item {selection-color: rgb(%1, %2, %3);}")
                                 .arg(c.red()).arg(c.green()).arg(c.blue()));
+}
 
+void UpnpControl::setFactory(MafwAdapterFactory *factory)
+{
+    mafwFactory = factory;
     mafwUpnpSource = mafwFactory->getUpnpSource();
 
     connect(mafwUpnpSource, SIGNAL(sourceAdded(QString)), this, SLOT(onSourceAdded(QString)));

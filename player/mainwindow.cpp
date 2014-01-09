@@ -74,9 +74,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #ifdef MAFW
     musicWindow = new MusicWindow(this, mafwFactory);
-    upnpControl = new UpnpControl(ui->centralWidget, mafwFactory);
-    connect(upnpControl, SIGNAL(childOpened()), this, SLOT(onChildOpened()));
-    connect(upnpControl, SIGNAL(childClosed()), this, SLOT(onChildClosed()));
 #else
     musicWindow = new MusicWindow(this);
 #endif
@@ -95,8 +92,12 @@ MainWindow::MainWindow(QWidget *parent) :
     reloadSettings();
 
 #ifdef MAFW
+    ui->upnpControl->setFactory(mafwFactory);
+
     ui->indicator->setFactory(mafwFactory);
 #endif
+    ui->indicator->setFixedWidth(112);
+    ui->indicator->setFixedHeight(70);
 
 #ifdef Q_WS_MAEMO_5
     if (mafwTrackerSource->isReady())
@@ -201,6 +202,9 @@ void MainWindow::connectSignals()
     connect(ui->shuffleAllButton, SIGNAL(clicked()), this, SLOT(onShuffleAllClicked()));
 
     connect(ui->menuList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(processListClicks(QListWidgetItem*)));
+
+    connect(ui->upnpControl, SIGNAL(childOpened()), this, SLOT(onChildOpened()));
+    connect(ui->upnpControl, SIGNAL(childClosed()), this, SLOT(onChildClosed()));
 
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
     connect(ui->actionSleeper, SIGNAL(triggered()), this, SLOT(openSleeperDialog()));
@@ -624,11 +628,9 @@ void MainWindow::orientationChanged(int w, int h)
         ui->menuList->show();
     }
 
-    upnpControl->setGeometry(0, h-(56+16+upnpControl->height()), w-(112+8), upnpControl->height());
-    ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
+    ui->bottomWidget->setGeometry(0, h-56-70, w-8, 70);
 
-    upnpControl->raise();
-    ui->indicator->raise();
+    ui->bottomWidget->raise();
 }
 
 void MainWindow::showAbout()
