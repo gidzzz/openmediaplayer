@@ -52,8 +52,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
 
 #ifdef MAFW
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
-    connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)), this, SLOT(onSourceMetadataChanged(QString)));
-    connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
+    connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)), this, SLOT(onMetadataChanged(QString)));
 #endif
 
 #ifdef MAFW
@@ -346,35 +345,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
     }
 }
 
-void VideosWindow::onMetadataChanged(QString metadata, QVariant value)
-{
-    QString thumbFile = value.toString();
-    QString objectId = ui->indicator->currentObjectId();
-    if (metadata == "paused-thumbnail-uri" && objectId.startsWith("localtagfs::videos")) {
-        if (thumbFile.contains("mafw-gst-renderer-")) {
-            QImage thumbnail(thumbFile);
-            if (thumbnail.width() > thumbnail.height()) {
-                thumbnail = thumbnail.scaledToHeight(124, Qt::SmoothTransformation);
-                thumbnail = thumbnail.copy((thumbnail.width()-124)/2, 0, 124, 124);
-            } else {
-                thumbnail = thumbnail.scaledToWidth(124, Qt::SmoothTransformation);
-                thumbnail = thumbnail.copy(0, (thumbnail.height()-124)/2, 124, 124);
-            }
-
-            thumbFile = "/home/user/.fmp_pause_thumbnail/" + QCryptographicHash::hash(objectId.toUtf8(), QCryptographicHash::Md5).toHex() + ".jpeg";
-            thumbnail = thumbnail.scaled(124, 124, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-            thumbnail.save(thumbFile, "JPEG");
-
-            GHashTable* metadata = mafw_metadata_new();
-            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, qstrdup(thumbFile.toUtf8()));
-            mafwTrackerSource->setMetadata(objectId.toUtf8(), metadata);
-            mafw_metadata_release(metadata);
-        }
-        this->listVideos();
-    }
-}
-
-void VideosWindow::onSourceMetadataChanged(QString objectId)
+void VideosWindow::onMetadataChanged(QString objectId)
 {
     if (objectId.startsWith("localtagfs::videos"))
         this->listVideos();

@@ -39,7 +39,6 @@ public:
 
 #ifdef MAFW
     void setFactory(MafwAdapterFactory *mafwFactory = 0);
-    QString currentObjectId();
 #endif
 
 public slots:
@@ -76,7 +75,6 @@ private:
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter *mafwrenderer;
     MafwPlaylistAdapter *playlist;
-    QString rendererObjectId;
     int mafwState;
 #endif
 #ifdef Q_WS_MAEMO_5
@@ -89,7 +87,6 @@ private slots:
 #endif
 #ifdef MAFW
     void onStateChanged(int);
-    void onMediaChanged(int, char* objectId);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onPlaylistReady(MafwPlaylist*,uint,MafwPlayState, const char* objectId, QString);
 #endif

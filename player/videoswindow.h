@@ -48,8 +48,7 @@ private slots:
 #ifdef MAFW
     void listVideos();
     void browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void onMetadataChanged(QString metadata, QVariant value);
-    void onSourceMetadataChanged(QString objectId);
+    void onMetadataChanged(QString objectId);
     void onContainerChanged(QString objectId);
 #endif
 };

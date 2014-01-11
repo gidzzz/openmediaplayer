@@ -83,8 +83,6 @@ void NowPlayingIndicator::connectSignals()
     connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(autoSetVisibility()));
     connect(playlist, SIGNAL(playlistChanged()), this, SLOT(autoSetVisibility()));
 
-    connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
-    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
@@ -92,20 +90,6 @@ void NowPlayingIndicator::connectSignals()
             this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 #endif
 }
-
-#ifdef MAFW
-void NowPlayingIndicator::onMediaChanged(int, char* objectId)
-{
-    rendererObjectId = QString::fromUtf8(objectId);
-}
-#endif
-
-#ifdef MAFW
-QString NowPlayingIndicator::currentObjectId()
-{
-    return rendererObjectId;
-}
-#endif
 
 #ifdef MAFW
 void NowPlayingIndicator::onStateChanged(int state)
@@ -262,7 +246,6 @@ void NowPlayingIndicator::onPlaylistReady(MafwPlaylist*, uint, MafwPlayState, co
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,const char *,QString)));
 
-    rendererObjectId = objectId;
     ready = true;
 
     autoSetVisibility();
