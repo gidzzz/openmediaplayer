@@ -32,9 +32,10 @@ SleeperDialog::SleeperDialog(QWidget *parent) :
     model->appendRow(new QStandardItem(tr("Linear")));
     model->appendRow(new QStandardItem(tr("Exponential")));
     selector->setModel(model);
-    selector->setCurrentIndex(QSettings().value("timer/volumeReduction").toString() == "none" ? NoReduction :
-                              QSettings().value("timer/volumeReduction").toString() == "linear" ? LinearReduction :
-                              QSettings().value("timer/volumeReduction").toString() == "exponential" ? ExponentialReduction : NoReduction);
+    selector->setCurrentIndex(QSettings().value("timer/volumeReduction").toString() == "none"        ? Sleeper::NoReduction :
+                              QSettings().value("timer/volumeReduction").toString() == "linear"      ? Sleeper::LinearReduction :
+                              QSettings().value("timer/volumeReduction").toString() == "exponential" ? Sleeper::ExponentialReduction :
+                                                                                                       Sleeper::NoReduction);
     ui->volumeBox->setPickSelector(selector);
 
     ui->minutesBox->setValue(QSettings().value("timer/minutes", 30).toInt());
@@ -45,6 +46,10 @@ SleeperDialog::SleeperDialog(QWidget *parent) :
     connect(refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTitle()));
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 
+    Sleeper *sleeper = MissionControl::acquire()->sleeper();
+    connect(sleeper, SIGNAL(finished()), this, SLOT(setTimeoutStamp()));
+    setTimeoutStamp(sleeper->end());
+
     Rotator *rotator = Rotator::acquire();
     connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
     orientationChanged(rotator->width(), rotator->height());
@@ -52,6 +57,11 @@ SleeperDialog::SleeperDialog(QWidget *parent) :
 
 SleeperDialog::~SleeperDialog()
 {
+    // A trick to trigger sleeper cleanup if it is not running
+    Sleeper *sleeper = MissionControl::acquire()->sleeper();
+    if (sleeper->end() == -1)
+        sleeper->stop();
+
     delete ui;
 }
 
@@ -81,6 +91,8 @@ void SleeperDialog::setTimeoutStamp(qint64 timeoutStamp)
 
 void SleeperDialog::onButtonClicked(QAbstractButton *button)
 {
+    Sleeper *sleeper = MissionControl::acquire()->sleeper();
+
     if (button == ui->buttonBox->button(QDialogButtonBox::Ok)) {
         switch (static_cast<QMaemo5ListPickSelector*>(ui->actionBox->pickSelector())->currentIndex()) {
             case 0: QSettings().setValue("timer/action", "stop-playback"); break;
@@ -90,19 +102,21 @@ void SleeperDialog::onButtonClicked(QAbstractButton *button)
 
         int reduction = static_cast<QMaemo5ListPickSelector*>(ui->volumeBox->pickSelector())->currentIndex();
         switch (reduction) {
-            case NoReduction: QSettings().setValue("timer/volumeReduction", "none"); break;
-            case LinearReduction: QSettings().setValue("timer/volumeReduction", "linear"); break;
-            case ExponentialReduction: QSettings().setValue("timer/volumeReduction", "exponential"); break;
+            case Sleeper::NoReduction: QSettings().setValue("timer/volumeReduction", "none"); break;
+            case Sleeper::LinearReduction: QSettings().setValue("timer/volumeReduction", "linear"); break;
+            case Sleeper::ExponentialReduction: QSettings().setValue("timer/volumeReduction", "exponential"); break;
         }
 
         QSettings().setValue("timer/minutes", ui->minutesBox->value());
 
-        emit timerRequested(ui->minutesBox->value()*60000, reduction);
+        sleeper->start(ui->minutesBox->value()*60000, reduction);
     }
 
     else if (button == ui->buttonBox->button(QDialogButtonBox::Reset)) {
-        emit timerRequested(-1, NoReduction);
+        sleeper->stop();
     }
+
+    setTimeoutStamp(sleeper->end());
 }
 
 void SleeperDialog::orientationChanged(int w, int h)

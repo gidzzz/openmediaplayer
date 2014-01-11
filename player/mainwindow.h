@@ -9,6 +9,7 @@
 #include <QtGui>
 #include <QDBusConnection>
 
+#include "missioncontrol.h"
 #include "musicwindow.h"
 #include "videoswindow.h"
 #include "internetradiowindow.h"
@@ -66,26 +67,15 @@ public slots:
     Q_SCRIPTABLE void play_saved_playlist(const QString &playlistName, bool shuffle = false);
     Q_SCRIPTABLE void top_application();
 
-signals:
-    void sleeperSet(qint64 timestamp);
-
 private:
     Ui::MainWindow *ui;
     MusicWindow *musicWindow;
     void paintEvent(QPaintEvent*);
-    void closeEvent(QCloseEvent *);
     void loadThemeIcons();
     void setButtonIcons();
     void connectSignals();
     void closeChildren();
-    QTimer *sleeperTimer;
-    QTimer *sleeperVolumeTimer;
     QTimer *resumeTimer;
-    qint64 sleeperStartStamp;
-    qint64 sleeperTimeoutStamp;
-    int volume;
-    int volumeReduction;
-    void scheduleSleeperVolume();
 #ifdef Q_WS_MAEMO_5
     QMaemo5InformationBox *updatingInfoBox;
     QProgressBar *updatingProgressBar;
@@ -126,13 +116,8 @@ private slots:
     void onChildOpened();
     void onNowPlayingWindowHidden();
     void onChildClosed();
-    void setSleeperTimer(int seconds, int reduction);
-    void stepSleeperVolume();
-    void onSleeperTimeout();
 #ifdef MAFW
-    void onPropertyChanged(const QDBusMessage &msg);
     void setupPlayback();
-    void getInitialVolume(int volume);
     void trackerSourceReady();
     void radioSourceReady();
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);

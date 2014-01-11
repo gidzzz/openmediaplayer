@@ -56,6 +56,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mafwTrackerSource = mafwFactory->getTrackerSource();
     mafwRadioSource = mafwFactory->getRadioSource();
     playlist = mafwFactory->getPlaylistAdapter();
+
+    MissionControl::acquire()->setFactory(mafwFactory);
+
     if (mafwrenderer->isRendererReady())
         mafwrenderer->getStatus();
     else
@@ -77,12 +80,6 @@ MainWindow::MainWindow(QWidget *parent) :
 #else
     musicWindow = new MusicWindow(this);
 #endif
-
-    sleeperTimeoutStamp = -1;
-    sleeperTimer = new QTimer(this);
-    sleeperTimer->setSingleShot(true);
-    sleeperVolumeTimer = new QTimer(this);
-    sleeperVolumeTimer->setSingleShot(true);
 
     connectSignals();
 
@@ -134,6 +131,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    mafwrenderer->enablePlayback(false);
+
+    QString action = QSettings().value("main/onApplicationExit", "stop-playback").toString();
+
+    if (action == "stop-playback")
+        mafwrenderer->stop();
+    else if (action == "pause-playback")
+        mafwrenderer->pause();
+
     delete ui;
 }
 
@@ -213,9 +219,6 @@ void MainWindow::connectSignals()
 
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
 
-    connect(sleeperTimer, SIGNAL(timeout()), this, SLOT(onSleeperTimeout()));
-    connect(sleeperVolumeTimer, SIGNAL(timeout()), this, SLOT(stepSleeperVolume()));
-
 #ifdef MAFW
     connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
     connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
@@ -231,12 +234,8 @@ void MainWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
-                                          "/com/nokia/mafw/renderer/gstrenderer",
-                                          "com.nokia.mafw.extension",
-                                          "property_changed",
-                                          this, SLOT(onPropertyChanged(const QDBusMessage &)));
 #endif
+
 #ifdef Q_WS_MAEMO_5
     QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Connected",
                                          this, SLOT(onWirelessHeadsetConnected()));
@@ -677,123 +676,7 @@ void MainWindow::reloadSettings()
 
 void MainWindow::openSleeperDialog()
 {
-    SleeperDialog *sleeperDialog = new SleeperDialog(this);
-    connect(sleeperDialog, SIGNAL(timerRequested(int,int)), this, SLOT(setSleeperTimer(int,int)));
-    connect(this, SIGNAL(sleeperSet(qint64)), sleeperDialog, SLOT(setTimeoutStamp(qint64)));
-    sleeperDialog->setTimeoutStamp(sleeperTimeoutStamp);
-    sleeperDialog->show();
-}
-
-void MainWindow::setSleeperTimer(int interval, int reduction)
-{
-    sleeperTimer->stop();
-    sleeperVolumeTimer->stop();
-    volumeReduction = reduction;
-
-    if (interval >= 0) {
-        qDebug() << "Setting sleeper timer to" << interval << "ms";
-
-        sleeperTimer->setInterval(interval);
-        sleeperTimer->start();
-        sleeperStartStamp = QDateTime::currentMSecsSinceEpoch();
-        sleeperTimeoutStamp = sleeperStartStamp + interval;
-
-#ifdef MAFW
-        connect(mafwrenderer, SIGNAL(signalGetVolume(int)), this, SLOT(getInitialVolume(int)));
-        mafwrenderer->getVolume();
-#endif
-    } else {
-        qDebug() << "Aborting sleeper";
-        sleeperTimeoutStamp = -1;
-    }
-
-    emit sleeperSet(sleeperTimeoutStamp);
-}
-
-#ifdef MAFW
-void MainWindow::getInitialVolume(int volume)
-{
-    disconnect(mafwrenderer, SIGNAL(signalGetVolume(int)), this, SLOT(getInitialVolume(int)));
-    this->volume = volume;
-    scheduleSleeperVolume();
-}
-#endif
-
-#ifdef MAFW
-void MainWindow::onPropertyChanged(const QDBusMessage &msg)
-{
-    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
-        volume = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
-        scheduleSleeperVolume();
-    }
-}
-#endif
-
-void MainWindow::scheduleSleeperVolume()
-{
-    if (volumeReduction && volume > 0) {
-        qint64 timespan = sleeperTimeoutStamp - QDateTime::currentMSecsSinceEpoch();
-        if (timespan > 0) {
-            switch (volumeReduction) {
-                case SleeperDialog::LinearReduction:
-                    sleeperVolumeTimer->setInterval(timespan / volume);
-                    break;
-                case SleeperDialog::ExponentialReduction:
-                    // The following algorithm is used to determine the timer interval:
-                    //     1. Calculate the reference volume for the current moment.
-                    //     2. Calculate the scale between the current volume and the reference volume from step 1.
-                    //     3. Calculate the reference volume for the current volume minus 1 using the scale from step 2.
-                    //     4. Calculate the moment for which the reference volume from step 1 would be equal to the reference volume from step 3.
-                    //     5. Calculate the interval as the difference between the moment from step 4 and the current moment.
-
-                    // Exponentially decreasing reference volume can be calculated using the follwing formula:
-                    //     v(t) = 100 - (exp(a*t)-1)
-                    // Parameter a is constant and adjusts the slope.
-                    // Parameter t is the moment for which the reference volume should be calculated.
-                    // MAFW accepts volume levels between 0 and 100, so t should be between 0 and ln(100 + 1) / a.
-
-                    const int a = 5;
-                    const double tMax = 0.92302410336825;
-
-                    qint64 currentStamp = QDateTime::currentMSecsSinceEpoch();
-                    double t = tMax * (currentStamp-sleeperStartStamp) / (sleeperTimeoutStamp-sleeperStartStamp);
-                    double referenceVolume = 101 - qExp(a*t);
-                    double scale = referenceVolume / volume;
-                    double nextReferenceVolume = (volume-1) * scale;
-                    double tNext = qLn(101-nextReferenceVolume) / a;
-                    int interval = sleeperStartStamp + (sleeperTimeoutStamp-sleeperStartStamp)*(tNext/tMax) - currentStamp;
-                    sleeperVolumeTimer->setInterval(qMax(0, interval));
-                    break;
-            }
-            sleeperVolumeTimer->start();
-            qDebug() << "Current volume level is" << volume << "and next step is in" << sleeperVolumeTimer->interval() << "ms";
-        }
-    }
-}
-
-void MainWindow::stepSleeperVolume()
-{
-#ifdef MAFW
-    volume = qMax(0, volume-1);
-    mafwrenderer->setVolume(volume);
-#endif
-}
-
-void MainWindow::onSleeperTimeout()
-{
-    emit sleeperSet(sleeperTimeoutStamp = -1);
-
-    QString action = QSettings().value("timer/action", "stop-playback").toString();
-    qDebug() << "Sleeper countdown finished with action" << action;
-
-#ifdef MAFW
-    if (action == "stop-playback")
-        mafwrenderer->stop();
-    else if (action == "pause-playback")
-        mafwrenderer->pause();
-    else if (action == "close-application")
-        this->close();
-#endif
+    (new SleeperDialog(this))->show();
 }
 
 void MainWindow::showMusicWindow()
@@ -941,18 +824,6 @@ void MainWindow::onShuffleAllClicked()
     CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
     playlistToken = cpm->appendBrowsed("localtagfs::music/songs");
-#endif
-}
-
-void MainWindow::closeEvent(QCloseEvent *)
-{
-    QString action = QSettings().value("main/onApplicationExit", "stop-playback").toString();
-#ifdef MAFW
-    mafwrenderer->enablePlayback(false);
-    if (action == "stop-playback")
-        mafwrenderer->stop();
-    else if (action == "pause-playback")
-        mafwrenderer->pause();
 #endif
 }
 

@@ -12,6 +12,7 @@
 
 #include "includes.h"
 #include "rotator.h"
+#include "missioncontrol.h"
 
 namespace Ui {
     class SleeperDialog;
@@ -22,26 +23,19 @@ class SleeperDialog : public QDialog
     Q_OBJECT
 
 public:
-    enum VolumeReduction {
-        NoReduction = 0,
-        LinearReduction,
-        ExponentialReduction
-    };
-
     explicit SleeperDialog(QWidget *parent = 0);
     ~SleeperDialog();
 
 public slots:
-    void setTimeoutStamp(qint64 timeoutStamp);
-
-signals:
-    void timerRequested(int interval, int reduction);
+    void setTimeoutStamp(qint64 timeoutStamp = -1);
 
 private:
     Ui::SleeperDialog *ui;
-    void keyPressEvent(QKeyEvent *e);
+
     QTimer *refreshTimer;
     qint64 timeoutStamp;
+
+    void keyPressEvent(QKeyEvent *e);
 
 private slots:
     void refreshTitle();

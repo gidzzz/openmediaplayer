@@ -37,6 +37,8 @@ SOURCES += \
     delegates/maindelegate.cpp \
     editlyrics.cpp \
     mediaart.cpp \
+    missioncontrol.cpp \
+    sleeper.cpp \
     playlistquerymanager.cpp \
     upnpcontrol.cpp \
     upnpview.cpp \
@@ -88,6 +90,8 @@ HEADERS += \
     delegates/maindelegate.h \
     editlyrics.h \
     mediaart.h \
+    missioncontrol.h \
+    sleeper.h \
     playlistquerymanager.h \
     upnpcontrol.h \
     upnpview.h \
