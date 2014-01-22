@@ -1,5 +1,8 @@
 #include "upnpview.h"
 
+const QString AudioMime = MAFW_METADATA_VALUE_MIME_AUDIO;
+const QString VideoMime = MAFW_METADATA_VALUE_MIME_VIDEO;
+
 UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapter *source) :
     BrowserWindow(parent, factory),
     mafwFactory(factory),
@@ -33,7 +36,8 @@ void UpnpView::browseObjectId(QString objectId)
     browseId = mafwSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
                                         MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                          MAFW_METADATA_KEY_DURATION,
-                                                         MAFW_METADATA_KEY_MIME),
+                                                         MAFW_METADATA_KEY_MIME,
+                                                         MAFW_METADATA_KEY_PROTOCOL_INFO),
                                         0, MAFW_SOURCE_BROWSE_ALL);
 }
 
@@ -51,13 +55,52 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
         title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
-        mime = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown type)");
+        if (v) mime = QString::fromUtf8(g_value_get_string(v));
 
-        if (mime.startsWith("audio") || mime.startsWith("video")) {
+        if (mime != MAFW_METADATA_VALUE_MIME_CONTAINER) {
+            // UPnP source does not always report correct MIME under the proper
+            // key, so try to obtain it by other means.
+            v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PROTOCOL_INFO);
+
+            if (v) {
+                // Protocol info value should start with something like this:
+                // "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;"
+                QString info = QString::fromUtf8(g_value_get_string(v));
+
+                int colon2 = info.indexOf(':', info.indexOf(':') + 1);
+
+                if (colon2 != -1 && info.length() - colon2 > 5) {
+                    QStringRef infoMime(&info, colon2+1, 5);
+
+                    if (!infoMime.compare("audio")) {
+                        mime = AudioMime;
+                    } else if (!infoMime.compare("video")) {
+                        mime = VideoMime;
+                    } else {
+                        v = NULL;
+                    }
+                } else {
+                    v = NULL;
+                }
+            }
+
+            if (!v) {
+                if (mime.startsWith("audio")) {
+                    mime = AudioMime;
+                } else if (mime.startsWith("video")) {
+                    mime = VideoMime;
+                } else {
+                    mime = tr("(unknown type)");
+                }
+            }
+        }
+
+        if (mime == AudioMime || mime == VideoMime) {
             v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
             duration = v ? g_value_get_int(v) : Duration::Unknown;
-        } else
+        } else {
             duration = Duration::Blank;
+        }
 
         QStandardItem *item = new QStandardItem();
 
@@ -66,11 +109,11 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
         item->setData(mime, UserRoleMIME);
         item->setData(title, UserRoleTitle);
 
-        if (mime == "x-mafw/container")
+        if (mime == MAFW_METADATA_VALUE_MIME_CONTAINER)
             item->setIcon(QIcon::fromTheme("general_folder"));
-        else if (mime.startsWith("audio"))
+        else if (mime == AudioMime)
             item->setIcon(QIcon::fromTheme("general_audio_file"));
-        else if (mime.startsWith("video"))
+        else if (mime == VideoMime)
             item->setIcon(QIcon::fromTheme("general_video_file"));
         else
             item->setIcon(QIcon::fromTheme("filemanager_unknown_file"));
@@ -89,7 +132,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
 
 void UpnpView::onContextMenuRequested(const QPoint &pos)
 {
-    if (ui->objectList->currentIndex().data(UserRoleMIME).toString().startsWith("audio")) {
+    if (ui->objectList->currentIndex().data(UserRoleMIME).toString() == AudioMime) {
         QMenu *contextMenu = new KbMenu(this);
         contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddOneToNowPlaying()));
@@ -103,7 +146,7 @@ void UpnpView::onItemActivated(QModelIndex index)
     QString objectId = index.data(UserRoleObjectID).toString();
     QString mime = index.data(UserRoleMIME).toString();
 
-    if (mime == "x-mafw/container") {
+    if (mime == MAFW_METADATA_VALUE_MIME_CONTAINER) {
         this->setEnabled(false);
         UpnpView *window = new UpnpView(this, mafwFactory, mafwSource);
         window->browseObjectId(objectId);
@@ -113,7 +156,7 @@ void UpnpView::onItemActivated(QModelIndex index)
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
-    } else if (mime.startsWith("audio")) {
+    } else if (mime == AudioMime) {
         this->setEnabled(false);
         playlist->assignAudioPlaylist();
         playlist->clear();
@@ -121,18 +164,18 @@ void UpnpView::onItemActivated(QModelIndex index)
 
         bool filter = QSettings().value("main/playlistFilter", false).toBool();
 
-        appendAllToPlaylist("audio", filter);
+        appendAllToPlaylist(AudioMime, filter);
 
         int sameTypeIndex = 0;
         if (filter) {
             int selectedRow = index.row();
             for (int i = 0; i < selectedRow; i++)
-                if (objectProxyModel->index(i,0).data(UserRoleMIME).toString().startsWith("audio"))
+                if (objectProxyModel->index(i,0).data(UserRoleMIME).toString() == AudioMime)
                     ++sameTypeIndex;
         } else {
             int selectedRow = objectProxyModel->mapToSource(index).row();
             for (int i = 0; i < selectedRow; i++)
-                if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith("audio"))
+                if (objectModel->item(i)->data(UserRoleMIME).toString() == AudioMime)
                     ++sameTypeIndex;
         }
 
@@ -146,25 +189,25 @@ void UpnpView::onItemActivated(QModelIndex index)
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
         ui->indicator->inhibit();
 
-    } else if (mime.startsWith("video")) {
+    } else if (mime == VideoMime) {
         this->setEnabled(false);
         playlist->assignVideoPlaylist();
         playlist->clear();
 
         bool filter = QSettings().value("main/playlistFilter", false).toBool();
 
-        appendAllToPlaylist("video", filter);
+        appendAllToPlaylist(VideoMime, filter);
 
         int sameTypeIndex = 0;
         if (filter) {
             int selectedRow = index.row();
             for (int i = 0; i < selectedRow; i++)
-                if (objectProxyModel->index(i,0).data(UserRoleMIME).toString().startsWith("video"))
+                if (objectProxyModel->index(i,0).data(UserRoleMIME).toString() == VideoMime)
                     ++sameTypeIndex;
         } else {
             int selectedRow = objectProxyModel->mapToSource(index).row();
             for (int i = 0; i < selectedRow; i++)
-                if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith("video"))
+                if (objectModel->item(i)->data(UserRoleMIME).toString() == VideoMime)
                     ++sameTypeIndex;
         }
 
@@ -210,7 +253,7 @@ void UpnpView::addAllToNowPlaying()
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    notifyOnAddedToNowPlaying(appendAllToPlaylist("audio", true));
+    notifyOnAddedToNowPlaying(appendAllToPlaylist(AudioMime, true));
 }
 
 int UpnpView::appendAllToPlaylist(QString type, bool filter)
@@ -221,11 +264,11 @@ int UpnpView::appendAllToPlaylist(QString type, bool filter)
     int sameTypeCount = 0;
     if (filter) {
         for (int i = 0; i < visibleCount; i++)
-            if (objectProxyModel->index(i,0).data(UserRoleMIME).toString().startsWith(type))
+            if (objectProxyModel->index(i,0).data(UserRoleMIME).toString() == type)
                 itemAddBuffer[sameTypeCount++] = qstrdup(objectProxyModel->index(i,0).data(UserRoleObjectID).toString().toUtf8());
     } else {
         for (int i = 0; i < visibleCount; i++)
-            if (objectModel->item(i)->data(UserRoleMIME).toString().startsWith(type))
+            if (objectModel->item(i)->data(UserRoleMIME).toString() == type)
                 itemAddBuffer[sameTypeCount++] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
     }
 
