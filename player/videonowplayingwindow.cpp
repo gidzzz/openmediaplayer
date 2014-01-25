@@ -227,12 +227,15 @@ void VideoNowPlayingWindow::connectSignals()
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
     // Metadata
-    connect(mafwrenderer, SIGNAL(metadataChanged(QString,QVariant)),
-            this, SLOT(onMetadataChanged(QString,QVariant)));
-    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
-            this, SLOT(handleRendererMetadata(GHashTable*,QString,QString)));
-    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(handleSourceMetadata(QString, GHashTable*, QString)));
+    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
+    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
+    QMapIterator<QString,QVariant> i(mw->metadata()); i.toBack();
+    while (i.hasPrevious()) {
+        // Going backwards is necessary for media type detection to work, which
+        // depends on video codec arriving before audio codec.
+        i.previous();
+        onMetadataChanged(i.key(), i.value());
+    }
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -247,76 +250,86 @@ void VideoNowPlayingWindow::connectSignals()
                                           this, SLOT(onErrorOccured(const QDBusMessage &)));
 }
 
-#ifdef MAFW
-void VideoNowPlayingWindow::onMetadataChanged(QString name, QVariant value)
+void VideoNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
 {
-    qDebug() << "Metadata changed:" << name << "=" << value;
+    if (key == MAFW_METADATA_KEY_AUDIO_CODEC) {
+        // Try to detect whether we have a video or an audio-only stream. If not
+        // sure, take the safe approach by keeping the video window open.
+        // NOTE: The implemented solution assumes that video codec always arrives
+        // before audio codec, but it based merely on observations.
+        if (gotInitialPlayState
+        && !value.isNull()
+        &&  MissionControl::acquire()->metadataWatcher()->metadata().value(MAFW_METADATA_KEY_VIDEO_CODEC).isNull()
+#ifdef MAFW_WORKAROUNDS
+        // Apparently, the problem described below affects also some local files.
+        // Try to solve that by disabling the detection for all local files.
+        && !currentObjectId.startsWith("localtagfs::")
+        // Looks like the renderer cannot tell us the video codec in RTSP streams.
+        // Being able to play something without knowing the codec smells fishy,
+        // so I take it for a bug in MAFW and I'm putting this as a workaround.
+        && !currentObjectId.startsWith("urisource::rtsp://"))
+#endif
+        {
+            qDebug() << "Video codec info unavailable, switching to radio mode";
+
+            // The stream has been identified as audio-only, which means that the radio
+            // window is a more suitable option. To not lose the current playlist,
+            // the transition will happen by deleting the radio playlist and renaming
+            // the video playlist to radio playlist.
+            MafwPlaylistManagerAdapter *playlistManager = MafwPlaylistManagerAdapter::get();
+            playlistManager->deletePlaylist("FmpRadioPlaylist");
+            mafw_playlist_set_name(MAFW_PLAYLIST(playlistManager->createPlaylist("FmpVideoPlaylist")), "FmpRadioPlaylist");
+
+            RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
+
+            // The video window will be closed because the radio window took over,
+            // so don't stop/save the playback state in this case.
+            saveStateOnClose = false;
+
+            delete this;
+
+            window->show();
+        }
+    }
 
     // Try to perform fit-to-screen if the necessary info has arrived
-    if (name == MAFW_METADATA_KEY_RES_X) {
+    else if (key == MAFW_METADATA_KEY_RES_X) {
         videoWidth = value.toInt();
         setFitToScreen(fitToScreen);
     }
-    else if (name == MAFW_METADATA_KEY_RES_Y) {
+    else if (key == MAFW_METADATA_KEY_RES_Y) {
         videoHeight = value.toInt();
         setFitToScreen(fitToScreen);
     }
 
-    mafwrenderer->getCurrentMetadata();
-
-    // Duration sometimes is misreported for UPnP, so don't set it from here unnecessarily
-    if (videoLength == Duration::Unknown && name == "duration") {
-        videoLength = value.toInt();
+    else if (key == MAFW_METADATA_KEY_DURATION) {
+        videoLength = value.isNull() ? Duration::Unknown : value.toInt();
         ui->videoLengthLabel->setText(mmss_len(videoLength));
         ui->positionSlider->setRange(0, videoLength);
     }
-}
-#endif
-
-#ifdef MAFW
-void VideoNowPlayingWindow::handleRendererMetadata(GHashTable *metadata, QString, QString error)
-{
-    // Try to detect whether we have a video or an audio-only stream. If not sure,
-    // take the safe approach by keeping the video window open.
-    if (metadata != NULL
-#ifdef MAFW_WORKAROUNDS
-    // Apparently, the problem described below affects also some local files.
-    // Try to solve that by disabling the detection for all local files.
-    && !currentObjectId.startsWith("localtagfs::")
-    // Looks like the renderer cannot tell us the video codec in RTSP streams.
-    // Being able to play something without knowing the codec smells fishy,
-    // so I take it for a bug in MAFW and I'm putting this as a workaround.
-    && !currentObjectId.startsWith("urisource::rtsp://")
-#endif
-    &&  mafw_metadata_first(metadata, MAFW_METADATA_KEY_AUDIO_CODEC)
-    && !mafw_metadata_first(metadata, MAFW_METADATA_KEY_VIDEO_CODEC))
-    {
-        qDebug() << "Video codec info unavailable, switching to radio mode";
-
-        // The stream has been identified as audio-only, which means that the radio
-        // window is a more suitable option. To not lose the current playlist,
-        // the transition will happen by deleting the radio playlist and renaming
-        // the video playlist to radio playlist.
-        MafwPlaylistManagerAdapter *playlistManager = MafwPlaylistManagerAdapter::get();
-        playlistManager->deletePlaylist("FmpRadioPlaylist");
-        mafw_playlist_set_name(MAFW_PLAYLIST(playlistManager->createPlaylist("FmpVideoPlaylist")), "FmpRadioPlaylist");
-
-        RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
-
-        // The video window will be closed because the radio window took over,
-        // so don't stop/save the playback state in this case.
-        saveStateOnClose = false;
-
-        delete this;
-
-        // Finally show the radio window.
-        window->show();
+    else if (key == MAFW_METADATA_KEY_IS_SEEKABLE) {
+        ui->positionSlider->setEnabled(value.toBool());
     }
+    else if (key == MAFW_METADATA_KEY_URI) {
+        uri = value.toString();
+    }
+    else if (key == MAFW_METADATA_KEY_PAUSED_POSITION) {
+        if (resumePosition != Duration::Blank)
+            resumePosition = value.isNull() ? Duration::Unknown : value.toInt();
 
-    if (!error.isEmpty())
-        qDebug() << error;
+        qDebug() << "Position to resume from:" << resumePosition;
+
+        // Check if things have settled down and the proper playback has started
+        if (gotCurrentPlayState) {
+            // We are late with fetching the paused position, but in practice it
+            // is usually a few seconds at most, so restoring the saved position
+            // is probably still desired.
+            if (resumePosition > 0)
+                mafwrenderer->setPosition(SeekAbsolute, resumePosition);
+            resumePosition = Duration::Blank;
+        }
+    }
 }
-#endif
 
 #ifdef MAFW
 void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char* objectId, QString error)
@@ -341,26 +354,15 @@ void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState
 #ifdef MAFW
 void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
-    qDebug() << "Media changed" << objectId;
-
     // Store the last received object identifier as current
     currentObjectId = QString::fromUtf8(objectId);
 
     // Reset the last received position from the previous track
     currentPosition = 0;
 
-    // Mark the resume position as unkown for the time of waiting for metadata,
-    // provided resuming has not been disabled yet.
-    if (resumePosition != Duration::Blank) {
-        // Resuming is supposed to be enabled only for the first video played
-        resumePosition = gotInitialPlayState ? Duration::Blank : Duration::Unknown;
-    }
-
-    // The media source can vary, obtain the right one and ask it for basic metadata
-    mafwSource->setSource(mafwFactory->getTempSource()->getSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
-    mafwSource->getMetadata(currentObjectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI,
-                                                                       MAFW_METADATA_KEY_DURATION,
-                                                                       MAFW_METADATA_KEY_PAUSED_POSITION));
+    // Resuming should be enabled only for the first video played
+    if (gotInitialPlayState)
+        resumePosition = Duration::Blank;
 
     // Rearrange the UI according to the origin of the media
     if (currentObjectId.startsWith("localtagfs::")) { // local storage
@@ -554,7 +556,6 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
             connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
             connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
-            connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), ui->positionSlider, SLOT(setEnabled(bool)));
 
             // Position slider
             connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
@@ -731,54 +732,6 @@ void VideoNowPlayingWindow::setDNDAtom(bool dnd)
 #endif
 
 #ifdef MAFW
-void VideoNowPlayingWindow::handleSourceMetadata(QString objectId, GHashTable *metadata, QString error)
-{
-    // Ignore stray results that could apppear after quickly changing media
-    if (objectId != currentObjectId) return;
-
-    if (metadata != NULL) {
-        GValue *v;
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        uri = v ? g_value_get_string (v) : QString();
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        if (v) videoLength = g_value_get_int (v);
-
-        // Extract the paused position only if resuming is still enabled
-        if (resumePosition != Duration::Blank) {
-            v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_POSITION);
-            if (v) resumePosition = g_value_get_int (v);
-        }
-
-        ui->videoLengthLabel->setText(mmss_len(videoLength));
-        ui->positionSlider->setRange(0, videoLength);
-    }
-
-    qDebug() << "Position to resume from:" << resumePosition;
-
-    // If it was impossible to determine the paused position, give it the value
-    // of 0. This will on one hand prevent resuming if there is simply no info,
-    // on the other, in opposition to Duration::Blank, it will allow to set the
-    // paused position again, in case this function was called as a result of
-    // some song not being stopped in time before creating this window.
-    if (resumePosition == Duration::Unknown)
-        resumePosition = 0;
-
-    // Check if things have settled down and the proper playback has started
-    if (gotCurrentPlayState) {
-        // We are late with fetching the paused position, but in practice it is
-        // usually a few seconds at most, so restoring the saved position is
-        // probably still desired.
-        if (resumePosition > 0)
-            mafwrenderer->setPosition(SeekAbsolute, resumePosition);
-        resumePosition = Duration::Blank;
-    }
-
-    if (!error.isEmpty())
-        qDebug() << error;
-}
-
 // Move playback forward by a small amount
 void VideoNowPlayingWindow::slowFwd()
 {

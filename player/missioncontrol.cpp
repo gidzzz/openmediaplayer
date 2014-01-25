@@ -8,28 +8,50 @@ MissionControl* MissionControl::acquire()
 }
 
 MissionControl::MissionControl() :
+    m_metadataWatcher(NULL),
+    m_lyricsManager(NULL),
     m_sleeper(NULL)
 {
 }
 
 void MissionControl::setFactory(MafwAdapterFactory *factory)
 {
-    mafwRenderer = factory->getRenderer();
-    mafwTrackerSource = factory->getTrackerSource();
+    mafwFactory = factory;
 
-    // Beware, it is possible to miss rendererReady() if not connected right
-    // after creating the renderer.
-    connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getStatus()));
-    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
-    connect(mafwRenderer, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
+    m_metadataWatcher = new MetadataWatcher(factory);
+
+    connect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)),
+            this, SLOT(onMetadataChanged(QString,QVariant)));
+}
+
+void MissionControl::reloadSettings()
+{
+    if (m_lyricsManager)
+        m_lyricsManager->deleteLater();
+
+    // Replacing an old instance with a new one will cause depending objects to
+    // be disconnected, but this should not really happen due to NowPlayingWindow
+    // also being destroyed when reloading (in MainWindow). Anyway, it still
+    // might be a good idea to implement online reloading of plugins.
+    m_lyricsManager = QSettings().value("lyrics/enable").toBool()
+                    ? new LyricsManager(this)
+                    : NULL;
+}
+
+LyricsManager* MissionControl::lyricsManager()
+{
+    return m_lyricsManager;
+}
+
+MetadataWatcher* MissionControl::metadataWatcher()
+{
+    return m_metadataWatcher;
 }
 
 Sleeper* MissionControl::sleeper()
 {
     if (!m_sleeper) {
-        m_sleeper = new Sleeper(this, mafwRenderer);
+        m_sleeper = new Sleeper(this, mafwFactory->getRenderer());
         connect(m_sleeper, SIGNAL(finished()), this, SLOT(onSleeperTimeout()));
     }
 
@@ -42,50 +64,19 @@ void MissionControl::onSleeperTimeout()
     m_sleeper = NULL;
 }
 
-void MissionControl::onStatusReceived(MafwPlaylist *, uint, MafwPlayState, const char *objectId, QString)
+void MissionControl::onMetadataChanged(QString key, QVariant value)
 {
-    disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-
-    currentObjectId = QString::fromUtf8(objectId);
-}
-
-void MissionControl::onMediaChanged(int, char *objectId)
-{
-    currentObjectId = QString::fromUtf8(objectId);
-}
-
-void MissionControl::onMetadataChanged(QString metadata, QVariant value)
-{
-    if (metadata == MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI && currentObjectId.startsWith("localtagfs::videos")) {
-        qDebug() << "Thumbnail changed" << value;
-        QString thumbFile = value.toString();
-        if (thumbFile.contains("mafw-gst-renderer-")) {
-            QImage thumbnail(thumbFile);
-            if (thumbnail.width() > thumbnail.height()) {
-                // Horizontal, fill height
-                thumbnail = thumbnail.scaledToHeight(124, Qt::SmoothTransformation);
-                thumbnail = thumbnail.copy((thumbnail.width()-124)/2, 0, 124, 124);
-            } else {
-                // Vertical, fill width
-                thumbnail = thumbnail.scaledToWidth(124, Qt::SmoothTransformation);
-                thumbnail = thumbnail.copy(0, (thumbnail.height()-124)/2, 124, 124);
-            }
-
-            thumbFile = "/home/user/.fmp_pause_thumbnail/"
-                      + QCryptographicHash::hash(currentObjectId.toUtf8(), QCryptographicHash::Md5).toHex()
-                      + ".jpeg";
-
-            thumbnail.save(thumbFile, "JPEG");
-
-            GHashTable* metadata = mafw_metadata_new();
-            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, qstrdup(thumbFile.toUtf8()));
-            mafwTrackerSource->setMetadata(currentObjectId.toUtf8(), metadata);
-            mafw_metadata_release(metadata);
+    // Fetch lyrics if enough details become available
+    if (!value.isNull()) {
+        if (key == MAFW_METADATA_KEY_ARTIST) {
+            currentArtist = value.toString();
+            if (m_lyricsManager && !currentTitle.isNull())
+                m_lyricsManager->fetchLyrics(currentArtist, currentTitle);
         }
-
-        // It is not necessary to inform VideosWindow directly about the change,
-        // because it should receive the notification from MAFW, although that can
-        // take a little bit longer.
+        else if (key == MAFW_METADATA_KEY_TITLE) {
+            currentTitle = value.toString();
+            if (m_lyricsManager && !currentArtist.isNull())
+                m_lyricsManager->fetchLyrics(currentArtist, currentTitle);
+        }
     }
 }

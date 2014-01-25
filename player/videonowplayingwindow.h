@@ -13,6 +13,7 @@
 #include "includes.h"
 #include "confirmdialog.h"
 #include "rotator.h"
+#include "missioncontrol.h"
 #include "radionowplayingwindow.h"
 #include "bookmarkdialog.h"
 
@@ -117,6 +118,7 @@ private slots:
     void onVolumeSliderReleased();
     void onPrevButtonClicked();
     void onNextButtonClicked();
+    void onMetadataChanged(QString key, QVariant value);
     void onScreenLocked(bool locked);
     void repeatKey();
 #ifdef MAFW
@@ -127,13 +129,10 @@ private slots:
     void fastRev();
     void onMediaChanged(int, char *objectId);
     void onPropertyChanged(const QDBusMessage &msg);
-    void onMetadataChanged(QString name, QVariant value);
     void onStateChanged(int state);
     void onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* objectId, QString error);
     void onBufferingInfo(float status);
     void onPositionChanged(int position, QString);
-    void handleRendererMetadata(GHashTable *metadata, QString, QString error);
-    void handleSourceMetadata(QString objectId, GHashTable *metadata, QString error);
     void onErrorOccured(const QDBusMessage &msg);
 #endif
     void onPositionSliderPressed();

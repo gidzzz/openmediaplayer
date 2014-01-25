@@ -137,23 +137,25 @@ void LyricsManager::deleteLyrics(QString artist, QString title)
 
 void LyricsManager::fetchLyrics(QString artist, QString title, bool useCache)
 {
-        // Abort a possible pending operation
-        if (retry != -1) {
-            providersList.at(retry)->abort();
-            retry = -1;
-        }
+    // Abort a possible pending operation
+    if (retry != -1) {
+        providersList.at(retry)->abort();
+        retry = -1;
+    }
 
-        // Store info about the processed song
-        this->artist = artist;
-        this->title = title;
+    // Store info about the processed song
+    this->artist = artist;
+    this->title = title;
 
-        // Fetch lyrics from cache or start querying providers
-        if (useCache && QFile(cacheFilePath(artist, title)).exists()) {
-            emit lyricsFetched(loadLyrics(artist, title));
-        } else {
-            connectionError = false;
-            queryNextProvider();
-        }
+    // Fetch lyrics from cache or start querying providers
+    if (useCache && QFile(cacheFilePath(artist, title)).exists()) {
+        emit lyricsFetched(loadLyrics(artist, title));
+    } else {
+        emit lyricsInfo(tr("Fetching lyrics..."));
+
+        connectionError = false;
+        queryNextProvider();
+    }
 }
 
 void LyricsManager::queryNextProvider()
@@ -171,8 +173,8 @@ void LyricsManager::queryNextProvider()
         }
     } else {
         retry = -1;
-        emit lyricsError(connectionError ? tr("There is no active Internet connection")
-                                         : tr("Lyrics not found"));
+        emit lyricsInfo(connectionError ? tr("There is no active Internet connection")
+                                        : tr("Lyrics not found"));
     }
 }
 
@@ -183,6 +185,7 @@ void LyricsManager::onLyricsFetched(QString lyrics)
     storeLyrics(artist, title, lyrics);
 
     retry = -1;
+
     emit lyricsFetched(lyrics);
 }
 
@@ -195,7 +198,7 @@ void LyricsManager::onLyricsError(QString message)
 
 bool LyricsManager::clearCache()
 {
-    qDebug() << "Clearing cache";
+    qDebug() << "Clearing lyrics cache";
 
     bool clear = true;
 
@@ -212,7 +215,7 @@ bool LyricsManager::clearCache()
         clear &= cacheDir.rmdir(artistDir);
     }
 
-    qDebug() << "Cache cleared:" << clear;
+    qDebug() << "Lyrics cache cleared:" << clear;
 
     return clear;
 }

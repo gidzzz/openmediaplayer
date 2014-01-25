@@ -24,7 +24,6 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 #ifdef MAFW
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
-    mafwSource(factory->getTempSource()),
     playlist(factory->getPlaylistAdapter())
 #endif
 {
@@ -116,8 +115,13 @@ void RadioNowPlayingWindow::connectSignals()
 
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
-    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
+    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
+    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
+    QMapIterator<QString,QVariant> i(mw->metadata());
+    while (i.hasNext()) {
+        i.next();
+        onMetadataChanged(i.key(), i.value());
+    }
 
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
@@ -125,9 +129,6 @@ void RadioNowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
     connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
-    connect(mafwrenderer, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onRendererMetadataChanged(QString,QVariant)));
-    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
-            this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
@@ -287,39 +288,35 @@ void RadioNowPlayingWindow::play()
 
 void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
 {
-    ui->stationLabel->setText(tr("(unknown station)"));
-
-    currentObjectId = QString::fromUtf8(objectId);
-    mafwSource->setSource(mafwFactory->getTempSource()->getSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
-    mafwSource->getMetadata(objectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                       MAFW_METADATA_KEY_URI));
-
-    mafwrenderer->getCurrentMetadata();
-
     onBufferingInfo(1.0);
 }
 
-void RadioNowPlayingWindow::onRendererMetadataChanged(QString name, QVariant value)
+void RadioNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
 {
-    qDebug() << "Metadata changed:" << name << "=" << value;
-
-    if (name == MAFW_METADATA_KEY_IS_SEEKABLE) {
+    if (key == MAFW_METADATA_KEY_TITLE) {
+        title = value.toString();
+        updateSongLabel();
+    }
+    else if (key == MAFW_METADATA_KEY_ARTIST) {
+        artist = value.toString();
+        updateSongLabel();
+    }
+    else if (key == MAFW_METADATA_KEY_ORGANIZATION) {
+        ui->stationLabel->setText(value.isNull() ? tr("(unknown station)") : value.toString());
+    }
+    else if (key == MAFW_METADATA_KEY_IS_SEEKABLE) {
         ui->positionSlider->setEnabled(value.toBool());
-        this->streamIsSeekable(value.toBool());
+        streamIsSeekable(value.toBool());
     }
-    else if (name == MAFW_METADATA_KEY_ARTIST) {
-        this->artist = value.toString();
-        this->updateSongLabel();
+    else if (key == MAFW_METADATA_KEY_DURATION) {
+        ui->streamLengthLabel->setText(mmss_len(value.isNull() ? Duration::Unknown : value.toInt()));
+        ui->positionSlider->setRange(0, value.toInt());
     }
-    else if (name == MAFW_METADATA_KEY_TITLE) {
-        this->title = value.toString();
-        this->updateSongLabel();
+    else if (key == MAFW_METADATA_KEY_RENDERER_ART_URI) {
+        setAlbumImage(value.isNull() ? defaultRadioImage : value.toString());
     }
-    else if (name == MAFW_METADATA_KEY_DURATION) {
-        ui->streamLengthLabel->setText(mmss_len(value.toInt()));
-    }
-    else if (name == MAFW_METADATA_KEY_RENDERER_ART_URI) {
-        setAlbumImage(value.toString());
+    else if (key == MAFW_METADATA_KEY_URI) {
+        uri = value.toString();
     }
 }
 
@@ -415,62 +412,6 @@ void RadioNowPlayingWindow::onPositionSliderMoved(int position)
     ui->currentPositionLabel->setText(mmss_pos(position));
     if (!lazySliders)
         mafwrenderer->setPosition(SeekAbsolute, position);
-}
-
-void RadioNowPlayingWindow::onRendererMetadataRequested(GHashTable *metadata, QString, QString error)
-{
-    if (metadata != NULL) {
-        QString station;
-        QString albumArt;
-        bool isSeekable;
-        int duration;
-        GValue *v;
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string(v)) : QString();
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
-        artist = v ? QString::fromUtf8(g_value_get_string(v)) : QString();
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int64 (v) : Duration::Unknown;
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_IS_SEEKABLE);
-        isSeekable = v ? g_value_get_boolean (v) : false;
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_RENDERER_ART_URI); // it's really a path, not a URI
-        setAlbumImage(v ? QString::fromUtf8(g_value_get_string(v)) : defaultRadioImage);
-
-        updateSongLabel();
-
-        streamIsSeekable(isSeekable);
-
-        ui->streamLengthLabel->setText(mmss_len(duration));
-        ui->positionSlider->setRange(0, duration);
-    }
-
-    if (!error.isEmpty())
-        qDebug() << error;
-}
-
-void RadioNowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error)
-{
-    if (objectId != currentObjectId) return;
-
-    if (metadata != NULL) {
-        QString station;
-        GValue *v;
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        station = QString::fromUtf8(g_value_get_string (v));
-        ui->stationLabel->setText(QFontMetrics(ui->stationLabel->font()).elidedText(station, Qt::ElideRight, 425));
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        uri = v ? QString::fromUtf8(g_value_get_string(v)) : "";
-    }
-
-    if (!error.isEmpty())
-        qDebug() << error;
 }
 #endif
 

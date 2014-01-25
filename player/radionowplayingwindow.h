@@ -17,6 +17,7 @@
 #include "ui_radionowplayingwindow.h"
 #include "includes.h"
 #include "rotator.h"
+#include "missioncontrol.h"
 #include "bookmarkdialog.h"
 #include "mirror.h"
 
@@ -53,6 +54,8 @@ private:
 
     void startPositionTimer();
 
+    void updateSongLabel();
+
     void setAlbumImage(QString image);
     QGraphicsScene *albumArtScene;
 
@@ -65,10 +68,8 @@ private:
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter *mafwSource;
     MafwPlaylistAdapter* playlist;
     int mafwState;
-    QString currentObjectId;
     QString artist;
     QString title;
     QString uri;
@@ -90,7 +91,7 @@ private slots:
     void onPrevButtonPressed();
     void onStopButtonPressed();
     void streamIsSeekable(bool seekable);
-    void updateSongLabel();
+    void onMetadataChanged(QString key, QVariant value);
 #ifdef MAFW
     void onStateChanged(int state);
     void onMediaChanged(int, char* objectId);
@@ -104,9 +105,6 @@ private slots:
     void onPositionSliderPressed();
     void onPositionSliderReleased();
     void onPositionSliderMoved(int position);
-    void onRendererMetadataRequested(GHashTable*, QString, QString error);
-    void onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error);
-    void onRendererMetadataChanged(QString name, QVariant value);
 #endif
 };
 

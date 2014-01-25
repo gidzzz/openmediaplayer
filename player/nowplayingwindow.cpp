@@ -23,8 +23,8 @@ NowPlayingWindow* NowPlayingWindow::instance = NULL;
 NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory *mafwFactory)
 {
     if (instance) {
-        instance->setParent(parent, Qt::Window);
         qDebug() << "Handing out running NPW instance";
+        instance->setParent(parent, Qt::Window);
     }
     else {
         qDebug() << "Handing out new NPW instance";
@@ -49,7 +49,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    metadataSource(factory->getTempSource()),
     playlist(factory->getPlaylistAdapter())
 #else
     ui(new Ui::NowPlayingWindow)
@@ -130,9 +129,10 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     orientationChanged(rotator->width(), rotator->height());
 
     if (enableLyrics) {
-        lyricsManager = new LyricsManager(this);
+        LyricsManager *lyricsManager = MissionControl::acquire()->lyricsManager();
         connect(lyricsManager, SIGNAL(lyricsFetched(QString)), this, SLOT(setLyrics(QString)));
-        connect(lyricsManager, SIGNAL(lyricsError(QString)), this, SLOT(setLyrics(QString)));
+        connect(lyricsManager, SIGNAL(lyricsInfo(QString)), this, SLOT(setLyrics(QString)));
+        reloadLyrics();
     }
 
 #ifdef MAFW
@@ -141,11 +141,9 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
 
     if (mafwrenderer->isRendererReady()) {
-        mafwrenderer->getCurrentMetadata();
         mafwrenderer->getStatus();
         mafwrenderer->getVolume();
     } else {
-        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getCurrentMetadata()));
         connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
         connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getVolume()));
     }
@@ -175,6 +173,8 @@ void NowPlayingWindow::setAlbumImage(QString image)
 
     if (image == defaultAlbumImage) {
         // If there's no album art, search for it in song's directory
+        // BUG: Currently it does not work because of the way how metadata
+        // arrives from MetadataWatcher.
         QString dirArtPath = currentURI;
         dirArtPath.remove("file://").replace("%20"," ");
         dirArtPath.truncate(dirArtPath.lastIndexOf("/"));
@@ -308,47 +308,6 @@ void NowPlayingWindow::setButtonIcons()
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
 }
 
-void NowPlayingWindow::onMetadataChanged(QString name, QVariant value)
-{
-    QFont f = ui->titleLabel->font();
-    QFontMetrics fm(f);
-    QString elided = fm.elidedText(value.toString(), Qt::ElideRight, 425);
-
-    if (name == MAFW_METADATA_KEY_TITLE) {
-        setTitle(value.toString());
-    }
-
-    else if (name == MAFW_METADATA_KEY_ARTIST) {
-        setArtist(value.toString());
-    }
-
-    else if (name == MAFW_METADATA_KEY_ALBUM) {
-        setAlbum(value.toString());
-    }
-
-    else if (name == MAFW_METADATA_KEY_DURATION) {
-        songDuration = value.toInt();
-        ui->trackLengthLabel->setText(mmss_len(songDuration));
-        ui->positionSlider->setRange(0, songDuration);
-    }
-
-    else if (name == MAFW_METADATA_KEY_URI) {
-        currentURI = value.toString();
-    }
-
-    // else if (name == "MAFW_METADATA_KEY_MIME");
-
-    // else if (name == MAFW_METADATA_KEY_ALBUM_ART_URI);
-
-    else if (name == MAFW_METADATA_KEY_RENDERER_ART_URI) {
-        setAlbumImage(value.toString());
-    }
-
-    // else if (name == "lyrics");
-
-    updateQmlViewMetadata();
-}
-
 #ifdef MAFW
 void NowPlayingWindow::onStateChanged(int state)
 {
@@ -445,19 +404,21 @@ void NowPlayingWindow::connectSignals()
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 #endif
 
+    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
+    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
+    QMapIterator<QString,QVariant> i(mw->metadata());
+    while (i.hasNext()) {
+        i.next();
+        onMetadataChanged(i.key(), i.value());
+    }
+
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwrenderer, SIGNAL(metadataChanged(QString, QVariant)), this, SLOT(onMetadataChanged(QString, QVariant)));
+    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
-    connect(mafwrenderer, SIGNAL(mediaIsSeekable(bool)), this, SLOT(onMediaIsSeekable(bool)));
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(mafwrenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
-            this, SLOT(onRendererMetadataRequested(GHashTable*,QString,QString)));
-
-    connect(metadataSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataRequested(QString,GHashTable*,QString)));
 
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
 
@@ -585,170 +546,72 @@ void NowPlayingWindow::onItemMoved(guint from, guint to)
 }
 #endif
 
-#ifdef MAFW
-void NowPlayingWindow::onRendererMetadataRequested(GHashTable* metadata, QString objectId, QString error)
+void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
 {
-    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int, char*)), Qt::UniqueConnection);
-
-    QString title;
-    QString artist;
-    QString album;
-    GValue *v;
-
-    const char **keys = new const char *[9];
-    keys[0] = MAFW_METADATA_KEY_URI;
-    keys[1] = MAFW_METADATA_KEY_MIME;
-    keys[2] = MAFW_METADATA_KEY_ALBUM_ART_URI;
-    keys[3] = MAFW_METADATA_KEY_RENDERER_ART_URI;
-    char currentKey = 4;
-
-    QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
-
-    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE) )) {
-        title = QString::fromUtf8(g_value_get_string (v));
-        if (item && item->data(UserRoleSongTitle).toString().isEmpty())
-            item->setData(UserRoleSongTitle, title);
-    } else {
-        title = tr("(unknown song)");
-        keys[currentKey++] = MAFW_METADATA_KEY_TITLE;
-    }
-
-    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST) )) {
-        artist = QString::fromUtf8(g_value_get_string(v));
-        if (item && item->data(UserRoleSongArtist).toString().isEmpty())
-            item->setData(UserRoleSongArtist, artist);
-    } else {
-        artist = tr("(unknown artist)");
-        keys[currentKey++] = MAFW_METADATA_KEY_ARTIST;
-    }
-
-    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM) )) {
-        album = QString::fromUtf8(g_value_get_string(v));
-        if (item && item->data(UserRoleSongAlbum).toString().isEmpty())
-            item->setData(UserRoleSongAlbum, album);
-    } else {
-        album = tr("(unknown album)");
-        keys[currentKey++] = MAFW_METADATA_KEY_ALBUM;
-    }
-
-    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION) )) {
-        songDuration = g_value_get_int64 (v);
-        if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank)
-            item->setData(UserRoleSongDuration, songDuration);
-    } else {
-        songDuration = Duration::Unknown;
-        keys[currentKey++] = MAFW_METADATA_KEY_DURATION;
-    }
-
-    if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_IS_SEEKABLE) ))
-        onMediaIsSeekable(g_value_get_boolean(v));
-    // if the renderer can't determine seekability, there's probably no point in querying the source
-
-    keys[currentKey] = NULL;
-    metadataObjectId = objectId;
-    metadataSource->setSource(mafwFactory->getTempSource()->getSourceByUUID(objectId.left(objectId.indexOf("::"))));
-    metadataSource->getMetadata(objectId.toUtf8(), keys);
-    delete[] keys;
-
-    QFont f = ui->titleLabel->font();
-    QFontMetrics fm(f);
-
-    setTitle(title);
-    setArtist(artist);
-    setAlbum(album);
-
-    ui->trackLengthLabel->setText(mmss_len(songDuration));
-    ui->positionSlider->setRange(0, songDuration);
-
-    updateQmlViewMetadata();
-
-    if (!error.isEmpty())
-        qDebug() << error;
-}
-
-void NowPlayingWindow::onSourceMetadataRequested(QString objectId, GHashTable *metadata, QString error)
-{
-    if (objectId != metadataObjectId) return;
-
-    if (metadata != NULL) {
-        QString albumArt;
-        GValue *v;
-
-        QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
-
-        QFont f = ui->titleLabel->font();
-        QFontMetrics fm(f);
-
-        if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE) )) {
-            QString title = QString::fromUtf8(g_value_get_string (v));
+    if (key == MAFW_METADATA_KEY_TITLE) {
+        if (value.isNull()) {
+            setTitle(tr("(unknown song)"));
+        } else {
+            QString title = value.toString();
             setTitle(title);
+
+            QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
             if (item && item->data(UserRoleSongTitle).toString().isEmpty())
                 item->setData(UserRoleSongTitle, title);
         }
-
-        if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST) )) {
-            QString artist = QString::fromUtf8(g_value_get_string(v));
+    }
+    else if (key == MAFW_METADATA_KEY_ARTIST) {
+        if (value.isNull()) {
+            setArtist(tr("(unknown artist)"));
+        } else {
+            QString artist = value.toString();
             setArtist(artist);
+
+            QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
             if (item && item->data(UserRoleSongArtist).toString().isEmpty())
                 item->setData(UserRoleSongArtist, artist);
         }
-
-        if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM) )) {
-            QString album = QString::fromUtf8(g_value_get_string(v));
+    }
+    else if (key == MAFW_METADATA_KEY_ALBUM) {
+        if (value.isNull()) {
+            setAlbum(tr("(unknown album)"));
+        } else {
+            QString album = value.toString();
             setAlbum(album);
+
+            QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
             if (item && item->data(UserRoleSongAlbum).toString().isEmpty())
                 item->setData(UserRoleSongAlbum, album);
         }
+    }
+    else if (key == MAFW_METADATA_KEY_DURATION) {
+        if (value.isNull()) {
+            songDuration = Duration::Unknown;
+        } else {
+            songDuration = value.toInt();
 
-        if (( v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION) )) {
-            songDuration = g_value_get_int (v);
-            ui->trackLengthLabel->setText(mmss_len(songDuration));
-            ui->positionSlider->setRange(0, songDuration);
+            QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
             if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank)
                 item->setData(UserRoleSongDuration, songDuration);
         }
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        currentURI = v ? QString::fromUtf8(g_value_get_string (v)) : "";
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
-        currentMIME = v ? QString::fromUtf8(g_value_get_string (v)) : "audio/unknown";
-
-        /*if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank) {
-            if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
-                playlistTime -= item->data(UserRoleSongDuration).toInt();
-            if (duration > 0)
-                playlistTime += duration;
-        }*/
-
-        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI);
-        if (v != NULL) {
-            const gchar* file_uri = g_value_get_string(v);
-            gchar* filename = NULL;
-            if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
-                setAlbumImage(QString::fromUtf8(filename));
-        } else {
-            v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_RENDERER_ART_URI);
-            if (v != NULL) {
-                const gchar* file_uri = g_value_get_string(v);
-                gchar* filename = NULL;
-                if (file_uri != NULL && (filename = g_filename_from_uri(file_uri, NULL, NULL)) != NULL)
-                    setAlbumImage(QString::fromUtf8(filename));
-            } else
-                setAlbumImage(defaultAlbumImage);
-        }
-
-        if (enableLyrics)
-            reloadLyrics();
-
-        updateQmlViewMetadata();
-
-        if (!error.isEmpty())
-            qDebug() << error;
+        ui->trackLengthLabel->setText(mmss_len(songDuration));
+        ui->positionSlider->setRange(0, songDuration);
     }
-}
+    else if (key == MAFW_METADATA_KEY_IS_SEEKABLE) {
+        onMediaIsSeekable(value.toBool());
+    }
+    else if (key == MAFW_METADATA_KEY_URI) {
+        currentURI = value.toString();
+    }
+    else if (key == MAFW_METADATA_KEY_MIME) {
+        currentMIME = value.isNull() ? "audio/unknown" : value.toString();
+    }
+    else if (key == MAFW_METADATA_KEY_RENDERER_ART_URI) {
+        setAlbumImage(value.toString());
+    }
 
-#endif
+    updateQmlViewMetadata();
+}
 
 void NowPlayingWindow::setLyrics(QString lyrics)
 {
@@ -759,14 +622,12 @@ void NowPlayingWindow::setLyrics(QString lyrics)
 
 void NowPlayingWindow::reloadLyrics()
 {
-    setLyrics(tr("Fetching lyrics..."));
-    lyricsManager->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis());
+    MissionControl::acquire()->lyricsManager()->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis());
 }
 
 void NowPlayingWindow::reloadLyricsOverridingCache()
 {
-    setLyrics(tr("Fetching lyrics..."));
-    lyricsManager->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), false);
+    MissionControl::acquire()->lyricsManager()->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), false);
 }
 
 void NowPlayingWindow::editLyrics()
@@ -1058,7 +919,6 @@ void NowPlayingWindow::onMediaChanged(int index, char*)
 {
     lastPlayingSong->set(index);
     focusItemByRow(index);
-    mafwrenderer->getCurrentMetadata();
 }
 
 void NowPlayingWindow::onMediaIsSeekable(bool seekable)
@@ -1196,7 +1056,7 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     setAlbum(item->data(UserRoleSongAlbum).toString());
 
     ui->currentPositionLabel->setText(mmss_pos(0));
-    this->songDuration = item->data(UserRoleSongDuration).toInt();
+    songDuration = item->data(UserRoleSongDuration).toInt();
     ui->trackLengthLabel->setText(mmss_len(songDuration));
 
     mafwrenderer->gotoIndex(ui->songList->row(item));

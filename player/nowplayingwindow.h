@@ -22,8 +22,8 @@
 #include "mediaart.h"
 #include "playlistquerymanager.h"
 #include "playlistpicker.h"
-#include "lyricsmanager.h"
 #include "rotator.h"
+#include "missioncontrol.h"
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
@@ -31,8 +31,8 @@
 #endif
 
 #ifdef MAFW
-    #include <mafw/mafwadapterfactory.h>
     #include <gq/GConfItem>
+    #include <mafw/mafwadapterfactory.h>
     #include "mafw/mafwplaylistmanageradapter.h"
 #else
     class MafwRendererAdapter;
@@ -63,7 +63,7 @@ signals:
 public slots:
     void setLyrics(QString lyrics);
     void reloadLyrics();
-    void setAlbumImage(QString);
+    void setAlbumImage(QString image);
     void onShuffleButtonToggled(bool);
 #ifdef MAFW
     void updatePlaylistState();
@@ -83,10 +83,8 @@ private:
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
-    MafwSourceAdapter *metadataSource;
     MafwPlaylistAdapter* playlist;
     PlaylistQueryManager *playlistQM;
-    LyricsManager *lyricsManager;
     int mafwState;
     GConfItem *lastPlayingSong;
     QString metadataObjectId;
@@ -147,8 +145,6 @@ private slots:
     void onStateChanged(int state);
     void onPositionChanged(int, QString);
     void onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char* ,QString);
-    void onRendererMetadataRequested(GHashTable*, QString objectId, QString);
-    void onSourceMetadataRequested(QString, GHashTable*, QString);
     void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
     void setPosition(int newPosition);
     void onPlaylistItemActivated(QListWidgetItem*);
@@ -161,8 +157,8 @@ private slots:
     void updatePlaylist(guint from = -1, guint nremove = 0, guint nreplace = 0);
 #endif
     void togglePlayback();
-    void onMetadataChanged(QString name, QVariant value);
     void volumeWatcher();
+    void onMetadataChanged(QString key, QVariant value);
     void onRepeatButtonToggled(bool checked);
     void orientationChanged(int w, int h);
     void onNextButtonPressed();

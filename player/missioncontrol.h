@@ -2,9 +2,9 @@
 #define MISSIONCONTROL_H
 
 #include <QObject>
-#include <QImage>
-#include <QCryptographicHash>
 
+#include "lyricsmanager.h"
+#include "metadatawatcher.h"
 #include "sleeper.h"
 
 #include "mafw/mafwadapterfactory.h"
@@ -16,28 +16,30 @@ class MissionControl : public QObject
 public:
     static MissionControl* acquire();
 
-    Sleeper* sleeper();
-
     void setFactory(MafwAdapterFactory *factory);
+    void reloadSettings();
+
+    LyricsManager *lyricsManager();
+    MetadataWatcher *metadataWatcher();
+    Sleeper* sleeper();
 
 private:
     static MissionControl *instance;
 
-    MafwRendererAdapter *mafwRenderer;
-    MafwSourceAdapter *mafwTrackerSource;
+    MafwAdapterFactory *mafwFactory;
 
+    MetadataWatcher *m_metadataWatcher;
+    LyricsManager *m_lyricsManager;
     Sleeper* m_sleeper;
 
-    QString currentObjectId;
+    QString currentArtist;
+    QString currentTitle;
 
     MissionControl();
 
 private slots:
+    void onMetadataChanged(QString key, QVariant value);
     void onSleeperTimeout();
-
-    void onStatusReceived(MafwPlaylist *, uint, MafwPlayState, const char *objectId, QString);
-    void onMediaChanged(int, char *objectId);
-    void onMetadataChanged(QString metadata, QVariant value);
 };
 
 #endif // MISSIONCONTROL_H

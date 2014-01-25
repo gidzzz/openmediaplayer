@@ -38,6 +38,7 @@ SOURCES += \
     editlyrics.cpp \
     mediaart.cpp \
     missioncontrol.cpp \
+    metadatawatcher.cpp \
     sleeper.cpp \
     playlistquerymanager.cpp \
     upnpcontrol.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     editlyrics.h \
     mediaart.h \
     missioncontrol.h \
+    metadatawatcher.h \
     sleeper.h \
     playlistquerymanager.h \
     upnpcontrol.h \

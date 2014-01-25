@@ -246,8 +246,6 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer*,
 #ifdef DEBUG
     qDebug() << "On Metadata Changed" << name;
 #endif
-    if(strcmp(name, "is-seekable") == 0)
-        emit static_cast<MafwRendererAdapter*>(user_data)->mediaIsSeekable(g_value_get_boolean(g_value_array_get_nth(value, 0)));
     if(value->n_values == 1)
     {
         GValue* v = g_value_array_get_nth(value, 0);
@@ -280,6 +278,20 @@ void MafwRendererAdapter::onMetadataChanged(MafwRenderer*,
                 qint64 int64_value = g_value_get_int64(v);
                 QVariant data = QVariant(int64_value);
                 emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
+            }
+            break;
+
+            case G_TYPE_BOOLEAN:
+            {
+                bool bool_value = g_value_get_boolean(v);
+                QVariant data = QVariant(bool_value);
+                emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
+            }
+            break;
+
+            default:
+            {
+                qDebug() << "Unknown metadata type for" << name;
             }
             break;
         }

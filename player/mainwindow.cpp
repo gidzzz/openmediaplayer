@@ -659,6 +659,8 @@ void MainWindow::reloadSettings()
 {
     NowPlayingWindow::destroy();
 
+    MissionControl::acquire()->reloadSettings();
+
     musicWindow->refreshPlaylistView();
 
     QString orientation = QSettings().value("main/orientation").toString();

@@ -33,7 +33,7 @@ public:
 
 signals:
     void lyricsFetched(QString lyrics);
-    void lyricsError(QString message);
+    void lyricsInfo(QString message);
 
 public slots:
     void onLyricsFetched(QString lyrics);
