@@ -39,7 +39,7 @@ QString MediaArt::setAlbumImage(QString album, QString image)
 
     g_free(uri);
 
-    return image.isEmpty() ? defaultAlbumImage : artFile;
+    return image.isEmpty() ? QString() : artFile;
 }
 
 void MediaArt::destructor(gpointer user_data)

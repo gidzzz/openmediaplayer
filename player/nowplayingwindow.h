@@ -63,7 +63,6 @@ signals:
 public slots:
     void setLyrics(QString lyrics);
     void reloadLyrics();
-    void setAlbumImage(QString image);
     void onShuffleButtonToggled(bool);
 #ifdef MAFW
     void updatePlaylistState();
@@ -96,6 +95,8 @@ private:
     void setArtist(QString artist);
     void setAlbum(QString album);
     void setSongNumber(int currentSong, int numberOfSongs);
+    void setAlbumImage(QString image);
+    void detectAlbumImage(QString image = QString());
     void updatePlaylistTimeLabel();
     void startPositionTimer();
     void connectSignals();

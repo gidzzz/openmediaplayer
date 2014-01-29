@@ -166,30 +166,42 @@ bool NowPlayingWindow::event(QEvent *event)
     return QMainWindow::event(event);
 }
 
+void NowPlayingWindow::detectAlbumImage(QString image)
+{
+    if (image.isNull() || !QFileInfo(image).exists()) {
+        if (currentURI.isNull()) {
+            image = defaultAlbumImage;
+        } else {
+            // Searh for album art in song's directory
+            image = currentURI;
+            image.remove("file://").replace("%20"," ");
+            image.truncate(image.lastIndexOf("/"));
+
+            if (QFileInfo(image + "/cover.jpg").exists()) {
+                image.append("/cover.jpg");
+            } else if (QFileInfo(image + "/front.jpg").exists()) {
+                image.append("/front.jpg");
+            } else if (QFileInfo(image + "/folder.jpg").exists()) {
+                image.append("/folder.jpg");
+            } else {
+                image = QString();
+            }
+
+            image = image.isNull()
+                  ? defaultAlbumImage
+                  : MediaArt::setAlbumImage(ui->albumLabel->text(), image);
+        }
+    }
+
+    setAlbumImage(image);
+}
+
 void NowPlayingWindow::setAlbumImage(QString image)
 {
+    albumArtPath = image;
+
     qDeleteAll(albumArtSceneLarge->items());
     qDeleteAll(albumArtSceneSmall->items());
-
-    if (image == defaultAlbumImage) {
-        // If there's no album art, search for it in song's directory
-        // BUG: Currently it does not work because of the way how metadata
-        // arrives from MetadataWatcher.
-        QString dirArtPath = currentURI;
-        dirArtPath.remove("file://").replace("%20"," ");
-        dirArtPath.truncate(dirArtPath.lastIndexOf("/"));
-
-        if (QFileInfo(dirArtPath + "/cover.jpg").exists())
-            dirArtPath.append("/cover.jpg");
-        else if (QFileInfo(dirArtPath + "/front.jpg").exists())
-            dirArtPath.append("/front.jpg");
-        else
-            dirArtPath.append("/folder.jpg");
-
-        albumArtPath = QFileInfo(dirArtPath).exists() ? MediaArt::setAlbumImage(ui->albumLabel->text(), dirArtPath) : defaultAlbumImage;
-    } else {
-        albumArtPath = QFileInfo(image).exists() ? image : defaultAlbumImage;
-    }
 
     mirror *m;
     QGraphicsPixmapItem *item;
@@ -299,7 +311,6 @@ void NowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 
 void NowPlayingWindow::setButtonIcons()
 {
-    setAlbumImage(defaultAlbumImage);
     ui->prevButton->setIcon(QIcon(prevButtonIcon));
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
@@ -602,12 +613,15 @@ void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
     }
     else if (key == MAFW_METADATA_KEY_URI) {
         currentURI = value.toString();
+
+        if (albumArtPath == defaultAlbumImage)
+            detectAlbumImage();
     }
     else if (key == MAFW_METADATA_KEY_MIME) {
         currentMIME = value.isNull() ? "audio/unknown" : value.toString();
     }
     else if (key == MAFW_METADATA_KEY_RENDERER_ART_URI) {
-        setAlbumImage(value.toString());
+        detectAlbumImage(value.toString());
     }
 
     updateQmlViewMetadata();
@@ -1318,20 +1332,19 @@ void NowPlayingWindow::selectAlbumArt()
 {
     CoverPicker picker(ui->albumLabel->whatsThis(), "/home/user/MyDocs", this);
     if (picker.exec() == QDialog::Accepted)
-        setAlbumImage(MediaArt::setAlbumImage(ui->albumLabel->whatsThis(), picker.cover));
+        detectAlbumImage(MediaArt::setAlbumImage(ui->albumLabel->whatsThis(), picker.cover));
 }
 
 void NowPlayingWindow::resetAlbumArt()
 {
     if (ConfirmDialog(ConfirmDialog::ResetArt, this).exec() == QMessageBox::Yes) {
-        // Remove old art using MediaArt::setAlbumImage() and let
-        // NowPlayingWindow::setAlbumImage() search for covers.
-        setAlbumImage(MediaArt::setAlbumImage(ui->albumLabel->text(), ""));
+        // Remove old art and search again
+        MediaArt::setAlbumImage(ui->albumLabel->text(), QString());
+        detectAlbumImage();
 
 #ifdef Q_WS_MAEMO_5
-        // Even if NowPlayingWindow::setAlbumImage() falls back to the default
-        // art, there still can be the embedded image, so poke Tracker to
-        // recheck the song file.
+        // Even if detectAlbumImage() falls back to the default art, there still
+        // might be an embedded image, so poke Tracker to recheck the song file.
         if (albumArtPath == defaultAlbumImage) {
             QDBusMessage msg = QDBusMessage::createMethodCall("org.freedesktop.Tracker.Extract",
                                                               "/org/freedesktop/Tracker/Extract",
@@ -1343,6 +1356,8 @@ void NowPlayingWindow::resetAlbumArt()
             args.append(currentMIME);
             msg.setArguments(args);
             QDBusConnection::sessionBus().send(msg);
+
+            // Give Tracker some time to do its job
             QTimer::singleShot(3000, this, SLOT(refreshAlbumArt()));
         }
 #endif
