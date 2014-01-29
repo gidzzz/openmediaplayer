@@ -61,7 +61,8 @@ signals:
     void itemDropped(QListWidgetItem *item, int from);
 
 public slots:
-    void setLyrics(QString lyrics);
+    void setLyricsNormal(QString lyrics);
+    void setLyricsInfo(QString info);
     void reloadLyrics();
     void onShuffleButtonToggled(bool);
 #ifdef MAFW
@@ -95,6 +96,7 @@ private:
     void setArtist(QString artist);
     void setAlbum(QString album);
     void setSongNumber(int currentSong, int numberOfSongs);
+    void setLyrics(QString text, QColor color);
     void setAlbumImage(QString image);
     void detectAlbumImage(QString image = QString());
     void updatePlaylistTimeLabel();

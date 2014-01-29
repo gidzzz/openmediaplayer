@@ -36,7 +36,7 @@ void EditLyrics::save()
 
     if (lyrics.isEmpty()) {
         LyricsManager::deleteLyrics(artist, title);
-        if (parent) parent->setLyrics(tr("Lyrics not found"));
+        if (parent) parent->setLyricsInfo(tr("Lyrics not found"));
     } else {
         LyricsManager::storeLyrics(artist, title, lyrics);
         if (parent) parent->reloadLyrics();

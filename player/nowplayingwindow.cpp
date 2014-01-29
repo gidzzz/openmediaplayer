@@ -130,8 +130,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
     if (enableLyrics) {
         LyricsManager *lyricsManager = MissionControl::acquire()->lyricsManager();
-        connect(lyricsManager, SIGNAL(lyricsFetched(QString)), this, SLOT(setLyrics(QString)));
-        connect(lyricsManager, SIGNAL(lyricsInfo(QString)), this, SLOT(setLyrics(QString)));
+        connect(lyricsManager, SIGNAL(lyricsFetched(QString)), this, SLOT(setLyricsNormal(QString)));
+        connect(lyricsManager, SIGNAL(lyricsInfo(QString)), this, SLOT(setLyricsInfo(QString)));
         reloadLyrics();
     }
 
@@ -627,9 +627,23 @@ void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
     updateQmlViewMetadata();
 }
 
-void NowPlayingWindow::setLyrics(QString lyrics)
+void NowPlayingWindow::setLyricsNormal(QString lyrics)
 {
-    ui->lyricsText->setText(lyrics);
+    setLyrics(lyrics, QMaemo5Style::standardColor("DefaultTextColor"));
+}
+
+void NowPlayingWindow::setLyricsInfo(QString info)
+{
+    setLyrics(info, QMaemo5Style::standardColor("SecondaryTextColor"));
+}
+
+void NowPlayingWindow::setLyrics(QString text, QColor color)
+{
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, color);
+    ui->lyricsText->setPalette(palette);
+
+    ui->lyricsText->setText(text);
     ui->lyricsText->adjustSize();
     ui->lyricsArea->verticalScrollBar()->setValue(0);
 }
