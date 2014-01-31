@@ -19,6 +19,7 @@ public:
     QMap<QString,QVariant> metadata();
 
 signals:
+    void metadataReady();
     void metadataChanged(QString key, QVariant value);
 
 private:
@@ -26,12 +27,16 @@ private:
     MafwSourceAdapter *mafwSource;
     MafwSourceAdapter *mafwTrackerSource;
 
-    QMap<QString,QVariant> m_metadata;
+    QMap<QString,QVariant> currentMetadata;
+    QMap<QString,QVariant> backupMetadata;
     QString currentObjectId;
 
-    void initMetadata();
-    void setMetadata(QString key, QVariant value);
-    void extractMetadata(const char *key, GHashTable *metadata);
+    bool sourceMetadataPresent;
+
+    void setMetadataFromSource(QString key, QVariant value);
+    void setMetadataFromRenderer(QString key, QVariant value);
+
+    static QVariant toQVariant(GValue *v);
 
 private slots:
     void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, const char *objectId, QString);

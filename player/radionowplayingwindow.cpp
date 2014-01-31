@@ -56,6 +56,17 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     this->setIcons();
     this->connectSignals();
 
+    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
+    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
+    QMap<QString,QVariant> metadata = mw->metadata();
+    onMetadataChanged(MAFW_METADATA_KEY_TITLE, metadata.value(MAFW_METADATA_KEY_TITLE));
+    onMetadataChanged(MAFW_METADATA_KEY_ARTIST, metadata.value(MAFW_METADATA_KEY_ARTIST));
+    onMetadataChanged(MAFW_METADATA_KEY_ORGANIZATION, metadata.value(MAFW_METADATA_KEY_ORGANIZATION));
+    onMetadataChanged(MAFW_METADATA_KEY_IS_SEEKABLE, metadata.value(MAFW_METADATA_KEY_IS_SEEKABLE));
+    onMetadataChanged(MAFW_METADATA_KEY_DURATION, metadata.value(MAFW_METADATA_KEY_DURATION));
+    onMetadataChanged(MAFW_METADATA_KEY_RENDERER_ART_URI, metadata.value(MAFW_METADATA_KEY_RENDERER_ART_URI));
+    onMetadataChanged(MAFW_METADATA_KEY_URI, metadata.value(MAFW_METADATA_KEY_URI));
+
     networkSession = new QNetworkSession(QNetworkConfigurationManager().defaultConfiguration(), this);
 
     Rotator *rotator = Rotator::acquire();
@@ -114,14 +125,6 @@ void RadioNowPlayingWindow::connectSignals()
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
 
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
-
-    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
-    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
-    QMapIterator<QString,QVariant> i(mw->metadata());
-    while (i.hasNext()) {
-        i.next();
-        onMetadataChanged(i.key(), i.value());
-    }
 
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));

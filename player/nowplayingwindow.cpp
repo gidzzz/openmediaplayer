@@ -121,6 +121,18 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
 
     this->connectSignals();
 
+    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
+    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
+    QMap<QString,QVariant> metadata = mw->metadata();
+    onMetadataChanged(MAFW_METADATA_KEY_TITLE, metadata.value(MAFW_METADATA_KEY_TITLE));
+    onMetadataChanged(MAFW_METADATA_KEY_ARTIST, metadata.value(MAFW_METADATA_KEY_ARTIST));
+    onMetadataChanged(MAFW_METADATA_KEY_ALBUM, metadata.value(MAFW_METADATA_KEY_ALBUM));
+    onMetadataChanged(MAFW_METADATA_KEY_DURATION, metadata.value(MAFW_METADATA_KEY_DURATION));
+    onMetadataChanged(MAFW_METADATA_KEY_IS_SEEKABLE, metadata.value(MAFW_METADATA_KEY_IS_SEEKABLE));
+    onMetadataChanged(MAFW_METADATA_KEY_MIME, metadata.value(MAFW_METADATA_KEY_MIME));
+    onMetadataChanged(MAFW_METADATA_KEY_URI, metadata.value(MAFW_METADATA_KEY_URI));
+    onMetadataChanged(MAFW_METADATA_KEY_RENDERER_ART_URI, metadata.value(MAFW_METADATA_KEY_RENDERER_ART_URI));
+
     ui->songList->viewport()->installEventFilter(this);
     ui->currentPositionLabel->installEventFilter(this);
 
@@ -414,14 +426,6 @@ void NowPlayingWindow::connectSignals()
 #ifdef Q_WS_MAEMO_5
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 #endif
-
-    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
-    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
-    QMapIterator<QString,QVariant> i(mw->metadata());
-    while (i.hasNext()) {
-        i.next();
-        onMetadataChanged(i.key(), i.value());
-    }
 
 #ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));

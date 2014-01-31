@@ -20,8 +20,8 @@ void MissionControl::setFactory(MafwAdapterFactory *factory)
 
     m_metadataWatcher = new MetadataWatcher(factory);
 
-    connect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)),
-            this, SLOT(onMetadataChanged(QString,QVariant)));
+    connect(m_metadataWatcher, SIGNAL(metadataReady()), this, SLOT(onMetadataReady()));
+    connect(factory->getRenderer(), SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged()));
 }
 
 void MissionControl::reloadSettings()
@@ -62,6 +62,25 @@ void MissionControl::onSleeperTimeout()
 {
     m_sleeper->deleteLater();
     m_sleeper = NULL;
+}
+
+
+void MissionControl::onMediaChanged()
+{
+    disconnect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)),
+               this, SLOT(onMetadataChanged(QString,QVariant)));
+}
+
+void MissionControl::onMetadataReady()
+{
+    currentArtist = m_metadataWatcher->metadata().value(MAFW_METADATA_KEY_ARTIST).toString();
+    currentTitle = m_metadataWatcher->metadata().value(MAFW_METADATA_KEY_TITLE).toString();
+
+    if (m_lyricsManager && !currentArtist.isNull() && !currentTitle.isNull())
+        m_lyricsManager->fetchLyrics(currentArtist, currentTitle);
+
+    connect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)),
+            this, SLOT(onMetadataChanged(QString,QVariant)));
 }
 
 void MissionControl::onMetadataChanged(QString key, QVariant value)

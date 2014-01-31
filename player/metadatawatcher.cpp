@@ -3,14 +3,13 @@
 MetadataWatcher::MetadataWatcher(MafwAdapterFactory *factory) :
     mafwRenderer(factory->getRenderer()),
     mafwSource(factory->getTempSource()),
-    mafwTrackerSource(factory->getTrackerSource())
+    mafwTrackerSource(factory->getTrackerSource()),
+    sourceMetadataPresent(false)
 {
     // Initialization
     connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getStatus()));
     connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
 
     // Metadata
     connect(mafwRenderer, SIGNAL(metadataChanged(QString,QVariant)),
@@ -23,57 +22,39 @@ MetadataWatcher::MetadataWatcher(MafwAdapterFactory *factory) :
     // but it might be a good idea to keep all metadata in sync.
     connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)),
             this, SLOT(onSourceMetadataChanged(QString)));
-
-    initMetadata();
 }
 
 QMap<QString,QVariant> MetadataWatcher::metadata()
 {
-    return m_metadata;
+    return currentMetadata;
 }
 
-void MetadataWatcher::initMetadata()
+void MetadataWatcher::setMetadataFromRenderer(QString key, QVariant value)
 {
-    setMetadata(MAFW_METADATA_KEY_TITLE,  QVariant());
-    setMetadata(MAFW_METADATA_KEY_ARTIST, QVariant());
-    setMetadata(MAFW_METADATA_KEY_ALBUM,  QVariant());
+    if (!sourceMetadataPresent)
+        backupMetadata[key] = value;
 
-    setMetadata(MAFW_METADATA_KEY_DURATION, QVariant());
-    setMetadata(MAFW_METADATA_KEY_IS_SEEKABLE, QVariant());
-
-    setMetadata(MAFW_METADATA_KEY_URI,  QVariant());
-    setMetadata(MAFW_METADATA_KEY_MIME, QVariant());
-
-    setMetadata(MAFW_METADATA_KEY_RENDERER_ART_URI, QVariant());
-
-    setMetadata(MAFW_METADATA_KEY_PAUSED_POSITION, QVariant());
+    QVariant &currentValue = currentMetadata[key];
+    if (currentValue != value) {
+        currentValue = value;
+        emit metadataChanged(key, value);
+    }
 }
 
-void MetadataWatcher::setMetadata(QString key, QVariant value)
+void MetadataWatcher::setMetadataFromSource(QString key, QVariant value)
 {
-    m_metadata[key] = value;
-
-    emit metadataChanged(key, value);
-}
-
-void MetadataWatcher::extractMetadata(const char *key, GHashTable *metadata)
-{
-    GValue *v = mafw_metadata_first(metadata, key);
-    switch (G_VALUE_TYPE(v)) {
-        case G_TYPE_INT:
-            setMetadata(key, g_value_get_int(v));
-            break;
-        case G_TYPE_INT64:
-            setMetadata(key, g_value_get_int64(v));
-            break;
-        case G_TYPE_STRING:
-            setMetadata(key, QString::fromUtf8(g_value_get_string(v)));
-            break;
-        case G_TYPE_BOOLEAN:
-            setMetadata(key, g_value_get_boolean(v));
-            break;
-        default:
-            break;
+    if (sourceMetadataPresent) {
+        // Consider source metadata less important than renderer metadata,
+        // that is do not overwrite it.
+        QVariant &currentValue = currentMetadata[key];
+        if (currentValue.isNull()) {
+            currentValue = value;
+            emit metadataChanged(key, value);
+        }
+    } else {
+        QVariant &currentValue = backupMetadata[key];
+        if (currentValue.isNull())
+            currentValue = value;
     }
 }
 
@@ -81,6 +62,8 @@ void MetadataWatcher::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState
 {
     disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
 
     onMediaChanged(index, (char *) objectId);
 }
@@ -91,8 +74,12 @@ void MetadataWatcher::onMediaChanged(int, char *objectId)
 
     currentObjectId = QString::fromUtf8(objectId);
 
-    m_metadata.clear();
-    initMetadata();
+    backupMetadata.clear();
+    sourceMetadataPresent = false;
+
+    // Reset the URI as soon as possible to avoid album art misdetection
+    if (currentMetadata.remove(MAFW_METADATA_KEY_URI))
+        emit metadataChanged(MAFW_METADATA_KEY_URI, QVariant());
 
     mafwRenderer->getCurrentMetadata();
 
@@ -123,44 +110,101 @@ void MetadataWatcher::onSourceMetadataReceived(QString objectId, GHashTable *met
     for (GList *key = keys; key; key = key->next) {
         QString keyName((const char *) key->data);
 
-        // Only one piece of cover art can be shown at a given time, so both
-        // source- and renderer-provided images can be stored under the same key
-        // to make the life of receiving classes easier,
-        if (keyName == MAFW_METADATA_KEY_ALBUM_ART_URI) {
-            keyName = MAFW_METADATA_KEY_RENDERER_ART_URI;
-            if (m_metadata.value(keyName).isNull()) {
-                // Renderer-art comes as a simple path, not a URI, contrary to
-                // album-art, thus a conversion is necessary.
-                const char* uri = g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI));
-                char* filename;
-                if (uri && (filename = g_filename_from_uri(uri, NULL, NULL)))
-                    setMetadata(MAFW_METADATA_KEY_RENDERER_ART_URI, QString::fromUtf8(filename));
-            }
-        }
         // Paused position might require some processing to prevent confusion in
         // the video window.
-        else if (keyName == MAFW_METADATA_KEY_PAUSED_POSITION) {
+        if (keyName == MAFW_METADATA_KEY_PAUSED_POSITION) {
             int pausedPoition = g_value_get_int(mafw_metadata_first(metadata, MAFW_METADATA_KEY_PAUSED_POSITION));
-            setMetadata(MAFW_METADATA_KEY_PAUSED_POSITION, pausedPoition < 0 ? 0 : pausedPoition);
-        }
-        // Consider source metadata less important than renderer metadata, that
-        // is do not overwrite it.
-        else if (m_metadata.value(keyName).isNull()) {
-            extractMetadata((const char *) key->data, metadata);
+            if (pausedPoition < 0)
+                pausedPoition = 0;
 
-            if (keyName == MAFW_METADATA_KEY_TITLE) {
-                // The title will double as station name for the radion window
-                setMetadata(MAFW_METADATA_KEY_ORGANIZATION, m_metadata[MAFW_METADATA_KEY_TITLE]);
+            if (sourceMetadataPresent) {
+                QVariant &currentValue = currentMetadata[keyName];
+                if (currentValue != pausedPoition) {
+                    currentValue = pausedPoition;
+                    emit metadataChanged(keyName, currentValue);
+                }
+            } else {
+                backupMetadata[keyName] = pausedPoition;
             }
         }
+        // Only one piece of cover art can be shown at a given time, so both
+        // source- and renderer-provided images can be stored under the same
+        // key to make the life of receiving classes easier.
+        else if (keyName == MAFW_METADATA_KEY_ALBUM_ART_URI) {
+            keyName = MAFW_METADATA_KEY_RENDERER_ART_URI;
+
+            // Renderer-art comes as a simple path, not a URI, contrary
+            // to album-art, thus a conversion is necessary.
+            const char* uri = g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_URI));
+            char* filename;
+            if (uri && (filename = g_filename_from_uri(uri, NULL, NULL)))
+                setMetadataFromSource(keyName, QString::fromUtf8(filename));
+        }
+        else {
+            QVariant value = toQVariant(mafw_metadata_first(metadata, (const char *) key->data));
+            setMetadataFromSource(keyName, value);
+
+            // The title will double as station name for the radion window
+            if (keyName == MAFW_METADATA_KEY_TITLE)
+                setMetadataFromSource(MAFW_METADATA_KEY_ORGANIZATION, value);
+        }
+
     }
 
     g_list_free(keys);
 
-    // The video window should always receive a position to resume from to work
-    // properly.
-    if (m_metadata.value(MAFW_METADATA_KEY_PAUSED_POSITION).isNull())
-        setMetadata(MAFW_METADATA_KEY_PAUSED_POSITION, 0);
+    if (!sourceMetadataPresent) {
+        // The video window should always receive a position to resume from to
+        // work properly.
+        if (backupMetadata.value(MAFW_METADATA_KEY_PAUSED_POSITION).isNull())
+            backupMetadata[MAFW_METADATA_KEY_PAUSED_POSITION] = 0;
+
+        QMap<QString,QVariant>::const_iterator currentIterator = currentMetadata.begin();
+        QMap<QString,QVariant>::const_iterator backupIterator = backupMetadata.begin();
+
+        // Compare with current metadata and emit differences
+        while (true) {
+            if (currentIterator == currentMetadata.end()) {
+                while (backupIterator != backupMetadata.end()) {
+                    // There are some additional items in backup metadata
+                    emit metadataChanged(backupIterator.key(), backupIterator.value());
+                    ++backupIterator;
+                }
+                break;
+            } else if (backupIterator == backupMetadata.end()) {
+                while (currentIterator != currentMetadata.end()) {
+                    // There is something missing from backup metadata
+                    emit metadataChanged(currentIterator.key(), QVariant());
+                    ++currentIterator;
+                }
+                break;
+            } else {
+                if (currentIterator.key() > backupIterator.key()) {
+                    // There are some additional items in backup metadata
+                    emit metadataChanged(backupIterator.key(), backupIterator.value());
+                    ++backupIterator;
+                }
+                else if (backupIterator.key() > currentIterator.key()) {
+                    // There is something missing from backup metadata
+                    emit metadataChanged(currentIterator.key(), QVariant());
+                    ++currentIterator;
+                }
+                else {
+                    if (currentIterator.value() != backupIterator.value())
+                        emit metadataChanged(backupIterator.key(), backupIterator.value());
+                    ++currentIterator;
+                    ++backupIterator;
+                }
+            }
+        }
+
+        currentMetadata = backupMetadata;
+        backupMetadata.clear();
+
+        sourceMetadataPresent = true;
+
+        emit metadataReady();
+    }
 }
 
 void MetadataWatcher::onSourceMetadataChanged(QString objectId)
@@ -182,7 +226,7 @@ void MetadataWatcher::onRendererMetadataReceived(GHashTable *metadata, QString o
 
     // Accept all metadata
     for (GList *key = keys; key; key = key->next)
-        extractMetadata((const char *) key->data, metadata);
+        setMetadataFromRenderer((const char *) key->data, toQVariant(mafw_metadata_first(metadata, (const char *) key->data)));
 
     g_list_free(keys);
 }
@@ -191,7 +235,7 @@ void MetadataWatcher::onRendererMetadataChanged(QString metadata, QVariant value
 {
     qDebug() << "Renderer metadata changed" << metadata << value;
 
-    setMetadata(metadata, value);
+    setMetadataFromRenderer(metadata, value);
 
     // Update video thumbnail
     if (metadata == MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI && currentObjectId.startsWith("localtagfs::videos")) {
@@ -224,5 +268,21 @@ void MetadataWatcher::onRendererMetadataChanged(QString metadata, QVariant value
         // It is not necessary to inform VideosWindow directly about the change,
         // because it should receive the notification from MAFW, although that
         // can take a little bit longer.
+    }
+}
+
+QVariant MetadataWatcher::toQVariant(GValue *v)
+{
+    switch (G_VALUE_TYPE(v)) {
+        case G_TYPE_INT:
+            return g_value_get_int(v);
+        case G_TYPE_INT64:
+            return g_value_get_int64(v);
+        case G_TYPE_STRING:
+            return QString::fromUtf8(g_value_get_string(v));
+        case G_TYPE_BOOLEAN:
+            return g_value_get_boolean(v);
+        default:
+            return QVariant();
     }
 }

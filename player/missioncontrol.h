@@ -38,6 +38,8 @@ private:
     MissionControl();
 
 private slots:
+    void onMediaChanged();
+    void onMetadataReady();
     void onMetadataChanged(QString key, QVariant value);
     void onSleeperTimeout();
 };

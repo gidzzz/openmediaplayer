@@ -78,8 +78,21 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     overlayRequestedByUser = overlay;
     showOverlay(overlay);
 
-    // Signals and events
     connectSignals();
+
+    // Metadata
+    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
+    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
+    QMap<QString,QVariant> metadata = mw->metadata();
+    onMetadataChanged(MAFW_METADATA_KEY_VIDEO_CODEC, metadata.value(MAFW_METADATA_KEY_VIDEO_CODEC));
+    onMetadataChanged(MAFW_METADATA_KEY_AUDIO_CODEC, metadata.value(MAFW_METADATA_KEY_AUDIO_CODEC));
+    onMetadataChanged(MAFW_METADATA_KEY_DURATION, metadata.value(MAFW_METADATA_KEY_DURATION));
+    onMetadataChanged(MAFW_METADATA_KEY_IS_SEEKABLE, metadata.value(MAFW_METADATA_KEY_IS_SEEKABLE));
+    onMetadataChanged(MAFW_METADATA_KEY_PAUSED_POSITION, metadata.value(MAFW_METADATA_KEY_PAUSED_POSITION));
+    onMetadataChanged(MAFW_METADATA_KEY_RES_X, metadata.value(MAFW_METADATA_KEY_RES_X));
+    onMetadataChanged(MAFW_METADATA_KEY_RES_Y, metadata.value(MAFW_METADATA_KEY_RES_Y));
+    onMetadataChanged(MAFW_METADATA_KEY_URI, metadata.value(MAFW_METADATA_KEY_URI));
+
     ui->currentPositionLabel->installEventFilter(this);
 
 #ifdef MAFW
@@ -226,17 +239,6 @@ void VideoNowPlayingWindow::connectSignals()
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
-    // Metadata
-    MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
-    connect(mw, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
-    QMapIterator<QString,QVariant> i(mw->metadata()); i.toBack();
-    while (i.hasPrevious()) {
-        // Going backwards is necessary for media type detection to work, which
-        // depends on video codec arriving before audio codec.
-        i.previous();
-        onMetadataChanged(i.key(), i.value());
-    }
-
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
                                           "com.nokia.mafw.extension",
@@ -374,13 +376,6 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
         ui->deleteButton->hide();
         ui->bookmarkButton->show();
     }
-
-    // Length of the video will be determined later, when possible
-    videoLength = Duration::Unknown;
-
-    // Start with the default size of the window
-    videoWidth = videoHeight = 0;
-    setFitToScreen(fitToScreen);
 
     // Start with buffering info hidden
     onBufferingInfo(1.0);
