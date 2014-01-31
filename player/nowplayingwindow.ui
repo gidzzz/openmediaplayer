@@ -218,9 +218,6 @@
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Maximum"/>
                </property>
-               <property name="text">
-                <string>(unknown song)</string>
-               </property>
               </widget>
              </item>
              <item>
@@ -263,9 +260,6 @@
                    <pointsize>13</pointsize>
                   </font>
                  </property>
-                 <property name="text">
-                  <string notr="true">--:--</string>
-                 </property>
                 </widget>
                </item>
               </layout>
@@ -287,18 +281,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="artistLabel">
-               <property name="text">
-                <string>(unknown artist)</string>
-               </property>
-              </widget>
+              <widget class="QLabel" name="artistLabel"/>
              </item>
              <item>
-              <widget class="QLabel" name="albumLabel">
-               <property name="text">
-                <string>(unknown album)</string>
-               </property>
-              </widget>
+              <widget class="QLabel" name="albumLabel"/>
              </item>
              <item>
               <spacer name="infoSpacer_4">
