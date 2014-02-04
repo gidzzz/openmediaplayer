@@ -65,6 +65,7 @@ private:
     QTimer *positionTimer;
     bool lazySliders;
     bool buttonWasDown;
+    bool isMediaSeekable;
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;
@@ -90,11 +91,10 @@ private slots:
     void onNextButtonPressed();
     void onPrevButtonPressed();
     void onStopButtonPressed();
-    void streamIsSeekable(bool seekable);
     void onMetadataChanged(QString key, QVariant value);
 #ifdef MAFW
     void onStateChanged(int state);
-    void onMediaChanged(int, char* objectId);
+    void onMediaChanged(int, char *);
     void onPropertyChanged(const QDBusMessage &msg);
     void onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *, QString);
     void onGetPosition(int position, QString);

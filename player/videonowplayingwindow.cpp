@@ -75,6 +75,8 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     resumePosition = Duration::Unknown;
 
+    mafwState = Transitioning;
+
     overlayRequestedByUser = overlay;
     showOverlay(overlay);
 
@@ -310,7 +312,10 @@ void VideoNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
         ui->positionSlider->setRange(0, videoLength);
     }
     else if (key == MAFW_METADATA_KEY_IS_SEEKABLE) {
-        ui->positionSlider->setEnabled(value.toBool());
+        isMediaSeekable = value.toBool();
+
+        if (mafwState == Playing || mafwState == Paused)
+            ui->positionSlider->setEnabled(isMediaSeekable);
     }
     else if (key == MAFW_METADATA_KEY_URI) {
         uri = value.toString();
@@ -572,11 +577,6 @@ void VideoNowPlayingWindow::onStateChanged(int state)
         return;
     }
 
-    if (state == Playing) {
-        gotInitialPlayState = true;
-        gotCurrentPlayState = true;
-    }
-
     if (state == Transitioning) {
         // Discard state information for the track that was playing a moment ago
         if (!playedObjectId.isEmpty()) {
@@ -618,6 +618,8 @@ void VideoNowPlayingWindow::onStateChanged(int state)
         }
 
         if (state == Paused) {
+            ui->positionSlider->setEnabled(isMediaSeekable);
+
             // The play button becomes a resume button
             ui->playButton->setIcon(QIcon(playButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
@@ -631,10 +633,14 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             // Playback position is not emitted in the paused state. Request it
             // manually to get the exact value.
             mafwrenderer->getPosition();
-
             positionTimer->stop();
         }
         else if (state == Playing) {
+            gotInitialPlayState = true;
+            gotCurrentPlayState = true;
+
+            ui->positionSlider->setEnabled(isMediaSeekable);
+
             // The play button becomes a pause button
             ui->playButton->setIcon(QIcon(pauseButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
@@ -657,7 +663,6 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             playedObjectId = currentObjectId;
 
             mafwrenderer->getPosition();
-
             startPositionTimer();
         }
         else if (state == Stopped) {

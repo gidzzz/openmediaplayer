@@ -44,18 +44,3 @@ MafwPlaylistAdapter* MafwAdapterFactory::getPlaylistAdapter()
 {
     return playlist;
 }
-
-void MafwAdapterFactory::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
-{
-    this->onStateChanged(state);
-}
-
-void MafwAdapterFactory::onStateChanged(int MafwState)
-{
-    this->state = MafwState;
-}
-
-int MafwAdapterFactory::mafwState()
-{
-    return state;
-}

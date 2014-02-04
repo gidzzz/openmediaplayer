@@ -106,18 +106,17 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
 
-    isMediaSeekable = false;
     playlistRequested = false;
     buttonWasDown = false;
     playlistTime = 0;
     currentViewId = 0;
     swipeStart = -1;
 
+    mafwState = Transitioning;
+
 #ifdef Q_WS_MAEMO_5
     lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
 #endif
-
-    this->onStateChanged(mafwFactory->mafwState());
 
     this->connectSignals();
 
@@ -337,23 +336,29 @@ void NowPlayingWindow::onStateChanged(int state)
     this->mafwState = state;
 
     if (state == Paused) {
+        ui->positionSlider->setEnabled(isMediaSeekable);
+
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+
         positionTimer->stop();
         mafwrenderer->getPosition();
     }
     else if (state == Playing) {
         ui->positionSlider->setEnabled(isMediaSeekable);
+
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+
         startPositionTimer();
     }
     else if (state == Stopped) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
         connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+
         positionTimer->stop();
     }
 
@@ -613,7 +618,10 @@ void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
         ui->positionSlider->setRange(0, songDuration);
     }
     else if (key == MAFW_METADATA_KEY_IS_SEEKABLE) {
-        onMediaIsSeekable(value.toBool());
+        isMediaSeekable = value.toBool();
+
+        if (mafwState == Playing || mafwState == Paused)
+            ui->positionSlider->setEnabled(isMediaSeekable);
     }
     else if (key == MAFW_METADATA_KEY_URI) {
         currentURI = value.toString();
@@ -911,16 +919,16 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
 
 void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char*, QString)
 {
-    if (!this->playlistRequested) {
-        this->updatePlaylist();
-        this->updatePlaylistState();
-        this->playlistRequested = true;
+    if (!playlistRequested) {
+        updatePlaylist();
+        updatePlaylistState();
+        onStateChanged(state);
+        playlistRequested = true;
     }
 
     lastPlayingSong->set((int)index); // sometimes the value is wrong, noticable mainly while using the playlist editor
     setSongNumber(index+1, playlist->getSize());
     selectItemByRow(index);
-    onStateChanged(state);
 }
 
 void NowPlayingWindow::setPosition(int newPosition)
@@ -931,14 +939,9 @@ void NowPlayingWindow::setPosition(int newPosition)
 
 void NowPlayingWindow::showEvent(QShowEvent *)
 {
-    mafwrenderer->getStatus();
-    this->updatePlaylistState();
     this->setWindowTitle(defaultWindowTitle); // avoid showing a different title for a split second
 
     startPositionTimer();
-
-    if (positionTimer->isActive())
-        ui->positionSlider->setEnabled(true);
 }
 
 void NowPlayingWindow::onGconfValueChanged()
@@ -951,12 +954,6 @@ void NowPlayingWindow::onMediaChanged(int index, char*)
 {
     lastPlayingSong->set(index);
     focusItemByRow(index);
-}
-
-void NowPlayingWindow::onMediaIsSeekable(bool seekable)
-{
-    ui->positionSlider->setEnabled(seekable);
-    this->isMediaSeekable = seekable;
 }
 #endif
 

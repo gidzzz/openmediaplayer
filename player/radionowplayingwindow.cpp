@@ -46,13 +46,14 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     lazySliders = QSettings().value("main/lazySliders").toBool();
 
+    mafwState = Transitioning;
+
     volumeTimer = new QTimer(this);
     volumeTimer->setInterval(3000);
 
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
-    this->updateSongLabel();
     this->setIcons();
     this->connectSignals();
 
@@ -125,9 +126,6 @@ void RadioNowPlayingWindow::connectSignals()
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
 
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
-
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
 
     connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
@@ -234,11 +232,11 @@ void RadioNowPlayingWindow::onStateChanged(int state)
 {
     mafwState = state;
 
+    disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+    disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+
     if (state == Transitioning) {
-        ui->positionSlider->setEnabled(false);
-        ui->positionSlider->setValue(0);
         ui->positionSlider->setMaximum(0);
-        ui->currentPositionLabel->setText(mmss_pos(0));
 
         if (ui->bufferBar->maximum() == 0) {
             ui->seekWidget->hide();
@@ -251,30 +249,45 @@ void RadioNowPlayingWindow::onStateChanged(int state)
         }
 
         if (state == Paused) {
+            ui->positionSlider->setEnabled(isMediaSeekable);
+
             ui->playButton->setIcon(QIcon(playButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
             connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
-            disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
-            disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+
             positionTimer->stop();
             mafwrenderer->getPosition();
         }
         else if (state == Playing) {
-            ui->playButton->setIcon(QIcon(pauseButtonIcon));
+            ui->positionSlider->setEnabled(isMediaSeekable);
+
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-            disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
-            disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+
+            if (isMediaSeekable) {
+                ui->playButton->setIcon(QIcon(pauseButtonIcon));
+                connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+            } else {
+                ui->playButton->setIcon(QIcon(stopButtonIcon));
+                connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(stop()));
+                connect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
+                connect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+            }
+
             startPositionTimer();
         }
         else if (state == Stopped) {
             ui->playButton->setIcon(QIcon(playButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
             connect(ui->playButton, SIGNAL(clicked()), this, SLOT(play()));
-            disconnect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
-            disconnect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
+
             positionTimer->stop();
         }
+    }
+
+    if (state == Transitioning || state == Stopped) {
+        ui->positionSlider->setEnabled(false);
+        ui->positionSlider->setValue(0);
+        ui->currentPositionLabel->setText(mmss_pos(0));
     }
 
 }
@@ -289,7 +302,7 @@ void RadioNowPlayingWindow::play()
     }
 }
 
-void RadioNowPlayingWindow::onMediaChanged(int, char* objectId)
+void RadioNowPlayingWindow::onMediaChanged(int, char *)
 {
     onBufferingInfo(1.0);
 }
@@ -308,8 +321,13 @@ void RadioNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
         ui->stationLabel->setText(value.isNull() ? tr("(unknown station)") : value.toString());
     }
     else if (key == MAFW_METADATA_KEY_IS_SEEKABLE) {
-        ui->positionSlider->setEnabled(value.toBool());
-        streamIsSeekable(value.toBool());
+        isMediaSeekable = value.toBool();
+
+        if (mafwState == Paused) {
+            ui->positionSlider->setEnabled(isMediaSeekable);
+        } else if (mafwState == Playing) {
+            onStateChanged(Playing);
+        }
     }
     else if (key == MAFW_METADATA_KEY_DURATION) {
         ui->streamLengthLabel->setText(mmss_len(value.isNull() ? Duration::Unknown : value.toInt()));
@@ -325,6 +343,12 @@ void RadioNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
 
 void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *objectId, QString)
 {
+    disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+               this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+
+    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
+
     onStateChanged(state);
     onMediaChanged(index, const_cast<char*>(objectId));
 }
@@ -488,24 +512,6 @@ void RadioNowPlayingWindow::onStopButtonPressed()
         ui->playButton->setIcon(QIcon(stopButtonPressedIcon));
     else
         ui->playButton->setIcon(QIcon(stopButtonIcon));
-}
-
-void RadioNowPlayingWindow::streamIsSeekable(bool seekable)
-{
-#ifdef MAFW
-    if (mafwState == Playing) {
-        if (seekable) {
-            onStateChanged(Playing);
-        } else {
-            ui->playButton->setIcon(QIcon(stopButtonIcon));
-            disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(stop()));
-            connect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
-            connect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
-            startPositionTimer();
-        }
-    }
-#endif
 }
 
 void RadioNowPlayingWindow::togglePlayback()

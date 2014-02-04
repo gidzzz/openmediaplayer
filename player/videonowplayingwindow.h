@@ -86,6 +86,7 @@ private:
     bool gotInitialStopState;
     bool gotInitialPlayState;
     bool gotCurrentPlayState;
+    bool isMediaSeekable;
     bool buttonWasDown;
     int keyToRepeat;
 #ifdef Q_WS_MAEMO_5

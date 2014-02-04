@@ -17,7 +17,6 @@ public:
     MafwSourceAdapter *getUpnpSource();
     MafwSourceAdapter *getTempSource();
     MafwPlaylistAdapter *getPlaylistAdapter();
-    int mafwState();
 
 private:
     MafwRendererAdapter *mafwrenderer;
@@ -27,11 +26,6 @@ private:
     MafwSourceAdapter *mafwTempSource;
     MafwPlaylistAdapter *playlist;
     MafwPlaylistManagerAdapter *mafw_playlist_manager;
-    int state;
-
-private slots:
-    void onStateChanged(int state);
-    void onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString);
 };
 
 #endif // MAFWADAPTERFACTORY_H
