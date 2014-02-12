@@ -21,14 +21,15 @@ public:
     ~LyricsManager();
 
     void fetchLyrics(QString artist, QString title, bool useCache = true);
+    void reloadLyrics();
+    void storeLyrics(QString artist, QString title, QString lyrics);
+    void deleteLyrics(QString artist, QString title);
 
     static QMap<QString,QString> listProviders();
 
     static QString cacheFilePath(QString artist, QString title);
     static QString cacheDirPath(QString artist, QString title);
     static QString loadLyrics(QString artist, QString title);
-    static void storeLyrics(QString artist, QString title, QString lyrics);
-    static void deleteLyrics(QString artist, QString title);
     static bool clearCache();
 
 signals:
@@ -38,6 +39,7 @@ signals:
 public slots:
     void onLyricsFetched(QString lyrics);
     void onLyricsError(QString message);
+    void reloadLyricsOverridingCache();
 
 private:
     QString artist;

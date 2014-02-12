@@ -76,7 +76,7 @@ void MissionControl::onMetadataReady()
     currentArtist = m_metadataWatcher->metadata().value(MAFW_METADATA_KEY_ARTIST).toString();
     currentTitle = m_metadataWatcher->metadata().value(MAFW_METADATA_KEY_TITLE).toString();
 
-    if (m_lyricsManager && !currentArtist.isNull() && !currentTitle.isNull())
+    if (m_lyricsManager)
         m_lyricsManager->fetchLyrics(currentArtist, currentTitle);
 
     connect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)),
@@ -89,12 +89,12 @@ void MissionControl::onMetadataChanged(QString key, QVariant value)
     if (!value.isNull()) {
         if (key == MAFW_METADATA_KEY_ARTIST) {
             currentArtist = value.toString();
-            if (m_lyricsManager && !currentTitle.isNull())
+            if (m_lyricsManager)
                 m_lyricsManager->fetchLyrics(currentArtist, currentTitle);
         }
         else if (key == MAFW_METADATA_KEY_TITLE) {
             currentTitle = value.toString();
-            if (m_lyricsManager && !currentArtist.isNull())
+            if (m_lyricsManager)
                 m_lyricsManager->fetchLyrics(currentArtist, currentTitle);
         }
     }

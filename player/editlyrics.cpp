@@ -32,14 +32,11 @@ EditLyrics::~EditLyrics()
 void EditLyrics::save()
 {
     QString lyrics = ui->lyricsField->toPlainText();
-    NowPlayingWindow *parent = qobject_cast<NowPlayingWindow*>(this->parentWidget());
 
     if (lyrics.isEmpty()) {
-        LyricsManager::deleteLyrics(artist, title);
-        if (parent) parent->setLyricsInfo(tr("Lyrics not found"));
+        MissionControl::acquire()->lyricsManager()->deleteLyrics(artist, title);
     } else {
-        LyricsManager::storeLyrics(artist, title, lyrics);
-        if (parent) parent->reloadLyrics();
+        MissionControl::acquire()->lyricsManager()->storeLyrics(artist, title, lyrics);
     }
 
     this->close();

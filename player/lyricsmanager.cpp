@@ -127,12 +127,18 @@ void LyricsManager::storeLyrics(QString artist, QString title, QString lyrics)
     file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
     QTextStream(&file) << lyrics;
     file.close();
+
+    if (this->title == title && this->artist == artist)
+        emit lyricsFetched(lyrics);
 }
 
 void LyricsManager::deleteLyrics(QString artist, QString title)
 {
     QFile(cacheFilePath(artist, title)).remove();
     QDir().rmdir(cacheDirPath(artist, title));
+
+    if (this->title == title && this->artist == artist)
+        emit lyricsInfo(tr("Lyrics not found"));
 }
 
 void LyricsManager::fetchLyrics(QString artist, QString title, bool useCache)
@@ -146,6 +152,12 @@ void LyricsManager::fetchLyrics(QString artist, QString title, bool useCache)
     // Store info about the processed song
     this->artist = artist;
     this->title = title;
+
+    // Do not even try to fetch lyrics if details are not available
+    if (artist.isNull() || title.isNull()) {
+        emit lyricsInfo(tr("Lyrics not found"));
+        return;
+    }
 
     // Fetch lyrics from cache or start querying providers
     if (useCache && QFile(cacheFilePath(artist, title)).exists()) {
@@ -182,11 +194,9 @@ void LyricsManager::onLyricsFetched(QString lyrics)
 {
     qDebug() << "Lyrics fetched";
 
-    storeLyrics(artist, title, lyrics);
-
     retry = -1;
 
-    emit lyricsFetched(lyrics);
+    storeLyrics(artist, title, lyrics);
 }
 
 void LyricsManager::onLyricsError(QString message)
@@ -194,6 +204,16 @@ void LyricsManager::onLyricsError(QString message)
     qDebug() << "Lyrics error:" << message;
 
     queryNextProvider();
+}
+
+void LyricsManager::reloadLyrics()
+{
+    fetchLyrics(artist, title);
+}
+
+void LyricsManager::reloadLyricsOverridingCache()
+{
+    fetchLyrics(artist, title, false);
 }
 
 bool LyricsManager::clearCache()

@@ -143,7 +143,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
         LyricsManager *lyricsManager = MissionControl::acquire()->lyricsManager();
         connect(lyricsManager, SIGNAL(lyricsFetched(QString)), this, SLOT(setLyricsNormal(QString)));
         connect(lyricsManager, SIGNAL(lyricsInfo(QString)), this, SLOT(setLyricsInfo(QString)));
-        reloadLyrics();
+        lyricsManager->reloadLyrics();
     }
 
 #ifdef MAFW
@@ -658,16 +658,6 @@ void NowPlayingWindow::setLyrics(QString text, QColor color)
     ui->lyricsText->setText(text);
     ui->lyricsText->adjustSize();
     ui->lyricsArea->verticalScrollBar()->setValue(0);
-}
-
-void NowPlayingWindow::reloadLyrics()
-{
-    MissionControl::acquire()->lyricsManager()->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis());
-}
-
-void NowPlayingWindow::reloadLyricsOverridingCache()
-{
-    MissionControl::acquire()->lyricsManager()->fetchLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), false);
 }
 
 void NowPlayingWindow::editLyrics()
@@ -1391,7 +1381,7 @@ void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Edit lyrics"), this, SLOT(editLyrics()));
-    contextMenu->addAction(tr("Reload lyrics"), this, SLOT(reloadLyricsOverridingCache()));
+    contextMenu->addAction(tr("Reload lyrics"), MissionControl::acquire()->lyricsManager(), SLOT(reloadLyricsOverridingCache()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 

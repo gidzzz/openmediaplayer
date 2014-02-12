@@ -3,8 +3,10 @@
 
 #include <QMainWindow>
 
+#include <QShortcut>
+
 #include "ui_editlyrics.h"
-#include "nowplayingwindow.h"
+#include "missioncontrol.h"
 #include "texteditautoresizer.h"
 
 namespace Ui {

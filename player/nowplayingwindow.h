@@ -63,7 +63,6 @@ signals:
 public slots:
     void setLyricsNormal(QString lyrics);
     void setLyricsInfo(QString info);
-    void reloadLyrics();
     void onShuffleButtonToggled(bool);
 #ifdef MAFW
     void updatePlaylistState();
@@ -133,7 +132,6 @@ private slots:
     void resetAlbumArt();
     void refreshAlbumArt();
     void editLyrics();
-    void reloadLyricsOverridingCache();
     void toggleVolumeSlider();
     void showFMTXDialog();
     void cycleView(int direction = 1);
