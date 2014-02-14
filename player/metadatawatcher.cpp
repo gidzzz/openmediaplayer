@@ -222,6 +222,11 @@ void MetadataWatcher::onRendererMetadataReceived(GHashTable *metadata, QString o
 
     qDebug() << "Renderer metadata received";
 
+    // Make sure that video codec is always emitted before audio codec so that
+    // media type detection does not fail.
+    if (g_hash_table_lookup(metadata, MAFW_METADATA_KEY_VIDEO_CODEC))
+        setMetadataFromRenderer(MAFW_METADATA_KEY_VIDEO_CODEC, g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_VIDEO_CODEC)));
+
     GList *keys = g_hash_table_get_keys(metadata);
 
     // Accept all metadata
@@ -235,39 +240,47 @@ void MetadataWatcher::onRendererMetadataChanged(QString metadata, QVariant value
 {
     qDebug() << "Renderer metadata changed" << metadata << value;
 
-    setMetadataFromRenderer(metadata, value);
+    if (metadata == MAFW_METADATA_KEY_AUDIO_CODEC) {
+        // If video codec info is available, then audio codec info should not
+        // arrive before it for media type detection to work. Make an additional
+        // metadata request instead of handling it immediately, in case the
+        // renderer has the desired information, but has not emitted it yet.
+        mafwRenderer->getCurrentMetadata();
+    } else {
+        setMetadataFromRenderer(metadata, value);
 
-    // Update video thumbnail
-    if (metadata == MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI && currentObjectId.startsWith("localtagfs::videos")) {
-        qDebug() << "Thumbnail changed" << value;
-        QString thumbFile = value.toString();
-        if (thumbFile.contains("mafw-gst-renderer-")) {
-            QImage thumbnail(thumbFile);
-            if (thumbnail.width() > thumbnail.height()) {
-                // Horizontal, fill height
-                thumbnail = thumbnail.scaledToHeight(124, Qt::SmoothTransformation);
-                thumbnail = thumbnail.copy((thumbnail.width()-124)/2, 0, 124, 124);
-            } else {
-                // Vertical, fill width
-                thumbnail = thumbnail.scaledToWidth(124, Qt::SmoothTransformation);
-                thumbnail = thumbnail.copy(0, (thumbnail.height()-124)/2, 124, 124);
+        // Update video thumbnail
+        if (metadata == MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI && currentObjectId.startsWith("localtagfs::videos")) {
+            qDebug() << "Thumbnail changed" << value;
+            QString thumbFile = value.toString();
+            if (thumbFile.contains("mafw-gst-renderer-")) {
+                QImage thumbnail(thumbFile);
+                if (thumbnail.width() > thumbnail.height()) {
+                    // Horizontal, fill height
+                    thumbnail = thumbnail.scaledToHeight(124, Qt::SmoothTransformation);
+                    thumbnail = thumbnail.copy((thumbnail.width()-124)/2, 0, 124, 124);
+                } else {
+                    // Vertical, fill width
+                    thumbnail = thumbnail.scaledToWidth(124, Qt::SmoothTransformation);
+                    thumbnail = thumbnail.copy(0, (thumbnail.height()-124)/2, 124, 124);
+                }
+
+                thumbFile = "/home/user/.fmp_pause_thumbnail/"
+                        + QCryptographicHash::hash(currentObjectId.toUtf8(), QCryptographicHash::Md5).toHex()
+                        + ".jpeg";
+
+                thumbnail.save(thumbFile, "JPEG");
+
+                GHashTable* metadata = mafw_metadata_new();
+                mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, qstrdup(thumbFile.toUtf8()));
+                mafwTrackerSource->setMetadata(currentObjectId.toUtf8(), metadata);
+                mafw_metadata_release(metadata);
             }
 
-            thumbFile = "/home/user/.fmp_pause_thumbnail/"
-                      + QCryptographicHash::hash(currentObjectId.toUtf8(), QCryptographicHash::Md5).toHex()
-                      + ".jpeg";
-
-            thumbnail.save(thumbFile, "JPEG");
-
-            GHashTable* metadata = mafw_metadata_new();
-            mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, qstrdup(thumbFile.toUtf8()));
-            mafwTrackerSource->setMetadata(currentObjectId.toUtf8(), metadata);
-            mafw_metadata_release(metadata);
+            // It is not necessary to inform VideosWindow directly about the change,
+            // because it should receive the notification from MAFW, although that
+            // can take a little bit longer.
         }
-
-        // It is not necessary to inform VideosWindow directly about the change,
-        // because it should receive the notification from MAFW, although that
-        // can take a little bit longer.
     }
 }
 

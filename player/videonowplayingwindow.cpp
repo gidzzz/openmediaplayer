@@ -254,45 +254,58 @@ void VideoNowPlayingWindow::connectSignals()
                                           this, SLOT(onErrorOccured(const QDBusMessage &)));
 }
 
+void VideoNowPlayingWindow::switchToRadio()
+{
+#ifdef MAFW_WORKAROUNDS
+    // Apparently, the problem described below affects also some local files.
+    // Try to solve that by disabling the detection for all local files.
+    if (currentObjectId.startsWith("localtagfs::")
+    // Looks like the renderer cannot tell us the video codec in RTSP streams.
+    // Being able to play something without knowing the codec smells fishy,
+    // so I take it for a bug in MAFW and I'm putting this as a workaround.
+    ||  currentObjectId.startsWith("urisource::rtsp://"))
+        return;
+#endif
+
+    qDebug() << "Video codec info unavailable, switching to radio mode";
+
+    // The stream has been identified as audio-only, which means that the radio
+    // window is a more suitable option. To not lose the current playlist,
+    // the transition will happen by deleting the radio playlist and renaming
+    // the video playlist to radio playlist.
+    MafwPlaylistManagerAdapter *playlistManager = MafwPlaylistManagerAdapter::get();
+    playlistManager->deletePlaylist("FmpRadioPlaylist");
+    mafw_playlist_set_name(MAFW_PLAYLIST(playlistManager->createPlaylist("FmpVideoPlaylist")), "FmpRadioPlaylist");
+
+    RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
+
+    // The video window will be closed because the radio window took over,
+    // so don't stop/save the playback state in this case.
+    saveStateOnClose = false;
+
+    delete this;
+
+    window->show();
+}
+
 void VideoNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
 {
+    // Try to detect whether we have a video or an audio-only stream. If not
+    // sure, take the safe approach by keeping the video window open.
     if (key == MAFW_METADATA_KEY_AUDIO_CODEC) {
-        // Try to detect whether we have a video or an audio-only stream. If not
-        // sure, take the safe approach by keeping the video window open.
-        // NOTE: The implemented solution assumes that video codec always arrives
-        // before audio codec, but it based merely on observations.
         if (gotInitialPlayState
         && !value.isNull()
-        &&  MissionControl::acquire()->metadataWatcher()->metadata().value(MAFW_METADATA_KEY_VIDEO_CODEC).isNull()
-#ifdef MAFW_WORKAROUNDS
-        // Apparently, the problem described below affects also some local files.
-        // Try to solve that by disabling the detection for all local files.
-        && !currentObjectId.startsWith("localtagfs::")
-        // Looks like the renderer cannot tell us the video codec in RTSP streams.
-        // Being able to play something without knowing the codec smells fishy,
-        // so I take it for a bug in MAFW and I'm putting this as a workaround.
-        && !currentObjectId.startsWith("urisource::rtsp://"))
-#endif
+        &&  MissionControl::acquire()->metadataWatcher()->metadata().value(MAFW_METADATA_KEY_VIDEO_CODEC).isNull())
         {
-            qDebug() << "Video codec info unavailable, switching to radio mode";
-
-            // The stream has been identified as audio-only, which means that the radio
-            // window is a more suitable option. To not lose the current playlist,
-            // the transition will happen by deleting the radio playlist and renaming
-            // the video playlist to radio playlist.
-            MafwPlaylistManagerAdapter *playlistManager = MafwPlaylistManagerAdapter::get();
-            playlistManager->deletePlaylist("FmpRadioPlaylist");
-            mafw_playlist_set_name(MAFW_PLAYLIST(playlistManager->createPlaylist("FmpVideoPlaylist")), "FmpRadioPlaylist");
-
-            RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
-
-            // The video window will be closed because the radio window took over,
-            // so don't stop/save the playback state in this case.
-            saveStateOnClose = false;
-
-            delete this;
-
-            window->show();
+            switchToRadio();
+        }
+    }
+    else if (key == MAFW_METADATA_KEY_VIDEO_CODEC) {
+        if (gotInitialPlayState
+        &&  key.isNull()
+        && !MissionControl::acquire()->metadataWatcher()->metadata().value(MAFW_METADATA_KEY_AUDIO_CODEC).isNull())
+        {
+            switchToRadio();
         }
     }
 

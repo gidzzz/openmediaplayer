@@ -64,6 +64,7 @@ private:
     void connectSignals();
     void startPositionTimer();
     void showOverlay(bool show);
+    void switchToRadio();
 
     QTimer *volumeTimer;
     QTimer *positionTimer;
