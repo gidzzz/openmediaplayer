@@ -18,10 +18,6 @@
 
 #include "mainwindow.h"
 
-#ifdef Q_WS_MAEMO_5
-    #define HAL_PATH_RX51_JACK "/org/freedesktop/Hal/devices/platform_soc_audio_logicaldev_input"
-#endif
-
 QString defaultAlbumImage;
 QString defaultRadioImage;
 QString volumeButtonIcon;
@@ -30,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     BaseWindow(parent),
     ui(new Ui::MainWindow)
 {
-    resumeTimer = NULL;
     ui->setupUi(this);
 
     QPalette palette;
@@ -58,18 +53,9 @@ MainWindow::MainWindow(QWidget *parent) :
     playlist = mafwFactory->getPlaylistAdapter();
 
     MissionControl::acquire()->setFactory(mafwFactory);
-
-    if (mafwrenderer->isRendererReady())
-        mafwrenderer->getStatus();
-    else
-        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
 #endif
 
 #ifdef Q_WS_MAEMO_5
-    wiredHeadsetIsConnected = false;
-    headsetPauseStamp = -1;
-    pausedByCall = false;
-    wasRinging = false;
 #else
     // Menu bar breaks layouts on desktop, hide it.
     ui->menuBar->hide();
@@ -124,8 +110,6 @@ MainWindow::MainWindow(QWidget *parent) :
     updatingInfoBox->setWidget(updatingWidget);
 
     QTimer::singleShot(1000, this, SLOT(takeScreenshot()));
-
-    updateWiredHeadset();
 #endif
 }
 
@@ -230,30 +214,6 @@ void MainWindow::connectSignals()
     connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
-
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-#endif
-
-#ifdef Q_WS_MAEMO_5
-    QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Connected",
-                                         this, SLOT(onWirelessHeadsetConnected()));
-    QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Disconnected",
-                                         this, SLOT(onHeadsetDisconnected()));
-    QDBusConnection::systemBus().connect("", "", "org.bluez.Headset", "Connected",
-                                         this, SLOT(onWirelessHeadsetConnected()));
-    QDBusConnection::systemBus().connect("", "", "org.bluez.Headset", "Disconnected",
-                                         this, SLOT(onHeadsetDisconnected()));
-
-    QDBusConnection::systemBus().connect("", "/org/freedesktop/Hal/devices/platform_headphone", "org.freedesktop.Hal.Device", "PropertyModified",
-                                         this, SLOT(updateWiredHeadset()));
-
-    QDBusConnection::systemBus().connect("", "", "org.freedesktop.Hal.Device", "Condition",
-                                         this, SLOT(onHeadsetButtonPressed(QDBusMessage)));
-
-    QDBusConnection::systemBus().connect("", "", "com.nokia.mce.signal", "sig_call_state_ind",
-                                         this, SLOT(onCallStateChanged(QDBusMessage)));
 #endif
 }
 
@@ -895,31 +855,6 @@ void MainWindow::setupPlayback()
 }
 #endif
 
-void MainWindow::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char*, QString)
-{
-    this->mafwState = state;
-}
-
-void MainWindow::togglePlayback()
-{
-    if (mafwState == Playing)
-        mafwrenderer->pause();
-    else if (mafwState == Paused)
-        mafwrenderer->resume();
-    else if (mafwState == Stopped)
-        mafwrenderer->play();
-}
-
-void MainWindow::onStateChanged(int state)
-{
-    this->mafwState = state;
-
-    if (state == Playing) {
-        headsetPauseStamp = -1;
-        pausedByCall = false;
-    }
-}
-
 void MainWindow::onContainerChanged(QString objectId)
 {
     if (objectId == "localtagfs::music")
@@ -932,140 +867,6 @@ void MainWindow::onContainerChanged(QString objectId)
 #endif
 
 #ifdef Q_WS_MAEMO_5
-void MainWindow::phoneButton()
-{
-    QString action = QSettings().value("main/headsetButtonAction", "next").toString();
-    if (action == "next") {
-        if (mafwState == Playing)
-            mafwrenderer->next();
-        else
-            togglePlayback();
-    } else if (action == "previous")
-        mafwrenderer->previous();
-    else if (action == "playpause")
-        togglePlayback();
-    else if (action == "stop")
-        mafwrenderer->stop();
-}
-
-// The purpose of distinction between wired and wireless headset is to postpone
-// playback resuming when Bluetooth headset is connected. This is needed because
-// the signal from Bluetooth daemon arrives before audio system is reconfigured,
-// which results in OMP playing via internal speakers for 1-2 seconds.
-// NOTE: There are 2 assumptions: a) it takes no more than 4 seconds to change
-// the audio output; b) headset will not be disconnected within those 4 seconds.
-void MainWindow::onWirelessHeadsetConnected()
-{
-    if (!resumeTimer) {
-        resumeTimer = new QTimer(this);
-        resumeTimer->setSingleShot(true);
-        connect(resumeTimer, SIGNAL(timeout()), this, SLOT(onHeadsetConnected()));
-    } else {
-        resumeTimer->stop();
-    }
-    resumeTimer->start(4000);
-}
-
-void MainWindow::onHeadsetConnected()
-{
-    qint64 headsetResumeTime = QSettings().value("main/headsetResumeSeconds", -1).toInt();
-
-    if (headsetPauseStamp != -1
-    && mafwState == Paused
-    && !pausedByCall
-    && (headsetResumeTime == -1 || headsetPauseStamp + headsetResumeTime*1000 > QDateTime::currentMSecsSinceEpoch()))
-        mafwrenderer->resume();
-
-    headsetPauseStamp = -1;
-}
-
-void MainWindow::onHeadsetDisconnected()
-{
-    if (QSettings().value("main/pauseHeadset", true).toBool()) {
-        if (mafwState == Playing) {
-            mafwrenderer->pause();
-            headsetPauseStamp = QDateTime::currentMSecsSinceEpoch();
-        } else if (pausedByCall) {
-            headsetPauseStamp = QDateTime::currentMSecsSinceEpoch();
-        }
-    }
-    if (resumeTimer) {
-        disconnect(resumeTimer, SIGNAL(timeout()), this, SLOT(onHeadsetConnected()));
-        resumeTimer->stop();
-        resumeTimer->deleteLater();
-        resumeTimer = NULL;
-    }
-}
-
-void MainWindow::updateWiredHeadset()
-{
-    QDBusInterface interface("org.freedesktop.Hal", HAL_PATH_RX51_JACK, "org.freedesktop.Hal.Device", QDBusConnection::systemBus(), this);
-    QDBusInterface interface2("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/platform_headphone", "org.freedesktop.Hal.Device", QDBusConnection::systemBus(), this);
-
-    if (!interface.isValid() || !interface2.isValid()) return;
-
-    // jackList contains "headphone" when headset is connected
-    QStringList jackList = static_cast< QDBusReply <QStringList> >(interface.call("GetProperty", "input.jack.type"));
-
-    // state contains jack GPIO state - false when nothing is not connected to jack
-    bool state = static_cast< QDBusReply <bool> >(interface2.call("GetProperty", "button.state.value"));
-
-    bool connected = ( state && jackList.contains("headphone") );
-
-    if (connected && !wiredHeadsetIsConnected) {
-        onHeadsetConnected();
-        wiredHeadsetIsConnected = true;
-    } else if (!connected && wiredHeadsetIsConnected) {
-        onHeadsetDisconnected();
-        wiredHeadsetIsConnected = false;
-    }
-}
-
-void MainWindow::onHeadsetButtonPressed(QDBusMessage msg)
-{
-    if (msg.arguments()[0] == "ButtonPressed") {
-        if (msg.arguments()[1] == "play-cd" || msg.arguments()[1] == "pause-cd")
-            togglePlayback();
-        else if (msg.arguments()[1] == "stop-cd")
-            mafwrenderer->stop();
-        else if (msg.arguments()[1] == "next-song")
-            mafwrenderer->next();
-        else if (msg.arguments()[1] == "previous-song")
-            mafwrenderer->previous();
-        else if (msg.arguments()[1] == "fast-forward")
-            mafwrenderer->setPosition(SeekRelative, 3);
-        else if (msg.arguments()[1] == "rewind")
-            mafwrenderer->setPosition(SeekRelative, -3);
-        else if (msg.arguments()[1] == "phone")
-            phoneButton();
-        else if (msg.arguments()[1] == "jack_insert" && msg.path() == HAL_PATH_RX51_JACK) // wired headset was connected or disconnected
-            updateWiredHeadset();
-    }
-}
-
-void MainWindow::onCallStateChanged(QDBusMessage msg)
-{
-    QString state = msg.arguments()[0].toString();
-
-    if (state == "ringing") {
-        wasRinging = true;
-        pausedByCall = mafwState == Playing;
-        if (pausedByCall) mafwrenderer->pause();
-    }
-
-    else if (!wasRinging && state == "active") {
-        pausedByCall = mafwState == Playing;
-        if (pausedByCall) mafwrenderer->pause();
-    }
-
-    else if (state == "none") {
-        if (pausedByCall && headsetPauseStamp == -1)
-            mafwrenderer->resume();
-        pausedByCall = false;
-        wasRinging = false;
-    }
-}
-
 void MainWindow::takeScreenshot()
 {
     // True takes a screenshot, false destroys it

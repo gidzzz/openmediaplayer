@@ -75,16 +75,11 @@ private:
     void setButtonIcons();
     void connectSignals();
     void closeChildren();
-    QTimer *resumeTimer;
 #ifdef Q_WS_MAEMO_5
     QMaemo5InformationBox *updatingInfoBox;
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
     bool updatingShow;
-    bool pausedByCall;
-    bool wasRinging;
-    bool wiredHeadsetIsConnected;
-    qint64 headsetPauseStamp;
 #endif
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
@@ -96,7 +91,6 @@ private:
     uint playlistToken;
     void countSongs();
     void countVideos();
-    int mafwState;
     QString objectIdToPlay;
 #endif
 
@@ -125,22 +119,12 @@ private slots:
     void countRadioStations();
     void onAddFinished(uint token);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);
-    void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
-    void togglePlayback();
-    void onStateChanged(int state);
     void onContainerChanged(QString objectId);
     void openDirectory(QString uri, Media::Type type);
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();
-    void onWirelessHeadsetConnected();
-    void onHeadsetConnected();
-    void onHeadsetDisconnected();
-    void onHeadsetButtonPressed(QDBusMessage msg);
-    void onCallStateChanged(QDBusMessage msg);
     void onScreenLocked(bool locked);
-    void phoneButton();
-    void updateWiredHeadset();
     void takeScreenshot();
 #endif
 
