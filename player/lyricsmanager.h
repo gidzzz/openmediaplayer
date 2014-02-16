@@ -47,9 +47,13 @@ private:
 
     QList<QPluginLoader*> loadersList;
     QList<AbstractLyricsProvider*> providersList;
-    void queryNextProvider();
+
+    bool stub;
     bool connectionError;
     int retry;
+
+    void populate();
+    void queryNextProvider();
 };
 
 #endif // LYRICSMANAGER_H

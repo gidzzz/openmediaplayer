@@ -5,7 +5,22 @@
 
 LyricsManager::LyricsManager(QObject *parent) :
     QObject(parent),
+    stub(true),
     retry(-1)
+{
+}
+
+LyricsManager::~LyricsManager()
+{
+    qDebug() << "Unloading plugins";
+
+    foreach(QPluginLoader* loader, loadersList) {
+        loader->unload();
+        delete loader;
+    }
+}
+
+void LyricsManager::populate()
 {
     qDebug() << "Started loading plugins";
 
@@ -61,17 +76,9 @@ LyricsManager::LyricsManager(QObject *parent) :
         connect(provider, SIGNAL(error(QString)), this, SLOT(onLyricsError(QString)));
     }
 
+    stub = false;
+
     qDebug() << "Finished loading plugins";
-}
-
-LyricsManager::~LyricsManager()
-{
-    qDebug() << "Unloading plugins";
-
-    foreach(QPluginLoader* loader, loadersList) {
-        loader->unload();
-        delete loader;
-    }
 }
 
 QMap<QString,QString> LyricsManager::listProviders()
@@ -164,6 +171,8 @@ void LyricsManager::fetchLyrics(QString artist, QString title, bool useCache)
         emit lyricsFetched(loadLyrics(artist, title));
     } else {
         emit lyricsInfo(tr("Fetching lyrics..."));
+
+        if (stub) populate();
 
         connectionError = false;
         queryNextProvider();
