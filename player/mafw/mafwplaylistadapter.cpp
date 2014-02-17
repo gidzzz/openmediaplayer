@@ -175,7 +175,6 @@ gpointer MafwPlaylistAdapter::getItems(int from, int to)
                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                               MAFW_METADATA_KEY_ALBUM,
                                                               MAFW_METADATA_KEY_ARTIST,
-                                                              MAFW_METADATA_KEY_URI,
                                                               MAFW_METADATA_KEY_DURATION),
                                              MafwPlaylistAdapter::get_items_cb,
                                              pl, get_items_free_cbarg);
@@ -196,7 +195,6 @@ gpointer MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist)
                                          MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                           MAFW_METADATA_KEY_ALBUM,
                                                           MAFW_METADATA_KEY_ARTIST,
-                                                          MAFW_METADATA_KEY_URI,
                                                           MAFW_METADATA_KEY_DURATION),
                                          MafwPlaylistAdapter::get_items_cb,
                                          pl, get_items_free_cbarg);
@@ -213,7 +211,6 @@ gpointer MafwPlaylistAdapter::getItemsOf(MafwPlaylist *playlist, int from, int t
                                          MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                           MAFW_METADATA_KEY_ALBUM,
                                                           MAFW_METADATA_KEY_ARTIST,
-                                                          MAFW_METADATA_KEY_URI,
                                                           MAFW_METADATA_KEY_DURATION),
                                          MafwPlaylistAdapter::get_items_cb,
                                          pl, get_items_free_cbarg);

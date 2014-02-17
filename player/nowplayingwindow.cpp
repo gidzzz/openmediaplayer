@@ -1053,7 +1053,6 @@ void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata
         item->setData(UserRoleSongAlbum, album);
         item->setData(UserRoleSongArtist, artist);
         item->setData(UserRoleObjectID, objectId);
-        item->setData(UserRoleSongIndex, index);
     } else {
         item->setData(UserRoleSongTitle, tr("Information not available"));
         item->setData(UserRoleSongDuration, Duration::Blank);
