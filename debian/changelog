@@ -1,3 +1,16 @@
+openmediaplayer (20140219-1) unstable; urgency=low
+
+  * UPnP widget uses whole screen width if playback indicator is hidden.
+  * Bluetooth and ringtone dialogs stay open for as long as it takes to obtain file details and allow operation to be cancelled in the meantime.
+  * Fixed paused video thumbnails being updated only when the video browser is open.
+  * Downloading of lyrics happens in the background even if Now Playing has not been opened yet.
+  * Improved reliability of media type detection in the UPnP browser.
+  * Use a separate color for lyrics status messages.
+  * Improved reliability of stop buttons and enabling/disabling of position sliders.
+  * Lots of changes under the hood.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 19 Feb 2014 11:37:19 +0100
+
 openmediaplayer (20140102-1) unstable; urgency=low
 
   * Disabled radio mode fallback for local videos.
