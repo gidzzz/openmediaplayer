@@ -31,6 +31,34 @@ QMap<QString,QVariant> MetadataWatcher::metadata()
 
 void MetadataWatcher::setMetadataFromRenderer(QString key, QVariant value)
 {
+#ifdef MAFW_WORKAROUNDS
+    // The renderer misreports duration of some UPnP media, so in this case give
+    // priority to the source. setMetadataFromSource() implements the remaining
+    // part of this workaround.
+    if (key == MAFW_METADATA_KEY_DURATION
+    &&  currentObjectId.startsWith("_uuid_"))
+    {
+        if (sourceMetadataPresent) {
+            QVariant &currentValue = currentMetadata[key];
+            if (currentValue.isNull()) {
+                currentValue = value;
+                emit metadataChanged(key, value);
+            }
+        } else {
+            QVariant &backupValue = backupMetadata[key];
+            if (backupValue.isNull())
+                backupValue = value;
+
+            QVariant &currentValue = currentMetadata[key];
+            if (currentValue != value) {
+                currentValue = value;
+                emit metadataChanged(key, value);
+            }
+        }
+        return;
+    }
+#endif
+
     if (!sourceMetadataPresent)
         backupMetadata[key] = value;
 
@@ -43,6 +71,24 @@ void MetadataWatcher::setMetadataFromRenderer(QString key, QVariant value)
 
 void MetadataWatcher::setMetadataFromSource(QString key, QVariant value)
 {
+#ifdef MAFW_WORKAROUNDS
+    // Source's part of the workaround described in setMetadataFromRenderer()
+    if (key == MAFW_METADATA_KEY_DURATION
+    &&  currentObjectId.startsWith("_uuid_"))
+    {
+        if (sourceMetadataPresent) {
+            QVariant &currentValue = currentMetadata[key];
+            if (currentValue != value) {
+                currentValue = value;
+                emit metadataChanged(key, currentValue);
+            }
+        } else {
+            backupMetadata[key] = value;
+        }
+        return;
+    }
+#endif
+
     if (sourceMetadataPresent) {
         // Consider source metadata less important than renderer metadata,
         // that is do not overwrite it.
@@ -52,9 +98,9 @@ void MetadataWatcher::setMetadataFromSource(QString key, QVariant value)
             emit metadataChanged(key, value);
         }
     } else {
-        QVariant &currentValue = backupMetadata[key];
-        if (currentValue.isNull())
-            currentValue = value;
+        QVariant &backupValue = backupMetadata[key];
+        if (backupValue.isNull())
+            backupValue = value;
     }
 }
 
