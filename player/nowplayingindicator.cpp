@@ -73,7 +73,7 @@ void NowPlayingIndicator::connectSignals()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
 
-    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this), SIGNAL(activated()), this, SLOT(openWindow()));
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), this), SIGNAL(activated()), this, SLOT(openWindow()));
 
     connect(animationTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
     connect(pokeTimer, SIGNAL(timeout()), this, SLOT(onPokeTimeout()));

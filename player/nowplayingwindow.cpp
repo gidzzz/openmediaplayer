@@ -380,9 +380,9 @@ void NowPlayingWindow::connectSignals()
     connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(previous()));
     shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
-    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(cycleView()));
-    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_L), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(cycleViewBack()));
 
     shortcut = new QShortcut(QKeySequence(Qt::Key_S), this); shortcut->setAutoRepeat(false);

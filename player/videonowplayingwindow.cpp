@@ -226,7 +226,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
 
     // A shortcut to toggle the overlay
-    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); shortcut->setAutoRepeat(false);
+    shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(toggleOverlay()));
 
     // Shortcuts to control the playback

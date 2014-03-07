@@ -97,8 +97,6 @@ void RadioNowPlayingWindow::connectSignals()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
 
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space), this); // prevent Ctrl+Space from toggling playback
-
 #ifdef Q_WS_MAEMO_5
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
 #endif
