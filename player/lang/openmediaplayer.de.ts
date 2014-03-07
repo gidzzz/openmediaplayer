@@ -918,7 +918,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <message>
         <location filename="../ringtonedialog.cpp" line="49"/>
         <source>Selected song set as ringing tone</source>
-        <translation></translation>
+        <translation>Als Klingelton verwenden</translation>
     </message>
 </context>
 <context>
