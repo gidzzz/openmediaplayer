@@ -1,3 +1,11 @@
+openmediaplayer (20140307-1) unstable; urgency=low
+
+  * Fixed a bug that could cause incorrect opening of playlist files via mime_open and inability to restore the old music playlist.
+  * Modified all shortcuts using Ctrl+Space to use Ctrl+L, to avoid confusion (and collision?) with a Maemo system shortcut.
+  * Restored a phrase accidentally removed from the German translation.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 07 Mar 2014 15:48:17 +0100
+
 openmediaplayer (20140219-1) unstable; urgency=low
 
   * UPnP widget uses whole screen width if playback indicator is hidden.
