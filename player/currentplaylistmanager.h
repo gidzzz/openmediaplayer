@@ -15,6 +15,7 @@ struct Job
     QString filter;   // filter string
     QString sorting;  // sort criteria
     uint limit;       // maximal number of results
+    bool clear;       // clear the playlist before adding items
 };
 
 class CurrentPlaylistManager : public QObject
@@ -27,7 +28,8 @@ public:
     uint appendBrowsed(QString objectId,
                        QString filter = QString(),
                        QString sorting = QString(),
-                       uint limit = MAFW_SOURCE_BROWSE_ALL);
+                       uint limit = MAFW_SOURCE_BROWSE_ALL,
+                       bool clear = false);
 
 signals:
     void finished(uint browseId, int count);

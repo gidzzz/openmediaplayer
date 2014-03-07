@@ -17,10 +17,10 @@ CurrentPlaylistManager::CurrentPlaylistManager(MafwAdapterFactory *factory) :
 }
 
 // Place a request to append browse results to the playlist
-uint CurrentPlaylistManager::appendBrowsed(QString objectId, QString filter, QString sorting, uint limit)
+uint CurrentPlaylistManager::appendBrowsed(QString objectId, QString filter, QString sorting, uint limit, bool clear)
 {
     // Create and enqueue a job
-    Job job = { ++currentToken, objectId, filter, sorting, limit };
+    Job job = { ++currentToken, objectId, filter, sorting, limit, clear };
     jobs.append(job);
 
     qDebug() << "Adding job" << jobs.last().token << jobs.last().objectId;
@@ -103,7 +103,7 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
         QString mime = QString::fromUtf8(g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));
         qDebug() << "Last item MIME:" << mime;
 
-        // Assing the proper playlist
+        // Assign the proper playlist
         if (mime.startsWith("audio")) {
             if (playlist->playlistName() != "FmpAudioPlaylist")
                 playlist->assignAudioPlaylist();
@@ -111,6 +111,10 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
             if (playlist->playlistName() != "FmpVideoPlaylist")
                 playlist->assignVideoPlaylist();
         }
+
+        // Also clear the playlist if ordered to do so
+        if (jobs.first().clear)
+            playlist->clear();
 
         // Add songs to the playlist
         playlist->appendItems((const gchar**)songBuffer);

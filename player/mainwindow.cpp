@@ -369,11 +369,9 @@ void MainWindow::mime_open(const QString &uriString)
                         .prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
                 qDebug() << "Converted ID:" << objectId;
 
-                playlist->clear();
-
                 CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
                 connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
-                playlistToken = cpm->appendBrowsed(objectId);
+                playlistToken = cpm->appendBrowsed(objectId, QString(), QString(), MAFW_SOURCE_BROWSE_ALL, true);
             }
 
             else {
