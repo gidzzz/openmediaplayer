@@ -1,3 +1,10 @@
+openmediaplayer (20140326-1) unstable; urgency=low
+
+  * Fixed a regression that broke item activation in the playlist browser.
+  * Fixed total playlist time calculation in Now Playing.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 26 Mar 2014 12:22:19 +0100
+
 openmediaplayer (20140307-1) unstable; urgency=low
 
   * Fixed a bug that could cause incorrect opening of playlist files via mime_open and inability to restore the old music playlist.
