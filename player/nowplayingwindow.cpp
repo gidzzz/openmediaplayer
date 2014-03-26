@@ -610,9 +610,17 @@ void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
         } else {
             songDuration = value.toInt();
 
+            if (songDuration < 0)
+                songDuration = Duration::Unknown;
+
             QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
-            if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank)
+            if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank) {
                 item->setData(UserRoleSongDuration, songDuration);
+                if (songDuration > 0) {
+                    playlistTime += songDuration;
+                    updatePlaylistTimeLabel();
+                }
+            }
         }
         ui->trackLengthLabel->setText(mmss_len(songDuration));
         ui->positionSlider->setRange(0, songDuration);
@@ -1019,9 +1027,12 @@ void NowPlayingWindow::togglePlayback()
 #ifdef MAFW
 void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata, guint index)
 {
-    QListWidgetItem *item =  ui->songList->item(index);
+    QListWidgetItem *item = ui->songList->item(index);
 
     if (!item) return; // in case of query manager's outdated request
+
+    if (item->data(UserRoleSongDuration).toInt() > 0)
+        playlistTime -= item->data(UserRoleSongDuration).toInt();
 
     if (metadata != NULL) {
         QString title;
@@ -1042,11 +1053,8 @@ void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
         duration = v ? g_value_get_int (v) : Duration::Unknown;
 
-        if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
-            playlistTime -= item->data(UserRoleSongDuration).toInt();
         if (duration > 0)
             playlistTime += duration;
-        this->updatePlaylistTimeLabel();
 
         item->setData(UserRoleSongTitle, title);
         item->setData(UserRoleSongDuration, duration);
@@ -1057,6 +1065,8 @@ void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata
         item->setData(UserRoleSongTitle, tr("Information not available"));
         item->setData(UserRoleSongDuration, Duration::Blank);
     }
+
+    updatePlaylistTimeLabel();
 
     if (qmlView) qmlView->setPlaylistItem(index, item);
 }
@@ -1104,7 +1114,6 @@ void NowPlayingWindow::updatePlaylistState()
 void NowPlayingWindow::clearPlaylist()
 {
     if (ConfirmDialog(ConfirmDialog::ClearCurrent, this).exec() == QMessageBox::Yes) {
-        playlistTime = 0;
         playlist->clear();
         lastPlayingSong->set(1);
         this->close();
@@ -1288,13 +1297,14 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
     if (nremove > 0) {
         for (uint i = 0; i < nremove; i++) {
             QListWidgetItem *item = ui->songList->takeItem(from);
-            if (playlistTime > 0 && item->data(UserRoleSongDuration).toInt() > 0)
+            if (item && item->data(UserRoleSongDuration).toInt() > 0) {
                 playlistTime -= item->data(UserRoleSongDuration).toInt();
-            delete item;
+                delete item;
+            }
 
             if (qmlView) qmlView->removePlaylistItem(from);
         }
-        this->updatePlaylistTimeLabel();
+        updatePlaylistTimeLabel();
         playlistQM->itemsRemoved(from, nremove);
     }
     else if (nreplace > 0) {
