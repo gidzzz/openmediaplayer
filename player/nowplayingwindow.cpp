@@ -530,7 +530,7 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
         }
 
         else if (event->type() == QEvent::MouseButtonRelease) {
-            if (clickedItem != ui->songList->currentItem())
+            if (clickedItem != ui->songList->itemAt(0, static_cast<QMouseEvent*>(event)->y()))
                 clickedItem = NULL;
             clickTimer->start();
         }

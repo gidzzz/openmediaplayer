@@ -475,20 +475,27 @@ bool SinglePlaylistView::eventFilter(QObject *obj, QEvent *e)
                 de->setDropAction(Qt::MoveAction);
                 playlistModified = true;
             }
-            return false;
+            break;
+        }
+
+        case QEvent::MouseButtonPress: {
+            clickedIndex = ui->objectList->indexAt(QPoint(0,static_cast<QMouseEvent*>(e)->y()));
+            break;
         }
 
         case QEvent::MouseButtonRelease: {
-            if (clickedIndex != ui->objectList->currentIndex())
+            if (clickedIndex != ui->objectList->indexAt(QPoint(0,static_cast<QMouseEvent*>(e)->y())))
                 clickedIndex = QModelIndex();
             clickTimer->start();
-            return false;
+            break;
         }
 
         default: {
-            return BrowserWindow::eventFilter(obj, e);
+            break;
         }
     }
+
+    return BrowserWindow::eventFilter(obj, e);
 }
 
 void SinglePlaylistView::onItemDoubleClicked()
