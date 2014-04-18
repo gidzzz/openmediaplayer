@@ -850,7 +850,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Valitse soittolista</translation>
     </message>
     <message>

@@ -847,7 +847,7 @@ Deconectați USB-ul pentru a continua folosirea transmițătorului FM.</translat
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

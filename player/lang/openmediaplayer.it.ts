@@ -850,8 +850,8 @@ Unplug USB to continue using FM transmitter.</source>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
-        <translation>Seleziona una playlst</translation>
+        <source>Select a playlist</source>
+        <translation>Seleziona una playlist</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="9"/>

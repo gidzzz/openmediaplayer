@@ -838,7 +838,7 @@ Húzza ki a kábelt, hogy használhassa az FM transmittert!</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Válassz lejátszási listát</translation>
     </message>
     <message>

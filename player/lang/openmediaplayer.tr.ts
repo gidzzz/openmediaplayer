@@ -823,7 +823,7 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Çalma listesi seçin</translation>
     </message>
     <message>

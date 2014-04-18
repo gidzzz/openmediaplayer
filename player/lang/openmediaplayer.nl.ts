@@ -850,7 +850,7 @@ Verwijder de USB kabel om de FM zender te kunnen gebruiken.</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Selecteer een afspeellijst</translation>
     </message>
     <message>

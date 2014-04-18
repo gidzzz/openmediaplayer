@@ -865,7 +865,7 @@ do seznamu stop</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Vybrat seznam stop</translation>
     </message>
     <message>

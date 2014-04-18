@@ -833,7 +833,7 @@ Unplug USB to continue using FM transmitter.</source>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation></translation>
     </message>
     <message>

@@ -850,7 +850,7 @@ Bitte  USB Kabel entfernen um den UKW-Sender zu benutzen.</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Wiedergabeliste auswählen</translation>
     </message>
     <message>

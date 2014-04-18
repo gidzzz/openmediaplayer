@@ -850,7 +850,7 @@ Débranchez le cable USB pour utiliser l&apos;émetteur FM.</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Choisir une liste de lecture</translation>
     </message>
     <message>

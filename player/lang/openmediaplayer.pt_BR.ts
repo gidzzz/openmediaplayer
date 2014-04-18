@@ -850,7 +850,7 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Selecionar uma lista de reprodução</translation>
     </message>
     <message>

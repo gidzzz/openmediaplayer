@@ -838,7 +838,7 @@ de Reprodução Atual</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Seleccionar uma lista de reprodução</translation>
     </message>
     <message>

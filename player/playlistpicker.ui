@@ -3,7 +3,7 @@
  <class>PlaylistPicker</class>
  <widget class="QDialog" name="PlaylistPicker">
   <property name="windowTitle">
-   <string>Select a playlst</string>
+   <string>Select a playlist</string>
   </property>
   <layout class="QVBoxLayout" name="mainLayout">
    <property name="leftMargin">

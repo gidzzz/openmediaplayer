@@ -862,7 +862,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <name>PlaylistPicker</name>
     <message>
         <location filename="../playlistpicker.ui" line="6"/>
-        <source>Select a playlst</source>
+        <source>Select a playlist</source>
         <translation>Vybrať zoznam stôp</translation>
     </message>
     <message>
