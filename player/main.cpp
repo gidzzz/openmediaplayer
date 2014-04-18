@@ -28,6 +28,8 @@
 #include <QTextStream>
 #include <QTranslator>
 
+#include <libmafw/mafw-log.h>
+
 int main(int argc, char *argv[])
 {
     QApplication::setOrganizationName("openmediaplayer");
@@ -64,6 +66,9 @@ int main(int argc, char *argv[])
         } else
             qDebug() << "Translator failed to load";
     }
+
+    // Disable mafw syslog logging
+    mafw_log_init(NULL);
 
     QTime t(0,0);
     t.start();
