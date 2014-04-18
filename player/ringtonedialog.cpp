@@ -44,7 +44,7 @@ void RingtoneDialog::setRingtone()
                    "/com/nokia/profiled",
                    "com.nokia.profiled",
                    QDBusConnection::sessionBus())
-    .call("set_value", "general", "ringing.alert.tone", uri);
+    .call(QDBus::NoBlock, "set_value", "general", "ringing.alert.tone", uri);
 
     QMaemo5InformationBox::information(this->parentWidget(), tr("Selected song set as ringing tone"));
 

@@ -77,7 +77,7 @@ void ShareDialog::shareViaBluetooth()
                    "/com/nokia/bt_ui",
                    "com.nokia.bt_ui",
                    QDBusConnection::systemBus())
-    .call("show_send_file_dlg", files);
+    .call(QDBus::NoBlock, "show_send_file_dlg", files);
 
     this->close();
 }
@@ -88,7 +88,7 @@ void ShareDialog::shareViaEmail()
                    "/com/nokia/modest",
                    "com.nokia.modest",
                    QDBusConnection::sessionBus())
-    .call("ComposeMail",
+    .call(QDBus::NoBlock, "ComposeMail",
            QString(), // to
            QString(), // cc
            QString(), // bcc
