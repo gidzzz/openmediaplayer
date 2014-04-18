@@ -27,7 +27,19 @@ Maemo5DeviceEvents* Maemo5DeviceEvents::acquire()
 
 Maemo5DeviceEvents::Maemo5DeviceEvents()
 {
+    this->screenState = "unlocked";
     this->connectSignals();
+    QDBusPendingCall call = QDBusConnection::systemBus().asyncCall(QDBusMessage::createMethodCall("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", "get_tklock_mode"));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(watcherFinished(QDBusPendingCallWatcher*)));
+}
+
+void Maemo5DeviceEvents::watcherFinished(QDBusPendingCallWatcher *watcher)
+{
+    QDBusPendingReply<QString> reply = *watcher;
+    QString state = reply;
+    watcher->deleteLater();
+    onScreenLocked(state);
 }
 
 void Maemo5DeviceEvents::connectSignals()
@@ -46,46 +58,23 @@ void Maemo5DeviceEvents::onScreenLocked(QString state)
     qDebug() << "Maemo5DeviceEvents: Screen lock status changed: " << state;
 #endif
     this->screenState = state;
-    if (state == "unlocked")
+    if (state.endsWith("unlocked"))
         emit screenLocked(false);
-    else if (state == "locked")
+    else
         emit screenLocked(true);
 }
 
 bool Maemo5DeviceEvents::isScreenLocked()
 {
-    if (!this->screenState.isNull()) {
-        if (this->screenState == "locked") {
+    if (this->screenState.endsWith("unlocked")) {
 #ifdef DEBUG
-            qDebug() << "Maemo5DeviceEvents: Screen is locked";
+        qDebug() << "Maemo5DeviceEvents: Screen is unlocked";
 #endif
-            return true;
-        } else if (this->screenState == "unlocked") {
-#ifdef DEBUG
-            qDebug() << "Maemo5DeviceEvents: Screen is unlocked";
-#endif
-            return false;
-        }
+        return false;
     } else {
-        // Screen state hasn't changed, so screenState would be a null value
-        // Read from sysfs
-        QFile tsDisabled("/sys/devices/platform/omap2_mcspi.1/spi1.0/disable_ts");
-        tsDisabled.open(QIODevice::ReadOnly);
-        int tsState = tsDisabled.readLine().toInt();
-        tsDisabled.close();
-        if (tsState == 1) {
-            this->screenState = "locked";
 #ifdef DEBUG
-            qDebug() << "Maemo5DeviceEvents: Screen is locked";
+        qDebug() << "Maemo5DeviceEvents: Screen is locked";
 #endif
-            return true;
-        } else if (tsState == 0) {
-            this->screenState = "unlocked";
-#ifdef DEBUG
-            qDebug() << "Maemo5DeviceEvents: Screen is unlocked";
-#endif
-            return false;
-        }
+        return true;
     }
-    return false;
 }

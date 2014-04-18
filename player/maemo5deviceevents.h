@@ -27,6 +27,7 @@ private:
 
 private slots:
     void onScreenLocked(QString);
+    void watcherFinished(QDBusPendingCallWatcher *);
 
 };
 
