@@ -812,7 +812,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../nowplayingwindow.ui" line="645"/>
         <source>Add songs to a playlist</source>
-        <translation>Pridať skladby do aktuálne prehrávaných</translation>
+        <translation>Pridať do zoznamu stôp</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="650"/>
