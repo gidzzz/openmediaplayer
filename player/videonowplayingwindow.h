@@ -63,6 +63,7 @@ private:
     void setIcons();
     void connectSignals();
     void startPositionTimer();
+    void updateDNDAtom();
     void showOverlay(bool show);
     void switchToRadio();
 
@@ -90,9 +91,6 @@ private:
     bool isMediaSeekable;
     bool buttonWasDown;
     int keyToRepeat;
-#ifdef Q_WS_MAEMO_5
-    void setDNDAtom(bool dnd);
-#endif
 #ifdef MAFW
     MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter* mafwrenderer;

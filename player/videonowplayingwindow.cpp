@@ -555,6 +555,8 @@ void VideoNowPlayingWindow::onStateChanged(int state)
 
     mafwState = state;
 
+    updateDNDAtom();
+
     // The life of this window is dependent on the playback state. Unfortunately,
     // even after issuing a stop command, getting the state of the renderer can
     // still fetch 'playing' as the result for a while. To prevent the window
@@ -638,11 +640,6 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
             connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
 
-#ifdef Q_WS_MAEMO_5
-            // Popups allowed
-            this->setDNDAtom(false);
-#endif
-
             // Playback position is not emitted in the paused state. Request it
             // manually to get the exact value.
             mafwrenderer->getPosition();
@@ -658,11 +655,6 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             ui->playButton->setIcon(QIcon(pauseButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
             connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
-
-#ifdef Q_WS_MAEMO_5
-            // Popups disallowed
-            this->setDNDAtom(true);
-#endif
 
             // The resume position should be touched only if proper metadata has
             // already arrived.
@@ -683,11 +675,6 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             ui->playButton->setIcon(QIcon(playButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
             connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
-
-#ifdef Q_WS_MAEMO_5
-            // Popups allowed
-            this->setDNDAtom(false);
-#endif
 
             // Reset the last received position
             currentPosition = 0;
@@ -734,15 +721,17 @@ void VideoNowPlayingWindow::setContinuousPlayback(bool enable)
     QSettings().setValue("Videos/continuousPlayback", enable);
 }
 
-#ifdef Q_WS_MAEMO_5
 // Prevent notifications and popups from obscuring the window
-void VideoNowPlayingWindow::setDNDAtom(bool dnd)
+void VideoNowPlayingWindow::updateDNDAtom()
 {
-    uchar enable = dnd;
-    Atom winDNDAtom = XInternAtom(QX11Info::display(), "_HILDON_DO_NOT_DISTURB", false);
-    XChangeProperty(QX11Info::display(), winId(), winDNDAtom, XA_INTEGER, 32, PropModeReplace, &enable, 1);
+    Atom atom = XInternAtom(QX11Info::display(), "_HILDON_DO_NOT_DISTURB", false);
+
+    if (uchar enable = !overlayVisible && mafwState == Playing) {
+        XChangeProperty(QX11Info::display(), winId(), atom, XA_INTEGER, 32, PropModeReplace, &enable, 1);
+    } else {
+        XDeleteProperty(QX11Info::display(), winId(), atom);
+    }
 }
-#endif
 
 #ifdef MAFW
 // Move playback forward by a small amount
@@ -844,6 +833,8 @@ void VideoNowPlayingWindow::showOverlay(bool show)
     ui->wmEditButton->setVisible(show);
 
     overlayVisible = show;
+
+    updateDNDAtom();
 
     if (show) {
         startPositionTimer();
