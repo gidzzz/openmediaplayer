@@ -50,9 +50,7 @@ SleeperDialog::SleeperDialog(QWidget *parent) :
     connect(sleeper, SIGNAL(finished()), this, SLOT(setTimeoutStamp()));
     setTimeoutStamp(sleeper->end());
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 SleeperDialog::~SleeperDialog()
@@ -119,7 +117,7 @@ void SleeperDialog::onButtonClicked(QAbstractButton *button)
     setTimeoutStamp(sleeper->end());
 }
 
-void SleeperDialog::orientationChanged(int w, int h)
+void SleeperDialog::onOrientationChanged(int w, int h)
 {
     ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait

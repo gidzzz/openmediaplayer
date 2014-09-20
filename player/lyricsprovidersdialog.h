@@ -33,7 +33,7 @@ private slots:
     void moveProviderDown();
     void onProviderChanged(QListWidgetItem *item);
 
-    void orientationChanged(int h, int w);
+    void onOrientationChanged(int h, int w);
 };
 
 #endif // LYRICSPROVIDERSDIALOG_H

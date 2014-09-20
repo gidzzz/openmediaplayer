@@ -44,6 +44,13 @@ void Rotator::setSlave(QWidget *slave)
     m_slave = slave;
 }
 
+void Rotator::addClient(QObject *client)
+{
+    connect(this, SIGNAL(rotated(int,int)), client, SLOT(onOrientationChanged(int,int)));
+
+    QMetaObject::invokeMethod(client, "onOrientationChanged", Q_ARG(int, w), Q_ARG(int, h));
+}
+
 Rotator::Orientation Rotator::policy()
 {
     return m_policy;

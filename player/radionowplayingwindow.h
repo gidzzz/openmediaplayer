@@ -81,7 +81,7 @@ private slots:
     void toggleVolumeSlider();
     void onVolumeSliderPressed();
     void onVolumeSliderReleased();
-    void orientationChanged(int w, int h);
+    void onOrientationChanged(int w, int h);
     void onScreenLocked(bool locked);
     void volumeWatcher();
 #ifdef Q_WS_MAEMO_5

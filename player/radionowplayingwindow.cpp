@@ -70,9 +70,7 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory
 
     networkSession = new QNetworkSession(QNetworkConfigurationManager().defaultConfiguration(), this);
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 
 #ifdef MAFW
     mafwrenderer->getStatus();
@@ -458,7 +456,7 @@ void RadioNowPlayingWindow::setAlbumImage(QString image)
     m->setItem(item);
 }
 
-void RadioNowPlayingWindow::orientationChanged(int w, int h)
+void RadioNowPlayingWindow::onOrientationChanged(int w, int h)
 {
     if (w > h) { // Landscape
         ui->orientationLayout->setDirection(QBoxLayout::LeftToRight);

@@ -43,7 +43,7 @@ private slots:
     void showDialog();
     void onSaveClicked();
     void onStateChanged();
-    void orientationChanged(int w, int h);
+    void onOrientationChanged(int w, int h);
     void onCheckboxClicked();
 };
 

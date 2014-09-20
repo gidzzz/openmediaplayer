@@ -38,7 +38,7 @@ private slots:
     void configureLyricsProviders();
     void clearLyricsCache();
     void accept();
-    void orientationChanged(int h, int w);
+    void onOrientationChanged(int h, int w);
 };
 
 #endif // SETTINGSDIALOG_H

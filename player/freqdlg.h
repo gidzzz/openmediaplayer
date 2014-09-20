@@ -51,7 +51,7 @@ public:
 private slots:
     void on_buttonBox_accepted();
     void onFrequencyChanged();
-    void orientationChanged(int w, int h);
+    void onOrientationChanged(int w, int h);
 
 private:
     Ui::FreqDlg *ui;

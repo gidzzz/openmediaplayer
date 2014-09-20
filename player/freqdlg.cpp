@@ -13,9 +13,7 @@ FreqDlg::FreqDlg(QWidget *parent) :
     frequency = new GConfItem("/system/fmtx/frequency");
     refreshFreqValues();
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 FreqDlg::~FreqDlg()
@@ -23,7 +21,7 @@ FreqDlg::~FreqDlg()
     delete ui;
 }
 
-void FreqDlg::orientationChanged(int w, int h)
+void FreqDlg::onOrientationChanged(int w, int h)
 {
     ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait

@@ -44,7 +44,7 @@ private slots:
     void onCreatePlaylist();
     void onCreatePlaylistAccepted();
     void onItemActivated(QListWidgetItem *item);
-    void orientationChanged(int h, int w);
+    void onOrientationChanged(int h, int w);
 };
 
 #endif // PLAYLISTPICKER_H

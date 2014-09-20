@@ -19,9 +19,7 @@ BookmarkDialog::BookmarkDialog(QWidget *parent, MafwAdapterFactory *factory, Med
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 BookmarkDialog::~BookmarkDialog()
@@ -64,7 +62,7 @@ void BookmarkDialog::accept()
     }
 }
 
-void BookmarkDialog::orientationChanged(int w, int h)
+void BookmarkDialog::onOrientationChanged(int w, int h)
 {
     ui->mainLayout->removeWidget(ui->videoBox);
     ui->mainLayout->removeWidget(ui->buttonBox);

@@ -22,6 +22,8 @@ public:
     void setPolicy(Orientation policy);
     void setSlave(QWidget *subject);
 
+    void addClient(QObject *client);
+
     Orientation policy();
     int width();
     int height();

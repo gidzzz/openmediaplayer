@@ -20,9 +20,7 @@ LyricsSearchDialog::LyricsSearchDialog(QWidget *parent) :
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(onOrientationChanged(int,int)));
-    onOrientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 LyricsSearchDialog::~LyricsSearchDialog()

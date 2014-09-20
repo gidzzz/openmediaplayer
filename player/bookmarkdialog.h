@@ -36,7 +36,7 @@ private:
 
 private slots:
     void accept();
-    void orientationChanged(int h, int w);
+    void onOrientationChanged(int h, int w);
 };
 
 #endif // BOOKMARKDIALOG_H

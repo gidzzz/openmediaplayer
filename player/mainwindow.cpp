@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connectSignals();
 
     Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
+    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(onOrientationChanged(int,int)));
     rotator->setSlave(this);
     reloadSettings();
 
@@ -575,7 +575,7 @@ void MainWindow::createVideoNowPlayingWindow()
 #endif
 }
 
-void MainWindow::orientationChanged(int w, int h)
+void MainWindow::onOrientationChanged(int w, int h)
 {
     if (w > h) { // Landscape
         ui->menuList->hide();

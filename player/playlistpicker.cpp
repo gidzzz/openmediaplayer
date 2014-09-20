@@ -31,9 +31,7 @@ PlaylistPicker::PlaylistPicker(QWidget *parent) :
     mafwPlaylistManager->freeListOfPlaylists(playlists);
 #endif
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 PlaylistPicker::~PlaylistPicker()
@@ -104,7 +102,7 @@ void PlaylistPicker::onCreatePlaylistAccepted()
 #endif
 }
 
-void PlaylistPicker::orientationChanged(int w, int h)
+void PlaylistPicker::onOrientationChanged(int w, int h)
 {
     if (w < h) // Portrait
         this->setFixedHeight(680);

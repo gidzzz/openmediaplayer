@@ -43,9 +43,7 @@ LyricsProvidersDialog::LyricsProvidersDialog(QString state, QWidget *parent) :
         ui->downButton->setEnabled(false);
     }
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 LyricsProvidersDialog::~LyricsProvidersDialog()
@@ -109,7 +107,7 @@ QString LyricsProvidersDialog::state()
     return state;
 }
 
-void LyricsProvidersDialog::orientationChanged(int w, int h)
+void LyricsProvidersDialog::onOrientationChanged(int w, int h)
 {
     if (w < h) { // Portrait
         ui->mainLayout->removeWidget(ui->controlsWidget);

@@ -135,9 +135,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui->songList->viewport()->installEventFilter(this);
     ui->currentPositionLabel->installEventFilter(this);
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 
     if (enableLyrics) {
         LyricsManager *lyricsManager = MissionControl::acquire()->lyricsManager();
@@ -678,7 +676,7 @@ void NowPlayingWindow::searchLyrics()
     (new LyricsSearchDialog(this))->show();
 }
 
-void NowPlayingWindow::orientationChanged(int w, int h)
+void NowPlayingWindow::onOrientationChanged(int w, int h)
 {
     if (w > h) { // Landscape mode
         portrait = false;

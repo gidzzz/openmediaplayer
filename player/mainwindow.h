@@ -95,7 +95,7 @@ private:
 #endif
 
 private slots:
-    void orientationChanged(int w, int h);
+    void onOrientationChanged(int w, int h);
     void showAbout();
     void processListClicks(QListWidgetItem*);
     void openSettings();

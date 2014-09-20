@@ -162,7 +162,7 @@ private slots:
     void volumeWatcher();
     void onMetadataChanged(QString key, QVariant value);
     void onRepeatButtonToggled(bool checked);
-    void orientationChanged(int w, int h);
+    void onOrientationChanged(int w, int h);
     void onNextButtonPressed();
     void onPrevButtonPressed();
     void onPositionSliderPressed();

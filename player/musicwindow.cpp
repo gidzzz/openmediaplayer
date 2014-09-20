@@ -95,9 +95,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
 
     connectSignals();
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 MusicWindow::~MusicWindow()
@@ -366,7 +364,7 @@ void MusicWindow::onSearchTextChanged()
     }
 }
 
-void MusicWindow::orientationChanged(int w, int h)
+void MusicWindow::onOrientationChanged(int w, int h)
 {
     ui->albumList->setGridSize(QSize(155, w > h ? 212 : 186));
 

@@ -39,9 +39,7 @@ FMTXDialog::FMTXDialog(QWidget *parent) :
 #endif
     ui->mainLayout->addWidget(freqButton, 1, 0, 1, 1);
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 
     fmtxState = new GConfItem("/system/fmtx/enabled");
     fmtxFrequency = new GConfItem("/system/fmtx/frequency");
@@ -103,7 +101,7 @@ void FMTXDialog::onStateChanged()
         ui->fmtxCheckbox->setChecked(false);
 }
 
-void FMTXDialog::orientationChanged(int w, int h)
+void FMTXDialog::onOrientationChanged(int w, int h)
 {
     ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait

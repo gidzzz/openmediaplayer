@@ -12,9 +12,7 @@ CoverPicker::CoverPicker(QString album, QString path, QWidget *parent) :
     connect(ui->fileList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
     connect(ui->locationButton, SIGNAL(clicked()), this, SLOT(browse()));
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(onOrientationChanged(int,int)));
-    onOrientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 
     QStringList filters;
     dir.setNameFilters(filters << "*.jpg");

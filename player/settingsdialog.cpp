@@ -133,9 +133,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-    Rotator *rotator = Rotator::acquire();
-    connect(rotator, SIGNAL(rotated(int,int)), this, SLOT(orientationChanged(int,int)));
-    orientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -238,7 +236,7 @@ void SettingsDialog::accept()
     QDialog::accept();
 }
 
-void SettingsDialog::orientationChanged(int w, int h)
+void SettingsDialog::onOrientationChanged(int w, int h)
 {
     ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait

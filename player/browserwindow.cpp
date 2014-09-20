@@ -25,8 +25,6 @@ BrowserWindow::BrowserWindow(QWidget *parent, MafwAdapterFactory *mafwFactory) :
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
     connect(ui->searchHideButton, SIGNAL(clicked()), this, SLOT(onSearchHideButtonClicked()));
 
-    connect(Rotator::acquire(), SIGNAL(rotated(int,int)), this, SLOT(onOrientationChanged(int,int)));
-
     // Set the initial orientation later, after child class constructor
     QTimer::singleShot(0, this, SLOT(orientationInit()));
 }
@@ -92,9 +90,7 @@ void BrowserWindow::keyReleaseEvent(QKeyEvent *e)
 
 void BrowserWindow::orientationInit()
 {
-    Rotator *rotator = Rotator::acquire();
-
-    this->onOrientationChanged(rotator->width(), rotator->height());
+    Rotator::acquire()->addClient(this);
 }
 
 void BrowserWindow::onOrientationChanged(int w, int h)

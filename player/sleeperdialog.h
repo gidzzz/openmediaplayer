@@ -40,7 +40,7 @@ private:
 private slots:
     void refreshTitle();
     void onButtonClicked(QAbstractButton *button);
-    void orientationChanged(int h, int w);
+    void onOrientationChanged(int h, int w);
 };
 
 #endif // SLEEPERDIALOG_H
