@@ -150,6 +150,11 @@ void LyricsManager::deleteLyrics(QString artist, QString title)
 
 void LyricsManager::fetchLyrics(QString artist, QString title, bool useCache)
 {
+    fetchLyrics(artist, title, artist, title, useCache);
+}
+
+void LyricsManager::fetchLyrics(QString artist, QString title, QString queryArtist, QString queryTitle, bool useCache)
+{
     // Abort a possible pending operation
     if (retry != -1) {
         providersList.at(retry)->abort();
@@ -159,16 +164,22 @@ void LyricsManager::fetchLyrics(QString artist, QString title, bool useCache)
     // Store info about the processed song
     this->artist = artist;
     this->title = title;
+    this->queryArtist = queryArtist;
+    this->queryTitle = queryTitle;
 
     // Do not even try to fetch lyrics if details are not available
-    if (artist.isNull() || title.isNull()) {
+    if (queryArtist.isNull() || queryTitle.isNull()) {
         emit lyricsInfo(tr("Lyrics not found"));
         return;
     }
 
+    // Override cache flag if artists or titles differ, because the requested
+    // song may already exist under the different name.
+    useCache |= artist != queryArtist || title != queryTitle;
+
     // Fetch lyrics from cache or start querying providers
-    if (useCache && QFile(cacheFilePath(artist, title)).exists()) {
-        emit lyricsFetched(loadLyrics(artist, title));
+    if (useCache && QFile(cacheFilePath(queryArtist, queryTitle)).exists()) {
+        emit lyricsFetched(loadLyrics(queryArtist, queryTitle));
     } else {
         emit lyricsInfo(tr("Fetching lyrics..."));
 
@@ -186,7 +197,7 @@ void LyricsManager::queryNextProvider()
         AbstractLyricsProvider *provider = providersList.at(retry);
         if (provider->nam == NULL || QNetworkConfigurationManager().isOnline()) {
             qDebug() << "Querying" << provider->name();
-            provider->fetch(artist, title);
+            provider->fetch(queryArtist, queryTitle);
         } else {
             qDebug() << "Skipping" << provider->name();
             connectionError = true;

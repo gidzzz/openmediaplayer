@@ -673,6 +673,11 @@ void NowPlayingWindow::editLyrics()
     (new EditLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), this))->show();
 }
 
+void NowPlayingWindow::searchLyrics()
+{
+    (new LyricsSearchDialog(this))->show();
+}
+
 void NowPlayingWindow::orientationChanged(int w, int h)
 {
     if (w > h) { // Landscape mode
@@ -1390,6 +1395,7 @@ void NowPlayingWindow::onLyricsContextMenuRequested(const QPoint &pos)
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Edit lyrics"), this, SLOT(editLyrics()));
+    contextMenu->addAction(tr("Search for lyrics"), this, SLOT(searchLyrics()));
     contextMenu->addAction(tr("Reload lyrics"), MissionControl::acquire()->lyricsManager(), SLOT(reloadLyricsOverridingCache()));
     contextMenu->exec(this->mapToGlobal(pos));
 }

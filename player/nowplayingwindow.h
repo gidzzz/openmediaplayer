@@ -19,6 +19,7 @@
 #include "texteditautoresizer.h"
 #include "coverpicker.h"
 #include "editlyrics.h"
+#include "lyricssearchdialog.h"
 #include "mediaart.h"
 #include "playlistquerymanager.h"
 #include "playlistpicker.h"
@@ -132,6 +133,7 @@ private slots:
     void resetAlbumArt();
     void refreshAlbumArt();
     void editLyrics();
+    void searchLyrics();
     void toggleVolumeSlider();
     void showFMTXDialog();
     void cycleView(int direction = 1);

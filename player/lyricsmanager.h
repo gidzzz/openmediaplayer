@@ -21,6 +21,7 @@ public:
     ~LyricsManager();
 
     void fetchLyrics(QString artist, QString title, bool useCache = true);
+    void fetchLyrics(QString artist, QString title, QString userArtist, QString userTitle, bool useCache = true);
     void reloadLyrics();
     void storeLyrics(QString artist, QString title, QString lyrics);
     void deleteLyrics(QString artist, QString title);
@@ -44,6 +45,8 @@ public slots:
 private:
     QString artist;
     QString title;
+    QString queryArtist;
+    QString queryTitle;
 
     QList<QPluginLoader*> loadersList;
     QList<AbstractLyricsProvider*> providersList;
