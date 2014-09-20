@@ -19,6 +19,9 @@ public:
     void fetch(QString artist, QString title);
     void abort();
 
+private:
+    void prepareName(QString &name);
+
 private slots:
     void onReplyReceived();
 };

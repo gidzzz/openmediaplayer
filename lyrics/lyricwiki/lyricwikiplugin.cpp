@@ -7,6 +7,9 @@ LyricWikiPlugin::LyricWikiPlugin()
 
 void LyricWikiPlugin::fetch(QString artist, QString title)
 {
+    prepareName(artist);
+    prepareName(title);
+
     QString url = QString("http://lyrics.wikia.com/%1:%2").arg(artist.replace(' ', '_'), title.replace(' ', '_'));
 
     reply = nam->get(QNetworkRequest(QUrl(url)));
@@ -18,6 +21,26 @@ void LyricWikiPlugin::abort()
     disconnect(reply, SIGNAL(finished()), this, SLOT(onReplyReceived()));
     reply->abort();
     reply->deleteLater();
+}
+
+void LyricWikiPlugin::prepareName(QString &name)
+{
+    // Capitalize
+    const QChar delimiter = ' ';
+    for (int i = name.length()-2; i >= 0; i--)
+        if (name[i] == delimiter)
+            name[i+1] = name[i+1].toUpper();
+    name[0] = name[0].toUpper();
+
+    // Sanitize
+    name.replace(' ', '_')
+        .replace('[', '(').replace(']', ')')
+        .replace('{', '(').replace('}', ')')
+        .replace('<', "Less_Than")
+        .replace('>', "Greater_Than")
+        .replace('#', "Number_");
+    // NOTE: Depending on the context, "#" can also be replaced by "Sharp"
+    // or omitted.
 }
 
 void LyricWikiPlugin::onReplyReceived()
@@ -34,7 +57,7 @@ void LyricWikiPlugin::onReplyReceived()
             return;
         }
 
-        data.remove(0, data.indexOf("</div>")+6);
+        data.remove(0, data.indexOf("</script>")+9);
         data.remove(data.indexOf("<!--"), 4);
 
         QTextDocument lyrics; lyrics.setHtml(data);
