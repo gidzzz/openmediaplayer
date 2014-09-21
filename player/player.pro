@@ -35,7 +35,7 @@ SOURCES += \
     coverpicker.cpp \
     freqdlg.cpp \
     delegates/maindelegate.cpp \
-    editlyrics.cpp \
+    lyricseditdialog.cpp \
     lyricssearchdialog.cpp \
     mediaart.cpp \
     missioncontrol.cpp \
@@ -90,7 +90,7 @@ HEADERS += \
     texteditautoresizer.h \
     freqdlg.h \
     delegates/maindelegate.h \
-    editlyrics.h \
+    lyricseditdialog.h \
     lyricssearchdialog.h \
     mediaart.h \
     missioncontrol.h \
@@ -134,7 +134,7 @@ FORMS += \
     aboutwindow.ui \
     coverpicker.ui \
     freqdlg.ui \
-    editlyrics.ui \
+    lyricseditdialog.ui \
     lyricssearchdialog.ui \
     playlistpicker.ui \
     sleeperdialog.ui \

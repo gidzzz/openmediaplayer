@@ -18,7 +18,7 @@
 #include "qmlview.h"
 #include "texteditautoresizer.h"
 #include "coverpicker.h"
-#include "editlyrics.h"
+#include "lyricseditdialog.h"
 #include "lyricssearchdialog.h"
 #include "mediaart.h"
 #include "playlistquerymanager.h"

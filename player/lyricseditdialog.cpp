@@ -1,8 +1,8 @@
-#include "editlyrics.h"
+#include "lyricseditdialog.h"
 
-EditLyrics::EditLyrics(QString artist, QString title, QWidget *parent) :
+LyricsEditDialog::LyricsEditDialog(QString artist, QString title, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::EditLyrics)
+    ui(new Ui::LyricsEditDialog)
 {
     ui->setupUi(this);
 
@@ -24,12 +24,12 @@ EditLyrics::EditLyrics(QString artist, QString title, QWidget *parent) :
     connect(ui->saveButton, SIGNAL(pressed()), this, SLOT(save()));
 }
 
-EditLyrics::~EditLyrics()
+LyricsEditDialog::~LyricsEditDialog()
 {
     delete ui;
 }
 
-void EditLyrics::save()
+void LyricsEditDialog::save()
 {
     QString lyrics = ui->lyricsField->toPlainText();
 

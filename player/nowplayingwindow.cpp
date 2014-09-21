@@ -668,7 +668,7 @@ void NowPlayingWindow::setLyrics(QString text, QColor color)
 
 void NowPlayingWindow::editLyrics()
 {
-    (new EditLyrics(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), this))->show();
+    (new LyricsEditDialog(ui->artistLabel->whatsThis(), ui->titleLabel->whatsThis(), this))->show();
 }
 
 void NowPlayingWindow::searchLyrics()
