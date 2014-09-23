@@ -24,7 +24,7 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylist())
 #endif
 {
     QFont font; font.setPointSize(13);
@@ -54,12 +54,11 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory)
 
 void SingleArtistView::browseArtist(QString objectId)
 {
-#ifdef MAFW
     artistObjectId = objectId;
-    listAlbums();
-#else
-    Q_UNUSED(album)
-#endif
+
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)), Qt::UniqueConnection);
+    if (mafwTrackerSource->isReady())
+        listAlbums();
 }
 
 #ifdef MAFW
@@ -81,11 +80,11 @@ void SingleArtistView::listAlbums()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseArtistId = mafwTrackerSource->sourceBrowse(artistObjectId.toUtf8(), false, NULL, NULL,
-                                                     MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
-                                                                      MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                      MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
-                                                     0, MAFW_SOURCE_BROWSE_ALL);
+    browseArtistId = mafwTrackerSource->browse(artistObjectId, false, NULL, NULL,
+                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
+                                                                MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                                MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
+                                               0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
@@ -229,7 +228,7 @@ void SingleArtistView::onDeleteClicked()
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         QModelIndex index = ui->objectList->currentIndex();
-        mafwTrackerSource->destroyObject(index.data(UserRoleObjectID).toString().toUtf8());
+        mafwTrackerSource->destroyObject(index.data(UserRoleObjectID).toString());
         visibleSongs -= index.data(UserRoleSongCount).toInt(); updateSongCount();
         objectProxyModel->removeRow(index.row());
     }
@@ -241,7 +240,7 @@ void SingleArtistView::deleteCurrentArtist()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::DeleteAll, this).exec() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(artistObjectId.toUtf8());
+        mafwTrackerSource->destroyObject(artistObjectId);
         this->close();
     }
 #endif
@@ -271,7 +270,7 @@ void SingleArtistView::onAlbumAddFinished(uint token, int count)
 #ifdef MAFW
 void SingleArtistView::onContainerChanged(QString objectId)
 {
-    if (objectId == "localtagfs::music")
+    if (artistObjectId.startsWith(objectId) || objectId.startsWith(artistObjectId))
         this->listAlbums();
 }
 #endif

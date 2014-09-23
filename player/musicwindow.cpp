@@ -25,9 +25,9 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter()),
+    playlist(factory->getPlaylist()),
 #endif
-    readyAction(NULL)
+    listAction(NULL)
 {
     ui->setupUi(this);
 #ifdef Q_WS_MAEMO_5
@@ -81,8 +81,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     playlistProxyModel->setSourceModel(playlistModel);
     ui->playlistList->setModel(playlistProxyModel);
 
-    loadViewState();
-
 #ifdef MAFW
     ui->indicator->setFactory(mafwFactory);
 
@@ -94,6 +92,8 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
 #endif
 
     connectSignals();
+
+    loadViewState();
 
     Rotator::acquire()->addClient(this);
 }
@@ -201,7 +201,6 @@ void MusicWindow::connectSignals()
     connect(ui->genresList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
     connect(ui->playlistList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
 
-    connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(onSourceReady()));
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseSourcePlaylists(uint,int,uint,QString,GHashTable*,QString)));
@@ -339,7 +338,7 @@ void MusicWindow::onDeleteClicked()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(currentList()->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+        mafwTrackerSource->destroyObject(currentList()->currentIndex().data(UserRoleObjectID).toString());
         currentList()->model()->removeRow(currentList()->currentIndex().row());
     }
 #endif
@@ -396,12 +395,6 @@ void MusicWindow::showChild(QMainWindow *window)
     ui->indicator->inhibit();
 }
 
-void MusicWindow::onSourceReady()
-{
-    if (readyAction)
-        (this->*readyAction)();
-}
-
 void MusicWindow::showView(QListView *listView, void (MusicWindow::*listAction)(), QString name, QString title)
 {
     QSortFilterProxyModel *proxyModel = static_cast<QSortFilterProxyModel*>(listView->model());
@@ -445,14 +438,11 @@ void MusicWindow::showView(QListView *listView, void (MusicWindow::*listAction)(
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterFixedString(QString)));
     listView->show();
 
+    this->listAction = listAction;
+
     // Populate the list only if it is still empty
-    if (proxyModel->sourceModel()->rowCount() == 0) {
-        if (mafwTrackerSource->isReady()) {
-            (this->*listAction)();
-        } else {
-            readyAction = listAction;
-        }
-    }
+    if (mafwTrackerSource->isReady() && proxyModel->sourceModel()->rowCount() == 0)
+        (this->*listAction)();
 }
 
 void MusicWindow::showAlbumView()
@@ -586,12 +576,12 @@ void MusicWindow::listSongs()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseAllSongsId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false, NULL, NULL,
-                                                       MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                        MAFW_METADATA_KEY_ALBUM,
-                                                                        MAFW_METADATA_KEY_ARTIST,
-                                                                        MAFW_METADATA_KEY_DURATION),
-                                                       0, MAFW_SOURCE_BROWSE_ALL);
+    browseAllSongsId = mafwTrackerSource->browse("localtagfs::music/songs", false, NULL, NULL,
+                                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                  MAFW_METADATA_KEY_ALBUM,
+                                                                  MAFW_METADATA_KEY_ARTIST,
+                                                                  MAFW_METADATA_KEY_DURATION),
+                                                 0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void MusicWindow::listArtists()
@@ -609,13 +599,13 @@ void MusicWindow::listArtists()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllArtists(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseAllArtistsId = mafwTrackerSource->sourceBrowse("localtagfs::music/artists", false, NULL, NULL,
-                                                         MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                          MAFW_METADATA_KEY_DURATION,
-                                                                          MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                          MAFW_METADATA_KEY_CHILDCOUNT_2,
-                                                                          MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI),
-                                                         0, MAFW_SOURCE_BROWSE_ALL);
+    browseAllArtistsId = mafwTrackerSource->browse("localtagfs::music/artists", false, NULL, NULL,
+                                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                    MAFW_METADATA_KEY_DURATION,
+                                                                    MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                                    MAFW_METADATA_KEY_CHILDCOUNT_2,
+                                                                    MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI),
+                                                   0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void MusicWindow::listAlbums()
@@ -630,12 +620,12 @@ void MusicWindow::listAlbums()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseAllAlbumsId = mafwTrackerSource->sourceBrowse("localtagfs::music/albums", false, NULL, NULL,
-                                                        MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
-                                                                         MAFW_METADATA_KEY_ARTIST,
-                                                                         MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                         MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
-                                                        0, MAFW_SOURCE_BROWSE_ALL);
+    browseAllAlbumsId = mafwTrackerSource->browse("localtagfs::music/albums", false, NULL, NULL,
+                                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
+                                                                   MAFW_METADATA_KEY_ARTIST,
+                                                                   MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                                   MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI),
+                                                  0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void MusicWindow::listGenres()
@@ -650,12 +640,12 @@ void MusicWindow::listGenres()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseAllGenresId = mafwTrackerSource->sourceBrowse("localtagfs::music/genres", false, NULL, NULL,
-                                                        MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                         MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                         MAFW_METADATA_KEY_CHILDCOUNT_2,
-                                                                         MAFW_METADATA_KEY_CHILDCOUNT_3),
-                                                        0, MAFW_SOURCE_BROWSE_ALL);
+    browseAllGenresId = mafwTrackerSource->browse("localtagfs::music/genres", false, NULL, NULL,
+                                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                   MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                                   MAFW_METADATA_KEY_CHILDCOUNT_2,
+                                                                   MAFW_METADATA_KEY_CHILDCOUNT_3),
+                                                  0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void MusicWindow::listPlaylists()
@@ -687,25 +677,25 @@ void MusicWindow::listAutoPlaylists()
         playlistModel->appendRow(item);
     }
 
-    browseNeverPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
-                                                          "(play-count=)", NULL,
-                                                          MAFW_SOURCE_NO_KEYS,
-                                                          0, MAFW_SOURCE_BROWSE_ALL);
+    browseNeverPlayedId = mafwTrackerSource->browse("localtagfs::music/songs", false,
+                                                    "(play-count=)", NULL,
+                                                    MAFW_SOURCE_NO_KEYS,
+                                                    0, MAFW_SOURCE_BROWSE_ALL);
 
-    browseMostPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
-                                                         "(play-count>0)", "-play-count,+title",
-                                                         MAFW_SOURCE_NO_KEYS,
-                                                         0, limit);
+    browseMostPlayedId = mafwTrackerSource->browse("localtagfs::music/songs", false,
+                                                   "(play-count>0)", "-play-count,+title",
+                                                   MAFW_SOURCE_NO_KEYS,
+                                                   0, limit);
 
-    browseRecentlyPlayedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
-                                                             "(play-count>0)", "-last-played",
-                                                             MAFW_SOURCE_NO_KEYS,
-                                                             0, limit);
+    browseRecentlyPlayedId = mafwTrackerSource->browse("localtagfs::music/songs", false,
+                                                       "(play-count>0)", "-last-played",
+                                                       MAFW_SOURCE_NO_KEYS,
+                                                       0, limit);
 
-    browseRecentlyAddedId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", false,
-                                                            NULL, "-added",
-                                                            MAFW_SOURCE_NO_KEYS,
-                                                            0, limit);
+    browseRecentlyAddedId = mafwTrackerSource->browse("localtagfs::music/songs", false,
+                                                      NULL, "-added",
+                                                      MAFW_SOURCE_NO_KEYS,
+                                                      0, limit);
 }
 
 void MusicWindow::listSavedPlaylists()
@@ -753,42 +743,37 @@ void MusicWindow::listImportedPlaylists()
 {
     qDebug() << "Updating imported playlists";
 
-    browseImportedPlaylistsId = mafwTrackerSource->sourceBrowse("localtagfs::music/playlists", false, NULL, NULL,
-                                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                                 MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                                 MAFW_METADATA_KEY_DURATION),
-                                                                0, MAFW_SOURCE_BROWSE_ALL);
+    browseImportedPlaylistsId = mafwTrackerSource->browse("localtagfs::music/playlists", false, NULL, NULL,
+                                                          MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                           MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                                           MAFW_METADATA_KEY_DURATION),
+                                                          0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString error)
 {
-    if (!error.isEmpty()) {
-        qDebug() << error;
-        error = QString();
-    }
-
     GValue *v;
 
     if (browseId == browseRecentlyAddedId) {
-        mafwTrackerSource->cancelBrowse(browseId, error);
+        mafwTrackerSource->cancelBrowse(browseId);
         browseRecentlyAddedId = MAFW_SOURCE_INVALID_BROWSE_ID;
         int size = remainingCount == 0 && objectId.isNull() ? 0 : remainingCount+1;
         playlistModel->item(1)->setData(tr("%n song(s)", "", size), UserRoleValueText);
 
     } else if (browseId == browseRecentlyPlayedId) {
-        mafwTrackerSource->cancelBrowse(browseId, error);
+        mafwTrackerSource->cancelBrowse(browseId);
         browseRecentlyPlayedId = MAFW_SOURCE_INVALID_BROWSE_ID;
         int size = remainingCount == 0 && objectId.isNull() ? 0 : remainingCount+1;
         playlistModel->item(2)->setData(tr("%n song(s)", "", size), UserRoleValueText);
 
     } else if (browseId == browseMostPlayedId) {
-        mafwTrackerSource->cancelBrowse(browseId, error);
+        mafwTrackerSource->cancelBrowse(browseId);
         browseMostPlayedId = MAFW_SOURCE_INVALID_BROWSE_ID;
         int size = remainingCount == 0 && objectId.isNull() ? 0 : remainingCount+1;
         playlistModel->item(3)->setData(tr("%n song(s)", "", size), UserRoleValueText);
 
     } else if (browseId == browseNeverPlayedId) {
-        mafwTrackerSource->cancelBrowse(browseId, error);
+        mafwTrackerSource->cancelBrowse(browseId);
         browseNeverPlayedId = MAFW_SOURCE_INVALID_BROWSE_ID;
         int size = remainingCount == 0 && objectId.isNull() ? 0 : remainingCount+1;
         playlistModel->item(4)->setData(tr("%n song(s)", "", size), UserRoleValueText);
@@ -1165,16 +1150,17 @@ void MusicWindow::onAddToPlaylist()
 
 void MusicWindow::onContainerChanged(QString objectId)
 {
-    qDebug() << "Container changed:" << objectId;
-
-    if (objectId.startsWith("localtagfs::music")) {
+    if (objectId == "localtagfs::" || objectId.startsWith("localtagfs::music")) {
         if (!objectId.endsWith("/playlists")) {
-            listArtists();
-            listGenres();
-            listAlbums();
-            listSongs();
+            artistModel->clear();
+            genresModel->clear();
+            albumModel->clear();
+            songModel->clear();
         }
-        listPlaylists();
+        playlistModel->clear();
+
+        if (listAction)
+            (this->*listAction)();
     }
 }
 

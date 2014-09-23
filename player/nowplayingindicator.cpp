@@ -270,7 +270,7 @@ void NowPlayingIndicator::setFactory(MafwAdapterFactory *factory)
 {
     this->mafwFactory = factory;
     this->mafwrenderer = factory->getRenderer();
-    this->playlist = factory->getPlaylistAdapter();
+    this->playlist = factory->getPlaylist();
     this->connectSignals();
     mafwrenderer->getStatus();
 }

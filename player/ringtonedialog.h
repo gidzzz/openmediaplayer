@@ -4,6 +4,7 @@
 #include "confirmdialog.h"
 
 #include <QDBusInterface>
+#include <QUrl>
 #include <QMaemo5InformationBox>
 
 #include "mafw/mafwsourceadapter.h"

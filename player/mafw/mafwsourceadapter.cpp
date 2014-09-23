@@ -1,312 +1,231 @@
-/**************************************************************************
-    This file is part of Open MediaPlayer
-    Copyright (C) 2010-2011 Nicolai Hess
+#include "mafwsourceadapter.h"
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#include "mafwadapterfactory.h"
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+QSet<gpointer> MafwSourceAdapter::instances;
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**************************************************************************/
-
-#include <mafw/mafwsourceadapter.h>
-#include <mafw/mafwsourcesignalhelper.h>
-
-MafwSourceAdapter::MafwSourceAdapter(QString source):
-    sourceIsReady(false),
-    sourceName(source)
+MafwSourceAdapter::MafwSourceAdapter(MafwSource *source)
 {
-  mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
-  mafw_shared_init(mafw_registry, NULL);
-  findSource();
-  connectRegistrySignals();
+    init();
+
+    bind(source);
 }
 
-MafwSourceAdapter::MafwSourceAdapter(MafwSource *source):
-    sourceIsReady(true)
+MafwSourceAdapter::MafwSourceAdapter(const QString &uuid) :
+    m_uuid(uuid)
 {
-    g_object_ref(source);
-    sourceName = mafw_extension_get_name(MAFW_EXTENSION(source));
-    mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
-    mafw_source = source;
-    connectRegistrySignals();
-}
+    init();
 
-MafwSourceAdapter::MafwSourceAdapter():
-    sourceIsReady(false)
-{
-    mafw_source = NULL;
-    mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
-    connectRegistrySignals();
-}
-
-void MafwSourceAdapter::setSource(MafwSource *source)
-{
-    g_object_ref(source);
-    if (mafw_source)
-        g_object_unref(mafw_source);
-
-    mafw_source = source;
-    sourceName = mafw_extension_get_name(MAFW_EXTENSION(source));
-    sourceIsReady = true;
-}
-
-MafwSource* MafwSourceAdapter::getSourceByUUID(QString uuid)
-{
-    return MAFW_SOURCE(mafw_registry_get_extension_by_uuid(mafw_registry, uuid.toUtf8()));
-}
-
-QString MafwSourceAdapter::getNameByUUID(QString uuid)
-{
-    return QString::fromUtf8(mafw_extension_get_name(mafw_registry_get_extension_by_uuid(mafw_registry, uuid.toUtf8())));
+    bind(MafwAdapterFactory::get()->findSourceByUUID(uuid));
 }
 
 MafwSourceAdapter::~MafwSourceAdapter()
 {
-    g_object_unref(mafw_source);
+    instances.remove(this);
+
+    bind(NULL);
 }
 
-bool
-MafwSourceAdapter::isReady() const
+void MafwSourceAdapter::init()
 {
-  return sourceIsReady;
+    instances.insert(this);
+
+    source = NULL;
+
+    connect(MafwAdapterFactory::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
 }
 
-void
-MafwSourceAdapter::findSource()
+void MafwSourceAdapter::bind(MafwSource *source)
 {
-  if(mafw_registry)
-  {
-    GList* sources_list = mafw_registry_get_sources(mafw_registry);
-    if(sources_list)
-    {
-      GList* source_elem = sources_list;
-      while(source_elem)
-      {
-        MafwSource* mafw_source = MAFW_SOURCE(source_elem->data);
-#ifdef DEBUG
-        g_print("source: %s\n", mafw_extension_get_name(MAFW_EXTENSION(mafw_source)));
-#endif
-        if(sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(mafw_source))) == 0)
-        {
-#ifdef DEBUG
-          g_print("got source\n");
-#endif
-          g_object_ref(mafw_source);
-          this->mafw_source = mafw_source;
-          this->sourceIsReady = true;
-          emit sourceReady();
-          connectSourceSignals();
-        }
-        source_elem = source_elem->next;
-      }
+    // Check if there is anything to do
+    if (source == this->source)
+        return;
+
+    if (source) {
+        // Unbind current source, if set, before proceeding
+        if (this->source)
+            bind(NULL);
+
+        // Bind
+        g_object_ref(source);
+        g_signal_connect(source, "container-changed", G_CALLBACK(&onContainerChanged), static_cast<void*>(this));
+        g_signal_connect(source, "metadata-changed" , G_CALLBACK(&onMetadataChanged) , static_cast<void*>(this));
+        g_signal_connect(source, "updating"         , G_CALLBACK(&onUpdating)        , static_cast<void*>(this));
+
+        this->source = source;
+        m_uuid = mafw_extension_get_uuid(MAFW_EXTENSION(source));
+
+        // Watch only for removals
+        disconnect(MafwAdapterFactory::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
+        connect(MafwAdapterFactory::get(), SIGNAL(sourceRemoved(MafwSource*)), this, SLOT(onSourceRemoved(MafwSource*)));
+
+        // Emit the signal in case something changed before the adapter got
+        // reconnected after losing its source or to notify listeners about
+        // readiness if this is the first time.
+        emit containerChanged(uuid() + "::");
+    } else {
+        // Unbind
+        g_signal_handlers_disconnect_matched(this->source, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this);
+        g_object_unref(this->source);
+
+        this->source = NULL;
+        m_uuid = QString();
+
+        // Watch only for additions
+        disconnect(MafwAdapterFactory::get(), SIGNAL(sourceRemoved(MafwSource*)), this, SLOT(onSourceRemoved(MafwSource*)));
+        connect(MafwAdapterFactory::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
     }
-    else
-    {
-#ifdef DEBUG
-      g_print("no source\n");
-#endif
+}
+
+QString MafwSourceAdapter::uuid()
+{
+    return m_uuid;
+}
+
+QString MafwSourceAdapter::name()
+{
+    return source ? mafw_extension_get_name(MAFW_EXTENSION(source)) : QString();
+}
+
+bool MafwSourceAdapter::isReady()
+{
+    return source;
+}
+
+void MafwSourceAdapter::onSourceAdded(MafwSource *source)
+{
+    if (m_uuid == mafw_extension_get_uuid(MAFW_EXTENSION(source))) {
+        // The control source must be activated for individual shares to appear
+        if (m_uuid == "upnpcontrolsource")
+            mafw_extension_set_property_boolean(MAFW_EXTENSION(source), "activate", true);
+
+        bind(source);
     }
-  }
-  else
-  {
-#ifdef DEBUG
-    g_print("no rgistry\n");
-#endif
-  }
 }
 
-void
-MafwSourceAdapter::connectRegistrySignals()
+void MafwSourceAdapter::onSourceRemoved(MafwSource *source)
 {
-  g_signal_connect(mafw_registry,
-                   "source_added",
-                   G_CALLBACK(&onSourceAdded),
-                   static_cast<void*>(this));
-
-  g_signal_connect(mafw_registry,
-                   "source_removed",
-                   G_CALLBACK(&onSourceRemoved),
-                   static_cast<void*>(this));
+    if (m_uuid == mafw_extension_get_uuid(MAFW_EXTENSION(source)))
+        bind(NULL);
 }
 
-void
-MafwSourceAdapter::onSourceAdded(MafwRegistry*,
-                                 GObject* source,
-                                 gpointer user_data)
+//--- Operations ---------------------------------------------------------------
+
+uint MafwSourceAdapter::browse(const QString &objectId, bool recursive, const char *filterString, const char *sortCriteria, const char *const *metadataKeys, uint skipCount, uint itemCount)
 {
-  if(static_cast<MafwSourceAdapter*>(user_data)->sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(source))) == 0)
-  {
-    if(QString(mafw_extension_get_name(MAFW_EXTENSION(source))) == "MAFW-UPnP-Control-Source")
-       mafw_extension_set_property_boolean(MAFW_EXTENSION(source), "activate", true);
+    if (source) {
+        MafwFilter *filter = mafw_filter_parse(filterString);
+        uint browseId = mafw_source_browse(source, objectId.toUtf8(), recursive, filter, sortCriteria, metadataKeys, skipCount, itemCount, &onBrowseResult, this);
+        mafw_filter_free(filter);
 
-    g_object_ref(source);
-    static_cast<MafwSourceAdapter*>(user_data)->mafw_source = MAFW_SOURCE(source);
-    static_cast<MafwSourceAdapter*>(user_data)->sourceIsReady = true;
-    emit static_cast<MafwSourceAdapter*>(user_data)->sourceReady();
-    static_cast<MafwSourceAdapter*>(user_data)->connectSourceSignals();
-  }
-
-  emit static_cast<MafwSourceAdapter*>(user_data)->sourceAdded(mafw_extension_get_uuid(MAFW_EXTENSION(source)));
-}
-
-
-void
-MafwSourceAdapter::onSourceRemoved(MafwRegistry*,
-                                   GObject* source,
-                                   gpointer user_data)
-{
-  emit static_cast<MafwSourceAdapter*>(user_data)->sourceRemoved(mafw_extension_get_uuid(MAFW_EXTENSION(source)));
-
-  if(static_cast<MafwSourceAdapter*>(user_data)->sourceName.compare(mafw_extension_get_name(MAFW_EXTENSION(source))) == 0)
-  {
-    g_object_unref(source);
-    static_cast<MafwSourceAdapter*>(user_data)->mafw_source = NULL;
-    static_cast<MafwSourceAdapter*>(user_data)->disconnectSourceSignals();
-  }
-}
-
-void
-MafwSourceAdapter::connectSourceSignals()
-{
-  g_signal_connect(mafw_source,
-                   "container-changed",
-                   G_CALLBACK(&onContainerChanged),
-                   static_cast<void*>(this));
-  g_signal_connect(mafw_source,
-                   "metadata-changed",
-                   G_CALLBACK(&onMetadataChanged),
-                   static_cast<void*>(this));
-  g_signal_connect(mafw_source,
-                   "updating",
-                   G_CALLBACK(&onUpdating),
-                   static_cast<void*>(this));
-}
-
-void
-MafwSourceAdapter::disconnectSourceSignals()
-{
-
-}
-
-void
-MafwSourceAdapter::onContainerChanged(MafwSource*, gchar* object_id, gpointer user_data)
-{
-#ifdef DEBUG
-  g_print("on container changed %s\n", object_id);
-#endif
-  emit static_cast<MafwSourceAdapter*>(user_data)->containerChanged(QString::fromUtf8(object_id));
-}
-
-void
-MafwSourceAdapter::onMetadataChanged(MafwSource*, gchar* object_id, gpointer user_data)
-{
-#ifdef DEBUG
-  g_print("on metadata changed %s\n", object_id);
-#endif
-  emit static_cast<MafwSourceAdapter*>(user_data)->metadataChanged(QString::fromUtf8(object_id));
-}
-
-void
-MafwSourceAdapter::onUpdating(MafwSource*, gint progress, gint processed_items, gint remaining_items, gint remaining_time, gpointer user_data)
-{
-#ifdef DEBUG
-  g_print("on updating %d, %d\n", progress, remaining_items);
-#endif
-  emit static_cast<MafwSourceAdapter*>(user_data)->updating(progress, processed_items, remaining_items, remaining_time);
-}
-
-uint
-MafwSourceAdapter::sourceBrowse(const char* object_id, bool recursive, const char* filterString, const char* sort_criteria, const char* const *metadata_keys, uint skip_count, uint item_count)
-{
-  uint rc = -1;
-  MafwFilter *filter;
-  if (filterString)
-      filter = mafw_filter_parse (filterString);
-  else
-      filter = NULL;
-  if(mafw_source)
-  {
-    rc = mafw_source_browse(mafw_source, object_id, recursive, filter, sort_criteria, metadata_keys, skip_count, item_count, MafwSourceSignalHelper::browse_result_cb, this);
-  }
-  return rc;
-}
-
-void
-MafwSourceAdapter::getMetadata(const char* object_id, const char* const *metadata_keys)
-{
-  if(mafw_source)
-  {
-    mafw_source_get_metadata(mafw_source, object_id, metadata_keys, MafwSourceSignalHelper::metadata_result_cb, this);
-  }
-}
-
-void
-MafwSourceAdapter::getUri(const char* object_id)
-{
-  if(mafw_source)
-  {
-    mafw_source_get_metadata(mafw_source, object_id, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI), MafwSourceSignalHelper::uri_result_cb, this);
-  }
-}
-
-bool
-MafwSourceAdapter::cancelBrowse(uint browseId,
-                                QString& qerror)
-{
-  bool rc = false;
-  if(mafw_source)
-  {
-    GError* error = NULL;
-    rc =  mafw_source_cancel_browse(mafw_source, browseId, &error);
-    if(error)
-    {
-      qerror = error->message;
-      g_error_free(error);
-      error = NULL;
+        return browseId;
+    } else {
+        return MAFW_SOURCE_INVALID_BROWSE_ID;
     }
-  }
-  return rc;
 }
 
-void
-MafwSourceAdapter::createObject(const char* parent, GHashTable* metadata)
+bool MafwSourceAdapter::cancelBrowse(uint browseId)
 {
-  if(mafw_source)
-  {
-    mafw_source_create_object(mafw_source, parent, metadata, MafwSourceSignalHelper::create_object_cb, this);
-  }
+    return mafw_source_cancel_browse(source, browseId, NULL);
 }
 
-void
-MafwSourceAdapter::destroyObject(const char* object_id)
+void MafwSourceAdapter::getMetadata(const QString &objectId, const char *const *metadataKeys)
 {
-  if(mafw_source)
-  {
-    mafw_source_destroy_object(mafw_source, object_id, MafwSourceSignalHelper::destroy_object_cb, this);
-  }
+    if (source)
+        mafw_source_get_metadata(source, objectId.toUtf8(), metadataKeys, &onMetadataResult, this);
 }
 
-
-void
-MafwSourceAdapter::setMetadata(const char* object_id,
-                               GHashTable* metadata)
+void MafwSourceAdapter::getUri(const QString &objectId)
 {
-  if(mafw_source)
-  {
-    mafw_source_set_metadata(mafw_source, object_id, metadata, MafwSourceSignalHelper::set_metadata_cb, this);
-  }
+    if (source)
+        mafw_source_get_metadata(source, objectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_URI), &onUriResult, this);
 }
 
-QString
-MafwSourceAdapter::createObjectId(QString uri)
+void MafwSourceAdapter::createObject(const QString &parent, GHashTable *metadata)
 {
-      return QString::fromUtf8(mafw_source_create_objectid (uri.toUtf8()));
+    if (source)
+        mafw_source_create_object(source, parent.toUtf8(), metadata, &onObjectCreated, this);
+}
+
+void MafwSourceAdapter::destroyObject(const QString &objectId)
+{
+    if (source)
+        mafw_source_destroy_object(source, objectId.toUtf8(), &onObjectDestroyed, this);
+}
+
+void MafwSourceAdapter::setMetadata(const QString &objectId, GHashTable *metadata)
+{
+    if (source)
+        mafw_source_set_metadata(source, objectId.toUtf8(), metadata, &onMetadataSet, this);
+}
+
+QString MafwSourceAdapter::createObjectId(const QString &uri)
+{
+    return QString::fromUtf8(mafw_source_create_objectid(uri.toUtf8()));
+}
+
+//--- Signal handlers ----------------------------------------------------------
+
+void MafwSourceAdapter::onContainerChanged(MafwSource *, gchar *objectId, MafwSourceAdapter *self)
+{
+    emit self->containerChanged(QString::fromUtf8(objectId));
+}
+
+void MafwSourceAdapter::onMetadataChanged(MafwSource *, gchar *objectId, MafwSourceAdapter *self)
+{
+    emit self->metadataChanged(QString::fromUtf8(objectId));
+}
+
+void MafwSourceAdapter::onUpdating(MafwSource *, gint progress, gint processedItems, gint remainingItems, gint remainingTime, MafwSourceAdapter *self)
+{
+    emit self->updating(progress, processedItems, remainingItems, remainingTime);
+}
+
+//--- Callbacks ----------------------------------------------------------------
+
+void MafwSourceAdapter::onBrowseResult(MafwSource *, guint browseId, gint remainingCount, guint index, const gchar *objectId, GHashTable *metadata, gpointer self, const GError *error)
+{
+    if (instances.contains(self))
+        emit static_cast<MafwSourceAdapter*>(self)->signalSourceBrowseResult(browseId, remainingCount, index, QString::fromUtf8(objectId), metadata, error ? error->message : QString());
+}
+
+void MafwSourceAdapter::onMetadataResult(MafwSource *, const gchar *objectId, GHashTable *metadata, gpointer self, const GError *error)
+{
+    if (instances.contains(self))
+        emit static_cast<MafwSourceAdapter*>(self)->signalMetadataResult(QString::fromUtf8(objectId), metadata, error ? error->message : QString());
+}
+
+void MafwSourceAdapter::onUriResult(MafwSource *, const gchar *objectId, GHashTable *metadata, gpointer self, const GError *error)
+{
+    if (instances.contains(self)) {
+        QString uri;
+        if (GValue *v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI))
+            uri = QString::fromUtf8(g_value_get_string(v));
+
+        emit static_cast<MafwSourceAdapter*>(self)->signalGotUri(QString::fromUtf8(objectId), uri, error ? error->message : QString());
+    }
+}
+
+void MafwSourceAdapter::onObjectCreated(MafwSource *, const gchar* objectId, gpointer self, const GError *error)
+{
+    if (instances.contains(self))
+        emit static_cast<MafwSourceAdapter*>(self)->signalCreateObjectResult(QString::fromUtf8(objectId), error ? error->message : QString());
+}
+
+void MafwSourceAdapter::onObjectDestroyed(MafwSource *, const gchar *objectId, gpointer self, const GError *error)
+{
+    if (instances.contains(self))
+        emit static_cast<MafwSourceAdapter*>(self)->signalDestroyObjectResult(QString::fromUtf8(objectId), error ? error->message : QString());
+}
+
+void MafwSourceAdapter::onMetadataSet(MafwSource *, const gchar *objectId, const gchar **failedKeys, gpointer self, const GError *error)
+{
+    if (instances.contains(self)) {
+        QStringList failedKeyList;
+        if (failedKeys)
+            for (; *failedKeys; failedKeys++)
+                failedKeyList.append(*failedKeys);
+
+        emit static_cast<MafwSourceAdapter*>(self)->signalMetadataSetResult(QString::fromUtf8(objectId), failedKeyList, error ? error->message : QString());
+    }
 }

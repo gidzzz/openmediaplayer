@@ -112,8 +112,6 @@ private slots:
     void onChildClosed();
 #ifdef MAFW
     void setupPlayback();
-    void trackerSourceReady();
-    void radioSourceReady();
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
     void countRadioResult(QString objectId, GHashTable *metadata, QString error);
     void countRadioStations();

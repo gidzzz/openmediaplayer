@@ -26,8 +26,8 @@ signals:
     void childClosed();
 
 private slots:
-    void onSourceAdded(QString uuid);
-    void onSourceRemoved(QString uuid);
+    void onSourceAdded(const QString &uuid, const QString &name);
+    void onSourceRemoved(const QString &uuid);
     void onItemActivated(QListWidgetItem *item);
     void onChildClosed();
 

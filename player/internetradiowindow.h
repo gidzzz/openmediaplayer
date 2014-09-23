@@ -54,7 +54,6 @@ private slots:
 #ifdef MAFW
     void listStations();
     void browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void onContainerChanged();
 #endif
 };
 

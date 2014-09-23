@@ -39,6 +39,7 @@ private:
 #endif
 
 private slots:
+    void onSourceReady();
     void onShareClicked();
     void onDeleteClicked();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));

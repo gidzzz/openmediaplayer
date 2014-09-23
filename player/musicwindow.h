@@ -87,7 +87,7 @@ private:
     uint playlistToken;
     int savedPlaylistCount;
 #endif
-    void (MusicWindow::*readyAction)();
+    void (MusicWindow::*listAction)();
     void connectSignals();
     void showChild(QMainWindow *window);
     void showView(QListView *listView, void (MusicWindow::*listAction)(), QString name, QString title);
@@ -98,7 +98,6 @@ private:
 #endif
 
 private slots:
-    void onSourceReady();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void onRingtoneClicked();
     void onShareClicked();

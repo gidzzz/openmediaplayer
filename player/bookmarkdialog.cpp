@@ -45,7 +45,7 @@ void BookmarkDialog::accept()
             if (objectId.isEmpty())
                 mafwRadioSource->createObject("iradiosource::", metadata);
             else
-                mafwRadioSource->setMetadata(objectId.toUtf8(), metadata);
+                mafwRadioSource->setMetadata(objectId, metadata);
 
             mafw_metadata_release(metadata);
 #endif

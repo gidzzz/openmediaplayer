@@ -9,9 +9,9 @@ RingtoneDialog::RingtoneDialog(QWidget *parent,
 {
     this->setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onUriReceived(QString,QString)));
+    connect(mafwSource, SIGNAL(signalGotUri(QString,QString,QString)), this, SLOT(onUriReceived(QString,QString)));
 
-    mafwSource->getUri(objectId.toUtf8());
+    mafwSource->getUri(objectId);
 }
 
 void RingtoneDialog::onUriReceived(QString objectId, QString uri)
@@ -44,7 +44,7 @@ void RingtoneDialog::setRingtone()
                    "/com/nokia/profiled",
                    "com.nokia.profiled",
                    QDBusConnection::sessionBus())
-    .call(QDBus::NoBlock, "set_value", "general", "ringing.alert.tone", uri);
+    .call(QDBus::NoBlock, "set_value", "general", "ringing.alert.tone", QUrl(uri).toLocalFile());
 
     QMaemo5InformationBox::information(this->parentWidget(), tr("Selected song set as ringing tone"));
 

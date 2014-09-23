@@ -16,6 +16,7 @@ class MetadataWatcher: public QObject
 public:
     MetadataWatcher(MafwAdapterFactory *factory);
 
+    MafwSourceAdapter* currentSource();
     QMap<QString,QVariant> metadata();
 
 signals:
@@ -23,6 +24,7 @@ signals:
     void metadataChanged(QString key, QVariant value);
 
 private:
+    MafwAdapterFactory *mafwFactory;
     MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwSource;
     MafwSourceAdapter *mafwTrackerSource;

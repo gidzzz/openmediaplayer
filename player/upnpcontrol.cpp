@@ -25,12 +25,12 @@ void UpnpControl::setFactory(MafwAdapterFactory *factory)
     mafwFactory = factory;
     mafwUpnpSource = mafwFactory->getUpnpSource();
 
-    connect(mafwUpnpSource, SIGNAL(sourceAdded(QString)), this, SLOT(onSourceAdded(QString)));
-    connect(mafwUpnpSource, SIGNAL(sourceRemoved(QString)), this, SLOT(onSourceRemoved(QString)));
+    connect(factory, SIGNAL(sourceAdded(QString,QString)), this, SLOT(onSourceAdded(QString,QString)));
+    connect(factory, SIGNAL(sourceRemoved(QString,QString)), this, SLOT(onSourceRemoved(QString)));
     connect(this, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
 }
 
-void UpnpControl::onSourceAdded(QString uuid)
+void UpnpControl::onSourceAdded(const QString &uuid, const QString &name)
 {
     qDebug() << "source added:" << uuid;
 
@@ -40,14 +40,14 @@ void UpnpControl::onSourceAdded(QString uuid)
         QListWidgetItem *item = new QListWidgetItem();
 
         item->setIcon(QIcon::fromTheme("mediaplayer_upnp_server"));
-        item->setText(mafwUpnpSource->getNameByUUID(uuid));
+        item->setText(name);
         item->setData(UserRoleObjectID, uuid);
 
         this->addItem(item);
     }
 }
 
-void UpnpControl::onSourceRemoved(QString uuid)
+void UpnpControl::onSourceRemoved(const QString &uuid)
 {
     qDebug() << "source removed:" << uuid;
 
@@ -67,9 +67,7 @@ void UpnpControl::onItemActivated(QListWidgetItem *item)
 
     QString uuid = item->data(UserRoleObjectID).toString();
 
-    MafwSourceAdapter *source = new MafwSourceAdapter(mafwUpnpSource->getSourceByUUID(uuid));
-
-    UpnpView *upnpView = new UpnpView(this, mafwFactory, source);
+    UpnpView *upnpView = new UpnpView(this, mafwFactory, new MafwSourceAdapter(uuid));
     upnpView->browseObjectId(uuid + "::");
     upnpView->setWindowTitle(item->text());
     upnpView->show();

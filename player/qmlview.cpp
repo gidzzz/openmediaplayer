@@ -14,7 +14,7 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylist())
 #endif
 {
     ui->setupUi(this);

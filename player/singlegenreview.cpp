@@ -24,7 +24,7 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylist())
 #endif
 {
     ui->objectList->setItemDelegate(new ArtistListItemDelegate(ui->objectList));
@@ -38,10 +38,6 @@ SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
 
     connect(ui->objectList, SIGNAL(activated(QModelIndex)), this, SLOT(onItemActivated(QModelIndex)));
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
-
-#ifdef MAFW
-    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
-#endif
 }
 
 void SingleGenreView::onItemActivated(QModelIndex index)
@@ -91,10 +87,10 @@ void SingleGenreView::onItemActivated(QModelIndex index)
 void SingleGenreView::browseGenre(QString objectId)
 {
     currentObjectId = objectId;
+
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)), Qt::UniqueConnection);
     if (mafwTrackerSource->isReady())
         listArtists();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(listArtists()));
 }
 
 void SingleGenreView::listArtists()
@@ -112,12 +108,12 @@ void SingleGenreView::listArtists()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseGenreId = mafwTrackerSource->sourceBrowse(currentObjectId.toUtf8(), false, NULL, NULL,
-                                                    MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                     MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI,
-                                                                     MAFW_METADATA_KEY_CHILDCOUNT_1,
-                                                                     MAFW_METADATA_KEY_CHILDCOUNT_2),
-                                                    0, MAFW_SOURCE_BROWSE_ALL);
+    browseGenreId = mafwTrackerSource->browse(currentObjectId, false, NULL, NULL,
+                                              MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                               MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI,
+                                                               MAFW_METADATA_KEY_CHILDCOUNT_1,
+                                                               MAFW_METADATA_KEY_CHILDCOUNT_2),
+                                              0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
@@ -233,7 +229,7 @@ void SingleGenreView::onAddFinished(uint token, int count)
 #ifdef MAFW
 void SingleGenreView::onContainerChanged(QString objectId)
 {
-    if (objectId == "localtagfs::music")
+    if (currentObjectId.startsWith(objectId) || objectId.startsWith(currentObjectId))
         listArtists();
 }
 #endif

@@ -159,7 +159,6 @@ contains(DEFINES, MAFW) {
 
     SOURCES += \
         mafw/mafwrenderersignalhelper.cpp \
-        mafw/mafwsourcesignalhelper.cpp \
         mafw/mafwsourceadapter.cpp \
         mafw/mafwrendereradapter.cpp \
         mafw/mafwplaylistadapter.cpp \
@@ -169,7 +168,6 @@ contains(DEFINES, MAFW) {
     HEADERS += \
         mafw/mafwrenderersignalhelper.h \
         mafw/mafwrendereradapter.h \
-        mafw/mafwsourcesignalhelper.h \
         mafw/mafwsourceadapter.h \
         mafw/mafwplaylistadapter.h \
         mafw/mafwplaylistmanageradapter.h \

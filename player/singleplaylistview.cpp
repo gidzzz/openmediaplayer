@@ -24,7 +24,7 @@ SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *fact
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylist())
 #endif
 {
 #ifdef MAFW
@@ -168,12 +168,12 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
-    browsePlaylistId = mafwTrackerSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                                       MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                        MAFW_METADATA_KEY_DURATION,
-                                                                        MAFW_METADATA_KEY_ARTIST,
-                                                                        MAFW_METADATA_KEY_ALBUM),
-                                                       0, MAFW_SOURCE_BROWSE_ALL);
+    browsePlaylistId = mafwTrackerSource->browse(objectId, true, NULL, NULL,
+                                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                  MAFW_METADATA_KEY_DURATION,
+                                                                  MAFW_METADATA_KEY_ARTIST,
+                                                                  MAFW_METADATA_KEY_ALBUM),
+                                                 0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting, int maxCount)
@@ -192,12 +192,12 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
 
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
-    browsePlaylistId = mafwTrackerSource->sourceBrowse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
-                                                       MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                        MAFW_METADATA_KEY_DURATION,
-                                                                        MAFW_METADATA_KEY_ARTIST,
-                                                                        MAFW_METADATA_KEY_ALBUM),
-                                                       0, maxCount);
+    browsePlaylistId = mafwTrackerSource->browse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
+                                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                                  MAFW_METADATA_KEY_DURATION,
+                                                                  MAFW_METADATA_KEY_ARTIST,
+                                                                  MAFW_METADATA_KEY_ALBUM),
+                                                 0, maxCount);
 }
 
 void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString)
@@ -443,7 +443,7 @@ void SinglePlaylistView::onDeleteClicked()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+        mafwTrackerSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         objectProxyModel->removeRow(ui->objectList->currentIndex().row());
         updateSongCount();
         playlistModified = true;
@@ -537,7 +537,7 @@ void SinglePlaylistView::deletePlaylist()
         if (currentObjectId.isNull()) // Saved playlist
             MafwPlaylistManagerAdapter::get()->deletePlaylist(this->windowTitle());
         else // Imported playlist
-            mafwTrackerSource->destroyObject(currentObjectId.toUtf8());
+            mafwTrackerSource->destroyObject(currentObjectId);
         this->close();
     }
 #endif
@@ -560,12 +560,8 @@ void SinglePlaylistView::onNowPlayingWindowHidden()
 #ifdef MAFW
 void SinglePlaylistView::closeEvent(QCloseEvent *e)
 {
-    if (browsePlaylistId != MAFW_SOURCE_INVALID_BROWSE_ID) {
-        QString error;
-        mafwTrackerSource->cancelBrowse(browsePlaylistId, error);
-        if (!error.isEmpty())
-            qDebug() << error;
-    }
+    if (browsePlaylistId != MAFW_SOURCE_INVALID_BROWSE_ID)
+        mafwTrackerSource->cancelBrowse(browsePlaylistId);
 
     if (playlistModified && currentObjectId.isNull()) {
         qDebug() << "Playlist modified, saving";

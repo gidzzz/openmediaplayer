@@ -16,9 +16,9 @@ ShareDialog::ShareDialog(QWidget *parent, MafwSourceAdapter *mafwSource, QString
     connect(ui->bluetoothButton, SIGNAL(clicked()), this, SLOT(onBluetoothClicked()));
     connect(ui->emailButton, SIGNAL(clicked()), this, SLOT(onEmailClicked()));
 
-    connect(mafwSource, SIGNAL(signalGotUri(QString,QString)), this, SLOT(onUriReceived(QString,QString)));
+    connect(mafwSource, SIGNAL(signalGotUri(QString,QString,QString)), this, SLOT(onUriReceived(QString,QString)));
 
-    mafwSource->getUri(objectId.toUtf8());
+    mafwSource->getUri(objectId);
 }
 
 ShareDialog::~ShareDialog()
@@ -71,7 +71,7 @@ void ShareDialog::onEmailClicked()
 
 void ShareDialog::shareViaBluetooth()
 {
-    QStringList files; files << QString(QUrl::fromLocalFile(uri).toEncoded());
+    QStringList files(uri);
 
     QDBusInterface("com.nokia.icd_ui",
                    "/com/nokia/bt_ui",
@@ -89,12 +89,12 @@ void ShareDialog::shareViaEmail()
                    "com.nokia.modest",
                    QDBusConnection::sessionBus())
     .call(QDBus::NoBlock, "ComposeMail",
-           QString(), // to
-           QString(), // cc
-           QString(), // bcc
-           QString(), // subject
-           QString(), // body
-           QString(QUrl::fromLocalFile(uri).toEncoded()));
+          QString(), // to
+          QString(), // cc
+          QString(), // bcc
+          QString(), // subject
+          QString(), // body
+          QString(uri));
 
     this->close();
 }

@@ -23,8 +23,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     ui(new Ui::VideoNowPlayingWindow)
 #ifdef MAFW
     ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    mafwSource(factory->getTempSource())
+    mafwrenderer(factory->getRenderer())
 #endif
 {
     ui->setupUi(this);
@@ -94,6 +93,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory
     onMetadataChanged(MAFW_METADATA_KEY_RES_X, metadata.value(MAFW_METADATA_KEY_RES_X));
     onMetadataChanged(MAFW_METADATA_KEY_RES_Y, metadata.value(MAFW_METADATA_KEY_RES_Y));
     onMetadataChanged(MAFW_METADATA_KEY_URI, metadata.value(MAFW_METADATA_KEY_URI));
+    mafwSource = mw->currentSource();
 
     ui->currentPositionLabel->installEventFilter(this);
 
@@ -136,7 +136,7 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
                 mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
 
             // Commit the metadata in the table
-            mafwSource->setMetadata(playedObjectId.toUtf8(), metadata);
+            mafwSource->setMetadata(playedObjectId, metadata);
             mafw_metadata_release(metadata);
         }
 
@@ -454,7 +454,7 @@ void VideoNowPlayingWindow::onDeleteClicked()
     mafwrenderer->pause();
 
     if (ConfirmDialog(ConfirmDialog::DeleteVideo, this).exec() == QMessageBox::Yes) {
-        mafwSource->destroyObject(currentObjectId.toUtf8());
+        mafwSource->destroyObject(currentObjectId);
         this->close();
     }
 #endif
@@ -598,7 +598,7 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             GHashTable* metadata = mafw_metadata_new();
             mafw_metadata_add_int(metadata, MAFW_METADATA_KEY_PAUSED_POSITION, 0);
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, "");
-            mafwSource->setMetadata(playedObjectId.toUtf8(), metadata);
+            mafwSource->setMetadata(playedObjectId, metadata);
             mafw_metadata_release(metadata);
         }
 

@@ -1,46 +1,79 @@
 #include "mafwadapterfactory.h"
 
-MafwAdapterFactory::MafwAdapterFactory(QObject *parent) :
-    QObject(parent)
+#include <libmafw-shared/mafw-shared.h>
+
+MafwAdapterFactory* MafwAdapterFactory::instance = NULL;
+
+MafwAdapterFactory* MafwAdapterFactory::get()
 {
-    mafwrenderer = new MafwRendererAdapter();
-    mafwTrackerSource = new MafwSourceAdapter("Mafw-Tracker-Source");
-    mafwRadioSource = new MafwSourceAdapter("Mafw-IRadio-Source");
-    mafwUpnpSource = new MafwSourceAdapter("MAFW-UPnP-Control-Source");
-    mafwTempSource = new MafwSourceAdapter();
-    playlist = new MafwPlaylistAdapter(this, mafwrenderer);
+    if (!instance) {
+        instance = new MafwAdapterFactory();
+
+        // Additional initialization
+        instance->renderer = new MafwRendererAdapter();
+        instance->playlist = new MafwPlaylistAdapter(instance, instance->renderer);
+        instance->sources[Tracker] = new MafwSourceAdapter("localtagfs");
+        instance->sources[Radio ]= new MafwSourceAdapter("iradiosource");
+        instance->sources[Upnp] = new MafwSourceAdapter("upnpcontrolsource");
 
 #ifdef MAFW_WORKAROUNDS
-    mafwrenderer->playlist = playlist;
+        instance->renderer->playlist = instance->playlist;
 #endif
+    }
+    return instance;
+}
+
+MafwAdapterFactory::MafwAdapterFactory()
+{
+    registry = mafw_registry_get_instance();
+    g_signal_connect(registry, "source-added"  , G_CALLBACK(&onSourceAdded)  , static_cast<void*>(this));
+    g_signal_connect(registry, "source-removed", G_CALLBACK(&onSourceRemoved), static_cast<void*>(this));
+
+    mafw_shared_init(registry, NULL);
+}
+
+MafwSource* MafwAdapterFactory::findSourceByUUID(const QString &uuid)
+{
+    return MAFW_SOURCE(mafw_registry_get_extension_by_uuid(registry, uuid.toUtf8()));
 }
 
 MafwRendererAdapter* MafwAdapterFactory::getRenderer()
 {
-    return mafwrenderer;
+    return renderer;
+}
+
+MafwPlaylistAdapter* MafwAdapterFactory::getPlaylist()
+{
+    return playlist;
 }
 
 MafwSourceAdapter* MafwAdapterFactory::getTrackerSource()
 {
-    return mafwTrackerSource;
+    return sources[Tracker];
 }
 
 MafwSourceAdapter* MafwAdapterFactory::getRadioSource()
 {
-    return mafwRadioSource;
+    return sources[Radio];
 }
 
 MafwSourceAdapter* MafwAdapterFactory::getUpnpSource()
 {
-    return mafwUpnpSource;
+    return sources[Upnp];
 }
 
-MafwSourceAdapter* MafwAdapterFactory::getTempSource()
+//--- Signal handlers ----------------------------------------------------------
+
+void MafwAdapterFactory::onSourceAdded(MafwRegistry *, MafwSource *source, MafwAdapterFactory *self)
 {
-    return mafwTempSource;
+    emit self->sourceAdded(source);
+    emit self->sourceAdded(mafw_extension_get_uuid(MAFW_EXTENSION(source)),
+                           mafw_extension_get_name(MAFW_EXTENSION(source)));
 }
 
-MafwPlaylistAdapter* MafwAdapterFactory::getPlaylistAdapter()
+void MafwAdapterFactory::onSourceRemoved(MafwRegistry *, MafwSource *source, MafwAdapterFactory *self)
 {
-    return playlist;
+    emit self->sourceRemoved(source);
+    emit self->sourceRemoved(mafw_extension_get_uuid(MAFW_EXTENSION(source)),
+                             mafw_extension_get_name(MAFW_EXTENSION(source)));
 }

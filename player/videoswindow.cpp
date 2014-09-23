@@ -24,7 +24,7 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylist())
 #endif
 {
     ui->objectList->setIconSize(QSize(64, 64));
@@ -51,16 +51,21 @@ VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
 #ifdef MAFW
+    if (mafwTrackerSource->isReady()) {
+        onSourceReady();
+    } else {
+        connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onSourceReady()));
+    }
+#endif
+}
+
+void VideosWindow::onSourceReady()
+{
+    disconnect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onSourceReady()));
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)), this, SLOT(onMetadataChanged(QString)));
-#endif
 
-#ifdef MAFW
-    if (mafwTrackerSource->isReady())
-        selectView();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(selectView()));
-#endif
+    selectView();
 }
 
 void VideosWindow::onContextMenuRequested(const QPoint &pos)
@@ -78,7 +83,7 @@ void VideosWindow::onDeleteClicked()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
-        mafwTrackerSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+        mafwTrackerSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         objectProxyModel->removeRow(ui->objectList->currentIndex().row());
     }
 #endif
@@ -203,13 +208,13 @@ void VideosWindow::listVideos()
     connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
-    browseId = mafwTrackerSource->sourceBrowse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : "+title",
-                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                MAFW_METADATA_KEY_DURATION,
-                                                                MAFW_METADATA_KEY_THUMBNAIL_URI,
-                                                                MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
-                                                                MAFW_METADATA_KEY_VIDEO_SOURCE),
-                                               0, MAFW_SOURCE_BROWSE_ALL);
+    browseId = mafwTrackerSource->browse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : "+title",
+                                         MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                          MAFW_METADATA_KEY_DURATION,
+                                                          MAFW_METADATA_KEY_THUMBNAIL_URI,
+                                                          MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI,
+                                                          MAFW_METADATA_KEY_VIDEO_SOURCE),
+                                         0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
@@ -353,7 +358,7 @@ void VideosWindow::onMetadataChanged(QString objectId)
 
 void VideosWindow::onContainerChanged(QString objectId)
 {
-    if (objectId == "localtagfs::videos")
+    if (objectId == "localtagfs::videos" || objectId.startsWith("localtagfs::videos"))
         QTimer::singleShot(3000, this, SLOT(listVideos())); // some time for the thumbnailer to finish
 }
 #endif

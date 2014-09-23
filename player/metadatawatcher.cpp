@@ -1,8 +1,9 @@
 #include "metadatawatcher.h"
 
 MetadataWatcher::MetadataWatcher(MafwAdapterFactory *factory) :
+    mafwFactory(factory),
     mafwRenderer(factory->getRenderer()),
-    mafwSource(factory->getTempSource()),
+    mafwSource(new MafwSourceAdapter(NULL)),
     mafwTrackerSource(factory->getTrackerSource()),
     sourceMetadataPresent(false)
 {
@@ -22,6 +23,11 @@ MetadataWatcher::MetadataWatcher(MafwAdapterFactory *factory) :
     // but it might be a good idea to keep all metadata in sync.
     connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)),
             this, SLOT(onSourceMetadataChanged(QString)));
+}
+
+MafwSourceAdapter* MetadataWatcher::currentSource()
+{
+    return mafwSource;
 }
 
 QMap<QString,QVariant> MetadataWatcher::metadata()
@@ -129,20 +135,20 @@ void MetadataWatcher::onMediaChanged(int, char *objectId)
 
     mafwRenderer->getCurrentMetadata();
 
-    mafwSource->setSource(mafwSource->getSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
-    mafwSource->getMetadata(currentObjectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                                       MAFW_METADATA_KEY_ARTIST,
-                                                                       MAFW_METADATA_KEY_ALBUM,
+    mafwSource->bind(mafwFactory->findSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
+    mafwSource->getMetadata(currentObjectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                              MAFW_METADATA_KEY_ARTIST,
+                                                              MAFW_METADATA_KEY_ALBUM,
 
-                                                                       MAFW_METADATA_KEY_DURATION,
-                                                                       MAFW_METADATA_KEY_IS_SEEKABLE,
+                                                              MAFW_METADATA_KEY_DURATION,
+                                                              MAFW_METADATA_KEY_IS_SEEKABLE,
 
-                                                                       MAFW_METADATA_KEY_URI,
-                                                                       MAFW_METADATA_KEY_MIME,
+                                                              MAFW_METADATA_KEY_URI,
+                                                              MAFW_METADATA_KEY_MIME,
 
-                                                                       MAFW_METADATA_KEY_ALBUM_ART_URI,
+                                                              MAFW_METADATA_KEY_ALBUM_ART_URI,
 
-                                                                       MAFW_METADATA_KEY_PAUSED_POSITION));
+                                                              MAFW_METADATA_KEY_PAUSED_POSITION));
 }
 
 void MetadataWatcher::onSourceMetadataReceived(QString objectId, GHashTable *metadata, QString)
@@ -259,7 +265,7 @@ void MetadataWatcher::onSourceMetadataChanged(QString objectId)
 
     qDebug() << "Source metadata changed";
 
-    mafwSource->getMetadata(currentObjectId.toUtf8(), MAFW_SOURCE_LIST(MAFW_METADATA_KEY_PAUSED_POSITION));
+    mafwSource->getMetadata(currentObjectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_PAUSED_POSITION));
 }
 
 void MetadataWatcher::onRendererMetadataReceived(GHashTable *metadata, QString objectId, QString)
@@ -319,7 +325,7 @@ void MetadataWatcher::onRendererMetadataChanged(QString metadata, QVariant value
 
                 GHashTable* metadata = mafw_metadata_new();
                 mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_PAUSED_THUMBNAIL_URI, qstrdup(thumbFile.toUtf8()));
-                mafwTrackerSource->setMetadata(currentObjectId.toUtf8(), metadata);
+                mafwTrackerSource->setMetadata(currentObjectId, metadata);
                 mafw_metadata_release(metadata);
             }
 

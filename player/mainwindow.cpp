@@ -46,11 +46,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuList->setItemDelegate(new MainDelegate(ui->menuList));
 
 #ifdef MAFW
-    mafwFactory = new MafwAdapterFactory(this);
+    mafwFactory = MafwAdapterFactory::get();
     mafwrenderer = mafwFactory->getRenderer();
     mafwTrackerSource = mafwFactory->getTrackerSource();
     mafwRadioSource = mafwFactory->getRadioSource();
-    playlist = mafwFactory->getPlaylistAdapter();
+    playlist = mafwFactory->getPlaylist();
 
     MissionControl::acquire()->setFactory(mafwFactory);
 #endif
@@ -82,12 +82,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->indicator->setFixedWidth(112);
     ui->indicator->setFixedHeight(70);
 
-#ifdef Q_WS_MAEMO_5
-    if (mafwTrackerSource->isReady())
-        registerDbusService();
-    else
-        connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(registerDbusService()));
+    connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
+    if (mafwRadioSource->isReady())
+        onContainerChanged(mafwRadioSource->uuid() + "::");
 
+    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
+    if (mafwTrackerSource->isReady()) {
+        onContainerChanged(mafwTrackerSource->uuid() + "::");
+        registerDbusService();
+    } else {
+        connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(registerDbusService()));
+    }
+
+#ifdef Q_WS_MAEMO_5
     updatingShow = true;
 
     updatingProgressBar = new QProgressBar;
@@ -130,6 +137,8 @@ MainWindow::~MainWindow()
 #ifdef Q_WS_MAEMO_5
 void MainWindow::registerDbusService()
 {
+    disconnect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(registerDbusService()));
+
     if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE))
         qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
 
@@ -204,13 +213,9 @@ void MainWindow::connectSignals()
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
 
 #ifdef MAFW
-    connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(radioSourceReady()));
-    connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countRadioResult(QString, GHashTable*, QString)));
 
-    connect(mafwTrackerSource, SIGNAL(sourceReady()), this, SLOT(trackerSourceReady()));
-    connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
     connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
@@ -682,17 +687,6 @@ void MainWindow::showInternetRadioWindow()
 }
 
 #ifdef MAFW
-void MainWindow::trackerSourceReady()
-{
-    countSongs();
-    countVideos();
-}
-
-void MainWindow::radioSourceReady()
-{
-    countRadioStations();
-}
-
 void MainWindow::countSongs()
 {
     mafwTrackerSource->getMetadata(TAGSOURCE_AUDIO_PATH,
@@ -855,12 +849,15 @@ void MainWindow::setupPlayback()
 
 void MainWindow::onContainerChanged(QString objectId)
 {
-    if (objectId == "localtagfs::music")
-        countSongs();
-    else if (objectId == "localtagfs::videos")
-        countVideos();
-    else if (objectId == "iradiosource::")
+    if (objectId.startsWith("localtagfs::")) {
+        const QString category = objectId.mid(12);
+        if (category.isEmpty() || category.startsWith("music"))
+            countSongs();
+        if (category.isEmpty() || category.startsWith("videos"))
+            countVideos();
+    } else if (objectId.startsWith("iradiosource::")) {
         countRadioStations();
+    }
 }
 #endif
 

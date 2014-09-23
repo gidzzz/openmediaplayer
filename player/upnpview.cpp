@@ -7,7 +7,7 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     BrowserWindow(parent, factory),
     mafwFactory(factory),
     mafwSource(source),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylist())
 {
     ui->objectList->setIconSize(QSize(48, 48));
     ui->objectList->setItemDelegate(new MediaWithIconDelegate(ui->objectList));
@@ -22,6 +22,13 @@ UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapt
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 }
 
+UpnpView::~UpnpView()
+{
+    // Last window in the stack should delete the source
+    if (!qobject_cast<UpnpView*>(this->parentWidget()))
+        delete mafwSource;
+}
+
 void UpnpView::browseObjectId(QString objectId)
 {
 #ifdef Q_WS_MAEMO_5
@@ -33,12 +40,12 @@ void UpnpView::browseObjectId(QString objectId)
     connect(mafwSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseId = mafwSource->sourceBrowse(objectId.toUtf8(), true, NULL, NULL,
-                                        MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                         MAFW_METADATA_KEY_DURATION,
-                                                         MAFW_METADATA_KEY_MIME,
-                                                         MAFW_METADATA_KEY_PROTOCOL_INFO),
-                                        0, MAFW_SOURCE_BROWSE_ALL);
+    browseId = mafwSource->browse(objectId, true, NULL, NULL,
+                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                   MAFW_METADATA_KEY_DURATION,
+                                                   MAFW_METADATA_KEY_MIME,
+                                                   MAFW_METADATA_KEY_PROTOCOL_INFO),
+                                  0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)

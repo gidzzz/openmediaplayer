@@ -17,6 +17,7 @@ class UpnpView : public BrowserWindow
 
 public:
     explicit UpnpView(QWidget *parent = 0, MafwAdapterFactory *factory = 0, MafwSourceAdapter *source = 0);
+    ~UpnpView();
 
 public slots:
     void browseObjectId(QString objectId);

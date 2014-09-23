@@ -8,7 +8,7 @@ CurrentPlaylistManager* CurrentPlaylistManager::acquire(MafwAdapterFactory *fact
 }
 
 CurrentPlaylistManager::CurrentPlaylistManager(MafwAdapterFactory *factory) :
-    playlist(factory->getPlaylistAdapter()),
+    playlist(factory->getPlaylist()),
     mafwTrackerSource(factory->getTrackerSource())
 {
     browseId = MAFW_SOURCE_INVALID_BROWSE_ID;
@@ -43,11 +43,11 @@ void CurrentPlaylistManager::process()
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
     // Request the results
-    browseId = mafwTrackerSource->sourceBrowse(job.objectId.toUtf8(), true,
-                                               job.filter.isNull() ? NULL : job.filter.toUtf8().data(),
-                                               job.sorting.isNull() ? NULL : job.sorting.toUtf8().data(),
-                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_MIME),
-                                               0, job.limit);
+    browseId = mafwTrackerSource->browse(job.objectId, true,
+                                         job.filter.isNull() ? NULL : job.filter.toUtf8().data(),
+                                         job.sorting.isNull() ? NULL : job.sorting.toUtf8().data(),
+                                         MAFW_SOURCE_LIST(MAFW_METADATA_KEY_MIME),
+                                         0, job.limit);
 }
 
 // Send a notification and clean up

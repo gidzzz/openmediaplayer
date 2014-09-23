@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QDBusInterface>
-#include <QUrl>
 #include <QKeyEvent>
 #include <QTimer>
 

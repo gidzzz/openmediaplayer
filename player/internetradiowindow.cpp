@@ -24,7 +24,7 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
     ,mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
     mafwRadioSource(factory->getRadioSource()),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylist())
 #endif
 {
     this->setWindowTitle(tr("Internet radio stations"));
@@ -42,14 +42,9 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *fa
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
 #ifdef MAFW
-    connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged()));
-#endif
-
-#ifdef MAFW
+    connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(listStations()));
     if (mafwRadioSource->isReady())
         listStations();
-    else
-        connect(mafwRadioSource, SIGNAL(sourceReady()), this, SLOT(listStations()));
 #endif
 }
 
@@ -150,7 +145,7 @@ void InternetRadioWindow::onDeleteClicked()
 {
 #ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
-        mafwRadioSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString().toUtf8());
+        mafwRadioSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         objectProxyModel->removeRow(ui->objectList->currentIndex().row());
     }
 #endif
@@ -178,11 +173,11 @@ void InternetRadioWindow::listStations()
     connect(mafwRadioSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
-    browseId = mafwRadioSource->sourceBrowse("iradiosource::", false, NULL, "+title",
-                                             MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                              MAFW_METADATA_KEY_URI,
-                                                              MAFW_METADATA_KEY_MIME),
-                                             0, MAFW_SOURCE_BROWSE_ALL);
+    browseId = mafwRadioSource->browse("iradiosource::", false, NULL, "+title",
+                                       MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+                                                        MAFW_METADATA_KEY_URI,
+                                                        MAFW_METADATA_KEY_MIME),
+                                       0, MAFW_SOURCE_BROWSE_ALL);
 }
 
 void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
@@ -284,10 +279,5 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
     }
-}
-
-void InternetRadioWindow::onContainerChanged()
-{
-    listStations();
 }
 #endif

@@ -48,8 +48,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory)
     ui(new Ui::NowPlayingWindow),
     mafwFactory(factory),
     mafwrenderer(factory->getRenderer()),
-    mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylistAdapter())
+    playlist(factory->getPlaylist()),
+    mafwTrackerSource(factory->getTrackerSource())
 #else
     ui(new Ui::NowPlayingWindow)
 #endif
@@ -1170,7 +1170,7 @@ void NowPlayingWindow::onDeleteClicked()
         .exec() == QMessageBox::Yes)
     {
         playlist->removeItem(ui->songList->currentRow());
-        mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString().toUtf8());
+        mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString());
     }
 #endif
 }
