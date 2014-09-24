@@ -20,10 +20,13 @@ public:
     void abort();
 
 private:
-    void prepareName(QString &name);
+    QString title;
+
+    QString& prepareName(QString &name);
 
 private slots:
-    void onReplyReceived();
+    void onArtistReplyReceived();
+    void onSongReplyReceived();
 };
 
 #endif // LYRICWIKIPLUGIN_H
