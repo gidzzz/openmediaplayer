@@ -13,7 +13,7 @@
 #include "rotator.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #endif
 
 namespace Ui {
@@ -25,7 +25,7 @@ class QmlView : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit QmlView(QUrl source, QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit QmlView(QUrl source, QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
     ~QmlView();
     void setMetadata(QString songName, QString albumName, QString artistName, QString albumArtUri, int duration);
     void appendPlaylistItem(QListWidgetItem *item);
@@ -68,10 +68,8 @@ private:
     void setDNDAtom(bool dnd);
 #endif
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
-    MafwSourceAdapter *mafwTrackerSource;
-    MafwPlaylistAdapter* playlist;
     int mafwState;
 #endif
 

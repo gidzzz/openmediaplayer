@@ -13,7 +13,7 @@
 #endif
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #endif
 
 class SinglePlaylistView : public BrowserWindow
@@ -27,7 +27,7 @@ class SinglePlaylistView : public BrowserWindow
     };
 
 public:
-    explicit SinglePlaylistView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit SinglePlaylistView(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
     bool eventFilter(QObject *obj, QEvent *e);
 #ifdef MAFW
     void browseAutomaticPlaylist(QString filter, QString sorting, int maxCount);
@@ -55,7 +55,7 @@ private:
 #ifdef MAFW
     QString currentObjectId;
     PlaylistQueryManager *playlistQM;
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;

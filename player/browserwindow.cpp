@@ -1,6 +1,6 @@
 #include "browserwindow.h"
 
-BrowserWindow::BrowserWindow(QWidget *parent, MafwAdapterFactory *mafwFactory) :
+BrowserWindow::BrowserWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BaseWindow(parent),
     ui(new Ui::BrowserWindow)
 {
@@ -8,7 +8,7 @@ BrowserWindow::BrowserWindow(QWidget *parent, MafwAdapterFactory *mafwFactory) :
 
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
 
-    ui->indicator->setFactory(mafwFactory);
+    ui->indicator->setRegistry(mafwRegistry);
 
     this->setAttribute(Qt::WA_DeleteOnClose);
 

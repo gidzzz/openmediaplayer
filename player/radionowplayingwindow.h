@@ -8,6 +8,7 @@
 #include <QNetworkConfigurationManager>
 #include <QNetworkSession>
 #include <QGraphicsView>
+#include <QMaemo5Style>
 
 #ifdef Q_WS_MAEMO_5
     #include "fmtxdialog.h"
@@ -22,7 +23,7 @@
 #include "mirror.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #else
     class MafwRendererAdapter;
     class MafwSourceAdapter;
@@ -38,7 +39,7 @@ class RadioNowPlayingWindow : public BaseWindow
     Q_OBJECT
 
 public:
-    explicit RadioNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit RadioNowPlayingWindow(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
     ~RadioNowPlayingWindow();
 
 public slots:
@@ -67,7 +68,7 @@ private:
     bool buttonWasDown;
     bool isMediaSeekable;
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwPlaylistAdapter* playlist;
     int mafwState;

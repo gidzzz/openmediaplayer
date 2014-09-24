@@ -18,13 +18,13 @@
 
 #include "singleplaylistview.h"
 
-SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwAdapterFactory *factory) :
-    BrowserWindow(parent, factory)
+SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
+    BrowserWindow(parent, mafwRegistry)
 #ifdef MAFW
-    ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylist())
+    ,mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer()),
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
+    playlist(mafwRegistry->playlist())
 #endif
 {
 #ifdef MAFW
@@ -260,7 +260,7 @@ void SinglePlaylistView::onItemActivated(QModelIndex index)
     mafwrenderer->gotoIndex((filter ? index.row() : objectProxyModel->mapToSource(index).row())-1);
     mafwrenderer->play();
 
-    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
     window->show();
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));

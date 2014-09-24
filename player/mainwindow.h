@@ -34,7 +34,7 @@
 #endif
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
     #include <libgnomevfs/gnome-vfs-mime-utils.h>
     #define TAGSOURCE_AUDIO_PATH     "localtagfs::music/songs"
     #define TAGSOURCE_PLAYLISTS_PATH "localtagfs::music/playlists"
@@ -82,7 +82,7 @@ private:
     bool updatingShow;
 #endif
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;

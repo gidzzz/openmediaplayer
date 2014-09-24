@@ -191,19 +191,19 @@ void NowPlayingIndicator::openWindow()
         }
 
         if (playlistName == "FmpRadioPlaylist")  {
-            window = new RadioNowPlayingWindow(parentWindow, mafwFactory);
+            window = new RadioNowPlayingWindow(parentWindow, mafwRegistry);
             connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
             window->show();
         }
         else if (playlistName == "FmpVideoPlaylist") {
-            window = new VideoNowPlayingWindow(parentWindow, mafwFactory, true);
+            window = new VideoNowPlayingWindow(parentWindow, mafwRegistry, true);
             connect(window, SIGNAL(destroyed()), this, SLOT(onWindowDestroyed()));
             window->showFullScreen();
         }
         // The user can only create audio playlists with the UX
         // Assume all other playlists are audio ones.
         else { // playlistName == "FmpAudioPlaylist"
-            window = NowPlayingWindow::acquire(parentWindow, mafwFactory);
+            window = NowPlayingWindow::acquire(parentWindow, mafwRegistry);
             connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
             window->show();
         }
@@ -266,11 +266,11 @@ void NowPlayingIndicator::hideEvent(QHideEvent *)
 }
 
 #ifdef MAFW
-void NowPlayingIndicator::setFactory(MafwAdapterFactory *factory)
+void NowPlayingIndicator::setRegistry(MafwRegistryAdapter *mafwRegistry)
 {
-    this->mafwFactory = factory;
-    this->mafwrenderer = factory->getRenderer();
-    this->playlist = factory->getPlaylist();
+    this->mafwRegistry = mafwRegistry;
+    this->mafwrenderer = mafwRegistry->renderer();
+    this->playlist = mafwRegistry->playlist();
     this->connectSignals();
     mafwrenderer->getStatus();
 }

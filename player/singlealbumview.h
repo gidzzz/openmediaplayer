@@ -4,7 +4,7 @@
 #include "browserwindow.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #endif
 
 #include "includes.h"
@@ -18,7 +18,7 @@ class SingleAlbumView : public BrowserWindow
     Q_OBJECT
 
 public:
-    explicit SingleAlbumView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit SingleAlbumView(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
 #ifdef MAFW
     void browseAlbumByObjectId(QString objectId);
 #endif
@@ -28,7 +28,7 @@ private:
     void notifyOnAddedToNowPlaying(int songCount);
 #endif
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;

@@ -7,14 +7,14 @@
 
 #include "includes.h"
 
-#include "mafw/mafwadapterfactory.h"
+#include "mafw/mafwregistryadapter.h"
 
 class MetadataWatcher: public QObject
 {
     Q_OBJECT
 
 public:
-    MetadataWatcher(MafwAdapterFactory *factory);
+    MetadataWatcher(MafwRegistryAdapter *mafwRegistry);
 
     MafwSourceAdapter* currentSource();
     QMap<QString,QVariant> metadata();
@@ -24,7 +24,7 @@ signals:
     void metadataChanged(QString key, QVariant value);
 
 private:
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwSource;
     MafwSourceAdapter *mafwTrackerSource;

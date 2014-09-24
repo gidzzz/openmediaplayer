@@ -29,7 +29,7 @@
 #endif
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #else
     class MafwRendererAdapter;
     class MafwSourceAdapter;
@@ -46,7 +46,7 @@ class VideoNowPlayingWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0, bool overlay = false);
+    explicit VideoNowPlayingWindow(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0, bool overlay = false);
     ~VideoNowPlayingWindow();
     bool eventFilter(QObject*, QEvent *event);
 
@@ -92,7 +92,7 @@ private:
     bool buttonWasDown;
     int keyToRepeat;
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwSource;
     int colorkey;

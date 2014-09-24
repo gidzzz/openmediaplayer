@@ -20,7 +20,7 @@
 
 NowPlayingWindow* NowPlayingWindow::instance = NULL;
 
-NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory *mafwFactory)
+NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwRegistryAdapter *mafwRegistry)
 {
     if (instance) {
         qDebug() << "Handing out running NPW instance";
@@ -28,7 +28,7 @@ NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwAdapterFactory 
     }
     else {
         qDebug() << "Handing out new NPW instance";
-        instance = new NowPlayingWindow(parent, mafwFactory);
+        instance = new NowPlayingWindow(parent, mafwRegistry);
     }
 
     return instance;
@@ -42,14 +42,14 @@ void NowPlayingWindow::destroy()
     }
 }
 
-NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
+NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BaseWindow(parent),
 #ifdef MAFW
     ui(new Ui::NowPlayingWindow),
-    mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    playlist(factory->getPlaylist()),
-    mafwTrackerSource(factory->getTrackerSource())
+    mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer()),
+    playlist(mafwRegistry->playlist()),
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker))
 #else
     ui(new Ui::NowPlayingWindow)
 #endif
@@ -1193,7 +1193,7 @@ void NowPlayingWindow::showCarView()
 void NowPlayingWindow::createQmlView(QUrl source, QString title)
 {
     if (!qmlView) {
-        qmlView = new QmlView(source, this, mafwFactory);
+        qmlView = new QmlView(source, this, mafwRegistry);
         qmlView->setWindowTitle(title);
         for (int i = 0; i < ui->songList->count(); i++)
             qmlView->appendPlaylistItem(ui->songList->item(i));

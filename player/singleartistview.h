@@ -4,7 +4,7 @@
 #include "browserwindow.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #endif
 
 #include "includes.h"
@@ -18,12 +18,12 @@ class SingleArtistView : public BrowserWindow
     Q_OBJECT
 
 public:
-    explicit SingleArtistView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit SingleArtistView(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
     void browseArtist(QString objectId);
 
 private:
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;

@@ -4,7 +4,7 @@
 #include "browserwindow.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #endif
 
 #include "delegates/artistlistitemdelegate.h"
@@ -23,12 +23,12 @@ class SingleGenreView : public BrowserWindow
     Q_OBJECT
 
 public:
-    explicit SingleGenreView(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit SingleGenreView(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
     void browseGenre(QString objectId);
 
 private:
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;

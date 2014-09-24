@@ -124,7 +124,7 @@ class MafwRendererAdapter : public QObject
 
 #ifdef MAFW_WORKAROUNDS
   MafwPlaylistAdapter* playlist;
-  friend class MafwAdapterFactory;
+  friend class MafwRegistryAdapter;
 #endif
 };
 #endif

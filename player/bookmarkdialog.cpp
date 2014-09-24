@@ -1,13 +1,13 @@
 #include "bookmarkdialog.h"
 
-BookmarkDialog::BookmarkDialog(QWidget *parent, MafwAdapterFactory *factory, Media::Type type, QString address, QString name, QString objectId) :
+BookmarkDialog::BookmarkDialog(QWidget *parent, MafwRegistryAdapter *mafwRegistry, Media::Type type, QString address, QString name, QString objectId) :
     QDialog(parent),
     ui(new Ui::BookmarkDialog)
 {
     ui->setupUi(this);
 
 #ifdef MAFW
-    mafwRadioSource = factory->getRadioSource();
+    mafwRadioSource = mafwRegistry->source(MafwRegistryAdapter::Radio);
     this->objectId = objectId;
 
     this->setWindowTitle(objectId.isEmpty() ? tr("Add radio bookmark") : tr("Edit radio bookmark"));

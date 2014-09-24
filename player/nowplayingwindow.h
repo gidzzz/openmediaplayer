@@ -33,7 +33,7 @@
 
 #ifdef MAFW
     #include <gq/GConfItem>
-    #include <mafw/mafwadapterfactory.h>
+    #include <mafw/mafwregistryadapter.h>
     #include "mafw/mafwplaylistmanageradapter.h"
 #else
     class MafwRendererAdapter;
@@ -49,7 +49,7 @@ class NowPlayingWindow : public BaseWindow
     Q_OBJECT
 
 public:
-    static NowPlayingWindow* acquire(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    static NowPlayingWindow* acquire(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistryAdapter = 0);
     static void destroy();
     ~NowPlayingWindow();
     QString currentURI;
@@ -73,14 +73,14 @@ public slots:
 
 private:
     static NowPlayingWindow *instance;
-    explicit NowPlayingWindow(QWidget *parent, MafwAdapterFactory *mafwFactory);
+    explicit NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistryAdapter);
     Ui::NowPlayingWindow *ui;
     QmlView *qmlView;
     int playlistTime;
     int currentViewId;
     int swipeStart;
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;

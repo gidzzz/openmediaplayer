@@ -6,7 +6,7 @@
 #include "includes.h"
 #include "upnpview.h"
 
-#include "mafw/mafwadapterfactory.h"
+#include "mafw/mafwregistryadapter.h"
 
 namespace Ui {
     class UpnpControl;
@@ -19,7 +19,7 @@ class UpnpControl : public QListWidget
 public:
     explicit UpnpControl(QWidget *parent);
 
-    void setFactory(MafwAdapterFactory *factory);
+    void setRegistry(MafwRegistryAdapter *mafwRegistry);
 
 signals:
     void childOpened();
@@ -32,7 +32,7 @@ private slots:
     void onChildClosed();
 
 private:
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwSourceAdapter *mafwUpnpSource;
     QStringList sources;
 };

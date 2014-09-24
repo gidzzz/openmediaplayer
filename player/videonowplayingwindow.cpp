@@ -18,12 +18,12 @@
 
 #include "videonowplayingwindow.h"
 
-VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory, bool overlay) :
+VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry, bool overlay) :
     QMainWindow(parent),
     ui(new Ui::VideoNowPlayingWindow)
 #ifdef MAFW
-    ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer())
+    ,mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer())
 #endif
 {
     ui->setupUi(this);
@@ -277,7 +277,7 @@ void VideoNowPlayingWindow::switchToRadio()
     playlistManager->deletePlaylist("FmpRadioPlaylist");
     mafw_playlist_set_name(MAFW_PLAYLIST(playlistManager->createPlaylist("FmpVideoPlaylist")), "FmpRadioPlaylist");
 
-    RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this->parentWidget(), mafwFactory);
+    RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this->parentWidget(), mafwRegistry);
 
     // The video window will be closed because the radio window took over,
     // so don't stop/save the playback state in this case.
@@ -442,7 +442,7 @@ void VideoNowPlayingWindow::onBookmarkClicked()
 {
 #ifdef MAFW
     mafwrenderer->pause();
-    BookmarkDialog bookmarkDialog(this, mafwFactory, Media::Video, uri);
+    BookmarkDialog bookmarkDialog(this, mafwRegistry, Media::Video, uri);
     bookmarkDialog.exec();
 #endif
 }

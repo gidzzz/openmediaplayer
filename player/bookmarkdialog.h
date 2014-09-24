@@ -12,7 +12,7 @@
 #include "rotator.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #endif
 
 namespace Ui {
@@ -24,7 +24,7 @@ class BookmarkDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit BookmarkDialog(QWidget *parent = 0, MafwAdapterFactory *factory = 0, Media::Type type = Media::Audio, QString address = "", QString name = "", QString objectId = "");
+    explicit BookmarkDialog(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0, Media::Type type = Media::Audio, QString address = "", QString name = "", QString objectId = "");
     ~BookmarkDialog();
 
 private:

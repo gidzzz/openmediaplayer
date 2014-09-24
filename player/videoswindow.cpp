@@ -18,13 +18,13 @@
 
 #include "videoswindow.h"
 
-VideosWindow::VideosWindow(QWidget *parent, MafwAdapterFactory *factory) :
-    BrowserWindow(parent, factory)
+VideosWindow::VideosWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
+    BrowserWindow(parent, mafwRegistry)
 #ifdef MAFW
-    ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylist())
+    ,mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer()),
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
+    playlist(mafwRegistry->playlist())
 #endif
 {
     ui->objectList->setIconSize(QSize(64, 64));
@@ -102,7 +102,7 @@ void VideosWindow::onVideoSelected(QModelIndex index)
     this->setEnabled(false);
 
 #ifdef MAFW
-    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwRegistry);
 #else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif

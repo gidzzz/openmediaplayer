@@ -25,12 +25,12 @@ MissionControl::MissionControl() :
 
 }
 
-void MissionControl::setFactory(MafwAdapterFactory *factory)
+void MissionControl::setRegistry(MafwRegistryAdapter *mafwRegistry)
 {
-    mafwFactory = factory;
-    mafwRenderer = factory->getRenderer();
+    this->mafwRegistry = mafwRegistry;
+    mafwRenderer = mafwRegistry->renderer();
 
-    m_metadataWatcher = new MetadataWatcher(factory);
+    m_metadataWatcher = new MetadataWatcher(mafwRegistry);
 
     connect(m_metadataWatcher, SIGNAL(metadataReady()), this, SLOT(onMetadataReady()));
     connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged()));

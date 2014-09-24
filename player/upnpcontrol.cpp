@@ -20,13 +20,13 @@ UpnpControl::UpnpControl(QWidget *parent) :
                                 .arg(c.red()).arg(c.green()).arg(c.blue()));
 }
 
-void UpnpControl::setFactory(MafwAdapterFactory *factory)
+void UpnpControl::setRegistry(MafwRegistryAdapter *mafwRegistry)
 {
-    mafwFactory = factory;
-    mafwUpnpSource = mafwFactory->getUpnpSource();
+    this->mafwRegistry = mafwRegistry;
+    mafwUpnpSource = mafwRegistry->source(MafwRegistryAdapter::Upnp);
 
-    connect(factory, SIGNAL(sourceAdded(QString,QString)), this, SLOT(onSourceAdded(QString,QString)));
-    connect(factory, SIGNAL(sourceRemoved(QString,QString)), this, SLOT(onSourceRemoved(QString)));
+    connect(mafwRegistry, SIGNAL(sourceAdded(QString,QString)), this, SLOT(onSourceAdded(QString,QString)));
+    connect(mafwRegistry, SIGNAL(sourceRemoved(QString,QString)), this, SLOT(onSourceRemoved(QString)));
     connect(this, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
 }
 
@@ -67,7 +67,7 @@ void UpnpControl::onItemActivated(QListWidgetItem *item)
 
     QString uuid = item->data(UserRoleObjectID).toString();
 
-    UpnpView *upnpView = new UpnpView(this, mafwFactory, new MafwSourceAdapter(uuid));
+    UpnpView *upnpView = new UpnpView(this, mafwRegistry, new MafwSourceAdapter(uuid));
     upnpView->browseObjectId(uuid + "::");
     upnpView->setWindowTitle(item->text());
     upnpView->show();

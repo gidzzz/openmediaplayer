@@ -46,13 +46,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuList->setItemDelegate(new MainDelegate(ui->menuList));
 
 #ifdef MAFW
-    mafwFactory = MafwAdapterFactory::get();
-    mafwrenderer = mafwFactory->getRenderer();
-    mafwTrackerSource = mafwFactory->getTrackerSource();
-    mafwRadioSource = mafwFactory->getRadioSource();
-    playlist = mafwFactory->getPlaylist();
+    mafwRegistry = MafwRegistryAdapter::get();
+    mafwrenderer = mafwRegistry->renderer();
+    mafwTrackerSource = mafwRegistry->source(MafwRegistryAdapter::Tracker);
+    mafwRadioSource = mafwRegistry->source(MafwRegistryAdapter::Radio);
+    playlist = mafwRegistry->playlist();
 
-    MissionControl::acquire()->setFactory(mafwFactory);
+    MissionControl::acquire()->setRegistry(mafwRegistry);
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 #ifdef MAFW
-    musicWindow = new MusicWindow(this, mafwFactory);
+    musicWindow = new MusicWindow(this, mafwRegistry);
 #else
     musicWindow = new MusicWindow(this);
 #endif
@@ -75,9 +75,9 @@ MainWindow::MainWindow(QWidget *parent) :
     reloadSettings();
 
 #ifdef MAFW
-    ui->upnpControl->setFactory(mafwFactory);
+    ui->upnpControl->setRegistry(mafwRegistry);
 
-    ui->indicator->setFactory(mafwFactory);
+    ui->indicator->setRegistry(mafwRegistry);
 #endif
     ui->indicator->setFixedWidth(112);
     ui->indicator->setFixedHeight(70);
@@ -248,7 +248,7 @@ void MainWindow::open_mp_radio_playing()
     if (playlist->playlistName() != "FmpRadioPlaylist")
         playlist->assignRadioPlaylist();
 
-    RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwFactory);
+    RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwRegistry);
     connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     window->show();
     ui->indicator->inhibit();
@@ -374,7 +374,7 @@ void MainWindow::mime_open(const QString &uriString)
                         .prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
                 qDebug() << "Converted ID:" << objectId;
 
-                CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+                CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
                 connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
                 playlistToken = cpm->appendBrowsed(objectId, QString(), QString(), MAFW_SOURCE_BROWSE_ALL, true);
             }
@@ -498,7 +498,7 @@ void MainWindow::play_automatic_playlist(const QString &playlistName, bool shuff
     playlist->clear();
     playlist->setShuffled(shuffle);
 
-    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
     playlistToken = cpm->appendBrowsed("localtagfs::music/songs", filter, sorting, limit);
 #endif
@@ -549,7 +549,7 @@ NowPlayingWindow* MainWindow::createNowPlayingWindow()
     closeChildren();
 
 #ifdef MAFW
-    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
 #else
     NowPlayingWindow *window = NowPlayingWindow::acquire(this);
 #endif
@@ -566,7 +566,7 @@ void MainWindow::createVideoNowPlayingWindow()
     closeChildren();
 
 #ifdef MAFW
-    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwRegistry);
 #else
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
 #endif
@@ -659,7 +659,7 @@ void MainWindow::showVideosWindow()
     this->setEnabled(false);
 
 #ifdef MAFW
-    VideosWindow *window = new VideosWindow(this, mafwFactory);
+    VideosWindow *window = new VideosWindow(this, mafwRegistry);
 #else
     VideosWindow *window = new VideosWindow(this);
 #endif
@@ -675,7 +675,7 @@ void MainWindow::showInternetRadioWindow()
     this->setEnabled(false);
 
 #ifdef MAFW
-    InternetRadioWindow *window = new InternetRadioWindow(this, mafwFactory);
+    InternetRadioWindow *window = new InternetRadioWindow(this, mafwRegistry);
 #else
     InternetRadioWindow *window = new InternetRadioWindow(this);
 #endif
@@ -775,7 +775,7 @@ void MainWindow::onShuffleAllClicked()
     playlist->clear();
     playlist->setShuffled(true);
 
-    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
     playlistToken = cpm->appendBrowsed("localtagfs::music/songs");
 #endif

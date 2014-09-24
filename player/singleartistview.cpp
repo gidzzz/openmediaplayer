@@ -18,13 +18,13 @@
 
 #include "singleartistview.h"
 
-SingleArtistView::SingleArtistView(QWidget *parent, MafwAdapterFactory *factory) :
-    BrowserWindow(parent, factory)
+SingleArtistView::SingleArtistView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
+    BrowserWindow(parent, mafwRegistry)
 #ifdef MAFW
-    ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylist())
+    ,mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer()),
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
+    playlist(mafwRegistry->playlist())
 #endif
 {
     QFont font; font.setPointSize(13);
@@ -145,7 +145,7 @@ void SingleArtistView::onAlbumSelected(QModelIndex index)
     if (index.row() == 0) {
         shuffleAllSongs();
     } else {
-        SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
+        SingleAlbumView *albumView = new SingleAlbumView(this, mafwRegistry);
         albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
         albumView->setWindowTitle(index.data(UserRoleTitle).toString());
         albumView->show();
@@ -168,7 +168,7 @@ void SingleArtistView::addAllToNowPlaying()
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-        CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+        CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
         connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onArtistAddFinished(uint,int)), Qt::UniqueConnection);
         playlistToken = cpm->appendBrowsed(artistObjectId);
     }
@@ -181,7 +181,7 @@ void SingleArtistView::onArtistAddFinished(uint token, int count)
     if (shuffleRequested) {
         mafwrenderer->play();
 
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
         window->show();
 
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
@@ -252,7 +252,7 @@ void SingleArtistView::onAddAlbumToNowPlaying()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAlbumAddFinished(uint,int)), Qt::UniqueConnection);
     playlistToken = cpm->appendBrowsed(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 }

@@ -3,11 +3,11 @@
 const QString AudioMime = MAFW_METADATA_VALUE_MIME_AUDIO;
 const QString VideoMime = MAFW_METADATA_VALUE_MIME_VIDEO;
 
-UpnpView::UpnpView(QWidget *parent, MafwAdapterFactory *factory, MafwSourceAdapter *source) :
-    BrowserWindow(parent, factory),
-    mafwFactory(factory),
+UpnpView::UpnpView(QWidget *parent, MafwRegistryAdapter *mafwRegistry, MafwSourceAdapter *source) :
+    BrowserWindow(parent, mafwRegistry),
+    mafwRegistry(mafwRegistry),
     mafwSource(source),
-    playlist(factory->getPlaylist())
+    playlist(mafwRegistry->playlist())
 {
     ui->objectList->setIconSize(QSize(48, 48));
     ui->objectList->setItemDelegate(new MediaWithIconDelegate(ui->objectList));
@@ -155,7 +155,7 @@ void UpnpView::onItemActivated(QModelIndex index)
 
     if (mime == MAFW_METADATA_VALUE_MIME_CONTAINER) {
         this->setEnabled(false);
-        UpnpView *window = new UpnpView(this, mafwFactory, mafwSource);
+        UpnpView *window = new UpnpView(this, mafwRegistry, mafwSource);
         window->browseObjectId(objectId);
         window->setWindowTitle(index.data(UserRoleTitle).toString());
         window->show();
@@ -186,11 +186,11 @@ void UpnpView::onItemActivated(QModelIndex index)
                     ++sameTypeIndex;
         }
 
-        MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
+        MafwRendererAdapter *mafwrenderer = mafwRegistry->renderer();
         mafwrenderer->gotoIndex(sameTypeIndex);
         mafwrenderer->play();
 
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
         window->show();
 
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
@@ -218,13 +218,13 @@ void UpnpView::onItemActivated(QModelIndex index)
                     ++sameTypeIndex;
         }
 
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwRegistry);
         window->showFullScreen();
 
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
-        MafwRendererAdapter *mafwrenderer = mafwFactory->getRenderer();
+        MafwRendererAdapter *mafwrenderer = mafwRegistry->renderer();
         mafwrenderer->gotoIndex(sameTypeIndex);
         window->play();
 

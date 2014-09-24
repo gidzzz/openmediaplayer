@@ -11,7 +11,7 @@
 #include "metadatawatcher.h"
 #include "sleeper.h"
 
-#include "mafw/mafwadapterfactory.h"
+#include "mafw/mafwregistryadapter.h"
 
 class MissionControl : public QObject
 {
@@ -20,7 +20,7 @@ class MissionControl : public QObject
 public:
     static MissionControl* acquire();
 
-    void setFactory(MafwAdapterFactory *factory);
+    void setRegistry(MafwRegistryAdapter *mafwRegistry);
     void reloadSettings();
 
     LyricsManager *lyricsManager();
@@ -30,7 +30,7 @@ public:
 private:
     static MissionControl *instance;
 
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter *mafwRenderer;
 
     MetadataWatcher *m_metadataWatcher;

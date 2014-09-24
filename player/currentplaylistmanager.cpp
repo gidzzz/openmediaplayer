@@ -2,14 +2,14 @@
 
 CurrentPlaylistManager* CurrentPlaylistManager::instance = NULL;
 
-CurrentPlaylistManager* CurrentPlaylistManager::acquire(MafwAdapterFactory *factory)
+CurrentPlaylistManager* CurrentPlaylistManager::acquire(MafwRegistryAdapter *mafwRegistry)
 {
-    return instance ? instance : instance = new CurrentPlaylistManager(factory);
+    return instance ? instance : instance = new CurrentPlaylistManager(mafwRegistry);
 }
 
-CurrentPlaylistManager::CurrentPlaylistManager(MafwAdapterFactory *factory) :
-    playlist(factory->getPlaylist()),
-    mafwTrackerSource(factory->getTrackerSource())
+CurrentPlaylistManager::CurrentPlaylistManager(MafwRegistryAdapter *mafwRegistry) :
+    playlist(mafwRegistry->playlist()),
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker))
 {
     browseId = MAFW_SOURCE_INVALID_BROWSE_ID;
     songBufferSize = 0;

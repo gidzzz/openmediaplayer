@@ -18,13 +18,13 @@
 
 #include "radionowplayingwindow.h"
 
-RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwAdapterFactory *factory) :
+RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BaseWindow(parent),
     ui(new Ui::RadioNowPlayingWindow)
 #ifdef MAFW
-    ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    playlist(factory->getPlaylist())
+    ,mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer()),
+    playlist(mafwRegistry->playlist())
 #endif
 {
     ui->setupUi(this);
@@ -482,7 +482,7 @@ void RadioNowPlayingWindow::showFMTXDialog()
 void RadioNowPlayingWindow::showBookmarkDialog()
 {
 #ifdef MAFW
-    BookmarkDialog(this, mafwFactory, Media::Audio, uri, ui->stationLabel->text()).exec();
+    BookmarkDialog(this, mafwRegistry, Media::Audio, uri, ui->stationLabel->text()).exec();
 #endif
 }
 

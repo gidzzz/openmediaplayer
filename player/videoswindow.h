@@ -13,7 +13,7 @@
 #include "delegates/mediawithicondelegate.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
     #include <libmafw/mafw-source.h>
 #endif
 
@@ -22,7 +22,7 @@ class VideosWindow : public BrowserWindow
     Q_OBJECT
 
 public:
-    explicit VideosWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit VideosWindow(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
 
 private:
     QList<QStandardItem*> recordingsBufferList;
@@ -31,7 +31,7 @@ private:
     QAction *sortByDate;
     QAction *sortByCategory;
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;

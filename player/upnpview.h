@@ -9,14 +9,14 @@
 #include "videonowplayingwindow.h"
 #include "delegates/mediawithicondelegate.h"
 
-#include "mafw/mafwadapterfactory.h"
+#include "mafw/mafwregistryadapter.h"
 
 class UpnpView : public BrowserWindow
 {
     Q_OBJECT
 
 public:
-    explicit UpnpView(QWidget *parent = 0, MafwAdapterFactory *factory = 0, MafwSourceAdapter *source = 0);
+    explicit UpnpView(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0, MafwSourceAdapter *source = 0);
     ~UpnpView();
 
 public slots:
@@ -35,7 +35,7 @@ private slots:
 private:
     void notifyOnAddedToNowPlaying(int songCount);
     uint browseId;
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwSourceAdapter *mafwSource;
     MafwPlaylistAdapter* playlist;
 };

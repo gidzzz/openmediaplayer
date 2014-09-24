@@ -23,7 +23,7 @@
 #include "delegates/songlistitemdelegate.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #endif
 
 class InternetRadioWindow : public BrowserWindow
@@ -31,13 +31,13 @@ class InternetRadioWindow : public BrowserWindow
     Q_OBJECT
 
 public:
-    explicit InternetRadioWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit InternetRadioWindow(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
 
 private:
     QList<QStandardItem*> audioBufferList;
     QList<QStandardItem*> videoBufferList;
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwRadioSource;
     MafwPlaylistAdapter* playlist;

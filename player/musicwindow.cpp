@@ -18,14 +18,14 @@
 
 #include "musicwindow.h"
 
-MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
+MusicWindow::MusicWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BaseWindow(parent),
     ui(new Ui::MusicWindow),
 #ifdef MAFW
-    mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylist()),
+    mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer()),
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
+    playlist(mafwRegistry->playlist()),
 #endif
     listAction(NULL)
 {
@@ -82,7 +82,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwAdapterFactory *factory) :
     ui->playlistList->setModel(playlistProxyModel);
 
 #ifdef MAFW
-    ui->indicator->setFactory(mafwFactory);
+    ui->indicator->setRegistry(mafwRegistry);
 
     browseRecentlyAddedId =
     browseRecentlyPlayedId =
@@ -137,7 +137,7 @@ void MusicWindow::onSongSelected(QModelIndex index)
     mafwrenderer->gotoIndex(filter ? index.row() : songProxyModel->mapToSource(index).row());
     mafwrenderer->play();
 
-    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+    NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
 
     window->show();
 
@@ -154,7 +154,7 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
     if (row >= 1 && row <= 4) {
         this->setEnabled(false);
 
-        SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
+        SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwRegistry);
         playlistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
         int limit = QSettings().value("music/playlistSize", 30).toInt();
@@ -171,7 +171,7 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
     } else if (row >= 6) {
         this->setEnabled(false);
 
-        SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwFactory);
+        SinglePlaylistView *playlistView = new SinglePlaylistView(this, mafwRegistry);
         playlistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
         if (index.data(UserRoleObjectID).isNull())
@@ -519,7 +519,7 @@ void MusicWindow::onAlbumSelected(QModelIndex index)
 {
     this->setEnabled(false);
 
-    SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
+    SingleAlbumView *albumView = new SingleAlbumView(this, mafwRegistry);
     albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
     albumView->setWindowTitle(index.data(UserRoleTitle).toString());
 
@@ -533,7 +533,7 @@ void MusicWindow::onArtistSelected(QModelIndex index)
     if (songCount == 0 || songCount == 1) {
         this->setEnabled(false);
 
-        SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
+        SingleAlbumView *albumView = new SingleAlbumView(this, mafwRegistry);
         albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
         albumView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
@@ -542,7 +542,7 @@ void MusicWindow::onArtistSelected(QModelIndex index)
     } else if (songCount > 1) {
         this->setEnabled(false);
 
-        SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
+        SingleArtistView *artistView = new SingleArtistView(this, mafwRegistry);
         artistView->browseArtist(index.data(UserRoleObjectID).toString());
         artistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
@@ -554,7 +554,7 @@ void MusicWindow::onGenreSelected(QModelIndex index)
 {
     this->setEnabled(false);
 
-    SingleGenreView *genreView = new SingleGenreView(this, mafwFactory);
+    SingleGenreView *genreView = new SingleGenreView(this, mafwRegistry);
     genreView->browseGenre(index.data(UserRoleObjectID).toString());
     genreView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
@@ -1078,7 +1078,7 @@ void MusicWindow::onAddToNowPlaying()
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-        CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+        CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
         connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
         playlistToken = cpm->appendBrowsed(currentList()->currentIndex().data(UserRoleObjectID).toString());
     }
@@ -1103,7 +1103,7 @@ void MusicWindow::onAddToNowPlaying()
                 case 4: filter = "(play-count=)"; sorting = ""; limit = MAFW_SOURCE_BROWSE_ALL; break;
             }
 
-            CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+            CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
             connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
             playlistToken = cpm->appendBrowsed("localtagfs::music/songs", filter, sorting, limit);
         }
@@ -1126,7 +1126,7 @@ void MusicWindow::onAddToNowPlaying()
 
         // Imported playlist
         else {
-            CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+            CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
             connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
             playlistToken = cpm->appendBrowsed(index.data(UserRoleObjectID).toString());
         }

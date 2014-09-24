@@ -1,10 +1,10 @@
 #include "metadatawatcher.h"
 
-MetadataWatcher::MetadataWatcher(MafwAdapterFactory *factory) :
-    mafwFactory(factory),
-    mafwRenderer(factory->getRenderer()),
+MetadataWatcher::MetadataWatcher(MafwRegistryAdapter *mafwRegistry) :
+    mafwRegistry(mafwRegistry),
+    mafwRenderer(mafwRegistry->renderer()),
     mafwSource(new MafwSourceAdapter(NULL)),
-    mafwTrackerSource(factory->getTrackerSource()),
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     sourceMetadataPresent(false)
 {
     // Initialization
@@ -135,7 +135,7 @@ void MetadataWatcher::onMediaChanged(int, char *objectId)
 
     mafwRenderer->getCurrentMetadata();
 
-    mafwSource->bind(mafwFactory->findSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
+    mafwSource->bind(mafwRegistry->findSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
     mafwSource->getMetadata(currentObjectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                               MAFW_METADATA_KEY_ARTIST,
                                                               MAFW_METADATA_KEY_ALBUM,

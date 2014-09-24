@@ -18,13 +18,13 @@
 
 #include "internetradiowindow.h"
 
-InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwAdapterFactory *factory) :
-    BrowserWindow(parent, factory)
+InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
+    BrowserWindow(parent, mafwRegistry)
 #ifdef MAFW
-    ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    mafwRadioSource(factory->getRadioSource()),
-    playlist(factory->getPlaylist())
+    ,mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer()),
+    mafwRadioSource(mafwRegistry->source(MafwRegistryAdapter::Radio)),
+    playlist(mafwRegistry->playlist())
 #endif
 {
     this->setWindowTitle(tr("Internet radio stations"));
@@ -95,12 +95,12 @@ void InternetRadioWindow::onStationSelected(QModelIndex index)
     mafwrenderer->gotoIndex(sameTypeIndex);
 
     if (type == "audio") {
-        RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwFactory);
+        RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwRegistry);
         window->show();
         window->play();
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
     } else { // type == "video"
-        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwFactory);
+        VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwRegistry);
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         window->showFullScreen();
         window->play();
@@ -130,7 +130,7 @@ void InternetRadioWindow::onEditClicked()
 #ifdef MAFW
     QModelIndex index = ui->objectList->currentIndex();
 
-    if (BookmarkDialog(this, mafwFactory,
+    if (BookmarkDialog(this, mafwRegistry,
                        index.data(UserRoleMIME).toString().startsWith("audio") ? Media::Audio : Media::Video,
                        index.data(UserRoleValueText).toString(), index.data(Qt::DisplayRole).toString(),
                        index.data(UserRoleObjectID).toString())
@@ -155,7 +155,7 @@ void InternetRadioWindow::onDeleteClicked()
 void InternetRadioWindow::onAddClicked()
 {
 #ifdef MAFW
-    BookmarkDialog(this, mafwFactory).exec();
+    BookmarkDialog(this, mafwRegistry).exec();
 #endif
 }
 

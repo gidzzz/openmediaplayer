@@ -7,14 +7,12 @@
 #include <X11/Xutil.h>
 #endif
 
-QmlView::QmlView(QUrl source, QWidget *parent, MafwAdapterFactory *factory ) :
+QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry ) :
     QMainWindow(parent),
     ui(new Ui::QmlView)
 #ifdef MAFW
-    ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylist())
+    ,mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer())
 #endif
 {
     ui->setupUi(this);

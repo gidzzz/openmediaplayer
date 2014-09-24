@@ -9,7 +9,7 @@
 #include <QMouseEvent>
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
 #endif
 
 #ifdef Q_WS_MAEMO_5
@@ -38,7 +38,7 @@ public:
     ~NowPlayingIndicator();
 
 #ifdef MAFW
-    void setFactory(MafwAdapterFactory *mafwFactory = 0);
+    void setRegistry(MafwRegistryAdapter *mafwRegistry = 0);
 #endif
 
 public slots:
@@ -72,7 +72,7 @@ private:
     int frame;
 
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter *mafwrenderer;
     MafwPlaylistAdapter *playlist;
     int mafwState;

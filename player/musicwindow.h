@@ -25,7 +25,7 @@
 #include "includes.h"
 
 #ifdef MAFW
-    #include "mafw/mafwadapterfactory.h"
+    #include "mafw/mafwregistryadapter.h"
     #include "mafw/mafwplaylistmanageradapter.h"
 #else
     class MafwRendererAdapter;
@@ -40,7 +40,7 @@ class MusicWindow : public BaseWindow
     Q_OBJECT
 
 public:
-    explicit MusicWindow(QWidget *parent = 0, MafwAdapterFactory *mafwFactory = 0);
+    explicit MusicWindow(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
     ~MusicWindow();
     bool eventFilter(QObject *obj, QEvent *e);
     void refreshPlaylistView();
@@ -70,7 +70,7 @@ private:
     void closeEvent(QCloseEvent *);
 
 #ifdef MAFW
-    MafwAdapterFactory *mafwFactory;
+    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;

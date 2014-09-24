@@ -163,7 +163,7 @@ contains(DEFINES, MAFW) {
         mafw/mafwrendereradapter.cpp \
         mafw/mafwplaylistadapter.cpp \
         mafw/mafwplaylistmanageradapter.cpp \
-        mafw/mafwadapterfactory.cpp
+        mafw/mafwregistryadapter.cpp
 
     HEADERS += \
         mafw/mafwrenderersignalhelper.h \
@@ -171,7 +171,7 @@ contains(DEFINES, MAFW) {
         mafw/mafwsourceadapter.h \
         mafw/mafwplaylistadapter.h \
         mafw/mafwplaylistmanageradapter.h \
-        mafw/mafwadapterfactory.h
+        mafw/mafwregistryadapter.h
 }
 
 LIBS += -lhildonthumbnail -lX11

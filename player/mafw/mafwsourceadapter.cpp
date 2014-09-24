@@ -1,6 +1,6 @@
 #include "mafwsourceadapter.h"
 
-#include "mafwadapterfactory.h"
+#include "mafwregistryadapter.h"
 
 QSet<gpointer> MafwSourceAdapter::instances;
 
@@ -16,7 +16,7 @@ MafwSourceAdapter::MafwSourceAdapter(const QString &uuid) :
 {
     init();
 
-    bind(MafwAdapterFactory::get()->findSourceByUUID(uuid));
+    bind(MafwRegistryAdapter::get()->findSourceByUUID(uuid));
 }
 
 MafwSourceAdapter::~MafwSourceAdapter()
@@ -32,7 +32,7 @@ void MafwSourceAdapter::init()
 
     source = NULL;
 
-    connect(MafwAdapterFactory::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
+    connect(MafwRegistryAdapter::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
 }
 
 void MafwSourceAdapter::bind(MafwSource *source)
@@ -56,8 +56,8 @@ void MafwSourceAdapter::bind(MafwSource *source)
         m_uuid = mafw_extension_get_uuid(MAFW_EXTENSION(source));
 
         // Watch only for removals
-        disconnect(MafwAdapterFactory::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
-        connect(MafwAdapterFactory::get(), SIGNAL(sourceRemoved(MafwSource*)), this, SLOT(onSourceRemoved(MafwSource*)));
+        disconnect(MafwRegistryAdapter::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
+        connect(MafwRegistryAdapter::get(), SIGNAL(sourceRemoved(MafwSource*)), this, SLOT(onSourceRemoved(MafwSource*)));
 
         // Emit the signal in case something changed before the adapter got
         // reconnected after losing its source or to notify listeners about
@@ -72,8 +72,8 @@ void MafwSourceAdapter::bind(MafwSource *source)
         m_uuid = QString();
 
         // Watch only for additions
-        disconnect(MafwAdapterFactory::get(), SIGNAL(sourceRemoved(MafwSource*)), this, SLOT(onSourceRemoved(MafwSource*)));
-        connect(MafwAdapterFactory::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
+        disconnect(MafwRegistryAdapter::get(), SIGNAL(sourceRemoved(MafwSource*)), this, SLOT(onSourceRemoved(MafwSource*)));
+        connect(MafwRegistryAdapter::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
     }
 }
 

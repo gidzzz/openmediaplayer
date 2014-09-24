@@ -10,7 +10,7 @@
 #include "rotator.h"
 #include "headerawareproxymodel.h"
 
-#include "mafw/mafwadapterfactory.h"
+#include "mafw/mafwregistryadapter.h"
 
 namespace Ui {
     class BrowserWindow;
@@ -21,7 +21,7 @@ class BrowserWindow : public BaseWindow
     Q_OBJECT
 
 public:
-    explicit BrowserWindow(QWidget *parent, MafwAdapterFactory *mafwFactory);
+    explicit BrowserWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry);
     ~BrowserWindow();
 
     bool eventFilter(QObject *, QEvent *e);

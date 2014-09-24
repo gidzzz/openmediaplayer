@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QList>
 
-#include "mafw/mafwadapterfactory.h"
+#include "mafw/mafwregistryadapter.h"
 
 struct Job
 {
@@ -23,7 +23,7 @@ class CurrentPlaylistManager : public QObject
     Q_OBJECT
 
 public:
-    static CurrentPlaylistManager* acquire(MafwAdapterFactory *factory);
+    static CurrentPlaylistManager* acquire(MafwRegistryAdapter *mafwRegistry);
 
     uint appendBrowsed(QString objectId,
                        QString filter = QString(),
@@ -36,7 +36,7 @@ signals:
 
 private:
     static CurrentPlaylistManager *instance;
-    CurrentPlaylistManager(MafwAdapterFactory *factory);
+    CurrentPlaylistManager(MafwRegistryAdapter *mafwRegistry);
 
     QList<Job> jobs;
 

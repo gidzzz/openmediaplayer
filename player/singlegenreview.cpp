@@ -18,13 +18,13 @@
 
 #include "singlegenreview.h"
 
-SingleGenreView::SingleGenreView(QWidget *parent, MafwAdapterFactory *factory) :
-    BrowserWindow(parent, factory)
+SingleGenreView::SingleGenreView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
+    BrowserWindow(parent, mafwRegistry)
 #ifdef MAFW
-    ,mafwFactory(factory),
-    mafwrenderer(factory->getRenderer()),
-    mafwTrackerSource(factory->getTrackerSource()),
-    playlist(factory->getPlaylist())
+    ,mafwRegistry(mafwRegistry),
+    mafwrenderer(mafwRegistry->renderer()),
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
+    playlist(mafwRegistry->playlist())
 #endif
 {
     ui->objectList->setItemDelegate(new ArtistListItemDelegate(ui->objectList));
@@ -61,7 +61,7 @@ void SingleGenreView::onItemActivated(QModelIndex index)
         if (songCount == 0 || songCount == 1) {
             this->setEnabled(false);
 
-            SingleAlbumView *albumView = new SingleAlbumView(this, mafwFactory);
+            SingleAlbumView *albumView = new SingleAlbumView(this, mafwRegistry);
             albumView->browseAlbumByObjectId(index.data(UserRoleObjectID).toString());
             albumView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
@@ -72,7 +72,7 @@ void SingleGenreView::onItemActivated(QModelIndex index)
         } else if (songCount > 1) {
             this->setEnabled(false);
 
-            SingleArtistView *artistView = new SingleArtistView(this, mafwFactory);
+            SingleArtistView *artistView = new SingleArtistView(this, mafwRegistry);
             artistView->browseArtist(index.data(UserRoleObjectID).toString());
             artistView->setWindowTitle(index.data(Qt::DisplayRole).toString());
 
@@ -197,7 +197,7 @@ void SingleGenreView::addArtistToNowPlaying()
 
     shuffleRequested = false;
 
-    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
     playlistToken = cpm->appendBrowsed(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 }
@@ -209,7 +209,7 @@ void SingleGenreView::onAddFinished(uint token, int count)
     if (shuffleRequested) {
         mafwrenderer->play();
 
-        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwFactory);
+        NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
         window->show();
 
         connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
@@ -242,7 +242,7 @@ void SingleGenreView::addAllToNowPlaying()
 
     ui->objectList->clearSelection();
 
-    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwFactory);
+    CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
     playlistToken = cpm->appendBrowsed(currentObjectId);
 }
