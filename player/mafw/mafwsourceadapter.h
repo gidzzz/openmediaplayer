@@ -39,12 +39,12 @@ signals:
     void updating(int progress, int processedItems, int remainingItems, int remainingTime);
 
     // Exposed callbacks
-    void signalSourceBrowseResult(uint browseId, int remainingCount, uint index, const QString &objectId, GHashTable *metadata, const QString &error);
-    void signalMetadataResult(const QString &objectId, GHashTable *metadata, const QString &error);
-    void signalGotUri(const QString &ojbectId, const QString &uri, const QString &error);
-    void signalCreateObjectResult(const QString &objectId, const QString &error);
-    void signalDestroyObjectResult(const QString &objectId, const QString &error);
-    void signalMetadataSetResult(const QString &objectId, const QStringList &failedKeys, const QString &error);
+    void browseResult(uint browseId, int remainingCount, uint index, const QString &objectId, GHashTable *metadata, const QString &error);
+    void metadataResult(const QString &objectId, GHashTable *metadata, const QString &error);
+    void gotUri(const QString &ojbectId, const QString &uri, const QString &error);
+    void objectCreated(const QString &objectId, const QString &error);
+    void objectDestroyed(const QString &objectId, const QString &error);
+    void metadataSet(const QString &objectId, const QStringList &failedKeys, const QString &error);
 
 private:
     MafwSource* source;

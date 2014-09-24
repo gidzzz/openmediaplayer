@@ -17,7 +17,7 @@ MetadataWatcher::MetadataWatcher(MafwRegistryAdapter *mafwRegistry) :
             this, SLOT(onRendererMetadataChanged(QString,QVariant)));
     connect(mafwRenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
             this, SLOT(onRendererMetadataReceived(GHashTable*,QString,QString)));
-    connect(mafwSource, SIGNAL(signalMetadataResult(QString,GHashTable*,QString)),
+    connect(mafwSource, SIGNAL(metadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataReceived(QString,GHashTable*,QString)));
     // Currently this is solely for the purpose of updating the paused position,
     // but it might be a good idea to keep all metadata in sync.

@@ -64,7 +64,7 @@ void SingleAlbumView::listSongs()
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
 
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+    connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
     browseAlbumId = mafwTrackerSource->browse(albumObjectId, true, NULL, "+track,+title",
@@ -110,7 +110,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     }
 
     if (remainingCount == 0) {
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+        disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)));
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);

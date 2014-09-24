@@ -205,7 +205,7 @@ void VideosWindow::listVideos()
     qDebug("Source ready");
 #endif
 
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint, int, uint, QString, GHashTable*, QString)),
+    connect(mafwTrackerSource, SIGNAL(browseResult(uint, int, uint, QString, GHashTable*, QString)),
             this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
 
     browseId = mafwTrackerSource->browse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : "+title",
@@ -288,7 +288,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
     }
 
     if (remainingCount == 0) {
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+        disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllVideos(uint,int,uint,QString,GHashTable*,QString)));
 
         if (sortByCategory->isChecked()) {

@@ -9,7 +9,7 @@ RingtoneDialog::RingtoneDialog(QWidget *parent,
 {
     this->setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(mafwSource, SIGNAL(signalGotUri(QString,QString,QString)), this, SLOT(onUriReceived(QString,QString)));
+    connect(mafwSource, SIGNAL(gotUri(QString,QString,QString)), this, SLOT(onUriReceived(QString,QString)));
 
     mafwSource->getUri(objectId);
 }

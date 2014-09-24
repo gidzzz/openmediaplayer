@@ -166,7 +166,7 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
     item->setData(true, UserRoleHeader);
     objectModel->appendRow(item);
 
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+    connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
     browsePlaylistId = mafwTrackerSource->browse(objectId, true, NULL, NULL,
                                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -190,7 +190,7 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
     // only one should be the delete action.
     ui->windowMenu->removeAction(ui->windowMenu->actions().last());
 
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+    connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
     browsePlaylistId = mafwTrackerSource->browse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
                                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -212,7 +212,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint 
     }
 
     if (remainingCount == 0) {
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+        disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);

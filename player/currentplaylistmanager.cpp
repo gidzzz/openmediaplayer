@@ -39,7 +39,7 @@ void CurrentPlaylistManager::process()
     Job job = jobs.first();
 
     // Prepare to receive the results
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+    connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
     // Request the results
@@ -77,7 +77,7 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
         // Check if it's just the obligatory empty result to avoid null items in the playlist
         if (remainingCount == 0 && objectId.isNull()) {
             // There are no items, abort
-            disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+            disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 
             // Clean up and move on
@@ -96,7 +96,7 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
     // Check if it's the last result
     if (remainingCount == 0) {
         // The connection is no longer needed
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+        disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 
         // MIME is required to determine which playlist should be used

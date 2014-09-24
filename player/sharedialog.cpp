@@ -16,7 +16,7 @@ ShareDialog::ShareDialog(QWidget *parent, MafwSourceAdapter *mafwSource, QString
     connect(ui->bluetoothButton, SIGNAL(clicked()), this, SLOT(onBluetoothClicked()));
     connect(ui->emailButton, SIGNAL(clicked()), this, SLOT(onEmailClicked()));
 
-    connect(mafwSource, SIGNAL(signalGotUri(QString,QString,QString)), this, SLOT(onUriReceived(QString,QString)));
+    connect(mafwSource, SIGNAL(gotUri(QString,QString,QString)), this, SLOT(onUriReceived(QString,QString)));
 
     mafwSource->getUri(objectId);
 }

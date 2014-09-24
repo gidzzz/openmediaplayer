@@ -37,7 +37,7 @@ void UpnpView::browseObjectId(QString objectId)
 
     objectModel->clear();
 
-    connect(mafwSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+    connect(mafwSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
     browseId = mafwSource->browse(objectId, true, NULL, NULL,
@@ -129,7 +129,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
     }
 
     if (remainingCount == 0) {
-        disconnect(mafwSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+        disconnect(mafwSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
 #ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);

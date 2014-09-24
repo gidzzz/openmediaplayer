@@ -77,7 +77,7 @@ void SingleArtistView::listAlbums()
     shuffleButton->setData(true, UserRoleHeader);
     objectModel->appendRow(shuffleButton);
 
-    connect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+    connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
 
     browseArtistId = mafwTrackerSource->browse(artistObjectId, false, NULL, NULL,
@@ -128,7 +128,7 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         qDebug() << error;
 
     if (remainingCount == 0) {
-        disconnect(mafwTrackerSource, SIGNAL(signalSourceBrowseResult(uint,int,uint,QString,GHashTable*,QString)),
+        disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)));
 #ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);

@@ -213,11 +213,11 @@ void MainWindow::connectSignals()
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
 
 #ifdef MAFW
-    connect(mafwRadioSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
+    connect(mafwRadioSource, SIGNAL(metadataResult(QString, GHashTable*, QString)),
             this, SLOT(countRadioResult(QString, GHashTable*, QString)));
 
     connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
-    connect(mafwTrackerSource, SIGNAL(signalMetadataResult(QString, GHashTable*, QString)),
+    connect(mafwTrackerSource, SIGNAL(metadataResult(QString, GHashTable*, QString)),
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
 #endif
 }
