@@ -30,6 +30,8 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
     positionTimer = new QTimer(this);
     positionTimer->setInterval(1000);
 
+    fmtx = new FMTXInterface(this);
+
     Rotator *rotator = Rotator::acquire();
     savedPolicy = rotator->policy();
     rotator->setPolicy(Rotator::Landscape);
@@ -41,6 +43,7 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
     connect(rootObject, SIGNAL(prevButtonClicked()), mafwrenderer, SLOT(previous()));
     connect(rootObject, SIGNAL(playButtonClicked()), this, SLOT(onPlayClicked()));
     connect(rootObject, SIGNAL(nextButtonClicked()), mafwrenderer, SLOT(next()));
+    connect(rootObject, SIGNAL(fmtxButtonClicked()), this, SLOT(onFmtxClicked()));
     connect(rootObject, SIGNAL(sliderValueChanged(int)), this, SLOT(onSliderValueChanged(int)));
     connect(rootObject, SIGNAL(playlistItemSelected(int)), this, SLOT(onPlaylistItemChanged(int)));
 
@@ -53,6 +56,7 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
     connect(this, SIGNAL(durationChanged(QVariant)), rootObject, SLOT(setSliderMaximum(QVariant)));
     connect(this, SIGNAL(stateIconChanged(QVariant)), rootObject, SLOT(setPlayButtonIcon(QVariant)));
     connect(this, SIGNAL(rowChanged(QVariant)), rootObject, SLOT(onRowChanged(QVariant)));
+    connect(this, SIGNAL(fmtxStateChanged(QVariant)), rootObject, SLOT(onFmtxStateChanged(QVariant)));
 
     connect(this, SIGNAL(playlistItemAppended(QVariant,QVariant,QVariant)),
             rootObject, SLOT(appendPlaylistItem(QVariant,QVariant,QVariant)));
@@ -70,6 +74,9 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+
+    connect(fmtx, SIGNAL(propertyChanged()), this, SLOT(onFmtxChanged()));
+    onFmtxChanged();
 
     positionTimer->start();
 
@@ -118,6 +125,11 @@ void QmlView::setDNDAtom(bool dnd)
     XChangeProperty(QX11Info::display(), winId(), winDNDAtom, XA_INTEGER, 32, PropModeReplace, (uchar*) &enable, 1);
 }
 #endif
+
+void QmlView::onFmtxChanged()
+{
+    emit fmtxStateChanged(fmtx->state() == FMTXInterface::Enabled ? "enabled" : "disabled");
+}
 
 #ifdef MAFW
 void QmlView::onPositionChanged(int position, QString)
@@ -223,6 +235,11 @@ void QmlView::clearPlaylist()
 void QmlView::onPlaylistItemChanged(int index)
 {
     mafwrenderer->gotoIndex(index);
+}
+
+void QmlView::onFmtxClicked()
+{
+    fmtx->setEnabled(fmtx->state() != FMTXInterface::Enabled);
 }
 
 void QmlView::setCurrentRow(int row)

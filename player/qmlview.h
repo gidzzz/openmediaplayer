@@ -11,6 +11,7 @@
 #include "ui_qmlview.h"
 #include "includes.h"
 #include "rotator.h"
+#include "fmtxinterface.h"
 
 #ifdef MAFW
     #include "mafw/mafwregistryadapter.h"
@@ -45,6 +46,7 @@ signals:
     void durationTextChanged(QVariant);
     void stateIconChanged(QVariant);
     void rowChanged(QVariant);
+    void fmtxStateChanged(QVariant);
 
     void playlistItemAppended(QVariant, QVariant, QVariant);
     void playlistItemInserted(QVariant, QVariant, QVariant, QVariant);
@@ -62,6 +64,7 @@ private:
     int songDuration;
     int currentPosition;
     Rotator::Orientation savedPolicy;
+    FMTXInterface *fmtx;
     QTimer *positionTimer;
     QObject *rootObject;
 #ifdef Q_WS_MAEMO_5
@@ -78,9 +81,11 @@ private slots:
     void onPositionChanged(int position, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
     void onStateChanged(int state);
+    void onFmtxChanged();
     void onPlayClicked();
     void onSliderValueChanged(int position);
     void onPlaylistItemChanged(int);
+    void onFmtxClicked();
 #endif
 };
 

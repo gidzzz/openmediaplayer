@@ -9,6 +9,7 @@ Rectangle {
   signal nextButtonClicked;
   signal prevButtonClicked;
   signal playButtonClicked;
+  signal fmtxButtonClicked;
   signal sliderValueChanged(int value);
   signal playlistItemSelected(int index);
 
@@ -215,6 +216,10 @@ Rectangle {
 
   function onRowChanged(row) {
     playlist.setCurrentIndex(row)
+  }
+
+  function onFmtxStateChanged(state) {
+    songView.fmtxButton.indicator.state = state
   }
 }
 //1
