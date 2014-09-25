@@ -5,24 +5,35 @@
   <property name="windowTitle">
    <string>FM transmitter</string>
   </property>
-  <layout class="QGridLayout" name="mainLayout">
+  <layout class="QGridLayout" name="dialogLayout">
    <item row="0" column="0">
-    <widget class="QCheckBox" name="fmtxCheckbox">
-     <property name="text">
-      <string>FM transmitter on</string>
-     </property>
-    </widget>
+    <layout class="QVBoxLayout" name="mainLayout">
+     <item>
+      <widget class="QCheckBox" name="stateBox">
+       <property name="text">
+        <string>FM transmitter on</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QMaemo5ValueButton" name="frequencyButton">
+       <property name="text">
+        <string>Frequency</string>
+       </property>
+       <property name="valueLayout">
+        <enum>QMaemo5ValueButton::ValueBesideText</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item row="0" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Fixed"/>
-     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+      <set>QDialogButtonBox::Save</set>
      </property>
     </widget>
    </item>

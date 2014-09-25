@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FrequencyPickDialog</class>
+ <widget class="QDialog" name="FrequencyPickDialog">
+  <property name="windowTitle">
+   <string>Frequency</string>
+  </property>
+  <layout class="QGridLayout" name="dialogLayout">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="listLayout">
+     <item>
+      <widget class="QListWidget" name="mhzList"/>
+     </item>
+     <item>
+      <widget class="QListWidget" name="khzList"/>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

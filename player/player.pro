@@ -33,7 +33,6 @@ SOURCES += \
     singleplaylistview.cpp \
     aboutwindow.cpp \
     coverpicker.cpp \
-    freqdlg.cpp \
     delegates/maindelegate.cpp \
     lyricseditdialog.cpp \
     lyricssearchdialog.cpp \
@@ -58,7 +57,10 @@ SOURCES += \
     opendialog.cpp \
     currentplaylistmanager.cpp \
     maemo5deviceevents.cpp \
-    fmtxdialog.cpp
+    fmtxinterface.cpp \
+    fmtxdialog.cpp \
+    frequencypickselector.cpp \
+    frequencypickdialog.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -88,7 +90,6 @@ HEADERS += \
     aboutwindow.h \
     coverpicker.h \
     texteditautoresizer.h \
-    freqdlg.h \
     delegates/maindelegate.h \
     lyricseditdialog.h \
     lyricssearchdialog.h \
@@ -118,7 +119,10 @@ HEADERS += \
     opendialog.h \
     currentplaylistmanager.h \
     maemo5deviceevents.h \
-    fmtxdialog.h
+    fmtxinterface.h \
+    fmtxdialog.h \
+    frequencypickselector.h \
+    frequencypickdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -126,6 +130,7 @@ FORMS += \
     nowplayingwindow.ui \
     sharedialog.ui \
     fmtxdialog.ui \
+    frequencypickdialog.ui \
     videonowplayingwindow.ui \
     nowplayingindicator.ui \
     radionowplayingwindow.ui \
@@ -133,7 +138,6 @@ FORMS += \
     qmlview.ui \
     aboutwindow.ui \
     coverpicker.ui \
-    freqdlg.ui \
     lyricseditdialog.ui \
     lyricssearchdialog.ui \
     playlistpicker.ui \

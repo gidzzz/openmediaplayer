@@ -1,140 +1,50 @@
-/**************************************************************************
-    This file is part of Open MediaPlayer
-    Copyright (C) 2010-2011 Timur Kristof
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**************************************************************************/
-
 #include "fmtxdialog.h"
+
+#include <QSettings>
+#include <QMaemo5InformationBox>
+
+#include "frequencypickselector.h"
+#include "rotator.h"
 
 FMTXDialog::FMTXDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FMTXDialog),
-    selector(new FreqDlg(this))
+    fmtx(new FMTXInterface(this))
 {
     ui->setupUi(this);
     ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
 
-    setAttribute(Qt::WA_DeleteOnClose);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
-#ifdef Q_WS_MAEMO_5
-    freqButton = new QMaemo5ValueButton(" " + tr("Frequency"), this);
-    freqButton->setValueLayout(QMaemo5ValueButton::ValueBesideText);
-    //freqButton->setPickSelector(selector);
-    ui->fmtxCheckbox->setText(tr("FM transmitter on"));
-    this->setWindowTitle(tr("FM transmitter"));
-#else
-    freqButton = new QPushButton("Frequency", this);
-#endif
-    ui->mainLayout->addWidget(freqButton, 1, 0, 1, 1);
+    ui->frequencyButton->setPickSelector(new FrequencyPickSelector(fmtx->frequencyMin(),
+                                                                   fmtx->frequencyMax(),
+                                                                   fmtx->frequencyStep(),
+                                                                   fmtx->frequency()));
+
+    switch (fmtx->state()) {
+        case FMTXInterface::Enabled:
+            ui->stateBox->setChecked(true);
+            break;
+        case FMTXInterface::Unavailable:
+            ui->stateBox->setEnabled(false);
+            ui->stateBox->setText(tr("FM transmitter disabled"));
+            break;
+        default:
+            // Disabled: simply not enabled
+            // Error: previous attempt was failed, but another can be made (?)
+            break;
+    }
+
+    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(ui->stateBox, SIGNAL(clicked(bool)), this, SLOT(onStateToggled(bool)));
 
     Rotator::acquire()->addClient(this);
-
-    fmtxState = new GConfItem("/system/fmtx/enabled");
-    fmtxFrequency = new GConfItem("/system/fmtx/frequency");
-    QString state = selector->getValue("state").toString();
-    if (state == "enabled")
-        ui->fmtxCheckbox->setChecked(true);
-    else if (state == "n/a") {
-        ui->fmtxCheckbox->setEnabled(false);
-#ifdef Q_WS_MAEMO_5
-        ui->fmtxCheckbox->setText(tr("FM transmitter disabled"));
-#endif
-    }
-    connect(freqButton, SIGNAL(clicked()), this, SLOT(showDialog()));
-    connect(fmtxState, SIGNAL(valueChanged()), this, SLOT(onStateChanged()));
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onSaveClicked()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(ui->fmtxCheckbox, SIGNAL(clicked()), this, SLOT(onCheckboxClicked()));
-    freqButton->setValueText(selector->currentValueText());
 }
 
 FMTXDialog::~FMTXDialog()
 {
     delete ui;
-}
-
-void FMTXDialog::showDialog()
-{
-    selector->exec();
-    if ( selector->res != "" )
-        freqButton->setValueText(selector->res);
-}
-
-void FMTXDialog::showEvent(QShowEvent *event)
-{
-    QDialog::showEvent(event);
-}
-
-void FMTXDialog::onSaveClicked()
-{
-    int frequencyValue = selector->selectedFreq() * 1000;
-    uint ufreq = selector->selectedFreq() * 1000;
-    fmtxFrequency->set(frequencyValue);
-#ifdef DEBUG
-    qDebug() << "Selected Frequency:" << QString::number(frequencyValue);
-#endif
-    selector->setValue("frequency", ufreq);
-    if (ui->fmtxCheckbox->isChecked())
-        selector->setValue("state", "enabled");
-    else
-        selector->setValue("state", "disabled");
-    this->close();
-}
-
-void FMTXDialog::onStateChanged()
-{
-    if (fmtxState->value().toBool())
-        ui->fmtxCheckbox->setChecked(true);
-    else
-        ui->fmtxCheckbox->setChecked(false);
-}
-
-void FMTXDialog::onOrientationChanged(int w, int h)
-{
-    ui->mainLayout->removeWidget(ui->buttonBox);
-    if (w < h) { // Portrait
-        this->setFixedHeight(230);
-        ui->mainLayout->addWidget(ui->buttonBox, 2, 0, 1, 1);
-        ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
-    } else { // Landscape
-        ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
-        ui->mainLayout->addWidget(ui->buttonBox, 0, 1, 2, 1, Qt::AlignBottom);
-        this->setFixedHeight(160);
-    }
-}
-
-void FMTXDialog::onCheckboxClicked()
-{
-#ifdef Q_WS_MAEMO_5
-    if (!QSettings().value("FMTX/overrideChecks", false).toBool()) {
-        QString startable = selector->getValue("startable").toString();
-        if (startable != "true")
-            ui->fmtxCheckbox->setChecked(false);
-
-        if (startable == "true")
-            return;
-        else if (startable == "Headphones are connected") {
-            this->showErrorNote(tr("Unable to use FM transmitter while headset or TV out cable is connected.\n"
-                                   "Unplug cable to continue using FM transmitter."));
-        }
-        else if (startable == "Usb device is connected") {
-            this->showErrorNote(tr("Unable to use FM transmitter while USB is connected.\n"
-                                   "Unplug USB to continue using FM transmitter."));
-        }
-    }
-#endif
 }
 
 void FMTXDialog::keyPressEvent(QKeyEvent *e)
@@ -143,33 +53,52 @@ void FMTXDialog::keyPressEvent(QKeyEvent *e)
         this->close();
 }
 
-void FMTXDialog::showErrorNote(QString error)
+void FMTXDialog::showError(const QString &message)
 {
-    QMaemo5InformationBox *box = new QMaemo5InformationBox(this);
-    box->setAttribute(Qt::WA_DeleteOnClose);
+    QMaemo5InformationBox::information(this, message, QMaemo5InformationBox::NoTimeout);
+}
 
-    QWidget *widget = new QWidget(box);
-    QSpacerItem *spacer = new QSpacerItem(90, 20, QSizePolicy::Fixed, QSizePolicy::Maximum);
+void FMTXDialog::onOrientationChanged(int w, int h)
+{
+    ui->dialogLayout->removeWidget(ui->buttonBox);
+    if (w < h) { // Portrait
+        ui->dialogLayout->addWidget(ui->buttonBox, 1, 0);
+        ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
+    } else { // Landscape
+        ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
+        ui->dialogLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
+    }
+    this->adjustSize();
+}
 
-    QLabel *errorLabel = new QLabel(box);
+void FMTXDialog::onStateToggled(bool enabled)
+{
+    if (enabled && !QSettings().value("FMTX/overrideChecks", false).toBool()) {
+        switch (fmtx->startability()) {
+            case FMTXInterface::Startable:
+                return;
+            case FMTXInterface::OfflineMode:
+                // TODO: Disable offline mode after asking for permission
+                break;
+            case FMTXInterface::HeadphonesConnected:
+                showError(tr("Unable to use FM transmitter while headset or TV out cable is connected.\n"
+                             "Unplug cable to continue using FM transmitter."));
+                break;
+            case FMTXInterface::UsbConnected:
+                showError(tr("Unable to use FM transmitter while USB is connected.\n"
+                             "Unplug USB to continue using FM transmitter."));
+                break;
+            default:
+                break;
+        }
+        ui->stateBox->setChecked(false);
+    }
+}
 
-    QHBoxLayout *layout = new QHBoxLayout(widget);
+void FMTXDialog::accept()
+{
+    fmtx->setFrequency(static_cast<FrequencyPickSelector*>(ui->frequencyButton->pickSelector())->currentFrequency());
+    fmtx->setEnabled(ui->stateBox->isChecked());
 
-    layout->addItem(spacer);
-    layout->addWidget(errorLabel);
-    layout->setSpacing(0);
-
-    widget->setLayout(layout);
-
-    // Bad padding in default widget, use tabbing to cover it up, sigh :/
-    errorLabel->setText("\n" + error + "\n\n");
-    errorLabel->setAlignment(Qt::AlignLeft);
-    errorLabel->setWordWrap(true);
-
-    box->setWidget(widget);
-    box->setTimeout(QMaemo5InformationBox::NoTimeout);
-
-    connect(box, SIGNAL(clicked()), this, SLOT(close()));
-
-    box->exec();
+    QDialog::accept();
 }
