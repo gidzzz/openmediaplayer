@@ -1,7 +1,5 @@
 #include "darklyricsplugin.h"
 
-#define USER_AGENT "OMP"
-
 DarkLyricsPlugin::DarkLyricsPlugin()
 {
     nam = new QNetworkAccessManager(this);

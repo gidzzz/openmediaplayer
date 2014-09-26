@@ -5,6 +5,8 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 
+#define USER_AGENT "OMP"
+
 class AbstractLyricsProvider : public QObject
 {
     Q_OBJECT

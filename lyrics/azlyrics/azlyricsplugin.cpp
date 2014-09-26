@@ -7,12 +7,15 @@ AZLyricsPlugin::AZLyricsPlugin()
 
 void AZLyricsPlugin::fetch(QString artist, QString title)
 {
-    artist = artist.toLower().remove(QRegExp("[^a-z0-9]"));
-    title = title.toLower().remove(QRegExp("[^a-z0-9]"));
+    const QRegExp removePattern("[^a-z0-9]");
+    artist = artist.toLower().remove(removePattern);
+    title = title.toLower().remove(removePattern);
 
-    QString url = QString("http://www.azlyrics.com/lyrics/%1/%2.html").arg(artist, title);
+    QNetworkRequest request;
+    request.setUrl(QString("http://www.azlyrics.com/lyrics/%1/%2.html").arg(artist, title));
+    request.setRawHeader("User-Agent", USER_AGENT);
 
-    reply = nam->get(QNetworkRequest(QUrl(url)));
+    reply = nam->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(onReplyReceived()));
 }
 
@@ -34,9 +37,11 @@ void AZLyricsPlugin::onReplyReceived()
     QByteArray data = reply->readAll();
     reply->deleteLater();
 
-    if (data.contains("<!-- start of lyrics -->\r\n")) {
-        data.remove(0, data.indexOf("<!-- start of lyrics -->\r\n") + 26);
-        data.remove(data.indexOf("\r\n<!-- end of lyrics -->"), data.length());
+    int i = data.indexOf("<!-- start of lyrics -->\r\n");
+    if (i != -1) {
+        i += 26;
+        data.remove(data.indexOf("<!-- end of lyrics -->", i), data.length());
+        data.remove(0, i);
 
         QTextDocument lyrics;
         lyrics.setHtml(QString::fromUtf8(data));
