@@ -1,3 +1,16 @@
+openmediaplayer (20140926-1) unstable; urgency=low
+
+  * Support for MAFW source plugins.
+  * Added FM transmitter button to the car view.
+  * Allow notification popups in the video window when not playing or when the overlay is visible.
+  * Added an option to search for lyrics with manually entered song info.
+  * Fixed the inability to load lyrics for the current song after changing settings.
+  * Fixed parsing in the LyricWiki plugin and improved compatibility with the site.
+  * Fixed the AZLyrics plugin, which apparently stopped working some time ago.
+  * Rewrote MAFW source browsing internals and FM transmitter support (lots of cleanups, fixed some memory leaks and bugs waiting to happen).
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Fri, 26 Sep 2014 23:20:32 +0200
+
 openmediaplayer (20140418-1) unstable; urgency=low
 
   * Do not output MAFW messages to syslog.
