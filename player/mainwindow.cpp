@@ -74,6 +74,11 @@ MainWindow::MainWindow(QWidget *parent) :
     rotator->setSlave(this);
     reloadSettings();
 
+    PluginsControl *pluginsControl = new PluginsControl(this);
+    ui->menuOptions->addAction(pluginsControl);
+    connect(pluginsControl, SIGNAL(childOpened()), this, SLOT(onChildOpened()));
+    connect(pluginsControl, SIGNAL(childClosed()), this, SLOT(onChildClosed()));
+
 #ifdef MAFW
     ui->upnpControl->setRegistry(mafwRegistry);
 

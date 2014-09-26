@@ -52,6 +52,14 @@ MafwSourceAdapter* MafwRegistryAdapter::source(RecognizedSource source)
     return sources[source];
 }
 
+bool MafwRegistryAdapter::isRecognized(const QString &uuid)
+{
+    for (int i = 0; i < RecognizedSourceCount; i++)
+        if (sources[i]->uuid() == uuid)
+            return true;
+    return false;
+}
+
 //--- Signal handlers ----------------------------------------------------------
 
 void MafwRegistryAdapter::onSourceAdded(MafwRegistry *, MafwSource *source, MafwRegistryAdapter *self)

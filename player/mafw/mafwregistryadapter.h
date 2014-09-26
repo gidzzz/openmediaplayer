@@ -28,6 +28,8 @@ public:
     MafwPlaylistAdapter* playlist();
     MafwSourceAdapter* source(RecognizedSource source);
 
+    bool isRecognized(const QString &uuid);
+
 signals:
     void sourceAdded(MafwSource *source);
     void sourceAdded(const QString &uuid, const QString &name);

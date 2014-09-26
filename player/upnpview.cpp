@@ -96,8 +96,6 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
                     mime = AudioMime;
                 } else if (mime.startsWith("video")) {
                     mime = VideoMime;
-                } else {
-                    mime = tr("(unknown type)");
                 }
             }
         }

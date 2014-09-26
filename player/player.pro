@@ -41,6 +41,8 @@ SOURCES += \
     metadatawatcher.cpp \
     sleeper.cpp \
     playlistquerymanager.cpp \
+    pluginscontrol.cpp \
+    pluginswindow.cpp \
     upnpcontrol.cpp \
     upnpview.cpp \
     delegates/mediawithicondelegate.cpp \
@@ -98,6 +100,8 @@ HEADERS += \
     metadatawatcher.h \
     sleeper.h \
     playlistquerymanager.h \
+    pluginscontrol.h \
+    pluginswindow.h \
     upnpcontrol.h \
     upnpview.h \
     delegates/mediawithicondelegate.h \

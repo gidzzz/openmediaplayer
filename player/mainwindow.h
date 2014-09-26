@@ -18,6 +18,7 @@
 #include "includes.h"
 #include "settingsdialog.h"
 #include "sleeperdialog.h"
+#include "pluginscontrol.h"
 #include "aboutwindow.h"
 #include "delegates/maindelegate.h"
 #include "rotator.h"
