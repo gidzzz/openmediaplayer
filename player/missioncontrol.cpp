@@ -16,6 +16,8 @@ MissionControl::MissionControl() :
 {
     mafwState = Transitioning;
 
+    metadataReady = false;
+
     pausedByCall = false;
     wasRinging = false;
 
@@ -33,6 +35,7 @@ void MissionControl::setRegistry(MafwRegistryAdapter *mafwRegistry)
     m_metadataWatcher = new MetadataWatcher(mafwRegistry);
 
     connect(m_metadataWatcher, SIGNAL(metadataReady()), this, SLOT(onMetadataReady()));
+    connect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
     connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged()));
 
     connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getStatus()));
@@ -69,9 +72,13 @@ void MissionControl::reloadSettings()
     // be disconnected, but this should not really happen due to NowPlayingWindow
     // also being destroyed when reloading (in MainWindow). Anyway, it still
     // might be a good idea to implement online reloading of plugins.
-    m_lyricsManager = QSettings().value("lyrics/enable").toBool()
-                    ? new LyricsManager(this)
-                    : NULL;
+    if (QSettings().value("lyrics/enable").toBool()) {
+        m_lyricsManager = new LyricsManager(this);
+        if (metadataReady)
+            m_lyricsManager->fetchLyrics(currentArtist, currentTitle);
+    } else {
+        m_lyricsManager = NULL;
+    }
 }
 
 void MissionControl::togglePlayback()
@@ -114,8 +121,7 @@ void MissionControl::onSleeperTimeout()
 
 void MissionControl::onMediaChanged()
 {
-    disconnect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)),
-               this, SLOT(onMetadataChanged(QString,QVariant)));
+    metadataReady = false;
 }
 
 void MissionControl::onMetadataReady()
@@ -126,12 +132,13 @@ void MissionControl::onMetadataReady()
     if (m_lyricsManager)
         m_lyricsManager->fetchLyrics(currentArtist, currentTitle);
 
-    connect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)),
-            this, SLOT(onMetadataChanged(QString,QVariant)));
+    metadataReady = true;
 }
 
 void MissionControl::onMetadataChanged(QString key, QVariant value)
 {
+    if (!metadataReady) return;
+
     // Fetch lyrics if enough details become available
     if (!value.isNull()) {
         if (key == MAFW_METADATA_KEY_ARTIST) {

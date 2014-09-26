@@ -39,6 +39,8 @@ private:
 
     int mafwState;
 
+    bool metadataReady;
+
     bool pausedByCall;
     bool wasRinging;
 
