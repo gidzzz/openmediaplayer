@@ -346,22 +346,22 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../lyricssearchdialog.ui" line="6"/>
         <source>Search for lyrics</source>
-        <translation type="unfinished"></translation>
+        <translation>Hľadať text skladby</translation>
     </message>
     <message>
         <location filename="../lyricssearchdialog.ui" line="14"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Názov</translation>
     </message>
     <message>
         <location filename="../lyricssearchdialog.ui" line="24"/>
         <source>Artist</source>
-        <translation type="unfinished"></translation>
+        <translation>Interpret</translation>
     </message>
     <message>
         <location filename="../lyricssearchdialog.cpp" line="11"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Hľadať</translation>
     </message>
 </context>
 <context>
@@ -785,7 +785,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1396"/>
         <source>Search for lyrics</source>
-        <translation type="unfinished"></translation>
+        <translation>Hľadať text skladby</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.cpp" line="1397"/>
@@ -908,7 +908,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../pluginscontrol.cpp" line="8"/>
         <source>Plug-ins</source>
-        <translation type="unfinished"></translation>
+        <translation>Zásuvné moduly</translation>
     </message>
 </context>
 <context>
@@ -916,7 +916,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../pluginswindow.cpp" line="10"/>
         <source>Plug-ins</source>
-        <translation type="unfinished"></translation>
+        <translation>Zásuvné moduly</translation>
     </message>
 </context>
 <context>
