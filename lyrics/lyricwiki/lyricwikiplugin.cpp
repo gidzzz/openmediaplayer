@@ -55,7 +55,7 @@ void LyricWikiPlugin::onArtistReplyReceived()
             i += 28;
             data.remove(data.indexOf('"', i), data.length());
 
-            reply = nam->get(QNetworkRequest(QUrl::fromEncoded(data + ':' + QUrl::toPercentEncoding(prepareName(title)))));
+            reply = nam->get(QNetworkRequest(QUrl::fromEncoded(data.mid(i) + ':' + QUrl::toPercentEncoding(prepareName(title)))));
             connect(reply, SIGNAL(finished()), this, SLOT(onSongReplyReceived()));
             return;
         }
