@@ -51,9 +51,14 @@ void BrowserWindow::keyPressEvent(QKeyEvent *e)
         case Qt::Key_Enter:
         case Qt::Key_Left:
         case Qt::Key_Right:
+        case Qt::Key_PageUp:
+        case Qt::Key_PageDown:
+        case Qt::Key_Home:
+        case Qt::Key_End:
         case Qt::Key_Space:
         case Qt::Key_Control:
         case Qt::Key_Shift:
+        case Qt::Key_AltGr:
             break;
 
         case Qt::Key_Backspace:
