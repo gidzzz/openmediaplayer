@@ -211,6 +211,11 @@ void MetadataWatcher::onSourceMetadataReceived(QString objectId, GHashTable *met
         if (backupMetadata.value(MAFW_METADATA_KEY_PAUSED_POSITION).isNull())
             backupMetadata[MAFW_METADATA_KEY_PAUSED_POSITION] = 0;
 
+        // The music window should be notified about missing album art every
+        // time to have a chance to look for it by its own means.
+        if (!currentMetadata.contains(MAFW_METADATA_KEY_RENDERER_ART_URI))
+            currentMetadata[MAFW_METADATA_KEY_RENDERER_ART_URI] = QVariant();
+
         QMap<QString,QVariant>::const_iterator currentIterator = currentMetadata.begin();
         QMap<QString,QVariant>::const_iterator backupIterator = backupMetadata.begin();
 
