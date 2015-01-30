@@ -20,6 +20,8 @@ BrowserWindow::BrowserWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry)
 
     ui->objectList->viewport()->installEventFilter(this);
 
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this), SIGNAL(activated()), this, SLOT(onSearchRequested()));
+
     connect(ui->objectList->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->indicator, SLOT(poke()));
 
     connect(ui->searchEdit, SIGNAL(textChanged(QString)), this, SLOT(onSearchTextChanged(QString)));
@@ -105,6 +107,16 @@ void BrowserWindow::onOrientationChanged(int w, int h)
 
     ui->indicator->setGeometry(w-(112+8), h-(70+56), 112, 70);
     ui->indicator->raise();
+}
+
+void BrowserWindow::onSearchRequested()
+{
+    if (ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
+    ui->searchEdit->setFocus();
+    ui->searchEdit->selectAll();
 }
 
 void BrowserWindow::onSearchHideButtonClicked()

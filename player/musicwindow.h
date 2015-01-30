@@ -108,6 +108,7 @@ private slots:
     void showArtistView();
     void showSongsView();
     void showGenresView();
+    void onSearchRequested();
     void onSearchHideButtonClicked();
     void onSearchTextChanged();
 

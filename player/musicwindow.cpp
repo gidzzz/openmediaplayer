@@ -186,6 +186,7 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
 
 void MusicWindow::connectSignals()
 {
+    connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this), SIGNAL(activated()), this, SLOT(onSearchRequested()));
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
 
 #ifdef MAFW
@@ -345,6 +346,15 @@ void MusicWindow::onDeleteClicked()
     currentList()->clearSelection();
 }
 
+void MusicWindow::onSearchRequested()
+{
+    if (ui->searchWidget->isHidden()) {
+        ui->indicator->inhibit();
+        ui->searchWidget->show();
+    }
+    ui->searchEdit->setFocus();
+    ui->searchEdit->selectAll();
+}
 
 void MusicWindow::onSearchHideButtonClicked()
 {

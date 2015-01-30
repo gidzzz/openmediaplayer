@@ -38,6 +38,7 @@ protected:
 protected slots:
     void orientationInit();
     void onOrientationChanged(int w, int h);
+    void onSearchRequested();
     void onSearchHideButtonClicked();
     void onSearchTextChanged(QString);
     void onChildClosed();
