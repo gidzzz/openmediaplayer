@@ -1,3 +1,15 @@
+openmediaplayer (20150131-1) unstable; urgency=low
+
+  * New shortcut: Ctrl+F to focus the search box and select its contents.
+  * Do not show the search box when Fn alone is pressed.
+  * Alow scrolling using PgUp, PgDn, Home and End.
+  * LyricWiki plugin works again.
+  * Fixed a problem with missing album art not always being looked for.
+  * New translation: Slovenian by sponka.
+  * Updated translations.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 31 Jan 2015 14:29:03 +0100
+
 openmediaplayer (20140926-1) unstable; urgency=low
 
   * Support for MAFW source plugins.
