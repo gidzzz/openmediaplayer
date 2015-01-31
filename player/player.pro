@@ -204,6 +204,7 @@ TRANSLATIONS = \
     lang/openmediaplayer.ro.ts \
     lang/openmediaplayer.ru.ts \
     lang/openmediaplayer.sk.ts \
+    lang/openmediaplayer.sl_SI.ts \
     lang/openmediaplayer.sv.ts \
     lang/openmediaplayer.tr.ts \
     lang/openmediaplayer.uk.ts \
