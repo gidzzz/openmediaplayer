@@ -457,158 +457,158 @@ FM vericisi için USB kablosunu çıkarın.</translation>
 <context>
     <name>MusicWindow</name>
     <message>
-        <location filename="../musicwindow.cpp" line="226"/>
+        <location filename="../musicwindow.cpp" line="227"/>
         <source>Add to now playing</source>
         <translation>Şimdi Çalınıyora ekle</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="232"/>
+        <location filename="../musicwindow.cpp" line="233"/>
         <source>Add to a playlist</source>
         <translation>Çalma listesine ekle</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="248"/>
-        <location filename="../musicwindow.cpp" line="263"/>
+        <location filename="../musicwindow.cpp" line="249"/>
+        <location filename="../musicwindow.cpp" line="264"/>
         <source>Rename playlist</source>
         <translation>Çalma listesini adlandır</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="249"/>
-        <location filename="../musicwindow.cpp" line="252"/>
+        <location filename="../musicwindow.cpp" line="250"/>
+        <location filename="../musicwindow.cpp" line="253"/>
         <source>Delete playlist</source>
         <translation>Çalma listesini sil</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="234"/>
+        <location filename="../musicwindow.cpp" line="235"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="237"/>
+        <location filename="../musicwindow.cpp" line="238"/>
         <source>Set as ringing tone</source>
         <translation>Zil sesi olarak ayarla</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="238"/>
+        <location filename="../musicwindow.cpp" line="239"/>
         <source>Share</source>
         <translation>Paylaş</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="269"/>
+        <location filename="../musicwindow.cpp" line="270"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="450"/>
+        <location filename="../musicwindow.cpp" line="460"/>
         <source>Albums</source>
         <translation>Albümler</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="465"/>
+        <location filename="../musicwindow.cpp" line="475"/>
         <source>Songs</source>
         <translation>Şarkılar</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="713"/>
+        <location filename="../musicwindow.cpp" line="723"/>
         <source>Saved</source>
         <translation>Kaydedilmiş</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="731"/>
-        <location filename="../musicwindow.cpp" line="761"/>
-        <location filename="../musicwindow.cpp" line="767"/>
-        <location filename="../musicwindow.cpp" line="773"/>
-        <location filename="../musicwindow.cpp" line="779"/>
-        <location filename="../musicwindow.cpp" line="797"/>
-        <location filename="../musicwindow.cpp" line="998"/>
+        <location filename="../musicwindow.cpp" line="741"/>
+        <location filename="../musicwindow.cpp" line="771"/>
+        <location filename="../musicwindow.cpp" line="777"/>
+        <location filename="../musicwindow.cpp" line="783"/>
+        <location filename="../musicwindow.cpp" line="789"/>
+        <location filename="../musicwindow.cpp" line="807"/>
+        <location filename="../musicwindow.cpp" line="1008"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n şarkılar</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="786"/>
+        <location filename="../musicwindow.cpp" line="796"/>
         <source>Imported playlists</source>
         <translation>İthal çalma listesi</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="666"/>
+        <location filename="../musicwindow.cpp" line="676"/>
         <source>Automatic playlists</source>
         <translation>Otomatik çalma listesi</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="672"/>
+        <location filename="../musicwindow.cpp" line="682"/>
         <source>Recently added</source>
         <translation>Son eklenen</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="672"/>
+        <location filename="../musicwindow.cpp" line="682"/>
         <source>Recently played</source>
         <translation>Son oynatılan</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="672"/>
+        <location filename="../musicwindow.cpp" line="682"/>
         <source>Most played</source>
         <translation>En çok çalınan</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="672"/>
+        <location filename="../musicwindow.cpp" line="682"/>
         <source>Never played</source>
         <translation>Hiç çalınmayan</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="823"/>
+        <location filename="../musicwindow.cpp" line="833"/>
         <source>(unknown song)</source>
         <translation>(bilinmeyen şarkı)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="826"/>
-        <location filename="../musicwindow.cpp" line="869"/>
-        <location filename="../musicwindow.cpp" line="887"/>
-        <location filename="../musicwindow.cpp" line="926"/>
+        <location filename="../musicwindow.cpp" line="836"/>
+        <location filename="../musicwindow.cpp" line="879"/>
+        <location filename="../musicwindow.cpp" line="897"/>
+        <location filename="../musicwindow.cpp" line="936"/>
         <source>(unknown artist)</source>
         <translation>(bilinmeyen sanatçı)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="829"/>
-        <location filename="../musicwindow.cpp" line="923"/>
+        <location filename="../musicwindow.cpp" line="839"/>
+        <location filename="../musicwindow.cpp" line="933"/>
         <source>(unknown album)</source>
         <translation>(bilinmeyen albüm)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="941"/>
+        <location filename="../musicwindow.cpp" line="951"/>
         <source>Various artists</source>
         <translation>Farklı sanatçılar</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="978"/>
-        <location filename="../musicwindow.cpp" line="989"/>
+        <location filename="../musicwindow.cpp" line="988"/>
+        <location filename="../musicwindow.cpp" line="999"/>
         <source>(unknown genre)</source>
         <translation>(bilinmeyen tarz)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="999"/>
+        <location filename="../musicwindow.cpp" line="1009"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n albümler</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1000"/>
+        <location filename="../musicwindow.cpp" line="1010"/>
         <source>%n artist(s)</source>
         <translation>
             <numerusform>%n sanatçılar</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1146"/>
+        <location filename="../musicwindow.cpp" line="1161"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip(ler) çalma listesine eklendi</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1180"/>
+        <location filename="../musicwindow.cpp" line="1195"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klibler şuanda oynuyor</numerusform>
@@ -621,34 +621,34 @@ FM vericisi için USB kablosunu çıkarın.</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="175"/>
-        <location filename="../musicwindow.cpp" line="421"/>
+        <location filename="../musicwindow.cpp" line="431"/>
         <source>All albums</source>
         <translation>Tüm albümler</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="180"/>
-        <location filename="../musicwindow.cpp" line="416"/>
-        <location filename="../musicwindow.cpp" line="455"/>
+        <location filename="../musicwindow.cpp" line="426"/>
+        <location filename="../musicwindow.cpp" line="465"/>
         <source>Artists</source>
         <translation>Sanatçılar</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="185"/>
-        <location filename="../musicwindow.cpp" line="431"/>
-        <location filename="../musicwindow.cpp" line="460"/>
+        <location filename="../musicwindow.cpp" line="441"/>
+        <location filename="../musicwindow.cpp" line="470"/>
         <source>Genres</source>
         <translation>Tür</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="190"/>
-        <location filename="../musicwindow.cpp" line="436"/>
-        <location filename="../musicwindow.cpp" line="470"/>
+        <location filename="../musicwindow.cpp" line="446"/>
+        <location filename="../musicwindow.cpp" line="480"/>
         <source>Playlists</source>
         <translation>Çalma listeleri</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="195"/>
-        <location filename="../musicwindow.cpp" line="426"/>
+        <location filename="../musicwindow.cpp" line="436"/>
         <source>All songs</source>
         <translation>Tüm şarkılar</translation>
     </message>
