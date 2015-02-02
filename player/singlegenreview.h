@@ -3,9 +3,7 @@
 
 #include "browserwindow.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#endif
+#include "mafw/mafwregistryadapter.h"
 
 #include "delegates/artistlistitemdelegate.h"
 #include "delegates/shufflebuttondelegate.h"
@@ -14,9 +12,7 @@
 #include "nowplayingwindow.h"
 #include "currentplaylistmanager.h"
 
-#ifdef Q_WS_MAEMO_5
-    #include <QMaemo5InformationBox>
-#endif
+#include <QMaemo5InformationBox>
 
 class SingleGenreView : public BrowserWindow
 {
@@ -27,7 +23,6 @@ public:
     void browseGenre(QString objectId);
 
 private:
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
@@ -37,10 +32,7 @@ private:
     QString currentObjectId;
     int visibleSongs;
     bool shuffleRequested;
-#endif
-#ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
-#endif
     void updateSongCount();
 
 private slots:
@@ -49,12 +41,10 @@ private slots:
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void addArtistToNowPlaying();
     void onNowPlayingWindowHidden();
-#ifdef MAFW
     void listArtists();
     void browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
     void onAddFinished(uint browseId, int count);
     void onContainerChanged(QString objectId);
-#endif
 };
 
 #endif // SINGLEGENREVIEW_H

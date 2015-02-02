@@ -31,9 +31,7 @@ UpnpView::~UpnpView()
 
 void UpnpView::browseObjectId(QString objectId)
 {
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     objectModel->clear();
 
@@ -129,9 +127,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
     if (remainingCount == 0) {
         disconnect(mafwSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
-#ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
 
@@ -247,9 +243,7 @@ void UpnpView::onAddOneToPlaylist()
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
         playlist->appendItem(picker.playlist, ui->objectList->currentIndex().data(UserRoleObjectID).toString());
-#ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
-#endif
     }
 }
 
@@ -290,9 +284,7 @@ int UpnpView::appendAllToPlaylist(QString type, bool filter)
 
 void UpnpView::notifyOnAddedToNowPlaying(int songCount)
 {
-#ifdef Q_WS_MAEMO_5
     QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
-#endif
 }
 
 void UpnpView::onNowPlayingWindowHidden()

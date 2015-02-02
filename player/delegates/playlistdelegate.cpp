@@ -38,11 +38,7 @@ void PlayListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     if (option.state & QStyle::State_Selected)
         QStyledItemDelegate::paint(painter, option, QModelIndex());
 
-#ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
-#else
-    QColor secondaryColor(156, 154, 156);
-#endif
 
     QFont f = painter->font();
     QPen defaultPen = painter->pen();

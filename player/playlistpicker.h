@@ -13,10 +13,8 @@
 #include "confirmdialog.h"
 #include "rotator.h"
 
-#ifdef MAFW
-    #include "mafw/mafwplaylistadapter.h"
-    #include "mafw/mafwplaylistmanageradapter.h"
-#endif
+#include "mafw/mafwplaylistadapter.h"
+#include "mafw/mafwplaylistmanageradapter.h"
 
 namespace Ui {
     class PlaylistPicker;

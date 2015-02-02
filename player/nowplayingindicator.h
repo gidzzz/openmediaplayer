@@ -8,13 +8,9 @@
 #include <QTimer>
 #include <QMouseEvent>
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#endif
+#include "mafw/mafwregistryadapter.h"
 
-#ifdef Q_WS_MAEMO_5
-    #include "maemo5deviceevents.h"
-#endif
+#include "maemo5deviceevents.h"
 
 #include "ui_nowplayingindicator.h"
 #include "includes.h"
@@ -37,9 +33,7 @@ public:
     explicit NowPlayingIndicator(QWidget *parent = 0);
     ~NowPlayingIndicator();
 
-#ifdef MAFW
     void setRegistry(MafwRegistryAdapter *mafwRegistry = 0);
-#endif
 
 public slots:
     void togglePlayback();
@@ -71,25 +65,17 @@ private:
     int inhibited;
     int frame;
 
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter *mafwrenderer;
     MafwPlaylistAdapter *playlist;
     int mafwState;
-#endif
-#ifdef Q_WS_MAEMO_5
     Maemo5DeviceEvents *deviceEvents;
-#endif
 
 private slots:
-#ifdef Q_WS_MAEMO_5
     void onTkLockChanged(bool);
-#endif
-#ifdef MAFW
     void onStateChanged(int);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
     void onPlaylistReady(MafwPlaylist*,uint,MafwPlayState, const char* objectId, QString);
-#endif
     void nextFrame();
     void openWindow();
     void onWindowDestroyed();

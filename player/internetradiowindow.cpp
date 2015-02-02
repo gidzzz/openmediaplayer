@@ -19,13 +19,11 @@
 #include "internetradiowindow.h"
 
 InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
-    BrowserWindow(parent, mafwRegistry)
-#ifdef MAFW
-    ,mafwRegistry(mafwRegistry),
+    BrowserWindow(parent, mafwRegistry),
+    mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     mafwRadioSource(mafwRegistry->source(MafwRegistryAdapter::Radio)),
     playlist(mafwRegistry->playlist())
-#endif
 {
     this->setWindowTitle(tr("Internet radio stations"));
 
@@ -41,19 +39,15 @@ InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRegistryAdapter *m
     connect(ui->objectList, SIGNAL(activated(QModelIndex)), this, SLOT(onStationSelected(QModelIndex)));
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
-#ifdef MAFW
     connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(listStations()));
     if (mafwRadioSource->isReady())
         listStations();
-#endif
 }
 
 void InternetRadioWindow::showFMTXDialog()
 {
-#ifdef Q_WS_MAEMO_5
     FMTXDialog *fmtxDialog = new FMTXDialog(this);
     fmtxDialog->show();
-#endif
 }
 
 void InternetRadioWindow::onStationSelected(QModelIndex index)
@@ -62,7 +56,6 @@ void InternetRadioWindow::onStationSelected(QModelIndex index)
 
     this->setEnabled(false);
 
-#ifdef MAFW
     QString type = index.data(UserRoleMIME).toString().startsWith("audio") ? "audio" : "video";
 
     if (type == "audio")
@@ -105,11 +98,6 @@ void InternetRadioWindow::onStationSelected(QModelIndex index)
         window->showFullScreen();
         window->play();
     }
-#else
-    window = new RadioNowPlayingWindow(this);
-    window->show();
-    connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
-#endif
 
     ui->indicator->inhibit();
 }
@@ -127,7 +115,6 @@ void InternetRadioWindow::onContextMenuRequested(const QPoint &pos)
 
 void InternetRadioWindow::onEditClicked()
 {
-#ifdef MAFW
     QModelIndex index = ui->objectList->currentIndex();
 
     if (BookmarkDialog(this, mafwRegistry,
@@ -138,37 +125,29 @@ void InternetRadioWindow::onEditClicked()
     {
         listStations();
     }
-#endif
 }
 
 void InternetRadioWindow::onDeleteClicked()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwRadioSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         objectProxyModel->removeRow(ui->objectList->currentIndex().row());
     }
-#endif
     ui->objectList->clearSelection();
 }
 
 void InternetRadioWindow::onAddClicked()
 {
-#ifdef MAFW
     BookmarkDialog(this, mafwRegistry).exec();
-#endif
 }
 
-#ifdef MAFW
 void InternetRadioWindow::listStations()
 {
 #ifdef DEBUG
     qDebug("Source ready");
 #endif
 
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     connect(mafwRadioSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -275,9 +254,6 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
             }
         }
 
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
-#endif

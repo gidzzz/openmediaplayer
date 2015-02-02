@@ -10,10 +10,8 @@
 #include <QGraphicsView>
 #include <QMaemo5Style>
 
-#ifdef Q_WS_MAEMO_5
-    #include "fmtxdialog.h"
-    #include "maemo5deviceevents.h"
-#endif
+#include "fmtxdialog.h"
+#include "maemo5deviceevents.h"
 
 #include "ui_radionowplayingwindow.h"
 #include "includes.h"
@@ -22,13 +20,7 @@
 #include "bookmarkdialog.h"
 #include "mirror.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#else
-    class MafwRendererAdapter;
-    class MafwSourceAdapter;
-    class MafwPlaylistAdapter;
-#endif
+#include "mafw/mafwregistryadapter.h"
 
 namespace Ui {
     class RadioNowPlayingWindow;
@@ -67,7 +59,6 @@ private:
     bool lazySliders;
     bool buttonWasDown;
     bool isMediaSeekable;
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwPlaylistAdapter* playlist;
@@ -75,7 +66,6 @@ private:
     QString artist;
     QString title;
     QString uri;
-#endif
 
 private slots:
     void togglePlayback();
@@ -85,15 +75,12 @@ private slots:
     void onOrientationChanged(int w, int h);
     void onScreenLocked(bool locked);
     void volumeWatcher();
-#ifdef Q_WS_MAEMO_5
     void showFMTXDialog();
-#endif
     void showBookmarkDialog();
     void onNextButtonPressed();
     void onPrevButtonPressed();
     void onStopButtonPressed();
     void onMetadataChanged(QString key, QVariant value);
-#ifdef MAFW
     void onStateChanged(int state);
     void onMediaChanged(int, char *);
     void onPropertyChanged(const QDBusMessage &msg);
@@ -106,7 +93,6 @@ private slots:
     void onPositionSliderPressed();
     void onPositionSliderReleased();
     void onPositionSliderMoved(int position);
-#endif
 };
 
 #endif // RADIONOWPLAYINGWINDOW_H

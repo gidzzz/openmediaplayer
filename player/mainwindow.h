@@ -25,23 +25,19 @@
 #include "opendialog.h"
 #include "currentplaylistmanager.h"
 
-#ifdef Q_WS_MAEMO_5
-    #include <QMaemo5InformationBox>
-    #include <QtGui/QX11Info>
-    #include <X11/Xlib.h>
-    #define DBUS_SERVICE   "com.nokia.mediaplayer"
-    #define DBUS_PATH      "/com/nokia/osso/mediaplayer"
-    #define DBUS_INTERFACE "com.nokia.mediaplayer"
-#endif
+#include <QMaemo5InformationBox>
+#include <QtGui/QX11Info>
+#include <X11/Xlib.h>
+#define DBUS_SERVICE   "com.nokia.mediaplayer"
+#define DBUS_PATH      "/com/nokia/osso/mediaplayer"
+#define DBUS_INTERFACE "com.nokia.mediaplayer"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-    #include <libgnomevfs/gnome-vfs-mime-utils.h>
-    #define TAGSOURCE_AUDIO_PATH     "localtagfs::music/songs"
-    #define TAGSOURCE_PLAYLISTS_PATH "localtagfs::music/playlists"
-    #define TAGSOURCE_VIDEO_PATH     "localtagfs::videos"
-    #define RADIOSOURCE_PATH         "iradiosource::"
-#endif
+#include "mafw/mafwregistryadapter.h"
+#include <libgnomevfs/gnome-vfs-mime-utils.h>
+#define TAGSOURCE_AUDIO_PATH     "localtagfs::music/songs"
+#define TAGSOURCE_PLAYLISTS_PATH "localtagfs::music/playlists"
+#define TAGSOURCE_VIDEO_PATH     "localtagfs::videos"
+#define RADIOSOURCE_PATH         "iradiosource::"
 
 namespace Ui {
     class MainWindow;
@@ -76,13 +72,10 @@ private:
     void setButtonIcons();
     void connectSignals();
     void closeChildren();
-#ifdef Q_WS_MAEMO_5
     QMaemo5InformationBox *updatingInfoBox;
     QProgressBar *updatingProgressBar;
     QLabel *updatingLabel;
     bool updatingShow;
-#endif
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
@@ -94,7 +87,6 @@ private:
     void countVideos();
     void openDirectory(const QString &uri, const QString &objectIdToPlay, Media::Type type);
     void convertObjectId(QString &objectId, const char *basePath);
-#endif
 
 private slots:
     void onOrientationChanged(int w, int h);
@@ -112,7 +104,6 @@ private slots:
     void onChildOpened();
     void onNowPlayingWindowHidden();
     void onChildClosed();
-#ifdef MAFW
     void setupPlayback();
     void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
     void countRadioResult(QString objectId, GHashTable *metadata, QString error);
@@ -120,13 +111,9 @@ private slots:
     void onAddFinished(uint token);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);
     void onContainerChanged(QString objectId);
-#endif
-#ifdef Q_WS_MAEMO_5
     void registerDbusService();
     void onScreenLocked(bool locked);
     void takeScreenshot();
-#endif
-
 };
 
 #endif // MAINWINDOW_H

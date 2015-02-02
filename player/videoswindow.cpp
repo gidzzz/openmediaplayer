@@ -19,13 +19,11 @@
 #include "videoswindow.h"
 
 VideosWindow::VideosWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
-    BrowserWindow(parent, mafwRegistry)
-#ifdef MAFW
-    ,mafwRegistry(mafwRegistry),
+    BrowserWindow(parent, mafwRegistry),
+    mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
-#endif
 {
     ui->objectList->setIconSize(QSize(64, 64));
     ui->objectList->setDragDropMode(QAbstractItemView::NoDragDrop);
@@ -50,13 +48,11 @@ VideosWindow::VideosWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     connect(ui->objectList, SIGNAL(activated(QModelIndex)), this, SLOT(onVideoSelected(QModelIndex)));
     connect(ui->objectList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
 
-#ifdef MAFW
     if (mafwTrackerSource->isReady()) {
         onSourceReady();
     } else {
         connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onSourceReady()));
     }
-#endif
 }
 
 void VideosWindow::onSourceReady()
@@ -81,12 +77,10 @@ void VideosWindow::onContextMenuRequested(const QPoint &pos)
 
 void VideosWindow::onDeleteClicked()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         objectProxyModel->removeRow(ui->objectList->currentIndex().row());
     }
-#endif
     ui->objectList->clearSelection();
 }
 
@@ -101,11 +95,7 @@ void VideosWindow::onVideoSelected(QModelIndex index)
 
     this->setEnabled(false);
 
-#ifdef MAFW
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwRegistry);
-#else
-    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
-#endif
     window->showFullScreen();
 
     connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -194,12 +184,9 @@ void VideosWindow::selectView()
     }
 }
 
-#ifdef MAFW
 void VideosWindow::listVideos()
 {
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
 #ifdef DEBUG
     qDebug("Source ready");
@@ -344,9 +331,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
             }
         }
 
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
 
@@ -361,4 +346,3 @@ void VideosWindow::onContainerChanged(QString objectId)
     if (objectId == "localtagfs::videos" || objectId.startsWith("localtagfs::videos"))
         QTimer::singleShot(3000, this, SLOT(listVideos())); // some time for the thumbnailer to finish
 }
-#endif

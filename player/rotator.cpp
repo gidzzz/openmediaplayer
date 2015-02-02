@@ -16,7 +16,6 @@ void Rotator::setPolicy(Orientation policy)
 {
     m_policy = policy;
 
-#ifdef Q_WS_MAEMO_5
     if (m_slave) switch (m_policy) {
         case Automatic:
             m_slave->setAttribute(Qt::WA_Maemo5AutoOrientation, true);
@@ -34,7 +33,6 @@ void Rotator::setPolicy(Orientation policy)
             m_slave->setAttribute(Qt::WA_Maemo5PortraitOrientation, true);
             break;
     }
-# endif
 
     onResized();
 }

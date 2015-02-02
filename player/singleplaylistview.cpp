@@ -19,21 +19,15 @@
 #include "singleplaylistview.h"
 
 SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
-    BrowserWindow(parent, mafwRegistry)
-#ifdef MAFW
-    ,mafwRegistry(mafwRegistry),
+    BrowserWindow(parent, mafwRegistry),
+    mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
-#endif
 {
-#ifdef MAFW
     browsePlaylistId = MAFW_SOURCE_INVALID_BROWSE_ID;
-#endif
 
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     permanentDelete = QSettings().value("main/permanentDelete").toBool();
 
@@ -116,10 +110,8 @@ void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guin
         setItemMetadata(objectModel->item(index+1), objectId, metadata);
     }
 
-#ifdef Q_WS_MAEMO_5
     if (remainingCount == 0)
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
 }
 
 void SinglePlaylistView::setItemMetadata(QStandardItem *item, QString objectId, GHashTable *metadata)
@@ -214,9 +206,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
-#ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
         playlistLoaded = true;
 
         switch (pendingActivation) {
@@ -240,7 +230,6 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint 
 
 void SinglePlaylistView::onItemActivated(QModelIndex index)
 {
-#ifdef MAFW
     this->setEnabled(false);
 
     if (!playlistLoaded) {
@@ -265,7 +254,6 @@ void SinglePlaylistView::onItemActivated(QModelIndex index)
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
     ui->indicator->inhibit();
-#endif
 }
 
 void SinglePlaylistView::addAllToNowPlaying()
@@ -275,15 +263,10 @@ void SinglePlaylistView::addAllToNowPlaying()
         return;
     }
 
-#ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-#ifdef Q_WS_MAEMO_5
     notifyOnAddedToNowPlaying(appendAllToPlaylist(true));
-#endif
-
-#endif
 }
 
 void SinglePlaylistView::addAllToPlaylist()
@@ -305,7 +288,6 @@ void SinglePlaylistView::addAllToPlaylist()
             playlistModified = true;
             --songCount;
         } else {
-#ifdef MAFW
             gchar** songAddBuffer = new gchar*[songCount];
 
             for (int i = 1; i < songCount; i++)
@@ -318,18 +300,14 @@ void SinglePlaylistView::addAllToPlaylist()
             for (int i = 0; i < songCount; i++)
                 delete[] songAddBuffer[i];
             delete[] songAddBuffer;
-#endif
         }
 
-#ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", songCount));
-#endif
     }
 }
 
 int SinglePlaylistView::appendAllToPlaylist(bool filter)
 {
-#ifdef MAFW
     int visibleCount = filter ? objectProxyModel->rowCount() : objectModel->rowCount();
 
     gchar** songAddBuffer = new gchar*[visibleCount];
@@ -350,15 +328,12 @@ int SinglePlaylistView::appendAllToPlaylist(bool filter)
     delete[] songAddBuffer;
 
     return visibleCount;
-#endif
 }
 
-#ifdef Q_WS_MAEMO_5
 void SinglePlaylistView::notifyOnAddedToNowPlaying(int songCount)
 {
     QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
-#endif
 
 void SinglePlaylistView::keyPressEvent(QKeyEvent *e)
 {
@@ -390,17 +365,12 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
 
 void SinglePlaylistView::onAddToNowPlaying()
 {
-#ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 
-#ifdef Q_WS_MAEMO_5
     notifyOnAddedToNowPlaying(1);
-#endif
-
-#endif
 }
 
 void SinglePlaylistView::onAddToPlaylist()
@@ -412,14 +382,10 @@ void SinglePlaylistView::onAddToPlaylist()
             objectModel->appendRow(objectModel->item(objectProxyModel->mapToSource(ui->objectList->currentIndex()).row())->clone());
             updateSongCount();
             playlistModified = true;
-        }
-#ifdef MAFW
-        else
+        } else {
             playlist->appendItem(picker.playlist, ui->objectList->currentIndex().data(UserRoleObjectID).toString());
-#endif
-#ifdef Q_WS_MAEMO_5
+        }
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
-#endif
     }
 }
 
@@ -441,14 +407,12 @@ void SinglePlaylistView::onShareClicked()
 
 void SinglePlaylistView::onDeleteClicked()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         objectProxyModel->removeRow(ui->objectList->currentIndex().row());
         updateSongCount();
         playlistModified = true;
     }
-#endif
     ui->objectList->clearSelection();
 }
 
@@ -509,7 +473,6 @@ void SinglePlaylistView::onItemDoubleClicked()
 
 void SinglePlaylistView::saveCurrentPlaylist()
 {
-#ifdef MAFW
     MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(this->windowTitle()));
     playlist->clear(targetPlaylist);
 
@@ -527,12 +490,10 @@ void SinglePlaylistView::saveCurrentPlaylist()
     delete[] songAddBuffer;
 
     playlistModified = false;
-#endif
 }
 
 void SinglePlaylistView::deletePlaylist()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::DeletePlaylist, this).exec() == QMessageBox::Yes) {
         if (currentObjectId.isNull()) // Saved playlist
             MafwPlaylistManagerAdapter::get()->deletePlaylist(this->windowTitle());
@@ -540,7 +501,6 @@ void SinglePlaylistView::deletePlaylist()
             mafwTrackerSource->destroyObject(currentObjectId);
         this->close();
     }
-#endif
 }
 
 void SinglePlaylistView::onDeleteFromPlaylist()
@@ -557,7 +517,6 @@ void SinglePlaylistView::onNowPlayingWindowHidden()
     this->onChildClosed();
 }
 
-#ifdef MAFW
 void SinglePlaylistView::closeEvent(QCloseEvent *e)
 {
     if (browsePlaylistId != MAFW_SOURCE_INVALID_BROWSE_ID)
@@ -570,4 +529,3 @@ void SinglePlaylistView::closeEvent(QCloseEvent *e)
 
     e->accept();
 }
-#endif

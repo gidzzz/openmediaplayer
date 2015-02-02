@@ -10,21 +10,16 @@
 #include <QLineEdit>
 #include <QSpacerItem>
 #include <QDialogButtonBox>
-#include "nowplayingindicator.h"
-#ifdef Q_WS_MAEMO_5
-    #include <QMaemo5InformationBox>
-    #include "fmtxdialog.h"
-#endif
+#include <QMaemo5InformationBox>
 
 #include "includes.h"
 #include "confirmdialog.h"
 #include "radionowplayingwindow.h"
 #include "bookmarkdialog.h"
+#include "fmtxdialog.h"
 #include "delegates/songlistitemdelegate.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#endif
+#include "mafw/mafwregistryadapter.h"
 
 class InternetRadioWindow : public BrowserWindow
 {
@@ -36,13 +31,11 @@ public:
 private:
     QList<QStandardItem*> audioBufferList;
     QList<QStandardItem*> videoBufferList;
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwRadioSource;
     MafwPlaylistAdapter* playlist;
     unsigned int browseId;
-#endif
 
 private slots:
     void showFMTXDialog();
@@ -51,10 +44,8 @@ private slots:
     void onDeleteClicked();
     void onStationSelected(QModelIndex index);
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
-#ifdef MAFW
     void listStations();
     void browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-#endif
 };
 
 #endif // INTERNETRADIOWINDOW_H

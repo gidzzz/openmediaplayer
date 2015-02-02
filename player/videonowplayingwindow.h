@@ -17,24 +17,16 @@
 #include "radionowplayingwindow.h"
 #include "bookmarkdialog.h"
 
-#ifdef Q_WS_MAEMO_5
-    #include <QtGui/QX11Info>
-    #include <X11/Xlib.h>
-    #include <X11/Xatom.h>
-    #include <X11/Xutil.h>
-    #include <QMaemo5InformationBox>
-    #include <QSpacerItem>
-    #include "maemo5deviceevents.h"
-    #include "sharedialog.h"
-#endif
+#include <QtGui/QX11Info>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <X11/Xutil.h>
+#include <QMaemo5InformationBox>
+#include <QSpacerItem>
+#include "maemo5deviceevents.h"
+#include "sharedialog.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#else
-    class MafwRendererAdapter;
-    class MafwSourceAdapter;
-    class MafwPlaylistAdapter;
-#endif
+#include "mafw/mafwregistryadapter.h"
 
 
 namespace Ui {
@@ -91,7 +83,6 @@ private:
     bool isMediaSeekable;
     bool buttonWasDown;
     int keyToRepeat;
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwSource;
@@ -103,7 +94,6 @@ private:
     int videoWidth;
     int videoHeight;
     static QColor colorKey() { return QColor(3, 13, 3); }
-#endif
 
 private slots:
     void setFitToScreen(bool enable);
@@ -121,7 +111,6 @@ private slots:
     void onMetadataChanged(QString key, QVariant value);
     void onScreenLocked(bool locked);
     void repeatKey();
-#ifdef MAFW
     void togglePlayback();
     void slowFwd();
     void slowRev();
@@ -134,7 +123,6 @@ private slots:
     void onBufferingInfo(float status);
     void onPositionChanged(int position, QString);
     void onErrorOccured(const QDBusMessage &msg);
-#endif
     void onPositionSliderPressed();
     void onPositionSliderReleased();
     void onPositionSliderMoved(int);

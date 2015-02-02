@@ -8,11 +8,7 @@ void MediaWithIconDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     QRect r = option.rect;
 
     if (index.data(UserRoleHeader).toBool()) {
-#ifdef Q_WS_MAEMO_5
         QColor activeColor = QMaemo5Style::standardColor("ActiveTextColor");
-#else
-        QColor activeColor(0,255, 0);
-#endif
         painter->setPen(QPen(activeColor));
         painter->drawText(r, Qt::AlignVCenter|Qt::AlignCenter, title);
     }

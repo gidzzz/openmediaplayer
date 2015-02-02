@@ -3,9 +3,7 @@
 
 #include "browserwindow.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#endif
+#include "mafw/mafwregistryadapter.h"
 
 #include "includes.h"
 #include "confirmdialog.h"
@@ -22,7 +20,6 @@ public:
     void browseArtist(QString objectId);
 
 private:
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
@@ -33,19 +30,14 @@ private:
     int visibleSongs;
     bool shuffleRequested;
     void listAlbums();
-#endif
-#ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
-#endif
     void updateSongCount();
 
 private slots:
-#ifdef MAFW
     void onArtistAddFinished(uint token, int count);
     void onAlbumAddFinished(uint token, int count);
     void browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error);
     void onContainerChanged(QString objectId);
-#endif
     void onAlbumSelected(QModelIndex index);
     void addAllToNowPlaying();
     void deleteCurrentArtist();

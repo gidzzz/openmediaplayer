@@ -26,20 +26,13 @@
 #include "rotator.h"
 #include "missioncontrol.h"
 
-#ifdef Q_WS_MAEMO_5
-    #include "fmtxdialog.h"
-    #include "maemo5deviceevents.h"
-#endif
+#include "fmtxdialog.h"
+#include "maemo5deviceevents.h"
 
-#ifdef MAFW
-    #include <gq/GConfItem>
-    #include <mafw/mafwregistryadapter.h>
-    #include "mafw/mafwplaylistmanageradapter.h"
-#else
-    class MafwRendererAdapter;
-    class MafwSourceAdapter;
-    class MafwPlaylistAdapter;
-#endif
+#include <gq/GConfItem>
+#include <mafw/mafwregistryadapter.h>
+#include "mafw/mafwplaylistmanageradapter.h"
+
 namespace Ui {
     class NowPlayingWindow;
 }
@@ -65,9 +58,7 @@ public slots:
     void setLyricsNormal(QString lyrics);
     void setLyricsInfo(QString info);
     void onShuffleButtonToggled(bool);
-#ifdef MAFW
     void updatePlaylistState();
-#endif
     void showCarView();
     void showEntertainmentView();
 
@@ -79,7 +70,6 @@ private:
     int playlistTime;
     int currentViewId;
     int swipeStart;
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
@@ -90,7 +80,6 @@ private:
     QString metadataObjectId;
     bool event(QEvent *event);
     void showEvent(QShowEvent *);
-#endif
     void setButtonIcons();
     void setTitle(QString title);
     void setArtist(QString artist);
@@ -142,7 +131,6 @@ private slots:
     void forgetClick();
     void onItemDoubleClicked();
     void onItemDropped(QListWidgetItem *item, int from);
-#ifdef MAFW
     void onItemMoved(guint from, guint to);
     void onPropertyChanged(const QDBusMessage &msg);
     void onStateChanged(int state);
@@ -157,7 +145,6 @@ private slots:
     void onNextButtonClicked();
     void onPreviousButtonClicked();
     void updatePlaylist(guint from = -1, guint nremove = 0, guint nreplace = 0);
-#endif
     void togglePlayback();
     void volumeWatcher();
     void onMetadataChanged(QString key, QVariant value);
@@ -187,9 +174,7 @@ private slots:
     void onAddToPlaylist();
     void selectItemByRow(int row);
     void focusItemByRow(int row);
-#ifdef Q_WS_MAEMO_5
     void onScreenLocked(bool locked);
-#endif
 };
 
 #endif // NOWPLAYINGWINDOW_H

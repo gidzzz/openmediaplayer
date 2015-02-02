@@ -12,10 +12,8 @@
 #include "delegates/thumbnailitemdelegate.h"
 #include "delegates/mediawithicondelegate.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-    #include <libmafw/mafw-source.h>
-#endif
+#include "mafw/mafwregistryadapter.h"
+#include <libmafw/mafw-source.h>
 
 class VideosWindow : public BrowserWindow
 {
@@ -30,13 +28,11 @@ private:
 
     QAction *sortByDate;
     QAction *sortByCategory;
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     unsigned int browseId;
-#endif
 
 private slots:
     void onSourceReady();
@@ -46,12 +42,10 @@ private slots:
     void onVideoSelected(QModelIndex index);
     void onSortingChanged(QAction *action);
     void selectView();
-#ifdef MAFW
     void listVideos();
     void browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onMetadataChanged(QString objectId);
     void onContainerChanged(QString objectId);
-#endif
 };
 
 #endif // VIDEOSWINDOW_H

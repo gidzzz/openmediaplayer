@@ -19,13 +19,11 @@
 #include "singleartistview.h"
 
 SingleArtistView::SingleArtistView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
-    BrowserWindow(parent, mafwRegistry)
-#ifdef MAFW
-    ,mafwRegistry(mafwRegistry),
+    BrowserWindow(parent, mafwRegistry),
+    mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
-#endif
 {
     QFont font; font.setPointSize(13);
     ui->objectList->setFont(font);
@@ -40,11 +38,9 @@ SingleArtistView::SingleArtistView(QWidget *parent, MafwRegistryAdapter *mafwReg
     ui->windowMenu->addAction(tr("Add songs to now playing"), this, SLOT(addAllToNowPlaying()));
     ui->windowMenu->addAction(tr("Delete"                  ), this, SLOT(deleteCurrentArtist()));
 
-#ifdef MAFW
     shuffleRequested = false;
 
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
-#endif
 
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
 
@@ -61,12 +57,9 @@ void SingleArtistView::browseArtist(QString objectId)
         listAlbums();
 }
 
-#ifdef MAFW
 void SingleArtistView::listAlbums()
 {
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     objectModel->clear();
     visibleSongs = 0;
@@ -130,16 +123,12 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)));
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
-#endif
 
 void SingleArtistView::onAlbumSelected(QModelIndex index)
 {
-#ifdef MAFW
     this->setEnabled(false);
 
     if (index.row() == 0) {
@@ -153,7 +142,6 @@ void SingleArtistView::onAlbumSelected(QModelIndex index)
         connect(albumView, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
     }
-#endif
 }
 
 void SingleArtistView::updateSongCount()
@@ -164,9 +152,7 @@ void SingleArtistView::updateSongCount()
 void SingleArtistView::addAllToNowPlaying()
 {
     if (objectModel->rowCount() > 1) {
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
         CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
         connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onArtistAddFinished(uint,int)), Qt::UniqueConnection);
@@ -189,18 +175,15 @@ void SingleArtistView::onArtistAddFinished(uint token, int count)
 
         shuffleRequested = false;
     }
-#ifdef Q_WS_MAEMO_5
     else {
         notifyOnAddedToNowPlaying(count);
     }
 
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
 }
 
 void SingleArtistView::shuffleAllSongs()
 {
-#ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
@@ -209,7 +192,6 @@ void SingleArtistView::shuffleAllSongs()
 
     shuffleRequested = true;
     this->addAllToNowPlaying();
-#endif
 }
 
 void SingleArtistView::onContextMenuRequested(const QPoint &pos)
@@ -225,32 +207,26 @@ void SingleArtistView::onContextMenuRequested(const QPoint &pos)
 
 void SingleArtistView::onDeleteClicked()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         QModelIndex index = ui->objectList->currentIndex();
         mafwTrackerSource->destroyObject(index.data(UserRoleObjectID).toString());
         visibleSongs -= index.data(UserRoleSongCount).toInt(); updateSongCount();
         objectProxyModel->removeRow(index.row());
     }
-#endif
     ui->objectList->clearSelection();
 }
 
 void SingleArtistView::deleteCurrentArtist()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::DeleteAll, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(artistObjectId);
         this->close();
     }
-#endif
 }
 
 void SingleArtistView::onAddAlbumToNowPlaying()
 {
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAlbumAddFinished(uint,int)), Qt::UniqueConnection);
@@ -261,26 +237,20 @@ void SingleArtistView::onAlbumAddFinished(uint token, int count)
 {
     if (token != playlistToken) return;
 
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     notifyOnAddedToNowPlaying(count);
-#endif
 }
 
-#ifdef MAFW
 void SingleArtistView::onContainerChanged(QString objectId)
 {
     if (artistObjectId.startsWith(objectId) || objectId.startsWith(artistObjectId))
         this->listAlbums();
 }
-#endif
 
-#ifdef Q_WS_MAEMO_5
 void SingleArtistView::notifyOnAddedToNowPlaying(int songCount)
 {
     QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
-#endif
 
 void SingleArtistView::onNowPlayingWindowHidden()
 {

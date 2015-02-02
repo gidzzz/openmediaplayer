@@ -1,29 +1,24 @@
 #include "qmlview.h"
 
-#ifdef Q_WS_MAEMO_5
 #include <QtGui/QX11Info>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
-#endif
 
 QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry ) :
     QMainWindow(parent),
-    ui(new Ui::QmlView)
-#ifdef MAFW
-    ,mafwRegistry(mafwRegistry),
+    ui(new Ui::QmlView),
+    mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer())
-#endif
 {
     ui->setupUi(this);
     ui->declarativeView->setSource(source);
     ui->declarativeView->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
     setAttribute(Qt::WA_DeleteOnClose);
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
     setAttribute(Qt::WA_Maemo5NonComposited);
-#endif
+
     QGLWidget *glWidget = new QGLWidget(this);
     ui->declarativeView->setViewport(glWidget);
 
@@ -80,18 +75,14 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
 
     positionTimer->start();
 
-#ifdef Q_WS_MAEMO_5
     quint32 disable = {0};
     Atom winPortraitModeSupportAtom = XInternAtom(QX11Info::display(), "_HILDON_PORTRAIT_MODE_SUPPORT", false);
     XChangeProperty(QX11Info::display(), winId(), winPortraitModeSupportAtom, XA_CARDINAL, 32, PropModeReplace, (uchar*) &disable, 1);
 
     this->setDNDAtom(true);
-#endif
 
-#ifdef MAFW
     mafwrenderer->getStatus();
     mafwrenderer->getPosition();
-#endif
 }
 
 QmlView::~QmlView()
@@ -117,21 +108,18 @@ void QmlView::setMetadata(QString songName, QString albumName, QString artistNam
     emit durationChanged(this->duration);
 }
 
-#ifdef Q_WS_MAEMO_5
 void QmlView::setDNDAtom(bool dnd)
 {
     quint32 enable = dnd ? 1 : 0;
     Atom winDNDAtom = XInternAtom(QX11Info::display(), "_HILDON_DO_NOT_DISTURB", false);
     XChangeProperty(QX11Info::display(), winId(), winDNDAtom, XA_INTEGER, 32, PropModeReplace, (uchar*) &enable, 1);
 }
-#endif
 
 void QmlView::onFmtxChanged()
 {
     emit fmtxStateChanged(fmtx->state() == FMTXInterface::Enabled ? "enabled" : "disabled");
 }
 
-#ifdef MAFW
 void QmlView::onPositionChanged(int position, QString)
 {
     duration = mmss_pos(position) + "/" + mmss_len(songDuration);
@@ -246,5 +234,3 @@ void QmlView::setCurrentRow(int row)
 {
     emit rowChanged(row);
 }
-
-#endif

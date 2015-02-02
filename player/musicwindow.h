@@ -24,12 +24,8 @@
 #include "ui_musicwindow.h"
 #include "includes.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-    #include "mafw/mafwplaylistmanageradapter.h"
-#else
-    class MafwRendererAdapter;
-#endif
+#include "mafw/mafwregistryadapter.h"
+#include "mafw/mafwplaylistmanageradapter.h"
 
 namespace Ui {
     class MusicWindow;
@@ -69,7 +65,6 @@ private:
     void keyReleaseEvent(QKeyEvent *e);
     void closeEvent(QCloseEvent *);
 
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
@@ -86,16 +81,13 @@ private:
     unsigned int addToNowPlayingId;
     uint playlistToken;
     int savedPlaylistCount;
-#endif
     void (MusicWindow::*listAction)();
     void connectSignals();
     void showChild(QMainWindow *window);
     void showView(QListView *listView, void (MusicWindow::*listAction)(), QString name, QString title);
     void loadViewState();
     QListView* currentList();
-#ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
-#endif
 
 private slots:
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
@@ -112,7 +104,6 @@ private slots:
     void onSearchHideButtonClicked();
     void onSearchTextChanged();
 
-#ifdef MAFW
     void browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString, GHashTable* metadata, QString error);
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
@@ -138,7 +129,6 @@ private slots:
     void onPlaylistSelected(QModelIndex index);
 
     void onContainerChanged(QString objectId);
-#endif
 
     void onAddToNowPlaying();
     void onAddToPlaylist();

@@ -19,13 +19,11 @@
 #include "singlegenreview.h"
 
 SingleGenreView::SingleGenreView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
-    BrowserWindow(parent, mafwRegistry)
-#ifdef MAFW
-    ,mafwRegistry(mafwRegistry),
+    BrowserWindow(parent, mafwRegistry),
+    mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
-#endif
 {
     ui->objectList->setItemDelegate(new ArtistListItemDelegate(ui->objectList));
     ui->objectList->setItemDelegateForRow(0, new ShuffleButtonDelegate(ui->objectList));
@@ -83,7 +81,6 @@ void SingleGenreView::onItemActivated(QModelIndex index)
     }
 }
 
-#ifdef MAFW
 void SingleGenreView::browseGenre(QString objectId)
 {
     currentObjectId = objectId;
@@ -95,9 +92,7 @@ void SingleGenreView::browseGenre(QString objectId)
 
 void SingleGenreView::listArtists()
 {
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     visibleSongs = 0;
     objectModel->clear();
@@ -165,12 +160,9 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)));
-#ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
-#endif
 
 void SingleGenreView::updateSongCount()
 {
@@ -189,9 +181,7 @@ void SingleGenreView::onContextMenuRequested(const QPoint &pos)
 
 void SingleGenreView::addArtistToNowPlaying()
 {
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     ui->objectList->clearSelection();
 
@@ -217,28 +207,22 @@ void SingleGenreView::onAddFinished(uint token, int count)
 
         shuffleRequested = false;
     }
-#ifdef Q_WS_MAEMO_5
     else {
         notifyOnAddedToNowPlaying(count);
     }
 
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
 }
 
-#ifdef MAFW
 void SingleGenreView::onContainerChanged(QString objectId)
 {
     if (currentObjectId.startsWith(objectId) || objectId.startsWith(currentObjectId))
         listArtists();
 }
-#endif
 
 void SingleGenreView::addAllToNowPlaying()
 {
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     ui->objectList->clearSelection();
 
@@ -247,12 +231,10 @@ void SingleGenreView::addAllToNowPlaying()
     playlistToken = cpm->appendBrowsed(currentObjectId);
 }
 
-#ifdef Q_WS_MAEMO_5
 void SingleGenreView::notifyOnAddedToNowPlaying(int songCount)
 {
     QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
-#endif
 
 void SingleGenreView::onNowPlayingWindowHidden()
 {

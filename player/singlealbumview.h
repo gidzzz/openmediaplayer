@@ -3,9 +3,7 @@
 
 #include "browserwindow.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#endif
+#include "mafw/mafwregistryadapter.h"
 
 #include "includes.h"
 #include "confirmdialog.h"
@@ -19,31 +17,23 @@ class SingleAlbumView : public BrowserWindow
 
 public:
     explicit SingleAlbumView(QWidget *parent = 0, MafwRegistryAdapter *mafwRegistry = 0);
-#ifdef MAFW
     void browseAlbumByObjectId(QString objectId);
-#endif
 
 private:
-#ifdef Q_WS_MAEMO_5
     void notifyOnAddedToNowPlaying(int songCount);
-#endif
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwPlaylistAdapter* playlist;
     QString albumObjectId;
     uint browseAlbumId;
-#endif
 
 private slots:
-#ifdef MAFW
     void listSongs();
     void updateSongCount();
     void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
     void onItemActivated(QModelIndex index);
     void onContainerChanged(QString objectId);
-#endif
     int appendAllToPlaylist(bool filter);
     void addAllToNowPlaying();
     void deleteCurrentAlbum();

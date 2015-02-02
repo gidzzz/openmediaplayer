@@ -13,9 +13,7 @@
 #include "rotator.h"
 #include "fmtxinterface.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#endif
+#include "mafw/mafwregistryadapter.h"
 
 namespace Ui {
     class QmlView;
@@ -67,17 +65,12 @@ private:
     FMTXInterface *fmtx;
     QTimer *positionTimer;
     QObject *rootObject;
-#ifdef Q_WS_MAEMO_5
     void setDNDAtom(bool dnd);
-#endif
-#ifdef MAFW
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     int mafwState;
-#endif
 
 private slots:
-#ifdef MAFW
     void onPositionChanged(int position, QString);
     void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
     void onStateChanged(int state);
@@ -86,7 +79,6 @@ private slots:
     void onSliderValueChanged(int position);
     void onPlaylistItemChanged(int);
     void onFmtxClicked();
-#endif
 };
 
 #endif // QMLVIEW_H

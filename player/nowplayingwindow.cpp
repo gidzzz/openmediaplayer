@@ -44,24 +44,16 @@ void NowPlayingWindow::destroy()
 
 NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BaseWindow(parent),
-#ifdef MAFW
     ui(new Ui::NowPlayingWindow),
     mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     playlist(mafwRegistry->playlist()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker))
-#else
-    ui(new Ui::NowPlayingWindow)
-#endif
 {
     ui->setupUi(this);
 
     QPalette palette;
-#ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
-#else
-    QColor secondaryColor(156, 154, 156);
-#endif
     palette.setColor(QPalette::WindowText, secondaryColor);
 
     ui->songNumberLabel->setPalette(palette);
@@ -114,9 +106,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
 
     mafwState = Transitioning;
 
-#ifdef Q_WS_MAEMO_5
     lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
-#endif
 
     this->connectSignals();
 
@@ -144,7 +134,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
         lyricsManager->reloadLyrics();
     }
 
-#ifdef MAFW
     playlistQM = new PlaylistQueryManager(this, playlist);
     connect(playlistQM, SIGNAL(onGetItems(QString, GHashTable*, guint)), this, SLOT(onGetPlaylistItems(QString, GHashTable*, guint)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
@@ -156,7 +145,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
         connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
         connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getVolume()));
     }
-#endif
 }
 
 NowPlayingWindow::~NowPlayingWindow()
@@ -302,7 +290,6 @@ void NowPlayingWindow::toggleVolumeSlider()
     }
 }
 
-#ifdef MAFW
 void NowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 {
     /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
@@ -316,7 +303,6 @@ void NowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
             ui->volumeSlider->setValue(volumeLevel);
     }
 }
-#endif
 
 void NowPlayingWindow::setButtonIcons()
 {
@@ -328,7 +314,6 @@ void NowPlayingWindow::setButtonIcons()
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
 }
 
-#ifdef MAFW
 void NowPlayingWindow::onStateChanged(int state)
 {
     this->mafwState = state;
@@ -366,7 +351,6 @@ void NowPlayingWindow::onStateChanged(int state)
         ui->currentPositionLabel->setText(mmss_pos(0));
     }
 }
-#endif
 
 void NowPlayingWindow::connectSignals()
 {
@@ -426,11 +410,8 @@ void NowPlayingWindow::connectSignals()
     connect(ui->songList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked()));
     connect(this, SIGNAL(itemDropped(QListWidgetItem*, int)), this, SLOT(onItemDropped(QListWidgetItem*, int)), Qt::QueuedConnection);
 
-#ifdef Q_WS_MAEMO_5
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
-#endif
 
-#ifdef MAFW
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
     connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
@@ -463,10 +444,8 @@ void NowPlayingWindow::connectSignals()
     // found it mentioned is a header file for Harmattan. Moreover, I don't
     // think I have ever seen this signal being emitted.
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "playlist_updated", this, SLOT(updatePlaylist()));
-#endif
 }
 
-#ifdef Q_WS_MAEMO_5
 void NowPlayingWindow::onScreenLocked(bool locked)
 {
     if (locked) {
@@ -475,14 +454,11 @@ void NowPlayingWindow::onScreenLocked(bool locked)
         startPositionTimer();
     }
 }
-#endif
 
 void NowPlayingWindow::showFMTXDialog()
 {
-#ifdef Q_WS_MAEMO_5
     FMTXDialog *fmtxDialog = new FMTXDialog(this);
     fmtxDialog->show();
-#endif
 }
 
 void NowPlayingWindow::onKeyTimeout()
@@ -546,12 +522,9 @@ void NowPlayingWindow::onItemDoubleClicked()
 
 void NowPlayingWindow::onItemDropped(QListWidgetItem *item, int from)
 {
-#ifdef MAFW
     playlist->moveItem(from, ui->songList->row(item));
-#endif
 }
 
-#ifdef MAFW
 void NowPlayingWindow::onItemMoved(guint from, guint to)
 {
     playlistQM->itemsRemoved(from, 1);
@@ -562,7 +535,6 @@ void NowPlayingWindow::onItemMoved(guint from, guint to)
 
     mafwrenderer->getStatus();
 }
-#endif
 
 void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
 {
@@ -732,9 +704,7 @@ void NowPlayingWindow::cycleView(int direction)
             ui->lyricsArea->hide();
             ui->songList->hide();
             ui->infoWidget->show();
-#ifdef MAFW
             startPositionTimer();
-#endif
             break;
 
         case 1: // Playlist view
@@ -746,9 +716,7 @@ void NowPlayingWindow::cycleView(int direction)
             ui->lyricsArea->hide();
             ui->songList->show();
             ui->songList->setFocus();
-#ifdef MAFW
             positionTimer->stop();
-#endif
             break;
 
         case 2: // Lyrics view
@@ -760,9 +728,7 @@ void NowPlayingWindow::cycleView(int direction)
             ui->songList->hide();
             ui->lyricsArea->show();
             ui->lyricsArea->setFocus();
-#ifdef MAFW
             positionTimer->stop();
-#endif
             break;
     }
 }
@@ -786,9 +752,7 @@ void NowPlayingWindow::onShuffleButtonToggled(bool checked)
         ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
     }
 
-#ifdef MAFW
     playlist->setShuffled(checked);
-#endif
 }
 
 void NowPlayingWindow::onRepeatButtonToggled(bool checked)
@@ -799,9 +763,7 @@ void NowPlayingWindow::onRepeatButtonToggled(bool checked)
         ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
     }
 
-#ifdef MAFW
     playlist->setRepeat(checked);
-#endif
 }
 
 void NowPlayingWindow::onNextButtonPressed()
@@ -824,17 +786,13 @@ void NowPlayingWindow::onPrevButtonPressed()
 void NowPlayingWindow::onVolumeSliderPressed()
 {
     volumeTimer->stop();
-#ifdef MAFW
     mafwrenderer->setVolume(ui->volumeSlider->value());
-#endif
 }
 
 void NowPlayingWindow::onVolumeSliderReleased()
 {
     volumeTimer->start();
-#ifdef MAFW
     mafwrenderer->setVolume(ui->volumeSlider->value());
-#endif
 }
 
 void NowPlayingWindow::onPositionSliderPressed()
@@ -844,23 +802,18 @@ void NowPlayingWindow::onPositionSliderPressed()
 
 void NowPlayingWindow::onPositionSliderReleased()
 {
-#ifdef MAFW
     mafwrenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
     ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-songDuration :
                                                              ui->positionSlider->value()));
-#endif
 }
 
 void NowPlayingWindow::onPositionSliderMoved(int position)
 {
     ui->currentPositionLabel->setText(mmss_pos(reverseTime ? position-songDuration : position));
-#ifdef MAFW
     if (!lazySliders)
         mafwrenderer->setPosition(SeekAbsolute, position);
-#endif
 }
 
-#ifdef MAFW
 void NowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new KbMenu(this);
@@ -956,7 +909,6 @@ void NowPlayingWindow::onMediaChanged(int index, char*)
     lastPlayingSong->set(index);
     focusItemByRow(index);
 }
-#endif
 
 void NowPlayingWindow::keyPressEvent(QKeyEvent *e)
 {
@@ -1017,17 +969,14 @@ void NowPlayingWindow::mouseDoubleClickEvent(QMouseEvent *e)
 
 void NowPlayingWindow::togglePlayback()
 {
-#ifdef MAFW
     if (mafwState == Playing)
         mafwrenderer->pause();
     else if (mafwState == Paused)
         mafwrenderer->resume();
     else if (mafwState == Stopped)
         mafwrenderer->play();
-#endif
 }
 
-#ifdef MAFW
 void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata, guint index)
 {
     QListWidgetItem *item = ui->songList->item(index);
@@ -1122,7 +1071,6 @@ void NowPlayingWindow::clearPlaylist()
         this->close();
     }
 }
-#endif
 
 void NowPlayingWindow::onContextMenuRequested(const QPoint &pos)
 {
@@ -1143,12 +1091,8 @@ void NowPlayingWindow::onAddToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-#ifdef MAFW
         playlist->appendItem(picker.playlist, ui->songList->currentItem()->data(UserRoleObjectID).toString());
-#endif
-#ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
-#endif
     }
 }
 
@@ -1163,7 +1107,6 @@ void NowPlayingWindow::onRingtoneClicked()
 
 void NowPlayingWindow::onDeleteClicked()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::DeleteSong, this,
                       ui->songList->currentItem()->data(UserRoleSongTitle).toString(),
                       ui->songList->currentItem()->data(UserRoleSongArtist).toString())
@@ -1172,7 +1115,6 @@ void NowPlayingWindow::onDeleteClicked()
         playlist->removeItem(ui->songList->currentRow());
         mafwTrackerSource->destroyObject(ui->songList->currentItem()->data(UserRoleObjectID).toString());
     }
-#endif
 }
 
 void NowPlayingWindow::onShareClicked()
@@ -1218,9 +1160,7 @@ void NowPlayingWindow::updateQmlViewMetadata()
 void NowPlayingWindow::nullQmlView()
 {
     qmlView = 0;
-#ifdef MAFW
     mafwrenderer->getPosition();
-#endif
 }
 
 void NowPlayingWindow::onAddAllToPlaylist()
@@ -1242,17 +1182,13 @@ void NowPlayingWindow::onAddAllToPlaylist()
             delete[] songAddBuffer[i];
         delete[] songAddBuffer;
 
-#ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", songCount));
-#endif
     }
 }
 
 void NowPlayingWindow::onDeleteFromNowPlaying()
 {
-#ifdef MAFW
     playlist->removeItem(ui->songList->currentRow());
-#endif
 }
 
 void NowPlayingWindow::selectItemByRow(int row)
@@ -1359,7 +1295,6 @@ void NowPlayingWindow::resetAlbumArt()
         MediaArt::setAlbumImage(ui->albumLabel->text(), QString());
         detectAlbumImage();
 
-#ifdef Q_WS_MAEMO_5
         // Even if detectAlbumImage() falls back to the default art, there still
         // might be an embedded image, so poke Tracker to recheck the song file.
         if (albumArtPath == defaultAlbumImage) {
@@ -1377,7 +1312,6 @@ void NowPlayingWindow::resetAlbumArt()
             // Give Tracker some time to do its job
             QTimer::singleShot(3000, this, SLOT(refreshAlbumArt()));
         }
-#endif
     }
 }
 

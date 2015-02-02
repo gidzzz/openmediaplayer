@@ -3,17 +3,13 @@
 
 #include <QDialog>
 #include <QDialogButtonBox>
-#ifdef Q_WS_MAEMO_5
-    #include <QMaemo5InformationBox>
-#endif
+#include <QMaemo5InformationBox>
 
 #include "ui_bookmarkdialog.h"
 #include "includes.h"
 #include "rotator.h"
 
-#ifdef MAFW
-    #include "mafw/mafwregistryadapter.h"
-#endif
+#include "mafw/mafwregistryadapter.h"
 
 namespace Ui {
     class BookmarkDialog;
@@ -29,10 +25,8 @@ public:
 
 private:
     Ui::BookmarkDialog *ui;
-#ifdef MAFW
     MafwSourceAdapter *mafwRadioSource;
     QString objectId;
-#endif
 
 private slots:
     void accept();

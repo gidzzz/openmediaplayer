@@ -27,10 +27,8 @@ NowPlayingIndicator::NowPlayingIndicator(QWidget *parent) :
     ui->setupUi(this);
 
     setAttribute(Qt::WA_OpaquePaintEvent);
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5NonComposited);
 
-#endif
 
     ready = false; // avoid segfaults on requesting info from the playlist too early
     poked = false;
@@ -77,7 +75,6 @@ void NowPlayingIndicator::connectSignals()
 
     connect(animationTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
     connect(pokeTimer, SIGNAL(timeout()), this, SLOT(onPokeTimeout()));
-#ifdef Q_WS_MAEMO_5
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onTkLockChanged(bool)));
 
     connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(autoSetVisibility()));
@@ -88,10 +85,8 @@ void NowPlayingIndicator::connectSignals()
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-#endif
 }
 
-#ifdef MAFW
 void NowPlayingIndicator::onStateChanged(int state)
 {
     mafwState = state;
@@ -101,9 +96,7 @@ void NowPlayingIndicator::onStateChanged(int state)
     else
         triggerAnimation();
 }
-#endif
 
-#ifdef Q_WS_MAEMO_5
 void NowPlayingIndicator::onTkLockChanged(bool state)
 {
     if (state) {
@@ -118,7 +111,6 @@ void NowPlayingIndicator::onTkLockChanged(bool state)
         triggerAnimation();
     }
 }
-#endif
 
 void NowPlayingIndicator::nextFrame()
 {
@@ -140,13 +132,11 @@ void NowPlayingIndicator::stopAnimation()
 
 void NowPlayingIndicator::triggerAnimation()
 {
-#ifdef MAFW
     if (this->isVisible()
     && mafwState == Playing
     && !Maemo5DeviceEvents::acquire()->isScreenLocked()
     && !animationTimer->isActive())
         animationTimer->start();
-#endif
 }
 
 void NowPlayingIndicator::contextMenuEvent(QContextMenuEvent *e)
@@ -159,13 +149,11 @@ void NowPlayingIndicator::contextMenuEvent(QContextMenuEvent *e)
 
 void NowPlayingIndicator::onAudioPlaylistSelected()
 {
-#ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     if (playlist->getSize())
         openWindow();
-#endif
 }
 
 void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *e)
@@ -176,7 +164,6 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *e)
 
 void NowPlayingIndicator::openWindow()
 {
-#ifdef MAFW
     QString playlistName = playlist->playlistName();
     qDebug() << "Current playlist is" << playlistName;
 
@@ -208,12 +195,6 @@ void NowPlayingIndicator::openWindow()
             window->show();
         }
 
-#else
-        NowPlayingWindow *window = NowPlayingWindow::acquire(parentWindow);
-        connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
-        window->show();
-#endif
-
         inhibit();
     }
 }
@@ -233,14 +214,11 @@ void NowPlayingIndicator::onNowPlayingWindowHidden()
     onWindowDestroyed();
 }
 
-#ifdef MAFW
 void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, const char *, QString)
 {
     onStateChanged(state);
 }
-#endif
 
-#ifdef MAFW
 void NowPlayingIndicator::onPlaylistReady(MafwPlaylist*, uint, MafwPlayState, const char *objectId, QString)
 {
     disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
@@ -250,14 +228,11 @@ void NowPlayingIndicator::onPlaylistReady(MafwPlaylist*, uint, MafwPlayState, co
 
     autoSetVisibility();
 }
-#endif
 
 void NowPlayingIndicator::showEvent(QShowEvent *)
 {
-#ifdef MAFW
     mafwrenderer->getStatus();
     triggerAnimation();
-#endif
 }
 
 void NowPlayingIndicator::hideEvent(QHideEvent *)
@@ -265,7 +240,6 @@ void NowPlayingIndicator::hideEvent(QHideEvent *)
     stopAnimation();
 }
 
-#ifdef MAFW
 void NowPlayingIndicator::setRegistry(MafwRegistryAdapter *mafwRegistry)
 {
     this->mafwRegistry = mafwRegistry;
@@ -274,7 +248,6 @@ void NowPlayingIndicator::setRegistry(MafwRegistryAdapter *mafwRegistry)
     this->connectSignals();
     mafwrenderer->getStatus();
 }
-#endif
 
 void NowPlayingIndicator::autoSetVisibility()
 {
@@ -320,7 +293,6 @@ void NowPlayingIndicator::onPokeTimeout()
 
 void NowPlayingIndicator::togglePlayback()
 {
-#ifdef MAFW
     if (playlist->playlistName() == "FmpVideoPlaylist") return;
 
     if (mafwState == Playing)
@@ -329,5 +301,4 @@ void NowPlayingIndicator::togglePlayback()
         mafwrenderer->resume();
     else if (mafwState == Stopped)
         mafwrenderer->play();
-#endif
 }

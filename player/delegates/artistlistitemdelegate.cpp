@@ -33,11 +33,7 @@ void ArtistListItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     if (option.state & QStyle::State_Selected)
         QStyledItemDelegate::paint(painter, option, QModelIndex());
 
-#ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
-#else
-    QColor secondaryColor(156, 154, 156);
-#endif
 
     painter->drawPixmap(r.right()-70+3, r.top()+3, 64, 64,
                         qvariant_cast<QIcon>(index.data(Qt::DecorationRole)).pixmap(64));

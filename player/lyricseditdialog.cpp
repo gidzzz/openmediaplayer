@@ -6,9 +6,7 @@ LyricsEditDialog::LyricsEditDialog(QString artist, QString title, QWidget *paren
 {
     ui->setupUi(this);
 
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5StackedWindow);
-#endif
     setAttribute(Qt::WA_DeleteOnClose);
 
     this->artist = artist;

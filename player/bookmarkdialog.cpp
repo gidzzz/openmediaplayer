@@ -6,12 +6,10 @@ BookmarkDialog::BookmarkDialog(QWidget *parent, MafwRegistryAdapter *mafwRegistr
 {
     ui->setupUi(this);
 
-#ifdef MAFW
     mafwRadioSource = mafwRegistry->source(MafwRegistryAdapter::Radio);
     this->objectId = objectId;
 
     this->setWindowTitle(objectId.isEmpty() ? tr("Add radio bookmark") : tr("Edit radio bookmark"));
-#endif
 
     ui->nameBox->setText(name);
     ui->addressBox->setText(address.isEmpty() ? "http://" : address);
@@ -30,13 +28,9 @@ BookmarkDialog::~BookmarkDialog()
 void BookmarkDialog::accept()
 {
     if (ui->nameBox->text().isEmpty()) {
-#ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this->parentWidget(), tr("Unable to add empty bookmark"));
-#endif
     } else {
         if (ui->addressBox->text().indexOf("://") > 0 && !ui->addressBox->text().endsWith("://")) {
-
-#ifdef MAFW
             GHashTable* metadata = mafw_metadata_new();
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_TITLE, ui->nameBox->text().toUtf8().data());
             mafw_metadata_add_str(metadata, MAFW_METADATA_KEY_URI, ui->addressBox->text().toUtf8().data());
@@ -48,16 +42,11 @@ void BookmarkDialog::accept()
                 mafwRadioSource->setMetadata(objectId, metadata);
 
             mafw_metadata_release(metadata);
-#endif
 
-#ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(this->parentWidget(), tr("Media bookmark saved"));
-#endif
             QDialog::accept();
         } else {
-#ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(this->parentWidget(), tr("Invalid URL"));
-#endif
         }
     }
 }

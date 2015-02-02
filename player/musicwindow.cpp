@@ -21,18 +21,15 @@
 MusicWindow::MusicWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BaseWindow(parent),
     ui(new Ui::MusicWindow),
-#ifdef MAFW
     mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist()),
-#endif
     listAction(NULL)
 {
     ui->setupUi(this);
-#ifdef Q_WS_MAEMO_5
     ui->searchHideButton->setIcon(QIcon::fromTheme("general_close"));
-#endif
+
     SongListItemDelegate *songDelegate = new SongListItemDelegate(ui->songList);
     ArtistListItemDelegate *artistDelegate = new ArtistListItemDelegate(ui->artistList);
     ThumbnailItemDelegate *albumDelegate = new ThumbnailItemDelegate(ui->albumList);
@@ -81,7 +78,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     playlistProxyModel->setSourceModel(playlistModel);
     ui->playlistList->setModel(playlistProxyModel);
 
-#ifdef MAFW
     ui->indicator->setRegistry(mafwRegistry);
 
     browseRecentlyAddedId =
@@ -89,7 +85,6 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     browseMostPlayedId =
     browseNeverPlayedId =
     browseImportedPlaylistsId = MAFW_SOURCE_INVALID_BROWSE_ID;
-#endif
 
     connectSignals();
 
@@ -103,7 +98,6 @@ MusicWindow::~MusicWindow()
     delete ui;
 }
 
-#ifdef MAFW
 void MusicWindow::onSongSelected(QModelIndex index)
 {
     this->setEnabled(false);
@@ -182,14 +176,12 @@ void MusicWindow::onPlaylistSelected(QModelIndex index)
         showChild(playlistView);
     }
 }
-#endif
 
 void MusicWindow::connectSignals()
 {
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this), SIGNAL(activated()), this, SLOT(onSearchRequested()));
     connect(new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Enter), this), SIGNAL(activated()), this, SLOT(onContextMenuRequested()));
 
-#ifdef MAFW
     connect(ui->songList, SIGNAL(activated(QModelIndex)), this, SLOT(onSongSelected(QModelIndex)));
     connect(ui->albumList, SIGNAL(activated(QModelIndex)), this, SLOT(onAlbumSelected(QModelIndex)));
     connect(ui->artistList, SIGNAL(activated(QModelIndex)), this, SLOT(onArtistSelected(QModelIndex)));
@@ -205,7 +197,6 @@ void MusicWindow::connectSignals()
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseSourcePlaylists(uint,int,uint,QString,GHashTable*,QString)));
-#endif
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -286,14 +277,11 @@ void MusicWindow::onRenamePlaylistAccepted()
     if (newName == oldName) {
         renamePlaylistDialog->close();
     } else {
-#ifdef MAFW
         MafwPlaylistManagerAdapter *mafwPlaylistManager = MafwPlaylistManagerAdapter::get();
         GArray* playlists = mafwPlaylistManager->listPlaylists();
         for (uint i = 0; i < playlists->len; i++) {
             if (QString::fromUtf8(g_array_index(playlists, MafwPlaylistManagerItem, i).name) == newName) {
-#ifdef Q_WS_MAEMO_5
                 QMaemo5InformationBox::information(this, "Playlist with the same name exists");
-#endif
                 mafwPlaylistManager->freeListOfPlaylists(playlists);
                 return;
             }
@@ -304,18 +292,15 @@ void MusicWindow::onRenamePlaylistAccepted()
         mafw_playlist_set_name(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(oldName)), newName.toUtf8());
         listSavedPlaylists();
     }
-#endif
 }
 
 void MusicWindow::onDeletePlaylistClicked()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         MafwPlaylistManagerAdapter::get()->deletePlaylist(ui->playlistList->currentIndex().data(Qt::DisplayRole).toString());
         playlistProxyModel->removeRow(ui->playlistList->currentIndex().row());
         --savedPlaylistCount;
     }
-#endif
     ui->playlistList->clearSelection();
 }
 
@@ -337,12 +322,10 @@ void MusicWindow::onShareClicked()
 
 void MusicWindow::onDeleteClicked()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(currentList()->currentIndex().data(UserRoleObjectID).toString());
         currentList()->model()->removeRow(currentList()->currentIndex().row());
     }
-#endif
     currentList()->clearSelection();
 }
 
@@ -524,7 +507,6 @@ void MusicWindow::onChildClosed()
     this->setEnabled(true);
 }
 
-#ifdef MAFW
 void MusicWindow::onAlbumSelected(QModelIndex index)
 {
     this->setEnabled(false);
@@ -578,9 +560,8 @@ void MusicWindow::listSongs()
 #ifdef DEBUG
     qDebug() << "MusicWindow: Source ready";
 #endif
-#ifdef Q_WS_MAEMO_5
+
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     songModel->clear();
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
@@ -601,9 +582,8 @@ void MusicWindow::listArtists()
 #ifdef DEBUG
     qDebug("Source ready");
 #endif
-#ifdef Q_WS_MAEMO_5
+
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     artistModel->clear();
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
@@ -622,9 +602,7 @@ void MusicWindow::listAlbums()
 {
     qDebug() << "Updating albums";
 
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     albumModel->clear();
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
@@ -642,9 +620,7 @@ void MusicWindow::listGenres()
 {
     qDebug() << "Updating genres";
 
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     genresModel->clear();
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
@@ -857,9 +833,7 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)));
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
 
@@ -910,9 +884,7 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllArtists(uint,int,uint,QString,GHashTable*,QString)));
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
 
@@ -966,9 +938,7 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)));
 
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
 
@@ -1018,12 +988,9 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)));
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
-#endif
 
 void MusicWindow::keyPressEvent(QKeyEvent *e)
 {
@@ -1075,23 +1042,18 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
 
 void MusicWindow::onAddToNowPlaying()
 {
-#ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     // Song list, add the selected song
     if (currentList() == ui->songList) {
         playlist->appendItem(ui->songList->currentIndex().data(UserRoleObjectID).toString());
-#ifdef Q_WS_MAEMO_5
         notifyOnAddedToNowPlaying(1);
-#endif
     }
 
     // Artist/album/genre list, add items from the selected artist/album/genre
     else if (currentList() == ui->artistList || currentList() == ui->albumList || currentList() == ui->genresList) {
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
         CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
         connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint,int)), Qt::UniqueConnection);
@@ -1100,9 +1062,7 @@ void MusicWindow::onAddToNowPlaying()
 
     // Playlist list, add items from the selected playlist
     else if (currentList() == ui->playlistList) {
-#ifdef Q_WS_MAEMO_5
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
         QModelIndex index = ui->playlistList->currentIndex();
         int row = playlistProxyModel->mapToSource(index).row();
 
@@ -1146,7 +1106,6 @@ void MusicWindow::onAddToNowPlaying()
             playlistToken = cpm->appendBrowsed(index.data(UserRoleObjectID).toString());
         }
     }
-#endif
 }
 
 void MusicWindow::onAddToPlaylist()
@@ -1154,12 +1113,8 @@ void MusicWindow::onAddToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-#ifdef MAFW
         playlist->appendItem(picker.playlist, ui->songList->currentIndex().data(UserRoleObjectID).toString());
-#endif
-#ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
-#endif
     }
 }
 
@@ -1183,18 +1138,14 @@ void MusicWindow::onAddFinished(uint token, int count)
 {
     if (token != playlistToken) return;
 
-#ifdef Q_WS_MAEMO_5
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     notifyOnAddedToNowPlaying(count);
-#endif
 }
 
-#ifdef Q_WS_MAEMO_5
 void MusicWindow::notifyOnAddedToNowPlaying(int songCount)
 {
     QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
-#endif
 
 void MusicWindow::closeEvent(QCloseEvent *)
 {

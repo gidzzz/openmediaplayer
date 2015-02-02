@@ -29,11 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QPalette palette;
-#ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
-#else
-    QColor secondaryColor(156, 154, 156);
-#endif
     palette.setColor(QPalette::WindowText, secondaryColor);
 
     ui->songCountLabel->setPalette(palette);
@@ -45,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->menuList->setItemDelegate(new MainDelegate(ui->menuList));
 
-#ifdef MAFW
     mafwRegistry = MafwRegistryAdapter::get();
     mafwrenderer = mafwRegistry->renderer();
     mafwTrackerSource = mafwRegistry->source(MafwRegistryAdapter::Tracker);
@@ -53,19 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     playlist = mafwRegistry->playlist();
 
     MissionControl::acquire()->setRegistry(mafwRegistry);
-#endif
 
-#ifdef Q_WS_MAEMO_5
-#else
-    // Menu bar breaks layouts on desktop, hide it.
-    ui->menuBar->hide();
-#endif
-
-#ifdef MAFW
     musicWindow = new MusicWindow(this, mafwRegistry);
-#else
-    musicWindow = new MusicWindow(this);
-#endif
 
     connectSignals();
 
@@ -79,11 +63,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(pluginsControl, SIGNAL(childOpened()), this, SLOT(onChildOpened()));
     connect(pluginsControl, SIGNAL(childClosed()), this, SLOT(onChildClosed()));
 
-#ifdef MAFW
     ui->upnpControl->setRegistry(mafwRegistry);
 
     ui->indicator->setRegistry(mafwRegistry);
-#endif
     ui->indicator->setFixedWidth(112);
     ui->indicator->setFixedHeight(70);
 
@@ -99,7 +81,6 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(registerDbusService()));
     }
 
-#ifdef Q_WS_MAEMO_5
     updatingShow = true;
 
     updatingProgressBar = new QProgressBar;
@@ -122,7 +103,6 @@ MainWindow::MainWindow(QWidget *parent) :
     updatingInfoBox->setWidget(updatingWidget);
 
     QTimer::singleShot(1000, this, SLOT(takeScreenshot()));
-#endif
 }
 
 MainWindow::~MainWindow()
@@ -139,7 +119,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-#ifdef Q_WS_MAEMO_5
 void MainWindow::registerDbusService()
 {
     disconnect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(registerDbusService()));
@@ -153,7 +132,6 @@ void MainWindow::registerDbusService()
     if (!QDBusConnection::sessionBus().registerObject("/com/nokia/mediaplayer", this, QDBusConnection::ExportScriptableSlots))
         qWarning("%s", qPrintable(QDBusConnection::sessionBus().lastError().message()));
 }
-#endif
 
 void MainWindow::paintEvent(QPaintEvent*)
 {
@@ -217,14 +195,12 @@ void MainWindow::connectSignals()
 
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
 
-#ifdef MAFW
     connect(mafwRadioSource, SIGNAL(metadataResult(QString, GHashTable*, QString)),
             this, SLOT(countRadioResult(QString, GHashTable*, QString)));
 
     connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
     connect(mafwTrackerSource, SIGNAL(metadataResult(QString, GHashTable*, QString)),
             this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
-#endif
 }
 
 void MainWindow::open_mp_main_view()
@@ -236,10 +212,8 @@ void MainWindow::open_mp_now_playing()
 {
     // maybe this check could be moved to NowPlayingWindow?
     if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && !playlist->isPlaylistNull()) {
-#ifdef MAFW
         if (playlist->playlistName() != "FmpAudioPlaylist")
             playlist->assignAudioPlaylist();
-#endif
         createNowPlayingWindow();
     } else {
         QTimer::singleShot(1000, this, SLOT(open_mp_now_playing()));
@@ -274,7 +248,6 @@ void MainWindow::open_mp_car_view()
     createNowPlayingWindow()->showCarView();
 }
 
-#ifdef MAFW
 void MainWindow::openDirectory(const QString &uri, const QString &objectIdToPlay, Media::Type type)
 {
     QString path = QString::fromUtf8(g_filename_from_uri(uri.left(uri.lastIndexOf('/')+1).toUtf8(), NULL, NULL));
@@ -348,11 +321,8 @@ void MainWindow::openDirectory(const QString &uri, const QString &objectIdToPlay
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
 }
-#endif
 
 void MainWindow::convertObjectId(QString &objectId, const char *basePath)
 {
@@ -365,7 +335,6 @@ void MainWindow::convertObjectId(QString &objectId, const char *basePath)
 
 void MainWindow::mime_open(const QString &uriString)
 {
-#ifdef MAFW
     QString uriToPlay = uriString.startsWith("/") ? "file://" + uriString : uriString;
     QString objectId = mafwTrackerSource->createObjectId(uriToPlay);
     qDebug() << "ID to open:" << objectId;
@@ -380,9 +349,7 @@ void MainWindow::mime_open(const QString &uriString)
 
             // M3U playlist, browse contents
             if (mime.endsWith("mpegurl")) {
-#ifdef Q_WS_MAEMO_5
                 setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
                 convertObjectId(objectId, TAGSOURCE_PLAYLISTS_PATH);
 
                 CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
@@ -400,9 +367,7 @@ void MainWindow::mime_open(const QString &uriString)
 
                 // Audio, a whole directory has to be added
                 if (QSettings().value("main/openFolders").toBool()) {
-#ifdef Q_WS_MAEMO_5
                     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
                     convertObjectId(objectId, TAGSOURCE_AUDIO_PATH);
 
                     openDirectory(uriToPlay, objectId, Media::Audio);
@@ -441,9 +406,7 @@ void MainWindow::mime_open(const QString &uriString)
 
             // A whole directory has to be added
             if (QSettings().value("main/openFolders").toBool()) {
-#ifdef Q_WS_MAEMO_5
                 setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
                 convertObjectId(objectId, TAGSOURCE_VIDEO_PATH);
 
                 openDirectory(uriToPlay, objectId, Media::Video);
@@ -468,12 +431,10 @@ void MainWindow::mime_open(const QString &uriString)
         playlist->appendItem(objectId);
         createVideoNowPlayingWindow();
     }
-#endif
 }
 
 void MainWindow::play_automatic_playlist(const QString &playlistName, bool shuffle)
 {
-#ifdef MAFW
     QString filter;
     QString sorting;
     int limit = QSettings().value("music/playlistSize", 30).toInt();
@@ -500,12 +461,10 @@ void MainWindow::play_automatic_playlist(const QString &playlistName, bool shuff
     CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
     playlistToken = cpm->appendBrowsed("localtagfs::music/songs", filter, sorting, limit);
-#endif
 }
 
 void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
 {
-#ifdef MAFW
     MafwPlaylistManagerAdapter *mafwPlaylistManager = MafwPlaylistManagerAdapter::get();
 
     GArray* playlists = mafwPlaylistManager->listPlaylists();
@@ -534,7 +493,6 @@ void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
     }
 
     mafwPlaylistManager->freeListOfPlaylists(playlists);
-#endif
 }
 
 void MainWindow::top_application()
@@ -547,11 +505,7 @@ NowPlayingWindow* MainWindow::createNowPlayingWindow()
 {
     closeChildren();
 
-#ifdef MAFW
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
-#else
-    NowPlayingWindow *window = NowPlayingWindow::acquire(this);
-#endif
     window->show();
 
     connect(window, SIGNAL(hidden()), this, SLOT(onNowPlayingWindowHidden()));
@@ -564,19 +518,13 @@ void MainWindow::createVideoNowPlayingWindow()
 {
     closeChildren();
 
-#ifdef MAFW
     VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this, mafwRegistry);
-#else
-    VideoNowPlayingWindow *window = new VideoNowPlayingWindow(this);
-#endif
     window->showFullScreen();
 
     connect(window, SIGNAL(destroyed()), ui->indicator, SLOT(restore()));
     ui->indicator->inhibit();
 
-#ifdef MAFW
     window->play();
-#endif
 }
 
 void MainWindow::onOrientationChanged(int w, int h)
@@ -630,12 +578,10 @@ void MainWindow::reloadSettings()
                                   orientation == "portrait"  ? Rotator::Portrait  :
                                                                Rotator::Automatic);
 
-#ifdef MAFW
     if (mafwrenderer->isRendererReady())
         setupPlayback();
     else
         connect(mafwrenderer, SIGNAL(rendererReady()), this, SLOT(setupPlayback()));
-#endif
 }
 
 void MainWindow::openSleeperDialog()
@@ -657,11 +603,7 @@ void MainWindow::showVideosWindow()
 {
     this->setEnabled(false);
 
-#ifdef MAFW
     VideosWindow *window = new VideosWindow(this, mafwRegistry);
-#else
-    VideosWindow *window = new VideosWindow(this);
-#endif
 
     window->show();
 
@@ -673,11 +615,7 @@ void MainWindow::showInternetRadioWindow()
 {
     this->setEnabled(false);
 
-#ifdef MAFW
     InternetRadioWindow *window = new InternetRadioWindow(this, mafwRegistry);
-#else
-    InternetRadioWindow *window = new InternetRadioWindow(this);
-#endif
 
     window->show();
 
@@ -685,7 +623,6 @@ void MainWindow::showInternetRadioWindow()
     ui->indicator->inhibit();
 }
 
-#ifdef MAFW
 void MainWindow::countSongs()
 {
     mafwTrackerSource->getMetadata(TAGSOURCE_AUDIO_PATH,
@@ -755,20 +692,14 @@ void MainWindow::onAddFinished(uint token)
         createVideoNowPlayingWindow();
     }
 
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
 }
-#endif
 
 void MainWindow::onShuffleAllClicked()
 {
-#ifdef MAFW
     this->setEnabled(false);
 
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     playlist->assignAudioPlaylist();
     playlist->clear();
@@ -777,10 +708,8 @@ void MainWindow::onShuffleAllClicked()
     CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
     connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
     playlistToken = cpm->appendBrowsed("localtagfs::music/songs");
-#endif
 }
 
-#ifdef MAFW
 void MainWindow::onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time)
 {
     qDebug() << "MainWindow::onSourceUpdating("
@@ -796,7 +725,6 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
     text.append("\n");
     text.append(tr("Remaining items:") + " " + (remaining_items < 0 ? "?" : QString::number(remaining_items)));
 
-#ifdef Q_WS_MAEMO_5
     updatingLabel->setText(text);
     updatingProgressBar->setValue(progress);
 
@@ -812,24 +740,18 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
         updatingInfoBox->hide();
         updatingShow = true;
     }
-#endif
 }
 
-#ifdef Q_WS_MAEMO_5
 void MainWindow::onScreenLocked(bool locked)
 {
-#ifdef MAFW
     if (locked)
         mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "locked",
                                      QSettings().value("main/compatiblePlayback", true).toBool());
     else
         mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "unlocked",
                                      QSettings().value("main/compatiblePlayback", true).toBool());
-#endif
 }
-#endif
 
-#ifdef MAFW
 void MainWindow::setupPlayback()
 {
     disconnect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
@@ -844,7 +766,6 @@ void MainWindow::setupPlayback()
         onScreenLocked(Maemo5DeviceEvents::acquire()->isScreenLocked());
     }
 }
-#endif
 
 void MainWindow::onContainerChanged(QString objectId)
 {
@@ -858,9 +779,7 @@ void MainWindow::onContainerChanged(QString objectId)
         countRadioStations();
     }
 }
-#endif
 
-#ifdef Q_WS_MAEMO_5
 void MainWindow::takeScreenshot()
 {
     // True takes a screenshot, false destroys it
@@ -887,7 +806,6 @@ void MainWindow::takeScreenshot()
     XFlush (xev.xclient.display);
     XSync (xev.xclient.display, False);
 }
-#endif
 
 void MainWindow::closeChildren()
 {

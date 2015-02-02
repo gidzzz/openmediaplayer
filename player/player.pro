@@ -5,7 +5,7 @@ TEMPLATE = app
 
 INCLUDEPATH += ../lyrics
 
-DEFINES += MAFW MAFW_WORKAROUNDS
+DEFINES += MAFW_WORKAROUNDS
 
 SOURCES += \
     main.cpp \
@@ -19,21 +19,15 @@ SOURCES += \
     videonowplayingwindow.cpp \
     cqgraphicsview.cpp \
     nowplayingindicator.cpp \
-    delegates/songlistitemdelegate.cpp \
-    delegates/artistlistitemdelegate.cpp \
-    delegates/playlistdelegate.cpp \
     radionowplayingwindow.cpp \
     singlealbumview.cpp \
-    delegates/singlealbumviewdelegate.cpp \
     singleartistview.cpp \
     settingsdialog.cpp \
     qmlview.cpp \
-    delegates/thumbnailitemdelegate.cpp \
     singlegenreview.cpp \
     singleplaylistview.cpp \
     aboutwindow.cpp \
     coverpicker.cpp \
-    delegates/maindelegate.cpp \
     lyricseditdialog.cpp \
     lyricssearchdialog.cpp \
     mediaart.cpp \
@@ -45,15 +39,12 @@ SOURCES += \
     pluginswindow.cpp \
     upnpcontrol.cpp \
     upnpview.cpp \
-    delegates/mediawithicondelegate.cpp \
     rotator.cpp \
     playlistpicker.cpp \
     sleeperdialog.cpp \
     bookmarkdialog.cpp \
     lyricsmanager.cpp \
     lyricsprovidersdialog.cpp \
-    delegates/shufflebuttondelegate.cpp \
-    delegates/providerlistitemdelegate.cpp \
     basewindow.cpp \
     browserwindow.cpp \
     opendialog.cpp \
@@ -62,7 +53,22 @@ SOURCES += \
     fmtxinterface.cpp \
     fmtxdialog.cpp \
     frequencypickselector.cpp \
-    frequencypickdialog.cpp
+    frequencypickdialog.cpp \
+    delegates/artistlistitemdelegate.cpp \
+    delegates/maindelegate.cpp \
+    delegates/mediawithicondelegate.cpp \
+    delegates/playlistdelegate.cpp \
+    delegates/providerlistitemdelegate.cpp \
+    delegates/shufflebuttondelegate.cpp \
+    delegates/singlealbumviewdelegate.cpp \
+    delegates/songlistitemdelegate.cpp \
+    delegates/thumbnailitemdelegate.cpp \
+    mafw/mafwplaylistadapter.cpp \
+    mafw/mafwplaylistmanageradapter.cpp \
+    mafw/mafwregistryadapter.cpp \
+    mafw/mafwrendereradapter.cpp \
+    mafw/mafwrenderersignalhelper.cpp \
+    mafw/mafwsourceadapter.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -76,23 +82,17 @@ HEADERS += \
     mirror.h \
     cqgraphicsview.h \
     nowplayingindicator.h \
-    delegates/songlistitemdelegate.h \
-    delegates/artistlistitemdelegate.h \
     includes.h \
-    delegates/playlistdelegate.h \
     radionowplayingwindow.h \
     singlealbumview.h \
-    delegates/singlealbumviewdelegate.h \
     singleartistview.h \
     settingsdialog.h \
     qmlview.h \
-    delegates/thumbnailitemdelegate.h \
     singlegenreview.h \
     singleplaylistview.h \
     aboutwindow.h \
     coverpicker.h \
     texteditautoresizer.h \
-    delegates/maindelegate.h \
     lyricseditdialog.h \
     lyricssearchdialog.h \
     mediaart.h \
@@ -104,7 +104,6 @@ HEADERS += \
     pluginswindow.h \
     upnpcontrol.h \
     upnpview.h \
-    delegates/mediawithicondelegate.h \
     rotator.h \
     playlistpicker.h \
     sleeperdialog.h \
@@ -114,8 +113,6 @@ HEADERS += \
     lyricsprovidersdialog.h \
     headerawareproxymodel.h \
     confirmdialog.h \
-    delegates/shufflebuttondelegate.h \
-    delegates/providerlistitemdelegate.h \
     fastlistview.h \
     basewindow.h \
     browserwindow.h \
@@ -126,7 +123,22 @@ HEADERS += \
     fmtxinterface.h \
     fmtxdialog.h \
     frequencypickselector.h \
-    frequencypickdialog.h
+    frequencypickdialog.h \
+    delegates/artistlistitemdelegate.h \
+    delegates/maindelegate.h \
+    delegates/mediawithicondelegate.h \
+    delegates/playlistdelegate.h \
+    delegates/providerlistitemdelegate.h \
+    delegates/shufflebuttondelegate.h \
+    delegates/singlealbumviewdelegate.h \
+    delegates/songlistitemdelegate.h \
+    delegates/thumbnailitemdelegate.h \
+    mafw/mafwplaylistadapter.h \
+    mafw/mafwplaylistmanageradapter.h \
+    mafw/mafwregistryadapter.h \
+    mafw/mafwrendereradapter.h \
+    mafw/mafwrenderersignalhelper.h \
+    mafw/mafwsourceadapter.h
 
 FORMS += \
     mainwindow.ui \
@@ -161,30 +173,9 @@ OTHER_FILES += \
     qml_carview/Slider.qml \
     qml_carview/SongView.qml
 
-contains(DEFINES, MAFW) {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0 libplayback-1
-
-    SOURCES += \
-        mafw/mafwrenderersignalhelper.cpp \
-        mafw/mafwsourceadapter.cpp \
-        mafw/mafwrendereradapter.cpp \
-        mafw/mafwplaylistadapter.cpp \
-        mafw/mafwplaylistmanageradapter.cpp \
-        mafw/mafwregistryadapter.cpp
-
-    HEADERS += \
-        mafw/mafwrenderersignalhelper.h \
-        mafw/mafwrendereradapter.h \
-        mafw/mafwsourceadapter.h \
-        mafw/mafwplaylistadapter.h \
-        mafw/mafwplaylistmanageradapter.h \
-        mafw/mafwregistryadapter.h
-}
-
 LIBS += -lhildonthumbnail -lX11
 CONFIG += link_pkgconfig
-PKGCONFIG += dbus-1 gtk+-2.0
+PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0 libplayback-1 dbus-1 gtk+-2.0
 
 TRANSLATIONS = \
     lang/openmediaplayer.ar_SA.ts \

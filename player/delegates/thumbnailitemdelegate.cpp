@@ -30,11 +30,7 @@ void ThumbnailItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     if (option.state & QStyle::State_Selected)
         QStyledItemDelegate::paint(painter, option, QModelIndex());
 
-#ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
-#else
-    QColor secondaryColor(156, 154, 156);
-#endif
 
     painter->drawPixmap(r.x()+(r.width()-128)/2, r.y()+3, 128, 128,
                         qvariant_cast<QIcon>(index.data(Qt::DecorationRole)).pixmap(128, 128));

@@ -19,13 +19,11 @@
 #include "singlealbumview.h"
 
 SingleAlbumView::SingleAlbumView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
-    BrowserWindow(parent, mafwRegistry)
-#ifdef MAFW
-    ,mafwRegistry(mafwRegistry),
+    BrowserWindow(parent, mafwRegistry),
+    mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
-#endif
 {
     ui->objectList->setItemDelegate(new SingleAlbumViewDelegate(ui->objectList));
     ui->objectList->setItemDelegateForRow(0, new ShuffleButtonDelegate(ui->objectList));
@@ -48,7 +46,6 @@ void SingleAlbumView::updateSongCount()
     objectModel->item(0)->setData(objectProxyModel->rowCount()-1, UserRoleSongCount);
 }
 
-#ifdef MAFW
 void SingleAlbumView::listSongs()
 {
 #ifdef DEBUG
@@ -60,9 +57,7 @@ void SingleAlbumView::listSongs()
     item->setData(true, UserRoleHeader);
     objectModel->appendRow(item);
 
-#ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#endif
 
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
             this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
@@ -112,9 +107,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
                    this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)));
-#ifdef Q_WS_MAEMO_5
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-#endif
     }
 }
 
@@ -152,11 +145,8 @@ void SingleAlbumView::onItemActivated(QModelIndex index)
     ui->indicator->inhibit();
 }
 
-#endif
-
 int SingleAlbumView::appendAllToPlaylist(bool filter)
 {
-#ifdef MAFW
     int visibleCount = filter ? objectProxyModel->rowCount() : objectModel->rowCount();
 
     gchar** songAddBuffer = new gchar*[visibleCount];
@@ -177,20 +167,14 @@ int SingleAlbumView::appendAllToPlaylist(bool filter)
     delete[] songAddBuffer;
 
     return visibleCount;
-#endif
 }
 
 void SingleAlbumView::addAllToNowPlaying()
 {
-#ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-#ifdef Q_WS_MAEMO_5
     notifyOnAddedToNowPlaying(appendAllToPlaylist(true));
-#endif
-
-#endif
 }
 
 void SingleAlbumView::onContextMenuRequested(const QPoint &pos)
@@ -209,17 +193,12 @@ void SingleAlbumView::onContextMenuRequested(const QPoint &pos)
 
 void SingleAlbumView::onAddToNowPlaying()
 {
-#ifdef MAFW
     if (playlist->playlistName() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 
-#ifdef Q_WS_MAEMO_5
     notifyOnAddedToNowPlaying(1);
-#endif
-
-#endif
 }
 
 void SingleAlbumView::onAddToPlaylist()
@@ -227,12 +206,8 @@ void SingleAlbumView::onAddToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-#ifdef MAFW
         playlist->appendItem(picker.playlist, ui->objectList->currentIndex().data(UserRoleObjectID).toString());
-#endif
-#ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
-#endif
     }
 }
 
@@ -252,42 +227,34 @@ void SingleAlbumView::onShareClicked()
     (new ShareDialog(this, mafwTrackerSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
 
-#ifdef MAFW
 void SingleAlbumView::onContainerChanged(QString objectId)
 {
     if (albumObjectId.startsWith(objectId) || objectId.startsWith(albumObjectId))
         listSongs();
 }
-#endif
 
 void SingleAlbumView::onDeleteClicked()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::Delete, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         objectProxyModel->removeRow(ui->objectList->currentIndex().row());
         updateSongCount();
     }
-#endif
     ui->objectList->clearSelection();
 }
 
 void SingleAlbumView::deleteCurrentAlbum()
 {
-#ifdef MAFW
     if (ConfirmDialog(ConfirmDialog::DeleteAll, this).exec() == QMessageBox::Yes) {
         mafwTrackerSource->destroyObject(albumObjectId);
         this->close();
     }
-#endif
 }
 
-#ifdef Q_WS_MAEMO_5
 void SingleAlbumView::notifyOnAddedToNowPlaying(int songCount)
 {
     QMaemo5InformationBox::information(this, tr("%n clip(s) added to now playing", "", songCount));
 }
-#endif
 
 void SingleAlbumView::onNowPlayingWindowHidden()
 {

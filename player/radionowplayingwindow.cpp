@@ -20,23 +20,17 @@
 
 RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BaseWindow(parent),
-    ui(new Ui::RadioNowPlayingWindow)
-#ifdef MAFW
-    ,mafwRegistry(mafwRegistry),
+    ui(new Ui::RadioNowPlayingWindow),
+    mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
     playlist(mafwRegistry->playlist())
-#endif
 {
     ui->setupUi(this);
 
     setAttribute(Qt::WA_DeleteOnClose);
 
     QPalette palette;
-#ifdef Q_WS_MAEMO_5
     QColor secondaryColor = QMaemo5Style::standardColor("SecondaryTextColor");
-#else
-    QColor secondaryColor(156, 154, 156);
-#endif
     palette.setColor(QPalette::WindowText, secondaryColor);
 
     ui->songLabel->setPalette(palette);
@@ -72,11 +66,9 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRegistryAdapte
 
     Rotator::acquire()->addClient(this);
 
-#ifdef MAFW
     mafwrenderer->getStatus();
     mafwrenderer->getPosition();
     mafwrenderer->getVolume();
-#endif
 }
 
 RadioNowPlayingWindow::~RadioNowPlayingWindow()
@@ -95,9 +87,7 @@ void RadioNowPlayingWindow::connectSignals()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
 
-#ifdef Q_WS_MAEMO_5
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
-#endif
     connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showBookmarkDialog()));
 
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
@@ -110,7 +100,6 @@ void RadioNowPlayingWindow::connectSignals()
     connect(ui->nextButton, SIGNAL(released()), this, SLOT(onNextButtonPressed()));
     connect(ui->prevButton, SIGNAL(pressed()), this, SLOT(onPrevButtonPressed()));
     connect(ui->prevButton, SIGNAL(released()), this, SLOT(onPrevButtonPressed()));
-#ifdef MAFW
     connect(ui->playButton, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onPlayMenuRequested(QPoint)));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
@@ -134,7 +123,6 @@ void RadioNowPlayingWindow::connectSignals()
                                           "com.nokia.mafw.extension",
                                           "property_changed",
                                           this, SLOT(onPropertyChanged(const QDBusMessage &)));
-#endif
 }
 
 void RadioNowPlayingWindow::onScreenLocked(bool locked)
@@ -146,7 +134,6 @@ void RadioNowPlayingWindow::onScreenLocked(bool locked)
     }
 }
 
-#ifdef MAFW
 void RadioNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 {
     if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
@@ -154,7 +141,6 @@ void RadioNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
             ui->volumeSlider->setValue(qdbus_cast<QVariant>(msg.arguments()[1]).toInt());
     }
 }
-#endif
 
 void RadioNowPlayingWindow::setIcons()
 {
@@ -210,20 +196,15 @@ void RadioNowPlayingWindow::volumeWatcher()
 void RadioNowPlayingWindow::onVolumeSliderPressed()
 {
     volumeTimer->stop();
-#ifdef MAFW
     mafwrenderer->setVolume(ui->volumeSlider->value());
-#endif
 }
 
 void RadioNowPlayingWindow::onVolumeSliderReleased()
 {
     volumeTimer->start();
-#ifdef MAFW
     mafwrenderer->setVolume(ui->volumeSlider->value());
-#endif
 }
 
-#ifdef MAFW
 void RadioNowPlayingWindow::onStateChanged(int state)
 {
     mafwState = state;
@@ -436,7 +417,6 @@ void RadioNowPlayingWindow::onPositionSliderMoved(int position)
     if (!lazySliders)
         mafwrenderer->setPosition(SeekAbsolute, position);
 }
-#endif
 
 void RadioNowPlayingWindow::setAlbumImage(QString image)
 {
@@ -471,19 +451,15 @@ void RadioNowPlayingWindow::onOrientationChanged(int w, int h)
     }
 }
 
-#ifdef Q_WS_MAEMO_5
 void RadioNowPlayingWindow::showFMTXDialog()
 {
     FMTXDialog *fmtxDialog = new FMTXDialog(this);
     fmtxDialog->show();
 }
-#endif
 
 void RadioNowPlayingWindow::showBookmarkDialog()
 {
-#ifdef MAFW
     BookmarkDialog(this, mafwRegistry, Media::Audio, uri, ui->stationLabel->text()).exec();
-#endif
 }
 
 void RadioNowPlayingWindow::onNextButtonPressed()
@@ -512,17 +488,14 @@ void RadioNowPlayingWindow::onStopButtonPressed()
 
 void RadioNowPlayingWindow::togglePlayback()
 {
-#ifdef MAFW
     if (mafwState == Playing)
         mafwrenderer->pause();
     else if (mafwState == Paused)
         mafwrenderer->resume();
     else if (mafwState == Stopped)
         mafwrenderer->play();
-#endif
 }
 
-#ifdef MAFW
 void RadioNowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new KbMenu(this);
@@ -530,4 +503,3 @@ void RadioNowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Stop playback"), mafwrenderer, SLOT(stop()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
-#endif
