@@ -92,7 +92,8 @@ private:
     uint playlistToken;
     void countSongs();
     void countVideos();
-    QString objectIdToPlay;
+    void openDirectory(const QString &uri, const QString &objectIdToPlay, Media::Type type);
+    void convertObjectId(QString &objectId, const char *basePath);
 #endif
 
 private slots:
@@ -119,7 +120,6 @@ private slots:
     void onAddFinished(uint token);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);
     void onContainerChanged(QString objectId);
-    void openDirectory(QString uri, Media::Type type);
 #endif
 #ifdef Q_WS_MAEMO_5
     void registerDbusService();

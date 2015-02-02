@@ -275,7 +275,7 @@ void MainWindow::open_mp_car_view()
 }
 
 #ifdef MAFW
-void MainWindow::openDirectory(QString uri, Media::Type type)
+void MainWindow::openDirectory(const QString &uri, const QString &objectIdToPlay, Media::Type type)
 {
     QString path = QString::fromUtf8(g_filename_from_uri(uri.left(uri.lastIndexOf('/')+1).toUtf8(), NULL, NULL));
 
@@ -354,6 +354,15 @@ void MainWindow::openDirectory(QString uri, Media::Type type)
 }
 #endif
 
+void MainWindow::convertObjectId(QString &objectId, const char *basePath)
+{
+     objectId.remove(0, 18) // "urisource::file://"
+             .replace("/", "%2F")
+             .prepend(basePath + QString("/"));
+
+    qDebug() << "Converted ID:" << objectId;
+}
+
 void MainWindow::mime_open(const QString &uriString)
 {
 #ifdef MAFW
@@ -374,10 +383,7 @@ void MainWindow::mime_open(const QString &uriString)
 #ifdef Q_WS_MAEMO_5
                 setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-                objectId.remove(0, 18) // "urisource::file://"
-                        .replace("/", "%2F")
-                        .prepend(TAGSOURCE_PLAYLISTS_PATH + QString("/"));
-                qDebug() << "Converted ID:" << objectId;
+                convertObjectId(objectId, TAGSOURCE_PLAYLISTS_PATH);
 
                 CurrentPlaylistManager *cpm = CurrentPlaylistManager::acquire(mafwRegistry);
                 connect(cpm, SIGNAL(finished(uint,int)), this, SLOT(onAddFinished(uint)), Qt::UniqueConnection);
@@ -397,20 +403,14 @@ void MainWindow::mime_open(const QString &uriString)
 #ifdef Q_WS_MAEMO_5
                     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-                    objectIdToPlay = objectId.remove(0, 18) // "urisource::file://"
-                                            .replace("/", "%2F")
-                                            .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
-                    qDebug() << "Converted ID:" << objectIdToPlay;
+                    convertObjectId(objectId, TAGSOURCE_AUDIO_PATH);
 
-                    openDirectory(uriToPlay, Media::Audio);
+                    openDirectory(uriToPlay, objectId, Media::Audio);
                 }
 
                 // Audio, just one file
                 else {
-                    objectId.remove(0, 18) // "urisource::file://"
-                            .replace("/", "%2F")
-                            .prepend(TAGSOURCE_AUDIO_PATH + QString("/"));
-                    qDebug() << "Converted ID:" << objectId;
+                    convertObjectId(objectId, TAGSOURCE_AUDIO_PATH);
 
                     if (playlist->playlistName() != "FmpAudioPlaylist")
                         playlist->assignAudioPlaylist();
@@ -444,20 +444,14 @@ void MainWindow::mime_open(const QString &uriString)
 #ifdef Q_WS_MAEMO_5
                 setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 #endif
-                objectIdToPlay = objectId.remove(0, 18) // "urisource::file://"
-                                         .replace("/", "%2F")
-                                         .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
-                qDebug() << "Converted ID:" << objectIdToPlay;
+                convertObjectId(objectId, TAGSOURCE_VIDEO_PATH);
 
-                openDirectory(uriToPlay, Media::Video);
+                openDirectory(uriToPlay, objectId, Media::Video);
             }
 
             // Just one file
             else {
-                objectId = objectId.remove(0, 18) // "urisource::file://"
-                                   .replace("/", "%2F")
-                                   .prepend(TAGSOURCE_VIDEO_PATH + QString("/"));
-                qDebug() << "Converted ID:" << objectId;
+                convertObjectId(objectId, TAGSOURCE_VIDEO_PATH);
 
                 playlist->assignVideoPlaylist();
                 playlist->clear();
