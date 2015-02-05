@@ -21,7 +21,7 @@
 InternetRadioWindow::InternetRadioWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BrowserWindow(parent, mafwRegistry),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer()),
+    mafwRenderer(mafwRegistry->renderer()),
     mafwRadioSource(mafwRegistry->source(MafwRegistryAdapter::Radio)),
     playlist(mafwRegistry->playlist())
 {
@@ -85,7 +85,7 @@ void InternetRadioWindow::onStationSelected(QModelIndex index)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-    mafwrenderer->gotoIndex(sameTypeIndex);
+    mafwRenderer->gotoIndex(sameTypeIndex);
 
     if (type == "audio") {
         RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwRegistry);

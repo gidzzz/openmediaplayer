@@ -84,7 +84,7 @@ private:
     bool buttonWasDown;
     int keyToRepeat;
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwSource;
     int colorkey;
     int mafwState;

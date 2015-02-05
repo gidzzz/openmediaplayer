@@ -22,7 +22,7 @@ MusicWindow::MusicWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BaseWindow(parent),
     ui(new Ui::MusicWindow),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer()),
+    mafwRenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist()),
     listAction(NULL)
@@ -128,8 +128,8 @@ void MusicWindow::onSongSelected(QModelIndex index)
         delete[] songAddBuffer[i];
     delete[] songAddBuffer;
 
-    mafwrenderer->gotoIndex(filter ? index.row() : songProxyModel->mapToSource(index).row());
-    mafwrenderer->play();
+    mafwRenderer->gotoIndex(filter ? index.row() : songProxyModel->mapToSource(index).row());
+    mafwRenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
 

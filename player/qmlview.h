@@ -67,7 +67,7 @@ private:
     QObject *rootObject;
     void setDNDAtom(bool dnd);
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     int mafwState;
 
 private slots:

@@ -45,7 +45,7 @@ private:
 
     QString currentObjectId;
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwTrackerSource;
     CurrentPlaylistAdapter *playlist;
     uint browsePlaylistId;

@@ -22,7 +22,7 @@ public:
 private:
     void notifyOnAddedToNowPlaying(int songCount);
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwTrackerSource;
     CurrentPlaylistAdapter *playlist;
     QString albumObjectId;

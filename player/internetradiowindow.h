@@ -32,7 +32,7 @@ private:
     QList<QStandardItem*> audioBufferList;
     QList<QStandardItem*> videoBufferList;
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwRadioSource;
     CurrentPlaylistAdapter *playlist;
     unsigned int browseId;

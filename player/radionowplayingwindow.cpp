@@ -22,7 +22,7 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRegistryAdapte
     BaseWindow(parent),
     ui(new Ui::RadioNowPlayingWindow),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer()),
+    mafwRenderer(mafwRegistry->renderer()),
     playlist(mafwRegistry->playlist())
 {
     ui->setupUi(this);
@@ -66,9 +66,9 @@ RadioNowPlayingWindow::RadioNowPlayingWindow(QWidget *parent, MafwRegistryAdapte
 
     Rotator::acquire()->addClient(this);
 
-    mafwrenderer->getStatus();
-    mafwrenderer->getPosition();
-    mafwrenderer->getVolume();
+    mafwRenderer->getStatus();
+    mafwRenderer->getPosition();
+    mafwRenderer->getVolume();
 }
 
 RadioNowPlayingWindow::~RadioNowPlayingWindow()
@@ -83,9 +83,9 @@ void RadioNowPlayingWindow::connectSignals()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
     shortcut = new QShortcut(QKeySequence(Qt::Key_Left), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(previous()));
+    connect(shortcut, SIGNAL(activated()), mafwRenderer, SLOT(previous()));
     shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
+    connect(shortcut, SIGNAL(activated()), mafwRenderer, SLOT(next()));
 
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showBookmarkDialog()));
@@ -104,18 +104,18 @@ void RadioNowPlayingWindow::connectSignals()
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
 
-    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
+    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwRenderer, SLOT(setVolume(int)));
     connect(ui->positionSlider, SIGNAL(sliderPressed()), this, SLOT(onPositionSliderPressed()));
     connect(ui->positionSlider, SIGNAL(sliderReleased()), this, SLOT(onPositionSliderReleased()));
     connect(ui->positionSlider, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
-    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+    connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
 
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
-    connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
-    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
-    connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    connect(mafwRenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
+    connect(mafwRenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
+    connect(mafwRenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
+    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
@@ -158,7 +158,7 @@ void RadioNowPlayingWindow::keyPressEvent(QKeyEvent *e)
             break;
 
         case Qt::Key_S:
-            mafwrenderer->stop();
+            mafwRenderer->stop();
             break;
     }
 }
@@ -169,7 +169,7 @@ void RadioNowPlayingWindow::startPositionTimer()
     &&  mafwState == Playing
     &&  !Maemo5DeviceEvents::acquire()->isScreenLocked())
     {
-        mafwrenderer->getPosition();
+        mafwRenderer->getPosition();
         positionTimer->start();
     }
 }
@@ -196,13 +196,13 @@ void RadioNowPlayingWindow::volumeWatcher()
 void RadioNowPlayingWindow::onVolumeSliderPressed()
 {
     volumeTimer->stop();
-    mafwrenderer->setVolume(ui->volumeSlider->value());
+    mafwRenderer->setVolume(ui->volumeSlider->value());
 }
 
 void RadioNowPlayingWindow::onVolumeSliderReleased()
 {
     volumeTimer->start();
-    mafwrenderer->setVolume(ui->volumeSlider->value());
+    mafwRenderer->setVolume(ui->volumeSlider->value());
 }
 
 void RadioNowPlayingWindow::onStateChanged(int state)
@@ -230,10 +230,10 @@ void RadioNowPlayingWindow::onStateChanged(int state)
 
             ui->playButton->setIcon(QIcon(playButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+            connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(resume()));
 
             positionTimer->stop();
-            mafwrenderer->getPosition();
+            mafwRenderer->getPosition();
         }
         else if (state == Playing) {
             ui->positionSlider->setEnabled(isMediaSeekable);
@@ -242,10 +242,10 @@ void RadioNowPlayingWindow::onStateChanged(int state)
 
             if (isMediaSeekable) {
                 ui->playButton->setIcon(QIcon(pauseButtonIcon));
-                connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+                connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(pause()));
             } else {
                 ui->playButton->setIcon(QIcon(stopButtonIcon));
-                connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(stop()));
+                connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(stop()));
                 connect(ui->playButton, SIGNAL(pressed()), this, SLOT(onStopButtonPressed()));
                 connect(ui->playButton, SIGNAL(released()), this, SLOT(onStopButtonPressed()));
             }
@@ -272,9 +272,9 @@ void RadioNowPlayingWindow::onStateChanged(int state)
 void RadioNowPlayingWindow::play()
 {
     if (networkSession->isOpen()) {
-        mafwrenderer->play();
+        mafwRenderer->play();
     } else {
-        connect(networkSession, SIGNAL(opened()), mafwrenderer, SLOT(play()), Qt::UniqueConnection);
+        connect(networkSession, SIGNAL(opened()), mafwRenderer, SLOT(play()), Qt::UniqueConnection);
         networkSession->open();
     }
 }
@@ -320,11 +320,11 @@ void RadioNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
 
 void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *objectId, QString)
 {
-    disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
+    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
 
     onStateChanged(state);
     onMediaChanged(index, const_cast<char*>(objectId));
@@ -378,11 +378,11 @@ void RadioNowPlayingWindow::onNextButtonClicked()
 {
     if (ui->nextButton->isDown()) {
         buttonWasDown = true;
-        mafwrenderer->setPosition(SeekRelative, 3);
-        mafwrenderer->getPosition();
+        mafwRenderer->setPosition(SeekRelative, 3);
+        mafwRenderer->getPosition();
     } else {
         if (!buttonWasDown)
-            mafwrenderer->next();
+            mafwRenderer->next();
         buttonWasDown = false;
     }
 }
@@ -391,11 +391,11 @@ void RadioNowPlayingWindow::onPreviousButtonClicked()
 {
     if (ui->prevButton->isDown()) {
         buttonWasDown = true;
-        mafwrenderer->setPosition(SeekRelative, -3);
-        mafwrenderer->getPosition();
+        mafwRenderer->setPosition(SeekRelative, -3);
+        mafwRenderer->getPosition();
     } else {
         if (!buttonWasDown)
-            mafwrenderer->previous();
+            mafwRenderer->previous();
         buttonWasDown = false;
     }
 }
@@ -408,14 +408,14 @@ void RadioNowPlayingWindow::onPositionSliderPressed()
 void RadioNowPlayingWindow::onPositionSliderReleased()
 {
     ui->currentPositionLabel->setText(mmss_pos(ui->positionSlider->value()));
-    mafwrenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
+    mafwRenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
 }
 
 void RadioNowPlayingWindow::onPositionSliderMoved(int position)
 {
     ui->currentPositionLabel->setText(mmss_pos(position));
     if (!lazySliders)
-        mafwrenderer->setPosition(SeekAbsolute, position);
+        mafwRenderer->setPosition(SeekAbsolute, position);
 }
 
 void RadioNowPlayingWindow::setAlbumImage(QString image)
@@ -489,17 +489,17 @@ void RadioNowPlayingWindow::onStopButtonPressed()
 void RadioNowPlayingWindow::togglePlayback()
 {
     if (mafwState == Playing)
-        mafwrenderer->pause();
+        mafwRenderer->pause();
     else if (mafwState == Paused)
-        mafwrenderer->resume();
+        mafwRenderer->resume();
     else if (mafwState == Stopped)
-        mafwrenderer->play();
+        mafwRenderer->play();
 }
 
 void RadioNowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
-    contextMenu->addAction(tr("Stop playback"), mafwrenderer, SLOT(stop()));
+    contextMenu->addAction(tr("Stop playback"), mafwRenderer, SLOT(stop()));
     contextMenu->exec(this->mapToGlobal(pos));
 }

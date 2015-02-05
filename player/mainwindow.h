@@ -77,7 +77,7 @@ private:
     QLabel *updatingLabel;
     bool updatingShow;
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
     CurrentPlaylistAdapter *playlist;

@@ -180,9 +180,9 @@ void UpnpView::onItemActivated(QModelIndex index)
                     ++sameTypeIndex;
         }
 
-        MafwRendererAdapter *mafwrenderer = mafwRegistry->renderer();
-        mafwrenderer->gotoIndex(sameTypeIndex);
-        mafwrenderer->play();
+        MafwRendererAdapter *mafwRenderer = mafwRegistry->renderer();
+        mafwRenderer->gotoIndex(sameTypeIndex);
+        mafwRenderer->play();
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
         window->show();
@@ -218,8 +218,8 @@ void UpnpView::onItemActivated(QModelIndex index)
         connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
         ui->indicator->inhibit();
 
-        MafwRendererAdapter *mafwrenderer = mafwRegistry->renderer();
-        mafwrenderer->gotoIndex(sameTypeIndex);
+        MafwRendererAdapter *mafwRenderer = mafwRegistry->renderer();
+        mafwRenderer->gotoIndex(sameTypeIndex);
         window->play();
 
     } else {

@@ -21,7 +21,7 @@
 SingleGenreView::SingleGenreView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BrowserWindow(parent, mafwRegistry),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer()),
+    mafwRenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
 {
@@ -197,7 +197,7 @@ void SingleGenreView::onAddFinished(uint token, int count)
     if (token != playlistToken) return;
 
     if (shuffleRequested) {
-        mafwrenderer->play();
+        mafwRenderer->play();
 
         NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
         window->show();

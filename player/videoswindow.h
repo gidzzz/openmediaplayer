@@ -29,7 +29,7 @@ private:
     QAction *sortByDate;
     QAction *sortByCategory;
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwTrackerSource;
     CurrentPlaylistAdapter *playlist;
     unsigned int browseId;

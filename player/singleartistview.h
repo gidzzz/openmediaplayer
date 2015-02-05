@@ -21,7 +21,7 @@ public:
 
 private:
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwTrackerSource;
     CurrentPlaylistAdapter *playlist;
     uint browseArtistId;

@@ -22,7 +22,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRegistryAdapte
     QMainWindow(parent),
     ui(new Ui::VideoNowPlayingWindow),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer())
+    mafwRenderer(mafwRegistry->renderer())
 {
     ui->setupUi(this);
     setIcons();
@@ -95,15 +95,15 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRegistryAdapte
 
     // Set up video surface
     QApplication::syncX();
-    mafwrenderer->setColorKey(colorKey().rgb() & 0xffffff);
-    mafwrenderer->setWindowXid(ui->videoWidget->winId());
+    mafwRenderer->setColorKey(colorKey().rgb() & 0xffffff);
+    mafwRenderer->setWindowXid(ui->videoWidget->winId());
 
     // Do not jump to the next playlist item if an error occurs
-    mafwrenderer->setErrorPolicy(MAFW_RENDERER_ERROR_POLICY_STOP);
+    mafwRenderer->setErrorPolicy(MAFW_RENDERER_ERROR_POLICY_STOP);
 
     // Request some initial values
-    mafwrenderer->getStatus();
-    mafwrenderer->getVolume();
+    mafwRenderer->getStatus();
+    mafwRenderer->getVolume();
 }
 
 VideoNowPlayingWindow::~VideoNowPlayingWindow()
@@ -114,7 +114,7 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
         if (resumePosition == Duration::Blank) {
             // Pausing the video should cause a thumbnail to be generated
             if (mafwState == Playing)
-                mafwrenderer->pause();
+                mafwRenderer->pause();
 
             // Prepare a metadata table to save the state in it
             GHashTable* metadata = mafw_metadata_new();
@@ -135,14 +135,14 @@ VideoNowPlayingWindow::~VideoNowPlayingWindow()
 
         // Make sure that video playback is dead after the window is closed,
         // because otherwise ghost windows may appear, rapidly opening and closing.
-        mafwrenderer->stop();
+        mafwRenderer->stop();
         // NOTE: If ghost windows happen despite the line above, it might be
         // necessary to wait for a confirmation that the playback is stopped and
         // only then close the window.
     }
 
     // Restore the default error policy
-    mafwrenderer->setErrorPolicy(MAFW_RENDERER_ERROR_POLICY_CONTINUE);
+    mafwRenderer->setErrorPolicy(MAFW_RENDERER_ERROR_POLICY_CONTINUE);
 
     // Restore the rotation policy to the one used before opening this window
     Rotator::acquire()->setPolicy(rotatorPolicy);
@@ -214,7 +214,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeSlider, SIGNAL(sliderPressed()), this, SLOT(onVolumeSliderPressed()));
     connect(ui->volumeSlider, SIGNAL(sliderReleased()), this, SLOT(onVolumeSliderReleased()));
-    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
+    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwRenderer, SLOT(setVolume(int)));
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(toggleVolumeSlider()));
 
     // A shortcut to toggle the overlay
@@ -230,7 +230,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
     // Initial status
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
@@ -336,7 +336,7 @@ void VideoNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
             // is usually a few seconds at most, so restoring the saved position
             // is probably still desired.
             if (resumePosition > 0)
-                mafwrenderer->setPosition(SeekAbsolute, resumePosition);
+                mafwRenderer->setPosition(SeekAbsolute, resumePosition);
             resumePosition = Duration::Blank;
         }
     }
@@ -345,12 +345,12 @@ void VideoNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
 void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char* objectId, QString error)
 {
     // This is a one-time handler, so disconnect it right after it is called
-    disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
     // This is the function which will take over from here
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
+    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
 
     // Forward the received info to more specific handlers
     onStateChanged(state);
@@ -395,11 +395,11 @@ void VideoNowPlayingWindow::onPrevButtonClicked()
     } else {
         if (!buttonWasDown) {
             if (this->currentPosition > 3) {
-                mafwrenderer->setPosition(SeekAbsolute, 0);
-                mafwrenderer->getPosition();
+                mafwRenderer->setPosition(SeekAbsolute, 0);
+                mafwRenderer->getPosition();
             } else {
                 gotCurrentPlayState = false;
-                mafwrenderer->previous();
+                mafwRenderer->previous();
             }
         }
         buttonWasDown = false;
@@ -414,7 +414,7 @@ void VideoNowPlayingWindow::onNextButtonClicked()
     } else {
         if (!buttonWasDown) {
             gotCurrentPlayState = false;
-            mafwrenderer->next();
+            mafwRenderer->next();
         }
         buttonWasDown = false;
     }
@@ -423,7 +423,7 @@ void VideoNowPlayingWindow::onNextButtonClicked()
 // Bookmark the video
 void VideoNowPlayingWindow::onBookmarkClicked()
 {
-    mafwrenderer->pause();
+    mafwRenderer->pause();
     BookmarkDialog bookmarkDialog(this, mafwRegistry, Media::Video, uri);
     bookmarkDialog.exec();
 }
@@ -431,7 +431,7 @@ void VideoNowPlayingWindow::onBookmarkClicked()
 // Delete the video
 void VideoNowPlayingWindow::onDeleteClicked()
 {
-    mafwrenderer->pause();
+    mafwRenderer->pause();
 
     if (ConfirmDialog(ConfirmDialog::DeleteVideo, this).exec() == QMessageBox::Yes) {
         mafwSource->destroyObject(currentObjectId);
@@ -442,7 +442,7 @@ void VideoNowPlayingWindow::onDeleteClicked()
 // Share the video
 void VideoNowPlayingWindow::onShareClicked()
 {
-    mafwrenderer->pause();
+    mafwRenderer->pause();
     (new ShareDialog(this, mafwSource, currentObjectId))->show();
 }
 
@@ -450,14 +450,14 @@ void VideoNowPlayingWindow::onShareClicked()
 void VideoNowPlayingWindow::onVolumeSliderPressed()
 {
     volumeTimer->stop();
-    mafwrenderer->setVolume(ui->volumeSlider->value());
+    mafwRenderer->setVolume(ui->volumeSlider->value());
 }
 
 // The volume slider was released, make sure that the volume is in sync with it
 void VideoNowPlayingWindow::onVolumeSliderReleased()
 {
     volumeTimer->start();
-    mafwrenderer->setVolume(ui->volumeSlider->value());
+    mafwRenderer->setVolume(ui->volumeSlider->value());
 }
 
 void VideoNowPlayingWindow::toggleVolumeSlider()
@@ -480,7 +480,7 @@ void VideoNowPlayingWindow::startPositionTimer()
     &&  overlayVisible
     &&  !Maemo5DeviceEvents::acquire()->isScreenLocked())
     {
-        mafwrenderer->getPosition();
+        mafwRenderer->getPosition();
         positionTimer->start();
     }
 }
@@ -515,7 +515,7 @@ void VideoNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
 void VideoNowPlayingWindow::play()
 {
     if (gotInitialStopState) {
-        mafwrenderer->play();
+        mafwRenderer->play();
     } else {
         playWhenReady = true;
     }
@@ -540,17 +540,17 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             gotInitialStopState = true;
 
             // Various status notifications
-            connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
-            connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
-            connect(mafwrenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
+            connect(mafwRenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
+            connect(mafwRenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
+            connect(mafwRenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
 
             // Position slider
-            connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+            connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
             connect(ui->positionSlider, SIGNAL(sliderPressed()), this, SLOT(onPositionSliderPressed()));
             connect(ui->positionSlider, SIGNAL(sliderReleased()), this, SLOT(onPositionSliderReleased()));
             connect(ui->positionSlider, SIGNAL(sliderMoved(int)), this, SLOT(onPositionSliderMoved(int)));
         } else {
-            mafwrenderer->stop();
+            mafwRenderer->stop();
         }
     }
 
@@ -558,7 +558,7 @@ void VideoNowPlayingWindow::onStateChanged(int state)
         // If in the meantime there was a request to start playback, this is the time to fulfill it
         if (playWhenReady) {
             playWhenReady = false;
-            mafwrenderer->play();
+            mafwRenderer->play();
         }
     } else {
         return;
@@ -581,8 +581,8 @@ void VideoNowPlayingWindow::onStateChanged(int state)
         // already taking place, the renderer will end up on the next item. To
         // correct this, we have to move back by one item.
         if (gotCurrentPlayState && !QSettings().value("Videos/continuousPlayback", false).toBool()) {
-            mafwrenderer->stop();
-            mafwrenderer->previous();
+            mafwRenderer->stop();
+            mafwRenderer->previous();
         }
 
         // Reset position display
@@ -610,11 +610,11 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             // The play button becomes a resume button
             ui->playButton->setIcon(QIcon(playButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+            connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(resume()));
 
             // Playback position is not emitted in the paused state. Request it
             // manually to get the exact value.
-            mafwrenderer->getPosition();
+            mafwRenderer->getPosition();
             positionTimer->stop();
         }
         else if (state == Playing) {
@@ -626,27 +626,27 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             // The play button becomes a pause button
             ui->playButton->setIcon(QIcon(pauseButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+            connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(pause()));
 
             // The resume position should be touched only if proper metadata has
             // already arrived.
             if (resumePosition != Duration::Unknown) {
                 if (resumePosition > 0)
-                    mafwrenderer->setPosition(SeekAbsolute, resumePosition);
+                    mafwRenderer->setPosition(SeekAbsolute, resumePosition);
                 resumePosition = Duration::Blank;
             }
 
             // Remember the last object which was actually playing
             playedObjectId = currentObjectId;
 
-            mafwrenderer->getPosition();
+            mafwRenderer->getPosition();
             startPositionTimer();
         }
         else if (state == Stopped) {
             // The play button becomes itself
             ui->playButton->setIcon(QIcon(playButtonIcon));
             disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-            connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+            connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(play()));
 
             // Reset the last received position
             currentPosition = 0;
@@ -707,39 +707,39 @@ void VideoNowPlayingWindow::updateDNDAtom()
 // Move playback forward by a small amount
 void VideoNowPlayingWindow::slowFwd()
 {
-    mafwrenderer->setPosition(SeekRelative, 10);
-    mafwrenderer->getPosition();
+    mafwRenderer->setPosition(SeekRelative, 10);
+    mafwRenderer->getPosition();
 }
 
 // Move playback backward by a small amount
 void VideoNowPlayingWindow::slowRev()
 {
-    mafwrenderer->setPosition(SeekRelative, -10);
-    mafwrenderer->getPosition();
+    mafwRenderer->setPosition(SeekRelative, -10);
+    mafwRenderer->getPosition();
 }
 
 // Move playback forward by a large amount
 void VideoNowPlayingWindow::fastFwd()
 {
-    mafwrenderer->setPosition(SeekRelative, 60);
-    mafwrenderer->getPosition();
+    mafwRenderer->setPosition(SeekRelative, 60);
+    mafwRenderer->getPosition();
 }
 
 // Move playback backward by a small amount
 void VideoNowPlayingWindow::fastRev()
 {
-    mafwrenderer->setPosition(SeekRelative, -60);
-    mafwrenderer->getPosition();
+    mafwRenderer->setPosition(SeekRelative, -60);
+    mafwRenderer->getPosition();
 }
 
 void VideoNowPlayingWindow::togglePlayback()
 {
     if (this->mafwState == Playing)
-        mafwrenderer->pause();
+        mafwRenderer->pause();
     else if (this->mafwState == Paused)
-        mafwrenderer->resume();
+        mafwRenderer->resume();
     else if (this->mafwState == Stopped)
-        mafwrenderer->play();
+        mafwRenderer->play();
 }
 
 // The overlay can be toggled by clicking the main area of the window
@@ -819,7 +819,7 @@ void VideoNowPlayingWindow::onPositionSliderPressed()
 
 void VideoNowPlayingWindow::onPositionSliderReleased()
 {
-    mafwrenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
+    mafwRenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
     ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-videoLength :
                                                              ui->positionSlider->value()));
 }
@@ -828,7 +828,7 @@ void VideoNowPlayingWindow::onPositionSliderMoved(int position)
 {
     ui->currentPositionLabel->setText(mmss_pos(reverseTime ? position-videoLength : position));
     if (!lazySliders)
-        mafwrenderer->setPosition(SeekAbsolute, position);
+        mafwRenderer->setPosition(SeekAbsolute, position);
 }
 
 // Handle buffring progress changes

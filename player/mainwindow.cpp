@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuList->setItemDelegate(new MainDelegate(ui->menuList));
 
     mafwRegistry = MafwRegistryAdapter::get();
-    mafwrenderer = mafwRegistry->renderer();
+    mafwRenderer = mafwRegistry->renderer();
     mafwTrackerSource = mafwRegistry->source(MafwRegistryAdapter::Tracker);
     mafwRadioSource = mafwRegistry->source(MafwRegistryAdapter::Radio);
     playlist = mafwRegistry->playlist();
@@ -107,14 +107,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    mafwrenderer->enablePlayback(false);
+    mafwRenderer->enablePlayback(false);
 
     QString action = QSettings().value("main/onApplicationExit", "stop-playback").toString();
 
     if (action == "stop-playback")
-        mafwrenderer->stop();
+        mafwRenderer->stop();
     else if (action == "pause-playback")
-        mafwrenderer->pause();
+        mafwRenderer->pause();
 
     delete ui;
 }
@@ -211,7 +211,7 @@ void MainWindow::open_mp_main_view()
 void MainWindow::open_mp_now_playing()
 {
     // maybe this check could be moved to NowPlayingWindow?
-    if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && playlist->isReady()) {
+    if (mafwRenderer->isRendererReady() && mafwTrackerSource->isReady() && playlist->isReady()) {
         if (playlist->name() != "FmpAudioPlaylist")
             playlist->assignAudioPlaylist();
         createNowPlayingWindow();
@@ -300,8 +300,8 @@ void MainWindow::openDirectory(const QString &uri, const QString &objectIdToPlay
         if (!QSettings().value("main/appendSongs").toBool()) {
             for (int i = 0; i < songAddBufferPos; i++) {
                 if (QString::fromUtf8(songAddBuffer[i]) == objectIdToPlay) {
-                    mafwrenderer->gotoIndex(i);
-                    mafwrenderer->play();
+                    mafwRenderer->gotoIndex(i);
+                    mafwRenderer->play();
                     break;
                 }
             }
@@ -310,7 +310,7 @@ void MainWindow::openDirectory(const QString &uri, const QString &objectIdToPlay
     } else { // type == Media::Video
         for (int i = 0; i < songAddBufferPos; i++) {
             if (QString::fromUtf8(songAddBuffer[i]) == objectIdToPlay) {
-                mafwrenderer->gotoIndex(i);
+                mafwRenderer->gotoIndex(i);
                 break;
             }
         }
@@ -384,10 +384,10 @@ void MainWindow::mime_open(const QString &uriString)
                     playlist->appendItem(objectId);
 
                     if (!QSettings().value("main/appendSongs").toBool()) {
-                        if (mafwrenderer->isRendererReady())
-                            mafwrenderer->play();
+                        if (mafwRenderer->isRendererReady())
+                            mafwRenderer->play();
                         else
-                            connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(play()));
+                            connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(play()));
                     }
 
                     createNowPlayingWindow();
@@ -483,7 +483,7 @@ void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
                 MafwPlaylistAdapter mpa(playlistName);
                 playlist->appendItems(&mpa);
 
-                mafwrenderer->play();
+                mafwRenderer->play();
                 createNowPlayingWindow();
                 setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
             }
@@ -576,10 +576,10 @@ void MainWindow::reloadSettings()
                                   orientation == "portrait"  ? Rotator::Portrait  :
                                                                Rotator::Automatic);
 
-    if (mafwrenderer->isRendererReady())
+    if (mafwRenderer->isRendererReady())
         setupPlayback();
     else
-        connect(mafwrenderer, SIGNAL(rendererReady()), this, SLOT(setupPlayback()));
+        connect(mafwRenderer, SIGNAL(rendererReady()), this, SLOT(setupPlayback()));
 }
 
 void MainWindow::openSleeperDialog()
@@ -684,7 +684,7 @@ void MainWindow::onAddFinished(uint token)
     if (token != playlistToken) return;
 
     if (playlist->name() == "FmpAudioPlaylist") {
-        mafwrenderer->play();
+        mafwRenderer->play();
         createNowPlayingWindow();
     } else {
         createVideoNowPlayingWindow();
@@ -743,10 +743,10 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
 void MainWindow::onScreenLocked(bool locked)
 {
     if (locked)
-        mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "locked",
+        mafwRenderer->enablePlayback(QSettings().value("main/managedPlayback") == "locked",
                                      QSettings().value("main/compatiblePlayback", true).toBool());
     else
-        mafwrenderer->enablePlayback(QSettings().value("main/managedPlayback") == "unlocked",
+        mafwRenderer->enablePlayback(QSettings().value("main/managedPlayback") == "unlocked",
                                      QSettings().value("main/compatiblePlayback", true).toBool());
 }
 
@@ -756,9 +756,9 @@ void MainWindow::setupPlayback()
 
     QString playback = QSettings().value("main/managedPlayback", "always").toString();
     if (playback == "always")
-        mafwrenderer->enablePlayback(true, QSettings().value("main/compatiblePlayback", true).toBool());
+        mafwRenderer->enablePlayback(true, QSettings().value("main/compatiblePlayback", true).toBool());
     else if (playback == "never")
-        mafwrenderer->enablePlayback(false);
+        mafwRenderer->enablePlayback(false);
     else if (playback == "locked" || playback == "unlocked") {
         connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
         onScreenLocked(Maemo5DeviceEvents::acquire()->isScreenLocked());

@@ -66,7 +66,7 @@ private:
     void closeEvent(QCloseEvent *);
 
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwTrackerSource;
     CurrentPlaylistAdapter *playlist;
     unsigned int browseAllSongsId;

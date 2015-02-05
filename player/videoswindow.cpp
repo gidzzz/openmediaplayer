@@ -21,7 +21,7 @@
 VideosWindow::VideosWindow(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BrowserWindow(parent, mafwRegistry),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer()),
+    mafwRenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
 {
@@ -135,7 +135,7 @@ void VideosWindow::onVideoSelected(QModelIndex index)
         delete[] videoAddBuffer[i];
     delete[] videoAddBuffer;
 
-    mafwrenderer->gotoIndex(selectedRow-indexOffset);
+    mafwRenderer->gotoIndex(selectedRow-indexOffset);
     window->play();
 }
 

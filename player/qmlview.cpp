@@ -9,7 +9,7 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
     QMainWindow(parent),
     ui(new Ui::QmlView),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer())
+    mafwRenderer(mafwRegistry->renderer())
 {
     ui->setupUi(this);
     ui->declarativeView->setSource(source);
@@ -35,9 +35,9 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
     rootObject->setParent(this);
 
     connect(rootObject, SIGNAL(quitButtonClicked()), this, SLOT(close()));
-    connect(rootObject, SIGNAL(prevButtonClicked()), mafwrenderer, SLOT(previous()));
+    connect(rootObject, SIGNAL(prevButtonClicked()), mafwRenderer, SLOT(previous()));
     connect(rootObject, SIGNAL(playButtonClicked()), this, SLOT(onPlayClicked()));
-    connect(rootObject, SIGNAL(nextButtonClicked()), mafwrenderer, SLOT(next()));
+    connect(rootObject, SIGNAL(nextButtonClicked()), mafwRenderer, SLOT(next()));
     connect(rootObject, SIGNAL(fmtxButtonClicked()), this, SLOT(onFmtxClicked()));
     connect(rootObject, SIGNAL(sliderValueChanged(int)), this, SLOT(onSliderValueChanged(int)));
     connect(rootObject, SIGNAL(playlistItemSelected(int)), this, SLOT(onPlaylistItemChanged(int)));
@@ -64,11 +64,11 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
     connect(this, SIGNAL(playlistCleared()),
             rootObject, SLOT(clearPlaylist()));
 
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(mafwRenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
+    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+    connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
 
     connect(fmtx, SIGNAL(propertyChanged()), this, SLOT(onFmtxChanged()));
     onFmtxChanged();
@@ -81,8 +81,8 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
 
     this->setDNDAtom(true);
 
-    mafwrenderer->getStatus();
-    mafwrenderer->getPosition();
+    mafwRenderer->getStatus();
+    mafwRenderer->getPosition();
 }
 
 QmlView::~QmlView()
@@ -136,8 +136,8 @@ void QmlView::onStateChanged(int state)
         playButtonIconString = playButtonIcon;
         /*ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));*/
-        mafwrenderer->getPosition();
+        connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(resume()));*/
+        mafwRenderer->getPosition();
         if (positionTimer->isActive())
             positionTimer->stop();
     }
@@ -145,8 +145,8 @@ void QmlView::onStateChanged(int state)
         playButtonIconString = QString(pauseButtonIcon).prepend("file://");
         /*ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));*/
-        mafwrenderer->getPosition();
+        connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(pause()));*/
+        mafwRenderer->getPosition();
         if (!positionTimer->isActive())
             positionTimer->start();
     }
@@ -154,7 +154,7 @@ void QmlView::onStateChanged(int state)
         playButtonIconString = QString(playButtonIcon).prepend("file://");
         /*ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));*/
+        connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(play()));*/
         if (positionTimer->isActive())
             positionTimer->stop();
     }
@@ -175,16 +175,16 @@ void QmlView::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QSt
 void QmlView::onPlayClicked()
 {
     if (this->mafwState == Playing)
-        mafwrenderer->pause();
+        mafwRenderer->pause();
     else if (this->mafwState == Stopped)
-        mafwrenderer->play();
+        mafwRenderer->play();
     else if (this->mafwState == Paused)
-        mafwrenderer->resume();
+        mafwRenderer->resume();
 }
 
 void QmlView::onSliderValueChanged(int position)
 {
-    mafwrenderer->setPosition(SeekAbsolute, position);
+    mafwRenderer->setPosition(SeekAbsolute, position);
 }
 
 void QmlView::appendPlaylistItem(QListWidgetItem *item)
@@ -222,7 +222,7 @@ void QmlView::clearPlaylist()
 
 void QmlView::onPlaylistItemChanged(int index)
 {
-    mafwrenderer->gotoIndex(index);
+    mafwRenderer->gotoIndex(index);
 }
 
 void QmlView::onFmtxClicked()

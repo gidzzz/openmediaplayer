@@ -60,7 +60,7 @@ private:
     bool buttonWasDown;
     bool isMediaSeekable;
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     CurrentPlaylistAdapter *playlist;
     int mafwState;
     QString artist;

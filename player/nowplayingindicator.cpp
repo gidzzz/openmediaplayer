@@ -65,9 +65,9 @@ void NowPlayingIndicator::connectSignals()
     QShortcut *shortcut;
 
     shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
+    connect(shortcut, SIGNAL(activated()), mafwRenderer, SLOT(next()));
     shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(previous()));
+    connect(shortcut, SIGNAL(activated()), mafwRenderer, SLOT(previous()));
     shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
 
@@ -79,10 +79,10 @@ void NowPlayingIndicator::connectSignals()
 
     connect(playlist, SIGNAL(contentsChanged(uint,uint,uint)), this, SLOT(autoSetVisibility()));
 
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 }
 
@@ -220,7 +220,7 @@ void NowPlayingIndicator::onGetStatus(MafwPlaylist*, uint, MafwPlayState state, 
 
 void NowPlayingIndicator::onPlaylistReady(MafwPlaylist*, uint, MafwPlayState, const char *objectId, QString)
 {
-    disconnect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
                this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,const char *,QString)));
 
     ready = true;
@@ -230,7 +230,7 @@ void NowPlayingIndicator::onPlaylistReady(MafwPlaylist*, uint, MafwPlayState, co
 
 void NowPlayingIndicator::showEvent(QShowEvent *)
 {
-    mafwrenderer->getStatus();
+    mafwRenderer->getStatus();
     triggerAnimation();
 }
 
@@ -242,10 +242,10 @@ void NowPlayingIndicator::hideEvent(QHideEvent *)
 void NowPlayingIndicator::setRegistry(MafwRegistryAdapter *mafwRegistry)
 {
     this->mafwRegistry = mafwRegistry;
-    this->mafwrenderer = mafwRegistry->renderer();
+    this->mafwRenderer = mafwRegistry->renderer();
     this->playlist = mafwRegistry->playlist();
     this->connectSignals();
-    mafwrenderer->getStatus();
+    mafwRenderer->getStatus();
 }
 
 void NowPlayingIndicator::autoSetVisibility()
@@ -295,9 +295,9 @@ void NowPlayingIndicator::togglePlayback()
     if (playlist->name() == "FmpVideoPlaylist") return;
 
     if (mafwState == Playing)
-        mafwrenderer->pause();
+        mafwRenderer->pause();
     else if (mafwState == Paused)
-        mafwrenderer->resume();
+        mafwRenderer->resume();
     else if (mafwState == Stopped)
-        mafwrenderer->play();
+        mafwRenderer->play();
 }

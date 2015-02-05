@@ -71,7 +71,7 @@ private:
     int currentViewId;
     int swipeStart;
     MafwRegistryAdapter *mafwRegistry;
-    MafwRendererAdapter* mafwrenderer;
+    MafwRendererAdapter *mafwRenderer;
     MafwSourceAdapter *mafwTrackerSource;
     CurrentPlaylistAdapter *playlist;
     PlaylistQueryManager *playlistQM;

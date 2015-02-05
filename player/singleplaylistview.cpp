@@ -21,7 +21,7 @@
 SinglePlaylistView::SinglePlaylistView(QWidget *parent, MafwRegistryAdapter *mafwRegistry) :
     BrowserWindow(parent, mafwRegistry),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer()),
+    mafwRenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
 {
@@ -248,8 +248,8 @@ void SinglePlaylistView::onItemActivated(QModelIndex index)
 
     appendAllToPlaylist(filter);
 
-    mafwrenderer->gotoIndex((filter ? index.row() : objectProxyModel->mapToSource(index).row())-1);
-    mafwrenderer->play();
+    mafwRenderer->gotoIndex((filter ? index.row() : objectProxyModel->mapToSource(index).row())-1);
+    mafwRenderer->play();
 
     NowPlayingWindow *window = NowPlayingWindow::acquire(this, mafwRegistry);
     window->show();

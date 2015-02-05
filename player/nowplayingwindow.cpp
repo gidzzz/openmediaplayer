@@ -46,7 +46,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
     BaseWindow(parent),
     ui(new Ui::NowPlayingWindow),
     mafwRegistry(mafwRegistry),
-    mafwrenderer(mafwRegistry->renderer()),
+    mafwRenderer(mafwRegistry->renderer()),
     mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
     playlist(mafwRegistry->playlist())
 {
@@ -138,12 +138,12 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
     connect(playlistQM, SIGNAL(gotItem(QString,GHashTable*,uint)), this, SLOT(onItemReceived(QString,GHashTable*,uint)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
 
-    if (mafwrenderer->isRendererReady()) {
-        mafwrenderer->getStatus();
-        mafwrenderer->getVolume();
+    if (mafwRenderer->isRendererReady()) {
+        mafwRenderer->getStatus();
+        mafwRenderer->getVolume();
     } else {
-        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getStatus()));
-        connect(mafwrenderer, SIGNAL(rendererReady()), mafwrenderer, SLOT(getVolume()));
+        connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getStatus()));
+        connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getVolume()));
     }
 }
 
@@ -270,7 +270,7 @@ void NowPlayingWindow::startPositionTimer()
     &&  !ui->infoWidget->isHidden()
     &&  !Maemo5DeviceEvents::acquire()->isScreenLocked())
     {
-        mafwrenderer->getPosition();
+        mafwRenderer->getPosition();
         positionTimer->start();
     }
 }
@@ -323,24 +323,24 @@ void NowPlayingWindow::onStateChanged(int state)
 
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(resume()));
+        connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(resume()));
 
         positionTimer->stop();
-        mafwrenderer->getPosition();
+        mafwRenderer->getPosition();
     }
     else if (state == Playing) {
         ui->positionSlider->setEnabled(isMediaSeekable);
 
         ui->playButton->setIcon(QIcon(pauseButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(pause()));
+        connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(pause()));
 
         startPositionTimer();
     }
     else if (state == Stopped) {
         ui->playButton->setIcon(QIcon(playButtonIcon));
         disconnect(ui->playButton, SIGNAL(clicked()), 0, 0);
-        connect(ui->playButton, SIGNAL(clicked()), mafwrenderer, SLOT(play()));
+        connect(ui->playButton, SIGNAL(clicked()), mafwRenderer, SLOT(play()));
 
         positionTimer->stop();
     }
@@ -359,16 +359,16 @@ void NowPlayingWindow::connectSignals()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(togglePlayback()));
     shortcut = new QShortcut(QKeySequence(Qt::Key_Left), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(previous()));
+    connect(shortcut, SIGNAL(activated()), mafwRenderer, SLOT(previous()));
     shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(next()));
+    connect(shortcut, SIGNAL(activated()), mafwRenderer, SLOT(next()));
     shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(cycleView()));
     shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_L), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), this, SLOT(cycleViewBack()));
 
     shortcut = new QShortcut(QKeySequence(Qt::Key_S), this); shortcut->setAutoRepeat(false);
-    connect(shortcut, SIGNAL(activated()), mafwrenderer, SLOT(stop()));
+    connect(shortcut, SIGNAL(activated()), mafwRenderer, SLOT(stop()));
     shortcut = new QShortcut(QKeySequence(Qt::Key_E), this); shortcut->setAutoRepeat(false);
     connect(shortcut, SIGNAL(activated()), ui->shuffleButton, SLOT(click()));
     shortcut = new QShortcut(QKeySequence(Qt::Key_R), this); shortcut->setAutoRepeat(false);
@@ -412,20 +412,20 @@ void NowPlayingWindow::connectSignals()
 
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
-    connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwrenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
-    connect(mafwrenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
-    connect(mafwrenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
-    connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
+    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
+    connect(mafwRenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
+    connect(mafwRenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
+    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
             this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
-    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwrenderer, SLOT(setVolume(int)));
+    connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwRenderer, SLOT(setVolume(int)));
 
     connect(ui->playButton, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onPlayMenuRequested(QPoint)));
     connect(ui->nextButton, SIGNAL(clicked()), this, SLOT(onNextButtonClicked()));
     connect(ui->prevButton, SIGNAL(clicked()), this, SLOT(onPreviousButtonClicked()));
 
-    connect(positionTimer, SIGNAL(timeout()), mafwrenderer, SLOT(getPosition()));
+    connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
     connect(lastPlayingSong, SIGNAL(valueChanged()), this, SLOT(onGconfValueChanged()));
 
@@ -533,7 +533,7 @@ void NowPlayingWindow::onItemMoved(uint from, uint to)
     if (ui->songList->item(to)->data(UserRoleSongDuration) == Duration::Blank)
         playlistQM->getItems(to,to);
 
-    mafwrenderer->getStatus();
+    mafwRenderer->getStatus();
 }
 
 void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
@@ -786,13 +786,13 @@ void NowPlayingWindow::onPrevButtonPressed()
 void NowPlayingWindow::onVolumeSliderPressed()
 {
     volumeTimer->stop();
-    mafwrenderer->setVolume(ui->volumeSlider->value());
+    mafwRenderer->setVolume(ui->volumeSlider->value());
 }
 
 void NowPlayingWindow::onVolumeSliderReleased()
 {
     volumeTimer->start();
-    mafwrenderer->setVolume(ui->volumeSlider->value());
+    mafwRenderer->setVolume(ui->volumeSlider->value());
 }
 
 void NowPlayingWindow::onPositionSliderPressed()
@@ -802,7 +802,7 @@ void NowPlayingWindow::onPositionSliderPressed()
 
 void NowPlayingWindow::onPositionSliderReleased()
 {
-    mafwrenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
+    mafwRenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
     ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-songDuration :
                                                              ui->positionSlider->value()));
 }
@@ -811,14 +811,14 @@ void NowPlayingWindow::onPositionSliderMoved(int position)
 {
     ui->currentPositionLabel->setText(mmss_pos(reverseTime ? position-songDuration : position));
     if (!lazySliders)
-        mafwrenderer->setPosition(SeekAbsolute, position);
+        mafwRenderer->setPosition(SeekAbsolute, position);
 }
 
 void NowPlayingWindow::onPlayMenuRequested(const QPoint &pos)
 {
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
-    contextMenu->addAction(tr("Stop playback"), mafwrenderer, SLOT(stop()));
+    contextMenu->addAction(tr("Stop playback"), mafwRenderer, SLOT(stop()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -827,13 +827,13 @@ void NowPlayingWindow::onNextButtonClicked()
     if (ui->nextButton->isDown()) {
         buttonWasDown = true;
         if (currentSongPosition >= this->songDuration)
-            mafwrenderer->setPosition(SeekAbsolute, 0);
+            mafwRenderer->setPosition(SeekAbsolute, 0);
         else
-            mafwrenderer->setPosition(SeekRelative, 3);
-        mafwrenderer->getPosition();
+            mafwRenderer->setPosition(SeekRelative, 3);
+        mafwRenderer->getPosition();
     } else {
         if (!buttonWasDown)
-            mafwrenderer->next();
+            mafwRenderer->next();
         buttonWasDown = false;
     }
 }
@@ -842,14 +842,14 @@ void NowPlayingWindow::onPreviousButtonClicked()
 {
     if (ui->prevButton->isDown()) {
         buttonWasDown = true;
-        mafwrenderer->setPosition(SeekRelative, -3);
-        mafwrenderer->getPosition();
+        mafwRenderer->setPosition(SeekRelative, -3);
+        mafwRenderer->getPosition();
     } else {
         if (!buttonWasDown) {
             if (this->currentSongPosition > 3)
                 this->setPosition(0);
             else
-                mafwrenderer->previous();
+                mafwRenderer->previous();
         }
         buttonWasDown = false;
     }
@@ -887,8 +887,8 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState stat
 
 void NowPlayingWindow::setPosition(int newPosition)
 {
-    mafwrenderer->setPosition(SeekAbsolute, newPosition);
-    mafwrenderer->getPosition();
+    mafwRenderer->setPosition(SeekAbsolute, newPosition);
+    mafwRenderer->getPosition();
 }
 
 void NowPlayingWindow::showEvent(QShowEvent *)
@@ -970,11 +970,11 @@ void NowPlayingWindow::mouseDoubleClickEvent(QMouseEvent *e)
 void NowPlayingWindow::togglePlayback()
 {
     if (mafwState == Playing)
-        mafwrenderer->pause();
+        mafwRenderer->pause();
     else if (mafwState == Paused)
-        mafwrenderer->resume();
+        mafwRenderer->resume();
     else if (mafwState == Stopped)
-        mafwrenderer->play();
+        mafwRenderer->play();
 }
 
 void NowPlayingWindow::onItemReceived(QString objectId, GHashTable *metadata, uint index)
@@ -1039,9 +1039,9 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
     songDuration = item->data(UserRoleSongDuration).toInt();
     ui->trackLengthLabel->setText(mmss_len(songDuration));
 
-    mafwrenderer->gotoIndex(ui->songList->row(item));
+    mafwRenderer->gotoIndex(ui->songList->row(item));
     if (mafwState == Stopped || mafwState == Paused)
-        mafwrenderer->play();
+        mafwRenderer->play();
 }
 
 void NowPlayingWindow::updatePlaylistState()
@@ -1160,7 +1160,7 @@ void NowPlayingWindow::updateQmlViewMetadata()
 void NowPlayingWindow::nullQmlView()
 {
     qmlView = 0;
-    mafwrenderer->getPosition();
+    mafwRenderer->getPosition();
 }
 
 void NowPlayingWindow::onAddAllToPlaylist()
@@ -1265,7 +1265,7 @@ void NowPlayingWindow::updatePlaylist(uint from, uint nremove, uint nreplace)
     if (synthetic)
         focusItemByRow(lastPlayingSong->value().toInt());
 
-    mafwrenderer->getStatus();
+    mafwRenderer->getStatus();
 
     setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
 
