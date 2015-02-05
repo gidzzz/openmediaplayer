@@ -338,10 +338,10 @@ void MafwRendererAdapter::play()
 #ifdef MAFW_WORKAROUNDS
     // Early play() or gotoIndex() seems be reliable only for smaller libraries.
     // For bigger ones something probably doesn't have enough time to ready up.
-    // Possible workaround is to call getSize() first, so when it returns,
-    // we know that play() can be successfully called. That's only a theory,
-    // but it works. ;)
-    playlist->getSize();
+    // Possible workaround is to call size() first, so when it returns, we know
+    // that play() can be successfully called. That's only a theory, but it
+    // seems to work.
+    playlist->size();
 #endif
 
 #ifdef LIBPLAYBACK_FULL
@@ -478,7 +478,7 @@ void MafwRendererAdapter::gotoIndex(uint index)
 {
 #ifdef MAFW_WORKAROUNDS
     // Explained in play()
-    playlist->getSize();
+    playlist->size();
 #endif
 
     if(mafw_renderer)

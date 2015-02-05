@@ -80,7 +80,7 @@ private:
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
     MafwSourceAdapter *mafwRadioSource;
-    MafwPlaylistAdapter* playlist;
+    CurrentPlaylistAdapter *playlist;
     uint browsePlaylistId;
     uint playlistToken;
     void countSongs();

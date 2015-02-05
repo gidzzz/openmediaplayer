@@ -4,8 +4,8 @@
 #include <QObject>
 
 #include "mafwrendereradapter.h"
-#include "mafwplaylistadapter.h"
 #include "mafwsourceadapter.h"
+#include "currentplaylistadapter.h"
 
 class MafwRegistryAdapter : public QObject
 {
@@ -25,8 +25,8 @@ public:
     MafwSource* findSourceByUUID(const QString &uuid);
 
     MafwRendererAdapter* renderer();
-    MafwPlaylistAdapter* playlist();
     MafwSourceAdapter* source(RecognizedSource source);
+    CurrentPlaylistAdapter* playlist();
 
     bool isRecognized(const QString &uuid);
 
@@ -44,8 +44,8 @@ private:
 
     // Reusable adapters
     MafwRendererAdapter *m_renderer;
-    MafwPlaylistAdapter *m_playlist;
     MafwSourceAdapter *sources[RecognizedSourceCount];
+    CurrentPlaylistAdapter *m_playlist;
 
     // Signal handlers
     static void onSourceAdded(MafwRegistry *, MafwSource *source, MafwRegistryAdapter *self);

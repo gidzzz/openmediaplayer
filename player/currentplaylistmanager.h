@@ -49,7 +49,7 @@ private:
     int songBufferSize;
     gchar** songBuffer;
 
-    MafwPlaylistAdapter *playlist;
+    CurrentPlaylistAdapter *playlist;
     MafwSourceAdapter *mafwTrackerSource;
 
 private slots:

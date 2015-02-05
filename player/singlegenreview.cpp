@@ -43,7 +43,7 @@ void SingleGenreView::onItemActivated(QModelIndex index)
     if (index.row() == 0) {
         this->setEnabled(false);
 
-        if (playlist->playlistName() != "FmpAudioPlaylist")
+        if (playlist->name() != "FmpAudioPlaylist")
             playlist->assignAudioPlaylist();
 
         playlist->clear();

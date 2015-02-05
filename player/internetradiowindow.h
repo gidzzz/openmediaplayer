@@ -34,7 +34,7 @@ private:
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwRadioSource;
-    MafwPlaylistAdapter* playlist;
+    CurrentPlaylistAdapter *playlist;
     unsigned int browseId;
 
 private slots:

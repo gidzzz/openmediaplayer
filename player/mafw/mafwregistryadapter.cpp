@@ -11,7 +11,7 @@ MafwRegistryAdapter* MafwRegistryAdapter::get()
 
         // Additional initialization
         instance->m_renderer = new MafwRendererAdapter();
-        instance->m_playlist = new MafwPlaylistAdapter(instance, instance->m_renderer);
+        instance->m_playlist = new CurrentPlaylistAdapter(instance->m_renderer, instance);
         instance->sources[Tracker] = new MafwSourceAdapter("localtagfs");
         instance->sources[Radio ]= new MafwSourceAdapter("iradiosource");
         instance->sources[Upnp] = new MafwSourceAdapter("upnpcontrolsource");
@@ -42,7 +42,7 @@ MafwRendererAdapter* MafwRegistryAdapter::renderer()
     return m_renderer;
 }
 
-MafwPlaylistAdapter* MafwRegistryAdapter::playlist()
+CurrentPlaylistAdapter* MafwRegistryAdapter::playlist()
 {
     return m_playlist;
 }

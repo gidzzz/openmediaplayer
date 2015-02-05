@@ -265,9 +265,8 @@ void VideoNowPlayingWindow::switchToRadio()
     // window is a more suitable option. To not lose the current playlist,
     // the transition will happen by deleting the radio playlist and renaming
     // the video playlist to radio playlist.
-    MafwPlaylistManagerAdapter *playlistManager = MafwPlaylistManagerAdapter::get();
-    playlistManager->deletePlaylist("FmpRadioPlaylist");
-    mafw_playlist_set_name(MAFW_PLAYLIST(playlistManager->createPlaylist("FmpVideoPlaylist")), "FmpRadioPlaylist");
+    MafwPlaylistManagerAdapter::get()->deletePlaylist("FmpRadioPlaylist");
+    MafwPlaylistAdapter("FmpVideoPlaylist").setName("FmpRadioPlaylist");
 
     RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this->parentWidget(), mafwRegistry);
 

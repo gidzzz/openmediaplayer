@@ -105,10 +105,10 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
 
         // Assign the proper playlist
         if (mime.startsWith("audio")) {
-            if (playlist->playlistName() != "FmpAudioPlaylist")
+            if (playlist->name() != "FmpAudioPlaylist")
                 playlist->assignAudioPlaylist();
         } else {
-            if (playlist->playlistName() != "FmpVideoPlaylist")
+            if (playlist->name() != "FmpVideoPlaylist")
                 playlist->assignVideoPlaylist();
         }
 
@@ -117,7 +117,7 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
             playlist->clear();
 
         // Add songs to the playlist
-        playlist->appendItems((const gchar**)songBuffer);
+        playlist->appendItems((const gchar**) songBuffer);
 
         // Clear the buffer
         for (int i = 0; i < songBufferSize; i++)

@@ -61,7 +61,7 @@ private:
     bool isMediaSeekable;
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
-    MafwPlaylistAdapter* playlist;
+    CurrentPlaylistAdapter *playlist;
     int mafwState;
     QString artist;
     QString title;

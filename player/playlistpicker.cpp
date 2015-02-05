@@ -22,8 +22,8 @@ PlaylistPicker::PlaylistPicker(QWidget *parent) :
         QString playlistName = QString::fromUtf8(item->name);
 
         if (playlistName != "FmpAudioPlaylist"
-        && playlistName != "FmpVideoPlaylist"
-        && playlistName != "FmpRadioPlaylist")
+        &&  playlistName != "FmpVideoPlaylist"
+        &&  playlistName != "FmpRadioPlaylist")
             (new QListWidgetItem(ui->playlistList))->setText(playlistName);
     }
 
@@ -78,24 +78,17 @@ void PlaylistPicker::onCreatePlaylistAccepted()
         }
     }
 
-    MafwPlaylistManagerAdapter *mafwPlaylistManager = MafwPlaylistManagerAdapter::get();
-
     if (playlistExists) {
-        if (ConfirmDialog(ConfirmDialog::OverwritePlaylist, this).exec() == QMessageBox::Yes) {
-            createPlaylistDialog->close();
-            mafwPlaylistManager->deletePlaylist(playlistName);
-            mafwPlaylistManager->createPlaylist(playlistName);
-            playlist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(playlistName));
-            this->playlistName = playlistName;
-            this->accept();
+        if (ConfirmDialog(ConfirmDialog::OverwritePlaylist, this).exec() != QMessageBox::Yes) {
+            MafwPlaylistManagerAdapter::get()->deletePlaylist(playlistName);
+        } else {
+            return;
         }
-    } else {
-        createPlaylistDialog->close();
-        mafwPlaylistManager->createPlaylist(playlistName);
-        playlist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(playlistName));
-        this->playlistName = playlistName;
-        this->accept();
     }
+
+    createPlaylistDialog->close();
+    this->playlistName = playlistName;
+    this->accept();
 }
 
 void PlaylistPicker::onOrientationChanged(int w, int h)
@@ -109,7 +102,6 @@ void PlaylistPicker::onOrientationChanged(int w, int h)
 void PlaylistPicker::onItemActivated(QListWidgetItem *item)
 {
     if (ui->playlistList->row(item) > 0) {
-        playlist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(item->text()));
         this->playlistName = item->text();
         this->accept();
     }

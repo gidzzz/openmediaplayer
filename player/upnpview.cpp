@@ -229,7 +229,7 @@ void UpnpView::onItemActivated(QModelIndex index)
 
 void UpnpView::onAddOneToNowPlaying()
 {
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
@@ -242,14 +242,14 @@ void UpnpView::onAddOneToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        playlist->appendItem(picker.playlist, ui->objectList->currentIndex().data(UserRoleObjectID).toString());
+        MafwPlaylistAdapter(picker.playlistName).appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
     }
 }
 
 void UpnpView::addAllToNowPlaying()
 {
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     notifyOnAddedToNowPlaying(appendAllToPlaylist(AudioMime, true));
@@ -273,7 +273,7 @@ int UpnpView::appendAllToPlaylist(QString type, bool filter)
 
     itemAddBuffer[sameTypeCount] = NULL;
 
-    playlist->appendItems((const gchar**)itemAddBuffer);
+    playlist->appendItems((const gchar**) itemAddBuffer);
 
     for (int i = 0; i < sameTypeCount; i++)
         delete[] itemAddBuffer[i];

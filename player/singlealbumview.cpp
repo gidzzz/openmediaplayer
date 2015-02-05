@@ -126,7 +126,7 @@ void SingleAlbumView::onItemActivated(QModelIndex index)
 
     this->setEnabled(false);
 
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(index.row() == 0);
@@ -160,7 +160,7 @@ int SingleAlbumView::appendAllToPlaylist(bool filter)
 
     songAddBuffer[--visibleCount] = NULL;
 
-    playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**) songAddBuffer);
 
     for (int i = 0; i < visibleCount; i++)
         delete[] songAddBuffer[i];
@@ -171,7 +171,7 @@ int SingleAlbumView::appendAllToPlaylist(bool filter)
 
 void SingleAlbumView::addAllToNowPlaying()
 {
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     notifyOnAddedToNowPlaying(appendAllToPlaylist(true));
@@ -193,7 +193,7 @@ void SingleAlbumView::onContextMenuRequested(const QPoint &pos)
 
 void SingleAlbumView::onAddToNowPlaying()
 {
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
@@ -206,7 +206,7 @@ void SingleAlbumView::onAddToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        playlist->appendItem(picker.playlist, ui->objectList->currentIndex().data(UserRoleObjectID).toString());
+        MafwPlaylistAdapter(picker.playlistName).appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
     }
 }

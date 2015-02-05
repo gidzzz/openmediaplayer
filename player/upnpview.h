@@ -37,7 +37,7 @@ private:
     uint browseId;
     MafwRegistryAdapter *mafwRegistry;
     MafwSourceAdapter *mafwSource;
-    MafwPlaylistAdapter* playlist;
+    CurrentPlaylistAdapter *playlist;
 };
 
 #endif // UPNPVIEW_H

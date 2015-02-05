@@ -16,7 +16,8 @@ class SinglePlaylistView : public BrowserWindow
 {
     Q_OBJECT
 
-    enum PendingActivation {
+    enum PendingActivation
+    {
         Nothing = -1,
         AddToNowPlaying = -2,
         AddToPlaylist = -3
@@ -43,18 +44,17 @@ private:
     void notifyOnAddedToNowPlaying(int songCount);
 
     QString currentObjectId;
-    PlaylistQueryManager *playlistQM;
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
-    MafwPlaylistAdapter* playlist;
+    CurrentPlaylistAdapter *playlist;
     uint browsePlaylistId;
     int remainingCount;
 
 private slots:
     void updateSongCount();
     void setItemMetadata(QStandardItem *item, QString objectId, GHashTable *metadata);
-    void onGetItems(QString objectId, GHashTable* metadata, guint index);
+    void onItemReceived(QString objectId, GHashTable* metadata, uint index);
     void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString);
     int appendAllToPlaylist(bool filter);
     void onItemActivated(QModelIndex index);

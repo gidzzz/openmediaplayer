@@ -5,23 +5,22 @@
 #define BATCH_SIZE 100
 #define ITEM_HEIGHT 70
 
-PlaylistQueryManager::PlaylistQueryManager(QObject *parent, MafwPlaylistAdapter *playlist, MafwPlaylist *mafwplaylist) :
-    QObject(parent)
+PlaylistQueryManager::PlaylistQueryManager(QObject *parent, MafwPlaylistAdapter *mafwPlaylist) :
+    QObject(parent),
+    mafwPlaylist(mafwPlaylist)
 {
-    this->playlist = playlist;
-    this->mafwplaylist = mafwplaylist;
     priority = 0;
     getItemsOp = NULL;
-    connect(playlist, SIGNAL(onGetItems(QString,GHashTable*,guint,gpointer)),
-            this, SLOT(onGetItems(QString,GHashTable*,guint,gpointer)));
-    connect(playlist, SIGNAL(getItemsComplete(gpointer)),
+    connect(mafwPlaylist, SIGNAL(gotItem(QString,GHashTable*,uint,gpointer)),
+            this, SLOT(onItemReceived(QString,GHashTable*,uint,gpointer)));
+    connect(mafwPlaylist, SIGNAL(getItemsComplete(gpointer)),
             this, SLOT(onRequestComplete(gpointer)));
 }
 
 PlaylistQueryManager::~PlaylistQueryManager()
 {
     if (getItemsOp)
-        mafw_playlist_cancel_get_items_md(getItemsOp);
+        mafwPlaylist->cancelQuery(getItemsOp);
 
     while (requests.size() > 0)
         delete requests.takeLast();
@@ -34,13 +33,10 @@ void PlaylistQueryManager::setPriority(int position)
 
 void PlaylistQueryManager::getItems(int first, int last)
 {
-    if (mafwplaylist == NULL) {
-        if (last < 0 || last >= playlist->getSize())
-        last = playlist->getSize()-1;
-    } else {
-        if (last < 0 || last >= playlist->getSizeOf(mafwplaylist))
-        last = playlist->getSizeOf(mafwplaylist)-1;
-    }
+    int playlistSize = mafwPlaylist->size();
+
+    if (last < 0 || last >= playlistSize)
+        last = playlistSize-1;
 
     if (last < first)
         return;
@@ -136,10 +132,7 @@ void PlaylistQueryManager::queryPlaylist()
         best[LAST] = first-1;
     }
 
-    if (mafwplaylist == NULL)
-        getItemsOp = playlist->getItems(first, last);
-    else
-        getItemsOp = playlist->getItemsOf(mafwplaylist, first, last);
+    getItemsOp = mafwPlaylist->getItems(first, last);
 
     qDebug() << first << "-" << last << getItemsOp;
 
@@ -150,11 +143,11 @@ void PlaylistQueryManager::queryPlaylist()
     requests.append(rangeInProgress);
 }
 
-void PlaylistQueryManager::onGetItems(QString objectId, GHashTable *metadata, guint index, gpointer op)
+void PlaylistQueryManager::onItemReceived(QString objectId, GHashTable *metadata, uint index, gpointer op)
 {
     if (op != getItemsOp) return;
 
-    emit onGetItems(objectId, metadata, index);
+    emit gotItem(objectId, metadata, index);
 }
 
 void PlaylistQueryManager::onRequestComplete(gpointer op)
@@ -243,7 +236,7 @@ void PlaylistQueryManager::restart()
 {
     qDebug() << "restarting query";
     if (getItemsOp) {
-        mafw_playlist_cancel_get_items_md(getItemsOp); // does it call the destructor?
+        mafwPlaylist->cancelQuery(getItemsOp);
         getItemsOp = NULL;
 
         int i = requests.indexOf(rangeInProgress);

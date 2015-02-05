@@ -129,7 +129,7 @@ void VideosWindow::onVideoSelected(QModelIndex index)
 
     videoAddBuffer[videoCount] = NULL;
 
-    playlist->appendItems((const gchar**)videoAddBuffer);
+    playlist->appendItems((const gchar**) videoAddBuffer);
 
     for (int i = 0; i < videoCount; i++)
         delete[] videoAddBuffer[i];

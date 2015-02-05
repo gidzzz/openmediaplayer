@@ -26,7 +26,7 @@ private:
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
-    MafwPlaylistAdapter* playlist;
+    CurrentPlaylistAdapter *playlist;
     uint browseGenreId;
     uint playlistToken;
     QString currentObjectId;

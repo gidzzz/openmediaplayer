@@ -63,6 +63,7 @@ SOURCES += \
     delegates/singlealbumviewdelegate.cpp \
     delegates/songlistitemdelegate.cpp \
     delegates/thumbnailitemdelegate.cpp \
+    mafw/currentplaylistadapter.cpp \
     mafw/mafwplaylistadapter.cpp \
     mafw/mafwplaylistmanageradapter.cpp \
     mafw/mafwregistryadapter.cpp \
@@ -133,6 +134,7 @@ HEADERS += \
     delegates/singlealbumviewdelegate.h \
     delegates/songlistitemdelegate.h \
     delegates/thumbnailitemdelegate.h \
+    mafw/currentplaylistadapter.h \
     mafw/mafwplaylistadapter.h \
     mafw/mafwplaylistmanageradapter.h \
     mafw/mafwregistryadapter.h \

@@ -56,7 +56,7 @@ void MafwRendererSignalHelper::play_playback_cb(MafwRenderer*,
     // better due to being shuffle-friendly.
     if (error && error->code == MAFW_RENDERER_ERROR_NO_MEDIA) {
         MafwRendererAdapter* mafwrenderer = static_cast<MafwRendererAdapter*>(user_data);
-        if (mafwrenderer->playlist->getSize()) {
+        if (mafwrenderer->playlist->size()) {
             if (play_retries < 5) {
                 qDebug() << "Trying to recover from MAFW_RENDERER_ERROR_NO_MEDIA";
                 ++play_retries;

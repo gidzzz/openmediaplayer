@@ -77,9 +77,10 @@ void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
 
     connect(ui->objectList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onItemDoubleClicked()));
 
-    int size = playlist->getSizeOf(mafwplaylist);
+    MafwPlaylistAdapter *mpa = new MafwPlaylistAdapter(mafwplaylist);
+    int size = mpa->size();
 
-    gchar** items = mafw_playlist_get_items(mafwplaylist, 0, size-1, NULL);
+    gchar** items = mpa->items(0, size-1);
     for (int i = 0; items[i] != NULL; i++) {
         QStandardItem *item = new QStandardItem();
         item->setData(QString::fromUtf8(items[i]), UserRoleObjectID);
@@ -89,8 +90,9 @@ void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
     }
     g_strfreev(items);
 
-    playlistQM = new PlaylistQueryManager(this, playlist, mafwplaylist);
-    connect(playlistQM, SIGNAL(onGetItems(QString, GHashTable*, guint)), this, SLOT(onGetItems(QString, GHashTable*, guint)));
+    PlaylistQueryManager *playlistQM = new PlaylistQueryManager(this, mpa);
+    mpa->setParent(playlistQM);
+    connect(playlistQM, SIGNAL(gotItem(QString,GHashTable*,uint)), this, SLOT(onItemReceived(QString,GHashTable*,uint)));
     connect(ui->objectList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
     playlistQM->getItems(0, size-1);
 
@@ -98,7 +100,7 @@ void SinglePlaylistView::browseSavedPlaylist(MafwPlaylist *mafwplaylist)
     updateSongCount();
 }
 
-void SinglePlaylistView::onGetItems(QString objectId, GHashTable* metadata, guint index)
+void SinglePlaylistView::onItemReceived(QString objectId, GHashTable* metadata, uint index)
 {
     remainingCount--;
 
@@ -237,7 +239,7 @@ void SinglePlaylistView::onItemActivated(QModelIndex index)
         return;
     }
 
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(index.row() == 0);
@@ -263,7 +265,7 @@ void SinglePlaylistView::addAllToNowPlaying()
         return;
     }
 
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     notifyOnAddedToNowPlaying(appendAllToPlaylist(true));
@@ -295,7 +297,7 @@ void SinglePlaylistView::addAllToPlaylist()
 
             songAddBuffer[--songCount] = NULL;
 
-            playlist->appendItems(picker.playlist, (const gchar**) songAddBuffer);
+            MafwPlaylistAdapter(picker.playlistName).appendItems((const gchar**) songAddBuffer);
 
             for (int i = 0; i < songCount; i++)
                 delete[] songAddBuffer[i];
@@ -321,7 +323,7 @@ int SinglePlaylistView::appendAllToPlaylist(bool filter)
 
     songAddBuffer[--visibleCount] = NULL;
 
-    playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**) songAddBuffer);
 
     for (int i = 0; i < visibleCount; i++)
         delete[] songAddBuffer[i];
@@ -365,7 +367,7 @@ void SinglePlaylistView::onContextMenuRequested(const QPoint &pos)
 
 void SinglePlaylistView::onAddToNowPlaying()
 {
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
@@ -383,7 +385,7 @@ void SinglePlaylistView::onAddToPlaylist()
             updateSongCount();
             playlistModified = true;
         } else {
-            playlist->appendItem(picker.playlist, ui->objectList->currentIndex().data(UserRoleObjectID).toString());
+            MafwPlaylistAdapter(picker.playlistName).appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         }
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
     }
@@ -473,8 +475,8 @@ void SinglePlaylistView::onItemDoubleClicked()
 
 void SinglePlaylistView::saveCurrentPlaylist()
 {
-    MafwPlaylist *targetPlaylist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(this->windowTitle()));
-    playlist->clear(targetPlaylist);
+    MafwPlaylistAdapter mpa(this->windowTitle());
+    mpa.clear();
 
     int songCount = objectModel->rowCount();
     gchar** songAddBuffer = new gchar*[songCount];
@@ -483,7 +485,7 @@ void SinglePlaylistView::saveCurrentPlaylist()
         songAddBuffer[i-1] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
     songAddBuffer[--songCount] = NULL;
 
-    playlist->appendItems(targetPlaylist, (const gchar**) songAddBuffer);
+    mpa.appendItems((const gchar**) songAddBuffer);
 
     for (int i = 0; i < songCount; i++)
         delete[] songAddBuffer[i];

@@ -68,7 +68,7 @@ private:
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
-    MafwPlaylistAdapter* playlist;
+    CurrentPlaylistAdapter *playlist;
     unsigned int browseAllSongsId;
     unsigned int browseAllArtistsId;
     unsigned int browseAllAlbumsId;

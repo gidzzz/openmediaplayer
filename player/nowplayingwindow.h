@@ -73,7 +73,7 @@ private:
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter* mafwrenderer;
     MafwSourceAdapter *mafwTrackerSource;
-    MafwPlaylistAdapter* playlist;
+    CurrentPlaylistAdapter *playlist;
     PlaylistQueryManager *playlistQM;
     int mafwState;
     GConfItem *lastPlayingSong;
@@ -131,12 +131,12 @@ private slots:
     void forgetClick();
     void onItemDoubleClicked();
     void onItemDropped(QListWidgetItem *item, int from);
-    void onItemMoved(guint from, guint to);
+    void onItemMoved(uint from, uint to);
     void onPropertyChanged(const QDBusMessage &msg);
     void onStateChanged(int state);
     void onPositionChanged(int, QString);
     void onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char*, QString);
-    void onGetPlaylistItems(QString object_id, GHashTable *metadata, guint index);
+    void onItemReceived(QString objectId, GHashTable *metadata, uint index);
     void setPosition(int newPosition);
     void onPlaylistItemActivated(QListWidgetItem*);
     void clearPlaylist();
@@ -144,7 +144,7 @@ private slots:
     void onMediaChanged(int index, char*);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
-    void updatePlaylist(guint from = -1, guint nremove = 0, guint nreplace = 0);
+    void updatePlaylist(uint from = -1, uint nremove = 0, uint nreplace = 0);
     void togglePlayback();
     void volumeWatcher();
     void onMetadataChanged(QString key, QVariant value);

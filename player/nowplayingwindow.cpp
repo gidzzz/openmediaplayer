@@ -47,8 +47,8 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
     ui(new Ui::NowPlayingWindow),
     mafwRegistry(mafwRegistry),
     mafwrenderer(mafwRegistry->renderer()),
-    playlist(mafwRegistry->playlist()),
-    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker))
+    mafwTrackerSource(mafwRegistry->source(MafwRegistryAdapter::Tracker)),
+    playlist(mafwRegistry->playlist())
 {
     ui->setupUi(this);
 
@@ -135,7 +135,7 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
     }
 
     playlistQM = new PlaylistQueryManager(this, playlist);
-    connect(playlistQM, SIGNAL(onGetItems(QString, GHashTable*, guint)), this, SLOT(onGetPlaylistItems(QString, GHashTable*, guint)));
+    connect(playlistQM, SIGNAL(gotItem(QString,GHashTable*,uint)), this, SLOT(onItemReceived(QString,GHashTable*,uint)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
 
     if (mafwrenderer->isRendererReady()) {
@@ -437,8 +437,8 @@ void NowPlayingWindow::connectSignals()
 
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "property_changed",
                                           this, SLOT(updatePlaylistState()));
-    connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(updatePlaylist(guint, guint, guint)));
-    connect(playlist, SIGNAL(itemMoved(guint, guint)), this, SLOT(onItemMoved(guint, guint)));
+    connect(playlist, SIGNAL(contentsChanged(uint,uint,uint)), this, SLOT(updatePlaylist(uint,uint,uint)));
+    connect(playlist, SIGNAL(itemMoved(uint,uint)), this, SLOT(onItemMoved(uint,uint)));
 
     // What's this? It's totally undocumented -- the only place where I have
     // found it mentioned is a header file for Harmattan. Moreover, I don't
@@ -525,7 +525,7 @@ void NowPlayingWindow::onItemDropped(QListWidgetItem *item, int from)
     playlist->moveItem(from, ui->songList->row(item));
 }
 
-void NowPlayingWindow::onItemMoved(guint from, guint to)
+void NowPlayingWindow::onItemMoved(uint from, uint to)
 {
     playlistQM->itemsRemoved(from, 1);
     playlistQM->itemsInserted(to, 1);
@@ -881,7 +881,7 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState stat
     }
 
     lastPlayingSong->set((int)index); // sometimes the value is wrong, noticable mainly while using the playlist editor
-    setSongNumber(index+1, playlist->getSize());
+    setSongNumber(index+1, playlist->size());
     selectItemByRow(index);
 }
 
@@ -977,7 +977,7 @@ void NowPlayingWindow::togglePlayback()
         mafwrenderer->play();
 }
 
-void NowPlayingWindow::onGetPlaylistItems(QString objectId, GHashTable *metadata, guint index)
+void NowPlayingWindow::onItemReceived(QString objectId, GHashTable *metadata, uint index)
 {
     QListWidgetItem *item = ui->songList->item(index);
 
@@ -1091,7 +1091,7 @@ void NowPlayingWindow::onAddToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        playlist->appendItem(picker.playlist, ui->songList->currentItem()->data(UserRoleObjectID).toString());
+        MafwPlaylistAdapter(picker.playlistName).appendItem(ui->songList->currentItem()->data(UserRoleObjectID).toString());
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
     }
 }
@@ -1176,7 +1176,7 @@ void NowPlayingWindow::onAddAllToPlaylist()
 
         songAddBuffer[songCount] = NULL;
 
-        playlist->appendItems(picker.playlist, (const gchar**) songAddBuffer);
+        MafwPlaylistAdapter(picker.playlistName).appendItems((const gchar**) songAddBuffer);
 
         for (int i = 0; i < songCount; i++)
             delete[] songAddBuffer[i];
@@ -1213,11 +1213,11 @@ void NowPlayingWindow::focusItemByRow(int row)
     }
 }
 
-void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
+void NowPlayingWindow::updatePlaylist(uint from, uint nremove, uint nreplace)
 {
     qDebug() << "Playlist contents changed: @" << from << "-" << nremove << "+" << nreplace;
 
-    if (playlist->playlistName() != "FmpAudioPlaylist") {
+    if (playlist->name() != "FmpAudioPlaylist") {
         qDebug() << "Playlist type rejected, update aborted";
         return;
     }
@@ -1230,7 +1230,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         if (qmlView) qmlView->clearPlaylist();
 
         from = 0;
-        nreplace = playlist->getSize();
+        nreplace = playlist->size();
     }
 
     if (nremove > 0) {
@@ -1247,7 +1247,7 @@ void NowPlayingWindow::updatePlaylist(guint from, guint nremove, guint nreplace)
         playlistQM->itemsRemoved(from, nremove);
     }
     else if (nreplace > 0) {
-        gchar** items = mafw_playlist_get_items(playlist->mafw_playlist, from, from+nreplace-1, NULL);
+        gchar** items = playlist->items(from, from+nreplace-1);
         for (int i = 0; items[i] != NULL; i++) {
             QListWidgetItem *item = new QListWidgetItem();
             item->setData(UserRoleSongDuration, Duration::Blank);

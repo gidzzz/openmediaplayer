@@ -27,7 +27,7 @@
 #include "sharedialog.h"
 
 #include "mafw/mafwregistryadapter.h"
-
+#include "mafw/mafwplaylistmanageradapter.h"
 
 namespace Ui {
     class VideoNowPlayingWindow;

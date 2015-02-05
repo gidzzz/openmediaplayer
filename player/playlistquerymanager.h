@@ -13,14 +13,14 @@ class PlaylistQueryManager : public QObject
     Q_OBJECT
 
 public:
-    explicit PlaylistQueryManager(QObject *parent, MafwPlaylistAdapter *playlist, MafwPlaylist *mafwplaylist = NULL);
+    PlaylistQueryManager(QObject *parent, MafwPlaylistAdapter *mafwPlaylist);
     ~PlaylistQueryManager();
     void getItems(int first, int last);
     void itemsInserted(int from, int amount);
     void itemsRemoved(int from, int amount);
 
 signals:
-    void onGetItems(QString objectId, GHashTable *metadata, guint index);
+    void gotItem(QString objectId, GHashTable *metadata, uint index);
 
 public slots:
     void setPriority(int position);
@@ -30,15 +30,14 @@ private:
     void queryPlaylist();
     void restart();
 
-    MafwPlaylistAdapter *playlist;
-    MafwPlaylist *mafwplaylist;
+    MafwPlaylistAdapter *mafwPlaylist;
     QList<int*> requests;
     gpointer getItemsOp;
     int priority;
     int* rangeInProgress;
 
 private slots:
-    void onGetItems(QString objectId, GHashTable *metadata, guint index, gpointer op);
+    void onItemReceived(QString objectId, GHashTable *metadata, uint index, gpointer op);
     void onRequestComplete(gpointer op);
 };
 

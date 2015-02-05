@@ -126,7 +126,7 @@ uint MafwSourceAdapter::browse(const QString &objectId, bool recursive, const ch
 
 bool MafwSourceAdapter::cancelBrowse(uint browseId)
 {
-    return mafw_source_cancel_browse(source, browseId, NULL);
+    return source && mafw_source_cancel_browse(source, browseId, NULL);
 }
 
 void MafwSourceAdapter::getMetadata(const QString &objectId, const char *const *metadataKeys)

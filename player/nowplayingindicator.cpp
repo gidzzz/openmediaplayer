@@ -77,8 +77,7 @@ void NowPlayingIndicator::connectSignals()
     connect(pokeTimer, SIGNAL(timeout()), this, SLOT(onPokeTimeout()));
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onTkLockChanged(bool)));
 
-    connect(playlist, SIGNAL(contentsChanged(guint, guint, guint)), this, SLOT(autoSetVisibility()));
-    connect(playlist, SIGNAL(playlistChanged()), this, SLOT(autoSetVisibility()));
+    connect(playlist, SIGNAL(contentsChanged(uint,uint,uint)), this, SLOT(autoSetVisibility()));
 
     connect(mafwrenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     connect(mafwrenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
@@ -149,10 +148,10 @@ void NowPlayingIndicator::contextMenuEvent(QContextMenuEvent *e)
 
 void NowPlayingIndicator::onAudioPlaylistSelected()
 {
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
-    if (playlist->getSize())
+    if (playlist->size())
         openWindow();
 }
 
@@ -164,7 +163,7 @@ void NowPlayingIndicator::mouseReleaseEvent(QMouseEvent *e)
 
 void NowPlayingIndicator::openWindow()
 {
-    QString playlistName = playlist->playlistName();
+    QString playlistName = playlist->name();
     qDebug() << "Current playlist is" << playlistName;
 
     if (window == 0) {
@@ -253,7 +252,7 @@ void NowPlayingIndicator::autoSetVisibility()
 {
     if (inhibited) return;
 
-    if (ready && playlist->getSize())
+    if (ready && playlist->size())
         this->show();
     else
         this->hide();
@@ -293,7 +292,7 @@ void NowPlayingIndicator::onPokeTimeout()
 
 void NowPlayingIndicator::togglePlayback()
 {
-    if (playlist->playlistName() == "FmpVideoPlaylist") return;
+    if (playlist->name() == "FmpVideoPlaylist") return;
 
     if (mafwState == Playing)
         mafwrenderer->pause();

@@ -102,7 +102,7 @@ void MusicWindow::onSongSelected(QModelIndex index)
 {
     this->setEnabled(false);
 
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(false);
@@ -122,7 +122,7 @@ void MusicWindow::onSongSelected(QModelIndex index)
 
     songAddBuffer[visibleCount] = NULL;
 
-    playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**) songAddBuffer);
 
     for (int i = 0; i < visibleCount; i++)
         delete[] songAddBuffer[i];
@@ -289,7 +289,7 @@ void MusicWindow::onRenamePlaylistAccepted()
         mafwPlaylistManager->freeListOfPlaylists(playlists);
 
         renamePlaylistDialog->close();
-        mafw_playlist_set_name(MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(oldName)), newName.toUtf8());
+        MafwPlaylistAdapter(oldName).setName(newName);
         listSavedPlaylists();
     }
 }
@@ -705,11 +705,12 @@ void MusicWindow::listSavedPlaylists()
             MafwPlaylistManagerItem plItem = g_array_index(playlists, MafwPlaylistManagerItem, i);
 
             QString playlistName = QString::fromUtf8(plItem.name);
-            int playlistSize = playlist->getSizeOf(MAFW_PLAYLIST (mafwPlaylistManager->getPlaylist(plItem.id)));
+            int playlistSize = MafwPlaylistAdapter(MAFW_PLAYLIST(mafwPlaylistManager->getPlaylist(plItem.id))).size();
 
             if (playlistName != "FmpAudioPlaylist"
-            && playlistName != "FmpVideoPlaylist"
-            && playlistName != "FmpRadioPlaylist") {
+            &&  playlistName != "FmpVideoPlaylist"
+            &&  playlistName != "FmpRadioPlaylist")
+            {
                 item = new QStandardItem();
                 item->setText(playlistName);
                 item->setData(playlistSize, UserRoleSongCount);
@@ -1042,7 +1043,7 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
 
 void MusicWindow::onAddToNowPlaying()
 {
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
 
     // Song list, add the selected song
@@ -1089,14 +1090,11 @@ void MusicWindow::onAddToNowPlaying()
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
             QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
-            MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(index.data(Qt::DisplayRole).toString()));
-            int size = playlist->getSizeOf(mafwplaylist);
-            gchar** items = mafw_playlist_get_items(mafwplaylist, 0, size-1, NULL);
-            playlist->appendItems((const gchar**)items);
-            g_strfreev(items);
+            MafwPlaylistAdapter mpa(index.data(Qt::DisplayRole).toString());
+            playlist->appendItems(&mpa);
 
             setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
-            notifyOnAddedToNowPlaying(size);
+            notifyOnAddedToNowPlaying(mpa.size());
         }
 
         // Imported playlist
@@ -1113,7 +1111,7 @@ void MusicWindow::onAddToPlaylist()
     PlaylistPicker picker(this);
     picker.exec();
     if (picker.result() == QDialog::Accepted) {
-        playlist->appendItem(picker.playlist, ui->songList->currentIndex().data(UserRoleObjectID).toString());
+        MafwPlaylistAdapter(picker.playlistName).appendItem(ui->songList->currentIndex().data(UserRoleObjectID).toString());
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
     }
 }

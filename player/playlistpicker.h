@@ -27,7 +27,7 @@ class PlaylistPicker : public QDialog
 public:
     explicit PlaylistPicker(QWidget *parent = 0);
     ~PlaylistPicker();
-    MafwPlaylist *playlist;
+
     QString playlistName;
 
 private:

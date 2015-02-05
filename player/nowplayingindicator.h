@@ -67,7 +67,7 @@ private:
 
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter *mafwrenderer;
-    MafwPlaylistAdapter *playlist;
+    CurrentPlaylistAdapter *playlist;
     int mafwState;
     Maemo5DeviceEvents *deviceEvents;
 

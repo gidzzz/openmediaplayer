@@ -79,7 +79,7 @@ void InternetRadioWindow::onStationSelected(QModelIndex index)
             songAddBuffer[sameTypeCount++] = qstrdup(objectModel->item(i)->data(UserRoleObjectID).toString().toUtf8());
     songAddBuffer[sameTypeCount] = NULL;
 
-    playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**) songAddBuffer);
 
     for (int i = 0; i < sameTypeCount; i++)
         delete[] songAddBuffer[i];

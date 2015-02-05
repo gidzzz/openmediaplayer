@@ -211,8 +211,8 @@ void MainWindow::open_mp_main_view()
 void MainWindow::open_mp_now_playing()
 {
     // maybe this check could be moved to NowPlayingWindow?
-    if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && !playlist->isPlaylistNull()) {
-        if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (mafwrenderer->isRendererReady() && mafwTrackerSource->isReady() && playlist->isReady()) {
+        if (playlist->name() != "FmpAudioPlaylist")
             playlist->assignAudioPlaylist();
         createNowPlayingWindow();
     } else {
@@ -224,7 +224,7 @@ void MainWindow::open_mp_radio_playing()
 {
     closeChildren();
 
-    if (playlist->playlistName() != "FmpRadioPlaylist")
+    if (playlist->name() != "FmpRadioPlaylist")
         playlist->assignRadioPlaylist();
 
     RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwRegistry);
@@ -285,7 +285,7 @@ void MainWindow::openDirectory(const QString &uri, const QString &objectIdToPlay
     songAddBuffer[songAddBufferPos] = NULL;
 
     if (type == Media::Audio) {
-        if (playlist->playlistName() != "FmpAudioPlaylist")
+        if (playlist->name() != "FmpAudioPlaylist")
             playlist->assignAudioPlaylist();
         if (!QSettings().value("main/appendSongs").toBool())
             playlist->clear();
@@ -294,7 +294,7 @@ void MainWindow::openDirectory(const QString &uri, const QString &objectIdToPlay
         playlist->clear();
     }
 
-    playlist->appendItems((const gchar**)songAddBuffer);
+    playlist->appendItems((const gchar**) songAddBuffer);
 
     if (type == Media::Audio) {
         if (!QSettings().value("main/appendSongs").toBool()) {
@@ -377,7 +377,7 @@ void MainWindow::mime_open(const QString &uriString)
                 else {
                     convertObjectId(objectId, TAGSOURCE_AUDIO_PATH);
 
-                    if (playlist->playlistName() != "FmpAudioPlaylist")
+                    if (playlist->name() != "FmpAudioPlaylist")
                         playlist->assignAudioPlaylist();
                     if (!QSettings().value("main/appendSongs").toBool())
                         playlist->clear();
@@ -453,7 +453,7 @@ void MainWindow::play_automatic_playlist(const QString &playlistName, bool shuff
 
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 
-    if (playlist->playlistName() != "FmpAudioPlaylist")
+    if (playlist->name() != "FmpAudioPlaylist")
         playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(shuffle);
@@ -475,15 +475,13 @@ void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
                 setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
                 QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
-                if (playlist->playlistName() != "FmpAudioPlaylist")
+                if (playlist->name() != "FmpAudioPlaylist")
                     playlist->assignAudioPlaylist();
                 playlist->clear();
                 playlist->setShuffled(shuffle);
 
-                MafwPlaylist *mafwplaylist = MAFW_PLAYLIST(mafwPlaylistManager->createPlaylist(playlistName));
-                gchar** items = mafw_playlist_get_items(mafwplaylist, 0, playlist->getSizeOf(mafwplaylist)-1, NULL);
-                playlist->appendItems((const gchar**)items);
-                g_strfreev(items);
+                MafwPlaylistAdapter mpa(playlistName);
+                playlist->appendItems(&mpa);
 
                 mafwrenderer->play();
                 createNowPlayingWindow();
@@ -685,7 +683,7 @@ void MainWindow::onAddFinished(uint token)
 {
     if (token != playlistToken) return;
 
-    if (playlist->playlistName() == "FmpAudioPlaylist") {
+    if (playlist->name() == "FmpAudioPlaylist") {
         mafwrenderer->play();
         createNowPlayingWindow();
     } else {

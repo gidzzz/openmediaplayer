@@ -2,79 +2,77 @@
 #define MAFWPLAYLISTADAPTER_H
 
 #include <QObject>
-#include <QString>
-#include <QTimer>
-#include <QDebug>
+
 #include <libmafw/mafw-playlist.h>
-#include "mafwrendereradapter.h"
-#include "mafwplaylistmanageradapter.h"
 
 class MafwPlaylistAdapter : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit MafwPlaylistAdapter(QObject *parent = 0, MafwRendererAdapter* mra = 0);
-    void clear();
-    void clear(MafwPlaylist *playlist);
+    MafwPlaylistAdapter(MafwPlaylist *playlist, QObject *parent = NULL);
+    MafwPlaylistAdapter(const QString &name, QObject *parent = NULL);
+    ~MafwPlaylistAdapter();
+
+public:
+    QString name();
+    void setName(const QString &name);
+
     bool isRepeat();
-    bool isShuffled();
-    bool isPlaylistNull();
     void setRepeat(bool repeat);
+
+    bool isShuffled();
     void setShuffled(bool shuffled);
-    void insertUri(QString uri, guint index);
-    void insertItem(QString objectId, guint index);
-    void appendUri(QString url);
-    void appendItem(QString objectId);
-    void appendItem(MafwPlaylist *playlist, QString objectId);
-    void appendItems(const gchar** oid);
-    void appendItems(MafwPlaylist *playlist, const gchar** oid);
-    void moveItem(int from, int to);
-    void removeItem(int index);
-    void duplicatePlaylist(QString newName);
-    int getSize();
-    int getSizeOf(MafwPlaylist *playlist);
-    gpointer getItemsOf(MafwPlaylist *playlist);
-    gpointer getItemsOf(MafwPlaylist *playlist, int from, int to);
-    gpointer getItems(int from, int to);
-    gpointer getAllItems();
-    QString playlistName();
-    MafwPlaylist *mafw_playlist;
 
-    static void get_items_cb(MafwPlaylist*, guint index, const char *object_id, GHashTable *metadata, gpointer);
-    static void get_items_free_cbarg(gpointer user_data);
-    static void onContentsChanged(MafwPlaylist*, guint from, guint nremove, guint nreplace, gpointer user_data);
-    static void onItemMoved(MafwPlaylist*, guint from, guint to, gpointer user_data);
+    uint size();
+    char* item(uint index);
+    char** items(uint first, uint last);
 
+    bool insertItem(uint index, const QString &objectId);
+    bool insertItems(uint index, const char **objectIds);
+    bool appendItem(const QString &objectId);
+    bool appendItems(const char **objectIds);
+    bool appendItems(MafwPlaylistAdapter *source);
+    bool moveItem(uint from, uint to);
+    bool removeItem(uint index);
+    void clear();
+
+    gpointer getItems(uint first, uint last);
+    void cancelQuery(gpointer op);
 
 signals:
-    void onGetItems(QString object_id, GHashTable *metadata, guint index, gpointer op);
-    void getItemsComplete(gpointer op);
-    void playlistChanged();
-    void contentsChanged(guint from, guint nremove, guint nreplace);
-    void itemMoved(guint from, guint to);
+    // Exposed signals
+    void contentsChanged(uint from, uint removed, uint replaced);
+    void itemMoved(uint from, uint to);
 
-public slots:
-    void assignAudioPlaylist();
-    void assignVideoPlaylist();
-    void assignRadioPlaylist();
+    // Exposed callbacks
+    void gotItem(QString objectId, GHashTable *metadata, uint index, gpointer op);
+    void getItemsComplete(gpointer op);
+
+protected:
+    MafwPlaylist *playlist;
+
+    void bind(MafwPlaylist *playlist);
 
 private:
-    void connectPlaylistSignals();
-    void disconnectPlaylistSignals();
-    gulong contents_changed_handler;
-    gulong item_moved_handler;
-    MafwRendererAdapter *mafwrenderer;
-    GError *error;
+    QList<gpointer> ownedOps;
 
-private slots:
-    void onGetStatus(MafwPlaylist* playlist, uint, MafwPlayState, const char*, QString);
-    void onPlaylistChanged(GObject* playlist);
-};
+    // All operations for which a notification should be issued upon completion
+    static QList<gpointer> activeOps;
 
-struct get_items_cb_payload
-{
-    MafwPlaylistAdapter* adapter;
-    gpointer op;
+    // Signal handlers
+    static void onContentsChanged(MafwPlaylist *, guint from, guint removed, guint replaced, gpointer self);
+    static void onItemMoved(MafwPlaylist *, guint from, guint to, gpointer self);
+
+    // Callbacks
+    static void onItemReceived(MafwPlaylist *, guint index, const gchar *objectId, GHashTable *metadata, gpointer data);
+    static void onGetItemsComplete(gpointer data);
+
+    struct GetItemsData
+    {
+        MafwPlaylistAdapter *adapter;
+        gpointer op;
+    };
 };
 
 #endif // MAFWPLAYLISTADAPTER_H
