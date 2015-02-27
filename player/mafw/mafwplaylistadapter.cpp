@@ -17,11 +17,7 @@ MafwPlaylistAdapter::MafwPlaylistAdapter(const QString &name, QObject *parent) :
     QObject(parent),
     playlist(NULL)
 {
-    bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(name)));
-
-    // Correction for the reference count increased by bind()
-    if (playlist)
-        g_object_unref(playlist);
+    bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(name)), false);
 }
 
 MafwPlaylistAdapter::~MafwPlaylistAdapter()
@@ -156,7 +152,7 @@ void MafwPlaylistAdapter::cancelQuery(gpointer op)
     }
 }
 
-void MafwPlaylistAdapter::bind(MafwPlaylist *playlist)
+void MafwPlaylistAdapter::bind(MafwPlaylist *playlist, bool ref)
 {
     // Check if there is anything to do
     if (playlist == this->playlist)
@@ -167,7 +163,8 @@ void MafwPlaylistAdapter::bind(MafwPlaylist *playlist)
         bind(NULL);
 
         // Bind
-        g_object_ref(playlist);
+        if (ref)
+            g_object_ref(playlist);
         g_signal_connect(playlist, "contents-changed", G_CALLBACK(&onContentsChanged), static_cast<void*>(this));
         g_signal_connect(playlist, "item-moved"      , G_CALLBACK(&onItemMoved)      , static_cast<void*>(this));
 

@@ -1,6 +1,8 @@
 #ifndef CURRENTPLAYLISTADAPTER_H
 #define CURRENTPLAYLISTADAPTER_H
 
+#include "mafw/mafwplaylistadapter.h"
+
 #include "mafw/mafwrendereradapter.h"
 
 class CurrentPlaylistAdapter : public MafwPlaylistAdapter

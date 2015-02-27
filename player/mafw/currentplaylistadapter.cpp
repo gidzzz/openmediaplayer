@@ -20,19 +20,19 @@ bool CurrentPlaylistAdapter::isReady()
 
 void CurrentPlaylistAdapter::assignAudioPlaylist()
 {
-    bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpAudioPlaylist")));
+    this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpAudioPlaylist")), false);
     renderer->assignPlaylist(this->playlist);
 }
 
 void CurrentPlaylistAdapter::assignRadioPlaylist()
 {
-    bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpRadioPlaylist")));
+    this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpRadioPlaylist")), false);
     renderer->assignPlaylist(this->playlist);
 }
 
 void CurrentPlaylistAdapter::assignVideoPlaylist()
 {
-    bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpVideoPlaylist")));
+    this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpVideoPlaylist")), false);
     renderer->assignPlaylist(this->playlist);
 }
 
@@ -42,7 +42,7 @@ void CurrentPlaylistAdapter::onStatusReceived(MafwPlaylist *playlist, uint, Mafw
                this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
 
     if (playlist) {
-        bind(playlist);
+        this->bind(playlist);
     } else {
         assignAudioPlaylist();
     }
@@ -50,7 +50,7 @@ void CurrentPlaylistAdapter::onStatusReceived(MafwPlaylist *playlist, uint, Mafw
 
 void CurrentPlaylistAdapter::onPlaylistChanged(GObject *playlist)
 {
-    bind(MAFW_PLAYLIST(playlist));
+    this->bind(MAFW_PLAYLIST(playlist));
 
     emit contentsChanged(-1, 0, 0);
 }

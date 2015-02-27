@@ -52,7 +52,7 @@ signals:
 protected:
     MafwPlaylist *playlist;
 
-    void bind(MafwPlaylist *playlist);
+    void bind(MafwPlaylist *playlist, bool ref = true);
 
 private:
     QList<gpointer> ownedOps;
