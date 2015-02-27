@@ -229,9 +229,7 @@ void UpnpView::onItemActivated(QModelIndex index)
 
 void UpnpView::onAddOneToNowPlaying()
 {
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
-
+    playlist->assignAudioPlaylist();
     playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 
     notifyOnAddedToNowPlaying(1);
@@ -249,8 +247,7 @@ void UpnpView::onAddOneToPlaylist()
 
 void UpnpView::addAllToNowPlaying()
 {
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
+    playlist->assignAudioPlaylist();
 
     notifyOnAddedToNowPlaying(appendAllToPlaylist(AudioMime, true));
 }

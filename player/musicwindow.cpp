@@ -102,8 +102,7 @@ void MusicWindow::onSongSelected(QModelIndex index)
 {
     this->setEnabled(false);
 
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
+    playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(false);
 
@@ -1043,8 +1042,7 @@ void MusicWindow::keyReleaseEvent(QKeyEvent *e)
 
 void MusicWindow::onAddToNowPlaying()
 {
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
+    playlist->assignAudioPlaylist();
 
     // Song list, add the selected song
     if (currentList() == ui->songList) {

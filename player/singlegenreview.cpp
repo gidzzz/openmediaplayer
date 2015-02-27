@@ -43,9 +43,7 @@ void SingleGenreView::onItemActivated(QModelIndex index)
     if (index.row() == 0) {
         this->setEnabled(false);
 
-        if (playlist->name() != "FmpAudioPlaylist")
-            playlist->assignAudioPlaylist();
-
+        playlist->assignAudioPlaylist();
         playlist->clear();
         playlist->setShuffled(true);
         shuffleRequested = true;

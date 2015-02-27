@@ -148,8 +148,7 @@ void NowPlayingIndicator::contextMenuEvent(QContextMenuEvent *e)
 
 void NowPlayingIndicator::onAudioPlaylistSelected()
 {
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
+    playlist->assignAudioPlaylist();
 
     if (playlist->size())
         openWindow();

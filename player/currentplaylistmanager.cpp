@@ -105,11 +105,9 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
 
         // Assign the proper playlist
         if (mime.startsWith("audio")) {
-            if (playlist->name() != "FmpAudioPlaylist")
-                playlist->assignAudioPlaylist();
+            playlist->assignAudioPlaylist();
         } else {
-            if (playlist->name() != "FmpVideoPlaylist")
-                playlist->assignVideoPlaylist();
+            playlist->assignVideoPlaylist();
         }
 
         // Also clear the playlist if ordered to do so

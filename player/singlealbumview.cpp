@@ -126,8 +126,7 @@ void SingleAlbumView::onItemActivated(QModelIndex index)
 
     this->setEnabled(false);
 
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
+    playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(index.row() == 0);
 
@@ -171,8 +170,7 @@ int SingleAlbumView::appendAllToPlaylist(bool filter)
 
 void SingleAlbumView::addAllToNowPlaying()
 {
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
+    playlist->assignAudioPlaylist();
 
     notifyOnAddedToNowPlaying(appendAllToPlaylist(true));
 }
@@ -193,9 +191,7 @@ void SingleAlbumView::onContextMenuRequested(const QPoint &pos)
 
 void SingleAlbumView::onAddToNowPlaying()
 {
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
-
+    playlist->assignAudioPlaylist();
     playlist->appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
 
     notifyOnAddedToNowPlaying(1);

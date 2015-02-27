@@ -212,8 +212,7 @@ void MainWindow::open_mp_now_playing()
 {
     // maybe this check could be moved to NowPlayingWindow?
     if (mafwRenderer->isRendererReady() && mafwTrackerSource->isReady() && playlist->isReady()) {
-        if (playlist->name() != "FmpAudioPlaylist")
-            playlist->assignAudioPlaylist();
+        playlist->assignAudioPlaylist();
         createNowPlayingWindow();
     } else {
         QTimer::singleShot(1000, this, SLOT(open_mp_now_playing()));
@@ -224,8 +223,7 @@ void MainWindow::open_mp_radio_playing()
 {
     closeChildren();
 
-    if (playlist->name() != "FmpRadioPlaylist")
-        playlist->assignRadioPlaylist();
+    playlist->assignRadioPlaylist();
 
     RadioNowPlayingWindow *window = new RadioNowPlayingWindow(this, mafwRegistry);
     connect(window, SIGNAL(destroyed()), this, SLOT(onChildClosed()));
@@ -285,8 +283,7 @@ void MainWindow::openDirectory(const QString &uri, const QString &objectIdToPlay
     songAddBuffer[songAddBufferPos] = NULL;
 
     if (type == Media::Audio) {
-        if (playlist->name() != "FmpAudioPlaylist")
-            playlist->assignAudioPlaylist();
+        playlist->assignAudioPlaylist();
         if (!QSettings().value("main/appendSongs").toBool())
             playlist->clear();
     } else { // type == Media::Video
@@ -377,8 +374,7 @@ void MainWindow::mime_open(const QString &uriString)
                 else {
                     convertObjectId(objectId, TAGSOURCE_AUDIO_PATH);
 
-                    if (playlist->name() != "FmpAudioPlaylist")
-                        playlist->assignAudioPlaylist();
+                    playlist->assignAudioPlaylist();
                     if (!QSettings().value("main/appendSongs").toBool())
                         playlist->clear();
                     playlist->appendItem(objectId);
@@ -453,8 +449,7 @@ void MainWindow::play_automatic_playlist(const QString &playlistName, bool shuff
 
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
+    playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(shuffle);
 
@@ -475,8 +470,7 @@ void MainWindow::play_saved_playlist(const QString &playlistName, bool shuffle)
                 setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
                 QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
-                if (playlist->name() != "FmpAudioPlaylist")
-                    playlist->assignAudioPlaylist();
+                playlist->assignAudioPlaylist();
                 playlist->clear();
                 playlist->setShuffled(shuffle);
 

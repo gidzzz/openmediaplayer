@@ -20,19 +20,22 @@ bool CurrentPlaylistAdapter::isReady()
 
 void CurrentPlaylistAdapter::assignAudioPlaylist()
 {
-    this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpAudioPlaylist")), false);
+    if (this->name() != "FmpAudioPlaylist")
+        this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpAudioPlaylist")), false);
     renderer->assignPlaylist(this->playlist);
 }
 
 void CurrentPlaylistAdapter::assignRadioPlaylist()
 {
-    this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpRadioPlaylist")), false);
+    if (this->name() != "FmpRadioPlaylist")
+        this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpRadioPlaylist")), false);
     renderer->assignPlaylist(this->playlist);
 }
 
 void CurrentPlaylistAdapter::assignVideoPlaylist()
 {
-    this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpVideoPlaylist")), false);
+    if (this->name() != "FmpVideoPlaylist")
+        this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpVideoPlaylist")), false);
     renderer->assignPlaylist(this->playlist);
 }
 

@@ -184,9 +184,7 @@ void SingleArtistView::onArtistAddFinished(uint token, int count)
 
 void SingleArtistView::shuffleAllSongs()
 {
-    if (playlist->name() != "FmpAudioPlaylist")
-        playlist->assignAudioPlaylist();
-
+    playlist->assignAudioPlaylist();
     playlist->clear();
     playlist->setShuffled(true);
 
