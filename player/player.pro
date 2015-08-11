@@ -186,6 +186,7 @@ TRANSLATIONS = \
     lang/openmediaplayer.de.ts \
     lang/openmediaplayer.en.ts \
     lang/openmediaplayer.es.ts \
+    lang/openmediaplayer.es_AR.ts \
     lang/openmediaplayer.fi.ts \
     lang/openmediaplayer.fr.ts \
     lang/openmediaplayer.hu.ts \
