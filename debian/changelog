@@ -1,3 +1,12 @@
+openmediaplayer (20150812-1) unstable; urgency=low
+
+  * Fixed an occasional crash when opening a file from an external application.
+  * Fixed some memory leaks.
+  * Various code cleanups.
+  * New translation: Spanish (Argentina) by hobarrera and jmo707.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Wed, 12 Aug 2015 00:32:20 +0200
+
 openmediaplayer (20150131-1) unstable; urgency=low
 
   * New shortcut: Ctrl+F to focus the search box and select its contents.
