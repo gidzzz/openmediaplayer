@@ -83,27 +83,27 @@ p, li { white-space: pre-wrap; }
         <translation>Відео</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="13"/>
+        <location filename="../bookmarkdialog.cpp" line="12"/>
         <source>Add radio bookmark</source>
         <translation>Додати закладку</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="13"/>
+        <location filename="../bookmarkdialog.cpp" line="12"/>
         <source>Edit radio bookmark</source>
         <translation>Редагувати закладку</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="34"/>
+        <location filename="../bookmarkdialog.cpp" line="31"/>
         <source>Unable to add empty bookmark</source>
         <translation>Посилання не може бути пустим</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="54"/>
+        <location filename="../bookmarkdialog.cpp" line="46"/>
         <source>Media bookmark saved</source>
         <translation>Посилання збережене</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="59"/>
+        <location filename="../bookmarkdialog.cpp" line="49"/>
         <source>Invalid URL</source>
         <translation>Недійсний URL</translation>
     </message>
@@ -253,47 +253,47 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>InternetRadioWindow</name>
     <message>
-        <location filename="../internetradiowindow.cpp" line="30"/>
+        <location filename="../internetradiowindow.cpp" line="28"/>
         <source>Internet radio stations</source>
         <translation>Мережеві радіостанції</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="36"/>
+        <location filename="../internetradiowindow.cpp" line="34"/>
         <source>Add radio bookmark</source>
         <translation>Додати посилання на радіо</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="37"/>
+        <location filename="../internetradiowindow.cpp" line="35"/>
         <source>FM transmitter</source>
         <translation>FM-передавач</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="123"/>
+        <location filename="../internetradiowindow.cpp" line="111"/>
         <source>Edit</source>
         <translation>Змінити</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="124"/>
+        <location filename="../internetradiowindow.cpp" line="112"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="199"/>
+        <location filename="../internetradiowindow.cpp" line="178"/>
         <source>(unknown station)</source>
         <translation>(невідома станція)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="205"/>
+        <location filename="../internetradiowindow.cpp" line="184"/>
         <source>(unknown)</source>
         <translation>(невідомо)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="235"/>
+        <location filename="../internetradiowindow.cpp" line="214"/>
         <source>Audio bookmarks</source>
         <translation>Аудіо закладки</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="258"/>
+        <location filename="../internetradiowindow.cpp" line="237"/>
         <source>Video bookmarks</source>
         <translation>Відео закладки</translation>
     </message>
@@ -365,7 +365,7 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="721"/>
+        <location filename="../mainwindow.cpp" line="644"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n запис</numerusform>
@@ -374,7 +374,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="728"/>
+        <location filename="../mainwindow.cpp" line="651"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n відеозапис</numerusform>
@@ -383,7 +383,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="744"/>
+        <location filename="../mainwindow.cpp" line="667"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n станція</numerusform>
@@ -416,32 +416,32 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Перемішати усі записи</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="720"/>
+        <location filename="../mainwindow.cpp" line="643"/>
         <source>(no songs)</source>
         <translation>(немає записів)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="727"/>
+        <location filename="../mainwindow.cpp" line="650"/>
         <source>(no videos)</source>
         <translation>(немає відео)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="743"/>
+        <location filename="../mainwindow.cpp" line="666"/>
         <source>(no stations)</source>
         <translation>(немає станцій)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="799"/>
+        <location filename="../mainwindow.cpp" line="714"/>
         <source>Retrieving information on the new media files</source>
         <translation>Отримання інформації про новий вміст</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="801"/>
+        <location filename="../mainwindow.cpp" line="716"/>
         <source>Estimated time remaining:</source>
         <translation>Орієнтовний час до завершення:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="803"/>
+        <location filename="../mainwindow.cpp" line="718"/>
         <source>Remaining items:</source>
         <translation>Залишилось:</translation>
     </message>
@@ -480,70 +480,70 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>MusicWindow</name>
     <message>
-        <location filename="../musicwindow.cpp" line="227"/>
+        <location filename="../musicwindow.cpp" line="217"/>
         <source>Add to now playing</source>
         <translation>Додати до списку відтворення</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="233"/>
+        <location filename="../musicwindow.cpp" line="223"/>
         <source>Add to a playlist</source>
         <translation>Додати до списку</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="249"/>
-        <location filename="../musicwindow.cpp" line="264"/>
+        <location filename="../musicwindow.cpp" line="239"/>
+        <location filename="../musicwindow.cpp" line="254"/>
         <source>Rename playlist</source>
         <translation>Змінити назву списку</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="250"/>
-        <location filename="../musicwindow.cpp" line="253"/>
+        <location filename="../musicwindow.cpp" line="240"/>
+        <location filename="../musicwindow.cpp" line="243"/>
         <source>Delete playlist</source>
         <translation>Видалити список</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="235"/>
+        <location filename="../musicwindow.cpp" line="225"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="238"/>
+        <location filename="../musicwindow.cpp" line="228"/>
         <source>Set as ringing tone</source>
         <translation>Зробити сигналом дзвінка</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="239"/>
+        <location filename="../musicwindow.cpp" line="229"/>
         <source>Share</source>
         <translation>Поділитись</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="270"/>
+        <location filename="../musicwindow.cpp" line="260"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="460"/>
+        <location filename="../musicwindow.cpp" line="442"/>
         <source>Albums</source>
         <translation>Збірки</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="475"/>
+        <location filename="../musicwindow.cpp" line="457"/>
         <source>Songs</source>
         <translation>Записи</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="723"/>
+        <location filename="../musicwindow.cpp" line="698"/>
         <source>Saved</source>
         <translation>Збережено</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="741"/>
-        <location filename="../musicwindow.cpp" line="771"/>
-        <location filename="../musicwindow.cpp" line="777"/>
+        <location filename="../musicwindow.cpp" line="717"/>
+        <location filename="../musicwindow.cpp" line="747"/>
+        <location filename="../musicwindow.cpp" line="753"/>
+        <location filename="../musicwindow.cpp" line="759"/>
+        <location filename="../musicwindow.cpp" line="765"/>
         <location filename="../musicwindow.cpp" line="783"/>
-        <location filename="../musicwindow.cpp" line="789"/>
-        <location filename="../musicwindow.cpp" line="807"/>
-        <location filename="../musicwindow.cpp" line="1008"/>
+        <location filename="../musicwindow.cpp" line="978"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n запис</numerusform>
@@ -552,67 +552,67 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="796"/>
+        <location filename="../musicwindow.cpp" line="772"/>
         <source>Imported playlists</source>
         <translation>Імпортовані списки</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="676"/>
+        <location filename="../musicwindow.cpp" line="651"/>
         <source>Automatic playlists</source>
         <translation>Автоматичні списки</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="682"/>
+        <location filename="../musicwindow.cpp" line="657"/>
         <source>Recently added</source>
         <translation>Нещодавно додані</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="682"/>
+        <location filename="../musicwindow.cpp" line="657"/>
         <source>Recently played</source>
         <translation>Нещодавно прослухані</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="682"/>
+        <location filename="../musicwindow.cpp" line="657"/>
         <source>Most played</source>
         <translation>Найпопулярніші</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="682"/>
+        <location filename="../musicwindow.cpp" line="657"/>
         <source>Never played</source>
         <translation>Не прослухані</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="833"/>
+        <location filename="../musicwindow.cpp" line="809"/>
         <source>(unknown song)</source>
         <translation>(невідомий запис)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="836"/>
-        <location filename="../musicwindow.cpp" line="879"/>
-        <location filename="../musicwindow.cpp" line="897"/>
-        <location filename="../musicwindow.cpp" line="936"/>
+        <location filename="../musicwindow.cpp" line="812"/>
+        <location filename="../musicwindow.cpp" line="853"/>
+        <location filename="../musicwindow.cpp" line="871"/>
+        <location filename="../musicwindow.cpp" line="908"/>
         <source>(unknown artist)</source>
         <translation>(невідомий виконавець)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="839"/>
-        <location filename="../musicwindow.cpp" line="933"/>
+        <location filename="../musicwindow.cpp" line="815"/>
+        <location filename="../musicwindow.cpp" line="905"/>
         <source>(unknown album)</source>
         <translation>(невідома збірка)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="951"/>
+        <location filename="../musicwindow.cpp" line="923"/>
         <source>Various artists</source>
         <translation>Різні виконавці</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="988"/>
-        <location filename="../musicwindow.cpp" line="999"/>
+        <location filename="../musicwindow.cpp" line="958"/>
+        <location filename="../musicwindow.cpp" line="969"/>
         <source>(unknown genre)</source>
         <translation>(невідомий жанр)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1009"/>
+        <location filename="../musicwindow.cpp" line="979"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n збірка</numerusform>
@@ -621,7 +621,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1010"/>
+        <location filename="../musicwindow.cpp" line="980"/>
         <source>%n artist(s)</source>
         <translation>
             <numerusform>%n виконавець</numerusform>
@@ -630,7 +630,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1161"/>
+        <location filename="../musicwindow.cpp" line="1113"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n запис додано до списку</numerusform>
@@ -639,7 +639,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1195"/>
+        <location filename="../musicwindow.cpp" line="1143"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n запис додано до списку відтворення</numerusform>
@@ -654,34 +654,34 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="175"/>
-        <location filename="../musicwindow.cpp" line="431"/>
+        <location filename="../musicwindow.cpp" line="413"/>
         <source>All albums</source>
         <translation>Усі збірки</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="180"/>
-        <location filename="../musicwindow.cpp" line="426"/>
-        <location filename="../musicwindow.cpp" line="465"/>
+        <location filename="../musicwindow.cpp" line="408"/>
+        <location filename="../musicwindow.cpp" line="447"/>
         <source>Artists</source>
         <translation>Виконавці</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="185"/>
-        <location filename="../musicwindow.cpp" line="441"/>
-        <location filename="../musicwindow.cpp" line="470"/>
+        <location filename="../musicwindow.cpp" line="423"/>
+        <location filename="../musicwindow.cpp" line="452"/>
         <source>Genres</source>
         <translation>Жанри</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="190"/>
-        <location filename="../musicwindow.cpp" line="446"/>
-        <location filename="../musicwindow.cpp" line="480"/>
+        <location filename="../musicwindow.cpp" line="428"/>
+        <location filename="../musicwindow.cpp" line="462"/>
         <source>Playlists</source>
         <translation>Списки</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="195"/>
-        <location filename="../musicwindow.cpp" line="436"/>
+        <location filename="../musicwindow.cpp" line="418"/>
         <source>All songs</source>
         <translation>Усі записи</translation>
     </message>
@@ -689,7 +689,7 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>NowPlayingIndicator</name>
     <message>
-        <location filename="../nowplayingindicator.cpp" line="156"/>
+        <location filename="../nowplayingindicator.cpp" line="145"/>
         <source>Music</source>
         <translation>Музика</translation>
     </message>
@@ -697,7 +697,7 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>NowPlayingWindow</name>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="269"/>
+        <location filename="../nowplayingwindow.cpp" line="257"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n запис</numerusform>
@@ -706,48 +706,48 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="274"/>
+        <location filename="../nowplayingwindow.cpp" line="262"/>
         <source>total</source>
         <translation>усього</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1068"/>
+        <location filename="../nowplayingwindow.cpp" line="1017"/>
         <source>Information not available</source>
         <translation>Інформація недоступна</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1135"/>
+        <location filename="../nowplayingwindow.cpp" line="1083"/>
         <source>Set as ringing tone</source>
         <translation>Зробити сигналом дзвінка</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1131"/>
+        <location filename="../nowplayingwindow.cpp" line="1079"/>
         <source>Delete from now playing</source>
         <translation>Видалити зі списку відтворення</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1136"/>
+        <location filename="../nowplayingwindow.cpp" line="1084"/>
         <source>Share</source>
         <translation>Поділитись</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="868"/>
+        <location filename="../nowplayingwindow.cpp" line="821"/>
         <source>Stop playback</source>
         <translation>Зупинити відтворення</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1133"/>
+        <location filename="../nowplayingwindow.cpp" line="1081"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1134"/>
+        <location filename="../nowplayingwindow.cpp" line="1082"/>
         <source>Add to a playlist</source>
         <translation>Додати до списку</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1150"/>
-        <location filename="../nowplayingwindow.cpp" line="1246"/>
+        <location filename="../nowplayingwindow.cpp" line="1095"/>
+        <location filename="../nowplayingwindow.cpp" line="1185"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n запис додано до списку</numerusform>
@@ -756,37 +756,37 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1185"/>
+        <location filename="../nowplayingwindow.cpp" line="1127"/>
         <source>Entertainment View</source>
         <translation>Режим розваг</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1190"/>
+        <location filename="../nowplayingwindow.cpp" line="1132"/>
         <source>Car View</source>
         <translation>Автомобільний режим</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1343"/>
+        <location filename="../nowplayingwindow.cpp" line="1279"/>
         <source>Select album art</source>
         <translation>Виберіть обкладинку</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1344"/>
+        <location filename="../nowplayingwindow.cpp" line="1280"/>
         <source>Reset album art</source>
         <translation>Повернути обкладинку</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1395"/>
+        <location filename="../nowplayingwindow.cpp" line="1329"/>
         <source>Edit lyrics</source>
         <translation>Редагувати текст</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1396"/>
+        <location filename="../nowplayingwindow.cpp" line="1330"/>
         <source>Search for lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1397"/>
+        <location filename="../nowplayingwindow.cpp" line="1331"/>
         <source>Reload lyrics</source>
         <translation>Перезавантажити текст</translation>
     </message>
@@ -801,20 +801,20 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>--/-- записів</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="571"/>
-        <location filename="../nowplayingwindow.cpp" line="1048"/>
+        <location filename="../nowplayingwindow.cpp" line="543"/>
+        <location filename="../nowplayingwindow.cpp" line="997"/>
         <source>(unknown song)</source>
         <translation>(невідомий запис)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="583"/>
-        <location filename="../nowplayingwindow.cpp" line="1051"/>
+        <location filename="../nowplayingwindow.cpp" line="555"/>
+        <location filename="../nowplayingwindow.cpp" line="1000"/>
         <source>(unknown artist)</source>
         <translation>(невідомий виконавець)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="595"/>
-        <location filename="../nowplayingwindow.cpp" line="1054"/>
+        <location filename="../nowplayingwindow.cpp" line="567"/>
+        <location filename="../nowplayingwindow.cpp" line="1003"/>
         <source>(unknown album)</source>
         <translation>(невідома збірка)</translation>
     </message>
@@ -891,12 +891,12 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="9"/>
-        <location filename="../playlistpicker.cpp" line="51"/>
+        <location filename="../playlistpicker.cpp" line="49"/>
         <source>New playlist</source>
         <translation>Новий список</translation>
     </message>
     <message>
-        <location filename="../playlistpicker.cpp" line="58"/>
+        <location filename="../playlistpicker.cpp" line="56"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
@@ -925,7 +925,7 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Список відтворення</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="317"/>
+        <location filename="../radionowplayingwindow.cpp" line="298"/>
         <source>(unknown station)</source>
         <translation>(невідома станція)</translation>
     </message>
@@ -945,22 +945,22 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Додати закладку</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="357"/>
+        <location filename="../radionowplayingwindow.cpp" line="338"/>
         <source>(unknown artist)</source>
         <translation>(невідомий виконавець)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="357"/>
+        <location filename="../radionowplayingwindow.cpp" line="338"/>
         <source>(unknown song)</source>
         <translation>(невідомий запис)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="387"/>
+        <location filename="../radionowplayingwindow.cpp" line="368"/>
         <source>Buffering</source>
         <translation>Буферизація</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="530"/>
+        <location filename="../radionowplayingwindow.cpp" line="503"/>
         <source>Stop playback</source>
         <translation>Зупинити відтворення</translation>
     </message>
@@ -1246,42 +1246,42 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.cpp" line="90"/>
+        <location filename="../singlealbumview.cpp" line="85"/>
         <source>(unknown song)</source>
         <translation>(невідомий запис)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="93"/>
+        <location filename="../singlealbumview.cpp" line="88"/>
         <source>(unknown artist)</source>
         <translation>(невідомий виконавець)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="96"/>
+        <location filename="../singlealbumview.cpp" line="91"/>
         <source>(unknown album)</source>
         <translation>(невідома збірка)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="202"/>
+        <location filename="../singlealbumview.cpp" line="184"/>
         <source>Add to now playing</source>
         <translation>Додати до списку відтворення</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="203"/>
+        <location filename="../singlealbumview.cpp" line="185"/>
         <source>Add to a playlist</source>
         <translation>Додати до списку</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="205"/>
+        <location filename="../singlealbumview.cpp" line="187"/>
         <source>Set as ringing tone</source>
         <translation>Зробити сигналом дзвінка</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="206"/>
+        <location filename="../singlealbumview.cpp" line="188"/>
         <source>Share</source>
         <translation>Поділитись</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="234"/>
+        <location filename="../singlealbumview.cpp" line="206"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n запис додано до списку</numerusform>
@@ -1290,7 +1290,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="288"/>
+        <location filename="../singlealbumview.cpp" line="252"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n запис додано до списку відтворення</numerusform>
@@ -1299,13 +1299,13 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="35"/>
+        <location filename="../singlealbumview.cpp" line="33"/>
         <source>Add songs to now playing</source>
         <translation>Додати до списку відтворення</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="36"/>
-        <location filename="../singlealbumview.cpp" line="204"/>
+        <location filename="../singlealbumview.cpp" line="34"/>
+        <location filename="../singlealbumview.cpp" line="186"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
@@ -1313,13 +1313,13 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SingleArtistView</name>
     <message>
-        <location filename="../singleartistview.cpp" line="103"/>
+        <location filename="../singleartistview.cpp" line="96"/>
         <source>(unknown album)</source>
         <translation>(невідома збірка)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="118"/>
-        <location filename="../singleartistview.cpp" line="161"/>
+        <location filename="../singleartistview.cpp" line="111"/>
+        <location filename="../singleartistview.cpp" line="149"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n запис</numerusform>
@@ -1328,12 +1328,12 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="221"/>
+        <location filename="../singleartistview.cpp" line="201"/>
         <source>Add to now playing</source>
         <translation>Додати до списку відтворення</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="281"/>
+        <location filename="../singleartistview.cpp" line="250"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n запис додано до списку відтворення</numerusform>
@@ -1342,18 +1342,18 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="76"/>
+        <location filename="../singleartistview.cpp" line="69"/>
         <source>Shuffle songs</source>
         <translation>Перемішати записи</translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="40"/>
+        <location filename="../singleartistview.cpp" line="38"/>
         <source>Add songs to now playing</source>
         <translation>Додати до списку відтворення</translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="41"/>
-        <location filename="../singleartistview.cpp" line="222"/>
+        <location filename="../singleartistview.cpp" line="39"/>
+        <location filename="../singleartistview.cpp" line="202"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
@@ -1361,13 +1361,13 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.cpp" line="132"/>
-        <location filename="../singlegenreview.cpp" line="150"/>
+        <location filename="../singlegenreview.cpp" line="125"/>
+        <location filename="../singlegenreview.cpp" line="143"/>
         <source>(unknown artist)</source>
         <translation>(невідомий виконавець)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlegenreview.cpp" line="253"/>
+        <location filename="../singlegenreview.cpp" line="234"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n запис додано до списку відтворення</numerusform>
@@ -1376,8 +1376,8 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singlegenreview.cpp" line="33"/>
-        <location filename="../singlegenreview.cpp" line="186"/>
+        <location filename="../singlegenreview.cpp" line="31"/>
+        <location filename="../singlegenreview.cpp" line="176"/>
         <source>Add to now playing</source>
         <translation>Додати до списку відтворення</translation>
     </message>
@@ -1385,27 +1385,27 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.cpp" line="135"/>
+        <location filename="../singleplaylistview.cpp" line="129"/>
         <source>(unknown song)</source>
         <translation>(невідомий запис)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="138"/>
+        <location filename="../singleplaylistview.cpp" line="132"/>
         <source>(unknown artist)</source>
         <translation>(невідомий виконавець)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="141"/>
+        <location filename="../singleplaylistview.cpp" line="135"/>
         <source>(unknown album)</source>
         <translation>(невідома збірка)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="154"/>
+        <location filename="../singleplaylistview.cpp" line="148"/>
         <source>Information not available</source>
         <translation>Інформація недоступна</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="359"/>
+        <location filename="../singleplaylistview.cpp" line="335"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n запис додано до списку відтворення</numerusform>
@@ -1414,34 +1414,34 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="60"/>
-        <location filename="../singleplaylistview.cpp" line="383"/>
+        <location filename="../singleplaylistview.cpp" line="54"/>
+        <location filename="../singleplaylistview.cpp" line="358"/>
         <source>Add to a playlist</source>
         <translation>Додати до списку</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="386"/>
+        <location filename="../singleplaylistview.cpp" line="361"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="384"/>
+        <location filename="../singleplaylistview.cpp" line="359"/>
         <source>Set as ringing tone</source>
         <translation>Зробити сигналом дзвінка</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="387"/>
+        <location filename="../singleplaylistview.cpp" line="362"/>
         <source>Share</source>
         <translation>Поділитись</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="385"/>
+        <location filename="../singleplaylistview.cpp" line="360"/>
         <source>Delete from playlist</source>
         <translation>Видалити зі списку</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="325"/>
-        <location filename="../singleplaylistview.cpp" line="421"/>
+        <location filename="../singleplaylistview.cpp" line="305"/>
+        <location filename="../singleplaylistview.cpp" line="386"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n запис додано до списку</numerusform>
@@ -1450,13 +1450,13 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="59"/>
-        <location filename="../singleplaylistview.cpp" line="382"/>
+        <location filename="../singleplaylistview.cpp" line="53"/>
+        <location filename="../singleplaylistview.cpp" line="357"/>
         <source>Add to now playing</source>
         <translation>Додати до списку відтворення</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="61"/>
+        <location filename="../singleplaylistview.cpp" line="55"/>
         <source>Delete playlist</source>
         <translation>Видалити список</translation>
     </message>
@@ -1528,22 +1528,22 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.cpp" line="62"/>
+        <location filename="../upnpview.cpp" line="60"/>
         <source>(unknown song)</source>
         <translation>(невідомий запис)</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="143"/>
+        <location filename="../upnpview.cpp" line="139"/>
         <source>Add to now playing</source>
         <translation>Додати до списку відтворення</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="144"/>
+        <location filename="../upnpview.cpp" line="140"/>
         <source>Add to a playlist</source>
         <translation>Додати до списку</translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="251"/>
+        <location filename="../upnpview.cpp" line="244"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n запис додано до списку</numerusform>
@@ -1552,7 +1552,7 @@ Unplug USB to continue using FM transmitter.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="294"/>
+        <location filename="../upnpview.cpp" line="284"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n запис додано до списку відтворення</numerusform>
@@ -1584,148 +1584,147 @@ Unplug USB to continue using FM transmitter.</source>
         <translation>Неперервно</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="885"/>
+        <location filename="../videonowplayingwindow.cpp" line="849"/>
         <source>Buffering</source>
         <translation>Буферизація</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="919"/>
-        <location filename="../videonowplayingwindow.cpp" line="997"/>
+        <location filename="../videonowplayingwindow.cpp" line="879"/>
         <source>Unable to play media</source>
         <translation>Неможливо відтворити вміст</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="923"/>
+        <location filename="../videonowplayingwindow.cpp" line="883"/>
         <source>Media not found</source>
         <translation>Вміст не знайдено</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="925"/>
+        <location filename="../videonowplayingwindow.cpp" line="885"/>
         <source>URI not available</source>
         <translation>URI недоступний</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="927"/>
+        <location filename="../videonowplayingwindow.cpp" line="887"/>
         <source>Invalid URI</source>
         <translation>Некоректний URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="929"/>
+        <location filename="../videonowplayingwindow.cpp" line="889"/>
         <source>Unable to open media</source>
         <translation>Неможливо відкрити вміст</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="931"/>
+        <location filename="../videonowplayingwindow.cpp" line="891"/>
         <source>Playback stream no longer available</source>
         <translation>Потік став недоступним</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="933"/>
+        <location filename="../videonowplayingwindow.cpp" line="893"/>
         <source>Could not determine MIME-type</source>
         <translation>Не вдалось визначити MIME-тип</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="935"/>
+        <location filename="../videonowplayingwindow.cpp" line="895"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Виникла помилка, неможливо продовжувати відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="937"/>
+        <location filename="../videonowplayingwindow.cpp" line="897"/>
         <source>General error occured</source>
         <translation>Виникла помилка</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="939"/>
+        <location filename="../videonowplayingwindow.cpp" line="899"/>
         <source>Unsupported media</source>
         <translation>Непідтримуваний тип даних</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="941"/>
+        <location filename="../videonowplayingwindow.cpp" line="901"/>
         <source>Unsupported resolution</source>
         <translation>Непідтримуваний розмір кадру</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="943"/>
+        <location filename="../videonowplayingwindow.cpp" line="903"/>
         <source>Unsupported framerate</source>
         <translation>Непідтримувана частота кадрів</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="945"/>
+        <location filename="../videonowplayingwindow.cpp" line="905"/>
         <source>Media is protected by DRM</source>
         <translation>Вміст захищений DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="947"/>
+        <location filename="../videonowplayingwindow.cpp" line="907"/>
         <source>System sound device is unavailable</source>
         <translation>Вивід звуку недоступний</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="949"/>
+        <location filename="../videonowplayingwindow.cpp" line="909"/>
         <source>Media corrupted</source>
         <translation>Пошкоджений вміст</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="951"/>
+        <location filename="../videonowplayingwindow.cpp" line="911"/>
         <source>Error while parsing playlist</source>
         <translation>Помилка розбору списку</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="952"/>
+        <location filename="../videonowplayingwindow.cpp" line="912"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Список може бути пошкодженим чи пустим</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="955"/>
+        <location filename="../videonowplayingwindow.cpp" line="915"/>
         <source>Codec not found:</source>
         <translation>Кодек не знайдено:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="959"/>
+        <location filename="../videonowplayingwindow.cpp" line="919"/>
         <source>Video codec not found:</source>
         <translation>Відеокодек не знайдено:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="963"/>
+        <location filename="../videonowplayingwindow.cpp" line="923"/>
         <source>Audio codec not found:</source>
         <translation>Аудіокодек не знайдено:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="967"/>
+        <location filename="../videonowplayingwindow.cpp" line="927"/>
         <source>No playlist assigned</source>
         <translation>Не визначено жодного списку</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="969"/>
+        <location filename="../videonowplayingwindow.cpp" line="929"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Індекс не синхронізований з елементами списку</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="971"/>
+        <location filename="../videonowplayingwindow.cpp" line="931"/>
         <source>Unable to start playback</source>
         <translation>Не вдалось почати відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="973"/>
+        <location filename="../videonowplayingwindow.cpp" line="933"/>
         <source>Unable to stop playback</source>
         <translation>Не вдалось зупинити відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="975"/>
+        <location filename="../videonowplayingwindow.cpp" line="935"/>
         <source>Unable to pause playback</source>
         <translation>Не вдалось призупинити відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="977"/>
+        <location filename="../videonowplayingwindow.cpp" line="937"/>
         <source>Unable to seek position in media</source>
         <translation>Не вдалось здійснити пошук позиції у вмісті</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="979"/>
+        <location filename="../videonowplayingwindow.cpp" line="939"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Не вдалось отримати поточну позицію відтворення</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="981"/>
+        <location filename="../videonowplayingwindow.cpp" line="941"/>
         <source>Unable to get current playback status</source>
         <translation>Не вдалось отримати поточний статус відтворення</translation>
     </message>
@@ -1733,47 +1732,47 @@ Unplug USB to continue using FM transmitter.</source>
 <context>
     <name>VideosWindow</name>
     <message>
-        <location filename="../videoswindow.cpp" line="40"/>
+        <location filename="../videoswindow.cpp" line="38"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="42"/>
+        <location filename="../videoswindow.cpp" line="40"/>
         <source>Category</source>
         <translation>Категорія</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="77"/>
+        <location filename="../videoswindow.cpp" line="73"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="78"/>
+        <location filename="../videoswindow.cpp" line="74"/>
         <source>Share</source>
         <translation>Поділитись</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="155"/>
+        <location filename="../videoswindow.cpp" line="145"/>
         <source>Videos - latest</source>
         <translation>Відео - найновіші</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="169"/>
+        <location filename="../videoswindow.cpp" line="159"/>
         <source>Videos - categories</source>
         <translation>Відео - категорії</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="246"/>
+        <location filename="../videoswindow.cpp" line="233"/>
         <source>(unknown clip)</source>
         <translation>(невідоме відео)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="311"/>
+        <location filename="../videoswindow.cpp" line="298"/>
         <source>Recorded by device camera</source>
         <translation>Зняті пристроєм</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="330"/>
+        <location filename="../videoswindow.cpp" line="317"/>
         <source>Films</source>
         <translation>Фільми</translation>
     </message>

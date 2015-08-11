@@ -85,27 +85,27 @@ p, li { white-space: pre-wrap; }
         <translation>Video</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="13"/>
+        <location filename="../bookmarkdialog.cpp" line="12"/>
         <source>Add radio bookmark</source>
         <translation>Dodaj zaznamek radia</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="13"/>
+        <location filename="../bookmarkdialog.cpp" line="12"/>
         <source>Edit radio bookmark</source>
         <translation>Uredi zaznamek radia</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="34"/>
+        <location filename="../bookmarkdialog.cpp" line="31"/>
         <source>Unable to add empty bookmark</source>
         <translation>Ne morem dodati praznega zaznamka</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="54"/>
+        <location filename="../bookmarkdialog.cpp" line="46"/>
         <source>Media bookmark saved</source>
         <translation>Zaznamek datoteke shranjen</translation>
     </message>
     <message>
-        <location filename="../bookmarkdialog.cpp" line="59"/>
+        <location filename="../bookmarkdialog.cpp" line="49"/>
         <source>Invalid URL</source>
         <translation>Neveljaven URL</translation>
     </message>
@@ -257,47 +257,47 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>InternetRadioWindow</name>
     <message>
-        <location filename="../internetradiowindow.cpp" line="30"/>
+        <location filename="../internetradiowindow.cpp" line="28"/>
         <source>Internet radio stations</source>
         <translation>Internetne radijske postaje</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="36"/>
+        <location filename="../internetradiowindow.cpp" line="34"/>
         <source>Add radio bookmark</source>
         <translation>Dodaj zaznamek radia</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="37"/>
+        <location filename="../internetradiowindow.cpp" line="35"/>
         <source>FM transmitter</source>
         <translation>FM oddajnik</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="123"/>
+        <location filename="../internetradiowindow.cpp" line="111"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="124"/>
+        <location filename="../internetradiowindow.cpp" line="112"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="199"/>
+        <location filename="../internetradiowindow.cpp" line="178"/>
         <source>(unknown station)</source>
         <translation>(neznana postaja)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="205"/>
+        <location filename="../internetradiowindow.cpp" line="184"/>
         <source>(unknown)</source>
         <translation>(neznano)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="235"/>
+        <location filename="../internetradiowindow.cpp" line="214"/>
         <source>Audio bookmarks</source>
         <translation>Zvočni zaznamki</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="258"/>
+        <location filename="../internetradiowindow.cpp" line="237"/>
         <source>Video bookmarks</source>
         <translation>Video zaznamki</translation>
     </message>
@@ -369,7 +369,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="721"/>
+        <location filename="../mainwindow.cpp" line="644"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -379,7 +379,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="728"/>
+        <location filename="../mainwindow.cpp" line="651"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n datoteka</numerusform>
@@ -389,7 +389,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="744"/>
+        <location filename="../mainwindow.cpp" line="667"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n postaja</numerusform>
@@ -423,32 +423,32 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         <translation>Premešaj vse skladbe</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="720"/>
+        <location filename="../mainwindow.cpp" line="643"/>
         <source>(no songs)</source>
         <translation>(ni skladb)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="727"/>
+        <location filename="../mainwindow.cpp" line="650"/>
         <source>(no videos)</source>
         <translation>(ni videov)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="743"/>
+        <location filename="../mainwindow.cpp" line="666"/>
         <source>(no stations)</source>
         <translation>(ni postaj)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="799"/>
+        <location filename="../mainwindow.cpp" line="714"/>
         <source>Retrieving information on the new media files</source>
         <translation>Pridobivam informacije o novih datotekah</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="801"/>
+        <location filename="../mainwindow.cpp" line="716"/>
         <source>Estimated time remaining:</source>
         <translation>Predvideni preostali čas:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="803"/>
+        <location filename="../mainwindow.cpp" line="718"/>
         <source>Remaining items:</source>
         <translation>Preostale datoteke:</translation>
     </message>
@@ -487,70 +487,70 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>MusicWindow</name>
     <message>
-        <location filename="../musicwindow.cpp" line="226"/>
+        <location filename="../musicwindow.cpp" line="217"/>
         <source>Add to now playing</source>
         <translation>Dodaj na trenutni seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="232"/>
+        <location filename="../musicwindow.cpp" line="223"/>
         <source>Add to a playlist</source>
         <translation>Dodaj na seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="248"/>
-        <location filename="../musicwindow.cpp" line="263"/>
+        <location filename="../musicwindow.cpp" line="239"/>
+        <location filename="../musicwindow.cpp" line="254"/>
         <source>Rename playlist</source>
         <translation>Preimenuj seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="249"/>
-        <location filename="../musicwindow.cpp" line="252"/>
+        <location filename="../musicwindow.cpp" line="240"/>
+        <location filename="../musicwindow.cpp" line="243"/>
         <source>Delete playlist</source>
         <translation>Izbriši seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="234"/>
+        <location filename="../musicwindow.cpp" line="225"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="237"/>
+        <location filename="../musicwindow.cpp" line="228"/>
         <source>Set as ringing tone</source>
         <translation>Nastavi kot ton zvonenja</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="238"/>
+        <location filename="../musicwindow.cpp" line="229"/>
         <source>Share</source>
         <translation>Deli</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="269"/>
+        <location filename="../musicwindow.cpp" line="260"/>
         <source>Save</source>
         <translation>Shrani</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="450"/>
+        <location filename="../musicwindow.cpp" line="442"/>
         <source>Albums</source>
         <translation>Albumi</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="465"/>
+        <location filename="../musicwindow.cpp" line="457"/>
         <source>Songs</source>
         <translation>Skladbe</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="713"/>
+        <location filename="../musicwindow.cpp" line="698"/>
         <source>Saved</source>
         <translation>Shranjeno</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="731"/>
-        <location filename="../musicwindow.cpp" line="761"/>
-        <location filename="../musicwindow.cpp" line="767"/>
-        <location filename="../musicwindow.cpp" line="773"/>
-        <location filename="../musicwindow.cpp" line="779"/>
-        <location filename="../musicwindow.cpp" line="797"/>
-        <location filename="../musicwindow.cpp" line="998"/>
+        <location filename="../musicwindow.cpp" line="717"/>
+        <location filename="../musicwindow.cpp" line="747"/>
+        <location filename="../musicwindow.cpp" line="753"/>
+        <location filename="../musicwindow.cpp" line="759"/>
+        <location filename="../musicwindow.cpp" line="765"/>
+        <location filename="../musicwindow.cpp" line="783"/>
+        <location filename="../musicwindow.cpp" line="978"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -560,67 +560,67 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="786"/>
+        <location filename="../musicwindow.cpp" line="772"/>
         <source>Imported playlists</source>
         <translation>Uvoženi seznami predvajanj</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="666"/>
+        <location filename="../musicwindow.cpp" line="651"/>
         <source>Automatic playlists</source>
         <translation>Samodejni seznami predvajanj</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="672"/>
+        <location filename="../musicwindow.cpp" line="657"/>
         <source>Recently added</source>
         <translation>Nedavno dodano</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="672"/>
+        <location filename="../musicwindow.cpp" line="657"/>
         <source>Recently played</source>
         <translation>Nedavno predvajano</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="672"/>
+        <location filename="../musicwindow.cpp" line="657"/>
         <source>Most played</source>
         <translation>Največ predvajano</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="672"/>
+        <location filename="../musicwindow.cpp" line="657"/>
         <source>Never played</source>
         <translation>Nikoli predvajano</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="823"/>
+        <location filename="../musicwindow.cpp" line="809"/>
         <source>(unknown song)</source>
         <translation>(neznana pesem)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="826"/>
-        <location filename="../musicwindow.cpp" line="869"/>
-        <location filename="../musicwindow.cpp" line="887"/>
-        <location filename="../musicwindow.cpp" line="926"/>
+        <location filename="../musicwindow.cpp" line="812"/>
+        <location filename="../musicwindow.cpp" line="853"/>
+        <location filename="../musicwindow.cpp" line="871"/>
+        <location filename="../musicwindow.cpp" line="908"/>
         <source>(unknown artist)</source>
         <translation>(neznan izvajalec)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="829"/>
-        <location filename="../musicwindow.cpp" line="923"/>
+        <location filename="../musicwindow.cpp" line="815"/>
+        <location filename="../musicwindow.cpp" line="905"/>
         <source>(unknown album)</source>
         <translation>(neznan album)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="941"/>
+        <location filename="../musicwindow.cpp" line="923"/>
         <source>Various artists</source>
         <translation>Različni izvajalci</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="978"/>
-        <location filename="../musicwindow.cpp" line="989"/>
+        <location filename="../musicwindow.cpp" line="958"/>
+        <location filename="../musicwindow.cpp" line="969"/>
         <source>(unknown genre)</source>
         <translation>(neznana zvrst)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="999"/>
+        <location filename="../musicwindow.cpp" line="979"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n album</numerusform>
@@ -630,7 +630,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1000"/>
+        <location filename="../musicwindow.cpp" line="980"/>
         <source>%n artist(s)</source>
         <translation>
             <numerusform>%n izvajalec</numerusform>
@@ -640,7 +640,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1146"/>
+        <location filename="../musicwindow.cpp" line="1113"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n datoteka dodana na seznam predvajanja</numerusform>
@@ -650,7 +650,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1180"/>
+        <location filename="../musicwindow.cpp" line="1143"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n datoteka dodana na trenutni seznam predvajanja</numerusform>
@@ -666,34 +666,34 @@ Za delovanje FM oddajnika odklopite USB.</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="175"/>
-        <location filename="../musicwindow.cpp" line="421"/>
+        <location filename="../musicwindow.cpp" line="413"/>
         <source>All albums</source>
         <translation>Vsi albumi</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="180"/>
-        <location filename="../musicwindow.cpp" line="416"/>
-        <location filename="../musicwindow.cpp" line="455"/>
+        <location filename="../musicwindow.cpp" line="408"/>
+        <location filename="../musicwindow.cpp" line="447"/>
         <source>Artists</source>
         <translation>Izvajalci</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="185"/>
-        <location filename="../musicwindow.cpp" line="431"/>
-        <location filename="../musicwindow.cpp" line="460"/>
+        <location filename="../musicwindow.cpp" line="423"/>
+        <location filename="../musicwindow.cpp" line="452"/>
         <source>Genres</source>
         <translation>Zvrsti</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="190"/>
-        <location filename="../musicwindow.cpp" line="436"/>
-        <location filename="../musicwindow.cpp" line="470"/>
+        <location filename="../musicwindow.cpp" line="428"/>
+        <location filename="../musicwindow.cpp" line="462"/>
         <source>Playlists</source>
         <translation>Seznami predvajanja</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="195"/>
-        <location filename="../musicwindow.cpp" line="426"/>
+        <location filename="../musicwindow.cpp" line="418"/>
         <source>All songs</source>
         <translation>Vse skladbe</translation>
     </message>
@@ -701,7 +701,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>NowPlayingIndicator</name>
     <message>
-        <location filename="../nowplayingindicator.cpp" line="156"/>
+        <location filename="../nowplayingindicator.cpp" line="145"/>
         <source>Music</source>
         <translation>Glasba</translation>
     </message>
@@ -709,7 +709,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="269"/>
+        <location filename="../nowplayingwindow.cpp" line="257"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -719,48 +719,48 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="274"/>
+        <location filename="../nowplayingwindow.cpp" line="262"/>
         <source>total</source>
         <translation>skupno</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1068"/>
+        <location filename="../nowplayingwindow.cpp" line="1017"/>
         <source>Information not available</source>
         <translation>Informacije niso na voljo</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1135"/>
+        <location filename="../nowplayingwindow.cpp" line="1083"/>
         <source>Set as ringing tone</source>
         <translation>Nastavi kot ton zvonenja</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1131"/>
+        <location filename="../nowplayingwindow.cpp" line="1079"/>
         <source>Delete from now playing</source>
         <translation>Izbriši s trenutnega seznama predvajanja</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1136"/>
+        <location filename="../nowplayingwindow.cpp" line="1084"/>
         <source>Share</source>
         <translation>Deli</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="868"/>
+        <location filename="../nowplayingwindow.cpp" line="821"/>
         <source>Stop playback</source>
         <translation>Ustavi predvajanje</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1133"/>
+        <location filename="../nowplayingwindow.cpp" line="1081"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1134"/>
+        <location filename="../nowplayingwindow.cpp" line="1082"/>
         <source>Add to a playlist</source>
         <translation>Dodaj na seznam predvajanja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1150"/>
-        <location filename="../nowplayingwindow.cpp" line="1246"/>
+        <location filename="../nowplayingwindow.cpp" line="1095"/>
+        <location filename="../nowplayingwindow.cpp" line="1185"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n datoteka dodana na seznam predvajanja</numerusform>
@@ -770,37 +770,37 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1185"/>
+        <location filename="../nowplayingwindow.cpp" line="1127"/>
         <source>Entertainment View</source>
         <translation>Razvedrilni pogled</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1190"/>
+        <location filename="../nowplayingwindow.cpp" line="1132"/>
         <source>Car View</source>
         <translation>Avtomobilski način</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1343"/>
+        <location filename="../nowplayingwindow.cpp" line="1279"/>
         <source>Select album art</source>
         <translation>Izberi naslovnico albuma</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1344"/>
+        <location filename="../nowplayingwindow.cpp" line="1280"/>
         <source>Reset album art</source>
         <translation>Ponastavi naslovnice albumov</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1395"/>
+        <location filename="../nowplayingwindow.cpp" line="1329"/>
         <source>Edit lyrics</source>
         <translation>Uredi besedilo</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1396"/>
+        <location filename="../nowplayingwindow.cpp" line="1330"/>
         <source>Search for lyrics</source>
         <translation>Iskanje besedila</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1397"/>
+        <location filename="../nowplayingwindow.cpp" line="1331"/>
         <source>Reload lyrics</source>
         <translation>Ponovno preberi besedilo</translation>
     </message>
@@ -815,20 +815,20 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         <translation>--/-- skladb</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="571"/>
-        <location filename="../nowplayingwindow.cpp" line="1048"/>
+        <location filename="../nowplayingwindow.cpp" line="543"/>
+        <location filename="../nowplayingwindow.cpp" line="997"/>
         <source>(unknown song)</source>
         <translation>(neznana pesem)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="583"/>
-        <location filename="../nowplayingwindow.cpp" line="1051"/>
+        <location filename="../nowplayingwindow.cpp" line="555"/>
+        <location filename="../nowplayingwindow.cpp" line="1000"/>
         <source>(unknown artist)</source>
         <translation>(neznan izvajalec)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="595"/>
-        <location filename="../nowplayingwindow.cpp" line="1054"/>
+        <location filename="../nowplayingwindow.cpp" line="567"/>
+        <location filename="../nowplayingwindow.cpp" line="1003"/>
         <source>(unknown album)</source>
         <translation>(neznan album)</translation>
     </message>
@@ -905,12 +905,12 @@ Za delovanje FM oddajnika odklopite USB.</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="9"/>
-        <location filename="../playlistpicker.cpp" line="51"/>
+        <location filename="../playlistpicker.cpp" line="49"/>
         <source>New playlist</source>
         <translation>Nov seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../playlistpicker.cpp" line="58"/>
+        <location filename="../playlistpicker.cpp" line="56"/>
         <source>Save</source>
         <translation>Shrani</translation>
     </message>
@@ -939,7 +939,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         <translation>Trenutno predvajanje</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="317"/>
+        <location filename="../radionowplayingwindow.cpp" line="298"/>
         <source>(unknown station)</source>
         <translation>(neznana postaja)</translation>
     </message>
@@ -959,22 +959,22 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         <translation>Dodaj zaznamek radia</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="357"/>
+        <location filename="../radionowplayingwindow.cpp" line="338"/>
         <source>(unknown artist)</source>
         <translation>(neznan izvajalec)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="357"/>
+        <location filename="../radionowplayingwindow.cpp" line="338"/>
         <source>(unknown song)</source>
         <translation>(neznana pesem)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="387"/>
+        <location filename="../radionowplayingwindow.cpp" line="368"/>
         <source>Buffering</source>
         <translation>Predpomnenje</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="530"/>
+        <location filename="../radionowplayingwindow.cpp" line="503"/>
         <source>Stop playback</source>
         <translation>Ustavi predvajanje</translation>
     </message>
@@ -1264,42 +1264,42 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.cpp" line="90"/>
+        <location filename="../singlealbumview.cpp" line="85"/>
         <source>(unknown song)</source>
         <translation>(neznana pesem)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="93"/>
+        <location filename="../singlealbumview.cpp" line="88"/>
         <source>(unknown artist)</source>
         <translation>(neznan izvajalec)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="96"/>
+        <location filename="../singlealbumview.cpp" line="91"/>
         <source>(unknown album)</source>
         <translation>(neznan album)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="202"/>
+        <location filename="../singlealbumview.cpp" line="184"/>
         <source>Add to now playing</source>
         <translation>Dodaj na trenutni seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="203"/>
+        <location filename="../singlealbumview.cpp" line="185"/>
         <source>Add to a playlist</source>
         <translation>Dodaj na seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="205"/>
+        <location filename="../singlealbumview.cpp" line="187"/>
         <source>Set as ringing tone</source>
         <translation>Nastavi kot ton zvonenja</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="206"/>
+        <location filename="../singlealbumview.cpp" line="188"/>
         <source>Share</source>
         <translation>Deli</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="234"/>
+        <location filename="../singlealbumview.cpp" line="206"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n datoteka dodana na seznam predvajanja</numerusform>
@@ -1309,7 +1309,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="288"/>
+        <location filename="../singlealbumview.cpp" line="252"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n datoteka dodana na trenutni seznam predvajanja</numerusform>
@@ -1319,13 +1319,13 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="35"/>
+        <location filename="../singlealbumview.cpp" line="33"/>
         <source>Add songs to now playing</source>
         <translation>Dodaj skladbe na trenutni seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="36"/>
-        <location filename="../singlealbumview.cpp" line="204"/>
+        <location filename="../singlealbumview.cpp" line="34"/>
+        <location filename="../singlealbumview.cpp" line="186"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
@@ -1333,13 +1333,13 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>SingleArtistView</name>
     <message>
-        <location filename="../singleartistview.cpp" line="103"/>
+        <location filename="../singleartistview.cpp" line="96"/>
         <source>(unknown album)</source>
         <translation>(neznan album)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="118"/>
-        <location filename="../singleartistview.cpp" line="161"/>
+        <location filename="../singleartistview.cpp" line="111"/>
+        <location filename="../singleartistview.cpp" line="149"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -1349,12 +1349,12 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="221"/>
+        <location filename="../singleartistview.cpp" line="201"/>
         <source>Add to now playing</source>
         <translation>Dodaj na trenutni seznam predvajanja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="281"/>
+        <location filename="../singleartistview.cpp" line="250"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n datoteka dodana na trenutni seznam predvajanja</numerusform>
@@ -1364,18 +1364,18 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="76"/>
+        <location filename="../singleartistview.cpp" line="69"/>
         <source>Shuffle songs</source>
         <translation>Premešaj skladbe</translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="40"/>
+        <location filename="../singleartistview.cpp" line="38"/>
         <source>Add songs to now playing</source>
         <translation>Dodaj skladbe na trenutni seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="41"/>
-        <location filename="../singleartistview.cpp" line="222"/>
+        <location filename="../singleartistview.cpp" line="39"/>
+        <location filename="../singleartistview.cpp" line="202"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
@@ -1383,13 +1383,13 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.cpp" line="132"/>
-        <location filename="../singlegenreview.cpp" line="150"/>
+        <location filename="../singlegenreview.cpp" line="125"/>
+        <location filename="../singlegenreview.cpp" line="143"/>
         <source>(unknown artist)</source>
         <translation>(neznan izvajalec)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlegenreview.cpp" line="253"/>
+        <location filename="../singlegenreview.cpp" line="234"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n datoteka dodana na trenutni seznam predvajanja</numerusform>
@@ -1399,8 +1399,8 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singlegenreview.cpp" line="33"/>
-        <location filename="../singlegenreview.cpp" line="186"/>
+        <location filename="../singlegenreview.cpp" line="31"/>
+        <location filename="../singlegenreview.cpp" line="176"/>
         <source>Add to now playing</source>
         <translation>Dodaj na trenutni seznam predvajanja</translation>
     </message>
@@ -1408,27 +1408,27 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.cpp" line="135"/>
+        <location filename="../singleplaylistview.cpp" line="129"/>
         <source>(unknown song)</source>
         <translation>(neznana pesem)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="138"/>
+        <location filename="../singleplaylistview.cpp" line="132"/>
         <source>(unknown artist)</source>
         <translation>(neznan izvajalec)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="141"/>
+        <location filename="../singleplaylistview.cpp" line="135"/>
         <source>(unknown album)</source>
         <translation>(neznan album)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="154"/>
+        <location filename="../singleplaylistview.cpp" line="148"/>
         <source>Information not available</source>
         <translation>Informacije niso na voljo</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="359"/>
+        <location filename="../singleplaylistview.cpp" line="335"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n datoteka dodana na trenutni seznam predvajanja</numerusform>
@@ -1438,34 +1438,34 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="60"/>
-        <location filename="../singleplaylistview.cpp" line="383"/>
+        <location filename="../singleplaylistview.cpp" line="54"/>
+        <location filename="../singleplaylistview.cpp" line="358"/>
         <source>Add to a playlist</source>
         <translation>Dodaj na seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="386"/>
+        <location filename="../singleplaylistview.cpp" line="361"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="384"/>
+        <location filename="../singleplaylistview.cpp" line="359"/>
         <source>Set as ringing tone</source>
         <translation>Nastavi kot ton zvonenja</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="387"/>
+        <location filename="../singleplaylistview.cpp" line="362"/>
         <source>Share</source>
         <translation>Deli</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="385"/>
+        <location filename="../singleplaylistview.cpp" line="360"/>
         <source>Delete from playlist</source>
         <translation>Izbriši s seznama predvajanja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="325"/>
-        <location filename="../singleplaylistview.cpp" line="421"/>
+        <location filename="../singleplaylistview.cpp" line="305"/>
+        <location filename="../singleplaylistview.cpp" line="386"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n datoteka dodana na seznam predvajanja</numerusform>
@@ -1475,13 +1475,13 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="59"/>
-        <location filename="../singleplaylistview.cpp" line="382"/>
+        <location filename="../singleplaylistview.cpp" line="53"/>
+        <location filename="../singleplaylistview.cpp" line="357"/>
         <source>Add to now playing</source>
         <translation>Dodaj na trenutni seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="61"/>
+        <location filename="../singleplaylistview.cpp" line="55"/>
         <source>Delete playlist</source>
         <translation>Izbriši seznam predvajanja</translation>
     </message>
@@ -1553,22 +1553,22 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.cpp" line="62"/>
+        <location filename="../upnpview.cpp" line="60"/>
         <source>(unknown song)</source>
         <translation>(neznana pesem)</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="143"/>
+        <location filename="../upnpview.cpp" line="139"/>
         <source>Add to now playing</source>
         <translation>Dodaj na trenutni seznam predvajanja</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="144"/>
+        <location filename="../upnpview.cpp" line="140"/>
         <source>Add to a playlist</source>
         <translation>Dodaj na seznam predvajanja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="251"/>
+        <location filename="../upnpview.cpp" line="244"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n datoteka dodana na seznam predvajanja</numerusform>
@@ -1578,7 +1578,7 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="294"/>
+        <location filename="../upnpview.cpp" line="284"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n datoteka dodana na trenutni seznam predvajanja</numerusform>
@@ -1611,148 +1611,147 @@ Za delovanje FM oddajnika odklopite USB.</translation>
         <translation>Neprekinjeno</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="885"/>
+        <location filename="../videonowplayingwindow.cpp" line="849"/>
         <source>Buffering</source>
         <translation>Predpomnenje</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="919"/>
-        <location filename="../videonowplayingwindow.cpp" line="997"/>
+        <location filename="../videonowplayingwindow.cpp" line="879"/>
         <source>Unable to play media</source>
         <translation>Ne morem predvajati datoteke</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="923"/>
+        <location filename="../videonowplayingwindow.cpp" line="883"/>
         <source>Media not found</source>
         <translation>Ne najdem datotek, primernih za predvajanje</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="925"/>
+        <location filename="../videonowplayingwindow.cpp" line="885"/>
         <source>URI not available</source>
         <translation>URI ni a voljo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="927"/>
+        <location filename="../videonowplayingwindow.cpp" line="887"/>
         <source>Invalid URI</source>
         <translation>Neveljaven URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="929"/>
+        <location filename="../videonowplayingwindow.cpp" line="889"/>
         <source>Unable to open media</source>
         <translation>Ne morem odpreti datoteke</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="931"/>
+        <location filename="../videonowplayingwindow.cpp" line="891"/>
         <source>Playback stream no longer available</source>
         <translation>Predvajalni tok ni več na voljo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="933"/>
+        <location filename="../videonowplayingwindow.cpp" line="893"/>
         <source>Could not determine MIME-type</source>
         <translation>Me morem ugotoviti MIME tipa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="935"/>
+        <location filename="../videonowplayingwindow.cpp" line="895"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Prišlo je do napake, ne morem nadaljevati s predvajanjem</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="937"/>
+        <location filename="../videonowplayingwindow.cpp" line="897"/>
         <source>General error occured</source>
         <translation>Prišlo je do splošne napake</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="939"/>
+        <location filename="../videonowplayingwindow.cpp" line="899"/>
         <source>Unsupported media</source>
         <translation>Nepodprt tip datoteke</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="941"/>
+        <location filename="../videonowplayingwindow.cpp" line="901"/>
         <source>Unsupported resolution</source>
         <translation>Nepodprtaločljivost</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="943"/>
+        <location filename="../videonowplayingwindow.cpp" line="903"/>
         <source>Unsupported framerate</source>
         <translation>Nepodprta hitrost predvajanja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="945"/>
+        <location filename="../videonowplayingwindow.cpp" line="905"/>
         <source>Media is protected by DRM</source>
         <translation>Datoteka je zaščitena z DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="947"/>
+        <location filename="../videonowplayingwindow.cpp" line="907"/>
         <source>System sound device is unavailable</source>
         <translation>Sistemski predvajalnik zvoka ni na voljo</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="949"/>
+        <location filename="../videonowplayingwindow.cpp" line="909"/>
         <source>Media corrupted</source>
         <translation>Poškodovana datoteka</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="951"/>
+        <location filename="../videonowplayingwindow.cpp" line="911"/>
         <source>Error while parsing playlist</source>
         <translation>Napaka pri branju seznama predvajanja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="952"/>
+        <location filename="../videonowplayingwindow.cpp" line="912"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Seznam predvajanje je prazen ali pokvarjen</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="955"/>
+        <location filename="../videonowplayingwindow.cpp" line="915"/>
         <source>Codec not found:</source>
         <translation>Ne najdem kodeka:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="959"/>
+        <location filename="../videonowplayingwindow.cpp" line="919"/>
         <source>Video codec not found:</source>
         <translation>Ne najdem video kodeka:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="963"/>
+        <location filename="../videonowplayingwindow.cpp" line="923"/>
         <source>Audio codec not found:</source>
         <translation>Ne najdem avdio kodeka:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="967"/>
+        <location filename="../videonowplayingwindow.cpp" line="927"/>
         <source>No playlist assigned</source>
         <translation>ni dodeljenega seznama predvajanja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="969"/>
+        <location filename="../videonowplayingwindow.cpp" line="929"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Indeks datotek ni usklajen s seznami predvajanj</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="971"/>
+        <location filename="../videonowplayingwindow.cpp" line="931"/>
         <source>Unable to start playback</source>
         <translation>Ne morem začeti predvajanja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="973"/>
+        <location filename="../videonowplayingwindow.cpp" line="933"/>
         <source>Unable to stop playback</source>
         <translation>Ne morem ustaviti predvajanja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="975"/>
+        <location filename="../videonowplayingwindow.cpp" line="935"/>
         <source>Unable to pause playback</source>
         <translation>Ne morem pavzirati predvajanja</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="977"/>
+        <location filename="../videonowplayingwindow.cpp" line="937"/>
         <source>Unable to seek position in media</source>
         <translation>Ne morem iskati položaja v posnetku</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="979"/>
+        <location filename="../videonowplayingwindow.cpp" line="939"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Ne morem pridobiti položaja v posnetku</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="981"/>
+        <location filename="../videonowplayingwindow.cpp" line="941"/>
         <source>Unable to get current playback status</source>
         <translation>Ne prepoznam stanja predvajanja</translation>
     </message>
@@ -1760,47 +1759,47 @@ Za delovanje FM oddajnika odklopite USB.</translation>
 <context>
     <name>VideosWindow</name>
     <message>
-        <location filename="../videoswindow.cpp" line="40"/>
+        <location filename="../videoswindow.cpp" line="38"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="42"/>
+        <location filename="../videoswindow.cpp" line="40"/>
         <source>Category</source>
         <translation>Kategorija</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="77"/>
+        <location filename="../videoswindow.cpp" line="73"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="78"/>
+        <location filename="../videoswindow.cpp" line="74"/>
         <source>Share</source>
         <translation>Deli</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="155"/>
+        <location filename="../videoswindow.cpp" line="145"/>
         <source>Videos - latest</source>
         <translation>Video - zadnji</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="169"/>
+        <location filename="../videoswindow.cpp" line="159"/>
         <source>Videos - categories</source>
         <translation>Video - kategorije</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="246"/>
+        <location filename="../videoswindow.cpp" line="233"/>
         <source>(unknown clip)</source>
         <translation>(neznan posnetek)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="311"/>
+        <location filename="../videoswindow.cpp" line="298"/>
         <source>Recorded by device camera</source>
         <translation>Posneto s kamero na napravi</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="330"/>
+        <location filename="../videoswindow.cpp" line="317"/>
         <source>Films</source>
         <translation>Filmi</translation>
     </message>
