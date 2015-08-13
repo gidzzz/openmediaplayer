@@ -177,7 +177,7 @@ OTHER_FILES += \
 
 LIBS += -lhildonthumbnail -lX11
 CONFIG += link_pkgconfig
-PKGCONFIG += mafw mafw-shared glib-2.0 gq-gconf gnome-vfs-2.0 libplayback-1 dbus-1 gtk+-2.0
+PKGCONFIG += mafw mafw-shared glib-2.0 gnome-vfs-2.0 libplayback-1 dbus-1 gtk+-2.0
 
 TRANSLATIONS = \
     lang/openmediaplayer.ar_SA.ts \

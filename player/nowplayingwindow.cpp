@@ -106,8 +106,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
 
     mafwState = Transitioning;
 
-    lastPlayingSong = new GConfItem("/apps/mediaplayer/last_playing_song", this);
-
     this->connectSignals();
 
     MetadataWatcher *mw = MissionControl::acquire()->metadataWatcher();
@@ -227,6 +225,13 @@ void NowPlayingWindow::setAlbumImage(QString image)
     ui->coverViewLarge->setTransform(t);*/
 }
 
+void NowPlayingWindow::setSong(int index)
+{
+    currentSong = index;
+    updateSongNumber();
+    selectItemByRow(index);
+}
+
 void NowPlayingWindow::setTitle(QString title)
 {
     ui->titleLabel->setWhatsThis(title);
@@ -252,9 +257,9 @@ void NowPlayingWindow::setAlbum(QString album)
     ui->albumLabel->setText(QFontMetrics(ui->albumLabel->font()).elidedText(album, Qt::ElideRight, 425));
 }
 
-void NowPlayingWindow::setSongNumber(int currentSong, int numberOfSongs)
+void NowPlayingWindow::updateSongNumber()
 {
-    ui->songNumberLabel->setText(QString::number(currentSong) + " / " + tr("%n song(s)", "", numberOfSongs));
+    ui->songNumberLabel->setText(QString::number(currentSong+1) + " / " + tr("%n song(s)", "", ui->songList->count()));
 }
 
 void NowPlayingWindow::updatePlaylistTimeLabel()
@@ -427,7 +432,6 @@ void NowPlayingWindow::connectSignals()
 
     connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
-    connect(lastPlayingSong, SIGNAL(valueChanged()), this, SLOT(onGconfValueChanged()));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -463,14 +467,14 @@ void NowPlayingWindow::showFMTXDialog()
 
 void NowPlayingWindow::onKeyTimeout()
 {
-    focusItemByRow(lastPlayingSong->value().toInt());
+    focusItemByRow(currentSong);
 }
 
 void NowPlayingWindow::forgetClick()
 {
     if (clickedItem) onPlaylistItemActivated(clickedItem);
     ui->songList->setDragEnabled(false);
-    selectItemByRow(lastPlayingSong->value().toInt());
+    selectItemByRow(currentSong);
     clickedItem = NULL;
 }
 
@@ -496,7 +500,7 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
 
         else if (event->type() == QEvent::Leave) {
             dragInProgress = false;
-            selectItemByRow(lastPlayingSong->value().toInt());
+            selectItemByRow(currentSong);
         }
 
         else if (event->type() == QEvent::MouseButtonPress) {
@@ -545,7 +549,7 @@ void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
             QString title = value.toString();
             setTitle(title);
 
-            QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
+            QListWidgetItem* item = ui->songList->item(currentSong);
             if (item && item->data(UserRoleSongTitle).toString().isEmpty())
                 item->setData(UserRoleSongTitle, title);
         }
@@ -557,7 +561,7 @@ void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
             QString artist = value.toString();
             setArtist(artist);
 
-            QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
+            QListWidgetItem* item = ui->songList->item(currentSong);
             if (item && item->data(UserRoleSongArtist).toString().isEmpty())
                 item->setData(UserRoleSongArtist, artist);
         }
@@ -569,7 +573,7 @@ void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
             QString album = value.toString();
             setAlbum(album);
 
-            QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
+            QListWidgetItem* item = ui->songList->item(currentSong);
             if (item && item->data(UserRoleSongAlbum).toString().isEmpty())
                 item->setData(UserRoleSongAlbum, album);
         }
@@ -583,7 +587,7 @@ void NowPlayingWindow::onMetadataChanged(QString key, QVariant value)
             if (songDuration < 0)
                 songDuration = Duration::Unknown;
 
-            QListWidgetItem* item = ui->songList->item(lastPlayingSong->value().toInt());
+            QListWidgetItem* item = ui->songList->item(currentSong);
             if (item && item->data(UserRoleSongDuration).toInt() == Duration::Blank) {
                 item->setData(UserRoleSongDuration, songDuration);
                 if (songDuration > 0) {
@@ -880,9 +884,7 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState stat
         playlistRequested = true;
     }
 
-    lastPlayingSong->set((int)index); // sometimes the value is wrong, noticable mainly while using the playlist editor
-    setSongNumber(index+1, playlist->size());
-    selectItemByRow(index);
+    setSong(index);
 }
 
 void NowPlayingWindow::setPosition(int newPosition)
@@ -898,15 +900,9 @@ void NowPlayingWindow::showEvent(QShowEvent *)
     startPositionTimer();
 }
 
-void NowPlayingWindow::onGconfValueChanged()
-{
-    setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
-    selectItemByRow(lastPlayingSong->value().toInt());
-}
-
 void NowPlayingWindow::onMediaChanged(int index, char*)
 {
-    lastPlayingSong->set(index);
+    setSong(index);
     focusItemByRow(index);
 }
 
@@ -1028,8 +1024,8 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 #ifdef DEBUG
     qDebug() << "Selected item number: " << ui->songList->currentRow();
 #endif
-    setSongNumber(ui->songList->currentRow()+1, ui->songList->count());
-    lastPlayingSong->set(ui->songList->currentRow());
+
+    setSong(ui->songList->currentRow());
 
     setTitle(item->data(UserRoleSongTitle).toString());
     setArtist(item->data(UserRoleSongArtist).toString());
@@ -1067,7 +1063,6 @@ void NowPlayingWindow::clearPlaylist()
 {
     if (ConfirmDialog(ConfirmDialog::ClearCurrent, this).exec() == QMessageBox::Yes) {
         playlist->clear();
-        lastPlayingSong->set(1);
         this->close();
     }
 }
@@ -1263,11 +1258,11 @@ void NowPlayingWindow::updatePlaylist(uint from, uint nremove, uint nreplace)
     }
 
     if (synthetic)
-        focusItemByRow(lastPlayingSong->value().toInt());
+        focusItemByRow(currentSong);
 
     mafwRenderer->getStatus();
 
-    setSongNumber(lastPlayingSong->value().toInt()+1, ui->songList->count());
+    updateSongNumber();
 
     qDebug() << "Playlist reserved slots:" << ui->songList->count();
 }

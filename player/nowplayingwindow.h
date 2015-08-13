@@ -29,7 +29,6 @@
 #include "fmtxdialog.h"
 #include "maemo5deviceevents.h"
 
-#include <gq/GConfItem>
 #include <mafw/mafwregistryadapter.h>
 #include "mafw/mafwplaylistmanageradapter.h"
 
@@ -76,18 +75,18 @@ private:
     CurrentPlaylistAdapter *playlist;
     PlaylistQueryManager *playlistQM;
     int mafwState;
-    GConfItem *lastPlayingSong;
     QString metadataObjectId;
     bool event(QEvent *event);
     void showEvent(QShowEvent *);
     void setButtonIcons();
+    void setSong(int index);
     void setTitle(QString title);
     void setArtist(QString artist);
     void setAlbum(QString album);
-    void setSongNumber(int currentSong, int numberOfSongs);
     void setLyrics(QString text, QColor color);
     void setAlbumImage(QString image);
     void detectAlbumImage(QString image = QString());
+    void updateSongNumber();
     void updatePlaylistTimeLabel();
     void startPositionTimer();
     void connectSignals();
@@ -105,8 +104,9 @@ private:
     bool dragInProgress;
     bool portrait;
     QListWidgetItem *clickedItem;
-    int songDuration;
+    int currentSong;
     int currentSongPosition;
+    int songDuration;
     QGraphicsScene *albumArtSceneLarge;
     QGraphicsScene *albumArtSceneSmall;
     QString albumArtPath;
@@ -140,7 +140,6 @@ private slots:
     void setPosition(int newPosition);
     void onPlaylistItemActivated(QListWidgetItem*);
     void clearPlaylist();
-    void onGconfValueChanged();
     void onMediaChanged(int index, char*);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
