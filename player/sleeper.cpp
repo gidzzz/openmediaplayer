@@ -37,7 +37,7 @@ void Sleeper::start(int interval, int reduction)
     startStamp = QDateTime::currentMSecsSinceEpoch();
     endStamp = startStamp + interval;
 
-    connect(mafwRenderer, SIGNAL(signalGetVolume(int)), this, SLOT(onInitialVolumeReceived(int)));
+    connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), this, SLOT(onInitialVolumeReceived(int)));
     mafwRenderer->getVolume();
 }
 
@@ -55,7 +55,7 @@ void Sleeper::stop()
 
 void Sleeper::onInitialVolumeReceived(int volume)
 {
-    disconnect(mafwRenderer, SIGNAL(signalGetVolume(int)), this, SLOT(onInitialVolumeReceived(int)));
+    disconnect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), this, SLOT(onInitialVolumeReceived(int)));
 
     scheduleVolumeStep(volume);
 }

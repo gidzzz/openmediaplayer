@@ -1,130 +1,118 @@
-#ifndef _MAFW_RENDERER_ADAPTER_HPP_
-#define _MAFW_RENDERER_ADAPTER_HPP_
+#ifndef MAFWRENDERERADAPTER_H
+#define MAFWRENDERERADAPTER_H
 
 #include <QObject>
+
 #include <QVariant>
-#include <QString>
 #include <QDebug>
 
 #include <libmafw/mafw.h>
 #include <libmafw-shared/mafw-shared.h>
-#include <libplayback/playback.h>
-#include <glib.h>
-
-#include "mafwrenderersignalhelper.h"
 
 #ifdef MAFW_WORKAROUNDS
     class MafwRendererAdapter;
-    class MafwPlaylistAdapter;
     #include "mafwplaylistadapter.h"
 #endif
 
-#define MEDIAPLAYER_RENDERER "Mafw-Gst-Renderer"
-#define MEDIAPLAYER_SOURCE "Mafw-Tracker-Source"
-
 class MafwRendererAdapter : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-    friend class MafwRendererSignalHelper;
- public:
-  MafwRendererAdapter();
-  ~MafwRendererAdapter() { }
+public:
+    MafwRendererAdapter(const QString &uuid);
+    ~MafwRendererAdapter();
 
-  static void onRendererAdded(MafwRegistry* mafw_registry, GObject* renderer, gpointer user_data);
-  static void onRendererRemoved(MafwRegistry* mafw_registry, GObject* renderer,gpointer user_data);
+    bool isReady();
 
-  static void onBufferingInfo(MafwRenderer* mafw_renderer, gfloat state, gpointer user_data);
-  static void onMediaChanged(MafwRenderer* mafw_renderer, gint index, gchar* object_id, gpointer user_data);
-  static void onMetadataChanged(MafwRenderer* mafw_renderer, gchar* name, GValueArray* value, gpointer user_data);
-  static void onPlaylistChanged(MafwRenderer* mafw_renderer, GObject* playlist, gpointer user_data);
-  static void onStateChanged(MafwRenderer* mafw_renderer, gint state, gpointer user_data);
+public slots:
+    // Exposed operations
+    void play();
+    void playObject(const QString &objectId);
+    void playUri(const QString &uri);
+    void stop();
+    void pause();
+    void resume();
+    void getStatus();
+    bool assignPlaylist(MafwPlaylist *playlist);
+    void next();
+    void previous();
+    void gotoIndex(uint index);
+    void setPosition(MafwRendererSeekMode mode, int seconds);
+    void getPosition();
+    void getCurrentMetadata();
 
-  static void playback_state_req_handler(pb_playback_t *pb, pb_state_e req_state, pb_req_t *ext_req, void *data);
-  static void playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data);
+    // Exposed properties
+    void setVolume(int volume);
+    void getVolume();
+    void setXid(uint Xid);
+    void setErrorPolicy(uint errorPolicy);
+    void setColorKey(int colorKey);
 
-  void enablePlayback(bool enable, bool compatible = false);
-  bool isRendererReady();
+signals:
+    void ready();
 
- public slots:
-  void play();
-  void playObject(const char* object_id);
-  void playURI(const char* uri);
-  void stop();
-  void pause();
-  void resume();
-  void getStatus();
-  void next();
-  void previous();
-  void gotoIndex(uint index);
-  void setPosition(MafwRendererSeekMode mode, int seconds);
-  void getPosition();
-  void getCurrentMetadata();
-  void setVolume(int volume);
-  void getVolume();
-  void setWindowXid(uint Xid);
-  void setColorKey(int colorKey);
-  void setErrorPolicy(uint errorPolicy);
+    // Exposed signals
+    void bufferingInfo(float status);
+    void mediaChanged(int index, const QString &objectId);
+    void metadataChanged(const QString &metadata, const QVariant &value);
+    void playlistChanged(GObject *playlist);
+    void stateChanged(MafwPlayState state);
 
-  bool assignPlaylist(MafwPlaylist* playlist);
+    // Exposed operation callbacks
+    void playExecuted(const QString &error);
+    void playObjectExecuted(const QString &error);
+    void playUriExecuted(const QString &error);
+    void stopExecuted(const QString &error);
+    void pauseExecuted(const QString &error);
+    void resumeExecuted(const QString &error);
+    void statusReceived(MafwPlaylist *playlist, uint index, MafwPlayState state, const QString &objectId, const QString &error);
+    void nextExecuted(const QString &error);
+    void previousExecuted(const QString &error);
+    void gotoIndexExecuted(const QString &error);
+    void positionReceived(int position, const QString &error);
+    void currentMetadataReceived(GHashTable *metadata, const QString &objectId, const QString &error);
 
- signals:
-  // MafwRenderer signals
-  void rendererReady();
-  void bufferingInfo(float status);
-  void mediaChanged(int index, char* objectId);
-  void metadataChanged(QString metadata, QVariant value);
-  void playlistChanged(GObject* playlist);
-  void stateChanged(int newState);
+    // Exposed property callbacks
+    void volumeReceived(int volume, const QString &error);
 
-  // Mafw callbacks as signals
-  void signalPlay(QString error);
-  void signalPlayURI(QString error);
-  void signalPlayObject(QString error);
-  void signalStop(QString error);
-  void signalPause(QString error);
-  void signalResume(QString error);
-  void signalGetStatus(MafwPlaylist* playlist, uint index, MafwPlayState state, const char* object_id, QString error);
-  void signalNext(QString error);
-  void signalPrevious(QString error);
-  void signalGotoIndex(QString error);
-  void signalSetPosition(int position, QString error);
-  void signalGetPosition(int position, QString error);
-  void signalGetCurrentMetadata(GHashTable *metadata, QString object_id, QString error);
-  void signalGetVolume(int volume);
+private:
+    MafwRenderer *renderer;
+    QString m_uuid;
 
- private slots:
-  void initializePlayback(MafwPlaylist*, uint, MafwPlayState state, const char*, QString);
+    void bind(MafwRenderer *renderer);
 
- private:
-  enum Action
-  {
-    Play,
-    Pause,
-    Resume,
-    Stop,
-    Dummy
-  };
+    // Signal handlers
+    static void onBufferingInfo(MafwRenderer *, gfloat status, gpointer self);
+    static void onMediaChanged(MafwRenderer *, gint index, gchar *objectId, gpointer self);
+    static void onMetadataChanged(MafwRenderer *, gchar *name, GValueArray *value, gpointer self);
+    static void onPlaylistChanged(MafwRenderer *, GObject *playlist, gpointer self);
+    static void onStateChanged(MafwRenderer *, gint state, gpointer self);
 
-  struct req_state_cb_payload
-  {
-    MafwRendererAdapter* adapter;
-    Action action;
-  };
+    // Operation callbacks
+    static void onPlayExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onPlayObjectExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onPlayUriExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onStopExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onPauseExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onResumeExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onStatusReceived(MafwRenderer *, MafwPlaylist *playlist, guint index, MafwPlayState state, const gchar *objectId, gpointer self, const GError *error);
+    static void onNextExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onPreviousExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onGotoIndexExecuted(MafwRenderer *, gpointer self, const GError *error);
+    static void onPositionReceived(MafwRenderer *, gint position, gpointer self, const GError *error);
+    static void onCurrentMetadataReceived(MafwRenderer *, const gchar *objectId, GHashTable *metadata, gpointer self, const GError *error);
 
-  void findRenderer();
-  void connectRegistrySignals();
-  void connectRendererSignals();
-  void disconnectRendererSignals();
-  MafwRegistry* mafw_registry;
-  MafwRenderer* mafw_renderer;
-  pb_playback_t* playback;
-  bool compatiblePlayback;
-  GValue GVolume;
+    // Property callbacks
+    static void onVolumeReceived(MafwExtension *, const gchar *, GValue *value, gpointer self, const GError *error);
 
 #ifdef MAFW_WORKAROUNDS
-  MafwPlaylistAdapter* playlist;
-  friend class MafwRegistryAdapter;
+    MafwPlaylistAdapter *playlist;
+    friend class MafwRegistryAdapter;
 #endif
+
+private slots:
+    void onRendererAdded(MafwRenderer *renderer);
+    void onRendererRemoved(MafwRenderer *renderer);
 };
-#endif
+
+#endif // MAFWRENDERERADAPTER_H

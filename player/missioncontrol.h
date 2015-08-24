@@ -7,8 +7,9 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 
-#include "lyricsmanager.h"
 #include "metadatawatcher.h"
+#include "playbackmanager.h"
+#include "lyricsmanager.h"
 #include "sleeper.h"
 
 #include "mafw/mafwregistryadapter.h"
@@ -23,21 +24,22 @@ public:
     void setRegistry(MafwRegistryAdapter *mafwRegistry);
     void reloadSettings();
 
-    LyricsManager *lyricsManager();
-    MetadataWatcher *metadataWatcher();
+    MetadataWatcher* metadataWatcher();
+    PlaybackManager* playbackManager();
+    LyricsManager* lyricsManager();
     Sleeper* sleeper();
 
 private:
     static MissionControl *instance;
 
-    MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter *mafwRenderer;
 
     MetadataWatcher *m_metadataWatcher;
+    PlaybackManager *m_playbackManager;
     LyricsManager *m_lyricsManager;
-    Sleeper* m_sleeper;
+    Sleeper *m_sleeper;
 
-    int mafwState;
+    MafwPlayState mafwState;
 
     bool metadataReady;
 
@@ -63,8 +65,8 @@ private slots:
 
     void onSleeperTimeout();
 
-    void onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, const char *, QString);
-    void onStateChanged(int state);
+    void onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, QString, QString);
+    void onStateChanged(MafwPlayState state);
 
     void onCallStateChanged(QDBusMessage msg);
 

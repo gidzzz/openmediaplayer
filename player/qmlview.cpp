@@ -64,10 +64,10 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
     connect(this, SIGNAL(playlistCleared()),
             rootObject, SLOT(clearPlaylist()));
 
-    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwRenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
-    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
+    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int,QString)));
+    connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
     connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
 
     connect(fmtx, SIGNAL(propertyChanged()), this, SLOT(onFmtxChanged()));
@@ -127,7 +127,7 @@ void QmlView::onPositionChanged(int position, QString)
     emit positionChanged(position);
 }
 
-void QmlView::onStateChanged(int state)
+void QmlView::onStateChanged(MafwPlayState state)
 {
     this->mafwState = state;
     QString playButtonIconString;
@@ -167,7 +167,7 @@ void QmlView::onStateChanged(int state)
     emit stateIconChanged(playButtonIconString);
 }
 
-void QmlView::onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString)
+void QmlView::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, QString, QString)
 {
     onStateChanged(state);
 }

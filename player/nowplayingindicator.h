@@ -68,14 +68,14 @@ private:
     MafwRegistryAdapter *mafwRegistry;
     MafwRendererAdapter *mafwRenderer;
     CurrentPlaylistAdapter *playlist;
-    int mafwState;
+    MafwPlayState mafwState;
     Maemo5DeviceEvents *deviceEvents;
 
 private slots:
     void onTkLockChanged(bool);
-    void onStateChanged(int);
-    void onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString);
-    void onPlaylistReady(MafwPlaylist*,uint,MafwPlayState, const char* objectId, QString);
+    void onStateChanged(MafwPlayState state);
+    void onStatusReceived(MafwPlaylist *, uint,MafwPlayState, QString, QString);
+    void onPlaylistReady(MafwPlaylist * ,uint,MafwPlayState, QString, QString);
     void nextFrame();
     void openWindow();
     void onWindowDestroyed();

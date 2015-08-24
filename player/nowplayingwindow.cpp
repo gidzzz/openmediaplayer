@@ -136,12 +136,12 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
     connect(playlistQM, SIGNAL(gotItem(QString,GHashTable*,uint)), this, SLOT(onItemReceived(QString,GHashTable*,uint)));
     connect(ui->songList->verticalScrollBar(), SIGNAL(valueChanged(int)), playlistQM, SLOT(setPriority(int)));
 
-    if (mafwRenderer->isRendererReady()) {
+    if (mafwRenderer->isReady()) {
         mafwRenderer->getStatus();
         mafwRenderer->getVolume();
     } else {
-        connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getStatus()));
-        connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getVolume()));
+        connect(mafwRenderer, SIGNAL(ready()), mafwRenderer, SLOT(getStatus()));
+        connect(mafwRenderer, SIGNAL(ready()), mafwRenderer, SLOT(getVolume()));
     }
 }
 
@@ -319,7 +319,7 @@ void NowPlayingWindow::setButtonIcons()
     ui->volumeButton->setIcon(QIcon(volumeButtonIcon));
 }
 
-void NowPlayingWindow::onStateChanged(int state)
+void NowPlayingWindow::onStateChanged(MafwPlayState state)
 {
     this->mafwState = state;
 
@@ -417,12 +417,12 @@ void NowPlayingWindow::connectSignals()
 
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
-    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
-    connect(mafwRenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int, QString)));
-    connect(mafwRenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
-    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int,QString)));
+    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int, QString)));
+    connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), ui->volumeSlider, SLOT(setValue(int)));
+    connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwRenderer, SLOT(setVolume(int)));
 
@@ -875,7 +875,7 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
     }
 }
 
-void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char*, QString)
+void NowPlayingWindow::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state, QString, QString)
 {
     if (!playlistRequested) {
         updatePlaylist();
@@ -890,7 +890,6 @@ void NowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState stat
 void NowPlayingWindow::setPosition(int newPosition)
 {
     mafwRenderer->setPosition(SeekAbsolute, newPosition);
-    mafwRenderer->getPosition();
 }
 
 void NowPlayingWindow::showEvent(QShowEvent *)
@@ -900,7 +899,7 @@ void NowPlayingWindow::showEvent(QShowEvent *)
     startPositionTimer();
 }
 
-void NowPlayingWindow::onMediaChanged(int index, char*)
+void NowPlayingWindow::onMediaChanged(int index, QString)
 {
     setSong(index);
     focusItemByRow(index);

@@ -11,6 +11,7 @@ MissionControl* MissionControl::acquire()
 
 MissionControl::MissionControl() :
     m_metadataWatcher(NULL),
+    m_playbackManager(NULL),
     m_lyricsManager(NULL),
     m_sleeper(NULL)
 {
@@ -29,18 +30,19 @@ MissionControl::MissionControl() :
 
 void MissionControl::setRegistry(MafwRegistryAdapter *mafwRegistry)
 {
-    this->mafwRegistry = mafwRegistry;
     mafwRenderer = mafwRegistry->renderer();
 
     m_metadataWatcher = new MetadataWatcher(mafwRegistry);
 
+    m_playbackManager = new PlaybackManager(mafwRenderer);
+
     connect(m_metadataWatcher, SIGNAL(metadataReady()), this, SLOT(onMetadataReady()));
     connect(m_metadataWatcher, SIGNAL(metadataChanged(QString,QVariant)), this, SLOT(onMetadataChanged(QString,QVariant)));
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged()));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged()));
 
-    connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getStatus()));
-    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwRenderer, SIGNAL(ready()), mafwRenderer, SLOT(getStatus()));
+    connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
     QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Connected",
                                          this, SLOT(onWirelessHeadsetConnected()));
@@ -92,14 +94,19 @@ void MissionControl::togglePlayback()
     }
 }
 
-LyricsManager* MissionControl::lyricsManager()
-{
-    return m_lyricsManager;
-}
-
 MetadataWatcher* MissionControl::metadataWatcher()
 {
     return m_metadataWatcher;
+}
+
+PlaybackManager* MissionControl::playbackManager()
+{
+    return m_playbackManager;
+}
+
+LyricsManager* MissionControl::lyricsManager()
+{
+    return m_lyricsManager;
 }
 
 Sleeper* MissionControl::sleeper()
@@ -154,18 +161,18 @@ void MissionControl::onMetadataChanged(QString key, QVariant value)
     }
 }
 
-void MissionControl::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, const char *, QString)
+void MissionControl::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, QString, QString)
 {
-    disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
-    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
 
     onStateChanged(state);
 
 }
 
-void MissionControl::onStateChanged(int state)
+void MissionControl::onStateChanged(MafwPlayState state)
 {
     mafwState = state;
 

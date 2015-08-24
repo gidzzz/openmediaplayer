@@ -112,11 +112,11 @@ void RadioNowPlayingWindow::connectSignals()
 
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
-    connect(mafwRenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
-    connect(mafwRenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onGetPosition(int,QString)));
+    connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), ui->volumeSlider, SLOT(setValue(int)));
+    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwRenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
-    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -205,7 +205,7 @@ void RadioNowPlayingWindow::onVolumeSliderReleased()
     mafwRenderer->setVolume(ui->volumeSlider->value());
 }
 
-void RadioNowPlayingWindow::onStateChanged(int state)
+void RadioNowPlayingWindow::onStateChanged(MafwPlayState state)
 {
     mafwState = state;
 
@@ -279,7 +279,7 @@ void RadioNowPlayingWindow::play()
     }
 }
 
-void RadioNowPlayingWindow::onMediaChanged(int, char *)
+void RadioNowPlayingWindow::onMediaChanged(int, QString)
 {
     onBufferingInfo(1.0);
 }
@@ -318,16 +318,16 @@ void RadioNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
     }
 }
 
-void RadioNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *objectId, QString)
+void RadioNowPlayingWindow::onStatusReceived(MafwPlaylist*, uint index, MafwPlayState state, QString objectId, QString)
 {
-    disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-               this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
-    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
+    connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int,QString)));
 
     onStateChanged(state);
-    onMediaChanged(index, const_cast<char*>(objectId));
+    onMediaChanged(index, objectId);
 }
 
 void RadioNowPlayingWindow::updateSongLabel()
@@ -342,7 +342,7 @@ void RadioNowPlayingWindow::updateSongLabel()
     ui->songLabel->setText(QFontMetrics(ui->songLabel->font()).elidedText(labelText, Qt::ElideRight, 425));
 }
 
-void RadioNowPlayingWindow::onGetPosition(int position, QString)
+void RadioNowPlayingWindow::onPositionChanged(int position, QString)
 {
     ui->currentPositionLabel->setText(mmss_pos(position));
 
@@ -379,7 +379,6 @@ void RadioNowPlayingWindow::onNextButtonClicked()
     if (ui->nextButton->isDown()) {
         buttonWasDown = true;
         mafwRenderer->setPosition(SeekRelative, 3);
-        mafwRenderer->getPosition();
     } else {
         if (!buttonWasDown)
             mafwRenderer->next();
@@ -392,7 +391,6 @@ void RadioNowPlayingWindow::onPreviousButtonClicked()
     if (ui->prevButton->isDown()) {
         buttonWasDown = true;
         mafwRenderer->setPosition(SeekRelative, -3);
-        mafwRenderer->getPosition();
     } else {
         if (!buttonWasDown)
             mafwRenderer->previous();

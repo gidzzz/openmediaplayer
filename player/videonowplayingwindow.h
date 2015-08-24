@@ -116,10 +116,10 @@ private slots:
     void slowRev();
     void fastFwd();
     void fastRev();
-    void onMediaChanged(int, char *objectId);
+    void onMediaChanged(int, QString objectId);
     void onPropertyChanged(const QDBusMessage &msg);
-    void onStateChanged(int state);
-    void onGetStatus(MafwPlaylist*, uint index, MafwPlayState, const char* objectId, QString error);
+    void onStateChanged(MafwPlayState state);
+    void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId, QString error);
     void onBufferingInfo(float status);
     void onPositionChanged(int position, QString);
     void onErrorOccured(const QDBusMessage &msg);

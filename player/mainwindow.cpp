@@ -107,7 +107,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    mafwRenderer->enablePlayback(false);
+    MissionControl::acquire()->playbackManager()->enable(false);
 
     QString action = QSettings().value("main/onApplicationExit", "stop-playback").toString();
 
@@ -211,7 +211,7 @@ void MainWindow::open_mp_main_view()
 void MainWindow::open_mp_now_playing()
 {
     // maybe this check could be moved to NowPlayingWindow?
-    if (mafwRenderer->isRendererReady() && mafwTrackerSource->isReady() && playlist->isReady()) {
+    if (mafwRenderer->isReady() && mafwTrackerSource->isReady() && playlist->isReady()) {
         playlist->assignAudioPlaylist();
         createNowPlayingWindow();
     } else {
@@ -380,10 +380,10 @@ void MainWindow::mime_open(const QString &uriString)
                     playlist->appendItem(objectId);
 
                     if (!QSettings().value("main/appendSongs").toBool()) {
-                        if (mafwRenderer->isRendererReady())
+                        if (mafwRenderer->isReady())
                             mafwRenderer->play();
                         else
-                            connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(play()));
+                            connect(mafwRenderer, SIGNAL(ready()), mafwRenderer, SLOT(play()));
                     }
 
                     createNowPlayingWindow();
@@ -570,10 +570,11 @@ void MainWindow::reloadSettings()
                                   orientation == "portrait"  ? Rotator::Portrait  :
                                                                Rotator::Automatic);
 
-    if (mafwRenderer->isRendererReady())
+    if (mafwRenderer->isReady()) {
         setupPlayback();
-    else
-        connect(mafwRenderer, SIGNAL(rendererReady()), this, SLOT(setupPlayback()));
+    } else {
+        connect(mafwRenderer, SIGNAL(ready()), this, SLOT(setupPlayback()));
+    }
 }
 
 void MainWindow::openSleeperDialog()
@@ -736,12 +737,13 @@ void MainWindow::onSourceUpdating(int progress, int processed_items, int remaini
 
 void MainWindow::onScreenLocked(bool locked)
 {
-    if (locked)
-        mafwRenderer->enablePlayback(QSettings().value("main/managedPlayback") == "locked",
-                                     QSettings().value("main/compatiblePlayback", true).toBool());
-    else
-        mafwRenderer->enablePlayback(QSettings().value("main/managedPlayback") == "unlocked",
-                                     QSettings().value("main/compatiblePlayback", true).toBool());
+    if (locked) {
+        MissionControl::acquire()->playbackManager()->enable(QSettings().value("main/managedPlayback") == "locked",
+                                                             QSettings().value("main/compatiblePlayback", true).toBool());
+    } else {
+        MissionControl::acquire()->playbackManager()->enable(QSettings().value("main/managedPlayback") == "unlocked",
+                                                             QSettings().value("main/compatiblePlayback", true).toBool());
+    }
 }
 
 void MainWindow::setupPlayback()
@@ -749,11 +751,11 @@ void MainWindow::setupPlayback()
     disconnect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
     QString playback = QSettings().value("main/managedPlayback", "always").toString();
-    if (playback == "always")
-        mafwRenderer->enablePlayback(true, QSettings().value("main/compatiblePlayback", true).toBool());
-    else if (playback == "never")
-        mafwRenderer->enablePlayback(false);
-    else if (playback == "locked" || playback == "unlocked") {
+    if (playback == "always") {
+        MissionControl::acquire()->playbackManager()->enable(true, QSettings().value("main/compatiblePlayback", true).toBool());
+    } else if (playback == "never") {
+        MissionControl::acquire()->playbackManager()->enable(false);
+    } else if (playback == "locked" || playback == "unlocked") {
         connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
         onScreenLocked(Maemo5DeviceEvents::acquire()->isScreenLocked());
     }

@@ -1,342 +1,90 @@
-/**************************************************************************
-    This file is part of Open MediaPlayer
-    Copyright (C) 2010-2011 Nicolai Hess
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**************************************************************************/
-
 #include "mafwrendereradapter.h"
 
-MafwRendererAdapter::MafwRendererAdapter()
+#include "mafwregistryadapter.h"
+#include "mafwutils.h"
+
+// NOTE: Unlike with MafwSourceAdapter, instance tracking is not present, thus
+// objects of this class are not disposable.
+
+MafwRendererAdapter::MafwRendererAdapter(const QString &uuid) :
+    renderer(NULL),
+    m_uuid(uuid)
 {
-    this->mafw_renderer = NULL;
-    this->playback = NULL;
-    memset(&GVolume, 0, sizeof(GVolume));
-    g_value_init (&GVolume, G_TYPE_UINT);
-    g_warning("start\n");
-    mafw_registry = MAFW_REGISTRY(mafw_registry_get_instance());
-    mafw_shared_init(mafw_registry, NULL);
-    findRenderer();
-    connectRegistrySignals();
+    connect(MafwRegistryAdapter::get(), SIGNAL(rendererAdded(MafwRenderer*)), this, SLOT(onRendererAdded(MafwRenderer*)));
+
+    bind(MAFW_RENDERER(MafwRegistryAdapter::get()->findExtensionByUuid(uuid)));
 }
 
-void MafwRendererAdapter::findRenderer()
+MafwRendererAdapter::~MafwRendererAdapter()
 {
-    if(mafw_registry)
-    {
-        GList* renderer_list = mafw_registry_get_renderers(mafw_registry);
-        if(renderer_list)
-        {
-            GList* renderer_elem = renderer_list;
-            while(renderer_elem)
-            {
-                MafwRenderer* mafw_renderer = MAFW_RENDERER(renderer_elem->data);
-                g_warning("renderer: %s\n", mafw_extension_get_name(MAFW_EXTENSION(mafw_renderer)));
-
-                if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(mafw_renderer)),MEDIAPLAYER_RENDERER) == 0)
-                {
-                    g_object_ref(mafw_renderer);
-                    this->mafw_renderer = mafw_renderer;
-                    connectRendererSignals();
-                }
-            }
-        }
-        else
-        {
-            g_warning("no renderer\n");
-        }
-    }
-    else
-    {
-        g_warning("no rgistry\n");
-    }
+    bind(NULL);
 }
 
-void MafwRendererAdapter::enablePlayback(bool enable, bool compatible)
+bool MafwRendererAdapter::isReady()
 {
-    if (enable) {
-        if (playback) {
-            if (compatiblePlayback != compatible) {
-                enablePlayback(false);
-                enablePlayback(true, compatible);
-            }
-        } else {
-            compatiblePlayback = compatible;
-            connect(this, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-                    this, SLOT(initializePlayback(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-            getStatus();
-        }
-    } else {
-        if (playback) {
-            pb_playback_destroy(playback);
-            playback = NULL;
-        }
-    }
+    return renderer;
 }
 
-void MafwRendererAdapter::initializePlayback(MafwPlaylist*, uint, MafwPlayState state, const char*, QString)
+void MafwRendererAdapter::bind(MafwRenderer *renderer)
 {
-    disconnect(this, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-               this, SLOT(initializePlayback(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    // Check if there is anything to do
+    if (renderer == this->renderer)
+        return;
 
-    playback = pb_playback_new(dbus_g_connection_get_connection(dbus_g_bus_get(DBUS_BUS_SESSION, NULL)), PB_CLASS_MEDIA,
-                               state == Playing && !compatiblePlayback ? PB_STATE_PLAY : PB_STATE_STOP,
-                               playback_state_req_handler, NULL);
-}
+    if (renderer) {
+        // Unbind current renderer, if set, before proceeding
+        if (this->renderer)
+            bind(NULL);
 
-void MafwRendererAdapter::playback_state_req_callback(pb_playback_t *pb, pb_state_e granted_state, const char *reason, pb_req_t *req, void *data)
-{
-// Waiting for an opinion from libplayback can take so long that there can be
-// a significant delay between disconnecting a headset and pausing music and
-// play/pause button also seems a bit laggy. Because of that it might be a good
-// idea to not wait for permission, but rather do what we have to do and later
-// only tell the playback manager what we wanted.
-#ifdef LIBPLAYBACK_FULL
-    MafwRendererAdapter *adapter = static_cast<req_state_cb_payload*>(data)->adapter;
-
-    if (adapter->mafw_renderer) {
-        if (granted_state == PB_STATE_STOP) {
-            switch (static_cast<req_state_cb_payload*>(data)->action) {
-                case Pause: mafw_renderer_pause(adapter->mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, adapter); break;
-                case Stop: mafw_renderer_stop(adapter->mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, adapter); break;
-                default: break;
-            }
-        }
-        else if (granted_state == PB_STATE_PLAY) {
-            switch (static_cast<req_state_cb_payload*>(data)->action) {
-                case Play: mafw_renderer_play(adapter->mafw_renderer, MafwRendererSignalHelper::play_playback_cb, adapter); break;
-                case Resume: mafw_renderer_resume(adapter->mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, adapter); break;
-                default: break;
-            }
-        }
-        else { // granted_state == PB_STATE_NONE
-            qDebug() << "State request denied:" << reason;
-        }
-    }
-
-    pb_playback_req_completed(pb, req);
-    delete static_cast<req_state_cb_payload*>(data);
-#else
-    Q_UNUSED(granted_state);
-    Q_UNUSED(reason);
-    Q_UNUSED(data);
-
-    pb_playback_req_completed(pb, req);
-#endif
-}
-
-void MafwRendererAdapter::playback_state_req_handler(pb_playback_t *pb, pb_state_e req_state, pb_req_t *ext_req, void *data)
-{
-    // This could be used to handle incoming calls.
-    // Currently that is accomplished using MCE in MainWindow.
-    Q_UNUSED(pb);
-    Q_UNUSED(req_state);
-    Q_UNUSED(ext_req);
-    Q_UNUSED(data);
-}
-
-void MafwRendererAdapter::connectRegistrySignals()
-{
-    g_signal_connect(mafw_registry,
-                     "renderer_added",
-                     G_CALLBACK(&onRendererAdded),
-                     static_cast<void*>(this));
-
-    g_signal_connect(mafw_registry,
-                     "renderer_removed",
-                     G_CALLBACK(&onRendererRemoved),
-                     static_cast<void*>(this));
-}
-
-void MafwRendererAdapter::connectRendererSignals()
-{
-#ifdef DEBUG
-    qDebug() << "connect renderer signals";
-#endif
-    g_signal_connect(mafw_renderer,
-                     "buffering-info",
-                     G_CALLBACK(&onBufferingInfo),
-                     static_cast<void*>(this));
-    g_signal_connect(mafw_renderer,
-                     "media-changed",
-                     G_CALLBACK(&onMediaChanged),
-                     static_cast<void*>(this));
-    g_signal_connect(mafw_renderer,
-                     "metadata-changed",
-                     G_CALLBACK(&onMetadataChanged),
-                     static_cast<void*>(this));
-    g_signal_connect(mafw_renderer,
-                     "playlist-changed",
-                     G_CALLBACK(&onPlaylistChanged),
-                     static_cast<void*>(this));
-    g_signal_connect(mafw_renderer,
-                     "state-changed",
-                     G_CALLBACK(&onStateChanged),
-                     static_cast<void*>(this));
-}
-
-void MafwRendererAdapter::disconnectRendererSignals()
-{
-
-}
-
-void MafwRendererAdapter::onRendererAdded(MafwRegistry*,
-                                          GObject* renderer,
-                                          gpointer user_data)
-{
-    if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(renderer)), MEDIAPLAYER_RENDERER) == 0)
-    {
+        // Bind
         g_object_ref(renderer);
-        static_cast<MafwRendererAdapter*>(user_data)->mafw_renderer = MAFW_RENDERER(renderer);
-        static_cast<MafwRendererAdapter*>(user_data)->connectRendererSignals();
-        emit static_cast<MafwRendererAdapter*>(user_data)->rendererReady();
+        g_signal_connect(renderer, "buffering-info"  , G_CALLBACK(&onBufferingInfo)  , static_cast<void*>(this));
+        g_signal_connect(renderer, "media-changed"   , G_CALLBACK(&onMediaChanged)   , static_cast<void*>(this));
+        g_signal_connect(renderer, "metadata-changed", G_CALLBACK(&onMetadataChanged), static_cast<void*>(this));
+        g_signal_connect(renderer, "playlist-changed", G_CALLBACK(&onPlaylistChanged), static_cast<void*>(this));
+        g_signal_connect(renderer, "state-changed"   , G_CALLBACK(&onStateChanged)   , static_cast<void*>(this));
+
+        this->renderer = renderer;
+        m_uuid = mafw_extension_get_uuid(MAFW_EXTENSION(renderer));
+
+        // Watch only for removals
+        disconnect(MafwRegistryAdapter::get(), SIGNAL(rendererAdded(MafwRenderer*)), this, SLOT(onRendererAdded(MafwRenderer*)));
+        connect(MafwRegistryAdapter::get(), SIGNAL(rendererRemoved(MafwRenderer*)), this, SLOT(onRendererRemoved(MafwRenderer*)));
+
+        emit ready();
+    } else {
+        // Unbind
+        g_signal_handlers_disconnect_matched(this->renderer, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this);
+        g_object_unref(this->renderer);
+
+        this->renderer = NULL;
+
+        // Watch only for additions
+        disconnect(MafwRegistryAdapter::get(), SIGNAL(rendererRemoved(MafwRenderer*)), this, SLOT(onRendererRemoved(MafwRenderer*)));
+        connect(MafwRegistryAdapter::get(), SIGNAL(rendererAdded(MafwRenderer*)), this, SLOT(onRendererAdded(MafwRenderer*)));
     }
 }
 
-
-void MafwRendererAdapter::onRendererRemoved(MafwRegistry*,
-                                            GObject* renderer,
-                                            gpointer user_data)
+void MafwRendererAdapter::onRendererAdded(MafwRenderer *renderer)
 {
-    if(g_strcmp0(mafw_extension_get_name(MAFW_EXTENSION(renderer)), MEDIAPLAYER_RENDERER) == 0)
-    {
-        g_object_unref(renderer);
-        static_cast<MafwRendererAdapter*>(user_data)->mafw_renderer = MAFW_RENDERER(renderer);
-        static_cast<MafwRendererAdapter*>(user_data)->disconnectRendererSignals();
-    }
+    if (m_uuid == mafw_extension_get_uuid(MAFW_EXTENSION(renderer)))
+        bind(renderer);
 }
 
-void MafwRendererAdapter::onBufferingInfo(MafwRenderer*,
-                                          gfloat status,
-                                          gpointer user_data)
+void MafwRendererAdapter::onRendererRemoved(MafwRenderer *renderer)
 {
-#ifdef DEBUG
-    qDebug() << "On buffering info";
-#endif
-    emit static_cast<MafwRendererAdapter*>(user_data)->bufferingInfo(status);
+    if (m_uuid == mafw_extension_get_uuid(MAFW_EXTENSION(renderer)))
+        bind(NULL);
 }
 
-void MafwRendererAdapter::onMediaChanged(MafwRenderer*,
-                                         gint index,
-                                         gchar* object_id,
-                                         gpointer user_data)
-{
-#ifdef DEBUG
-    qDebug() << "On media changed";
-#endif
-    emit static_cast<MafwRendererAdapter*>(user_data)->mediaChanged(index, object_id);
-}
-
-void MafwRendererAdapter::onMetadataChanged(MafwRenderer*,
-                                            gchar* name,
-                                            GValueArray* value,
-                                            gpointer user_data)
-{
-#ifdef DEBUG
-    qDebug() << "On Metadata Changed" << name;
-#endif
-    if(value->n_values == 1)
-    {
-        GValue* v = g_value_array_get_nth(value, 0);
-        switch(G_VALUE_TYPE(v))
-        {
-            case G_TYPE_STRING:
-            {
-                const gchar* str_value = g_value_get_string(v);
-                QVariant data = QVariant(QString::fromUtf8(str_value));
-#ifdef DEBUG
-                qDebug() << "string: " << data.toString();
-#endif
-                emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
-            }
-            break;
-
-            case G_TYPE_INT:
-            {
-                int int_value = g_value_get_int(v);
-                QVariant data = QVariant(int_value);
-#ifdef DEBUG
-                qDebug() << "int: " << QString::number(data.toInt());
-#endif
-                emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
-            }
-            break;
-
-            case G_TYPE_INT64:
-            {
-                qint64 int64_value = g_value_get_int64(v);
-                QVariant data = QVariant(int64_value);
-                emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
-            }
-            break;
-
-            case G_TYPE_BOOLEAN:
-            {
-                bool bool_value = g_value_get_boolean(v);
-                QVariant data = QVariant(bool_value);
-                emit static_cast<MafwRendererAdapter*>(user_data)->metadataChanged(QString(name), data);
-            }
-            break;
-
-            default:
-            {
-                qDebug() << "Unknown metadata type for" << name;
-            }
-            break;
-        }
-
-    }
-}
-
-void MafwRendererAdapter::onPlaylistChanged(MafwRenderer*,
-                                            GObject* playlist,
-                                            gpointer user_data)
-{
-#ifdef DEBUG
-    qDebug() << "On playlist changed";
-#endif
-    emit static_cast<MafwRendererAdapter*>(user_data)->playlistChanged(playlist);
-}
-
-void MafwRendererAdapter::onStateChanged(MafwRenderer*,
-                                         gint state,
-                                         gpointer user_data)
-{
-    MafwRendererAdapter *adapter = static_cast<MafwRendererAdapter*>(user_data);
-
-#ifdef DEBUG
-    qDebug() << "On state changed";
-#endif
-    emit adapter->stateChanged(state);
-
-#ifndef LIBPLAYBACK_FULL
-    if (adapter->playback) {
-        if (state == Paused || state == Stopped)
-            pb_playback_req_state(static_cast<MafwRendererAdapter*>(user_data)->playback,
-                                  PB_STATE_STOP, playback_state_req_callback, NULL);
-
-        else if (state == Playing && !adapter->compatiblePlayback)
-            pb_playback_req_state(static_cast<MafwRendererAdapter*>(user_data)->playback,
-                                  PB_STATE_PLAY, playback_state_req_callback, NULL);
-    }
-#endif
-}
+//--- Exposed operations -------------------------------------------------------
 
 void MafwRendererAdapter::play()
 {
+    if (!renderer) return;
+
 #ifdef MAFW_WORKAROUNDS
-    // Early play() or gotoIndex() seems be reliable only for smaller libraries.
+    // Early play() or gotoIndex() seems reliable only for smaller libraries.
     // For bigger ones something probably doesn't have enough time to ready up.
     // Possible workaround is to call size() first, so when it returns, we know
     // that play() can be successfully called. That's only a theory, but it
@@ -344,233 +92,255 @@ void MafwRendererAdapter::play()
     playlist->size();
 #endif
 
-#ifdef LIBPLAYBACK_FULL
-    if (playback) {
-        req_state_cb_payload *pl = new req_state_cb_payload;
-        pl->adapter = this;
-        pl->action = Play;
-        pb_playback_req_state(playback, PB_STATE_PLAY,
-                              playback_state_req_callback, pl);
-    } else if (mafw_renderer) {
-        mafw_renderer_play(mafw_renderer, MafwRendererSignalHelper::play_playback_cb, this);
-    }
-#else
-    if (mafw_renderer)
-        mafw_renderer_play(mafw_renderer, MafwRendererSignalHelper::play_playback_cb, this);
-#endif
+    mafw_renderer_play(renderer, onPlayExecuted, this);
 }
 
-void MafwRendererAdapter::playObject(const gchar* object_id)
+void MafwRendererAdapter::playObject(const QString &objectId)
 {
-#ifdef LIBPLAYBACK_FULL
-    if (mafw_renderer) {
-        req_state_cb_payload *pl = new req_state_cb_payload;
-        pl->adapter = this;
-        pl->action = Dummy;
-        pb_playback_req_state(playback, PB_STATE_PLAY,
-                              playback_state_req_callback, pl);
-
-        mafw_renderer_play_object(mafw_renderer, object_id, MafwRendererSignalHelper::play_object_playback_cb, this);
-    }
-#else
-    if (mafw_renderer)
-        mafw_renderer_play_object(mafw_renderer, object_id, MafwRendererSignalHelper::play_object_playback_cb, this);
-#endif
+    if (renderer)
+        mafw_renderer_play_object(renderer, objectId.toUtf8(), onPlayObjectExecuted, this);
 }
 
-void MafwRendererAdapter::playURI(const gchar* uri)
+void MafwRendererAdapter::playUri(const QString &uri)
 {
-#ifdef LIBPLAYBACK_FULL
-    if (mafw_renderer) {
-        req_state_cb_payload *pl = new req_state_cb_payload;
-        pl->adapter = this;
-        pl->action = Dummy;
-        pb_playback_req_state(playback, PB_STATE_PLAY,
-                              playback_state_req_callback, pl);
-
-        mafw_renderer_play_uri(mafw_renderer, uri, MafwRendererSignalHelper::play_uri_playback_cb, this);
-    }
-#else
-    if (mafw_renderer)
-        mafw_renderer_play_uri(mafw_renderer, uri, MafwRendererSignalHelper::play_uri_playback_cb, this);
-#endif
+    if (renderer)
+        mafw_renderer_play_uri(renderer, uri.toUtf8(), onPlayUriExecuted, this);
 }
 
 void MafwRendererAdapter::stop()
 {
-#ifdef LIBPLAYBACK_FULL
-    if (playback) {
-        req_state_cb_payload *pl = new req_state_cb_payload;
-        pl->adapter = this;
-        pl->action = Stop;
-        pb_playback_req_state(playback, PB_STATE_STOP,
-                              playback_state_req_callback, pl);
-    } else if (mafw_renderer) {
-        mafw_renderer_stop(mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, this);
-    }
-#else
-    if (mafw_renderer)
-        mafw_renderer_stop(mafw_renderer, MafwRendererSignalHelper::stop_playback_cb, this);
-#endif
+    if (renderer)
+        mafw_renderer_stop(renderer, onStopExecuted, this);
 }
 
 void MafwRendererAdapter::pause()
 {
-#ifdef LIBPLAYBACK_FULL
-    if (playback) {
-        req_state_cb_payload *pl = new req_state_cb_payload;
-        pl->adapter = this;
-        pl->action = Pause;
-        pb_playback_req_state(playback, PB_STATE_STOP,
-                              playback_state_req_callback, pl);
-    } else if (mafw_renderer) {
-        mafw_renderer_pause(mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, this);
-    }
-#else
-    if (mafw_renderer)
-        mafw_renderer_pause(mafw_renderer, MafwRendererSignalHelper::pause_playback_cb, this);
-#endif
+    if (renderer)
+        mafw_renderer_pause(renderer, onPauseExecuted, this);
 }
 
 void MafwRendererAdapter::resume()
 {
-#ifdef LIBPLAYBACK_FULL
-    if (playback) {
-        req_state_cb_payload *pl = new req_state_cb_payload;
-        pl->adapter = this;
-        pl->action = Resume;
-        pb_playback_req_state(playback, PB_STATE_PLAY,
-                              playback_state_req_callback, pl);
-    } else if (mafw_renderer) {
-        mafw_renderer_resume(mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, this);
-    }
-#else
-    if (mafw_renderer)
-        mafw_renderer_resume(mafw_renderer, MafwRendererSignalHelper::resume_playback_cb, this);
-#endif
+    if (renderer)
+        mafw_renderer_resume(renderer, onResumeExecuted, this);
 }
 
 void MafwRendererAdapter::getStatus()
 {
-    if(mafw_renderer)
-    {
-        mafw_renderer_get_status(mafw_renderer, MafwRendererSignalHelper::get_status_cb, this);
-    }
+    if (renderer)
+        mafw_renderer_get_status(renderer, onStatusReceived, this);
+}
+
+bool MafwRendererAdapter::assignPlaylist(MafwPlaylist *playlist)
+{
+    return renderer && mafw_renderer_assign_playlist(renderer, playlist, NULL);
 }
 
 void MafwRendererAdapter::next()
 {
-    if(mafw_renderer)
-    {
-        mafw_renderer_next(mafw_renderer, MafwRendererSignalHelper::next_playback_cb, this);
-    }
+    if (renderer)
+        mafw_renderer_next(renderer, onNextExecuted, this);
 }
 
 void MafwRendererAdapter::previous()
 {
-    if(mafw_renderer)
-    {
-        mafw_renderer_previous(mafw_renderer, MafwRendererSignalHelper::previous_playback_cb, this);
-    }
+    if (renderer)
+        mafw_renderer_previous(renderer, onPreviousExecuted, this);
 }
 
 void MafwRendererAdapter::gotoIndex(uint index)
 {
+    if (!renderer) return;
+
 #ifdef MAFW_WORKAROUNDS
     // Explained in play()
     playlist->size();
 #endif
 
-    if(mafw_renderer)
-    {
-        mafw_renderer_goto_index(mafw_renderer, index, MafwRendererSignalHelper::goto_index_playback_cb, this);
-    }
+    mafw_renderer_goto_index(renderer, index, onGotoIndexExecuted, this);
 }
 
-void MafwRendererAdapter::setPosition(MafwRendererSeekMode seekmode,
-                                      int seconds)
+void MafwRendererAdapter::setPosition(MafwRendererSeekMode mode, int seconds)
 {
-    if(mafw_renderer)
-    {
-        mafw_renderer_set_position(mafw_renderer, seekmode, seconds, MafwRendererSignalHelper::set_position_cb, this);
-    }
+    if (renderer)
+        mafw_renderer_set_position(renderer, mode, seconds, onPositionReceived, this);
 }
 
 void MafwRendererAdapter::getPosition()
 {
-    if(mafw_renderer)
-    {
-        mafw_renderer_get_position(mafw_renderer, MafwRendererSignalHelper::get_position_cb, this);
-    }
+    if (renderer)
+        mafw_renderer_get_position(renderer, onPositionReceived, this);
 }
 
 void MafwRendererAdapter::getCurrentMetadata()
 {
-    if(mafw_renderer)
-    {
-        mafw_renderer_get_current_metadata(mafw_renderer, MafwRendererSignalHelper::get_current_metadata_cb, this);
-    }
+    if (renderer)
+        mafw_renderer_get_current_metadata(renderer, onCurrentMetadataReceived, this);
 }
 
-bool MafwRendererAdapter::assignPlaylist(MafwPlaylist* playlist)
-{
-    if(mafw_renderer)
-    {
-        return mafw_renderer_assign_playlist(mafw_renderer, playlist, NULL);
-    }
-    return false;
-}
-
-bool MafwRendererAdapter::isRendererReady()
-{
-    if(mafw_renderer)
-        return true;
-    else
-        return false;
-}
+//--- Exposed properties -------------------------------------------------------
 
 void MafwRendererAdapter::setVolume(int volume)
 {
-    if(mafw_renderer)
-    {
-        g_value_set_uint (&GVolume, volume);
-        mafw_extension_set_property(MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_VOLUME, &GVolume);
-    }
+    // This uint property is masked as int for compatibility with Qt
+    if (renderer)
+        mafw_extension_set_property_uint(MAFW_EXTENSION(renderer), MAFW_PROPERTY_RENDERER_VOLUME, volume);
 }
 
 void MafwRendererAdapter::getVolume()
 {
-    if(mafw_renderer)
-    {
-#ifdef DEBUG
-        qDebug("MafwRendererAdapter::getVolume");
-#endif
-        mafw_extension_get_property (MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_VOLUME,
-                                     MafwRendererSignalHelper::get_property_cb, this);
-    }
+    if (renderer)
+        mafw_extension_get_property(MAFW_EXTENSION(renderer), MAFW_PROPERTY_RENDERER_VOLUME, onVolumeReceived, this);
 }
 
-void MafwRendererAdapter::setWindowXid(uint Xid)
+void MafwRendererAdapter::setXid(uint xid)
 {
-    if(mafw_renderer)
-    {
-        mafw_extension_set_property_uint(MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_XID, Xid);
-    }
-}
-
-void MafwRendererAdapter::setColorKey(int colorKey)
-{
-    if(mafw_renderer)
-    {
-        // MAFW API docs state that this is a read-only property
-        // however, the stock Maemo 5 player is changing this to
-        // a static number.
-        mafw_extension_set_property_int (MAFW_EXTENSION(this->mafw_renderer), MAFW_PROPERTY_RENDERER_COLORKEY, colorKey);
-    }
+    if (renderer)
+        mafw_extension_set_property_uint(MAFW_EXTENSION(renderer), MAFW_PROPERTY_RENDERER_XID, xid);
 }
 
 void MafwRendererAdapter::setErrorPolicy(uint errorPolicy)
 {
-    if (mafw_renderer)
-        mafw_extension_set_property_uint(MAFW_EXTENSION(mafw_renderer), MAFW_PROPERTY_RENDERER_ERROR_POLICY, errorPolicy);
+    if (renderer)
+        mafw_extension_set_property_uint(MAFW_EXTENSION(renderer), MAFW_PROPERTY_RENDERER_ERROR_POLICY, errorPolicy);
+}
+
+void MafwRendererAdapter::setColorKey(int colorKey)
+{
+    // Despite what the MAFW documentation says, this a writable property
+    if (renderer)
+        mafw_extension_set_property_int(MAFW_EXTENSION(this->renderer), MAFW_PROPERTY_RENDERER_COLORKEY, colorKey);
+}
+
+//--- Signal handlers ----------------------------------------------------------
+
+void MafwRendererAdapter::onBufferingInfo(MafwRenderer *, gfloat status, gpointer self)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->bufferingInfo(status);
+}
+
+void MafwRendererAdapter::onMediaChanged(MafwRenderer *, gint index, gchar *objectId, gpointer self)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->mediaChanged(index, QString::fromUtf8(objectId));
+}
+
+void MafwRendererAdapter::onMetadataChanged(MafwRenderer*, gchar *name, GValueArray *value, gpointer self)
+{
+    if (value->n_values == 1) {
+        GValue *v = g_value_array_get_nth(value, 0);
+
+        switch(G_VALUE_TYPE(v)) {
+            case G_TYPE_BOOLEAN:
+                emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, g_value_get_boolean(v)); break;
+            case G_TYPE_INT:
+                emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, g_value_get_int(v)); break;
+            case G_TYPE_INT64:
+                emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, g_value_get_int64(v)); break;
+            case G_TYPE_STRING:
+                emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, QString::fromUtf8(g_value_get_string(v))); break;
+            default:
+                qDebug() << "Unsupported metadata type" << G_VALUE_TYPE_NAME(v) << "for" << name; break;
+        }
+    } else {
+        qDebug() << "Unsupported metadata count" << value->n_values << "for" << name;
+    }
+}
+
+void MafwRendererAdapter::onPlaylistChanged(MafwRenderer *, GObject *playlist, gpointer self)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->playlistChanged(playlist);
+}
+
+void MafwRendererAdapter::onStateChanged(MafwRenderer *, gint state, gpointer self)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->stateChanged(static_cast<MafwPlayState>(state));
+}
+
+//--- Callbacks ----------------------------------------------------------------
+
+void MafwRendererAdapter::onPlayExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->playExecuted(MafwUtils::toQString(error));
+
+#ifdef MAFW_WORKAROUNDS
+    // MAFW behaves inconsistently when it comes to assigning items to
+    // a renderer. It can end up without any media to play despite the playlist
+    // not being empty. gotoIndex() can fix the issue, but next() is probably
+    // better due to being shuffle-friendly.
+    static int retries = 0;
+    if (error && error->code == MAFW_RENDERER_ERROR_NO_MEDIA) {
+        if (static_cast<MafwRendererAdapter*>(self)->playlist->size()) {
+            if (retries < 5) {
+                qDebug() << "Trying to recover from MAFW_RENDERER_ERROR_NO_MEDIA";
+                ++retries;
+                static_cast<MafwRendererAdapter*>(self)->next();
+                static_cast<MafwRendererAdapter*>(self)->play();
+            } else {
+                qDebug() << "Giving up on MAFW_RENDERER_ERROR_NO_MEDIA";
+            }
+            return;
+        }
+    }
+    retries = 0;
+#endif
+}
+
+void MafwRendererAdapter::onPlayObjectExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->playObjectExecuted(MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onPlayUriExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->playUriExecuted(MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onStopExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->stopExecuted(MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onPauseExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->pauseExecuted(MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onResumeExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->resumeExecuted(MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onStatusReceived(MafwRenderer *, MafwPlaylist *playlist, guint index, MafwPlayState state, const gchar *objectId, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->statusReceived(playlist, index, state, QString::fromUtf8(objectId), MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onNextExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->nextExecuted(MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onPreviousExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->previousExecuted(MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onGotoIndexExecuted(MafwRenderer *, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->gotoIndexExecuted(MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onPositionReceived(MafwRenderer *, gint position, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->positionReceived(position, MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onCurrentMetadataReceived(MafwRenderer *, const gchar *objectId, GHashTable *metadata, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->currentMetadataReceived(metadata, QString::fromUtf8(objectId), MafwUtils::toQString(error));
+}
+
+void MafwRendererAdapter::onVolumeReceived(MafwExtension *, const gchar *, GValue *value, gpointer self, const GError *error)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->volumeReceived(g_value_get_uint(value), MafwUtils::toQString(error));
 }

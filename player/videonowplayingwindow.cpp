@@ -96,7 +96,7 @@ VideoNowPlayingWindow::VideoNowPlayingWindow(QWidget *parent, MafwRegistryAdapte
     // Set up video surface
     QApplication::syncX();
     mafwRenderer->setColorKey(colorKey().rgb() & 0xffffff);
-    mafwRenderer->setWindowXid(ui->videoWidget->winId());
+    mafwRenderer->setXid(ui->videoWidget->winId());
 
     // Do not jump to the next playlist item if an error occurs
     mafwRenderer->setErrorPolicy(MAFW_RENDERER_ERROR_POLICY_STOP);
@@ -230,8 +230,8 @@ void VideoNowPlayingWindow::connectSignals()
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
     // Initial status
-    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
     QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -342,28 +342,28 @@ void VideoNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
     }
 }
 
-void VideoNowPlayingWindow::onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char* objectId, QString error)
+void VideoNowPlayingWindow::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state, QString objectId, QString error)
 {
     // This is a one-time handler, so disconnect it right after it is called
-    disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-               this, SLOT(onGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
     // This is the function which will take over from here
-    connect(mafwRenderer, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
+    connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int,QString)));
 
     // Forward the received info to more specific handlers
     onStateChanged(state);
-    onMediaChanged(index, const_cast<char*>(objectId));
+    onMediaChanged(index, objectId);
 
     if (!error.isEmpty())
         qDebug() << error;
 }
 
-void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
+void VideoNowPlayingWindow::onMediaChanged(int, QString objectId)
 {
     // Store the last received object identifier as current
-    currentObjectId = QString::fromUtf8(objectId);
+    currentObjectId = objectId;
 
     // Reset the last received position from the previous track
     currentPosition = 0;
@@ -373,7 +373,7 @@ void VideoNowPlayingWindow::onMediaChanged(int, char* objectId)
         resumePosition = Duration::Blank;
 
     // Rearrange the UI according to the origin of the media
-    if (currentObjectId.startsWith("localtagfs::")) { // local storage
+    if (objectId.startsWith("localtagfs::")) { // local storage
         ui->bookmarkButton->hide();
         ui->shareButton->show();
         ui->deleteButton->show();
@@ -396,7 +396,6 @@ void VideoNowPlayingWindow::onPrevButtonClicked()
         if (!buttonWasDown) {
             if (this->currentPosition > 3) {
                 mafwRenderer->setPosition(SeekAbsolute, 0);
-                mafwRenderer->getPosition();
             } else {
                 gotCurrentPlayState = false;
                 mafwRenderer->previous();
@@ -521,7 +520,7 @@ void VideoNowPlayingWindow::play()
     }
 }
 
-void VideoNowPlayingWindow::onStateChanged(int state)
+void VideoNowPlayingWindow::onStateChanged(MafwPlayState state)
 {
     qDebug() << "State changed:" << state;
 
@@ -540,8 +539,8 @@ void VideoNowPlayingWindow::onStateChanged(int state)
             gotInitialStopState = true;
 
             // Various status notifications
-            connect(mafwRenderer, SIGNAL(signalGetPosition(int,QString)), this, SLOT(onPositionChanged(int,QString)));
-            connect(mafwRenderer, SIGNAL(signalGetVolume(int)), ui->volumeSlider, SLOT(setValue(int)));
+            connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int,QString)));
+            connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), ui->volumeSlider, SLOT(setValue(int)));
             connect(mafwRenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
 
             // Position slider
@@ -708,28 +707,24 @@ void VideoNowPlayingWindow::updateDNDAtom()
 void VideoNowPlayingWindow::slowFwd()
 {
     mafwRenderer->setPosition(SeekRelative, 10);
-    mafwRenderer->getPosition();
 }
 
 // Move playback backward by a small amount
 void VideoNowPlayingWindow::slowRev()
 {
     mafwRenderer->setPosition(SeekRelative, -10);
-    mafwRenderer->getPosition();
 }
 
 // Move playback forward by a large amount
 void VideoNowPlayingWindow::fastFwd()
 {
     mafwRenderer->setPosition(SeekRelative, 60);
-    mafwRenderer->getPosition();
 }
 
 // Move playback backward by a small amount
 void VideoNowPlayingWindow::fastRev()
 {
     mafwRenderer->setPosition(SeekRelative, -60);
-    mafwRenderer->getPosition();
 }
 
 void VideoNowPlayingWindow::togglePlayback()

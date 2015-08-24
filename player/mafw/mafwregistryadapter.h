@@ -22,7 +22,7 @@ public:
 
     static MafwRegistryAdapter* get();
 
-    MafwSource* findSourceByUUID(const QString &uuid);
+    MafwExtension* findExtensionByUuid(const QString &uuid);
 
     MafwRendererAdapter* renderer();
     MafwSourceAdapter* source(RecognizedSource source);
@@ -31,6 +31,9 @@ public:
     bool isRecognized(const QString &uuid);
 
 signals:
+    void rendererAdded(MafwRenderer *renderer);
+    void rendererRemoved(MafwRenderer *renderer);
+
     void sourceAdded(MafwSource *source);
     void sourceAdded(const QString &uuid, const QString &name);
     void sourceRemoved(MafwSource *source);
@@ -48,6 +51,8 @@ private:
     CurrentPlaylistAdapter *m_playlist;
 
     // Signal handlers
+    static void onRendererAdded(MafwRegistry *, MafwRenderer *renderer, MafwRegistryAdapter *self);
+    static void onRendererRemoved(MafwRegistry *, MafwRenderer *renderer, MafwRegistryAdapter *self);
     static void onSourceAdded(MafwRegistry *, MafwSource *source, MafwRegistryAdapter *self);
     static void onSourceRemoved(MafwRegistry *, MafwSource *source, MafwRegistryAdapter *self);
 };

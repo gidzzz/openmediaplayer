@@ -55,6 +55,7 @@ protected:
     void bind(MafwPlaylist *playlist, bool ref = true);
 
 private:
+    // Operations started by this adapter
     QList<gpointer> ownedOps;
 
     // All operations for which a notification should be issued upon completion

@@ -6,9 +6,9 @@ CurrentPlaylistAdapter::CurrentPlaylistAdapter(MafwRendererAdapter *renderer, QO
     MafwPlaylistAdapter(NULL, parent),
     renderer(renderer)
 {
-    connect(renderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
-    connect(renderer, SIGNAL(rendererReady()), renderer, SLOT(getStatus()));
+    connect(renderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+    connect(renderer, SIGNAL(ready()), renderer, SLOT(getStatus()));
 
     connect(renderer, SIGNAL(playlistChanged(GObject*)), this, SLOT(onPlaylistChanged(GObject*)));
 }
@@ -41,10 +41,10 @@ void CurrentPlaylistAdapter::assignPlaylist(const char *playlistName)
     }
 }
 
-void CurrentPlaylistAdapter::onStatusReceived(MafwPlaylist *playlist, uint, MafwPlayState, const char *, QString)
+void CurrentPlaylistAdapter::onStatusReceived(MafwPlaylist *playlist, uint, MafwPlayState, QString, QString)
 {
-    disconnect(renderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    disconnect(renderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
     if (playlist) {
         this->bind(playlist);

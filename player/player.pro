@@ -32,6 +32,7 @@ SOURCES += \
     lyricssearchdialog.cpp \
     mediaart.cpp \
     missioncontrol.cpp \
+    playbackmanager.cpp \
     metadatawatcher.cpp \
     sleeper.cpp \
     playlistquerymanager.cpp \
@@ -64,11 +65,11 @@ SOURCES += \
     delegates/songlistitemdelegate.cpp \
     delegates/thumbnailitemdelegate.cpp \
     mafw/currentplaylistadapter.cpp \
+    mafw/mafwutils.cpp \
     mafw/mafwplaylistadapter.cpp \
     mafw/mafwplaylistmanageradapter.cpp \
     mafw/mafwregistryadapter.cpp \
     mafw/mafwrendereradapter.cpp \
-    mafw/mafwrenderersignalhelper.cpp \
     mafw/mafwsourceadapter.cpp
 
 HEADERS += \
@@ -98,6 +99,7 @@ HEADERS += \
     lyricssearchdialog.h \
     mediaart.h \
     missioncontrol.h \
+    playbackmanager.h \
     metadatawatcher.h \
     sleeper.h \
     playlistquerymanager.h \
@@ -135,11 +137,11 @@ HEADERS += \
     delegates/songlistitemdelegate.h \
     delegates/thumbnailitemdelegate.h \
     mafw/currentplaylistadapter.h \
+    mafw/mafwutils.h \
     mafw/mafwplaylistadapter.h \
     mafw/mafwplaylistmanageradapter.h \
     mafw/mafwregistryadapter.h \
     mafw/mafwrendereradapter.h \
-    mafw/mafwrenderersignalhelper.h \
     mafw/mafwsourceadapter.h
 
 FORMS += \

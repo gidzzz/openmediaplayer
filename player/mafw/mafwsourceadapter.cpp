@@ -16,7 +16,7 @@ MafwSourceAdapter::MafwSourceAdapter(const QString &uuid) :
 {
     init();
 
-    bind(MafwRegistryAdapter::get()->findSourceByUUID(uuid));
+    bind(MAFW_SOURCE(MafwRegistryAdapter::get()->findExtensionByUuid(uuid)));
 }
 
 MafwSourceAdapter::~MafwSourceAdapter()

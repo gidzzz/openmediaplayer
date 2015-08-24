@@ -8,14 +8,14 @@ MetadataWatcher::MetadataWatcher(MafwRegistryAdapter *mafwRegistry) :
     sourceMetadataPresent(false)
 {
     // Initialization
-    connect(mafwRenderer, SIGNAL(rendererReady()), mafwRenderer, SLOT(getStatus()));
-    connect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    connect(mafwRenderer, SIGNAL(ready()), mafwRenderer, SLOT(getStatus()));
+    connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
     // Metadata
     connect(mafwRenderer, SIGNAL(metadataChanged(QString,QVariant)),
             this, SLOT(onRendererMetadataChanged(QString,QVariant)));
-    connect(mafwRenderer, SIGNAL(signalGetCurrentMetadata(GHashTable*,QString,QString)),
+    connect(mafwRenderer, SIGNAL(currentMetadataReceived(GHashTable*,QString,QString)),
             this, SLOT(onRendererMetadataReceived(GHashTable*,QString,QString)));
     connect(mafwSource, SIGNAL(metadataResult(QString,GHashTable*,QString)),
             this, SLOT(onSourceMetadataReceived(QString,GHashTable*,QString)));
@@ -110,21 +110,21 @@ void MetadataWatcher::setMetadataFromSource(QString key, QVariant value)
     }
 }
 
-void MetadataWatcher::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, const char *objectId, QString)
+void MetadataWatcher::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId, QString)
 {
-    disconnect(mafwRenderer, SIGNAL(signalGetStatus(MafwPlaylist*,uint,MafwPlayState,const char*,QString)),
-               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,const char*,QString)));
+    disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,char*)), this, SLOT(onMediaChanged(int,char*)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int,QString)));
 
-    onMediaChanged(index, (char *) objectId);
+    onMediaChanged(index, objectId);
 }
 
-void MetadataWatcher::onMediaChanged(int, char *objectId)
+void MetadataWatcher::onMediaChanged(int, QString objectId)
 {
     qDebug() << "Media changed" << objectId;
 
-    currentObjectId = QString::fromUtf8(objectId);
+    currentObjectId = objectId;
 
     backupMetadata.clear();
     sourceMetadataPresent = false;
@@ -135,8 +135,8 @@ void MetadataWatcher::onMediaChanged(int, char *objectId)
 
     mafwRenderer->getCurrentMetadata();
 
-    mafwSource->bind(mafwRegistry->findSourceByUUID(currentObjectId.left(currentObjectId.indexOf("::"))));
-    mafwSource->getMetadata(currentObjectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
+    mafwSource->bind(MAFW_SOURCE(mafwRegistry->findExtensionByUuid(objectId.left(objectId.indexOf("::")))));
+    mafwSource->getMetadata(objectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                               MAFW_METADATA_KEY_ARTIST,
                                                               MAFW_METADATA_KEY_ALBUM,
 

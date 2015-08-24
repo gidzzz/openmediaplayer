@@ -81,11 +81,11 @@ private slots:
     void onPrevButtonPressed();
     void onStopButtonPressed();
     void onMetadataChanged(QString key, QVariant value);
-    void onStateChanged(int state);
-    void onMediaChanged(int, char *);
+    void onStateChanged(MafwPlayState state);
+    void onMediaChanged(int, QString);
     void onPropertyChanged(const QDBusMessage &msg);
-    void onGetStatus(MafwPlaylist*, uint index, MafwPlayState state, const char *, QString);
-    void onGetPosition(int position, QString);
+    void onStatusReceived(MafwPlaylist*, uint index, MafwPlayState state, QString objectId, QString);
+    void onPositionChanged(int position, QString);
     void onBufferingInfo(float status);
     void onNextButtonClicked();
     void onPreviousButtonClicked();

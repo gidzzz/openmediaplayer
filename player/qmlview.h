@@ -72,8 +72,8 @@ private:
 
 private slots:
     void onPositionChanged(int position, QString);
-    void onGetStatus(MafwPlaylist*,uint,MafwPlayState state,const char*,QString);
-    void onStateChanged(int state);
+    void onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, QString, QString);
+    void onStateChanged(MafwPlayState state);
     void onFmtxChanged();
     void onPlayClicked();
     void onSliderValueChanged(int position);
