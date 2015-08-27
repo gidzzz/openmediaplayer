@@ -21,6 +21,8 @@ public:
 private:
     MafwRendererAdapter *renderer;
 
+    void assignPlaylist(const char *playlistName);
+
 private slots:
     void onStatusReceived(MafwPlaylist *playlist, uint, MafwPlayState, const char *, QString);
     void onPlaylistChanged(GObject *playlist);

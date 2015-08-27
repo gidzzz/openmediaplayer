@@ -20,23 +20,25 @@ bool CurrentPlaylistAdapter::isReady()
 
 void CurrentPlaylistAdapter::assignAudioPlaylist()
 {
-    if (this->name() != "FmpAudioPlaylist")
-        this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpAudioPlaylist")), false);
-    renderer->assignPlaylist(this->playlist);
+    assignPlaylist("FmpAudioPlaylist");
 }
 
 void CurrentPlaylistAdapter::assignRadioPlaylist()
 {
-    if (this->name() != "FmpRadioPlaylist")
-        this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpRadioPlaylist")), false);
-    renderer->assignPlaylist(this->playlist);
+    assignPlaylist("FmpRadioPlaylist");
 }
 
 void CurrentPlaylistAdapter::assignVideoPlaylist()
 {
-    if (this->name() != "FmpVideoPlaylist")
-        this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist("FmpVideoPlaylist")), false);
-    renderer->assignPlaylist(this->playlist);
+    assignPlaylist("FmpVideoPlaylist");
+}
+
+void CurrentPlaylistAdapter::assignPlaylist(const char *playlistName)
+{
+    if (this->name() != playlistName) {
+        this->bind(MAFW_PLAYLIST(MafwPlaylistManagerAdapter::get()->createPlaylist(playlistName)), false);
+        renderer->assignPlaylist(this->playlist);
+    }
 }
 
 void CurrentPlaylistAdapter::onStatusReceived(MafwPlaylist *playlist, uint, MafwPlayState, const char *, QString)
