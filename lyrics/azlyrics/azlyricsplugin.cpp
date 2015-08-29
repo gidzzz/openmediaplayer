@@ -37,10 +37,10 @@ void AZLyricsPlugin::onReplyReceived()
     QByteArray data = reply->readAll();
     reply->deleteLater();
 
-    int i = data.indexOf("<!-- start of lyrics -->\r\n");
+    int i = data.indexOf("-->\r\n", data.indexOf("<!-- Usage"));
     if (i != -1) {
-        i += 26;
-        data.remove(data.indexOf("<!-- end of lyrics -->", i), data.length());
+        i += 5;
+        data.remove(data.indexOf("</div>", i), data.length());
         data.remove(0, i);
 
         QTextDocument lyrics;
