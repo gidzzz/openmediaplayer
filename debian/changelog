@@ -1,3 +1,10 @@
+openmediaplayer (20150829-1) unstable; urgency=low
+
+  * Fixed a regression that caused extra empty playlist items to appear in Now Playing.
+  * Updated the AZLyrics plugin to work again.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Sat, 29 Aug 2015 15:20:22 +0200
+
 openmediaplayer (20150812-1) unstable; urgency=low
 
   * Fixed an occasional crash when opening a file from an external application.
