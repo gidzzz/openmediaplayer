@@ -52,6 +52,7 @@ enum UserRoles { UserRoleName=Qt::UserRole,
                  UserRoleArtistCount,
                  UserRoleObjectID,
                  UserRoleMIME,
+                 UserRoleURI,
                  UserRoleValueText
                };
 

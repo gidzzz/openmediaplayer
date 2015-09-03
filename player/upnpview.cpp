@@ -42,6 +42,7 @@ void UpnpView::browseObjectId(QString objectId)
                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                    MAFW_METADATA_KEY_DURATION,
                                                    MAFW_METADATA_KEY_MIME,
+                                                   MAFW_METADATA_KEY_URI,
                                                    MAFW_METADATA_KEY_PROTOCOL_INFO),
                                   0, MAFW_SOURCE_BROWSE_ALL);
 }
@@ -53,6 +54,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
     if (metadata != NULL) {
         QString title;
         QString mime;
+        QString uri;
         int duration;
         GValue *v;
 
@@ -61,6 +63,9 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
         if (v) mime = QString::fromUtf8(g_value_get_string(v));
+
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
+        if (v) uri = QString::fromUtf8(g_value_get_string(v));
 
         if (mime != MAFW_METADATA_VALUE_MIME_CONTAINER) {
             // UPnP source does not always report correct MIME under the proper
@@ -109,8 +114,9 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
 
         item->setData(objectId, UserRoleObjectID);
         item->setData(duration, UserRoleSongDuration);
-        item->setData(mime, UserRoleMIME);
         item->setData(title, UserRoleTitle);
+        item->setData(mime, UserRoleMIME);
+        item->setData(uri, UserRoleURI);
 
         if (mime == MAFW_METADATA_VALUE_MIME_CONTAINER)
             item->setIcon(QIcon::fromTheme("general_folder"));
@@ -133,13 +139,16 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
 
 void UpnpView::onContextMenuRequested(const QPoint &pos)
 {
+    if (ui->objectList->currentIndex().data(UserRoleMIME).toString() == MAFW_METADATA_VALUE_MIME_CONTAINER) return;
+
+    QMenu *contextMenu = new KbMenu(this);
+    contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     if (ui->objectList->currentIndex().data(UserRoleMIME).toString() == AudioMime) {
-        QMenu *contextMenu = new KbMenu(this);
-        contextMenu->setAttribute(Qt::WA_DeleteOnClose);
         contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddOneToNowPlaying()));
         contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddOneToPlaylist()));
-        contextMenu->exec(this->mapToGlobal(pos));
     }
+    contextMenu->addAction(tr("Open in web browser"), this, SLOT(openCurrentUri()));
+    contextMenu->exec(this->mapToGlobal(pos));
 }
 
 void UpnpView::onItemActivated(QModelIndex index)
@@ -223,7 +232,7 @@ void UpnpView::onItemActivated(QModelIndex index)
         window->play();
 
     } else {
-        ui->objectList->clearSelection();
+        openCurrentUri();
     }
 }
 
@@ -243,6 +252,11 @@ void UpnpView::onAddOneToPlaylist()
         MafwPlaylistAdapter(picker.playlistName).appendItem(ui->objectList->currentIndex().data(UserRoleObjectID).toString());
         QMaemo5InformationBox::information(this, tr("%n clip(s) added to playlist", "", 1));
     }
+}
+
+void UpnpView::openCurrentUri()
+{
+    QDesktopServices::openUrl(ui->objectList->currentIndex().data(UserRoleURI).toString());
 }
 
 void UpnpView::addAllToNowPlaying()

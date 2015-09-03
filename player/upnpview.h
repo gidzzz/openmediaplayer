@@ -28,16 +28,18 @@ private slots:
     void onItemActivated(QModelIndex index);
     void onAddOneToNowPlaying();
     void onAddOneToPlaylist();
+    void openCurrentUri();
     void addAllToNowPlaying();
     int appendAllToPlaylist(QString type, bool filter);
     void onNowPlayingWindowHidden();
 
 private:
-    void notifyOnAddedToNowPlaying(int songCount);
-    uint browseId;
     MafwRegistryAdapter *mafwRegistry;
     MafwSourceAdapter *mafwSource;
     CurrentPlaylistAdapter *playlist;
+    uint browseId;
+
+    void notifyOnAddedToNowPlaying(int songCount);
 };
 
 #endif // UPNPVIEW_H
