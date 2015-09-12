@@ -15,6 +15,7 @@
 #include "rotator.h"
 #include "missioncontrol.h"
 #include "radionowplayingwindow.h"
+#include "metadatadialog.h"
 #include "bookmarkdialog.h"
 
 #include <QtGui/QX11Info>
@@ -101,6 +102,7 @@ private slots:
     void toggleOverlay();
     void toggleSettings();
     void toggleVolumeSlider();
+    void onDetailsClicked();
     void onBookmarkClicked();
     void onShareClicked();
     void onDeleteClicked();

@@ -14,6 +14,7 @@
 #include "nowplayingwindow.h"
 #include "ringtonedialog.h"
 #include "sharedialog.h"
+#include "metadatadialog.h"
 #include "delegates/songlistitemdelegate.h"
 #include "delegates/artistlistitemdelegate.h"
 #include "delegates/thumbnailitemdelegate.h"
@@ -93,6 +94,7 @@ private slots:
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void onRingtoneClicked();
     void onShareClicked();
+    void onDetailsClicked();
     void onDeleteClicked();
     void onOrientationChanged(int w, int h);
     void showAlbumView();

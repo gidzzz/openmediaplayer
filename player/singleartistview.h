@@ -7,6 +7,7 @@
 
 #include "includes.h"
 #include "confirmdialog.h"
+#include "metadatadialog.h"
 #include "singlealbumview.h"
 #include "delegates/thumbnailitemdelegate.h"
 #include "currentplaylistmanager.h"
@@ -46,6 +47,7 @@ private slots:
     void onAddAlbumToNowPlaying();
     void onNowPlayingWindowHidden();
     void onDeleteClicked();
+    void onDetailsClicked();
 };
 
 #endif // SINGLEARTISTVIEW_H

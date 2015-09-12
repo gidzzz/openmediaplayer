@@ -136,19 +136,7 @@ void MetadataWatcher::onMediaChanged(int, QString objectId)
     mafwRenderer->getCurrentMetadata();
 
     mafwSource->bind(MAFW_SOURCE(mafwRegistry->findExtensionByUuid(objectId.left(objectId.indexOf("::")))));
-    mafwSource->getMetadata(objectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
-                                                              MAFW_METADATA_KEY_ARTIST,
-                                                              MAFW_METADATA_KEY_ALBUM,
-
-                                                              MAFW_METADATA_KEY_DURATION,
-                                                              MAFW_METADATA_KEY_IS_SEEKABLE,
-
-                                                              MAFW_METADATA_KEY_URI,
-                                                              MAFW_METADATA_KEY_MIME,
-
-                                                              MAFW_METADATA_KEY_ALBUM_ART_URI,
-
-                                                              MAFW_METADATA_KEY_PAUSED_POSITION));
+    mafwSource->getMetadata(objectId, MAFW_SOURCE_ALL_KEYS);
 }
 
 void MetadataWatcher::onSourceMetadataReceived(QString objectId, GHashTable *metadata, QString)

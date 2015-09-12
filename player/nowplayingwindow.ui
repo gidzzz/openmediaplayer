@@ -625,6 +625,7 @@
     <addaction name="actionFM_Transmitter"/>
     <addaction name="actionClear_now_playing"/>
     <addaction name="actionAdd_to_playlist"/>
+    <addaction name="actionDetails"/>
     <addaction name="actionEntertainment_view"/>
     <addaction name="actionCar_view"/>
    </widget>
@@ -643,6 +644,11 @@
   <action name="actionAdd_to_playlist">
    <property name="text">
     <string>Add songs to a playlist</string>
+   </property>
+  </action>
+  <action name="actionDetails">
+   <property name="text">
+    <string>Details</string>
    </property>
   </action>
   <action name="actionEntertainment_view">

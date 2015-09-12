@@ -15,6 +15,7 @@
 #include "ringtonedialog.h"
 #include "sharedialog.h"
 #include "delegates/playlistdelegate.h"
+#include "metadatadialog.h"
 #include "qmlview.h"
 #include "texteditautoresizer.h"
 #include "coverpicker.h"
@@ -58,6 +59,7 @@ public slots:
     void setLyricsInfo(QString info);
     void onShuffleButtonToggled(bool);
     void updatePlaylistState();
+    void showDetails();
     void showCarView();
     void showEntertainmentView();
 

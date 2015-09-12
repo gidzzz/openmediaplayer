@@ -200,6 +200,7 @@ void SingleArtistView::onContextMenuRequested(const QPoint &pos)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddAlbumToNowPlaying()));
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    contextMenu->addAction(tr("Details"), this, SLOT(onDetailsClicked()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -212,6 +213,11 @@ void SingleArtistView::onDeleteClicked()
         objectProxyModel->removeRow(index.row());
     }
     ui->objectList->clearSelection();
+}
+
+void SingleArtistView::onDetailsClicked()
+{
+    (new MetadataDialog(this, mafwTrackerSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
 
 void SingleArtistView::deleteCurrentArtist()

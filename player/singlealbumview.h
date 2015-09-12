@@ -7,6 +7,7 @@
 
 #include "includes.h"
 #include "confirmdialog.h"
+#include "metadatadialog.h"
 #include "nowplayingwindow.h"
 #include "delegates/singlealbumviewdelegate.h"
 #include "delegates/shufflebuttondelegate.h"
@@ -40,6 +41,7 @@ private slots:
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void onRingtoneClicked();
     void onShareClicked();
+    void onDetailsClicked();
     void onDeleteClicked();
     void onAddToNowPlaying();
     void onAddToPlaylist();

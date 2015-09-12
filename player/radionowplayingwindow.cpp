@@ -89,6 +89,7 @@ void RadioNowPlayingWindow::connectSignals()
 
     connect(ui->actionFM_transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_radio_bookmark, SIGNAL(triggered()), this, SLOT(showBookmarkDialog()));
+    connect(ui->actionDetails, SIGNAL(triggered()), this, SLOT(showDetails()));
 
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(toggleVolumeSlider()));
     connect(ui->volumeButton, SIGNAL(clicked()), this, SLOT(volumeWatcher()));
@@ -458,6 +459,11 @@ void RadioNowPlayingWindow::showFMTXDialog()
 void RadioNowPlayingWindow::showBookmarkDialog()
 {
     BookmarkDialog(this, mafwRegistry, Media::Audio, uri, ui->stationLabel->text()).exec();
+}
+
+void RadioNowPlayingWindow::showDetails()
+{
+    (new MetadataDialog(this, MissionControl::acquire()->metadataWatcher()->metadata()))->show();
 }
 
 void RadioNowPlayingWindow::onNextButtonPressed()

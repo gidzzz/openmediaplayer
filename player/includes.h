@@ -17,6 +17,7 @@ extern QString volumeButtonIcon;
 #define defaultAlbumIcon "mediaplayer_default_album"
 #define defaultShuffleIcon "mediaplayer_default_shuffle"
 #define defaultVideoIcon "general_video"
+#define detailsButtonIcon "general_information"
 #define bookmarkButtonIcon "general_add"
 #define shareButtonIcon "general_share"
 #define deleteButtonIcon "general_delete"

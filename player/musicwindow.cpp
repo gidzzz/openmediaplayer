@@ -216,22 +216,27 @@ void MusicWindow::onContextMenuRequested(const QPoint &pos)
     // All views
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(onAddToNowPlaying()));
 
-    // Artist, album or song view
-    if (currentList() == ui->artistList || currentList() == ui->albumList || currentList() == ui->songList) {
-        // Song view
-        if (currentList() == ui->songList)
-            contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
-        // Everything
-        contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
-        // Song view
-        if (currentList() == ui->songList) {
-            contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(onRingtoneClicked()));
-            contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    // All but playlist view
+    if (currentList() != ui->playlistList) {
+        // Artist, album or song view
+        if (currentList() == ui->artistList || currentList() == ui->albumList || currentList() == ui->songList) {
+            // Song view
+            if (currentList() == ui->songList)
+                contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddToPlaylist()));
+            // Everything
+            contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+            // Song view
+            if (currentList() == ui->songList) {
+                contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(onRingtoneClicked()));
+                contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+            }
         }
+        // Everything
+        contextMenu->addAction(tr("Details"), this, SLOT(onDetailsClicked()));
     }
 
     // Playlist view
-    else if (currentList() == ui->playlistList) {
+    else {
         // Non-automatic playlist
         if (playlistProxyModel->mapToSource(ui->playlistList->currentIndex()).row() > 4) {
             // Saved playlist
@@ -317,6 +322,11 @@ void MusicWindow::onRingtoneClicked()
 void MusicWindow::onShareClicked()
 {
     (new ShareDialog(this, mafwTrackerSource, ui->songList->currentIndex().data(UserRoleObjectID).toString()))->show();
+}
+
+void MusicWindow::onDetailsClicked()
+{
+    (new MetadataDialog(this, mafwTrackerSource, currentList()->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
 
 void MusicWindow::onDeleteClicked()

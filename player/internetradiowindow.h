@@ -14,6 +14,7 @@
 
 #include "includes.h"
 #include "confirmdialog.h"
+#include "metadatadialog.h"
 #include "radionowplayingwindow.h"
 #include "bookmarkdialog.h"
 #include "fmtxdialog.h"
@@ -42,6 +43,7 @@ private slots:
     void onAddClicked();
     void onEditClicked();
     void onDeleteClicked();
+    void onDetailsClicked();
     void onStationSelected(QModelIndex index);
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void listStations();

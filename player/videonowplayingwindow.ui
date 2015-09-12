@@ -143,6 +143,22 @@
          <number>0</number>
         </property>
         <item>
+         <widget class="QToolButton" name="detailsButton">
+          <property name="styleSheet">
+           <string notr="true">background: transparent;</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>48</width>
+            <height>48</height>
+           </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QToolButton" name="bookmarkButton">
           <property name="visible">
            <bool>false</bool>

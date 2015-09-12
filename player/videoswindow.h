@@ -8,6 +8,7 @@
 #include <QSettings>
 
 #include "confirmdialog.h"
+#include "metadatadialog.h"
 #include "videonowplayingwindow.h"
 #include "delegates/thumbnailitemdelegate.h"
 #include "delegates/mediawithicondelegate.h"
@@ -38,6 +39,7 @@ private slots:
     void onSourceReady();
     void onShareClicked();
     void onDeleteClicked();
+    void onDetailsClicked();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void onVideoSelected(QModelIndex index);
     void onSortingChanged(QAction *action);

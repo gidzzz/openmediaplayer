@@ -174,6 +174,7 @@ void SingleGenreView::onContextMenuRequested(const QPoint &pos)
     QMenu *contextMenu = new KbMenu(this);
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Add to now playing"), this, SLOT(addArtistToNowPlaying()));
+    contextMenu->addAction(tr("Details"), this, SLOT(showDetails()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -210,6 +211,11 @@ void SingleGenreView::onAddFinished(uint token, int count)
     }
 
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
+}
+
+void SingleGenreView::showDetails()
+{
+    (new MetadataDialog(this, mafwTrackerSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
 
 void SingleGenreView::onContainerChanged(QString objectId)

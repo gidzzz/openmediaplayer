@@ -185,6 +185,7 @@ void VideoNowPlayingWindow::setIcons()
     ui->playButton->setIcon(QIcon(playButtonIcon));
     ui->nextButton->setIcon(QIcon(nextButtonIcon));
 
+    ui->detailsButton->setIcon(QIcon::fromTheme(detailsButtonIcon));
     ui->bookmarkButton->setIcon(QIcon::fromTheme(bookmarkButtonIcon));
     ui->shareButton->setIcon(QIcon::fromTheme(shareButtonIcon));
     ui->deleteButton->setIcon(QIcon::fromTheme(deleteButtonIcon));
@@ -202,6 +203,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(ui->continuousCheckBox, SIGNAL(toggled(bool)), this, SLOT(setContinuousPlayback(bool)));
 
     // Action buttons
+    connect(ui->detailsButton, SIGNAL(clicked()), this, SLOT(onDetailsClicked()));
     connect(ui->bookmarkButton, SIGNAL(clicked()), this, SLOT(onBookmarkClicked()));
     connect(ui->shareButton, SIGNAL(clicked()), this, SLOT(onShareClicked()));
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(onDeleteClicked()));
@@ -419,12 +421,18 @@ void VideoNowPlayingWindow::onNextButtonClicked()
     }
 }
 
+// Show media details
+void VideoNowPlayingWindow::onDetailsClicked()
+{
+    mafwRenderer->pause();
+    (new MetadataDialog(this, MissionControl::acquire()->metadataWatcher()->metadata()))->show();
+}
+
 // Bookmark the video
 void VideoNowPlayingWindow::onBookmarkClicked()
 {
     mafwRenderer->pause();
-    BookmarkDialog bookmarkDialog(this, mafwRegistry, Media::Video, uri);
-    bookmarkDialog.exec();
+    BookmarkDialog(this, mafwRegistry, Media::Video, uri).exec();
 }
 
 // Delete the video

@@ -46,6 +46,7 @@ SOURCES += \
     bookmarkdialog.cpp \
     lyricsmanager.cpp \
     lyricsprovidersdialog.cpp \
+    metadatadialog.cpp \
     basewindow.cpp \
     browserwindow.cpp \
     opendialog.cpp \
@@ -114,6 +115,7 @@ HEADERS += \
     ../lyrics/abstractlyricsprovider.h \
     lyricsmanager.h \
     lyricsprovidersdialog.h \
+    metadatadialog.h \
     headerawareproxymodel.h \
     confirmdialog.h \
     fastlistview.h \
@@ -164,6 +166,7 @@ FORMS += \
     sleeperdialog.ui \
     bookmarkdialog.ui \
     lyricsprovidersdialog.ui \
+    metadatadialog.ui \
     browserwindow.ui \
     opendialog.ui
 

@@ -110,6 +110,7 @@ void InternetRadioWindow::onContextMenuRequested(const QPoint &pos)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Edit"), this, SLOT(onEditClicked()));
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
+    contextMenu->addAction(tr("Details"), this, SLOT(onDetailsClicked()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -134,6 +135,11 @@ void InternetRadioWindow::onDeleteClicked()
         objectProxyModel->removeRow(ui->objectList->currentIndex().row());
     }
     ui->objectList->clearSelection();
+}
+
+void InternetRadioWindow::onDetailsClicked()
+{
+    (new MetadataDialog(this, mafwRadioSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
 
 void InternetRadioWindow::onAddClicked()

@@ -381,6 +381,7 @@ void NowPlayingWindow::connectSignals()
 
     connect(ui->actionFM_Transmitter, SIGNAL(triggered()), this, SLOT(showFMTXDialog()));
     connect(ui->actionAdd_to_playlist, SIGNAL(triggered()), this, SLOT(onAddAllToPlaylist()));
+    connect(ui->actionDetails, SIGNAL(triggered()), this, SLOT(showDetails()));
     connect(ui->actionEntertainment_view, SIGNAL(triggered()), this, SLOT(showEntertainmentView()));
     connect(ui->actionCar_view, SIGNAL(triggered()), this, SLOT(showCarView()));
 
@@ -1114,6 +1115,11 @@ void NowPlayingWindow::onDeleteClicked()
 void NowPlayingWindow::onShareClicked()
 {
     (new ShareDialog(this, mafwTrackerSource, ui->songList->currentItem()->data(UserRoleObjectID).toString()))->show();
+}
+
+void NowPlayingWindow::showDetails()
+{
+    (new MetadataDialog(this, MissionControl::acquire()->metadataWatcher()->metadata()))->show();
 }
 
 void NowPlayingWindow::showEntertainmentView()

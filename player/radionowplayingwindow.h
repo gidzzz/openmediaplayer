@@ -18,6 +18,7 @@
 #include "rotator.h"
 #include "missioncontrol.h"
 #include "bookmarkdialog.h"
+#include "metadatadialog.h"
 #include "mirror.h"
 
 #include "mafw/mafwregistryadapter.h"
@@ -77,6 +78,7 @@ private slots:
     void volumeWatcher();
     void showFMTXDialog();
     void showBookmarkDialog();
+    void showDetails();
     void onNextButtonPressed();
     void onPrevButtonPressed();
     void onStopButtonPressed();

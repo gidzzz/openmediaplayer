@@ -8,6 +8,7 @@
 #include "delegates/artistlistitemdelegate.h"
 #include "delegates/shufflebuttondelegate.h"
 #include "includes.h"
+#include "metadatadialog.h"
 #include "singleartistview.h"
 #include "nowplayingwindow.h"
 #include "currentplaylistmanager.h"
@@ -40,6 +41,7 @@ private slots:
     void addAllToNowPlaying();
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void addArtistToNowPlaying();
+    void showDetails();
     void onNowPlayingWindowHidden();
     void listArtists();
     void browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);

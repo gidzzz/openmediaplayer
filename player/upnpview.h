@@ -5,6 +5,7 @@
 
 #include "includes.h"
 
+#include "metadatadialog.h"
 #include "nowplayingwindow.h"
 #include "videonowplayingwindow.h"
 #include "delegates/mediawithicondelegate.h"
@@ -29,6 +30,7 @@ private slots:
     void onAddOneToNowPlaying();
     void onAddOneToPlaylist();
     void openCurrentUri();
+    void showDetails();
     void addAllToNowPlaying();
     int appendAllToPlaylist(QString type, bool filter);
     void onNowPlayingWindowHidden();

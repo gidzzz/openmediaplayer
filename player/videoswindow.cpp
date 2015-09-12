@@ -72,6 +72,7 @@ void VideosWindow::onContextMenuRequested(const QPoint &pos)
     contextMenu->setAttribute(Qt::WA_DeleteOnClose);
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    contextMenu->addAction(tr("Details"), this, SLOT(onDetailsClicked()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -87,6 +88,11 @@ void VideosWindow::onDeleteClicked()
 void VideosWindow::onShareClicked()
 {
     (new ShareDialog(this, mafwTrackerSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
+}
+
+void VideosWindow::onDetailsClicked()
+{
+    (new MetadataDialog(this, mafwTrackerSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
 
 void VideosWindow::onVideoSelected(QModelIndex index)

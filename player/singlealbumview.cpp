@@ -186,6 +186,7 @@ void SingleAlbumView::onContextMenuRequested(const QPoint &pos)
     contextMenu->addAction(tr("Delete"), this, SLOT(onDeleteClicked()));
     contextMenu->addAction(tr("Set as ringing tone"), this, SLOT(onRingtoneClicked()));
     contextMenu->addAction(tr("Share"), this, SLOT(onShareClicked()));
+    contextMenu->addAction(tr("Details"), this, SLOT(onDetailsClicked()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -221,6 +222,11 @@ void SingleAlbumView::onRingtoneClicked()
 void SingleAlbumView::onShareClicked()
 {
     (new ShareDialog(this, mafwTrackerSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
+}
+
+void SingleAlbumView::onDetailsClicked()
+{
+    (new MetadataDialog(this, mafwTrackerSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
 
 void SingleAlbumView::onContainerChanged(QString objectId)

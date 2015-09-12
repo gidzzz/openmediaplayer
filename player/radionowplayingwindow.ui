@@ -414,6 +414,7 @@
     </property>
     <addaction name="actionFM_transmitter"/>
     <addaction name="actionAdd_radio_bookmark"/>
+    <addaction name="actionDetails"/>
    </widget>
    <addaction name="windowMenu"/>
   </widget>
@@ -425,6 +426,11 @@
   <action name="actionAdd_radio_bookmark">
    <property name="text">
     <string>Add radio bookmark</string>
+   </property>
+  </action>
+  <action name="actionDetails">
+   <property name="text">
+    <string>Details</string>
    </property>
   </action>
  </widget>

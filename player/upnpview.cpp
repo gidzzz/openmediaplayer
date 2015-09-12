@@ -148,6 +148,7 @@ void UpnpView::onContextMenuRequested(const QPoint &pos)
         contextMenu->addAction(tr("Add to a playlist"), this, SLOT(onAddOneToPlaylist()));
     }
     contextMenu->addAction(tr("Open in web browser"), this, SLOT(openCurrentUri()));
+    contextMenu->addAction(tr("Details"), this, SLOT(showDetails()));
     contextMenu->exec(this->mapToGlobal(pos));
 }
 
@@ -257,6 +258,11 @@ void UpnpView::onAddOneToPlaylist()
 void UpnpView::openCurrentUri()
 {
     QDesktopServices::openUrl(ui->objectList->currentIndex().data(UserRoleURI).toString());
+}
+
+void UpnpView::showDetails()
+{
+    (new MetadataDialog(this, mafwSource, ui->objectList->currentIndex().data(UserRoleObjectID).toString()))->show();
 }
 
 void UpnpView::addAllToNowPlaying()
