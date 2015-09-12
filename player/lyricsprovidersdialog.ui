@@ -5,6 +5,9 @@
   <property name="windowTitle">
    <string>Lyrics providers</string>
   </property>
+  <property name="minimumHeight">
+   <number>800</number>
+  </property>
   <layout class="QGridLayout" name="mainLayout">
    <property name="margin">
     <number>0</number>

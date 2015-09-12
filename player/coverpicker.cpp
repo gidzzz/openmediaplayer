@@ -12,8 +12,6 @@ CoverPicker::CoverPicker(QString album, QString path, QWidget *parent) :
     connect(ui->fileList, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(onItemActivated(QListWidgetItem*)));
     connect(ui->locationButton, SIGNAL(clicked()), this, SLOT(browse()));
 
-    Rotator::acquire()->addClient(this);
-
     QStringList filters;
     dir.setNameFilters(filters << "*.jpg");
     dir.setFilter(QDir::AllDirs | QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
@@ -68,12 +66,4 @@ void CoverPicker::onItemActivated(QListWidgetItem* item)
     } else {
         browse(path);
     }
-}
-
-void CoverPicker::onOrientationChanged(int w, int h)
-{
-    if (w < h) // Portrait
-        this->setFixedHeight(680);
-    else // Landscape
-        this->setFixedHeight(360);
 }

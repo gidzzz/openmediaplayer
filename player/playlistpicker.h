@@ -11,7 +11,6 @@
 #include "ui_playlistpicker.h"
 #include "includes.h"
 #include "confirmdialog.h"
-#include "rotator.h"
 
 #include "mafw/mafwplaylistadapter.h"
 #include "mafw/mafwplaylistmanageradapter.h"
@@ -42,7 +41,6 @@ private slots:
     void onCreatePlaylist();
     void onCreatePlaylistAccepted();
     void onItemActivated(QListWidgetItem *item);
-    void onOrientationChanged(int h, int w);
 };
 
 #endif // PLAYLISTPICKER_H

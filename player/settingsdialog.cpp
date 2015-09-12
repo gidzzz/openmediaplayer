@@ -240,13 +240,11 @@ void SettingsDialog::onOrientationChanged(int w, int h)
 {
     ui->mainLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
-        this->setFixedHeight(680);
         ui->mainLayout->addWidget(ui->buttonBox, 1, 0, 1, 1);
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
         ui->mainLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
-        this->setFixedHeight(360);
     }
 }
 

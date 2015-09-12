@@ -72,11 +72,9 @@ void FrequencyPickDialog::onOrientationChanged(int w, int h)
 {
     ui->dialogLayout->removeWidget(ui->buttonBox);
     if (w < h) { // Portrait
-        this->setFixedHeight(680);
         ui->dialogLayout->addWidget(ui->buttonBox, 1, 0);
         ui->buttonBox->setSizePolicy(QSizePolicy::MinimumExpanding, ui->buttonBox->sizePolicy().verticalPolicy());
     } else { // Landscape
-        this->setFixedHeight(360);
         ui->buttonBox->setSizePolicy(QSizePolicy::Maximum, ui->buttonBox->sizePolicy().verticalPolicy());
         ui->dialogLayout->addWidget(ui->buttonBox, 0, 1, 1, 1, Qt::AlignBottom);
     }

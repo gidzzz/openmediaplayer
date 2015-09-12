@@ -9,7 +9,6 @@
 
 #include "includes.h"
 #include "ui_coverpicker.h"
-#include "rotator.h"
 
 namespace Ui {
     class CoverPicker;
@@ -35,7 +34,6 @@ private:
 
 private slots:
     void onItemActivated(QListWidgetItem* item);
-    void onOrientationChanged(int w, int h);
 };
 
 #endif // COVERPICKER_H

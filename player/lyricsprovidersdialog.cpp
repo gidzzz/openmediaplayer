@@ -113,11 +113,9 @@ void LyricsProvidersDialog::onOrientationChanged(int w, int h)
         ui->mainLayout->removeWidget(ui->controlsWidget);
         ui->controlsLayout->setDirection(QBoxLayout::LeftToRight);
         ui->mainLayout->addWidget(ui->controlsWidget, 1, 0);
-        this->setFixedHeight(680);
     } else { // Landscape
         ui->mainLayout->removeWidget(ui->controlsWidget);
         ui->controlsLayout->setDirection(QBoxLayout::TopToBottom);
         ui->mainLayout->addWidget(ui->controlsWidget, 0, 1);
-        this->setFixedHeight(360);
     }
 }

@@ -5,6 +5,9 @@
   <property name="windowTitle">
    <string>Frequency</string>
   </property>
+  <property name="minimumHeight">
+   <number>800</number>
+  </property>
   <layout class="QGridLayout" name="dialogLayout">
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="listLayout">

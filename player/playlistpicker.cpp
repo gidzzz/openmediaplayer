@@ -28,8 +28,6 @@ PlaylistPicker::PlaylistPicker(QWidget *parent) :
     }
 
     mafwPlaylistManager->freeListOfPlaylists(playlists);
-
-    Rotator::acquire()->addClient(this);
 }
 
 PlaylistPicker::~PlaylistPicker()
@@ -89,14 +87,6 @@ void PlaylistPicker::onCreatePlaylistAccepted()
     createPlaylistDialog->close();
     this->playlistName = playlistName;
     this->accept();
-}
-
-void PlaylistPicker::onOrientationChanged(int w, int h)
-{
-    if (w < h) // Portrait
-        this->setFixedHeight(680);
-    else // Landscape
-        this->setFixedHeight(360);
 }
 
 void PlaylistPicker::onItemActivated(QListWidgetItem *item)

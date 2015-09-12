@@ -5,6 +5,9 @@
   <property name="windowTitle">
    <string>Select album art</string>
   </property>
+  <property name="minimumHeight">
+   <number>800</number>
+  </property>
   <layout class="QVBoxLayout" name="mainLayout">
    <property name="spacing">
     <number>0</number>
