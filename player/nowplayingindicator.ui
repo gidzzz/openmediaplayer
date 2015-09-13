@@ -2,13 +2,17 @@
 <ui version="4.0">
  <class>NowPlayingIndicator</class>
  <widget class="QWidget" name="NowPlayingIndicator">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
+  <property name="minimumSize">
+   <size>
     <width>112</width>
     <height>70</height>
-   </rect>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>112</width>
+    <height>70</height>
+   </size>
   </property>
   <property name="visible">
    <bool>false</bool>

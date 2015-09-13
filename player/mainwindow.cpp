@@ -64,10 +64,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(pluginsControl, SIGNAL(childClosed()), this, SLOT(onChildClosed()));
 
     ui->upnpControl->setRegistry(mafwRegistry);
-
     ui->indicator->setRegistry(mafwRegistry);
-    ui->indicator->setFixedWidth(112);
-    ui->indicator->setFixedHeight(70);
 
     connect(mafwRadioSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     if (mafwRadioSource->isReady())
