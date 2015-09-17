@@ -8,6 +8,7 @@
 #include "includes.h"
 
 #include "mafw/mafwregistryadapter.h"
+#include "mafw/mafwutils.h"
 
 class MetadataWatcher: public QObject
 {

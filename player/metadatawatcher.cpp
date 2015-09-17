@@ -193,7 +193,7 @@ void MetadataWatcher::onSourceMetadataReceived(QString objectId, GHashTable *met
                 setMetadataFromSource(keyName, QString::fromUtf8(filename));
         }
         else {
-            QVariant value = toQVariant(mafw_metadata_first(metadata, (const char *) key->data));
+            QVariant value = MafwUtils::toQVariant(mafw_metadata_first(metadata, (const char *) key->data));
             setMetadataFromSource(keyName, value);
 
             // The title will double as station name for the radion window
@@ -288,7 +288,7 @@ void MetadataWatcher::onRendererMetadataReceived(GHashTable *metadata, QString o
 
     // Accept all metadata
     for (GList *key = keys; key; key = key->next)
-        setMetadataFromRenderer((const char *) key->data, toQVariant(mafw_metadata_first(metadata, (const char *) key->data)));
+        setMetadataFromRenderer((const char *) key->data, MafwUtils::toQVariant(mafw_metadata_first(metadata, (const char *) key->data)));
 
     g_list_free(keys);
 }
@@ -338,21 +338,5 @@ void MetadataWatcher::onRendererMetadataChanged(QString metadata, QVariant value
             // because it should receive the notification from MAFW, although that
             // can take a little bit longer.
         }
-    }
-}
-
-QVariant MetadataWatcher::toQVariant(GValue *v)
-{
-    switch (G_VALUE_TYPE(v)) {
-        case G_TYPE_INT:
-            return g_value_get_int(v);
-        case G_TYPE_INT64:
-            return g_value_get_int64(v);
-        case G_TYPE_STRING:
-            return QString::fromUtf8(g_value_get_string(v));
-        case G_TYPE_BOOLEAN:
-            return g_value_get_boolean(v);
-        default:
-            return QVariant();
     }
 }

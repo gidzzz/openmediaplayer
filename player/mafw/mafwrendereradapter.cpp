@@ -227,20 +227,7 @@ void MafwRendererAdapter::onMediaChanged(MafwRenderer *, gint index, gchar *obje
 void MafwRendererAdapter::onMetadataChanged(MafwRenderer*, gchar *name, GValueArray *value, gpointer self)
 {
     if (value->n_values == 1) {
-        GValue *v = g_value_array_get_nth(value, 0);
-
-        switch(G_VALUE_TYPE(v)) {
-            case G_TYPE_BOOLEAN:
-                emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, g_value_get_boolean(v)); break;
-            case G_TYPE_INT:
-                emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, g_value_get_int(v)); break;
-            case G_TYPE_INT64:
-                emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, g_value_get_int64(v)); break;
-            case G_TYPE_STRING:
-                emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, QString::fromUtf8(g_value_get_string(v))); break;
-            default:
-                qDebug() << "Unsupported metadata type" << G_VALUE_TYPE_NAME(v) << "for" << name; break;
-        }
+        emit static_cast<MafwRendererAdapter*>(self)->metadataChanged(name, MafwUtils::toQVariant(g_value_array_get_nth(value, 0)));
     } else {
         qDebug() << "Unsupported metadata count" << value->n_values << "for" << name;
     }
