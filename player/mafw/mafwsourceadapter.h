@@ -51,6 +51,7 @@ private:
     QString m_uuid;
 
     void init();
+    void drop();
 
     // Track active instances to avoid segfault on callback to a deleted object
     static QSet<gpointer> instances;

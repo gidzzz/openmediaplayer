@@ -23,7 +23,7 @@ MafwSourceAdapter::~MafwSourceAdapter()
 {
     instances.remove(this);
 
-    bind(NULL);
+    drop();
 }
 
 void MafwSourceAdapter::init()
@@ -44,7 +44,7 @@ void MafwSourceAdapter::bind(MafwSource *source)
     if (source) {
         // Unbind current source, if set, before proceeding
         if (this->source)
-            bind(NULL);
+            drop();
 
         // Bind
         g_object_ref(source);
@@ -64,17 +64,20 @@ void MafwSourceAdapter::bind(MafwSource *source)
         // readiness if this is the first time.
         emit containerChanged(uuid() + "::");
     } else {
-        // Unbind
-        g_signal_handlers_disconnect_matched(this->source, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this);
-        g_object_unref(this->source);
-
-        this->source = NULL;
+        // Unbind permanently, forget about the UUID
+        drop();
         m_uuid = QString();
-
-        // Watch only for additions
-        disconnect(MafwRegistryAdapter::get(), SIGNAL(sourceRemoved(MafwSource*)), this, SLOT(onSourceRemoved(MafwSource*)));
-        connect(MafwRegistryAdapter::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
     }
+}
+
+void MafwSourceAdapter::drop()
+{
+    g_signal_handlers_disconnect_matched(this->source, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this);
+    g_object_unref(this->source);
+
+    this->source = NULL;
+
+    disconnect(MafwRegistryAdapter::get(), SIGNAL(sourceRemoved(MafwSource*)), this, SLOT(onSourceRemoved(MafwSource*)));
 }
 
 QString MafwSourceAdapter::uuid()
@@ -105,8 +108,11 @@ void MafwSourceAdapter::onSourceAdded(MafwSource *source)
 
 void MafwSourceAdapter::onSourceRemoved(MafwSource *source)
 {
-    if (m_uuid == mafw_extension_get_uuid(MAFW_EXTENSION(source)))
-        bind(NULL);
+    if (m_uuid == mafw_extension_get_uuid(MAFW_EXTENSION(source))) {
+        // Unbind temporarily, wait for the source to reappear
+        drop();
+        connect(MafwRegistryAdapter::get(), SIGNAL(sourceAdded(MafwSource*)), this, SLOT(onSourceAdded(MafwSource*)));
+    }
 }
 
 //--- Operations ---------------------------------------------------------------
