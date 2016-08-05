@@ -57,6 +57,7 @@ signals:
     void metadataChanged(const QString &metadata, const QVariant &value);
     void playlistChanged(GObject *playlist);
     void stateChanged(MafwPlayState state);
+    void error(uint domain, int code, const QString &message);
     void propertyChanged(const QString &name, const QVariant &value);
 
     // Exposed operation callbacks
@@ -88,6 +89,7 @@ private:
     static void onMetadataChanged(MafwRenderer *, gchar *name, GValueArray *value, gpointer self);
     static void onPlaylistChanged(MafwRenderer *, GObject *playlist, gpointer self);
     static void onStateChanged(MafwRenderer *, gint state, gpointer self);
+    static void onError(MafwExtension *, guint domain, gint code, gchar *message, gpointer self);
     static void onPropertyChanged(MafwExtension *, gchar *name, GValue *value, gpointer self);
 
     // Operation callbacks

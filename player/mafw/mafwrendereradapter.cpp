@@ -244,6 +244,11 @@ void MafwRendererAdapter::onStateChanged(MafwRenderer *, gint state, gpointer se
     emit static_cast<MafwRendererAdapter*>(self)->stateChanged(static_cast<MafwPlayState>(state));
 }
 
+void MafwRendererAdapter::onError(MafwExtension *, guint domain, gint code, gchar *message, gpointer self)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->error(domain, code, QString::fromUtf8(message));
+}
+
 void MafwRendererAdapter::onPropertyChanged(MafwExtension *, gchar *name, GValue *value, gpointer self)
 {
     emit static_cast<MafwRendererAdapter*>(self)->propertyChanged(name, MafwUtils::toQVariant(value));

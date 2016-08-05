@@ -236,12 +236,7 @@ void VideoNowPlayingWindow::connectSignals()
             this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
     connect(mafwRenderer, SIGNAL(propertyChanged(QString,QVariant)), this, SLOT(onPropertyChanged(QString,QVariant)));
-
-    QDBusConnection::sessionBus().connect("",
-                                          "/com/nokia/mafw/renderer/gstrenderer",
-                                          "com.nokia.mafw.extension",
-                                          "error",
-                                          this, SLOT(onErrorOccured(const QDBusMessage &)));
+    connect(mafwRenderer, SIGNAL(error(uint,int,QString)), this, SLOT(onErrorOccurred(uint,int,QString)));
 }
 
 void VideoNowPlayingWindow::switchToRadio()
@@ -865,76 +860,10 @@ void VideoNowPlayingWindow::onPositionChanged(int position, QString)
     }
 }
 
-void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
+void VideoNowPlayingWindow::onErrorOccurred(uint domain, int code, const QString &message)
 {
-    QString errorMsg;
-
-    if (msg.arguments()[0] == "com.nokia.mafw.error.renderer") {
-        errorMsg.append(tr("Unable to play media"));
-        errorMsg.append("\n");
-
-        if (msg.arguments()[1] == MAFW_RENDERER_ERROR_NO_MEDIA)
-            errorMsg.append(tr("Media not found"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_URI_NOT_AVAILABLE)
-            errorMsg.append(tr("URI not available"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_INVALID_URI)
-            errorMsg.append(tr("Invalid URI"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_MEDIA_NOT_FOUND)
-            errorMsg.append(tr("Unable to open media"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_STREAM_DISCONNECTED)
-            errorMsg.append(tr("Playback stream no longer available"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_TYPE_NOT_AVAILABLE)
-            errorMsg.append(tr("Could not determine MIME-type"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_PLAYBACK)
-            errorMsg.append(tr("General error occured, unable to continue playback"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_UNABLE_TO_PERFORM)
-            errorMsg.append(tr("General error occured"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_UNSUPPORTED_TYPE)
-            errorMsg.append(tr("Unsupported media"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_UNSUPPORTED_RESOLUTION)
-            errorMsg.append(tr("Unsupported resolution"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_UNSUPPORTED_FPS)
-            errorMsg.append(tr("Unsupported framerate"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_DRM)
-            errorMsg.append(tr("Media is protected by DRM"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_DEVICE_UNAVAILABLE)
-            errorMsg.append(tr("System sound device is unavailable"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CORRUPTED_FILE)
-            errorMsg.append(tr("Media corrupted"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_PLAYLIST_PARSING) {
-            errorMsg.append(tr("Error while parsing playlist"));
-            errorMsg.append(tr("Playlist may be corrupt or empty"));
-        }
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CODEC_NOT_FOUND) {
-            errorMsg.append(tr("Codec not found:") + "\n");
-            errorMsg.append(msg.arguments()[2].toString());
-        }
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_VIDEO_CODEC_NOT_FOUND) {
-            errorMsg.append(tr("Video codec not found:") + "\n");
-            errorMsg.append(msg.arguments()[2].toString());
-        }
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_AUDIO_CODEC_NOT_FOUND) {
-            errorMsg.append(tr("Audio codec not found:") + "\n");
-            errorMsg.append(msg.arguments()[2].toString());
-        }
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_NO_PLAYLIST)
-            errorMsg.append(tr("No playlist assigned"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_INDEX_OUT_OF_BOUNDS)
-            errorMsg.append(tr("Media index is not in bound with playlist items"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CANNOT_PLAY)
-            errorMsg.append(tr("Unable to start playback"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CANNOT_STOP)
-            errorMsg.append(tr("Unable to stop playback"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CANNOT_PAUSE)
-            errorMsg.append(tr("Unable to pause playback"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CANNOT_SET_POSITION)
-            errorMsg.append(tr("Unable to seek position in media"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CANNOT_GET_POSITION)
-            errorMsg.append(tr("Unable to retrieve current position in media"));
-        else if (msg.arguments()[1] == MAFW_RENDERER_ERROR_CANNOT_GET_STATUS)
-            errorMsg.append(tr("Unable to get current playback status"));
-
-        QLabel *errorInfo = new QLabel(errorMsg);
+    if (domain == MAFW_RENDERER_ERROR) {
+        QLabel *errorInfo = new QLabel(tr("Unable to play media") + "\n" + errorMessage(code, message));
         errorInfo->setWordWrap(true);
 
         QMaemo5InformationBox *errorBox = new QMaemo5InformationBox(this);
@@ -946,5 +875,64 @@ void VideoNowPlayingWindow::onErrorOccured(const QDBusMessage &msg)
         errorBox->exec();
 
         this->close();
+    }
+}
+
+QString VideoNowPlayingWindow::errorMessage(int code, const QString &message) {
+    switch (code) {
+        case MAFW_RENDERER_ERROR_NO_MEDIA:
+            return tr("Media not found");
+        case MAFW_RENDERER_ERROR_URI_NOT_AVAILABLE:
+            return tr("URI not available");
+        case MAFW_RENDERER_ERROR_INVALID_URI:
+            return tr("Invalid URI");
+        case MAFW_RENDERER_ERROR_MEDIA_NOT_FOUND:
+            return tr("Unable to open media");
+        case MAFW_RENDERER_ERROR_STREAM_DISCONNECTED:
+            return tr("Playback stream no longer available");
+        case MAFW_RENDERER_ERROR_TYPE_NOT_AVAILABLE:
+            return tr("Could not determine MIME-type");
+        case MAFW_RENDERER_ERROR_PLAYBACK:
+            return tr("General error occured, unable to continue playback");
+        case MAFW_RENDERER_ERROR_UNABLE_TO_PERFORM:
+            return tr("General error occured");
+        case MAFW_RENDERER_ERROR_UNSUPPORTED_TYPE:
+            return tr("Unsupported media");
+        case MAFW_RENDERER_ERROR_UNSUPPORTED_RESOLUTION:
+            return tr("Unsupported resolution");
+        case MAFW_RENDERER_ERROR_UNSUPPORTED_FPS:
+            return tr("Unsupported framerate");
+        case MAFW_RENDERER_ERROR_DRM:
+            return tr("Media is protected by DRM");
+        case MAFW_RENDERER_ERROR_DEVICE_UNAVAILABLE:
+            return tr("System sound device is unavailable");
+        case MAFW_RENDERER_ERROR_CORRUPTED_FILE:
+            return tr("Media corrupted");
+        case MAFW_RENDERER_ERROR_PLAYLIST_PARSING:
+            return tr("Error while parsing playlist") + "\n" + tr("Playlist may be corrupt or empty");
+        case MAFW_RENDERER_ERROR_CODEC_NOT_FOUND:
+            return tr("Codec not found:") + "\n" + message;
+        case MAFW_RENDERER_ERROR_VIDEO_CODEC_NOT_FOUND:
+            return tr("Video codec not found:") + "\n" + message;
+        case MAFW_RENDERER_ERROR_AUDIO_CODEC_NOT_FOUND:
+            return tr("Audio codec not found:") + "\n" + message;
+        case MAFW_RENDERER_ERROR_NO_PLAYLIST:
+            return tr("No playlist assigned");
+        case MAFW_RENDERER_ERROR_INDEX_OUT_OF_BOUNDS:
+            return tr("Media index is not in bound with playlist items");
+        case MAFW_RENDERER_ERROR_CANNOT_PLAY:
+            return tr("Unable to start playback");
+        case MAFW_RENDERER_ERROR_CANNOT_STOP:
+            return tr("Unable to stop playback");
+        case MAFW_RENDERER_ERROR_CANNOT_PAUSE:
+            return tr("Unable to pause playback");
+        case MAFW_RENDERER_ERROR_CANNOT_SET_POSITION:
+            return tr("Unable to seek position in media");
+        case MAFW_RENDERER_ERROR_CANNOT_GET_POSITION:
+            return tr("Unable to retrieve current position in media");
+        case MAFW_RENDERER_ERROR_CANNOT_GET_STATUS:
+            return tr("Unable to get current playback status");
+        default:
+            return message;
     }
 }

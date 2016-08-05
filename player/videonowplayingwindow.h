@@ -60,6 +60,8 @@ private:
     void showOverlay(bool show);
     void switchToRadio();
 
+    static QString errorMessage(int code, const QString &message);
+
     QTimer *volumeTimer;
     QTimer *positionTimer;
     QTimer *keyRepeatTimer;
@@ -124,7 +126,7 @@ private slots:
     void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId, QString error);
     void onBufferingInfo(float status);
     void onPositionChanged(int position, QString);
-    void onErrorOccured(const QDBusMessage &msg);
+    void onErrorOccurred(uint domain, int code, const QString &message);
     void onPositionSliderPressed();
     void onPositionSliderReleased();
     void onPositionSliderMoved(int);
