@@ -43,6 +43,7 @@ void MafwRendererAdapter::bind(MafwRenderer *renderer)
         g_signal_connect(renderer, "metadata-changed", G_CALLBACK(&onMetadataChanged), static_cast<void*>(this));
         g_signal_connect(renderer, "playlist-changed", G_CALLBACK(&onPlaylistChanged), static_cast<void*>(this));
         g_signal_connect(renderer, "state-changed"   , G_CALLBACK(&onStateChanged)   , static_cast<void*>(this));
+        g_signal_connect(renderer, "property-changed", G_CALLBACK(&onPropertyChanged), static_cast<void*>(this));
 
         this->renderer = renderer;
         m_uuid = mafw_extension_get_uuid(MAFW_EXTENSION(renderer));
@@ -241,6 +242,11 @@ void MafwRendererAdapter::onPlaylistChanged(MafwRenderer *, GObject *playlist, g
 void MafwRendererAdapter::onStateChanged(MafwRenderer *, gint state, gpointer self)
 {
     emit static_cast<MafwRendererAdapter*>(self)->stateChanged(static_cast<MafwPlayState>(state));
+}
+
+void MafwRendererAdapter::onPropertyChanged(MafwExtension *, gchar *name, GValue *value, gpointer self)
+{
+    emit static_cast<MafwRendererAdapter*>(self)->propertyChanged(name, MafwUtils::toQVariant(value));
 }
 
 //--- Callbacks ----------------------------------------------------------------

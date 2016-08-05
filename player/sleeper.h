@@ -5,9 +5,6 @@
 
 #include <QTimer>
 #include <QDateTime>
-#include <QDBusConnection>
-#include <QDBusMessage>
-#include <QDBusArgument>
 #include <QApplication>
 #include <QSettings>
 #include <QtCore>
@@ -51,7 +48,7 @@ signals:
 
 private slots:
     void onInitialVolumeReceived(int volume);
-    void onPropertyChanged(const QDBusMessage &msg);
+    void onPropertyChanged(const QString &name, const QVariant &value);
     void stepVolume();
     void onTimeout();
 };

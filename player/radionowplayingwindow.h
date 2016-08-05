@@ -85,7 +85,7 @@ private slots:
     void onMetadataChanged(QString key, QVariant value);
     void onStateChanged(MafwPlayState state);
     void onMediaChanged(int, QString);
-    void onPropertyChanged(const QDBusMessage &msg);
+    void onPropertyChanged(const QString &name, const QVariant &value);
     void onStatusReceived(MafwPlaylist*, uint index, MafwPlayState state, QString objectId, QString);
     void onPositionChanged(int position, QString);
     void onBufferingInfo(float status);

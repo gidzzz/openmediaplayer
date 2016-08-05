@@ -14,11 +14,7 @@ Sleeper::Sleeper(QObject *parent, MafwRendererAdapter *mafwRenderer) :
     volumeTimer->setSingleShot(true);
     connect(volumeTimer, SIGNAL(timeout()), this, SLOT(stepVolume()));
 
-    QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
-                                          "/com/nokia/mafw/renderer/gstrenderer",
-                                          "com.nokia.mafw.extension",
-                                          "property_changed",
-                                          this, SLOT(onPropertyChanged(const QDBusMessage &)));
+    connect(mafwRenderer, SIGNAL(propertyChanged(QString,QVariant)), this, SLOT(onPropertyChanged(QString,QVariant)));
 }
 
 qint64 Sleeper::end()
@@ -60,10 +56,10 @@ void Sleeper::onInitialVolumeReceived(int volume)
     scheduleVolumeStep(volume);
 }
 
-void Sleeper::onPropertyChanged(const QDBusMessage &msg)
+void Sleeper::onPropertyChanged(const QString &name, const QVariant &value)
 {
-    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME)
-        scheduleVolumeStep(qdbus_cast<QVariant>(msg.arguments()[1]).toInt());
+    if (name == MAFW_PROPERTY_RENDERER_VOLUME)
+        scheduleVolumeStep(value.toInt());
 }
 
 void Sleeper::scheduleVolumeStep(int volume)

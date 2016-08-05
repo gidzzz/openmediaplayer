@@ -113,17 +113,12 @@ void RadioNowPlayingWindow::connectSignals()
 
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
+    connect(mafwRenderer, SIGNAL(propertyChanged(QString,QVariant)), this, SLOT(onPropertyChanged(QString,QVariant)));
     connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int,QString)));
     connect(mafwRenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
             this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
-
-    QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
-                                          "/com/nokia/mafw/renderer/gstrenderer",
-                                          "com.nokia.mafw.extension",
-                                          "property_changed",
-                                          this, SLOT(onPropertyChanged(const QDBusMessage &)));
 }
 
 void RadioNowPlayingWindow::onScreenLocked(bool locked)
@@ -135,12 +130,10 @@ void RadioNowPlayingWindow::onScreenLocked(bool locked)
     }
 }
 
-void RadioNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
+void RadioNowPlayingWindow::onPropertyChanged(const QString &name, const QVariant &value)
 {
-    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
-        if (!ui->volumeSlider->isSliderDown())
-            ui->volumeSlider->setValue(qdbus_cast<QVariant>(msg.arguments()[1]).toInt());
-    }
+    if (name == MAFW_PROPERTY_RENDERER_VOLUME && !ui->volumeSlider->isSliderDown())
+        ui->volumeSlider->setValue(value.toInt());
 }
 
 void RadioNowPlayingWindow::setIcons()

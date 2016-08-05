@@ -235,11 +235,7 @@ void VideoNowPlayingWindow::connectSignals()
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
             this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
 
-    QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
-                                          "/com/nokia/mafw/renderer/gstrenderer",
-                                          "com.nokia.mafw.extension",
-                                          "property_changed",
-                                          this, SLOT(onPropertyChanged(const QDBusMessage &)));
+    connect(mafwRenderer, SIGNAL(propertyChanged(QString,QVariant)), this, SLOT(onPropertyChanged(QString,QVariant)));
 
     QDBusConnection::sessionBus().connect("",
                                           "/com/nokia/mafw/renderer/gstrenderer",
@@ -507,15 +503,10 @@ void VideoNowPlayingWindow::toggleOverlay()
     showOverlay(overlayRequestedByUser);
 }
 
-void VideoNowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
+void VideoNowPlayingWindow::onPropertyChanged(const QString &name, const QVariant &value)
 {
-    /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
-                 /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.extension.get_extension_property string:volume*/
-    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
-        int volumeLevel = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
-
-        ui->volumeSlider->setValue(volumeLevel);
-    }
+    if (name == MAFW_PROPERTY_RENDERER_VOLUME && !ui->volumeSlider->isSliderDown())
+        ui->volumeSlider->setValue(value.toInt());
 }
 
 // Issue the play command if ready, otherwise queue it

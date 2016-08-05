@@ -292,18 +292,10 @@ void NowPlayingWindow::toggleVolumeSlider()
     }
 }
 
-void NowPlayingWindow::onPropertyChanged(const QDBusMessage &msg)
+void NowPlayingWindow::onPropertyChanged(const QString &name, const QVariant &value)
 {
-    /*dbus-send --print-reply --type=method_call --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer \
-                 /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.extension.get_extension_property string:volume*/
-    if (msg.arguments()[0].toString() == MAFW_PROPERTY_RENDERER_VOLUME) {
-        int volumeLevel = qdbus_cast<QVariant>(msg.arguments()[1]).toInt();
-#ifdef DEBUG
-        qDebug() << QString::number(volumeLevel);
-#endif
-        if (!ui->volumeSlider->isSliderDown())
-            ui->volumeSlider->setValue(volumeLevel);
-    }
+    if (name == MAFW_PROPERTY_RENDERER_VOLUME && !ui->volumeSlider->isSliderDown())
+        ui->volumeSlider->setValue(value.toInt());
 }
 
 void NowPlayingWindow::setButtonIcons()
@@ -417,6 +409,7 @@ void NowPlayingWindow::connectSignals()
 
     connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
     connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int,QString)));
+    connect(mafwRenderer, SIGNAL(propertyChanged(QString,QVariant)), this, SLOT(onPropertyChanged(QString,QVariant)));
     connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int, QString)));
     connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
@@ -430,12 +423,6 @@ void NowPlayingWindow::connectSignals()
 
     connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
-
-    QDBusConnection::sessionBus().connect("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
-                                          "/com/nokia/mafw/renderer/gstrenderer",
-                                          "com.nokia.mafw.extension",
-                                          "property_changed",
-                                          this, SLOT(onPropertyChanged(const QDBusMessage &)));
 
     QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "property_changed",
                                           this, SLOT(updatePlaylistState()));

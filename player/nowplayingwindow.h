@@ -134,7 +134,7 @@ private slots:
     void onItemDoubleClicked();
     void onItemDropped(QListWidgetItem *item, int from);
     void onItemMoved(uint from, uint to);
-    void onPropertyChanged(const QDBusMessage &msg);
+    void onPropertyChanged(const QString &name, const QVariant &value);
     void onStateChanged(MafwPlayState state);
     void onPositionChanged(int, QString);
     void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state, QString, QString);
