@@ -428,11 +428,6 @@ void NowPlayingWindow::connectSignals()
                                           this, SLOT(updatePlaylistState()));
     connect(playlist, SIGNAL(contentsChanged(uint,uint,uint)), this, SLOT(updatePlaylist(uint,uint,uint)));
     connect(playlist, SIGNAL(itemMoved(uint,uint)), this, SLOT(onItemMoved(uint,uint)));
-
-    // What's this? It's totally undocumented -- the only place where I have
-    // found it mentioned is a header file for Harmattan. Moreover, I don't
-    // think I have ever seen this signal being emitted.
-    QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "playlist_updated", this, SLOT(updatePlaylist()));
 }
 
 void NowPlayingWindow::onScreenLocked(bool locked)
