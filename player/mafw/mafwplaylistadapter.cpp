@@ -167,6 +167,7 @@ void MafwPlaylistAdapter::bind(MafwPlaylist *playlist, bool ref)
             g_object_ref(playlist);
         g_signal_connect(playlist, "contents-changed", G_CALLBACK(&onContentsChanged), static_cast<void*>(this));
         g_signal_connect(playlist, "item-moved"      , G_CALLBACK(&onItemMoved)      , static_cast<void*>(this));
+        g_signal_connect(playlist, "notify"          , G_CALLBACK(&onPropertyChanged), static_cast<void*>(this));
 
         this->playlist = playlist;
     } else {
@@ -196,6 +197,11 @@ void MafwPlaylistAdapter::onContentsChanged(MafwPlaylist *, guint from, guint re
 void MafwPlaylistAdapter::onItemMoved(MafwPlaylist *, guint from, guint to, gpointer self)
 {
     emit static_cast<MafwPlaylistAdapter*>(self)->itemMoved(from, to);
+}
+
+void MafwPlaylistAdapter::onPropertyChanged(MafwPlaylist *, GParamSpec *, gpointer self)
+{
+    emit static_cast<MafwPlaylistAdapter*>(self)->propertyChanged();
 }
 
 //--- Callbacks ----------------------------------------------------------------

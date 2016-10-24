@@ -424,8 +424,7 @@ void NowPlayingWindow::connectSignals()
     connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
     connect(ui->actionClear_now_playing, SIGNAL(triggered()), this, SLOT(clearPlaylist()));
 
-    QDBusConnection::sessionBus().connect("", "", "com.nokia.mafw.playlist", "property_changed",
-                                          this, SLOT(updatePlaylistState()));
+    connect(playlist, SIGNAL(propertyChanged()), this, SLOT(updatePlaylistState()));
     connect(playlist, SIGNAL(contentsChanged(uint,uint,uint)), this, SLOT(updatePlaylist(uint,uint,uint)));
     connect(playlist, SIGNAL(itemMoved(uint,uint)), this, SLOT(onItemMoved(uint,uint)));
 }

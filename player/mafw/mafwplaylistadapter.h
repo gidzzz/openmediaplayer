@@ -44,6 +44,7 @@ signals:
     // Exposed signals
     void contentsChanged(uint from, uint removed, uint replaced);
     void itemMoved(uint from, uint to);
+    void propertyChanged();
 
     // Exposed callbacks
     void gotItem(QString objectId, GHashTable *metadata, uint index, gpointer op);
@@ -64,6 +65,7 @@ private:
     // Signal handlers
     static void onContentsChanged(MafwPlaylist *, guint from, guint removed, guint replaced, gpointer self);
     static void onItemMoved(MafwPlaylist *, guint from, guint to, gpointer self);
+    static void onPropertyChanged(MafwPlaylist *, GParamSpec *, gpointer self);
 
     // Callbacks
     static void onItemReceived(MafwPlaylist *, guint index, const gchar *objectId, GHashTable *metadata, gpointer data);
