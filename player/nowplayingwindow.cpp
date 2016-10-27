@@ -25,12 +25,10 @@ NowPlayingWindow* NowPlayingWindow::acquire(QWidget *parent, MafwRegistryAdapter
     if (instance) {
         qDebug() << "Handing out running NPW instance";
         instance->setParent(parent, Qt::Window);
-    }
-    else {
+    } else {
         qDebug() << "Handing out new NPW instance";
         instance = new NowPlayingWindow(parent, mafwRegistry);
     }
-
     return instance;
 }
 
@@ -63,9 +61,6 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
 
     defaultWindowTitle = this->windowTitle();
 
-    positionTimer = new QTimer(this);
-    positionTimer->setInterval(1000);
-
     albumArtSceneLarge = new QGraphicsScene(ui->coverViewLarge);
     albumArtSceneSmall = new QGraphicsScene(ui->coverViewSmall);
     qmlView = 0;
@@ -91,12 +86,15 @@ NowPlayingWindow::NowPlayingWindow(QWidget *parent, MafwRegistryAdapter *mafwReg
     keyTimer->setInterval(5000);
     keyTimer->setSingleShot(true);
 
+    volumeTimer = new QTimer(this);
+    volumeTimer->setInterval(3000);
+
+    positionTimer = new QTimer(this);
+    positionTimer->setInterval(1000);
+
     ui->songList->setItemDelegate(new PlayListDelegate(ui->songList));
 
     this->setButtonIcons();
-
-    volumeTimer = new QTimer(this);
-    volumeTimer->setInterval(3000);
 
     playlistRequested = false;
     buttonWasDown = false;
@@ -285,7 +283,6 @@ void NowPlayingWindow::toggleVolumeSlider()
     if (ui->volumeSlider->isHidden()) {
         ui->buttonsWidget->hide();
         ui->volumeSlider->show();
-
     } else {
         ui->volumeSlider->hide();
         ui->buttonsWidget->show();
@@ -484,8 +481,8 @@ bool NowPlayingWindow::eventFilter(QObject *object, QEvent *event)
     if (object == ui->currentPositionLabel && event->type() == QEvent::MouseButtonPress) {
         reverseTime = !reverseTime;
         QSettings().setValue("main/reverseTime", reverseTime);
-        ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-songDuration :
-                                                                 ui->positionSlider->value()));
+        ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-songDuration
+                                                               : ui->positionSlider->value()));
     }
 
     else if (object == ui->songList->viewport()) {
@@ -751,41 +748,24 @@ void NowPlayingWindow::volumeWatcher()
 
 void NowPlayingWindow::onShuffleButtonToggled(bool checked)
 {
-    if (checked) {
-        ui->shuffleButton->setIcon(QIcon(shuffleButtonPressed));
-    } else {
-        ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
-    }
-
+    ui->shuffleButton->setIcon(QIcon(checked ? shuffleButtonPressed : shuffleButtonIcon));
     playlist->setShuffled(checked);
 }
 
 void NowPlayingWindow::onRepeatButtonToggled(bool checked)
 {
-    if (checked) {
-        ui->repeatButton->setIcon(QIcon(repeatButtonPressedIcon));
-    } else {
-        ui->repeatButton->setIcon(QIcon(repeatButtonIcon));
-    }
-
+    ui->repeatButton->setIcon(QIcon(checked ? repeatButtonPressedIcon : repeatButtonIcon));
     playlist->setRepeat(checked);
 }
 
 void NowPlayingWindow::onNextButtonPressed()
 {
-    if (ui->nextButton->isDown()) {
-        ui->nextButton->setIcon(QIcon(nextButtonPressedIcon));
-    } else {
-        ui->nextButton->setIcon(QIcon(nextButtonIcon));
-    }
+    ui->nextButton->setIcon(QIcon(ui->nextButton->isDown() ? nextButtonPressedIcon : nextButtonIcon));
 }
 
 void NowPlayingWindow::onPrevButtonPressed()
 {
-    if (ui->prevButton->isDown())
-        ui->prevButton->setIcon(QIcon(prevButtonPressedIcon));
-    else
-        ui->prevButton->setIcon(QIcon(prevButtonIcon));
+    ui->prevButton->setIcon(QIcon(ui->prevButton->isDown() ? prevButtonPressedIcon : prevButtonIcon));
 }
 
 void NowPlayingWindow::onVolumeSliderPressed()
@@ -808,8 +788,8 @@ void NowPlayingWindow::onPositionSliderPressed()
 void NowPlayingWindow::onPositionSliderReleased()
 {
     mafwRenderer->setPosition(SeekAbsolute, ui->positionSlider->value());
-    ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-songDuration :
-                                                             ui->positionSlider->value()));
+    ui->currentPositionLabel->setText(mmss_pos(reverseTime ? ui->positionSlider->value()-songDuration
+                                                           : ui->positionSlider->value()));
 }
 
 void NowPlayingWindow::onPositionSliderMoved(int position)

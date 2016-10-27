@@ -230,8 +230,8 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
                 objectModel->item(i)->setData(audioBufferList.first()->data(UserRoleMIME), UserRoleMIME);
                 objectModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
                 objectModel->item(i)->setData(QString(audioBufferList.first()->text() % QChar(31) %
-                                                       audioBufferList.first()->data(UserRoleValueText).toString()),
-                                               UserRoleFilterString);
+                                                      audioBufferList.first()->data(UserRoleValueText).toString()),
+                                              UserRoleFilterString);
                 delete audioBufferList.takeFirst();
                 ++i;
             }
@@ -253,8 +253,8 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
                 objectModel->item(i)->setData(videoBufferList.first()->data(UserRoleMIME), UserRoleMIME);
                 objectModel->item(i)->setData(Duration::Blank, UserRoleSongDuration);
                 objectModel->item(i)->setData(QString(videoBufferList.first()->text() % QChar(31) %
-                                                       videoBufferList.first()->data(UserRoleValueText).toString()),
-                                               UserRoleFilterString);
+                                                      videoBufferList.first()->data(UserRoleValueText).toString()),
+                                              UserRoleFilterString);
                 delete videoBufferList.takeFirst();
                 ++i;
             }

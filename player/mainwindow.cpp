@@ -615,22 +615,18 @@ void MainWindow::showInternetRadioWindow()
 
 void MainWindow::countSongs()
 {
-    mafwTrackerSource->getMetadata(TAGSOURCE_AUDIO_PATH,
-                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
+    mafwTrackerSource->getMetadata(TAGSOURCE_AUDIO_PATH, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
 }
 
 void MainWindow::countVideos()
 {
-    mafwTrackerSource->getMetadata(TAGSOURCE_VIDEO_PATH,
-                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
+    mafwTrackerSource->getMetadata(TAGSOURCE_VIDEO_PATH, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
 }
 
 void MainWindow::countRadioStations()
 {
-    mafwRadioSource->getMetadata(RADIOSOURCE_PATH,
-                                 MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
+    mafwRadioSource->getMetadata(RADIOSOURCE_PATH, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
 }
-
 
 void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, QString error)
 {

@@ -786,10 +786,10 @@ void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint 
 
         QStandardItem *item = new QStandardItem();
 
-        v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
         item->setText(QString::fromUtf8(g_value_get_string(v)));
 
-        v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
+        v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
         item->setData(tr("%n song(s)", "", g_value_get_int(v)), UserRoleValueText);
 
         item->setData(Duration::Blank, UserRoleSongDuration);
