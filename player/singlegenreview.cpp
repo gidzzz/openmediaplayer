@@ -114,21 +114,18 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
     if (browseId != browseGenreId) return;
 
     if (metadata != NULL) {
-        QString title;
-        int songCount = -1;
-        int albumCount = -1;
         GValue *v;
 
         QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
+        QString title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
-        albumCount = v ? g_value_get_int (v) : -1;
+        int albumCount = v ? g_value_get_int (v) : -1;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_2);
-        songCount = v ? g_value_get_int (v) : -1;
+        int songCount = v ? g_value_get_int (v) : -1;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI);
         if (v != NULL) {

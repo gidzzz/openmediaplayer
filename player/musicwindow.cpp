@@ -807,25 +807,20 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
     if (browseId != browseAllSongsId) return;
 
     if (metadata != NULL) {
-        QString title;
-        QString artist;
-        QString album;
-        int duration;
         GValue *v;
-
         QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+        QString title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
-        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
+        QString artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
-        album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
+        QString album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : Duration::Unknown;
+        int duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         item->setText(title);
         item->setData(artist, UserRoleSongArtist);
@@ -852,21 +847,17 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
     if (browseId != browseAllArtistsId) return;
 
     if (metadata != NULL) {
-        QString title;
-        int songCount;
-        int albumCount;
         GValue *v;
-
         QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
+        QString title = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
-        albumCount = v ? g_value_get_int (v) : -1;
+        int albumCount = v ? g_value_get_int (v) : -1;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_2);
-        songCount = v ? g_value_get_int (v) : -1;
+        int songCount = v ? g_value_get_int (v) : -1;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_SMALL_URI);
         if (v != NULL) {
@@ -903,22 +894,17 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
     if (browseId != browseAllAlbumsId) return;
 
     if (metadata != NULL) {
-        QString albumTitle;
-        QString artist;
-        QString albumArt;
-        int songCount;
         GValue *v;
-
         QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
-        albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
+        QString albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
-        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
+        QString artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
-        songCount = v ? g_value_get_int(v) : Duration::Unknown;
+        int songCount = v ? g_value_get_int(v) : Duration::Unknown;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI);
         if (v != NULL) {
@@ -956,25 +942,20 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
 {
     if (this->browseAllGenresId != browseId) return;
 
-    QString title;
-    int songCount;
-    int albumCount;
-    int artistCount;
     GValue *v;
-
     QStandardItem *item = new QStandardItem();
 
     v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_TITLE);
-    title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown genre)");
+    QString title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown genre)");
 
     v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
-    artistCount = v ? g_value_get_int (v) : -1;
+    int artistCount = v ? g_value_get_int (v) : -1;
 
     v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_2);
-    albumCount = v ? g_value_get_int (v) : -1;
+    int albumCount = v ? g_value_get_int (v) : -1;
 
     v = mafw_metadata_first (metadata, MAFW_METADATA_KEY_CHILDCOUNT_3);
-    songCount = v ? g_value_get_int (v) : -1;
+    int songCount = v ? g_value_get_int (v) : -1;
 
     if (title.isEmpty()) title = tr("(unknown genre)");
 

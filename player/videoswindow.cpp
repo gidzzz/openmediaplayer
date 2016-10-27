@@ -230,19 +230,16 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
     }
 
     if (metadata != NULL) {
-        QString title;
-        QString source;
-        int duration;
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown clip)");
+        QString title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown clip)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_VIDEO_SOURCE);
-        source = v ? QString::fromUtf8(g_value_get_string (v)) : "";
+        QString source = v ? QString::fromUtf8(g_value_get_string (v)) : QString();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : Duration::Unknown;
+        int duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QStandardItem *item = sortByCategory->isChecked() ? new QStandardItem() : objectModel->item(index);
 

@@ -175,19 +175,16 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
     }
 
     if (metadata != NULL) {
-        QString title;
-        QString mime;
-        QString uri;
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
+        QString title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown station)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
-        mime = QString::fromUtf8(g_value_get_string (v));
+        QString mime = QString::fromUtf8(g_value_get_string (v));
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        uri = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown)");
+        QString uri = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown)");
 
         QStandardItem *item = new QStandardItem();
         item->setText(title);

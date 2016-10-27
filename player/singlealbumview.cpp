@@ -75,23 +75,19 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
     if (browseId != browseAlbumId) return;
 
     if (metadata != NULL) {
-        QString title;
-        QString artist;
-        QString album;
-        int duration;
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+        QString title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ARTIST);
-        artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
+        QString artist = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown artist)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
-        album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
+        QString album = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
-        duration = v ? g_value_get_int (v) : Duration::Unknown;
+        int duration = v ? g_value_get_int (v) : Duration::Unknown;
 
         QStandardItem *item = new QStandardItem();
         item->setData(title, UserRoleSongTitle);

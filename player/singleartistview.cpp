@@ -85,18 +85,15 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
     if (browseId != browseArtistId) return;
 
     if (metadata != NULL) {
-        QString albumTitle;
-        int childcount;
-        QString albumArt;
         GValue *v;
 
         QStandardItem *item = new QStandardItem();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM);
-        albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
+        QString albumTitle = v ? QString::fromUtf8(g_value_get_string(v)) : tr("(unknown album)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
-        childcount = v ? g_value_get_int(v) : 0;
+        int childcount = v ? g_value_get_int(v) : 0;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_ALBUM_ART_MEDIUM_URI);
         if (v != NULL) {

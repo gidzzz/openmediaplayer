@@ -52,20 +52,16 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
     if (browseId != this->browseId) return;
 
     if (metadata != NULL) {
-        QString title;
-        QString mime;
-        QString uri;
-        int duration;
         GValue *v;
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_TITLE);
-        title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
+        QString title = v ? QString::fromUtf8(g_value_get_string (v)) : tr("(unknown song)");
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME);
-        if (v) mime = QString::fromUtf8(g_value_get_string(v));
+        QString mime = v ? QString::fromUtf8(g_value_get_string(v)) : QString();
 
         v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_URI);
-        if (v) uri = QString::fromUtf8(g_value_get_string(v));
+        QString uri = v ? QString::fromUtf8(g_value_get_string(v)) : QString();
 
         if (mime != MAFW_METADATA_VALUE_MIME_CONTAINER) {
             // UPnP source does not always report correct MIME under the proper
@@ -103,6 +99,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
             }
         }
 
+        int duration;
         if (mime == AudioMime || mime == VideoMime) {
             v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_DURATION);
             duration = v ? g_value_get_int(v) : Duration::Unknown;
