@@ -35,7 +35,7 @@ extern QString volumeButtonIcon;
 #define repeatButtonIcon "/etc/hildon/theme/mediaplayer/Repeat.png"
 #define repeatButtonPressedIcon "/etc/hildon/theme/mediaplayer/RepeatPressed.png"
 #define shuffleButtonIcon "/etc/hildon/theme/mediaplayer/Shuffle.png"
-#define shuffleButtonPressed "/etc/hildon/theme/mediaplayer/ShufflePressed.png"
+#define shuffleButtonPressedIcon "/etc/hildon/theme/mediaplayer/ShufflePressed.png"
 #define wmCloseIcon "/etc/hildon/theme/images/wmBackIcon.png"
 #define wmEditIcon "/etc/hildon/theme/images/wmEditIcon.png"
 

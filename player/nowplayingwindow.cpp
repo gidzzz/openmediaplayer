@@ -748,7 +748,7 @@ void NowPlayingWindow::volumeWatcher()
 
 void NowPlayingWindow::onShuffleButtonToggled(bool checked)
 {
-    ui->shuffleButton->setIcon(QIcon(checked ? shuffleButtonPressed : shuffleButtonIcon));
+    ui->shuffleButton->setIcon(QIcon(checked ? shuffleButtonPressedIcon : shuffleButtonIcon));
     playlist->setShuffled(checked);
 }
 
@@ -1019,7 +1019,7 @@ void NowPlayingWindow::onPlaylistItemActivated(QListWidgetItem *item)
 void NowPlayingWindow::updatePlaylistState()
 {
     if (playlist->isShuffled()) {
-        ui->shuffleButton->setIcon(QIcon(shuffleButtonPressed));
+        ui->shuffleButton->setIcon(QIcon(shuffleButtonPressedIcon));
         ui->shuffleButton->setChecked(true);
     } else {
         ui->shuffleButton->setIcon(QIcon(shuffleButtonIcon));
