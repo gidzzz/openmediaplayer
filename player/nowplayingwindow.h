@@ -136,13 +136,13 @@ private slots:
     void onItemMoved(uint from, uint to);
     void onPropertyChanged(const QString &name, const QVariant &value);
     void onStateChanged(MafwPlayState state);
-    void onPositionChanged(int, QString);
-    void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state, QString, QString);
+    void onPositionChanged(int position);
+    void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state);
     void onItemReceived(QString objectId, GHashTable *metadata, uint index);
     void setPosition(int newPosition);
     void onPlaylistItemActivated(QListWidgetItem*);
     void clearPlaylist();
-    void onMediaChanged(int index, QString);
+    void onMediaChanged(int index);
     void onNextButtonClicked();
     void onPreviousButtonClicked();
     void updatePlaylist(uint from = -1, uint nremove = 0, uint nreplace = 0);

@@ -42,7 +42,7 @@ void MissionControl::setRegistry(MafwRegistryAdapter *mafwRegistry)
 
     connect(mafwRenderer, SIGNAL(ready()), mafwRenderer, SLOT(getStatus()));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState)));
 
     QDBusConnection::systemBus().connect("", "", "org.bluez.AudioSink", "Connected",
                                          this, SLOT(onWirelessHeadsetConnected()));
@@ -161,10 +161,10 @@ void MissionControl::onMetadataChanged(QString key, QVariant value)
     }
 }
 
-void MissionControl::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, QString, QString)
+void MissionControl::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state)
 {
     disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState)));
 
     connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
 

@@ -80,9 +80,9 @@ void NowPlayingIndicator::connectSignals()
 
     connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState)));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-            this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+            this, SLOT(onPlaylistReady()));
 }
 
 void NowPlayingIndicator::onStateChanged(MafwPlayState state)
@@ -211,15 +211,15 @@ void NowPlayingIndicator::onNowPlayingWindowHidden()
     onWindowDestroyed();
 }
 
-void NowPlayingIndicator::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, QString, QString)
+void NowPlayingIndicator::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state)
 {
     onStateChanged(state);
 }
 
-void NowPlayingIndicator::onPlaylistReady(MafwPlaylist *, uint, MafwPlayState, QString, QString)
+void NowPlayingIndicator::onPlaylistReady()
 {
     disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-               this, SLOT(onPlaylistReady(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+               this, SLOT(onPlaylistReady()));
 
     ready = true;
 

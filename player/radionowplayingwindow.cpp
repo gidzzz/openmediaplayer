@@ -115,10 +115,10 @@ void RadioNowPlayingWindow::connectSignals()
 
     connect(mafwRenderer, SIGNAL(propertyChanged(QString,QVariant)), this, SLOT(onPropertyChanged(QString,QVariant)));
     connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), ui->volumeSlider, SLOT(setValue(int)));
-    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int,QString)));
+    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int)));
     connect(mafwRenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState)));
 }
 
 void RadioNowPlayingWindow::onScreenLocked(bool locked)
@@ -273,7 +273,7 @@ void RadioNowPlayingWindow::play()
     }
 }
 
-void RadioNowPlayingWindow::onMediaChanged(int, QString)
+void RadioNowPlayingWindow::onMediaChanged()
 {
     onBufferingInfo(1.0);
 }
@@ -312,16 +312,16 @@ void RadioNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
     }
 }
 
-void RadioNowPlayingWindow::onStatusReceived(MafwPlaylist*, uint index, MafwPlayState state, QString objectId, QString)
+void RadioNowPlayingWindow::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state)
 {
     disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState)));
 
     connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int,QString)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged()));
 
     onStateChanged(state);
-    onMediaChanged(index, objectId);
+    onMediaChanged();
 }
 
 void RadioNowPlayingWindow::updateSongLabel()
@@ -336,7 +336,7 @@ void RadioNowPlayingWindow::updateSongLabel()
     ui->songLabel->setText(QFontMetrics(ui->songLabel->font()).elidedText(labelText, Qt::ElideRight, 425));
 }
 
-void RadioNowPlayingWindow::onPositionChanged(int position, QString)
+void RadioNowPlayingWindow::onPositionChanged(int position)
 {
     ui->currentPositionLabel->setText(mmss_pos(position));
 

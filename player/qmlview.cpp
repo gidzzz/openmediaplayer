@@ -65,9 +65,9 @@ QmlView::QmlView(QUrl source, QWidget *parent, MafwRegistryAdapter *mafwRegistry
             rootObject, SLOT(clearPlaylist()));
 
     connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
-    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int,QString)));
+    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int)));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState)));
     connect(positionTimer, SIGNAL(timeout()), mafwRenderer, SLOT(getPosition()));
 
     connect(fmtx, SIGNAL(propertyChanged()), this, SLOT(onFmtxChanged()));
@@ -120,7 +120,7 @@ void QmlView::onFmtxChanged()
     emit fmtxStateChanged(fmtx->state() == FMTXInterface::Enabled ? "enabled" : "disabled");
 }
 
-void QmlView::onPositionChanged(int position, QString)
+void QmlView::onPositionChanged(int position)
 {
     duration = mmss_pos(position) + "/" + mmss_len(songDuration);
     emit durationTextChanged(duration);
@@ -167,7 +167,7 @@ void QmlView::onStateChanged(MafwPlayState state)
     emit stateIconChanged(playButtonIconString);
 }
 
-void QmlView::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, QString, QString)
+void QmlView::onStatusReceived(MafwPlaylist *, uint, MafwPlayState state)
 {
     onStateChanged(state);
 }

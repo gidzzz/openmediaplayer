@@ -24,7 +24,7 @@ private:
     void assignPlaylist(const char *playlistName);
 
 private slots:
-    void onStatusReceived(MafwPlaylist *playlist, uint, MafwPlayState, QString, QString);
+    void onStatusReceived(MafwPlaylist *playlist);
     void onPlaylistChanged(GObject *playlist);
 };
 

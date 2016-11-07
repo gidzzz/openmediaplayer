@@ -123,9 +123,9 @@ private slots:
     void onMediaChanged(int, QString objectId);
     void onPropertyChanged(const QString &name, const QVariant &value);
     void onStateChanged(MafwPlayState state);
-    void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId, QString error);
+    void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId);
     void onBufferingInfo(float status);
-    void onPositionChanged(int position, QString);
+    void onPositionChanged(int position);
     void onErrorOccurred(uint domain, int code, const QString &message);
     void onPositionSliderPressed();
     void onPositionSliderReleased();

@@ -74,8 +74,8 @@ private:
 private slots:
     void onTkLockChanged(bool);
     void onStateChanged(MafwPlayState state);
-    void onStatusReceived(MafwPlaylist *, uint,MafwPlayState, QString, QString);
-    void onPlaylistReady(MafwPlaylist * ,uint,MafwPlayState, QString, QString);
+    void onStatusReceived(MafwPlaylist *, uint, MafwPlayState state);
+    void onPlaylistReady();
     void nextFrame();
     void openWindow();
     void onWindowDestroyed();

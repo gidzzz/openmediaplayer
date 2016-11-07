@@ -10,15 +10,15 @@ MetadataWatcher::MetadataWatcher(MafwRegistryAdapter *mafwRegistry) :
     // Initialization
     connect(mafwRenderer, SIGNAL(ready()), mafwRenderer, SLOT(getStatus()));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString)));
 
     // Metadata
     connect(mafwRenderer, SIGNAL(metadataChanged(QString,QVariant)),
             this, SLOT(onRendererMetadataChanged(QString,QVariant)));
     connect(mafwRenderer, SIGNAL(currentMetadataReceived(GHashTable*,QString,QString)),
-            this, SLOT(onRendererMetadataReceived(GHashTable*,QString,QString)));
+            this, SLOT(onRendererMetadataReceived(GHashTable*,QString)));
     connect(mafwSource, SIGNAL(metadataResult(QString,GHashTable*,QString)),
-            this, SLOT(onSourceMetadataReceived(QString,GHashTable*,QString)));
+            this, SLOT(onSourceMetadataReceived(QString,GHashTable*)));
     // Currently this is solely for the purpose of updating the paused position,
     // but it might be a good idea to keep all metadata in sync.
     connect(mafwTrackerSource, SIGNAL(metadataChanged(QString)),
@@ -110,10 +110,10 @@ void MetadataWatcher::setMetadataFromSource(QString key, QVariant value)
     }
 }
 
-void MetadataWatcher::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId, QString)
+void MetadataWatcher::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId)
 {
     disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString)));
 
     connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int,QString)));
 
@@ -139,7 +139,7 @@ void MetadataWatcher::onMediaChanged(int, QString objectId)
     mafwSource->getMetadata(objectId, MAFW_SOURCE_ALL_KEYS);
 }
 
-void MetadataWatcher::onSourceMetadataReceived(QString objectId, GHashTable *metadata, QString)
+void MetadataWatcher::onSourceMetadataReceived(QString objectId, GHashTable *metadata)
 {
     if (objectId != currentObjectId) return;
 
@@ -261,7 +261,7 @@ void MetadataWatcher::onSourceMetadataChanged(QString objectId)
     mafwSource->getMetadata(currentObjectId, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_PAUSED_POSITION));
 }
 
-void MetadataWatcher::onRendererMetadataReceived(GHashTable *metadata, QString objectId, QString)
+void MetadataWatcher::onRendererMetadataReceived(GHashTable *metadata, QString objectId)
 {
     if (objectId != currentObjectId) return;
 

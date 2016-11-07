@@ -233,7 +233,7 @@ void VideoNowPlayingWindow::connectSignals()
 
     // Initial status
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString)));
 
     connect(mafwRenderer, SIGNAL(propertyChanged(QString,QVariant)), this, SLOT(onPropertyChanged(QString,QVariant)));
     connect(mafwRenderer, SIGNAL(error(uint,int,QString)), this, SLOT(onErrorOccurred(uint,int,QString)));
@@ -335,11 +335,11 @@ void VideoNowPlayingWindow::onMetadataChanged(QString key, QVariant value)
     }
 }
 
-void VideoNowPlayingWindow::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state, QString objectId, QString error)
+void VideoNowPlayingWindow::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state, QString objectId)
 {
     // This is a one-time handler, so disconnect it right after it is called
     disconnect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+               this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString)));
 
     // This is the function which will take over from here
     connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
@@ -348,9 +348,6 @@ void VideoNowPlayingWindow::onStatusReceived(MafwPlaylist *, uint index, MafwPla
     // Forward the received info to more specific handlers
     onStateChanged(state);
     onMediaChanged(index, objectId);
-
-    if (!error.isEmpty())
-        qDebug() << error;
 }
 
 void VideoNowPlayingWindow::onMediaChanged(int, QString objectId)
@@ -533,7 +530,7 @@ void VideoNowPlayingWindow::onStateChanged(MafwPlayState state)
             gotInitialStopState = true;
 
             // Various status notifications
-            connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int,QString)));
+            connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int)));
             connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), ui->volumeSlider, SLOT(setValue(int)));
             connect(mafwRenderer, SIGNAL(bufferingInfo(float)), this, SLOT(onBufferingInfo(float)));
 
@@ -847,7 +844,7 @@ void VideoNowPlayingWindow::onBufferingInfo(float status)
 }
 
 // Handle changes in playback position
-void VideoNowPlayingWindow::onPositionChanged(int position, QString)
+void VideoNowPlayingWindow::onPositionChanged(int position)
 {
     // Store the last received position as current
     currentPosition = position;

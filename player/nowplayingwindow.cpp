@@ -408,12 +408,12 @@ void NowPlayingWindow::connectSignals()
     connect(Maemo5DeviceEvents::acquire(), SIGNAL(screenLocked(bool)), this, SLOT(onScreenLocked(bool)));
 
     connect(mafwRenderer, SIGNAL(stateChanged(MafwPlayState)), this, SLOT(onStateChanged(MafwPlayState)));
-    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int,QString)));
+    connect(mafwRenderer, SIGNAL(mediaChanged(int,QString)), this, SLOT(onMediaChanged(int)));
     connect(mafwRenderer, SIGNAL(propertyChanged(QString,QVariant)), this, SLOT(onPropertyChanged(QString,QVariant)));
-    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int, QString)));
+    connect(mafwRenderer, SIGNAL(positionReceived(int,QString)), this, SLOT(onPositionChanged(int)));
     connect(mafwRenderer, SIGNAL(volumeReceived(int,QString)), ui->volumeSlider, SLOT(setValue(int)));
     connect(mafwRenderer, SIGNAL(statusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)),
-            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState,QString,QString)));
+            this, SLOT(onStatusReceived(MafwPlaylist*,uint,MafwPlayState)));
 
     connect(ui->volumeSlider, SIGNAL(sliderMoved(int)), mafwRenderer, SLOT(setVolume(int)));
 
@@ -821,7 +821,7 @@ void NowPlayingWindow::onPreviousButtonClicked()
     }
 }
 
-void NowPlayingWindow::onPositionChanged(int position, QString)
+void NowPlayingWindow::onPositionChanged(int position)
 {
     currentSongPosition = position;
     if (!ui->positionSlider->isSliderDown())
@@ -837,7 +837,7 @@ void NowPlayingWindow::onPositionChanged(int position, QString)
     }
 }
 
-void NowPlayingWindow::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state, QString, QString)
+void NowPlayingWindow::onStatusReceived(MafwPlaylist *, uint index, MafwPlayState state)
 {
     if (!playlistRequested) {
         updatePlaylist();
@@ -861,7 +861,7 @@ void NowPlayingWindow::showEvent(QShowEvent *)
     startPositionTimer();
 }
 
-void NowPlayingWindow::onMediaChanged(int index, QString)
+void NowPlayingWindow::onMediaChanged(int index)
 {
     setSong(index);
     focusItemByRow(index);

@@ -42,12 +42,12 @@ private:
     static QVariant toQVariant(GValue *v);
 
 private slots:
-    void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId, QString);
+    void onStatusReceived(MafwPlaylist *, uint index, MafwPlayState, QString objectId);
 
     void onMediaChanged(int, QString objectId);
-    void onSourceMetadataReceived(QString objectId, GHashTable *metadata, QString);
+    void onSourceMetadataReceived(QString objectId, GHashTable *metadata);
     void onSourceMetadataChanged(QString objectId);
-    void onRendererMetadataReceived(GHashTable *metadata, QString objectId, QString);
+    void onRendererMetadataReceived(GHashTable *metadata, QString objectId);
     void onRendererMetadataChanged(QString metadata, QVariant value);
 };
 

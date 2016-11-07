@@ -65,7 +65,7 @@ private slots:
 
     void onSleeperTimeout();
 
-    void onStatusReceived(MafwPlaylist *, uint, MafwPlayState state, QString, QString);
+    void onStatusReceived(MafwPlaylist *, uint, MafwPlayState state);
     void onStateChanged(MafwPlayState state);
 
     void onCallStateChanged(QDBusMessage msg);
