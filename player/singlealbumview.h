@@ -32,7 +32,7 @@ private:
 private slots:
     void listSongs();
     void updateSongCount();
-    void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
     void onItemActivated(QModelIndex index);
     void onContainerChanged(QString objectId);
     int appendAllToPlaylist(bool filter);

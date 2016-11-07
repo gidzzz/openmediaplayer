@@ -157,7 +157,7 @@ void SinglePlaylistView::browseImportedPlaylist(QString objectId)
     objectModel->appendRow(item);
 
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
     browsePlaylistId = mafwTrackerSource->browse(objectId, true, NULL, NULL,
                                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                   MAFW_METADATA_KEY_DURATION,
@@ -181,7 +181,7 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
     ui->windowMenu->removeAction(ui->windowMenu->actions().last());
 
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
     browsePlaylistId = mafwTrackerSource->browse("localtagfs::music/songs", true, filter.toUtf8(), sorting.toUtf8(),
                                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
                                                                   MAFW_METADATA_KEY_DURATION,
@@ -190,7 +190,7 @@ void SinglePlaylistView::browseAutomaticPlaylist(QString filter, QString sorting
                                                  0, maxCount);
 }
 
-void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString)
+void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata)
 {
     if (browseId != this->browsePlaylistId) return;
 
@@ -203,7 +203,7 @@ void SinglePlaylistView::onBrowseResult(uint browseId, int remainingCount, uint 
 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*)));
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
         playlistLoaded = true;
 

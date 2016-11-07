@@ -60,7 +60,7 @@ void SingleAlbumView::listSongs()
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseAlbumId = mafwTrackerSource->browse(albumObjectId, true, NULL, "+track,+title",
                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -70,7 +70,7 @@ void SingleAlbumView::listSongs()
                                               0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
+void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata)
 {
     if (browseId != browseAlbumId) return;
 
@@ -102,7 +102,7 @@ void SingleAlbumView::browseAllSongs(uint browseId, int remainingCount, uint, QS
 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*)));
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     }
 }

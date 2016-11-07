@@ -45,7 +45,7 @@ private slots:
     void onSortingChanged(QAction *action);
     void selectView();
     void listVideos();
-    void browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
     void onMetadataChanged(QString objectId);
     void onContainerChanged(QString objectId);
 };

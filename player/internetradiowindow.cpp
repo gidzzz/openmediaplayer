@@ -156,7 +156,7 @@ void InternetRadioWindow::listStations()
     this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
 
     connect(mafwRadioSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseId = mafwRadioSource->browse("iradiosource::", false, NULL, "+title",
                                        MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -165,7 +165,7 @@ void InternetRadioWindow::listStations()
                                        0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
+void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata)
 {
     if (this->browseId != browseId) return;
 
@@ -197,7 +197,7 @@ void InternetRadioWindow::browseAllStations(uint browseId, int remainingCount, u
 
     if (remainingCount == 0) {
         disconnect(mafwRadioSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllStations(uint,int,uint,QString,GHashTable*)));
 
         bool drawHeaders = !audioBufferList.isEmpty() && !videoBufferList.isEmpty();
         int delta = audioBufferList.size() + videoBufferList.size() - objectModel->rowCount();

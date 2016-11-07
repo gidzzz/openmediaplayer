@@ -47,7 +47,7 @@ private slots:
     void onStationSelected(QModelIndex index);
     void onContextMenuRequested(const QPoint &pos = QPoint(35,35));
     void listStations();
-    void browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void browseAllStations(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
 };
 
 #endif // INTERNETRADIOWINDOW_H

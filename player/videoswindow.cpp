@@ -198,8 +198,8 @@ void VideosWindow::listVideos()
     qDebug("Source ready");
 #endif
 
-    connect(mafwTrackerSource, SIGNAL(browseResult(uint, int, uint, QString, GHashTable*, QString)),
-            this, SLOT(browseAllVideos(uint, int, uint, QString, GHashTable*, QString)), Qt::UniqueConnection);
+    connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
+            this, SLOT(browseAllVideos(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseId = mafwTrackerSource->browse("localtagfs::videos", false, NULL, sortByDate->isChecked() ? "-added,+title" : "+title",
                                          MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -210,7 +210,7 @@ void VideosWindow::listVideos()
                                          0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString)
+void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata)
 {
     if (this->browseId != browseId) return;
 
@@ -279,7 +279,7 @@ void VideosWindow::browseAllVideos(uint browseId, int remainingCount, uint index
 
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllVideos(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllVideos(uint,int,uint,QString,GHashTable*)));
 
         if (sortByCategory->isChecked()) {
             bool drawHeaders = !recordingsBufferList.isEmpty() && !filmsBufferList.isEmpty();

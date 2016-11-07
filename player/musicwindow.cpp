@@ -195,7 +195,7 @@ void MusicWindow::connectSignals()
 
     connect(mafwTrackerSource, SIGNAL(containerChanged(QString)), this, SLOT(onContainerChanged(QString)));
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseSourcePlaylists(uint,int,uint,QString,GHashTable*,QString)));
+            this, SLOT(browseSourcePlaylists(uint,int,uint,QString,GHashTable*)));
     connect(ui->songList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->albumList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
     connect(ui->artistList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenuRequested(QPoint)));
@@ -574,7 +574,7 @@ void MusicWindow::listSongs()
 
     songModel->clear();
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseAllSongsId = mafwTrackerSource->browse("localtagfs::music/songs", false, NULL, NULL,
                                                  MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -596,7 +596,7 @@ void MusicWindow::listArtists()
 
     artistModel->clear();
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAllArtists(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(browseAllArtists(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseAllArtistsId = mafwTrackerSource->browse("localtagfs::music/artists", false, NULL, NULL,
                                                    MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -615,7 +615,7 @@ void MusicWindow::listAlbums()
 
     albumModel->clear();
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseAllAlbumsId = mafwTrackerSource->browse("localtagfs::music/albums", false, NULL, NULL,
                                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
@@ -633,7 +633,7 @@ void MusicWindow::listGenres()
 
     genresModel->clear();
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseAllGenresId = mafwTrackerSource->browse("localtagfs::music/genres", false, NULL, NULL,
                                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -746,7 +746,7 @@ void MusicWindow::listImportedPlaylists()
                                                           0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString error)
+void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata)
 {
     GValue *v;
 
@@ -797,12 +797,9 @@ void MusicWindow::browseSourcePlaylists(uint browseId, int remainingCount, uint 
 
         playlistModel->appendRow(item);
     }
-
-    if (!error.isEmpty())
-        qDebug() << error;
 }
 
-void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
+void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata)
 {
     if (browseId != browseAllSongsId) return;
 
@@ -832,17 +829,14 @@ void MusicWindow::browseAllSongs(uint browseId, int remainingCount, uint, QStrin
         songModel->appendRow(item);
     }
 
-    if (!error.isEmpty())
-        qDebug() << error;
-
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllSongs(uint,int,uint,QString,GHashTable*)));
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     }
 }
 
-void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
+void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata)
 {
     if (browseId != browseAllArtistsId) return;
 
@@ -879,17 +873,14 @@ void MusicWindow::browseAllArtists(uint browseId, int remainingCount, uint, QStr
         artistModel->appendRow(item);
     }
 
-    if (!error.isEmpty())
-        qDebug() << error;
-
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllArtists(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllArtists(uint,int,uint,QString,GHashTable*)));
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     }
 }
 
-void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
+void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata)
 {
     if (browseId != browseAllAlbumsId) return;
 
@@ -927,18 +918,15 @@ void MusicWindow::browseAllAlbums(uint browseId, int remainingCount, uint, QStri
         albumModel->appendRow(item);
     }
 
-    if (!error.isEmpty())
-        qDebug() << error;
-
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*)));
 
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     }
 }
 
-void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata, QString error)
+void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata)
 {
     if (this->browseAllGenresId != browseId) return;
 
@@ -973,12 +961,9 @@ void MusicWindow::browseAllGenres(uint browseId, int remainingCount, uint, QStri
 
     genresModel->appendRow(item);
 
-    if (!error.isEmpty())
-        qDebug() << error;
-
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*)));
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     }
 }

@@ -105,8 +105,8 @@ private slots:
     void onNowPlayingWindowHidden();
     void onChildClosed();
     void setupPlayback();
-    void countAudioVideoResult(QString objectId, GHashTable* metadata, QString error);
-    void countRadioResult(QString objectId, GHashTable *metadata, QString error);
+    void countAudioVideoResult(QString objectId, GHashTable *metadata);
+    void countRadioResult(QString objectId, GHashTable *metadata);
     void countRadioStations();
     void onAddFinished(uint token);
     void onSourceUpdating(int progress, int processed_items, int remaining_items, int remaining_time);

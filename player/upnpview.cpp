@@ -36,7 +36,7 @@ void UpnpView::browseObjectId(QString objectId)
     objectModel->clear();
 
     connect(mafwSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseId = mafwSource->browse(objectId, true, NULL, NULL,
                                   MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -47,7 +47,7 @@ void UpnpView::browseObjectId(QString objectId)
                                   0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString)
+void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata)
 {
     if (browseId != this->browseId) return;
 
@@ -129,7 +129,7 @@ void UpnpView::onBrowseResult(uint browseId, int remainingCount, uint, QString o
 
     if (remainingCount == 0) {
         disconnect(mafwSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*)));
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     }
 }

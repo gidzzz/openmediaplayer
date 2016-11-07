@@ -106,14 +106,13 @@ private slots:
     void onSearchHideButtonClicked();
     void onSearchTextChanged();
 
-    void browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString, GHashTable* metadata, QString error);
-    void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
-    void browseAllGenres(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error);
+    void browseSourcePlaylists(uint browseId, int remainingCount, uint index, QString, GHashTable *metadata);
+    void browseAllSongs(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
+    void browseAllArtists(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
+    void browseAllAlbums(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
+    void browseAllGenres(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
 
     void onAddFinished(uint token, int count);
-
 
     void listSongs();
     void listArtists();

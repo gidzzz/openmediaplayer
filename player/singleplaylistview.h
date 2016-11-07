@@ -55,7 +55,7 @@ private slots:
     void updateSongCount();
     void setItemMetadata(QStandardItem *item, QString objectId, GHashTable *metadata);
     void onItemReceived(QString objectId, GHashTable* metadata, uint index);
-    void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString);
+    void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
     int appendAllToPlaylist(bool filter);
     void onItemActivated(QModelIndex index);
     void addAllToNowPlaying();

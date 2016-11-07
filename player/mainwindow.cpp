@@ -192,12 +192,12 @@ void MainWindow::connectSignals()
 
     connect(musicWindow, SIGNAL(hidden()), this, SLOT(onChildClosed()));
 
-    connect(mafwRadioSource, SIGNAL(metadataResult(QString, GHashTable*, QString)),
-            this, SLOT(countRadioResult(QString, GHashTable*, QString)));
+    connect(mafwRadioSource, SIGNAL(metadataResult(QString,GHashTable*,QString)),
+            this, SLOT(countRadioResult(QString,GHashTable*)));
 
     connect(mafwTrackerSource, SIGNAL(updating(int,int,int,int)), this, SLOT(onSourceUpdating(int,int,int,int)));
-    connect(mafwTrackerSource, SIGNAL(metadataResult(QString, GHashTable*, QString)),
-            this, SLOT(countAudioVideoResult(QString, GHashTable*, QString)));
+    connect(mafwTrackerSource, SIGNAL(metadataResult(QString,GHashTable*,QString)),
+            this, SLOT(countAudioVideoResult(QString,GHashTable*)));
 }
 
 void MainWindow::open_mp_main_view()
@@ -628,7 +628,7 @@ void MainWindow::countRadioStations()
     mafwRadioSource->getMetadata(RADIOSOURCE_PATH, MAFW_SOURCE_LIST(MAFW_METADATA_KEY_CHILDCOUNT_1));
 }
 
-void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, QString error)
+void MainWindow::countAudioVideoResult(QString objectId, GHashTable *metadata)
 {
     GValue *v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
     int count = v ? g_value_get_int(v) : -1;
@@ -647,12 +647,9 @@ void MainWindow::countAudioVideoResult(QString objectId, GHashTable* metadata, Q
         ui->videoCountLabel->setText(countStr);
         ui->menuList->item(1)->setData(UserRoleValueText, countStr);
     }
-
-    if (!error.isEmpty())
-        qDebug() << error;
 }
 
-void MainWindow::countRadioResult(QString, GHashTable *metadata, QString error)
+void MainWindow::countRadioResult(QString, GHashTable *metadata)
 {
     GValue *v = mafw_metadata_first(metadata, MAFW_METADATA_KEY_CHILDCOUNT_1);
     int count = v ? g_value_get_int(v) : -1;
@@ -662,9 +659,6 @@ void MainWindow::countRadioResult(QString, GHashTable *metadata, QString error)
 
     ui->stationCountLabel->setText(countStr);
     ui->menuList->item(2)->setData(UserRoleValueText, countStr);
-
-    if (!error.isEmpty())
-        qDebug() << error;
 }
 
 void MainWindow::onAddFinished(uint token)

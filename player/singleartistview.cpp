@@ -71,7 +71,7 @@ void SingleArtistView::listAlbums()
     objectModel->appendRow(shuffleButton);
 
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseArtistId = mafwTrackerSource->browse(artistObjectId, false, NULL, NULL,
                                                MAFW_SOURCE_LIST(MAFW_METADATA_KEY_ALBUM,
@@ -80,7 +80,7 @@ void SingleArtistView::listAlbums()
                                                0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
+void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata)
 {
     if (browseId != browseArtistId) return;
 
@@ -114,12 +114,9 @@ void SingleArtistView::browseAllAlbums(uint browseId, int remainingCount, uint, 
         visibleSongs += childcount; updateSongCount();
     }
 
-    if (!error.isEmpty())
-        qDebug() << error;
-
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllAlbums(uint,int,uint,QString,GHashTable*)));
         this->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     }
 }

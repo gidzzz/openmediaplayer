@@ -37,7 +37,7 @@ private:
 private slots:
     void onArtistAddFinished(uint token, int count);
     void onAlbumAddFinished(uint token, int count);
-    void browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable* metadata, QString error);
+    void browseAllAlbums(uint browseId, int remainingCount, uint, QString, GHashTable *metadata);
     void onContainerChanged(QString objectId);
     void onAlbumSelected(QModelIndex index);
     void addAllToNowPlaying();

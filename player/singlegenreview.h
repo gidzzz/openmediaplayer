@@ -44,7 +44,7 @@ private slots:
     void showDetails();
     void onNowPlayingWindowHidden();
     void listArtists();
-    void browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString);
+    void browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata);
     void onAddFinished(uint browseId, int count);
     void onContainerChanged(QString objectId);
 };

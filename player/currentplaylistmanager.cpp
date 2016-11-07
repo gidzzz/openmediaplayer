@@ -40,7 +40,7 @@ void CurrentPlaylistManager::process()
 
     // Prepare to receive the results
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     // Request the results
     browseId = mafwTrackerSource->browse(job.objectId, true,
@@ -66,11 +66,9 @@ void CurrentPlaylistManager::finalize()
     if (!jobs.isEmpty()) process();
 }
 
-void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable* metadata, QString error)
+void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata)
 {
     if (browseId != this->browseId) return;
-
-    if (!error.isEmpty()) qDebug() << error;
 
     // Check if it's the first result
     if (index == 0) {
@@ -78,7 +76,7 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
         if (remainingCount == 0 && objectId.isNull()) {
             // There are no items, abort
             disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*)));
 
             // Clean up and move on
             finalize();
@@ -97,7 +95,7 @@ void CurrentPlaylistManager::onBrowseResult(uint browseId, int remainingCount, u
     if (remainingCount == 0) {
         // The connection is no longer needed
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(onBrowseResult(uint,int,uint,QString,GHashTable*)));
 
         // MIME is required to determine which playlist should be used
         QString mime = QString::fromUtf8(g_value_get_string(mafw_metadata_first(metadata, MAFW_METADATA_KEY_MIME)));

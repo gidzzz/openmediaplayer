@@ -99,7 +99,7 @@ void SingleGenreView::listArtists()
     objectModel->appendRow(item);
 
     connect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-            this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)), Qt::UniqueConnection);
+            this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*)), Qt::UniqueConnection);
 
     browseGenreId = mafwTrackerSource->browse(currentObjectId, false, NULL, NULL,
                                               MAFW_SOURCE_LIST(MAFW_METADATA_KEY_TITLE,
@@ -109,7 +109,7 @@ void SingleGenreView::listArtists()
                                               0, MAFW_SOURCE_BROWSE_ALL);
 }
 
-void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable* metadata, QString error)
+void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, QString objectId, GHashTable *metadata)
 {
     if (browseId != browseGenreId) return;
 
@@ -149,12 +149,9 @@ void SingleGenreView::browseAllGenres(uint browseId, int remainingCount, uint, Q
 
     }
 
-    if (!error.isEmpty())
-        qDebug() << error;
-
     if (remainingCount == 0) {
         disconnect(mafwTrackerSource, SIGNAL(browseResult(uint,int,uint,QString,GHashTable*,QString)),
-                   this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*,QString)));
+                   this, SLOT(browseAllGenres(uint,int,uint,QString,GHashTable*)));
         setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
     }
 }

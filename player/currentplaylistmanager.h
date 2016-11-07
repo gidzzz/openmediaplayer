@@ -53,7 +53,7 @@ private:
     MafwSourceAdapter *mafwTrackerSource;
 
 private slots:
-    void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata, QString error);
+    void onBrowseResult(uint browseId, int remainingCount, uint index, QString objectId, GHashTable *metadata);
 };
 
 #endif // CURRENTPLAYLISTMANAGER_H
