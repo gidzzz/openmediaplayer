@@ -1,3 +1,15 @@
+openmediaplayer (20161108-1) unstable; urgency=low
+
+  * File details dialog for viewing complete metadata.
+  * Files from the UPnP browser can be opened using a web browser.
+  * Got rid of the half-working support for last playing song stored in GConf.
+  * Improved resilience to MAFW crashes.
+  * Rewritten MAFW renderer adapter.
+  * More complete MAFW error logging.
+  * Minor UI adjustments and internal tweaks.
+
+ -- Grzegorz Gidel <grg.gdl@gmail.com>  Tue, 08 Nov 2016 11:20:46 +0100
+
 openmediaplayer (20150829-1) unstable; urgency=low
 
   * Fixed a regression that caused extra empty playlist items to appear in Now Playing.
