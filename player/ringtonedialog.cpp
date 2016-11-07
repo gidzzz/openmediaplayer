@@ -18,6 +18,8 @@ void RingtoneDialog::onUriReceived(QString objectId, QString uri)
 {
     if (objectId != this->objectId) return;
 
+    disconnect(this->sender(), SIGNAL(gotUri(QString,QString,QString)), this, SLOT(onUriReceived(QString,QString)));
+
     this->uri = uri;
 
     if (accepted)
