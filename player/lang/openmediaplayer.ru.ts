@@ -1685,12 +1685,12 @@ Unplug USB to continue using FM transmitter.</source>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="893"/>
-        <source>General error occured, unable to continue playback</source>
+        <source>General error occurred, unable to continue playback</source>
         <translation>Произошла ошибка, проигрывание приостановлено</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="895"/>
-        <source>General error occured</source>
+        <source>General error occurred</source>
         <translation>Произошла ошибка</translation>
     </message>
     <message>

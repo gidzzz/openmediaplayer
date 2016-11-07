@@ -1660,12 +1660,12 @@ Retire o cabo para continuar a usar o Transmissor FM</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="893"/>
-        <source>General error occured, unable to continue playback</source>
+        <source>General error occurred, unable to continue playback</source>
         <translation>Ocorreu um erro. Incapaz de continuar reprodução</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="895"/>
-        <source>General error occured</source>
+        <source>General error occurred</source>
         <translation>Ocorreu um erro</translation>
     </message>
     <message>

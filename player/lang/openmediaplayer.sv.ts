@@ -1661,12 +1661,12 @@ i gränssnittet</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="893"/>
-        <source>General error occured, unable to continue playback</source>
+        <source>General error occurred, unable to continue playback</source>
         <translation>Generellt fel uppstod. Kunde inte fortsätta uppspelning</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="895"/>
-        <source>General error occured</source>
+        <source>General error occurred</source>
         <translation>Generellt fel uppstod</translation>
     </message>
     <message>

@@ -1660,12 +1660,12 @@ Desconectá el cable USB para seguir usando el transmisor FM.</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="893"/>
-        <source>General error occured, unable to continue playback</source>
+        <source>General error occurred, unable to continue playback</source>
         <translation>Un error general ha ocurrido, incapaz de continuar con la reproducción</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="895"/>
-        <source>General error occured</source>
+        <source>General error occurred</source>
         <translation>Un error general ha ocurrido</translation>
     </message>
     <message>

@@ -1710,12 +1710,12 @@ Za delovanje FM oddajnika odklopite USB.</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="893"/>
-        <source>General error occured, unable to continue playback</source>
+        <source>General error occurred, unable to continue playback</source>
         <translation>Prišlo je do napake, ne morem nadaljevati s predvajanjem</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="895"/>
-        <source>General error occured</source>
+        <source>General error occurred</source>
         <translation>Prišlo je do splošne napake</translation>
     </message>
     <message>

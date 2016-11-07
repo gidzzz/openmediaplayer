@@ -1685,12 +1685,12 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="893"/>
-        <source>General error occured, unable to continue playback</source>
+        <source>General error occurred, unable to continue playback</source>
         <translation>Došlo k všeobecnej chybe, nie je možné pokračovať v prehrávaní</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="895"/>
-        <source>General error occured</source>
+        <source>General error occurred</source>
         <translation>Došlo k všeobecnej chybe</translation>
     </message>
     <message>

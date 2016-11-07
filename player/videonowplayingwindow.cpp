@@ -890,9 +890,9 @@ QString VideoNowPlayingWindow::errorMessage(int code, const QString &message) {
         case MAFW_RENDERER_ERROR_TYPE_NOT_AVAILABLE:
             return tr("Could not determine MIME-type");
         case MAFW_RENDERER_ERROR_PLAYBACK:
-            return tr("General error occured, unable to continue playback");
+            return tr("General error occurred, unable to continue playback");
         case MAFW_RENDERER_ERROR_UNABLE_TO_PERFORM:
-            return tr("General error occured");
+            return tr("General error occurred");
         case MAFW_RENDERER_ERROR_UNSUPPORTED_TYPE:
             return tr("Unsupported media");
         case MAFW_RENDERER_ERROR_UNSUPPORTED_RESOLUTION:

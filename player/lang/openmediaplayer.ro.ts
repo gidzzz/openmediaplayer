@@ -1670,12 +1670,12 @@ Deconectați USB-ul pentru a continua folosirea transmițătorului FM.</translat
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="893"/>
-        <source>General error occured, unable to continue playback</source>
+        <source>General error occurred, unable to continue playback</source>
         <translation>Eroare generală întâmpinată, nu se poate continua redarea</translation>
     </message>
     <message>
         <location filename="../videonowplayingwindow.cpp" line="895"/>
-        <source>General error occured</source>
+        <source>General error occurred</source>
         <translation>Eroare generală întâmpinată</translation>
     </message>
     <message>
