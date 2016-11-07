@@ -278,22 +278,27 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="178"/>
+        <location filename="../internetradiowindow.cpp" line="113"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="181"/>
         <source>(unknown station)</source>
         <translation>(tuntematon asema)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="184"/>
+        <location filename="../internetradiowindow.cpp" line="187"/>
         <source>(unknown)</source>
         <translation>(tuntematon)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="214"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
         <source>Audio bookmarks</source>
         <translation>Äänikirjanmerkit</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="237"/>
+        <location filename="../internetradiowindow.cpp" line="240"/>
         <source>Video bookmarks</source>
         <translation>Videokirjanmerkit</translation>
     </message>
@@ -365,7 +370,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="644"/>
+        <location filename="../mainwindow.cpp" line="638"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n kappale</numerusform>
@@ -373,7 +378,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="651"/>
+        <location filename="../mainwindow.cpp" line="645"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n leike</numerusform>
@@ -381,7 +386,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="667"/>
+        <location filename="../mainwindow.cpp" line="658"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n asema</numerusform>
@@ -413,32 +418,32 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         <translation>Satunnaistoisto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="643"/>
+        <location filename="../mainwindow.cpp" line="637"/>
         <source>(no songs)</source>
         <translation>(ei kappaleita)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="650"/>
+        <location filename="../mainwindow.cpp" line="644"/>
         <source>(no videos)</source>
         <translation>(ei videoita)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="666"/>
+        <location filename="../mainwindow.cpp" line="657"/>
         <source>(no stations)</source>
         <translation>(ei asemia)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="714"/>
+        <location filename="../mainwindow.cpp" line="702"/>
         <source>Retrieving information on the new media files</source>
         <translation>Uusien mediatiedostojen tietoja haetaan</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="716"/>
+        <location filename="../mainwindow.cpp" line="704"/>
         <source>Estimated time remaining:</source>
         <translation>Arvioitu jäljellä oleva aika:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="718"/>
+        <location filename="../mainwindow.cpp" line="706"/>
         <source>Remaining items:</source>
         <translation>Jäljellä olevat kohteet:</translation>
     </message>
@@ -475,6 +480,19 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
     </message>
 </context>
 <context>
+    <name>MetadataDialog</name>
+    <message>
+        <location filename="../metadatadialog.ui" line="6"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../metadatadialog.cpp" line="114"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MusicWindow</name>
     <message>
         <location filename="../musicwindow.cpp" line="217"/>
@@ -482,65 +500,65 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         <translation>Lisää nyt soitettaviin</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="223"/>
+        <location filename="../musicwindow.cpp" line="225"/>
         <source>Add to a playlist</source>
         <translation>Lisää soittolistalle</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="239"/>
-        <location filename="../musicwindow.cpp" line="254"/>
+        <location filename="../musicwindow.cpp" line="244"/>
+        <location filename="../musicwindow.cpp" line="259"/>
         <source>Rename playlist</source>
         <translation>Nimeä soittolista uudelleen</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="240"/>
-        <location filename="../musicwindow.cpp" line="243"/>
+        <location filename="../musicwindow.cpp" line="245"/>
+        <location filename="../musicwindow.cpp" line="248"/>
         <source>Delete playlist</source>
         <translation>Poista soittolista</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="225"/>
+        <location filename="../musicwindow.cpp" line="227"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="228"/>
+        <location filename="../musicwindow.cpp" line="230"/>
         <source>Set as ringing tone</source>
         <translation>Aseta soittoääneksi</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="229"/>
+        <location filename="../musicwindow.cpp" line="231"/>
         <source>Share</source>
         <translation>Jaa</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="260"/>
+        <location filename="../musicwindow.cpp" line="265"/>
         <source>Save</source>
         <translation>Tallenna</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="442"/>
+        <location filename="../musicwindow.cpp" line="452"/>
         <source>Albums</source>
         <translation>Albumit</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="457"/>
+        <location filename="../musicwindow.cpp" line="467"/>
         <source>Songs</source>
         <translation>Kappaleet</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="698"/>
+        <location filename="../musicwindow.cpp" line="708"/>
         <source>Saved</source>
         <translation>Tallennetut soittolistat</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="717"/>
-        <location filename="../musicwindow.cpp" line="747"/>
-        <location filename="../musicwindow.cpp" line="753"/>
-        <location filename="../musicwindow.cpp" line="759"/>
-        <location filename="../musicwindow.cpp" line="765"/>
-        <location filename="../musicwindow.cpp" line="783"/>
-        <location filename="../musicwindow.cpp" line="978"/>
+        <location filename="../musicwindow.cpp" line="727"/>
+        <location filename="../musicwindow.cpp" line="757"/>
+        <location filename="../musicwindow.cpp" line="763"/>
+        <location filename="../musicwindow.cpp" line="769"/>
+        <location filename="../musicwindow.cpp" line="775"/>
+        <location filename="../musicwindow.cpp" line="793"/>
+        <location filename="../musicwindow.cpp" line="957"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n kappale</numerusform>
@@ -548,67 +566,72 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="772"/>
+        <location filename="../musicwindow.cpp" line="782"/>
         <source>Imported playlists</source>
         <translation>Tuodut soittolistat</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="651"/>
+        <location filename="../musicwindow.cpp" line="661"/>
         <source>Automatic playlists</source>
         <translation>Automaattiset soittolistat</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="657"/>
+        <location filename="../musicwindow.cpp" line="235"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../musicwindow.cpp" line="667"/>
         <source>Recently added</source>
         <translation>Viimeksi lisätyt</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="657"/>
+        <location filename="../musicwindow.cpp" line="667"/>
         <source>Recently played</source>
         <translation>Viimeksi soitetut</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="657"/>
+        <location filename="../musicwindow.cpp" line="667"/>
         <source>Most played</source>
         <translation>Eniten soitetut</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="657"/>
+        <location filename="../musicwindow.cpp" line="667"/>
         <source>Never played</source>
         <translation>Ei vielä soitettu</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="809"/>
+        <location filename="../musicwindow.cpp" line="811"/>
         <source>(unknown song)</source>
         <translation>(tuntematon kappale)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="812"/>
-        <location filename="../musicwindow.cpp" line="853"/>
-        <location filename="../musicwindow.cpp" line="871"/>
-        <location filename="../musicwindow.cpp" line="908"/>
+        <location filename="../musicwindow.cpp" line="814"/>
+        <location filename="../musicwindow.cpp" line="848"/>
+        <location filename="../musicwindow.cpp" line="866"/>
+        <location filename="../musicwindow.cpp" line="895"/>
         <source>(unknown artist)</source>
         <translation>(tuntematon esittäjä)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="815"/>
-        <location filename="../musicwindow.cpp" line="905"/>
+        <location filename="../musicwindow.cpp" line="817"/>
+        <location filename="../musicwindow.cpp" line="892"/>
         <source>(unknown album)</source>
         <translation>(tuntematon albumi)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="923"/>
+        <location filename="../musicwindow.cpp" line="910"/>
         <source>Various artists</source>
         <translation>Eri esittäjiä</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="958"/>
-        <location filename="../musicwindow.cpp" line="969"/>
+        <location filename="../musicwindow.cpp" line="937"/>
+        <location filename="../musicwindow.cpp" line="948"/>
         <source>(unknown genre)</source>
         <translation>(tuntematon genre)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="979"/>
+        <location filename="../musicwindow.cpp" line="958"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n albumi</numerusform>
@@ -616,7 +639,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="980"/>
+        <location filename="../musicwindow.cpp" line="959"/>
         <source>%n artist(s)</source>
         <translation>
             <numerusform>%n esittäjä</numerusform>
@@ -624,7 +647,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1113"/>
+        <location filename="../musicwindow.cpp" line="1089"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n leike lisätty soittolistalle</numerusform>
@@ -632,7 +655,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1143"/>
+        <location filename="../musicwindow.cpp" line="1119"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n leike lisätty nyt soitettaviin</numerusform>
@@ -646,34 +669,34 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="175"/>
-        <location filename="../musicwindow.cpp" line="413"/>
+        <location filename="../musicwindow.cpp" line="423"/>
         <source>All albums</source>
         <translation>Kaikki albumit</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="180"/>
-        <location filename="../musicwindow.cpp" line="408"/>
-        <location filename="../musicwindow.cpp" line="447"/>
+        <location filename="../musicwindow.cpp" line="418"/>
+        <location filename="../musicwindow.cpp" line="457"/>
         <source>Artists</source>
         <translation>Esittäjät</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="185"/>
-        <location filename="../musicwindow.cpp" line="423"/>
-        <location filename="../musicwindow.cpp" line="452"/>
+        <location filename="../musicwindow.cpp" line="433"/>
+        <location filename="../musicwindow.cpp" line="462"/>
         <source>Genres</source>
         <translation>Genret</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="190"/>
-        <location filename="../musicwindow.cpp" line="428"/>
-        <location filename="../musicwindow.cpp" line="462"/>
+        <location filename="../musicwindow.cpp" line="438"/>
+        <location filename="../musicwindow.cpp" line="472"/>
         <source>Playlists</source>
         <translation>Soittolistat</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="195"/>
-        <location filename="../musicwindow.cpp" line="418"/>
+        <location filename="../musicwindow.cpp" line="428"/>
         <source>All songs</source>
         <translation>Kaikki kappaleet</translation>
     </message>
@@ -681,7 +704,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
 <context>
     <name>NowPlayingIndicator</name>
     <message>
-        <location filename="../nowplayingindicator.cpp" line="145"/>
+        <location filename="../nowplayingindicator.cpp" line="144"/>
         <source>Music</source>
         <translation>Musiikki</translation>
     </message>
@@ -689,7 +712,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="257"/>
+        <location filename="../nowplayingwindow.cpp" line="260"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n kappale</numerusform>
@@ -697,48 +720,48 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="262"/>
+        <location filename="../nowplayingwindow.cpp" line="265"/>
         <source>total</source>
         <translation>yhteensä</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1017"/>
+        <location filename="../nowplayingwindow.cpp" line="970"/>
         <source>Information not available</source>
         <translation>Tiedot eivät ole käytettävissä</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1083"/>
+        <location filename="../nowplayingwindow.cpp" line="1035"/>
         <source>Set as ringing tone</source>
         <translation>Aseta soittoääneksi</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1079"/>
+        <location filename="../nowplayingwindow.cpp" line="1031"/>
         <source>Delete from now playing</source>
         <translation>Poista nyt soitettavista</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1084"/>
+        <location filename="../nowplayingwindow.cpp" line="1036"/>
         <source>Share</source>
         <translation>Jaa</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="821"/>
+        <location filename="../nowplayingwindow.cpp" line="787"/>
         <source>Stop playback</source>
         <translation>Pysäytä toisto</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1081"/>
+        <location filename="../nowplayingwindow.cpp" line="1033"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1082"/>
+        <location filename="../nowplayingwindow.cpp" line="1034"/>
         <source>Add to a playlist</source>
         <translation>Lisää soittolistalle</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1095"/>
-        <location filename="../nowplayingwindow.cpp" line="1185"/>
+        <location filename="../nowplayingwindow.cpp" line="1047"/>
+        <location filename="../nowplayingwindow.cpp" line="1142"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n leike lisätty soittolistalle</numerusform>
@@ -746,37 +769,37 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1127"/>
+        <location filename="../nowplayingwindow.cpp" line="1084"/>
         <source>Entertainment View</source>
         <translation>Viihdenäkymä</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1132"/>
+        <location filename="../nowplayingwindow.cpp" line="1089"/>
         <source>Car View</source>
         <translation>Autonäkymä</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1279"/>
+        <location filename="../nowplayingwindow.cpp" line="1236"/>
         <source>Select album art</source>
         <translation>Valitse kansikuva</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1280"/>
+        <location filename="../nowplayingwindow.cpp" line="1237"/>
         <source>Reset album art</source>
         <translation>Nollaa kansikuva</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1329"/>
+        <location filename="../nowplayingwindow.cpp" line="1286"/>
         <source>Edit lyrics</source>
         <translation>Muokkaa sanoituksia</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1330"/>
+        <location filename="../nowplayingwindow.cpp" line="1287"/>
         <source>Search for lyrics</source>
         <translation>Hae sanoituksia</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1331"/>
+        <location filename="../nowplayingwindow.cpp" line="1288"/>
         <source>Reload lyrics</source>
         <translation>Lataa sanoitukset uudelleen</translation>
     </message>
@@ -791,20 +814,20 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         <translation>--/-- kappaletta</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="543"/>
-        <location filename="../nowplayingwindow.cpp" line="997"/>
+        <location filename="../nowplayingwindow.cpp" line="526"/>
+        <location filename="../nowplayingwindow.cpp" line="950"/>
         <source>(unknown song)</source>
         <translation>(tuntematon kappale)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="555"/>
-        <location filename="../nowplayingwindow.cpp" line="1000"/>
+        <location filename="../nowplayingwindow.cpp" line="538"/>
+        <location filename="../nowplayingwindow.cpp" line="953"/>
         <source>(unknown artist)</source>
         <translation>(tuntematon esittäjä)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="567"/>
-        <location filename="../nowplayingwindow.cpp" line="1003"/>
+        <location filename="../nowplayingwindow.cpp" line="550"/>
+        <location filename="../nowplayingwindow.cpp" line="956"/>
         <source>(unknown album)</source>
         <translation>(tuntematon albumi)</translation>
     </message>
@@ -814,27 +837,32 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         <translation>Valinnat</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="635"/>
+        <location filename="../nowplayingwindow.ui" line="636"/>
         <source>FM Transmitter</source>
         <translation>FM-lähetin</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="640"/>
+        <location filename="../nowplayingwindow.ui" line="641"/>
         <source>Clear now playing</source>
         <translation>Tyhjennä nyt soitettavat</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="645"/>
+        <location filename="../nowplayingwindow.ui" line="646"/>
         <source>Add songs to a playlist</source>
         <translation>Lisää kappaleet soittolistalle</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="650"/>
+        <location filename="../nowplayingwindow.ui" line="651"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="656"/>
         <source>Entertainment view</source>
         <translation>Viihdenäkymä</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="655"/>
+        <location filename="../nowplayingwindow.ui" line="661"/>
         <source>Car view</source>
         <translation>Autonäkymä</translation>
     </message>
@@ -881,12 +909,12 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="9"/>
-        <location filename="../playlistpicker.cpp" line="49"/>
+        <location filename="../playlistpicker.cpp" line="47"/>
         <source>New playlist</source>
         <translation>Uusi soittolista</translation>
     </message>
     <message>
-        <location filename="../playlistpicker.cpp" line="56"/>
+        <location filename="../playlistpicker.cpp" line="54"/>
         <source>Save</source>
         <translation>Tallenna</translation>
     </message>
@@ -915,7 +943,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         <translation>Nyt soitetaan</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="298"/>
+        <location filename="../radionowplayingwindow.cpp" line="292"/>
         <source>(unknown station)</source>
         <translation>(tuntematon asema)</translation>
     </message>
@@ -925,32 +953,37 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         <translation>Valinnat</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="422"/>
+        <location filename="../radionowplayingwindow.ui" line="423"/>
         <source>FM transmitter</source>
         <translation>FM-lähetin</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="427"/>
+        <location filename="../radionowplayingwindow.ui" line="428"/>
         <source>Add radio bookmark</source>
         <translation>Lisää radiokirjanmerkki</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="338"/>
+        <location filename="../radionowplayingwindow.ui" line="433"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../radionowplayingwindow.cpp" line="332"/>
         <source>(unknown artist)</source>
         <translation>(tuntematon esittäjä)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="338"/>
+        <location filename="../radionowplayingwindow.cpp" line="332"/>
         <source>(unknown song)</source>
         <translation>(tuntematon kappale)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="368"/>
+        <location filename="../radionowplayingwindow.cpp" line="362"/>
         <source>Buffering</source>
         <translation>Puskuroidaan</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="503"/>
+        <location filename="../radionowplayingwindow.cpp" line="500"/>
         <source>Stop playback</source>
         <translation>Pysäytä toisto</translation>
     </message>
@@ -958,7 +991,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
 <context>
     <name>RingtoneDialog</name>
     <message>
-        <location filename="../ringtonedialog.cpp" line="49"/>
+        <location filename="../ringtonedialog.cpp" line="51"/>
         <source>Selected song set as ringing tone</source>
         <translation>Valittu kappale asetettu soittoääneksi</translation>
     </message>
@@ -966,7 +999,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../settingsdialog.ui" line="14"/>
+        <location filename="../settingsdialog.ui" line="6"/>
         <source>Media player - Settings</source>
         <translation>Mediasoitin - Asetukset</translation>
     </message>
@@ -1090,102 +1123,102 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         <translation>Pysäytä toisto</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="60"/>
+        <location filename="../settingsdialog.ui" line="55"/>
         <source>On application exit</source>
         <translation>Sovellusta suljettaessa</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="108"/>
+        <location filename="../settingsdialog.ui" line="103"/>
         <source>Disconnect headset to pause</source>
         <translation>Keskeytä katkaisemalla kuulokeyhteys</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="115"/>
+        <location filename="../settingsdialog.ui" line="110"/>
         <source>Reconnect headset to resume</source>
         <translation>Jatka yhdistämällä kuulokkeet uudelleen</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="136"/>
+        <location filename="../settingsdialog.ui" line="131"/>
         <source>Enable lyrics</source>
         <translation>Käytä sanoituksia</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="143"/>
+        <location filename="../settingsdialog.ui" line="138"/>
         <source>Lyrics providers</source>
         <translation>Sanoitusten toimittajat</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="150"/>
+        <location filename="../settingsdialog.ui" line="145"/>
         <source>Clear lyrics cache</source>
         <translation>Poista sanoitukset välimuistista</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="67"/>
+        <location filename="../settingsdialog.ui" line="62"/>
         <source>Play only search results</source>
         <translation>Soita vain hakutulokset</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="171"/>
+        <location filename="../settingsdialog.ui" line="166"/>
         <source>Open whole folders</source>
         <translation>Avaa kansiot kokonaan</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="178"/>
+        <location filename="../settingsdialog.ui" line="173"/>
         <source>Append opened songs</source>
         <translation>Liitä avatut kappaleet</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="76"/>
+        <location filename="../settingsdialog.ui" line="71"/>
         <source>Size of automatic playlists</source>
         <translation>Automaattisten soittolistojen koko</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="122"/>
+        <location filename="../settingsdialog.ui" line="117"/>
         <source>Headset button action</source>
         <translation>Kuulokenäppäimen toiminto</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="192"/>
+        <location filename="../settingsdialog.ui" line="187"/>
         <source>Orientation</source>
         <translation>Näytön suunta</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="220"/>
+        <location filename="../settingsdialog.ui" line="215"/>
         <source>Prevent playback interruptions</source>
         <translation>Estä toiston katkokset</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="227"/>
+        <location filename="../settingsdialog.ui" line="222"/>
         <source>Interruptions prevention method</source>
         <translation>Menetelmä katkoksien estoon</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="199"/>
+        <location filename="../settingsdialog.ui" line="194"/>
         <source>Lazy sliders</source>
         <translation>Laiskat liukusäätimet</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="164"/>
+        <location filename="../settingsdialog.ui" line="159"/>
         <source>Show opening dialog</source>
         <translation>Näytä avausdialogi</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="206"/>
+        <location filename="../settingsdialog.ui" line="201"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>Poistamisvalinta soittolistan kohteille</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="241"/>
+        <location filename="../settingsdialog.ui" line="236"/>
         <source>Override FMTX checks in UI</source>
         <translation>Ohita FMTX-tarkastukset UI:ssä</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="260"/>
+        <location filename="../settingsdialog.ui" line="255"/>
         <source>Requires CSSU</source>
         <translation>Vaatii CSSU:n</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="272"/>
+        <location filename="../settingsdialog.ui" line="267"/>
         <source>Requires modified FMTXD</source>
         <translation>Vaatii muokatun FMTXD:n</translation>
     </message>
@@ -1232,42 +1265,47 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.cpp" line="85"/>
+        <location filename="../singlealbumview.cpp" line="81"/>
         <source>(unknown song)</source>
         <translation>(tuntematon kappale)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="88"/>
+        <location filename="../singlealbumview.cpp" line="84"/>
         <source>(unknown artist)</source>
         <translation>(tuntematon esittäjä)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="91"/>
+        <location filename="../singlealbumview.cpp" line="87"/>
         <source>(unknown album)</source>
         <translation>(tuntematon albumi)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="184"/>
+        <location filename="../singlealbumview.cpp" line="180"/>
         <source>Add to now playing</source>
         <translation>Lisää nyt soitettaviin</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="185"/>
+        <location filename="../singlealbumview.cpp" line="181"/>
         <source>Add to a playlist</source>
         <translation>Lisää soittolistalle</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="187"/>
+        <location filename="../singlealbumview.cpp" line="183"/>
         <source>Set as ringing tone</source>
         <translation>Aseta soittoääneksi</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="188"/>
+        <location filename="../singlealbumview.cpp" line="184"/>
         <source>Share</source>
         <translation>Jaa</translation>
     </message>
+    <message>
+        <location filename="../singlealbumview.cpp" line="185"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="206"/>
+        <location filename="../singlealbumview.cpp" line="203"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n leike lisätty soittolistalle</numerusform>
@@ -1275,7 +1313,7 @@ Jatka FM-lähettimen käyttöä irrottamalla USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="252"/>
+        <location filename="../singlealbumview.cpp" line="254"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n leike lisätty nyt soitettaviin</numerusform>
@@ -1290,7 +1328,7 @@ nyt soitettaviin</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="34"/>
-        <location filename="../singlealbumview.cpp" line="186"/>
+        <location filename="../singlealbumview.cpp" line="182"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
@@ -1298,13 +1336,13 @@ nyt soitettaviin</translation>
 <context>
     <name>SingleArtistView</name>
     <message>
-        <location filename="../singleartistview.cpp" line="96"/>
+        <location filename="../singleartistview.cpp" line="93"/>
         <source>(unknown album)</source>
         <translation>(tuntematon albumi)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="111"/>
-        <location filename="../singleartistview.cpp" line="149"/>
+        <location filename="../singleartistview.cpp" line="108"/>
+        <location filename="../singleartistview.cpp" line="143"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n kappale</numerusform>
@@ -1312,9 +1350,14 @@ nyt soitettaviin</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="201"/>
+        <location filename="../singleartistview.cpp" line="195"/>
         <source>Add to now playing</source>
         <translation>Lisää nyt soitettaviin</translation>
+    </message>
+    <message>
+        <location filename="../singleartistview.cpp" line="197"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="250"/>
@@ -1337,7 +1380,7 @@ nyt soitettaviin</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="39"/>
-        <location filename="../singleartistview.cpp" line="202"/>
+        <location filename="../singleartistview.cpp" line="196"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
@@ -1345,10 +1388,15 @@ nyt soitettaviin</translation>
 <context>
     <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.cpp" line="125"/>
-        <location filename="../singlegenreview.cpp" line="143"/>
+        <location filename="../singlegenreview.cpp" line="122"/>
+        <location filename="../singlegenreview.cpp" line="140"/>
         <source>(unknown artist)</source>
         <translation>(tuntematon esittäjä)</translation>
+    </message>
+    <message>
+        <location filename="../singlegenreview.cpp" line="171"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="234"/>
@@ -1360,7 +1408,7 @@ nyt soitettaviin</translation>
     </message>
     <message>
         <location filename="../singlegenreview.cpp" line="31"/>
-        <location filename="../singlegenreview.cpp" line="176"/>
+        <location filename="../singlegenreview.cpp" line="170"/>
         <source>Add to now playing</source>
         <translation>Lisää nyt soitettaviin</translation>
     </message>
@@ -1368,27 +1416,27 @@ nyt soitettaviin</translation>
 <context>
     <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.cpp" line="129"/>
+        <location filename="../singleplaylistview.cpp" line="125"/>
         <source>(unknown song)</source>
         <translation>(tuntematon kappale)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="132"/>
+        <location filename="../singleplaylistview.cpp" line="128"/>
         <source>(unknown artist)</source>
         <translation>(tuntematon esittäjä)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="135"/>
+        <location filename="../singleplaylistview.cpp" line="131"/>
         <source>(unknown album)</source>
         <translation>(tuntematon albumi)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="148"/>
+        <location filename="../singleplaylistview.cpp" line="144"/>
         <source>Information not available</source>
         <translation>Tiedot eivät ole käytettävissä</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="335"/>
+        <location filename="../singleplaylistview.cpp" line="331"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n leike lisätty nyt soitettaviin</numerusform>
@@ -1397,33 +1445,33 @@ nyt soitettaviin</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="54"/>
-        <location filename="../singleplaylistview.cpp" line="358"/>
+        <location filename="../singleplaylistview.cpp" line="354"/>
         <source>Add to a playlist</source>
         <translation>Lisää soittolistalle</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="361"/>
+        <location filename="../singleplaylistview.cpp" line="357"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="359"/>
+        <location filename="../singleplaylistview.cpp" line="355"/>
         <source>Set as ringing tone</source>
         <translation>Aseta soittoääneksi</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="362"/>
+        <location filename="../singleplaylistview.cpp" line="358"/>
         <source>Share</source>
         <translation>Jaa</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="360"/>
+        <location filename="../singleplaylistview.cpp" line="356"/>
         <source>Delete from playlist</source>
         <translation>Poista soittolistalta</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="305"/>
-        <location filename="../singleplaylistview.cpp" line="386"/>
+        <location filename="../singleplaylistview.cpp" line="301"/>
+        <location filename="../singleplaylistview.cpp" line="382"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n leike lisätty soittolistalle</numerusform>
@@ -1432,7 +1480,7 @@ nyt soitettaviin</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="53"/>
-        <location filename="../singleplaylistview.cpp" line="357"/>
+        <location filename="../singleplaylistview.cpp" line="353"/>
         <source>Add to now playing</source>
         <translation>Lisää nyt soitettaviin</translation>
     </message>
@@ -1509,22 +1557,32 @@ nyt soitettaviin</translation>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.cpp" line="60"/>
+        <location filename="../upnpview.cpp" line="58"/>
         <source>(unknown song)</source>
         <translation>(tuntematon kappale)</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="139"/>
+        <location filename="../upnpview.cpp" line="144"/>
         <source>Add to now playing</source>
         <translation>Lisää nyt soitettaviin</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="140"/>
+        <location filename="../upnpview.cpp" line="145"/>
         <source>Add to a playlist</source>
         <translation>Lisää soittolistalle</translation>
     </message>
+    <message>
+        <location filename="../upnpview.cpp" line="147"/>
+        <source>Open in web browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../upnpview.cpp" line="148"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="244"/>
+        <location filename="../upnpview.cpp" line="251"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n leike lisätty soittolistalle</numerusform>
@@ -1532,7 +1590,7 @@ nyt soitettaviin</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="284"/>
+        <location filename="../upnpview.cpp" line="301"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n leike lisätty nyt soitettaviin</numerusform>
@@ -1564,147 +1622,147 @@ nyt soitettaviin</translation>
         <translation>Jatkuva</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="849"/>
+        <location filename="../videonowplayingwindow.cpp" line="835"/>
         <source>Buffering</source>
         <translation>Puskuroidaan</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="879"/>
+        <location filename="../videonowplayingwindow.cpp" line="863"/>
         <source>Unable to play media</source>
         <translation>Mediaa ei voi toistaa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="883"/>
+        <location filename="../videonowplayingwindow.cpp" line="881"/>
         <source>Media not found</source>
         <translation>Mediaa ei löydy</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="885"/>
+        <location filename="../videonowplayingwindow.cpp" line="883"/>
         <source>URI not available</source>
         <translation>URI ei saatavilla</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="887"/>
+        <location filename="../videonowplayingwindow.cpp" line="885"/>
         <source>Invalid URI</source>
         <translation>Virheellinen URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="889"/>
+        <location filename="../videonowplayingwindow.cpp" line="887"/>
         <source>Unable to open media</source>
         <translation>Mediaa ei voi avata</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="891"/>
+        <location filename="../videonowplayingwindow.cpp" line="889"/>
         <source>Playback stream no longer available</source>
         <translation>Suoratoistoa ei enää saatavilla</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="893"/>
+        <location filename="../videonowplayingwindow.cpp" line="891"/>
         <source>Could not determine MIME-type</source>
         <translation>MIME-tyyppiä ei voi määritellä</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="895"/>
+        <location filename="../videonowplayingwindow.cpp" line="893"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Yleinen virhe, toistoa ei voi jatkaa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="897"/>
+        <location filename="../videonowplayingwindow.cpp" line="895"/>
         <source>General error occured</source>
         <translation>Yleinen virhe</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="899"/>
+        <location filename="../videonowplayingwindow.cpp" line="897"/>
         <source>Unsupported media</source>
         <translation>Mediamuoto ei ole tuettu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="901"/>
+        <location filename="../videonowplayingwindow.cpp" line="899"/>
         <source>Unsupported resolution</source>
         <translation>Videotarkkuus ei ole tuettu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="903"/>
+        <location filename="../videonowplayingwindow.cpp" line="901"/>
         <source>Unsupported framerate</source>
         <translation>Kuvataajuus ei ole tuettu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="905"/>
+        <location filename="../videonowplayingwindow.cpp" line="903"/>
         <source>Media is protected by DRM</source>
         <translation>Media on DRM-suojattu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="907"/>
+        <location filename="../videonowplayingwindow.cpp" line="905"/>
         <source>System sound device is unavailable</source>
         <translation>Järjestelmä-äänilaite ei käytettävissä</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="909"/>
+        <location filename="../videonowplayingwindow.cpp" line="907"/>
         <source>Media corrupted</source>
         <translation>Media vioittunut</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="911"/>
+        <location filename="../videonowplayingwindow.cpp" line="909"/>
         <source>Error while parsing playlist</source>
         <translation>Virhe jäsentäessä soittolistaa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="912"/>
+        <location filename="../videonowplayingwindow.cpp" line="909"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Soittolista saattaa olla vioittunut tai tyhjä</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="915"/>
+        <location filename="../videonowplayingwindow.cpp" line="911"/>
         <source>Codec not found:</source>
         <translation>Koodekkia ei löydy:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="919"/>
+        <location filename="../videonowplayingwindow.cpp" line="913"/>
         <source>Video codec not found:</source>
         <translation>Videokoodekkia ei löydy:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="923"/>
+        <location filename="../videonowplayingwindow.cpp" line="915"/>
         <source>Audio codec not found:</source>
         <translation>Audiokoodekkia ei löydy:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="927"/>
+        <location filename="../videonowplayingwindow.cpp" line="917"/>
         <source>No playlist assigned</source>
         <translation>Soittolistaa ei määritetty</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="929"/>
+        <location filename="../videonowplayingwindow.cpp" line="919"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Mediaindeksi ei ole sidottuna soittolistan kohteisiin</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="931"/>
+        <location filename="../videonowplayingwindow.cpp" line="921"/>
         <source>Unable to start playback</source>
         <translation>Toistoa ei voi aloittaa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="933"/>
+        <location filename="../videonowplayingwindow.cpp" line="923"/>
         <source>Unable to stop playback</source>
         <translation>Toistoa ei voi pysäyttää</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="935"/>
+        <location filename="../videonowplayingwindow.cpp" line="925"/>
         <source>Unable to pause playback</source>
         <translation>Toistoa ei voi keskeyttää</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="937"/>
+        <location filename="../videonowplayingwindow.cpp" line="927"/>
         <source>Unable to seek position in media</source>
         <translation>Median toistokohtaa ei voi hakea</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="939"/>
+        <location filename="../videonowplayingwindow.cpp" line="929"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Median nykyistä toistokohtaa ei voi hakea</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="941"/>
+        <location filename="../videonowplayingwindow.cpp" line="931"/>
         <source>Unable to get current playback status</source>
         <translation>Nykyistä toistotilaa ei voi hakea</translation>
     </message>
@@ -1732,27 +1790,32 @@ nyt soitettaviin</translation>
         <translation>Jaa</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="145"/>
+        <location filename="../videoswindow.cpp" line="75"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../videoswindow.cpp" line="151"/>
         <source>Videos - latest</source>
         <translation>Videot - uusimmat</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="159"/>
+        <location filename="../videoswindow.cpp" line="165"/>
         <source>Videos - categories</source>
         <translation>Videot - luokat</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="233"/>
+        <location filename="../videoswindow.cpp" line="236"/>
         <source>(unknown clip)</source>
         <translation>(tuntematon leike)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="298"/>
+        <location filename="../videoswindow.cpp" line="301"/>
         <source>Recorded by device camera</source>
         <translation>Laitteen kameran tallentamat</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="317"/>
+        <location filename="../videoswindow.cpp" line="320"/>
         <source>Films</source>
         <translation>Elokuvat</translation>
     </message>

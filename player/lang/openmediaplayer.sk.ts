@@ -280,22 +280,27 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Odstrániť</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="178"/>
+        <location filename="../internetradiowindow.cpp" line="113"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../internetradiowindow.cpp" line="181"/>
         <source>(unknown station)</source>
         <translation>(neznámá stanica)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="184"/>
+        <location filename="../internetradiowindow.cpp" line="187"/>
         <source>(unknown)</source>
         <translation>(neznámy)</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="214"/>
+        <location filename="../internetradiowindow.cpp" line="217"/>
         <source>Audio bookmarks</source>
         <translation>Audio záložky</translation>
     </message>
     <message>
-        <location filename="../internetradiowindow.cpp" line="237"/>
+        <location filename="../internetradiowindow.cpp" line="240"/>
         <source>Video bookmarks</source>
         <translation>Video záložky</translation>
     </message>
@@ -367,7 +372,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>MainWindow</name>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="644"/>
+        <location filename="../mainwindow.cpp" line="638"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -376,7 +381,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="651"/>
+        <location filename="../mainwindow.cpp" line="645"/>
         <source>%n clip(s)</source>
         <translation>
             <numerusform>%n klip</numerusform>
@@ -385,7 +390,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="667"/>
+        <location filename="../mainwindow.cpp" line="658"/>
         <source>%n station(s)</source>
         <translation>
             <numerusform>%n stanica</numerusform>
@@ -418,32 +423,32 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Zamiešať skladby</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="643"/>
+        <location filename="../mainwindow.cpp" line="637"/>
         <source>(no songs)</source>
         <translation>(žiadne skladby)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="650"/>
+        <location filename="../mainwindow.cpp" line="644"/>
         <source>(no videos)</source>
         <translation>(žiadne videa)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="666"/>
+        <location filename="../mainwindow.cpp" line="657"/>
         <source>(no stations)</source>
         <translation>(žiadne stanice)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="714"/>
+        <location filename="../mainwindow.cpp" line="702"/>
         <source>Retrieving information on the new media files</source>
         <translation>Získavanie informácií o nových multimediálnych súboroch</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="716"/>
+        <location filename="../mainwindow.cpp" line="704"/>
         <source>Estimated time remaining:</source>
         <translation>Odhadovaný ostávajúci čas:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="718"/>
+        <location filename="../mainwindow.cpp" line="706"/>
         <source>Remaining items:</source>
         <translation>Zostávajúce položky:</translation>
     </message>
@@ -480,6 +485,19 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
 </context>
 <context>
+    <name>MetadataDialog</name>
+    <message>
+        <location filename="../metadatadialog.ui" line="6"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../metadatadialog.cpp" line="114"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MusicWindow</name>
     <message>
         <location filename="../musicwindow.cpp" line="217"/>
@@ -487,65 +505,65 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Pridať do aktuálne prehrávaných</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="223"/>
+        <location filename="../musicwindow.cpp" line="225"/>
         <source>Add to a playlist</source>
         <translation>Pridať do zoznamu stôp</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="239"/>
-        <location filename="../musicwindow.cpp" line="254"/>
+        <location filename="../musicwindow.cpp" line="244"/>
+        <location filename="../musicwindow.cpp" line="259"/>
         <source>Rename playlist</source>
         <translation>Premenovať zoznam stôp</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="240"/>
-        <location filename="../musicwindow.cpp" line="243"/>
+        <location filename="../musicwindow.cpp" line="245"/>
+        <location filename="../musicwindow.cpp" line="248"/>
         <source>Delete playlist</source>
         <translation>Odstrániť zoznam stôp</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="225"/>
+        <location filename="../musicwindow.cpp" line="227"/>
         <source>Delete</source>
         <translation>Odstrániť</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="228"/>
+        <location filename="../musicwindow.cpp" line="230"/>
         <source>Set as ringing tone</source>
         <translation>Nastaviť ako vyzváňací tón</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="229"/>
+        <location filename="../musicwindow.cpp" line="231"/>
         <source>Share</source>
         <translation>Zdieľať</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="260"/>
+        <location filename="../musicwindow.cpp" line="265"/>
         <source>Save</source>
         <translation>Uložiť</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="442"/>
+        <location filename="../musicwindow.cpp" line="452"/>
         <source>Albums</source>
         <translation>Albumy</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="457"/>
+        <location filename="../musicwindow.cpp" line="467"/>
         <source>Songs</source>
         <translation>Skladby</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="698"/>
+        <location filename="../musicwindow.cpp" line="708"/>
         <source>Saved</source>
         <translation>Uložené</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="717"/>
-        <location filename="../musicwindow.cpp" line="747"/>
-        <location filename="../musicwindow.cpp" line="753"/>
-        <location filename="../musicwindow.cpp" line="759"/>
-        <location filename="../musicwindow.cpp" line="765"/>
-        <location filename="../musicwindow.cpp" line="783"/>
-        <location filename="../musicwindow.cpp" line="978"/>
+        <location filename="../musicwindow.cpp" line="727"/>
+        <location filename="../musicwindow.cpp" line="757"/>
+        <location filename="../musicwindow.cpp" line="763"/>
+        <location filename="../musicwindow.cpp" line="769"/>
+        <location filename="../musicwindow.cpp" line="775"/>
+        <location filename="../musicwindow.cpp" line="793"/>
+        <location filename="../musicwindow.cpp" line="957"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -554,67 +572,72 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="772"/>
+        <location filename="../musicwindow.cpp" line="782"/>
         <source>Imported playlists</source>
         <translation>Importované</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="651"/>
+        <location filename="../musicwindow.cpp" line="661"/>
         <source>Automatic playlists</source>
         <translation>Automatické zoznamy stôp</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="657"/>
+        <location filename="../musicwindow.cpp" line="235"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../musicwindow.cpp" line="667"/>
         <source>Recently added</source>
         <translation>Nedávno pridané</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="657"/>
+        <location filename="../musicwindow.cpp" line="667"/>
         <source>Recently played</source>
         <translation>Nedávno prehrávané</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="657"/>
+        <location filename="../musicwindow.cpp" line="667"/>
         <source>Most played</source>
         <translation>Najčastejšie prehrávané</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="657"/>
+        <location filename="../musicwindow.cpp" line="667"/>
         <source>Never played</source>
         <translation>Nikdy neprehrávané</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="809"/>
+        <location filename="../musicwindow.cpp" line="811"/>
         <source>(unknown song)</source>
         <translation>(neznáma skladba)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="812"/>
-        <location filename="../musicwindow.cpp" line="853"/>
-        <location filename="../musicwindow.cpp" line="871"/>
-        <location filename="../musicwindow.cpp" line="908"/>
+        <location filename="../musicwindow.cpp" line="814"/>
+        <location filename="../musicwindow.cpp" line="848"/>
+        <location filename="../musicwindow.cpp" line="866"/>
+        <location filename="../musicwindow.cpp" line="895"/>
         <source>(unknown artist)</source>
         <translation>(neznámy interpret)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="815"/>
-        <location filename="../musicwindow.cpp" line="905"/>
+        <location filename="../musicwindow.cpp" line="817"/>
+        <location filename="../musicwindow.cpp" line="892"/>
         <source>(unknown album)</source>
         <translation>(neznámy album)</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="923"/>
+        <location filename="../musicwindow.cpp" line="910"/>
         <source>Various artists</source>
         <translation>Rôzny interpreti</translation>
     </message>
     <message>
-        <location filename="../musicwindow.cpp" line="958"/>
-        <location filename="../musicwindow.cpp" line="969"/>
+        <location filename="../musicwindow.cpp" line="937"/>
+        <location filename="../musicwindow.cpp" line="948"/>
         <source>(unknown genre)</source>
         <translation>(neznámy žáner)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="979"/>
+        <location filename="../musicwindow.cpp" line="958"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n album</numerusform>
@@ -623,7 +646,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="980"/>
+        <location filename="../musicwindow.cpp" line="959"/>
         <source>%n artist(s)</source>
         <translation>
             <numerusform>%n interpret</numerusform>
@@ -632,7 +655,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1113"/>
+        <location filename="../musicwindow.cpp" line="1089"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip pridaný do zoznamu stôp</numerusform>
@@ -641,7 +664,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../musicwindow.cpp" line="1143"/>
+        <location filename="../musicwindow.cpp" line="1119"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klip pridaný do aktuálne prehrávaných</numerusform>
@@ -656,34 +679,34 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="175"/>
-        <location filename="../musicwindow.cpp" line="413"/>
+        <location filename="../musicwindow.cpp" line="423"/>
         <source>All albums</source>
         <translation>Všetky albumy</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="180"/>
-        <location filename="../musicwindow.cpp" line="408"/>
-        <location filename="../musicwindow.cpp" line="447"/>
+        <location filename="../musicwindow.cpp" line="418"/>
+        <location filename="../musicwindow.cpp" line="457"/>
         <source>Artists</source>
         <translation>Interpreti</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="185"/>
-        <location filename="../musicwindow.cpp" line="423"/>
-        <location filename="../musicwindow.cpp" line="452"/>
+        <location filename="../musicwindow.cpp" line="433"/>
+        <location filename="../musicwindow.cpp" line="462"/>
         <source>Genres</source>
         <translation>Žánre</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="190"/>
-        <location filename="../musicwindow.cpp" line="428"/>
-        <location filename="../musicwindow.cpp" line="462"/>
+        <location filename="../musicwindow.cpp" line="438"/>
+        <location filename="../musicwindow.cpp" line="472"/>
         <source>Playlists</source>
         <translation>Zoznamy stôp</translation>
     </message>
     <message>
         <location filename="../musicwindow.ui" line="195"/>
-        <location filename="../musicwindow.cpp" line="418"/>
+        <location filename="../musicwindow.cpp" line="428"/>
         <source>All songs</source>
         <translation>Všetky skladby</translation>
     </message>
@@ -691,7 +714,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>NowPlayingIndicator</name>
     <message>
-        <location filename="../nowplayingindicator.cpp" line="145"/>
+        <location filename="../nowplayingindicator.cpp" line="144"/>
         <source>Music</source>
         <translation>Hudba</translation>
     </message>
@@ -699,7 +722,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>NowPlayingWindow</name>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="257"/>
+        <location filename="../nowplayingwindow.cpp" line="260"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -708,48 +731,48 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="262"/>
+        <location filename="../nowplayingwindow.cpp" line="265"/>
         <source>total</source>
         <translation>celkom</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1017"/>
+        <location filename="../nowplayingwindow.cpp" line="970"/>
         <source>Information not available</source>
         <translation>Informácia nie je dostupná</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1083"/>
+        <location filename="../nowplayingwindow.cpp" line="1035"/>
         <source>Set as ringing tone</source>
         <translation>Nastaviť ako vyzváňací tón</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1079"/>
+        <location filename="../nowplayingwindow.cpp" line="1031"/>
         <source>Delete from now playing</source>
         <translation>Odstrániť z aktuálne prehrávaných</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1084"/>
+        <location filename="../nowplayingwindow.cpp" line="1036"/>
         <source>Share</source>
         <translation>Zdieľať</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="821"/>
+        <location filename="../nowplayingwindow.cpp" line="787"/>
         <source>Stop playback</source>
         <translation>Zastaviť prehrávanie</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1081"/>
+        <location filename="../nowplayingwindow.cpp" line="1033"/>
         <source>Delete</source>
         <translation>Odstrániť</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1082"/>
+        <location filename="../nowplayingwindow.cpp" line="1034"/>
         <source>Add to a playlist</source>
         <translation>Pridať do zoznamu stôp</translation>
     </message>
     <message numerus="yes">
-        <location filename="../nowplayingwindow.cpp" line="1095"/>
-        <location filename="../nowplayingwindow.cpp" line="1185"/>
+        <location filename="../nowplayingwindow.cpp" line="1047"/>
+        <location filename="../nowplayingwindow.cpp" line="1142"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip pridaný do zoznamu stôp</numerusform>
@@ -758,37 +781,37 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1127"/>
+        <location filename="../nowplayingwindow.cpp" line="1084"/>
         <source>Entertainment View</source>
         <translation>Zábavné zobrazenie</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1132"/>
+        <location filename="../nowplayingwindow.cpp" line="1089"/>
         <source>Car View</source>
         <translation>Zobrazenie pre vozidlo</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1279"/>
+        <location filename="../nowplayingwindow.cpp" line="1236"/>
         <source>Select album art</source>
         <translation>Vybrať obal</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1280"/>
+        <location filename="../nowplayingwindow.cpp" line="1237"/>
         <source>Reset album art</source>
         <translation>Vrátiť pôvodný obal</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1329"/>
+        <location filename="../nowplayingwindow.cpp" line="1286"/>
         <source>Edit lyrics</source>
         <translation>Upraviť text skladby</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1330"/>
+        <location filename="../nowplayingwindow.cpp" line="1287"/>
         <source>Search for lyrics</source>
         <translation>Hľadať text skladby</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="1331"/>
+        <location filename="../nowplayingwindow.cpp" line="1288"/>
         <source>Reload lyrics</source>
         <translation>Znovu načítať text skladby</translation>
     </message>
@@ -803,20 +826,20 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>--/-- skladba</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="543"/>
-        <location filename="../nowplayingwindow.cpp" line="997"/>
+        <location filename="../nowplayingwindow.cpp" line="526"/>
+        <location filename="../nowplayingwindow.cpp" line="950"/>
         <source>(unknown song)</source>
         <translation>(neznáma skladba)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="555"/>
-        <location filename="../nowplayingwindow.cpp" line="1000"/>
+        <location filename="../nowplayingwindow.cpp" line="538"/>
+        <location filename="../nowplayingwindow.cpp" line="953"/>
         <source>(unknown artist)</source>
         <translation>(neznámy interpret)</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.cpp" line="567"/>
-        <location filename="../nowplayingwindow.cpp" line="1003"/>
+        <location filename="../nowplayingwindow.cpp" line="550"/>
+        <location filename="../nowplayingwindow.cpp" line="956"/>
         <source>(unknown album)</source>
         <translation>(neznámy album)</translation>
     </message>
@@ -826,27 +849,32 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Možnosti</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="635"/>
+        <location filename="../nowplayingwindow.ui" line="636"/>
         <source>FM Transmitter</source>
         <translation>FM vysielač</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="640"/>
+        <location filename="../nowplayingwindow.ui" line="641"/>
         <source>Clear now playing</source>
         <translation>Vymazať aktuálne prehrávané</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="645"/>
+        <location filename="../nowplayingwindow.ui" line="646"/>
         <source>Add songs to a playlist</source>
         <translation>Pridať do zoznamu stôp</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="650"/>
+        <location filename="../nowplayingwindow.ui" line="651"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../nowplayingwindow.ui" line="656"/>
         <source>Entertainment view</source>
         <translation>Zábavné zobrazenie</translation>
     </message>
     <message>
-        <location filename="../nowplayingwindow.ui" line="655"/>
+        <location filename="../nowplayingwindow.ui" line="661"/>
         <source>Car view</source>
         <translation>Zobrazenie pre vozidlo</translation>
     </message>
@@ -893,12 +921,12 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
     <message>
         <location filename="../playlistpicker.cpp" line="9"/>
-        <location filename="../playlistpicker.cpp" line="49"/>
+        <location filename="../playlistpicker.cpp" line="47"/>
         <source>New playlist</source>
         <translation>Nový zoznam stôp</translation>
     </message>
     <message>
-        <location filename="../playlistpicker.cpp" line="56"/>
+        <location filename="../playlistpicker.cpp" line="54"/>
         <source>Save</source>
         <translation>Uložiť</translation>
     </message>
@@ -927,7 +955,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Prehráva sa</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="298"/>
+        <location filename="../radionowplayingwindow.cpp" line="292"/>
         <source>(unknown station)</source>
         <translation>(neznáma stanica)</translation>
     </message>
@@ -937,32 +965,37 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Možnosti</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="422"/>
+        <location filename="../radionowplayingwindow.ui" line="423"/>
         <source>FM transmitter</source>
         <translation>FM vysielač</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.ui" line="427"/>
+        <location filename="../radionowplayingwindow.ui" line="428"/>
         <source>Add radio bookmark</source>
         <translation>Pridať záložku rádia</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="338"/>
+        <location filename="../radionowplayingwindow.ui" line="433"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../radionowplayingwindow.cpp" line="332"/>
         <source>(unknown artist)</source>
         <translation>(neznámy interpret)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="338"/>
+        <location filename="../radionowplayingwindow.cpp" line="332"/>
         <source>(unknown song)</source>
         <translation>(neznáma skladba)</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="368"/>
+        <location filename="../radionowplayingwindow.cpp" line="362"/>
         <source>Buffering</source>
         <translation>Ukladanie do vyrovnávacej pamäte</translation>
     </message>
     <message>
-        <location filename="../radionowplayingwindow.cpp" line="503"/>
+        <location filename="../radionowplayingwindow.cpp" line="500"/>
         <source>Stop playback</source>
         <translation>Zastaviť prehrávanie</translation>
     </message>
@@ -970,7 +1003,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>RingtoneDialog</name>
     <message>
-        <location filename="../ringtonedialog.cpp" line="49"/>
+        <location filename="../ringtonedialog.cpp" line="51"/>
         <source>Selected song set as ringing tone</source>
         <translation>Vybraná skladba bola nastavená ako vyzváňací tón</translation>
     </message>
@@ -978,7 +1011,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../settingsdialog.ui" line="14"/>
+        <location filename="../settingsdialog.ui" line="6"/>
         <source>Media player - Settings</source>
         <translation>Prehrávač médií - Nastavenia</translation>
     </message>
@@ -1105,102 +1138,102 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Zastaviť prehrávanie</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="60"/>
+        <location filename="../settingsdialog.ui" line="55"/>
         <source>On application exit</source>
         <translation>Pri ukončení aplikácie</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="108"/>
+        <location filename="../settingsdialog.ui" line="103"/>
         <source>Disconnect headset to pause</source>
         <translation>Pozastaviť pri odpojení headsetu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="115"/>
+        <location filename="../settingsdialog.ui" line="110"/>
         <source>Reconnect headset to resume</source>
         <translation>Pokračovať pri pripojení headsetu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="136"/>
+        <location filename="../settingsdialog.ui" line="131"/>
         <source>Enable lyrics</source>
         <translation>Povoliť zobrazenie textov skladieb</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="143"/>
+        <location filename="../settingsdialog.ui" line="138"/>
         <source>Lyrics providers</source>
         <translation>Zdroje textov skladieb</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="150"/>
+        <location filename="../settingsdialog.ui" line="145"/>
         <source>Clear lyrics cache</source>
         <translation>Vymazať uložené texty skladieb</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="67"/>
+        <location filename="../settingsdialog.ui" line="62"/>
         <source>Play only search results</source>
         <translation>Prehrať jedine výsledky vyhľadávania</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="171"/>
+        <location filename="../settingsdialog.ui" line="166"/>
         <source>Open whole folders</source>
         <translation>Otvárať celé zložky</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="178"/>
+        <location filename="../settingsdialog.ui" line="173"/>
         <source>Append opened songs</source>
         <translation>Pridať otvorené skladby</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="76"/>
+        <location filename="../settingsdialog.ui" line="71"/>
         <source>Size of automatic playlists</source>
         <translation>Veľkosť automatických zoznamov stôp</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="122"/>
+        <location filename="../settingsdialog.ui" line="117"/>
         <source>Headset button action</source>
         <translation>Akcia tlačítka headsetu</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="192"/>
+        <location filename="../settingsdialog.ui" line="187"/>
         <source>Orientation</source>
         <translation>Orientácia displeja</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="220"/>
+        <location filename="../settingsdialog.ui" line="215"/>
         <source>Prevent playback interruptions</source>
         <translation>Neprerušovať prehrávanie kvôli upozorneniam</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="227"/>
+        <location filename="../settingsdialog.ui" line="222"/>
         <source>Interruptions prevention method</source>
         <translation>Spôsob zabránenia prerušovania prehrávania</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="199"/>
+        <location filename="../settingsdialog.ui" line="194"/>
         <source>Lazy sliders</source>
         <translation>Pomalé posuvníky</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="164"/>
+        <location filename="../settingsdialog.ui" line="159"/>
         <source>Show opening dialog</source>
         <translation>Zobraziť otvárací dialóg</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="206"/>
+        <location filename="../settingsdialog.ui" line="201"/>
         <source>&quot;Delete&quot; for playlist items</source>
         <translation>Zobraziť možnosť &quot;Odstrániť&quot; v zoznamoch stôp</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="241"/>
+        <location filename="../settingsdialog.ui" line="236"/>
         <source>Override FMTX checks in UI</source>
         <translation>Zrušiť kontrolu FMTX</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="260"/>
+        <location filename="../settingsdialog.ui" line="255"/>
         <source>Requires CSSU</source>
         <translation>Vyžaduje CSSU</translation>
     </message>
     <message>
-        <location filename="../settingsdialog.ui" line="272"/>
+        <location filename="../settingsdialog.ui" line="267"/>
         <source>Requires modified FMTXD</source>
         <translation>Vyžaduje modifikovaný FMTXD</translation>
     </message>
@@ -1248,42 +1281,47 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>SingleAlbumView</name>
     <message>
-        <location filename="../singlealbumview.cpp" line="85"/>
+        <location filename="../singlealbumview.cpp" line="81"/>
         <source>(unknown song)</source>
         <translation>(neznáma skladba)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="88"/>
+        <location filename="../singlealbumview.cpp" line="84"/>
         <source>(unknown artist)</source>
         <translation>(neznámy interpret)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="91"/>
+        <location filename="../singlealbumview.cpp" line="87"/>
         <source>(unknown album)</source>
         <translation>(neznámy album)</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="184"/>
+        <location filename="../singlealbumview.cpp" line="180"/>
         <source>Add to now playing</source>
         <translation>Pridať do aktuálne prehrávaných</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="185"/>
+        <location filename="../singlealbumview.cpp" line="181"/>
         <source>Add to a playlist</source>
         <translation>Pridať do zoznamu stôp</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="187"/>
+        <location filename="../singlealbumview.cpp" line="183"/>
         <source>Set as ringing tone</source>
         <translation>Nastaviť ako vyzváňací tón</translation>
     </message>
     <message>
-        <location filename="../singlealbumview.cpp" line="188"/>
+        <location filename="../singlealbumview.cpp" line="184"/>
         <source>Share</source>
         <translation>Zdieľať</translation>
     </message>
+    <message>
+        <location filename="../singlealbumview.cpp" line="185"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="206"/>
+        <location filename="../singlealbumview.cpp" line="203"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip pridaný do zoznamu stôp</numerusform>
@@ -1292,7 +1330,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../singlealbumview.cpp" line="252"/>
+        <location filename="../singlealbumview.cpp" line="254"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klip pridaný do aktuálne prehrávaných</numerusform>
@@ -1307,7 +1345,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="34"/>
-        <location filename="../singlealbumview.cpp" line="186"/>
+        <location filename="../singlealbumview.cpp" line="182"/>
         <source>Delete</source>
         <translation>Odstrániť</translation>
     </message>
@@ -1315,13 +1353,13 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>SingleArtistView</name>
     <message>
-        <location filename="../singleartistview.cpp" line="96"/>
+        <location filename="../singleartistview.cpp" line="93"/>
         <source>(unknown album)</source>
         <translation>(neznámy album)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleartistview.cpp" line="111"/>
-        <location filename="../singleartistview.cpp" line="149"/>
+        <location filename="../singleartistview.cpp" line="108"/>
+        <location filename="../singleartistview.cpp" line="143"/>
         <source>%n song(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -1330,9 +1368,14 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../singleartistview.cpp" line="201"/>
+        <location filename="../singleartistview.cpp" line="195"/>
         <source>Add to now playing</source>
         <translation>Pridať do aktuálne prehrávaných</translation>
+    </message>
+    <message>
+        <location filename="../singleartistview.cpp" line="197"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="250"/>
@@ -1355,7 +1398,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="39"/>
-        <location filename="../singleartistview.cpp" line="202"/>
+        <location filename="../singleartistview.cpp" line="196"/>
         <source>Delete</source>
         <translation>Odstrániť</translation>
     </message>
@@ -1363,10 +1406,15 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>SingleGenreView</name>
     <message>
-        <location filename="../singlegenreview.cpp" line="125"/>
-        <location filename="../singlegenreview.cpp" line="143"/>
+        <location filename="../singlegenreview.cpp" line="122"/>
+        <location filename="../singlegenreview.cpp" line="140"/>
         <source>(unknown artist)</source>
         <translation>(neznámy interpret)</translation>
+    </message>
+    <message>
+        <location filename="../singlegenreview.cpp" line="171"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="234"/>
@@ -1379,7 +1427,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
     <message>
         <location filename="../singlegenreview.cpp" line="31"/>
-        <location filename="../singlegenreview.cpp" line="176"/>
+        <location filename="../singlegenreview.cpp" line="170"/>
         <source>Add to now playing</source>
         <translation>Pridať do aktuálne prehrávaných</translation>
     </message>
@@ -1387,27 +1435,27 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>SinglePlaylistView</name>
     <message>
-        <location filename="../singleplaylistview.cpp" line="129"/>
+        <location filename="../singleplaylistview.cpp" line="125"/>
         <source>(unknown song)</source>
         <translation>(neznáma skladba)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="132"/>
+        <location filename="../singleplaylistview.cpp" line="128"/>
         <source>(unknown artist)</source>
         <translation>(neznámy interpret)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="135"/>
+        <location filename="../singleplaylistview.cpp" line="131"/>
         <source>(unknown album)</source>
         <translation>(neznámy album)</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="148"/>
+        <location filename="../singleplaylistview.cpp" line="144"/>
         <source>Information not available</source>
         <translation>Informácia nie je dostupná</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="335"/>
+        <location filename="../singleplaylistview.cpp" line="331"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klip pridaný do aktuálne prehrávaných</numerusform>
@@ -1417,33 +1465,33 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="54"/>
-        <location filename="../singleplaylistview.cpp" line="358"/>
+        <location filename="../singleplaylistview.cpp" line="354"/>
         <source>Add to a playlist</source>
         <translation>Pridať do zoznamu stôp</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="361"/>
+        <location filename="../singleplaylistview.cpp" line="357"/>
         <source>Delete</source>
         <translation>Odstrániť</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="359"/>
+        <location filename="../singleplaylistview.cpp" line="355"/>
         <source>Set as ringing tone</source>
         <translation>Nastaviť ako vyzváňací tón</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="362"/>
+        <location filename="../singleplaylistview.cpp" line="358"/>
         <source>Share</source>
         <translation>Zdieľať</translation>
     </message>
     <message>
-        <location filename="../singleplaylistview.cpp" line="360"/>
+        <location filename="../singleplaylistview.cpp" line="356"/>
         <source>Delete from playlist</source>
         <translation>Odstrániť zo zoznamu stôp</translation>
     </message>
     <message numerus="yes">
-        <location filename="../singleplaylistview.cpp" line="305"/>
-        <location filename="../singleplaylistview.cpp" line="386"/>
+        <location filename="../singleplaylistview.cpp" line="301"/>
+        <location filename="../singleplaylistview.cpp" line="382"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip pridaný do zoznamu stôp</numerusform>
@@ -1453,7 +1501,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     </message>
     <message>
         <location filename="../singleplaylistview.cpp" line="53"/>
-        <location filename="../singleplaylistview.cpp" line="357"/>
+        <location filename="../singleplaylistview.cpp" line="353"/>
         <source>Add to now playing</source>
         <translation>Pridať do aktuálne prehrávaných</translation>
     </message>
@@ -1530,22 +1578,32 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
 <context>
     <name>UpnpView</name>
     <message>
-        <location filename="../upnpview.cpp" line="60"/>
+        <location filename="../upnpview.cpp" line="58"/>
         <source>(unknown song)</source>
         <translation>(neznáma skladba)</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="139"/>
+        <location filename="../upnpview.cpp" line="144"/>
         <source>Add to now playing</source>
         <translation>Pridať do aktuálne prehrávaných</translation>
     </message>
     <message>
-        <location filename="../upnpview.cpp" line="140"/>
+        <location filename="../upnpview.cpp" line="145"/>
         <source>Add to a playlist</source>
         <translation>Pridať do zoznamu stôp</translation>
     </message>
+    <message>
+        <location filename="../upnpview.cpp" line="147"/>
+        <source>Open in web browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../upnpview.cpp" line="148"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="244"/>
+        <location filename="../upnpview.cpp" line="251"/>
         <source>%n clip(s) added to playlist</source>
         <translation>
             <numerusform>%n klip pridaný do zoznamu stôp</numerusform>
@@ -1554,7 +1612,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../upnpview.cpp" line="284"/>
+        <location filename="../upnpview.cpp" line="301"/>
         <source>%n clip(s) added to now playing</source>
         <translation>
             <numerusform>%n klip pridaný do aktuálne prehrávaných</numerusform>
@@ -1586,147 +1644,147 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Neprerušovať</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="849"/>
+        <location filename="../videonowplayingwindow.cpp" line="835"/>
         <source>Buffering</source>
         <translation>Ukladanie do vyrovnávacej pamäte</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="879"/>
+        <location filename="../videonowplayingwindow.cpp" line="863"/>
         <source>Unable to play media</source>
         <translation>Médium nemožno prehrať</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="883"/>
+        <location filename="../videonowplayingwindow.cpp" line="881"/>
         <source>Media not found</source>
         <translation>Nemožno nájsť súbor média</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="885"/>
+        <location filename="../videonowplayingwindow.cpp" line="883"/>
         <source>URI not available</source>
         <translation>Adresa URI nie je dostupná</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="887"/>
+        <location filename="../videonowplayingwindow.cpp" line="885"/>
         <source>Invalid URI</source>
         <translation>Neplatná adresa URI</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="889"/>
+        <location filename="../videonowplayingwindow.cpp" line="887"/>
         <source>Unable to open media</source>
         <translation>Nemožno otvoriť súbor média</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="891"/>
+        <location filename="../videonowplayingwindow.cpp" line="889"/>
         <source>Playback stream no longer available</source>
         <translation>Prúd prehrávania už nie je k dispozícií</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="893"/>
+        <location filename="../videonowplayingwindow.cpp" line="891"/>
         <source>Could not determine MIME-type</source>
         <translation>Nie je možné určiť MIME typ</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="895"/>
+        <location filename="../videonowplayingwindow.cpp" line="893"/>
         <source>General error occured, unable to continue playback</source>
         <translation>Došlo k všeobecnej chybe, nie je možné pokračovať v prehrávaní</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="897"/>
+        <location filename="../videonowplayingwindow.cpp" line="895"/>
         <source>General error occured</source>
         <translation>Došlo k všeobecnej chybe</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="899"/>
+        <location filename="../videonowplayingwindow.cpp" line="897"/>
         <source>Unsupported media</source>
         <translation>Nepodporovaný formát média</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="901"/>
+        <location filename="../videonowplayingwindow.cpp" line="899"/>
         <source>Unsupported resolution</source>
         <translation>Nepodporované rozlíšenie videa</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="903"/>
+        <location filename="../videonowplayingwindow.cpp" line="901"/>
         <source>Unsupported framerate</source>
         <translation>Nepodporovaná snímková frekvencia</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="905"/>
+        <location filename="../videonowplayingwindow.cpp" line="903"/>
         <source>Media is protected by DRM</source>
         <translation>Zdroj je chránený DRM</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="907"/>
+        <location filename="../videonowplayingwindow.cpp" line="905"/>
         <source>System sound device is unavailable</source>
         <translation>Zvukový systém prístroja nie je dostupný</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="909"/>
+        <location filename="../videonowplayingwindow.cpp" line="907"/>
         <source>Media corrupted</source>
         <translation>Médium je poškodené</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="911"/>
+        <location filename="../videonowplayingwindow.cpp" line="909"/>
         <source>Error while parsing playlist</source>
         <translation>Chyba pri spracovávaní zoznamu stôp</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="912"/>
+        <location filename="../videonowplayingwindow.cpp" line="909"/>
         <source>Playlist may be corrupt or empty</source>
         <translation>Zoznam stôp môže byť poškodený alebo prázdny</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="915"/>
+        <location filename="../videonowplayingwindow.cpp" line="911"/>
         <source>Codec not found:</source>
         <translation>Kódek neboj nájdený:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="919"/>
+        <location filename="../videonowplayingwindow.cpp" line="913"/>
         <source>Video codec not found:</source>
         <translation>Videokódek neboj nájdený:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="923"/>
+        <location filename="../videonowplayingwindow.cpp" line="915"/>
         <source>Audio codec not found:</source>
         <translation>Zvukový kódek neboj nájdený:</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="927"/>
+        <location filename="../videonowplayingwindow.cpp" line="917"/>
         <source>No playlist assigned</source>
         <translation>Žiadny priradený zoznam stôp</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="929"/>
+        <location filename="../videonowplayingwindow.cpp" line="919"/>
         <source>Media index is not in bound with playlist items</source>
         <translation>Index média nie je vo vnútri zoznamu stôp</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="931"/>
+        <location filename="../videonowplayingwindow.cpp" line="921"/>
         <source>Unable to start playback</source>
         <translation>Nie je možné spustiť prehrávanie</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="933"/>
+        <location filename="../videonowplayingwindow.cpp" line="923"/>
         <source>Unable to stop playback</source>
         <translation>Nie je možné zastaviť prehrávanie</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="935"/>
+        <location filename="../videonowplayingwindow.cpp" line="925"/>
         <source>Unable to pause playback</source>
         <translation>Nie je možné pozastaviť prehrávanie</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="937"/>
+        <location filename="../videonowplayingwindow.cpp" line="927"/>
         <source>Unable to seek position in media</source>
         <translation>Nie je možné posunúť sa na pozíciu v médiu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="939"/>
+        <location filename="../videonowplayingwindow.cpp" line="929"/>
         <source>Unable to retrieve current position in media</source>
         <translation>Nie je možné získať aktuálnu pozíciu v médiu</translation>
     </message>
     <message>
-        <location filename="../videonowplayingwindow.cpp" line="941"/>
+        <location filename="../videonowplayingwindow.cpp" line="931"/>
         <source>Unable to get current playback status</source>
         <translation>Nie je možné zistiť aktuálny stav prehrávania</translation>
     </message>
@@ -1754,27 +1812,32 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
         <translation>Zdieľať</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="145"/>
+        <location filename="../videoswindow.cpp" line="75"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../videoswindow.cpp" line="151"/>
         <source>Videos - latest</source>
         <translation>Videá - najnovšie</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="159"/>
+        <location filename="../videoswindow.cpp" line="165"/>
         <source>Videos - categories</source>
         <translation>Videá - kategórie</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="233"/>
+        <location filename="../videoswindow.cpp" line="236"/>
         <source>(unknown clip)</source>
         <translation>(neznámy klip)</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="298"/>
+        <location filename="../videoswindow.cpp" line="301"/>
         <source>Recorded by device camera</source>
         <translation>Nahrané kamerou prístroja</translation>
     </message>
     <message>
-        <location filename="../videoswindow.cpp" line="317"/>
+        <location filename="../videoswindow.cpp" line="320"/>
         <source>Films</source>
         <translation>Filmy</translation>
     </message>
