@@ -1341,7 +1341,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="33"/>
         <source>Add songs to now playing</source>
-        <translation>Pridať skladby do aktuálne prehrávaných</translation>
+        <translation>Pridať skladby</translation>
     </message>
     <message>
         <location filename="../singlealbumview.cpp" line="34"/>
@@ -1394,7 +1394,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../singleartistview.cpp" line="38"/>
         <source>Add songs to now playing</source>
-        <translation>Pridať skladby do aktuálne prehrávaných</translation>
+        <translation>Pridať skladby</translation>
     </message>
     <message>
         <location filename="../singleartistview.cpp" line="39"/>
