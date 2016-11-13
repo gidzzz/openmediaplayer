@@ -282,7 +282,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../internetradiowindow.cpp" line="113"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message>
         <location filename="../internetradiowindow.cpp" line="181"/>
@@ -489,12 +489,12 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../metadatadialog.ui" line="6"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message>
         <location filename="../metadatadialog.cpp" line="114"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopírovať</translation>
     </message>
 </context>
 <context>
@@ -584,7 +584,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../musicwindow.cpp" line="235"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message>
         <location filename="../musicwindow.cpp" line="667"/>
@@ -866,7 +866,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../nowplayingwindow.ui" line="651"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message>
         <location filename="../nowplayingwindow.ui" line="656"/>
@@ -977,7 +977,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../radionowplayingwindow.ui" line="433"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message>
         <location filename="../radionowplayingwindow.cpp" line="332"/>
@@ -1318,7 +1318,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../singlealbumview.cpp" line="185"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlealbumview.cpp" line="203"/>
@@ -1375,7 +1375,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../singleartistview.cpp" line="197"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message numerus="yes">
         <location filename="../singleartistview.cpp" line="250"/>
@@ -1414,7 +1414,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../singlegenreview.cpp" line="171"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message numerus="yes">
         <location filename="../singlegenreview.cpp" line="234"/>
@@ -1595,12 +1595,12 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../upnpview.cpp" line="147"/>
         <source>Open in web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Otvoriť vo webovom prehliadači</translation>
     </message>
     <message>
         <location filename="../upnpview.cpp" line="148"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message numerus="yes">
         <location filename="../upnpview.cpp" line="251"/>
@@ -1814,7 +1814,7 @@ Pre obnovenie funkcie FM vysielača odpojte USB.</translation>
     <message>
         <location filename="../videoswindow.cpp" line="75"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti</translation>
     </message>
     <message>
         <location filename="../videoswindow.cpp" line="151"/>
