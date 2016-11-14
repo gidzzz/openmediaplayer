@@ -62,6 +62,9 @@ void MissionControl::setRegistry(MafwRegistryAdapter *mafwRegistry)
     QDBusConnection::systemBus().connect("", "", "com.nokia.mce.signal", "sig_call_state_ind",
                                          this, SLOT(onCallStateChanged(QDBusMessage)));
 
+    QDBusConnection::systemBus().connect("", "", "com.nokia.bme.signal", "battery_empty",
+                                         this, SLOT(onBatteryEmpty()));
+
     updateWiredHeadset();
 }
 
@@ -180,6 +183,12 @@ void MissionControl::onStateChanged(MafwPlayState state)
         headsetPauseStamp = -1;
         pausedByCall = false;
     }
+}
+
+void MissionControl::onBatteryEmpty()
+{
+    if (mafwState == Playing)
+        mafwRenderer->pause();
 }
 
 void MissionControl::onCallStateChanged(QDBusMessage msg)

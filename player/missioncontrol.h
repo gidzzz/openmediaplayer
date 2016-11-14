@@ -68,6 +68,8 @@ private slots:
     void onStatusReceived(MafwPlaylist *, uint, MafwPlayState state);
     void onStateChanged(MafwPlayState state);
 
+    void onBatteryEmpty();
+
     void onCallStateChanged(QDBusMessage msg);
 
     void onWirelessHeadsetConnected();
